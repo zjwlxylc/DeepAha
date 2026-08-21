@@ -536,7 +536,7 @@ git commit -m "feat(db): add phase 1 PostgreSQL persistence"
 - 产出：`ObjectStore`、`ObjectMetadata`、`ObjectIntegrityError`、`S3ObjectStore`。
 - 输入：Task 2 的对象存储设置。
 
-- [ ] **Step 1：编写失败的真实边界对象存储测试**
+- [x] **Step 1：编写失败的真实边界对象存储测试**
 
 Test the adapter rather than a mock:
 
@@ -575,7 +575,7 @@ def test_existing_object_with_wrong_metadata_is_never_overwritten(
         )
 ```
 
-- [ ] **Step 2：启动 Moto 并确认 RED**
+- [x] **Step 2：启动 Moto 并确认 RED**
 
 Run:
 
@@ -591,7 +591,7 @@ uv run pytest tests/integration/test_s3_object_store.py -m integration -v
 
 Expected: import failure because object-store modules do not exist.
 
-- [ ] **Step 3：增加 S3 依赖**
+- [x] **Step 3：增加 S3 依赖**
 
 Run:
 
@@ -601,7 +601,7 @@ uv add "boto3>=1.40,<2"
 uv add --group dev "boto3-stubs[s3]>=1.40,<2"
 ```
 
-- [ ] **Step 4：实现对象存储 Protocol 与元数据**
+- [x] **Step 4：实现对象存储 Protocol 与元数据**
 
 Use these exact public shapes:
 
@@ -630,7 +630,7 @@ class ObjectStore(Protocol):
 
 `ObjectIntegrityError` is raised for caller-supplied hash mismatch or existing-object metadata mismatch.
 
-- [ ] **Step 5：实现 `S3ObjectStore`**
+- [x] **Step 5：实现 `S3ObjectStore`**
 
 Requirements:
 
@@ -643,7 +643,7 @@ Requirements:
 - `get_bytes()` re-hashes the body and raises on mismatch;
 - never log access/secret keys or response bodies.
 
-- [ ] **Step 6：运行对象存储 GREEN 验证**
+- [x] **Step 6：运行对象存储 GREEN 验证**
 
 Run:
 
@@ -657,11 +657,11 @@ uv run mypy src tests
 
 Expected: all object-store tests pass against Moto and all three static checks exit `0`.
 
-- [ ] **Step 7：停止本 Task 范围内的 Moto 服务**
+- [x] **Step 7：停止本 Task 范围内的 Moto 服务**
 
 Run `docker compose -f infra/compose.yaml -p deepaha-phase1-storage down --remove-orphans` from the repository root.
 
-- [ ] **Step 8：提交 Task 3**
+- [x] **Step 8：提交 Task 3**
 
 ```powershell
 git add backend/pyproject.toml backend/uv.lock backend/src/deepaha/artifacts/object_store.py backend/src/deepaha/artifacts/s3.py backend/tests/integration/test_s3_object_store.py
