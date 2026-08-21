@@ -105,6 +105,10 @@ Model Gateway、Playwright、Docling 和 OCR 不是 Phase 2 默认范围；只�
 
 ### Phase 3：Opportunity 归并、版本与变化
 
+**候选状态（2026-08-22）：** `IMPLEMENTED_PENDING_PHASE2_GATE`。独立堆叠分支已本地验证；
+Phase 2 Gate 仍 OPEN，因此 Phase 3 Gate 为 `BLOCKED_BY_PHASE2`，v0.3 仍为 PROPOSED，
+不得合并、发布或标记 STABLE。
+
 **目的：** 把多文档组织成稳定机会，追踪更正、延期和状态变化。
 
 **范围：**
@@ -229,7 +233,7 @@ Model Gateway、Playwright、Docling 和 OCR 不是 Phase 2 默认范围；只�
 
 ## 4. 十四天验证切片
 
-十四天不是完成全平台，而是 Blueprint 的经营验证节奏参考；仓库当前已经按独立 Gate 完成 Phase 0–1，后续不得据此表跨阶段并行实现：
+十四天不是完成全平台，而是 Blueprint 的经营验证节奏参考；仓库当前已经按独立 Gate 完成 Phase 0–1。经明确授权可在隔离分支做受控堆叠候选实现，但不得据此表绕过 Gate、合并或发布顺序：
 
 | 时间 | 重点 | 计划产出 | 验收方式 |
 | --- | --- | --- | --- |
@@ -246,7 +250,7 @@ Model Gateway、Playwright、Docling 和 OCR 不是 Phase 2 默认范围；只�
 
 - Phase 0、Phase 1 已有详细 spec、plan 和关闭证据。
 - Phase 2 已生成独立设计与实施计划，引用 Blueprint v1.2、基线协调记录和领域契约 v0.2。
-- Phase 3–9 在启动前分别生成独立 spec 和 plan，引用本路线与当时稳定的领域契约。
+- Phase 3 已生成独立 spec/plan 与候选实现；Phase 4–9 启动前分别生成独立 spec 和 plan，并引用本路线与当时可用的上游契约，同时保留未关闭 Gate 阻塞状态。
 - 任一阶段发现隐藏复杂度时，拆成可独立验收的子阶段；不得扩大一个计划直到所有系统都包含在内。
 - 每个阶段验收后更新本文状态和证据链接，不重写历史结果。
 

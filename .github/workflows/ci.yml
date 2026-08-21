@@ -87,3 +87,44 @@ jobs:
           uv run pytest tests/contracts tests/sources tests/documents
           -m "not integration and not live_source" --strict-markers
       - run: uv run alembic check
+
+  phase3-resolution:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18.4-alpine3.23
+        env:
+          POSTGRES_DB: deepaha
+          POSTGRES_USER: deepaha
+          POSTGRES_PASSWORD: deepaha_phase3_local_only
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U deepaha -d deepaha"
+          --health-interval 2s --health-timeout 2s --health-retries 30
+      s3:
+        image: motoserver/moto:5.2.2
+        ports: ["5000:5000"]
+    # Test-only constants for disposable CI services; never valid outside this job.
+    env:
+      DEEPAHA_DATABASE_URL: postgresql+psycopg://deepaha:deepaha_phase3_local_only@127.0.0.1:5432/deepaha
+      DEEPAHA_OBJECT_STORE_ENDPOINT: http://127.0.0.1:5000
+      DEEPAHA_OBJECT_STORE_REGION: us-east-1
+      DEEPAHA_OBJECT_STORE_BUCKET: deepaha-raw
+      DEEPAHA_OBJECT_STORE_ACCESS_KEY: phase3-ci
+      DEEPAHA_OBJECT_STORE_SECRET_KEY: phase3-ci-secret
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.14"
+          enable-cache: true
+      - run: uv sync --locked --group dev
+      - run: uv run alembic upgrade head
+      - run: uv run pytest -m integration --strict-markers
+      - run: >-
+          uv run pytest tests/contracts tests/opportunities
+          -m "not integration and not live_source" --strict-markers
+      - run: uv run alembic check

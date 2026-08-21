@@ -1,6 +1,7 @@
 import json
 from dataclasses import replace
 from datetime import UTC, datetime
+from hashlib import sha256
 from pathlib import Path
 from uuid import UUID
 
@@ -40,6 +41,11 @@ TARGET_ID = UUID("019b0000-0000-7000-8000-000000000020")
 OTHER_TARGET_ID = UUID("019b0000-0000-7000-8000-000000000021")
 PRIMARY_KEY = "external:019b0000-0000-7000-8000-000000000001:deepaha-2026-001"
 PUBLIC_ID = "opp_63be197cc6ef3632650c5f69b5938f0b"
+FIXTURE_CONTENT_SHA256 = "1ab32974f7dc982bb6cf12b8d023a53b136136b1c254779003b789734d8f7f82"
+
+
+def test_resolution_fixture_bytes_are_fixed() -> None:
+    assert sha256(FIXTURE_PATH.read_bytes()).hexdigest() == FIXTURE_CONTENT_SHA256
 
 
 def patch_values(**changes: object) -> OpportunityPatch:

@@ -815,6 +815,7 @@ git push
 
 - Create: `scripts/verify-phase3.ps1`
 - Modify: `.github/workflows/ci.yml`
+- Modify: `backend/tests/opportunities/test_resolver.py`
 - Create: `docs/gates/phase-3/README.md`
 - Create: `docs/gates/phase-3/acceptance-results.md`
 - Create: `docs/gates/phase-3/test-summary.md`
