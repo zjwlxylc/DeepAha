@@ -20,8 +20,10 @@ Registry 已登记 10 个 active 官方 Endpoint；每个最小间隔 21,600 秒
 30 秒单次超时、浏览器策略 `NEVER`，内容使用边界为 `LINK_ONLY`。这些是配置事实，不是
 live 可用性证据。
 
-live runner 已由无网络 mock 测试证明会拒绝低于策略的间隔、逐 Endpoint 原子落盘、隐藏响应
-正文与秘密，并可用同一路径续跑。第 1 轮的十个 Endpoint 均一次尝试成功；轮次完成时外部
+live runner 已由无网络 mock 测试证明会拒绝低于策略的间隔、逐 Endpoint checkpoint 外部
+JSON、隐藏响应正文与秘密，并可用同一路径续跑。数据库事务与 JSON checkpoint 不是跨系统
+原子提交，当前由唯一 heartbeat 写入，禁止并发手动续跑。第 1 轮的十个 Endpoint 均一次
+尝试成功；轮次完成时外部
 observation JSON 为 22,243 bytes，SHA-256
 `9086e3181cf04bd6d50924e5d8398a46ba68f3cc1800c79794df4c9514f842c7`。该文件会在后续轮次
 原子更新，因此此 hash 只是当前有效窗口第 1 轮快照身份。轮后 CLI source health 实际退出 0，
@@ -39,3 +41,7 @@ compose 后，PostgreSQL `tmpfs` 被清空，数据库 observation/health 证据
 
 实际完成后只能从仓库外 observation JSON 导出聚合值；不得提交中国官方网页响应、对象内容、
 cookie、凭据或数据库。
+
+等待期间完成的代码审查、安全扫描、离线测试和文档工作没有停止/重启 live 容器，也没有写入
+observation JSON，因此不计为来源策略维护分钟。修复只影响后续代码候选；当前窗口仍按原
+Registry SHA、轮次间隔和结果计数继续。

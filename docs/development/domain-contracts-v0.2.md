@@ -91,7 +91,8 @@ updated_at: Instant
 - `OPEN_LICENSE` 必须同时提供 `license_name` 和 `license_url`。
 - `fixture_storage_allowed=true` 只能用于已经记录开放许可或得到明确授权的内容。
 - `LINK_ONLY` 和 `UNKNOWN` 的完整响应不得作为仓库 fixture 提交。
-- Endpoint 不得配置登录、验证码、付费墙绕过或未授权的请求头/cookie。
+- Endpoint URL 不得包含 username/password 用户信息；Endpoint 也不得配置登录、验证码、
+  付费墙绕过或未授权的请求头/cookie。重定向目标遵守同一凭据禁令和 host/IP 策略。
 - `updated_at >= created_at`。同一 `(source_id,url,policy_version)` 含义不可变；策略变化必须递增 `policy_version` 并创建新 Endpoint 版本，旧行只允许停用，不得就地改写策略字段。
 
 ## 5. `CaptureObservation`

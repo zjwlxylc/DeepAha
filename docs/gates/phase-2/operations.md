@@ -43,6 +43,11 @@ Phase 1/2 集成 verifier；应在第五轮安全导出聚合证据后再清理�
 
 ## 恢复与停止
 
-- 部分轮次会在每个 Endpoint 后原子落盘；重跑跳过已经持久化的 Endpoint 结果。
+- 外部 JSON 使用临时文件替换，并在每个 Endpoint 后 checkpoint；重跑跳过 JSON 中已经
+  checkpoint 的 Endpoint 结果。
+- collector 的数据库事务与外部 JSON 不构成跨系统原子提交。runner 目前没有跨进程锁，
+  同一 observation path/数据库必须只有一个 writer；heartbeat 活跃时不得并发手动续跑。
+- 若进程在 collector 已提交、JSON 尚未 checkpoint 的窗口中中断，先比较数据库 observation、
+  health 与外部 JSON，再决定恢复方式；不得盲目重跑并把额外观察删除或伪装成原结果。
 - 配置、轮数、间隔或 Registry SHA 不一致时拒绝复用旧 observation 文件。
 - 任一策略违规、需要特例绕过或有效率不达标时保留证据并保持 Gate OPEN。

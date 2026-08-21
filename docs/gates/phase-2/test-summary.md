@@ -2,8 +2,8 @@
 
 ## 当前工作树环境
 
-- 最近本地 GREEN 验证：2026-08-22T01:10:16+08:00 至 2026-08-22T01:11:01+08:00
-- 实现基线 HEAD：`29b633205d377e29e6db06cf20552fbd2a30a111`
+- 最近本地 GREEN 验证：2026-08-22T03:31:56+08:00
+- 代码审查基线 HEAD：`5779b619dc0260a87a83bee9c5be2d5b0ff77984`
 - uv `0.12.5`；Python `3.14.7`
 - Ruff `0.16.4`；mypy `1.20.2`；pytest `9.1.1`；Alembic `1.19.1`
 - Node.js `24.14.0`；项目锁定 pnpm `10.15.0`
@@ -13,14 +13,26 @@
 
 | 命令/区域 | 结果 |
 | --- | --- |
-| `powershell -ExecutionPolicy Bypass -File scripts/verify-phase2.ps1` | 退出码 0；根验证、服务启动、迁移、集成、定向测试、漂移检查和 scoped cleanup 全部完成。 |
-| 默认后端测试 | `155 passed, 68 deselected`。 |
+| `powershell -ExecutionPolicy Bypass -File scripts/verify-phase2.ps1`（`29b6332`） | 退出码 0；根验证、服务启动、迁移、集成、定向测试、漂移检查和 scoped cleanup 全部完成。 |
+| `powershell -ExecutionPolicy Bypass -File scripts/verify.ps1`（`5779b61`） | 退出码 0；未占用 live 基础设施。默认后端 `159 passed, 69 deselected`。 |
 | Ruff / mypy | 74 个文件格式通过；Lint 通过；70 个源文件无类型错误。 |
 | Web | Lint、TypeScript、1 个 Vitest 测试和 Next.js 生产构建通过。 |
-| Phase 2 集成 | `68 passed, 155 deselected`；PostgreSQL 18.4 与 Moto 5.2.2。 |
-| Phase 2 定向离线 | `148 passed`；contracts/sources/documents。 |
+| Phase 2 集成（`5779b61`，隔离端口 55434/55002） | `69 passed, 159 deselected`；PostgreSQL 18.4 与 Moto 5.2.2，`alembic check` 无漂移。 |
+| Phase 2 定向离线（`5779b61`） | `152 passed`；contracts/sources/documents。 |
 | live runner 回归 | `4 passed`；Windows PowerShell UTF-8 Registry、resume、输出白名单和最小间隔拒绝。 |
 | Alembic | 应用 `20260821_0001`、`20260821_0002`；`No new upgrade operations detected.` |
+
+隔离集成第一次使用测试 bucket `deepaha-raw-review`，唯一失败是既有测试明确断言 bucket
+`deepaha-raw`；这不是产品失败。保持相同隔离容器、改用测试契约要求的 bucket 后重跑得到
+`69 passed, 159 deselected`。临时容器按精确名称删除，live 的 55432/55000 容器持续健康。
+
+## 远程 CI
+
+| 提交 | Run | 实际结论 |
+| --- | --- | --- |
+| `64b09f508d9118a771195c4ab6449cc8487ab057` | [32507301635](https://github.com/zjwlxylc/DeepAha/actions/runs/32507301635) | `completed / success` |
+| `ed0bf33beb5c00ed30ee95c8ade26f84f10186fc` | [32515719316](https://github.com/zjwlxylc/DeepAha/actions/runs/32515719316) | `completed / success` |
+| `5779b619dc0260a87a83bee9c5be2d5b0ff77984` | [32518043724](https://github.com/zjwlxylc/DeepAha/actions/runs/32518043724) | `completed / success` |
 
 ## 故障注入
 
@@ -33,4 +45,4 @@
 
 - 精确候选提交的新鲜副本验证；
 - 五轮 live 观察；
-- 远程 CI 结论。
+- live 后精确最终 Gate 候选的统一验证与远程 CI。

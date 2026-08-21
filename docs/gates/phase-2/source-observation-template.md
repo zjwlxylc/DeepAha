@@ -20,9 +20,13 @@ powershell -ExecutionPolicy Bypass -File scripts/run-phase2-source-observation.p
 ```
 
 Repeat the same command against the same output path only when `next_due_at` has
-arrived. The runner resumes partial work and writes each endpoint result
-atomically. It does not save response bodies, headers, cookies, credentials, or
-object-store content in the observation file.
+arrived. The runner checkpoints the external JSON through a temporary-file
+replacement after each endpoint and skips checkpointed endpoint results on
+resume. The database transaction and external JSON are not a cross-system atomic
+commit, and the runner has no cross-process lock: use exactly one writer. If an
+interruption occurs between collection commit and checkpoint, inspect database
+observations/health and the JSON before resuming. The observation file does not
+save response bodies, headers, cookies, credentials, or object-store content.
 
 ## Required acceptance evidence
 
