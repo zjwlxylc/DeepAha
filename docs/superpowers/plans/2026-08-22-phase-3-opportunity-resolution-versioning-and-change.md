@@ -199,6 +199,7 @@ git push
 - Create: `infra/compose.phase3.yaml`
 - Create: `backend/migrations/versions/20260822_0003_phase3_opportunity_history.py`
 - Modify: `backend/src/deepaha/opportunities/models.py`
+- Modify: `backend/src/deepaha/documents/models.py`
 - Modify: `backend/src/deepaha/db/models.py`
 - Modify: `backend/tests/integration/test_migrations.py`
 - Create: `backend/tests/integration/test_phase3_persistence_contract.py`

@@ -119,6 +119,7 @@ class EvidenceRef(Base):
             ["documents.document_id", "documents.artifact_id"],
             ondelete="RESTRICT",
         ),
+        UniqueConstraint("evidence_ref_id", "document_id"),
     )
 
     evidence_ref_id: Mapped[UUID] = mapped_column(
