@@ -1062,7 +1062,7 @@ git commit -m "ci: add phase 1 integration verification"
 
 **接口：** 仅 Gate 证据；不增加运行时行为。
 
-- [ ] **Step 1：实现后先以 `OPEN` 状态创建证据包**
+- [x] **Step 1：实现后先以 `OPEN` 状态创建证据包**
 
 Populate files from actual Task 6 outputs. Before remote CI succeeds, `README.md` must say:
 
@@ -1074,7 +1074,7 @@ Populate files from actual Task 6 outputs. Before remote CI succeeds, `README.md
 
 Do not copy Phase 0 test counts or CI URLs. `sample-provenance.md` must reproduce the fixed URL, time, licence, 11662-byte size, SHA and object key exactly.
 
-- [ ] **Step 2：运行新鲜副本验证**
+- [x] **Step 2：运行新鲜副本验证**
 
 Create a temporary clone or archive extraction outside `D:\DeepAha`, install only documented prerequisites, and run:
 
@@ -1085,7 +1085,7 @@ powershell -ExecutionPolicy Bypass -File scripts/verify-phase1.ps1
 
 Record the temporary path, source commit, runtime/container versions, commands, exit codes, test counts and migration revision. The temporary copy must not reuse repository `.venv`, caches, database files or object-store contents.
 
-- [ ] **Step 3：逐行验证验收矩阵**
+- [x] **Step 3：逐行验证验收矩阵**
 
 `acceptance-results.md` must contain one row for each exit condition:
 
@@ -1098,7 +1098,7 @@ Record the temporary path, source commit, runtime/container versions, commands, 
 
 Each PASS row cites a concrete test name, command and observed result. Any missing evidence keeps that row and the Gate open.
 
-- [ ] **Step 4：检查最终 Diff 的范围与秘密信息**
+- [x] **Step 4：检查最终 Diff 的范围与秘密信息**
 
 Run:
 
@@ -1112,7 +1112,7 @@ rg -n --hidden -g '!backend/uv.lock' -g '!web/pnpm-lock.yaml' "AKIA[0-9A-Z]{16}|
 
 Review matches manually. Test-only local credentials in Compose/CI are permitted only when clearly labelled and unable to access external services.
 
-- [ ] **Step 5：提交 OPEN Gate 证据**
+- [x] **Step 5：提交 OPEN Gate 证据**
 
 ```powershell
 git add docs/gates/phase-1 docs/development/README.md README.md

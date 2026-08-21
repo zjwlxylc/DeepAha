@@ -12,6 +12,9 @@
 | [质量与发布策略](./quality-and-release.md) | 测试层级、Golden Dataset、指标证据和发布流程 | 编写测试、评估或准备发布时 |
 | [Phase 0 设计](../superpowers/specs/2026-08-21-phase-0-engineering-foundation-design.md) | 第一个可交付子项目的设计与验收边界 | 开始创建代码仓库骨架前 |
 | [Phase 0 实现计划](../superpowers/plans/2026-08-21-phase-0-engineering-foundation.md) | 可逐项执行的脚手架与验证步骤 | 实际执行 Phase 0 时 |
+| [Phase 1 设计](../superpowers/specs/2026-08-21-phase-1-domain-contract-and-raw-evidence-design.md) | 领域契约、原始证据、存储边界和退出条件 | 评审或维护 Phase 1 时 |
+| [Phase 1 实现计划](../superpowers/plans/2026-08-21-phase-1-domain-contract-and-raw-evidence.md) | Task 1–7 的 TDD 实施与验证顺序 | 复核 Phase 1 实现证据时 |
+| [Phase 1 Gate](../gates/phase-1/README.md) | 本地/新鲜副本/远程 CI 证据与 Gate 判定 | 判断 Phase 1 是否可以关闭时 |
 
 ## 文档状态词
 
@@ -23,7 +26,7 @@
 - `VERIFIED`：指定测试和证据已经运行并满足文档中的验收条件。
 - `SUPERSEDED`：被明确的新版本替代，只保留历史参考。
 
-当前状态：Phase 0 工程基础已实现并通过 [Phase 0 Gate](../gates/phase-0/README.md)；Phase 1 及后续阶段仍为 `PROPOSED`，尚未开始实现。
+当前状态：Phase 0 工程基础已通过 [Phase 0 Gate](../gates/phase-0/README.md)；Phase 1 代码已实现并通过当前工作副本与新鲜副本的本地验证，但 [Phase 1 Gate](../gates/phase-1/README.md) 仍为 `OPEN`，等待远程 CI 证据。Phase 2 及后续阶段仍为 `PROPOSED`，尚未开始实现。
 
 ## 维护规则
 
