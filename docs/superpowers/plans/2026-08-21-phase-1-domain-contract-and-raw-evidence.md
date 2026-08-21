@@ -683,7 +683,7 @@ git commit -m "feat(storage): add immutable S3 raw object store"
 - 产出：`ImportRawArtifactCommand`、`ImportRawArtifactResult`、`RawArtifactProvenanceConflict`、`build_raw_object_key()`、`import_raw_artifact()`。
 - 输入：Task 2 的 Session/ORM 与 Task 3 的 `ObjectStore`。
 
-- [ ] **Step 1：编写失败的幂等性测试**
+- [x] **Step 1：编写失败的幂等性测试**
 
 ```python
 def test_replaying_same_capture_returns_same_raw_artifact(
@@ -714,7 +714,7 @@ def test_replaying_same_capture_returns_same_raw_artifact(
 
 Add separate tests for changed `retrieved_at` causing `RawArtifactProvenanceConflict`, a transaction rollback followed by successful retry, object key format, and zero-byte rejection before storage.
 
-- [ ] **Step 2：运行定向测试并确认 RED**
+- [x] **Step 2：运行定向测试并确认 RED**
 
 Run from the repository root:
 
@@ -733,7 +733,7 @@ uv run pytest tests/integration/test_raw_artifact_import.py -m integration -v
 
 Expected: import failure because `artifacts.service` does not exist.
 
-- [ ] **Step 3：实现命令/结果类型与内容寻址**
+- [x] **Step 3：实现命令/结果类型与内容寻址**
 
 Use frozen dataclasses. `build_raw_object_key` must return:
 
@@ -744,7 +744,7 @@ def build_raw_object_key(content_sha256: str) -> str:
 
 Validate non-empty bytes and all command metadata with the Task 1 contract types before calling storage.
 
-- [ ] **Step 4：实现数据库幂等性，服务内部不提交事务**
+- [x] **Step 4：实现数据库幂等性，服务内部不提交事务**
 
 The service order is:
 
@@ -757,11 +757,11 @@ The service order is:
 
 The caller owns commit/rollback. The service never deletes the content-addressed object on database rollback.
 
-- [ ] **Step 5：证明测试能捕获错误的去重分支**
+- [x] **Step 5：证明测试能捕获错误的去重分支**
 
 Temporarily change the conflict branch to always create a fresh ID, run the duplicate test, and confirm it fails on either the unique constraint or row count. Restore the correct implementation and rerun to pass.
 
-- [ ] **Step 6：运行 Task 4 GREEN 验证**
+- [x] **Step 6：运行 Task 4 GREEN 验证**
 
 Run:
 
@@ -776,7 +776,7 @@ uv run mypy src tests
 
 Expected: duplicate replay returns one ID/row, provenance conflict is explicit, rollback retry succeeds, and all commands exit `0`.
 
-- [ ] **Step 7：停止本 Task 服务并提交 Task 4**
+- [x] **Step 7：停止本 Task 服务并提交 Task 4**
 
 ```powershell
 Set-Location ..
