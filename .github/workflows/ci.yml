@@ -83,4 +83,7 @@ jobs:
       - run: uv sync --locked --group dev
       - run: uv run alembic upgrade head
       - run: uv run pytest -m integration --strict-markers
+      - run: >-
+          uv run pytest tests/contracts tests/sources tests/documents
+          -m "not integration and not live_source" --strict-markers
       - run: uv run alembic check

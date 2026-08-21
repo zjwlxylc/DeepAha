@@ -20,7 +20,8 @@ if ($env:DEEPAHA_ALLOW_LIVE_SOURCE_CHECK -ne "true") {
     throw "DEEPAHA_ALLOW_LIVE_SOURCE_CHECK=true is required"
 }
 
-$registry = Get-Content -LiteralPath $resolvedRegistryPath -Raw | ConvertFrom-Json
+$registry = Get-Content -LiteralPath $resolvedRegistryPath -Raw -Encoding UTF8 |
+    ConvertFrom-Json
 $endpoints = @(
     foreach ($entry in $registry.sources) {
         foreach ($endpoint in $entry.endpoints) {
@@ -56,7 +57,20 @@ $outputDirectory = Split-Path -Parent $resolvedOutputPath
 if (-not (Test-Path -LiteralPath $outputDirectory)) {
     New-Item -ItemType Directory -Path $outputDirectory | Out-Null
 }
-$registrySha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $resolvedRegistryPath).Hash.ToLowerInvariant()
+$registryStream = [System.IO.File]::OpenRead($resolvedRegistryPath)
+try {
+    $registryHasher = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        $registryDigest = $registryHasher.ComputeHash($registryStream)
+    }
+    finally {
+        $registryHasher.Dispose()
+    }
+}
+finally {
+    $registryStream.Dispose()
+}
+$registrySha256 = ([System.BitConverter]::ToString($registryDigest) -replace "-", "").ToLowerInvariant()
 
 function Write-ObservationState {
     param([Parameter(Mandatory = $true)][object]$State)
@@ -144,7 +158,8 @@ function Update-ObservationCounts {
 }
 
 if (Test-Path -LiteralPath $resolvedOutputPath) {
-    $state = Get-Content -LiteralPath $resolvedOutputPath -Raw | ConvertFrom-Json
+    $state = Get-Content -LiteralPath $resolvedOutputPath -Raw -Encoding UTF8 |
+        ConvertFrom-Json
     if (
         $state.schema_version -ne "0.2.0" -or
         [int]$state.requested_rounds -ne $Rounds -or

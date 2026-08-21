@@ -72,7 +72,7 @@ def test_live_runner_uses_mock_cli_without_network_or_sleep(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    powershell = shutil.which("pwsh") or shutil.which("powershell")
+    powershell = shutil.which("powershell") or shutil.which("pwsh")
     if powershell is None:
         pytest.skip("PowerShell is unavailable")
     fake_cli = tmp_path / "fake-source-cli.ps1"
@@ -122,25 +122,26 @@ throw "unexpected fake CLI command: $command"
     monkeypatch.setenv("DEEPAHA_ALLOW_LIVE_SOURCE_CHECK", "true")
     monkeypatch.setenv("DEEPAHA_OBJECT_STORE_SECRET_KEY", "must-not-appear")
 
+    command = [
+        powershell,
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        str(RUNNER),
+        "-Rounds",
+        "1",
+        "-IntervalSeconds",
+        "21600",
+        "-OutputPath",
+        str(output),
+        "-RegistryPath",
+        str(REGISTRY),
+        "-CliPath",
+        str(fake_cli),
+    ]
     completed = subprocess.run(
-        [
-            powershell,
-            "-NoProfile",
-            "-ExecutionPolicy",
-            "Bypass",
-            "-File",
-            str(RUNNER),
-            "-Rounds",
-            "1",
-            "-IntervalSeconds",
-            "21600",
-            "-OutputPath",
-            str(output),
-            "-RegistryPath",
-            str(REGISTRY),
-            "-CliPath",
-            str(fake_cli),
-        ],
+        command,
         check=False,
         capture_output=True,
         text=True,
@@ -160,6 +161,20 @@ throw "unexpected fake CLI command: $command"
     serialized = output.read_text(encoding="utf-8")
     assert "must-not-appear" not in serialized
     assert "response_body" not in serialized
+
+    resumed = subprocess.run(
+        command,
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=30,
+    )
+    assert resumed.returncode == 0, resumed.stderr
+    resumed_result = json.loads(output.read_text(encoding="utf-8"))
+    assert len(resumed_result["rounds"]) == 1
+    assert resumed_result["counts"] == {"results": 10, "valid": 10, "failed": 0}
 
 
 def test_live_runner_rejects_interval_below_registry_policy(

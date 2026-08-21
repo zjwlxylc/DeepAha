@@ -9,7 +9,7 @@
 | [系统开发路线](./system-roadmap.md) | 阶段顺序、依赖、交付物、Gate 和停止条件 | 规划版本与决定下一阶段时 |
 | [系统架构基线](./architecture.md) | 模块边界、运行拓扑、数据流、错误处理和技术选择 | 新增模块、接口或基础设施前 |
 | [领域契约 v0.1](./domain-contracts-v0.1.md) | 核心实体、枚举、证据定位和跨模块契约 | 设计数据库、API、Schema 或测试夹具时 |
-| [领域契约 v0.2](./domain-contracts-v0.2.md) | Phase 2 的机会类型、Endpoint、采集观察、解析尝试和结构化定位提案 | 执行 Phase 2 契约/迁移前 |
+| [领域契约 v0.2](./domain-contracts-v0.2.md) | Phase 2 已实现、Gate 关闭前仍为 PROPOSED 的 Endpoint、采集观察、解析尝试和结构化定位契约 | 评审 Phase 2 实现时 |
 | [质量与发布策略](./quality-and-release.md) | 测试层级、Golden Dataset、指标证据和发布流程 | 编写测试、评估或准备发布时 |
 | [Blueprint v1.2 基线协调](../superpowers/specs/2026-08-21-blueprint-v1.2-baseline-reconciliation-design.md) | 新旧 Blueprint 权威、D8–D12 和阶段映射 | 解释 Phase 2 及后续范围变化时 |
 | [Phase 0 设计](../superpowers/specs/2026-08-21-phase-0-engineering-foundation-design.md) | 第一个可交付子项目的设计与验收边界 | 开始创建代码仓库骨架前 |
@@ -19,6 +19,7 @@
 | [Phase 1 Gate](../gates/phase-1/README.md) | 本地/新鲜副本/远程 CI 证据与 Gate 判定 | 判断 Phase 1 是否可以关闭时 |
 | [Phase 2 设计](../superpowers/specs/2026-08-21-phase-2-source-ingestion-and-document-evidence-design.md) | 观察式采集、三格式解析、证据定位和 Gate 边界 | 开始或评审 Phase 2 时 |
 | [Phase 2 实现计划](../superpowers/plans/2026-08-21-phase-2-source-ingestion-and-document-evidence.md) | Task 1–11 的 TDD 实施、live 观察与验证顺序 | 新窗体执行 Phase 2 时 |
+| [Phase 2 Gate](../gates/phase-2/README.md) | 已实现能力、本地证据与仍缺失的 live/新鲜副本/CI 证据 | 判断 Phase 2 是否允许关闭时 |
 
 ## 文档状态词
 
@@ -30,7 +31,7 @@
 - `VERIFIED`：指定测试和证据已经运行并满足文档中的验收条件。
 - `SUPERSEDED`：被明确的新版本替代，只保留历史参考。
 
-当前状态：Phase 0 工程基础和 Phase 1 领域契约/原始证据 Gate 已 `CLOSED`。Blueprint v1.2 基线协调、Phase 2 spec 和实施计划已经形成；Phase 2 代码、迁移、来源观察、解析结果和 Gate 仍为 `PROPOSED`，尚未开始实现。Phase 3 及后续阶段不得提前进入。
+当前状态：Phase 0 工程基础和 Phase 1 领域契约/原始证据 Gate 已 `CLOSED`。Phase 2 代码、迁移、来源采集和三格式解析已 `IMPLEMENTED`，本地统一验证已通过；但 live 24 小时观察、新鲜副本和远程 CI 尚未完成，[Phase 2 Gate](../gates/phase-2/README.md) 仍为 `OPEN`，领域契约 v0.2 仍为 `PROPOSED`。Phase 3 及后续阶段不得提前进入。
 
 ## 维护规则
 
