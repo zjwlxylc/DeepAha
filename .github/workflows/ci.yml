@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, codex/phase-3-opportunity-resolution]
   pull_request:
 
 permissions:
