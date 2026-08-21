@@ -26,7 +26,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "-q"
+addopts = "-q -m 'not integration'"
 markers = ["integration: requires PostgreSQL 18 and the local S3 endpoint"]
 pythonpath = ["src"]
 testpaths = ["tests"]

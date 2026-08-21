@@ -952,7 +952,7 @@ git commit -m "test(phase1): add licensed official evidence slice"
 - 产出：一个 Phase 1 集成验证命令和 CI `integration` 作业。
 - 输入：Task 1-5 的全部测试/迁移。
 
-- [ ] **Step 1：让基线 pytest 明确排除集成测试**
+- [x] **Step 1：让基线 pytest 明确排除集成测试**
 
 Task 2 已注册 marker；本 Step 只把默认测试切换为显式排除集成测试，使 `uv run pytest` 在无 Docker 时保持确定性：
 
@@ -966,7 +966,7 @@ testpaths = ["tests"]
 
 Run `uv run pytest --strict-markers`; expected baseline unit/contract tests pass and integration tests are deselected, not silently skipped.
 
-- [ ] **Step 2：编写带范围化清理的 `verify-phase1.ps1`**
+- [x] **Step 2：编写带范围化清理的 `verify-phase1.ps1`**
 
 The script must:
 
@@ -980,7 +980,7 @@ The script must:
 - in `finally`, run `docker compose -f (Join-Path $projectRoot "infra/compose.yaml") -p $phase1ComposeProject down --remove-orphans`;
 - never call `down -v`, delete filesystem paths, or touch another Compose project.
 
-- [ ] **Step 3：用故意失败的断言运行一次脚本**
+- [x] **Step 3：用故意失败的断言运行一次脚本**
 
 Temporarily change the fixed expected SHA in the official sample test by one character. Run:
 
@@ -990,11 +990,11 @@ powershell -ExecutionPolicy Bypass -File scripts/verify-phase1.ps1
 
 Expected: non-zero exit and the SHA assertion failure. Restore the fixed SHA before continuing.
 
-- [ ] **Step 4：恢复后运行完整本地验证**
+- [x] **Step 4：恢复后运行完整本地验证**
 
 Run the same script again. Expected: baseline backend/web verification, migrations, integration tests and Alembic check all exit `0`; scoped containers stop in `finally`.
 
-- [ ] **Step 5：增加 CI `integration` 作业**
+- [x] **Step 5：增加 CI `integration` 作业**
 
 Use service containers:
 
@@ -1026,7 +1026,7 @@ Use service containers:
 
 Steps use checkout, `astral-sh/setup-uv@v6` with Python 3.14, locked sync, `alembic upgrade head`, `pytest -m integration --strict-markers`, and `alembic check`. The credentials are local service constants, not external secrets; label them as test-only in workflow comments.
 
-- [ ] **Step 6：运行本地 YAML 与仓库检查**
+- [x] **Step 6：运行本地 YAML 与仓库检查**
 
 Run:
 
@@ -1038,7 +1038,7 @@ powershell -ExecutionPolicy Bypass -File scripts/verify-phase1.ps1
 
 Read complete output and record actual test counts, migration revision and tool versions for Task 7.
 
-- [ ] **Step 7：提交 Task 6**
+- [x] **Step 7：提交 Task 6**
 
 ```powershell
 git add backend/pyproject.toml backend/uv.lock scripts/verify.ps1 scripts/verify-phase1.ps1 .github/workflows/ci.yml
