@@ -1,0 +1,49 @@
+{
+  "manifest_version": "1.0.0",
+  "generator_version": "phase4-fixture-generator-v1",
+  "scenario_clock": "2026-08-22T00:00:00Z",
+  "license": "CC0-1.0",
+  "synthetic_only": true,
+  "files": [
+    {
+      "filename": "phase4-golden-cases.json",
+      "sha256": "c8446bdc21a777b499aa187f8b325d1bac5fd92365adb877fb39bb0564233444",
+      "byte_length": 3644,
+      "record_count": 12,
+      "license": "CC0-1.0",
+      "synthetic_only": true
+    },
+    {
+      "filename": "phase4-major-catalog.json",
+      "sha256": "ad6987a6b67d586e54feec4fe8545db64d1219314a5bc5ade9a77058d5165a1f",
+      "byte_length": 1572,
+      "record_count": 12,
+      "license": "CC0-1.0",
+      "synthetic_only": true
+    },
+    {
+      "filename": "phase4-major-mapping.json",
+      "sha256": "44f1907e9207f1bedd9b243b35781d718037d231f2a6c66ddee9aa69235ab6fb",
+      "byte_length": 463,
+      "record_count": 2,
+      "license": "CC0-1.0",
+      "synthetic_only": true
+    },
+    {
+      "filename": "phase4-mother-profiles.json",
+      "sha256": "43ca5fa8c3c61061fb84b23c0b338d9f6adabeffc9e3183a4f203ead7ba9be06",
+      "byte_length": 24012,
+      "record_count": 20,
+      "license": "CC0-1.0",
+      "synthetic_only": true
+    },
+    {
+      "filename": "phase4-synthetic-profiles.json",
+      "sha256": "b3308c8a719d3be812c57b5e42fabb1ba860ba555ea01d4622c2d6de4cac82ff",
+      "byte_length": 124381,
+      "record_count": 100,
+      "license": "CC0-1.0",
+      "synthetic_only": true
+    }
+  ]
+}
