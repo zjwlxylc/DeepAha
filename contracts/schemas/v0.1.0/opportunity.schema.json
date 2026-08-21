@@ -1,0 +1,121 @@
+{
+  "$defs": {
+    "OpportunityStatus": {
+      "enum": [
+        "DRAFT",
+        "OPEN",
+        "CLOSING_SOON",
+        "CLOSED",
+        "CANCELLED",
+        "SUPERSEDED",
+        "UNKNOWN"
+      ],
+      "title": "OpportunityStatus",
+      "type": "string"
+    },
+    "OpportunityType": {
+      "enum": [
+        "PUBLIC_INSTITUTION_JOB",
+        "STATE_OWNED_ENTERPRISE_JOB",
+        "CIVIL_SERVICE",
+        "GRASSROOTS_PROGRAM",
+        "YOUTH_POLICY_BENEFIT",
+        "POSTGRAD_RECOMMENDATION",
+        "ADMISSION_CHANGE"
+      ],
+      "title": "OpportunityType",
+      "type": "string"
+    },
+    "PublicationStatus": {
+      "enum": [
+        "INTERNAL",
+        "READY",
+        "PUBLISHED",
+        "WITHDRAWN"
+      ],
+      "title": "PublicationStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "canonical_title": {
+      "minLength": 1,
+      "title": "Canonical Title",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "current_version": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Current Version"
+    },
+    "issuer_name": {
+      "minLength": 1,
+      "title": "Issuer Name",
+      "type": "string"
+    },
+    "jurisdiction": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Jurisdiction"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "public_id": {
+      "pattern": "^opp_[0-9a-f]{32}$",
+      "title": "Public Id",
+      "type": "string"
+    },
+    "publication_status": {
+      "$ref": "#/$defs/PublicationStatus"
+    },
+    "status": {
+      "$ref": "#/$defs/OpportunityStatus"
+    },
+    "type": {
+      "$ref": "#/$defs/OpportunityType"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "opportunity_id",
+    "public_id",
+    "type",
+    "canonical_title",
+    "issuer_name",
+    "jurisdiction",
+    "current_version",
+    "status",
+    "publication_status",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "OpportunitySchema",
+  "type": "object"
+}

@@ -16,10 +16,11 @@
 | 类型 | 约束 | 用途 |
 |---|---|---|
 | `EntityId` | UUIDv7 | 内部实体主键，按时间大致有序 |
-| `PublicId` | 不透明、稳定、不可包含敏感信息 | 对外 API 标识 |
+| `PublicId` | `src_` 或 `opp_` 前缀加 32 位小写十六进制；稳定且不含敏感信息 | 对外 API 标识 |
 | `Instant` | RFC 3339 UTC，例如 `2026-08-21T08:00:00Z` | 系统时间点 |
 | `LocalDate` | ISO 8601 日期，例如 `2026-08-21` | 截止日期等业务日期 |
 | `Sha256` | 64 位小写十六进制 | 内容去重和完整性验证 |
+| `S3Uri` | `s3://<bucket>/<object_key>`，不含 endpoint 或凭据 | 原始或派生对象定位 |
 | `VersionNumber` | 从 `1` 开始递增的整数 | 聚合根版本 |
 | `Confidence` | `[0, 1]` 小数；不能代替证据 | 模型或解析置信度 |
 | `JsonObject` | 有版本、可验证的 JSON 对象 | 尚未稳定的扩展字段 |
@@ -106,13 +107,13 @@ retrieved_at: Instant
 http_status: integer | null
 media_type: string | null
 content_sha256: Sha256
-storage_uri: string
-byte_size: integer
+storage_uri: S3Uri
+byte_size: positive integer
 collector_version: string
 metadata_schema_version: string
 ```
 
-不变量：原始内容采用不可变存储；重复抓取可以共享内容对象，但每次抓取事实必须单独保留。
+不变量：原始内容采用不可变存储。Phase 1 固定捕获重放以 `(source_id, content_sha256)` 去重；只有全部捕获元数据一致才返回原记录，元数据不一致必须报告 `RAW_ARTIFACT_PROVENANCE_CONFLICT`。数据库把公共 `storage_uri` 拆为 `storage_bucket` 与 `object_key`，不持久化 endpoint。进入实时采集前，Phase 2 必须另行定义每次抓取观察记录，不得静默吞掉新的抓取事实。
 
 ### 4.3 `Document`
 
@@ -142,7 +143,7 @@ locator:
 quote_sha256: Sha256 | null
 ```
 
-`EvidenceRef` 是结论与原文之间的最小追溯单元。公开引用必须能回到正式来源；社区线索只能作为发现路径。
+`EvidenceRef` 是结论与原文之间的最小追溯单元。公共 Schema 保持值对象；数据库可增加不公开的内部 UUIDv7，并用 `(document_id, artifact_id)` 复合外键保证文档与原件配对。Phase 1 的 `full_document` locator 固定使用 `value="*"`。公开引用必须能回到正式来源；社区线索只能作为发现路径。
 
 ### 4.5 `Opportunity`
 
@@ -153,14 +154,14 @@ type: OpportunityType
 canonical_title: string
 issuer_name: string
 jurisdiction: string | null
-current_version: VersionNumber
+current_version: VersionNumber | null
 status: OpportunityStatus
 publication_status: PublicationStatus
 created_at: Instant
 updated_at: Instant
 ```
 
-`Opportunity` 是稳定身份，内容变化存入版本；不得通过覆盖当前记录抹去历史。
+`Opportunity` 是稳定身份，内容变化存入版本；不得通过覆盖当前记录抹去历史。Phase 1 尚未实现 `OpportunityVersion` 时允许 `current_version=null`，表示稳定身份已建立但尚无版本；不得写入悬空的版本 `1` 或用 `0` 代替未知。
 
 ### 4.6 `OpportunityVersion`
 

@@ -1,0 +1,70 @@
+{
+  "$defs": {
+    "EvidenceLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/EvidenceLocatorKind"
+        },
+        "value": {
+          "minLength": 1,
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "title": "EvidenceLocator",
+      "type": "object"
+    },
+    "EvidenceLocatorKind": {
+      "enum": [
+        "page",
+        "paragraph",
+        "css_selector",
+        "text_span",
+        "full_document"
+      ],
+      "title": "EvidenceLocatorKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_id": {
+      "format": "uuid",
+      "title": "Artifact Id",
+      "type": "string"
+    },
+    "document_id": {
+      "format": "uuid",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "locator": {
+      "$ref": "#/$defs/EvidenceLocator"
+    },
+    "quote_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Quote Sha256"
+    }
+  },
+  "required": [
+    "document_id",
+    "artifact_id",
+    "locator",
+    "quote_sha256"
+  ],
+  "title": "EvidenceRefSchema",
+  "type": "object"
+}

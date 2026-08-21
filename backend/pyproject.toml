@@ -5,6 +5,7 @@ description = "DeepAha API"
 requires-python = ">=3.14,<3.15"
 dependencies = [
   "fastapi>=0.115,<1",
+  "pydantic>=2.11,<3",
   "pydantic-settings>=2.10,<3",
   "uvicorn[standard]>=0.35,<1",
 ]
@@ -12,9 +13,11 @@ dependencies = [
 [dependency-groups]
 dev = [
   "httpx2>=2,<3",
+  "jsonschema>=4.25,<5",
   "mypy>=1.17,<2",
   "pytest>=8.4,<10",
   "ruff>=0.12,<1",
+  "types-jsonschema>=4.25,<5",
 ]
 
 [tool.pytest.ini_options]

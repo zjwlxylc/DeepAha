@@ -126,7 +126,7 @@
 - 产出：`render_phase1_schemas() -> dict[str, bytes]` 和 `python -m deepaha.contracts.export <repo-root>`。
 - 输入：spec 中已确认的 D1-D5。
 
-- [ ] **Step 1：先增加失败的契约测试**
+- [x] **Step 1：先增加失败的契约测试**
 
 Create tests that independently state the contract, including these cases:
 
@@ -188,7 +188,7 @@ def test_full_document_locator_has_fixed_value() -> None:
 
 Also test: naive datetime rejection, uppercase/short SHA rejection, `current_version=0` rejection, invalid enum rejection, `updated_at < created_at` rejection, and `storage_uri` rejecting endpoint credentials.
 
-- [ ] **Step 2：运行新测试并确认 RED**
+- [x] **Step 2：运行新测试并确认 RED**
 
 Run:
 
@@ -199,19 +199,19 @@ uv run pytest tests/contracts/test_phase1_contracts.py -v
 
 Expected: collection fails because `deepaha.contracts` does not exist. This is the intended missing-contract failure.
 
-- [ ] **Step 3：增加直接依赖并锁定版本**
+- [x] **Step 3：增加直接依赖并锁定版本**
 
 Run:
 
 ```powershell
 Set-Location backend
 uv add "pydantic>=2.11,<3"
-uv add --group dev "jsonschema>=4.25,<5"
+uv add --group dev "jsonschema>=4.25,<5" "types-jsonschema>=4.25,<5"
 ```
 
 Confirm `pyproject.toml` contains direct Pydantic and dev jsonschema dependencies and `uv.lock` changes only through `uv`.
 
-- [ ] **Step 4：实现公共校验类型**
+- [x] **Step 4：实现公共校验类型**
 
 Use Python 3.14 `uuid.uuid7` and Pydantic validators. The public signatures must be:
 
@@ -226,13 +226,13 @@ Confidence = Annotated[Decimal, Field(ge=Decimal("0"), le=Decimal("1"))]
 
 `require_uuid7` rejects other UUID versions. A shared model validator converts aware times to UTC and rejects naive datetimes; it does not silently assume a timezone.
 
-- [ ] **Step 5：实现五个 Pydantic 契约**
+- [x] **Step 5：实现五个 Pydantic 契约**
 
 Define the exact fields and enums from spec section 6. Set `model_config = ConfigDict(extra="forbid")` on all public contracts. `EvidenceLocator` enforces `full_document -> "*"`. `OpportunitySchema` permits `current_version=None` or an integer `>=1`.
 
 Export all public names from `contracts/__init__.py`; do not add API routes or ORM imports.
 
-- [ ] **Step 6：实现确定性 JSON Schema 导出**
+- [x] **Step 6：实现确定性 JSON Schema 导出**
 
 The renderer must return bytes without writing during tests:
 
@@ -258,7 +258,7 @@ def render_phase1_schemas() -> dict[str, bytes]:
 
 The CLI writes only to `contracts/schemas/v0.1.0/` beneath the explicit repository root argument.
 
-- [ ] **Step 7：增加版本化示例与导出物**
+- [x] **Step 7：增加版本化示例与导出物**
 
 Create one valid example object per contract in `phase-1-official-sample.json`. Use fixed UUIDv7 values, UTC timestamps, `status=UNKNOWN`, `publication_status=INTERNAL`, `current_version=null`, and the fixed SHA `1589f9177e197a578c8d37bd5a3bc869a17d7b0936f156666f69a2f88fbb9d2b`.
 
@@ -266,12 +266,14 @@ Run:
 
 ```powershell
 Set-Location backend
+$env:PYTHONPATH = "src"
 uv run python -m deepaha.contracts.export ..
+Remove-Item Env:PYTHONPATH
 ```
 
 Add tests that validate every example with both its Pydantic model and `jsonschema.Draft202012Validator`, and compare `render_phase1_schemas()` byte-for-byte with the checked-in files.
 
-- [ ] **Step 8：用已确认的差异更新领域契约文档**
+- [x] **Step 8：用已确认的差异更新领域契约文档**
 
 Change only these semantics:
 
@@ -283,7 +285,7 @@ Change only these semantics:
 
 Keep all Phase 2+ objects `PROPOSED`; do not claim the Phase 1 contract is stable before the Gate closes.
 
-- [ ] **Step 9：运行契约 RED-to-GREEN 验证**
+- [x] **Step 9：运行契约 RED-to-GREEN 验证**
 
 Run:
 
@@ -297,7 +299,7 @@ uv run mypy src tests
 
 Expected: all contract tests pass and all three static checks exit `0`.
 
-- [ ] **Step 10：提交 Task 1**
+- [x] **Step 10：提交 Task 1**
 
 ```powershell
 git add backend/pyproject.toml backend/uv.lock backend/src/deepaha/contracts backend/tests/contracts contracts docs/development/domain-contracts-v0.1.md docs/superpowers/specs/2026-08-21-phase-1-domain-contract-and-raw-evidence-design.md docs/superpowers/plans/2026-08-21-phase-1-domain-contract-and-raw-evidence.md

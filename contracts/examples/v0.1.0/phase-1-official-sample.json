@@ -1,0 +1,61 @@
+{
+  "source": {
+    "source_id": "0198d239-4b00-7000-8000-000000000001",
+    "public_id": "src_0198d2394b0070008000000000000001",
+    "canonical_url": "https://www.gov.uk/government/organisations/government-skills",
+    "authority_name": "Government Skills and Civil Service Fast Stream",
+    "tier": "OFFICIAL_PRIMARY",
+    "jurisdiction": "United Kingdom",
+    "active": true,
+    "created_at": "2026-08-21T09:00:00Z",
+    "updated_at": "2026-08-21T09:00:00Z"
+  },
+  "raw_artifact": {
+    "artifact_id": "0198d239-4b00-7000-8000-000000000002",
+    "source_id": "0198d239-4b00-7000-8000-000000000001",
+    "requested_url": "https://www.gov.uk/api/content/government/news/civil-service-fast-stream-named-uks-top-graduate-employer",
+    "resolved_url": "https://www.gov.uk/api/content/government/news/civil-service-fast-stream-named-uks-top-graduate-employer",
+    "retrieved_at": "2026-08-21T09:59:08.005Z",
+    "http_status": 200,
+    "media_type": "application/json; charset=utf-8",
+    "content_sha256": "1589f9177e197a578c8d37bd5a3bc869a17d7b0936f156666f69a2f88fbb9d2b",
+    "storage_uri": "s3://deepaha-raw/raw/sha256/15/1589f9177e197a578c8d37bd5a3bc869a17d7b0936f156666f69a2f88fbb9d2b",
+    "byte_size": 11662,
+    "collector_version": "phase1_design_capture/0.1.0",
+    "metadata_schema_version": "0.1.0"
+  },
+  "document": {
+    "document_id": "0198d239-4b00-7000-8000-000000000003",
+    "artifact_id": "0198d239-4b00-7000-8000-000000000002",
+    "title": "Civil Service Fast Stream named UK's top graduate employer",
+    "published_at": "2025-09-17T07:00:00Z",
+    "language": "en",
+    "extracted_text_uri": null,
+    "parser_name": "phase1_fixture_manifest",
+    "parser_version": "0.1.0",
+    "parse_confidence": null,
+    "created_at": "2026-08-21T10:00:00Z"
+  },
+  "opportunity": {
+    "opportunity_id": "0198d239-4b00-7000-8000-000000000004",
+    "public_id": "opp_0198d2394b0070008000000000000004",
+    "type": "CIVIL_SERVICE",
+    "canonical_title": "Civil Service Fast Stream",
+    "issuer_name": "Civil Service Fast Stream",
+    "jurisdiction": "United Kingdom",
+    "current_version": null,
+    "status": "UNKNOWN",
+    "publication_status": "INTERNAL",
+    "created_at": "2026-08-21T10:00:00Z",
+    "updated_at": "2026-08-21T10:00:00Z"
+  },
+  "evidence_ref": {
+    "document_id": "0198d239-4b00-7000-8000-000000000003",
+    "artifact_id": "0198d239-4b00-7000-8000-000000000002",
+    "locator": {
+      "kind": "full_document",
+      "value": "*"
+    },
+    "quote_sha256": "1589f9177e197a578c8d37bd5a3bc869a17d7b0936f156666f69a2f88fbb9d2b"
+  }
+}
