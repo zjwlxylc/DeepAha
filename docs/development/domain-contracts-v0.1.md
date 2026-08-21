@@ -1,8 +1,11 @@
 # DeepAha 领域契约 v0.1
 
-> 状态：`PROPOSED`  
-> 契约版本：`0.1.0`  
-> 适用阶段：Phase 1—Phase 6 设计基线  
+> 状态：`Source`、`RawArtifact`、`Document`、`EvidenceRef`、`Opportunity` 及其必要 v0.1 类型为 `STABLE`；其余未实现对象为 `PROPOSED`
+>
+> 契约版本：`0.1.0`
+>
+> 适用阶段：Phase 1—Phase 6 设计基线
+>
 > 来源基线：`文档/DeepAha_青年机会智能系统_Blueprint_v1.0.1.docx`
 
 ## 1. 目的
@@ -82,6 +85,8 @@
 
 ### 4.1 `Source`
 
+> 状态：`STABLE`（Phase 1 Gate）
+
 ```yaml
 source_id: EntityId
 public_id: PublicId
@@ -97,6 +102,8 @@ updated_at: Instant
 不变量：规范 URL 唯一；来源等级变更必须记录操作者、原因和时间。
 
 ### 4.2 `RawArtifact`
+
+> 状态：`STABLE`（Phase 1 Gate）
 
 ```yaml
 artifact_id: EntityId
@@ -117,6 +124,8 @@ metadata_schema_version: string
 
 ### 4.3 `Document`
 
+> 状态：`STABLE`（Phase 1 Gate）
+
 ```yaml
 document_id: EntityId
 artifact_id: EntityId
@@ -134,6 +143,8 @@ created_at: Instant
 
 ### 4.4 `EvidenceRef`
 
+> 状态：`STABLE`（Phase 1 Gate）
+
 ```yaml
 document_id: EntityId
 artifact_id: EntityId
@@ -146,6 +157,8 @@ quote_sha256: Sha256 | null
 `EvidenceRef` 是结论与原文之间的最小追溯单元。公共 Schema 保持值对象；数据库可增加不公开的内部 UUIDv7，并用 `(document_id, artifact_id)` 复合外键保证文档与原件配对。Phase 1 的 `full_document` locator 固定使用 `value="*"`。公开引用必须能回到正式来源；社区线索只能作为发现路径。
 
 ### 4.5 `Opportunity`
+
+> 状态：`STABLE`（Phase 1 Gate）
 
 ```yaml
 opportunity_id: EntityId
@@ -164,6 +177,8 @@ updated_at: Instant
 `Opportunity` 是稳定身份，内容变化存入版本；不得通过覆盖当前记录抹去历史。Phase 1 尚未实现 `OpportunityVersion` 时允许 `current_version=null`，表示稳定身份已建立但尚无版本；不得写入悬空的版本 `1` 或用 `0` 代替未知。
 
 ### 4.6 `OpportunityVersion`
+
+> 状态：`PROPOSED`
 
 ```yaml
 opportunity_id: EntityId
@@ -188,6 +203,8 @@ created_at: Instant
 
 ### 4.7 `OpportunityEvent`
 
+> 状态：`PROPOSED`
+
 ```yaml
 event_id: EntityId
 opportunity_id: EntityId
@@ -201,6 +218,8 @@ evidence_refs: [EvidenceRef]
 
 ### 4.8 `OpportunityAlias`
 
+> 状态：`PROPOSED`
+
 ```yaml
 alias_id: EntityId
 opportunity_id: EntityId
@@ -212,6 +231,8 @@ source_id: EntityId | null
 别名用于实体归并（entity resolution）；自动归并必须可撤销并保留依据。
 
 ### 4.9 `RuleSet` 与 `RuleExpression`
+
+> 状态：`PROPOSED`
 
 ```yaml
 rule_set_id: EntityId
@@ -237,6 +258,8 @@ confidence: Confidence | null
 
 ### 4.10 `EligibilityResult`
 
+> 状态：`PROPOSED`
+
 ```yaml
 result_id: EntityId
 opportunity_id: EntityId
@@ -256,6 +279,8 @@ engine_version: string
 
 ### 4.11 `UserStateVersion`
 
+> 状态：`PROPOSED`
+
 ```yaml
 user_state_version_id: EntityId
 user_id: EntityId
@@ -269,6 +294,8 @@ created_at: Instant
 首版仅保留匹配所必需的最小属性。敏感字段应分级、加密并设置独立保留期限；日志不得记录原始敏感值。
 
 ### 4.12 `MatchSnapshot`
+
+> 状态：`PROPOSED`
 
 ```yaml
 snapshot_id: EntityId
@@ -285,6 +312,8 @@ created_at: Instant
 分数用于排序，不得替代资格状态。首版必须能用固定规则重算相同结果。
 
 ### 4.13 行为、反馈与评估
+
+> 状态：`PROPOSED`
 
 ```yaml
 ActionEvent:

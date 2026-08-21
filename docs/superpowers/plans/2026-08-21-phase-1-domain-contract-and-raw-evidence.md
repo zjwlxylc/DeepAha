@@ -1119,11 +1119,11 @@ git add docs/gates/phase-1 docs/development/README.md README.md
 git commit -m "docs: record phase 1 local verification evidence"
 ```
 
-- [ ] **Step 6：仅在用户授权 push 后取得远程 CI 证据**
+- [x] **Step 6：仅在用户授权 push 后取得远程 CI 证据**
 
 If the user authorizes pushing, push the implementation branch/commit, wait for `backend-quality`, `web-quality`, and `integration`, and inspect all conclusions. If push is not authorized, stop with Gate `OPEN` and report the missing remote evidence; do not fabricate a run URL.
 
-- [ ] **Step 7：只在远程成功后关闭 Gate**
+- [x] **Step 7：只在远程成功后关闭 Gate**
 
 When all required jobs are `success`, update:
 
@@ -1135,7 +1135,7 @@ When all required jobs are `success`, update:
 
 Run `git diff --check` and both verification scripts again after the documentation-only change if the source commit changed.
 
-- [ ] **Step 8：提交最终 Gate 关闭记录**
+- [x] **Step 8：提交最终 Gate 关闭记录**
 
 ```powershell
 git add docs/gates/phase-1 docs/development docs/development/domain-contracts-v0.1.md README.md
@@ -1150,22 +1150,22 @@ Do not push this closure commit or claim the new commit's CI passed until its ow
 
 Before reporting Phase 1 complete, execute and read fresh output for every item:
 
-- [ ] `git status --short --branch` shows only expected state.
-- [ ] `git diff --check` exits `0`.
-- [ ] `powershell -ExecutionPolicy Bypass -File scripts/verify.ps1` exits `0`.
-- [ ] `powershell -ExecutionPolicy Bypass -File scripts/verify-phase1.ps1` exits `0` in the working copy.
-- [ ] The same two commands exit `0` in a fresh copy.
-- [ ] Alembic round-trip and `alembic check` pass against PostgreSQL 18.4.
-- [ ] The fixed fixture is exactly 11662 bytes with SHA `1589f9177e197a578c8d37bd5a3bc869a17d7b0936f156666f69a2f88fbb9d2b`.
-- [ ] Repeated import returns one RawArtifact ID and one database row.
-- [ ] S3 readback bytes match the fixture exactly.
-- [ ] EvidenceRef rejects a Document/Artifact mismatch.
-- [ ] Document and Opportunity remain separate models/tables/entities.
-- [ ] Checked-in JSON Schemas equal deterministic Pydantic exports.
-- [ ] Alembic migration and SQLAlchemy metadata have no diff.
-- [ ] No secrets, user data, database/object files, caches or build output are tracked.
-- [ ] `backend-quality`, `web-quality`, and `integration` have actual remote `success` conclusions for the Gate commit.
-- [ ] Gate documents contain actual evidence and no planned result is described as completed.
+- [x] `git status --short --branch` shows only expected state.
+- [x] `git diff --check` exits `0`.
+- [x] `powershell -ExecutionPolicy Bypass -File scripts/verify.ps1` exits `0`.
+- [x] `powershell -ExecutionPolicy Bypass -File scripts/verify-phase1.ps1` exits `0` in the working copy.
+- [x] The same two commands exit `0` in a fresh copy.
+- [x] Alembic round-trip and `alembic check` pass against PostgreSQL 18.4.
+- [x] The fixed fixture is exactly 11662 bytes with SHA `1589f9177e197a578c8d37bd5a3bc869a17d7b0936f156666f69a2f88fbb9d2b`.
+- [x] Repeated import returns one RawArtifact ID and one database row.
+- [x] S3 readback bytes match the fixture exactly.
+- [x] EvidenceRef rejects a Document/Artifact mismatch.
+- [x] Document and Opportunity remain separate models/tables/entities.
+- [x] Checked-in JSON Schemas equal deterministic Pydantic exports.
+- [x] Alembic migration and SQLAlchemy metadata have no diff.
+- [x] No secrets, user data, database/object files, caches or build output are tracked.
+- [x] `backend-quality`, `web-quality`, and `integration` have actual remote `success` conclusions for the Gate commit.
+- [x] Gate documents contain actual evidence and no planned result is described as completed.
 
 ## 交接
 

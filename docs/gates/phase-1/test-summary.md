@@ -2,8 +2,8 @@
 
 ## 当前工作副本
 
-- 验证时间：`2026-08-21T20:25:18+08:00` 至 `2026-08-21T20:26:18+08:00`
-- 实现提交：`c05b7d531190eeebffa6ebca4d35278cdc0788fa`
+- Gate 关闭候选验证时间：`2026-08-21T20:58:18+08:00` 至 `2026-08-21T20:59:23+08:00`
+- Gate 验证提交：`42e827800d83444b17015250e4b9be9bb9fab47a`；关闭记录为其后的文档变更
 - uv：`0.12.5`
 - Python：`3.14.7`
 - Ruff：`0.16.4`
@@ -50,12 +50,18 @@
 
 ## 远程持续集成
 
-尚未 push，也没有当前 Gate 提交的 Actions run URL 或 job conclusions。`backend-quality`、`web-quality` 与新增 `integration` 的远程结论均为待获取。
+- Gate 验证提交：`42e827800d83444b17015250e4b9be9bb9fab47a`
+- 运行：[GitHub Actions 32484185078](https://github.com/zjwlxylc/DeepAha/actions/runs/32484185078)
+- 工作流：`CI`，run number `4`
+- 总结论：`success`
+- `backend-quality`：`success`
+- `web-quality`：`success`
+- `integration`：`success`；远程实际完成 `alembic upgrade head`、`pytest -m integration --strict-markers` 与 `alembic check`
 
 ## 范围与秘密扫描
 
-- `git diff --stat 22f11b8e99311067670d8bbf1394fb881bf7e872..HEAD`：52 个文件，5,204 行新增、9 行删除；逐项属于 Phase 1 设计/计划、契约、迁移/ORM、对象存储、固定样本、测试、验证或相应文档。
+- Gate 验证提交运行 `git diff --stat 22f11b8e99311067670d8bbf1394fb881bf7e872..42e827800d83444b17015250e4b9be9bb9fab47a`：59 个文件，5,374 行新增、11 行删除；逐项属于 Phase 1 设计/计划、契约、迁移/ORM、对象存储、固定样本、测试、验证或相应文档。
 - 跟踪文件中的 `.env`、数据库/SQLite、`node_modules`、`.next`、`.venv`、`__pycache__`、对象和 data 目录匹配数：0。
 - `AKIA` 与私钥头匹配数：0。
 - PostgreSQL 凭据形态匹配数：9。逐条为 CI/脚本的 `127.0.0.1` 一次性常量、测试值或计划代码块（其中一条是扫描命令自身）；无外部数据库主机或真实凭据。
-- 当前工作树没有数据库文件、对象内容、缓存或构建产物；两张主工作区用户图片不在本分支 worktree 中，也未被触碰。
+- Git 跟踪集合中没有数据库文件、对象内容、缓存或构建产物；验证生成的 `.venv`、缓存、`node_modules` 与 `.next` 均保持忽略状态。两张主工作区用户图片不在本分支 worktree 中，也未被触碰。

@@ -26,7 +26,7 @@
 - `VERIFIED`：指定测试和证据已经运行并满足文档中的验收条件。
 - `SUPERSEDED`：被明确的新版本替代，只保留历史参考。
 
-当前状态：Phase 0 工程基础已通过 [Phase 0 Gate](../gates/phase-0/README.md)；Phase 1 代码已实现并通过当前工作副本与新鲜副本的本地验证，但 [Phase 1 Gate](../gates/phase-1/README.md) 仍为 `OPEN`，等待远程 CI 证据。Phase 2 及后续阶段仍为 `PROPOSED`，尚未开始实现。
+当前状态：Phase 0 工程基础已通过 [Phase 0 Gate](../gates/phase-0/README.md)；Phase 1 领域契约与原始证据已实现并通过本地、新鲜副本及远程 CI 验证，[Phase 1 Gate](../gates/phase-1/README.md) 已 `CLOSED`。Phase 2 及后续阶段仍为 `PROPOSED`，尚未开始实现。
 
 ## 维护规则
 

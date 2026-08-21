@@ -1,10 +1,12 @@
 # Phase 1 验收结果
 
-> 实现提交：`c05b7d531190eeebffa6ebca4d35278cdc0788fa`
+> Gate 验证提交：`42e827800d83444b17015250e4b9be9bb9fab47a`
 >
-> Gate 状态：`OPEN`
+> 本地验证基线：`c05b7d531190eeebffa6ebca4d35278cdc0788fa`
 >
-> 远程 CI：等待实际运行证据
+> Gate 状态：`CLOSED`
+>
+> 远程 CI：[GitHub Actions 32484185078](https://github.com/zjwlxylc/DeepAha/actions/runs/32484185078) — `success`
 
 ## 退出条件逐项结果
 
@@ -15,8 +17,8 @@
 | 3 | `Document` 与 `Opportunity` 是不同实体 | `PASS` | `test_document_and_opportunity_have_distinct_contract_fields`、`test_document_and_opportunity_are_distinct_tables` 及官方样本纵向测试分别证明契约字段、数据库表/列、ID 和标题均分离，`Opportunity` 无 `document_id`/`artifact_id`。 |
 | 4 | Schema、迁移、ORM 与契约测试一致 | `PASS` | `test_checked_in_schemas_match_deterministic_renderer` 校验确定性 Schema 导出；`test_schema_fields_map_explicitly_to_persistence_columns` 校验字段映射；`test_migration_matches_orm_metadata` 与 `uv run alembic check` 均报告无差异。 |
 | 5 | 新鲜环境可复现全部结果 | `PASS` | 在仓库外新鲜克隆 `C:\Users\LENOVO\AppData\Local\Temp\DeepAha-Phase1-Gate-c05b7d5`（源提交 `c05b7d5…`）从无项目虚拟环境/依赖/构建/存储内容开始运行 `scripts/verify.ps1` 与 `scripts/verify-phase1.ps1`，两者退出码均为 0；结果为快速测试 `25 passed`、集成 `31 passed`、Web `1 passed`、迁移 `20260821_0001` 且无漂移。 |
-| 6 | 未加入 Phase 2 能力或禁止产物 | `PASS` | `git diff --stat 22f11b8…HEAD` 显示 52 个文件均属于契约、数据库、对象存储、样本、测试、验证或文档；跟踪产物扫描为 0。私钥/AWS key 扫描为 0；DSN 的 9 个匹配全部是指向 `127.0.0.1` 的已标注测试常量、测试断言或计划文本。运行时代码没有 Phase 2 采集/解析/LLM/规则/用户能力。 |
+| 6 | 未加入 Phase 2 能力或禁止产物 | `PASS` | Gate 验证提交相对 `22f11b8…` 为 59 个文件、5,374 行新增、11 行删除，逐项属于契约、数据库、对象存储、样本、测试、验证或文档；跟踪产物扫描为 0。私钥/AWS key 扫描为 0；DSN 的 9 个匹配全部是指向 `127.0.0.1` 的已标注测试常量、测试断言或计划文本。运行时代码没有 Phase 2 采集/解析/LLM/规则/用户能力。 |
 
 ## Gate 判定
 
-六项退出条件都具有本地与新鲜副本实际证据，但远程 CI 尚无当前 Gate 提交的运行证据。总结论仍为 `OPEN`；不能用本地 PASS 替代远程 job conclusions。
+六项退出条件均具有本地与新鲜副本实际证据；Gate 验证提交 `42e8278…` 的远程 CI 总结论为 `success`，且 `backend-quality`、`web-quality`、`integration` 三个作业均为 `success`。Phase 1 Gate 总结论为 `CLOSED`。
