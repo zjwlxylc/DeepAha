@@ -801,7 +801,7 @@ git commit -m "feat(artifacts): add idempotent raw evidence import"
 - 产出：不可变 fixture 字节和来源 manifest。
 - 输入：全部 Phase 1 契约、ORM 模型、对象存储和导入服务。
 
-- [ ] **Step 1：编写失败的 fixture 身份测试**
+- [x] **Step 1：编写失败的 fixture 身份测试**
 
 ```python
 FIXED_SHA256 = "1589f9177e197a578c8d37bd5a3bc869a17d7b0936f156666f69a2f88fbb9d2b"
@@ -821,7 +821,7 @@ def test_official_fixture_has_fixed_bytes_and_open_licence() -> None:
     assert manifest["limitations"]["current_application_status_proven"] is False
 ```
 
-- [ ] **Step 2：运行 fixture 测试并确认 RED**
+- [x] **Step 2：运行 fixture 测试并确认 RED**
 
 Run:
 
@@ -832,7 +832,7 @@ uv run pytest tests/integration/test_phase1_official_sample.py::test_official_fi
 
 Expected: failure because fixture and manifest do not exist.
 
-- [ ] **Step 3：只捕获已经固定的官方响应**
+- [x] **Step 3：只捕获已经固定的官方响应**
 
 Retrieve exactly:
 
@@ -852,7 +852,7 @@ sha256 = 1589f9177e197a578c8d37bd5a3bc869a17d7b0936f156666f69a2f88fbb9d2b
 
 If a fresh GET no longer produces the fixed bytes, stop this Task and report that the selected snapshot cannot be reconstructed from the current source. Do not accept a new hash without user approval. Add the fixed UTF-8 response with `apply_patch`; do not add response headers, images, cookies or unrelated assets.
 
-- [ ] **Step 4：增加精确的来源 manifest 与 README**
+- [x] **Step 4：增加精确的来源 manifest 与 README**
 
 The manifest must contain these literal domain values:
 
@@ -883,13 +883,13 @@ The manifest must contain these literal domain values:
 
 README records the two official organizations, source page link, licence/attribution, no third-party assets, and the non-Gold/non-current-status limitations.
 
-- [ ] **Step 5：编写失败的纵向集成测试**
+- [x] **Step 5：编写失败的纵向集成测试**
 
 The test must:
 
 1. create Source with `tier=OFFICIAL_PRIMARY` and authority `Government Skills and Civil Service Fast Stream`;
 2. call `import_raw_artifact` twice with the exact fixture/manifest;
-3. create Document title `Civil Service Fast Stream named UK's top graduate employer`, published at `2025-09-17T07:00:00Z`, language `en`, parser `phase1_fixture_manifest/0.1.0`;
+3. create Document title `Civil Service Fast Stream named UK's top graduate employer`, published at `2025-09-16T23:00:00Z` (the UTC value stated by the fixed response), language `en`, parser `phase1_fixture_manifest/0.1.0`;
 4. create EvidenceRef `full_document`, `*`, quote hash equal to the raw hash;
 5. create Opportunity title `Civil Service Fast Stream`, type `CIVIL_SERVICE`, status `UNKNOWN`, publication `INTERNAL`, current version `null`;
 6. commit, reload all rows, read bytes from S3, and assert exact equality/hash;
@@ -897,11 +897,11 @@ The test must:
 
 Run it before adding any missing fixture-to-ORM adapters and confirm the specific failure.
 
-- [ ] **Step 6：只增加测试需要的最小 fixture 映射**
+- [x] **Step 6：只增加测试需要的最小 fixture 映射**
 
 Keep mapping code in the test fixture helpers unless it is used by production import. Do not create a generic JSON parser, Source Registry, resolver or sample-specific runtime API. Use the existing ORM constructors and raw import service.
 
-- [ ] **Step 7：运行官方样本 GREEN 验证**
+- [x] **Step 7：运行官方样本 GREEN 验证**
 
 Run from the repository root:
 
@@ -921,7 +921,7 @@ uv run pytest tests/contracts tests/integration -v
 
 Expected: fixed identity and licence tests pass; the vertical test proves raw byte replay and Document/Opportunity separation without network access.
 
-- [ ] **Step 8：停止本 Task 范围内的服务**
+- [x] **Step 8：停止本 Task 范围内的服务**
 
 Run from the repository root:
 
@@ -929,7 +929,7 @@ Run from the repository root:
 docker compose -f infra/compose.yaml -p deepaha-phase1-sample down --remove-orphans
 ```
 
-- [ ] **Step 9：提交 Task 5**
+- [x] **Step 9：提交 Task 5**
 
 ```powershell
 git add backend/tests/fixtures/official backend/tests/integration/test_phase1_official_sample.py

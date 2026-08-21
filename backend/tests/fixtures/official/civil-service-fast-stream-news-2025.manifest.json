@@ -1,0 +1,22 @@
+{
+  "requested_url": "https://www.gov.uk/api/content/government/news/civil-service-fast-stream-named-uks-top-graduate-employer",
+  "resolved_url": "https://www.gov.uk/api/content/government/news/civil-service-fast-stream-named-uks-top-graduate-employer",
+  "retrieved_at": "2026-08-21T09:59:08.005Z",
+  "http_status": 200,
+  "media_type": "application/json; charset=utf-8",
+  "byte_size": 11662,
+  "content_sha256": "1589f9177e197a578c8d37bd5a3bc869a17d7b0936f156666f69a2f88fbb9d2b",
+  "collector_version": "phase1_design_capture/0.1.0",
+  "metadata_schema_version": "0.1.0",
+  "license": {
+    "name": "Open Government Licence v3.0",
+    "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+    "terms_url": "https://www.gov.uk/help/terms-conditions",
+    "attribution": "Contains public sector information licensed under the Open Government Licence v3.0."
+  },
+  "limitations": {
+    "gold_business_sample": false,
+    "china_launch_coverage": false,
+    "current_application_status_proven": false
+  }
+}
