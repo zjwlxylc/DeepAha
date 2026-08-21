@@ -1,0 +1,76 @@
+:root {
+  color-scheme: light;
+  --ink: #102a43;
+  --blue: #0b6fb8;
+  --orange: #e66a1f;
+  --paper: #f4f8fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background: linear-gradient(145deg, #ffffff 0%, var(--paper) 100%);
+  color: var(--ink);
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.shell {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 2rem;
+}
+
+.hero {
+  width: min(42rem, 100%);
+  border-left: 0.35rem solid var(--orange);
+  padding: 1rem 0 1rem 2rem;
+}
+
+.eyebrow,
+.status {
+  color: var(--blue);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+h1 {
+  margin: 0.25rem 0;
+  font-size: clamp(3.25rem, 12vw, 7rem);
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+.tagline {
+  margin: 1rem 0;
+  color: var(--orange);
+  font-size: clamp(1.25rem, 4vw, 2rem);
+  font-weight: 700;
+}
+
+.mission {
+  max-width: 34rem;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.status {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}

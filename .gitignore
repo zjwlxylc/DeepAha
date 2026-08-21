@@ -16,6 +16,7 @@ dist/
 node_modules/
 .next/
 coverage/
+*.tsbuildinfo
 
 # Editors and operating systems
 .idea/
