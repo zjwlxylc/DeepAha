@@ -13,13 +13,21 @@ from deepaha.contracts.phase2 import OpportunityTypeV02
 from deepaha.contracts.phase3 import (
     OpportunityEventType,
     OpportunityFieldEvidenceSchema,
+    OpportunityIdentityActionType,
+    OpportunityIdentityMemberRole,
     OpportunitySnapshotSchema,
     ResolutionDisposition,
 )
 from deepaha.documents.models import Document, EvidenceRef
 from deepaha.opportunities.identity import (
+    IdentityActionRecord,
+    IdentityMemberRecord,
+    IdentityReplayError,
+    IdentityState,
     normalize_identity_text,
     normalize_official_url,
+    replay_identity_state,
+    resolve_canonical_opportunity_id,
     weak_fingerprint,
 )
 from deepaha.opportunities.models import (
@@ -27,6 +35,8 @@ from deepaha.opportunities.models import (
     Opportunity,
     OpportunityAlias,
     OpportunityEvent,
+    OpportunityIdentityAction,
+    OpportunityIdentityActionMember,
     OpportunityResolutionCandidate,
     OpportunityVersion,
 )
@@ -389,6 +399,7 @@ class OpportunityResolutionService:
             )
         )
         session.flush()
+
         return ResolutionResult(
             disposition=ResolutionDisposition.NEEDS_REVIEW.value,
             opportunity_id=None,
@@ -572,8 +583,330 @@ class OpportunityResolutionService:
         session.flush()
 
 
+_IDENTITY_ROLE_ORDER = {
+    OpportunityIdentityMemberRole.SOURCE: 0,
+    OpportunityIdentityMemberRole.TARGET: 1,
+    OpportunityIdentityMemberRole.PARENT: 2,
+    OpportunityIdentityMemberRole.CHILD: 3,
+}
+
+
+def _sort_identity_members(
+    members: tuple[IdentityMemberRecord, ...],
+) -> tuple[IdentityMemberRecord, ...]:
+    return tuple(
+        sorted(
+            members,
+            key=lambda item: (_IDENTITY_ROLE_ORDER[item.role], item.opportunity_id.hex),
+        )
+    )
+
+
+def load_identity_actions(session: Session) -> tuple[IdentityActionRecord, ...]:
+    action_rows = session.scalars(select(OpportunityIdentityAction)).all()
+    member_rows = session.scalars(select(OpportunityIdentityActionMember)).all()
+    members_by_action: dict[UUID, list[IdentityMemberRecord]] = defaultdict(list)
+    for row in member_rows:
+        members_by_action[row.action_id].append(
+            IdentityMemberRecord(
+                opportunity_id=row.opportunity_id,
+                role=OpportunityIdentityMemberRole(row.role),
+            )
+        )
+    return tuple(
+        IdentityActionRecord(
+            action_id=row.action_id,
+            action_type=OpportunityIdentityActionType(row.action_type),
+            members=_sort_identity_members(tuple(members_by_action[row.action_id])),
+            reversal_of_action_id=row.reversal_of_action_id,
+            actor=row.actor,
+            reason=row.reason,
+            source_document_id=row.source_document_id,
+            source_evidence_ref_id=row.source_evidence_ref_id,
+            occurred_at=row.occurred_at,
+        )
+        for row in action_rows
+    )
+
+
+class OpportunityIdentityService:
+    def __init__(
+        self,
+        *,
+        session_factory: sessionmaker[Session],
+        clock: Callable[[], datetime],
+        id_factory: Callable[[], UUID] = uuid7,
+    ) -> None:
+        self._session_factory = session_factory
+        self._clock = clock
+        self._id_factory = id_factory
+
+    def merge(
+        self,
+        *,
+        target_id: UUID,
+        source_ids: tuple[UUID, ...],
+        document_id: UUID | None,
+        evidence_ref_id: UUID | None,
+        actor: str,
+        reason: str,
+    ) -> UUID:
+        members = _sort_identity_members(
+            tuple(
+                [
+                    IdentityMemberRecord(
+                        opportunity_id=source_id,
+                        role=OpportunityIdentityMemberRole.SOURCE,
+                    )
+                    for source_id in source_ids
+                ]
+                + [
+                    IdentityMemberRecord(
+                        opportunity_id=target_id,
+                        role=OpportunityIdentityMemberRole.TARGET,
+                    )
+                ]
+            )
+        )
+        return self._append_base_action(
+            action_type=OpportunityIdentityActionType.MERGE,
+            members=members,
+            document_id=document_id,
+            evidence_ref_id=evidence_ref_id,
+            actor=actor,
+            reason=reason,
+        )
+
+    def split(
+        self,
+        *,
+        parent_id: UUID,
+        child_ids: tuple[UUID, ...],
+        document_id: UUID | None,
+        evidence_ref_id: UUID | None,
+        actor: str,
+        reason: str,
+    ) -> UUID:
+        members = _sort_identity_members(
+            tuple(
+                [
+                    IdentityMemberRecord(
+                        opportunity_id=parent_id,
+                        role=OpportunityIdentityMemberRole.PARENT,
+                    )
+                ]
+                + [
+                    IdentityMemberRecord(
+                        opportunity_id=child_id,
+                        role=OpportunityIdentityMemberRole.CHILD,
+                    )
+                    for child_id in child_ids
+                ]
+            )
+        )
+        return self._append_base_action(
+            action_type=OpportunityIdentityActionType.SPLIT,
+            members=members,
+            document_id=document_id,
+            evidence_ref_id=evidence_ref_id,
+            actor=actor,
+            reason=reason,
+        )
+
+    def reverse_identity_action(
+        self,
+        *,
+        action_id: UUID,
+        document_id: UUID | None,
+        evidence_ref_id: UUID | None,
+        actor: str,
+        reason: str,
+    ) -> UUID:
+        self._validate_audit_fields(
+            document_id=document_id,
+            evidence_ref_id=evidence_ref_id,
+            actor=actor,
+            reason=reason,
+        )
+        with self._session_factory() as session:
+            self._validate_evidence_pair(session, document_id, evidence_ref_id)
+            records = load_identity_actions(session)
+            by_id = {record.action_id: record for record in records}
+            original = by_id.get(action_id)
+            if original is None:
+                raise ValueError(f"identity action {action_id} does not exist")
+            if original.action_type in {
+                OpportunityIdentityActionType.MERGE_REVERSAL,
+                OpportunityIdentityActionType.SPLIT_REVERSAL,
+            }:
+                raise IdentityReplayError("reversal of a reversal is forbidden")
+            self._lock_and_validate_opportunities(
+                session,
+                tuple(member.opportunity_id for member in original.members),
+            )
+            records = load_identity_actions(session)
+            original = next(record for record in records if record.action_id == action_id)
+            reversal_type = (
+                OpportunityIdentityActionType.MERGE_REVERSAL
+                if original.action_type is OpportunityIdentityActionType.MERGE
+                else OpportunityIdentityActionType.SPLIT_REVERSAL
+            )
+            now = self._clock()
+            reversal = IdentityActionRecord(
+                action_id=self._id_factory(),
+                action_type=reversal_type,
+                members=original.members,
+                reversal_of_action_id=original.action_id,
+                actor=actor.strip(),
+                reason=reason.strip(),
+                source_document_id=document_id,
+                source_evidence_ref_id=evidence_ref_id,
+                occurred_at=now,
+            )
+            replay_identity_state((*records, reversal))
+            self._persist_identity_action(session, reversal)
+            session.commit()
+            return reversal.action_id
+
+    def load_identity_state(self) -> IdentityState:
+        with self._session_factory() as session:
+            return replay_identity_state(load_identity_actions(session))
+
+    def resolve_canonical_opportunity_id(self, opportunity_id: UUID) -> UUID:
+        with self._session_factory() as session:
+            exists = session.scalar(
+                select(Opportunity.opportunity_id).where(
+                    Opportunity.opportunity_id == opportunity_id
+                )
+            )
+            if exists is None:
+                raise ValueError(f"opportunity {opportunity_id} does not exist")
+            state = replay_identity_state(load_identity_actions(session))
+            return resolve_canonical_opportunity_id(state, opportunity_id)
+
+    def _append_base_action(
+        self,
+        *,
+        action_type: OpportunityIdentityActionType,
+        members: tuple[IdentityMemberRecord, ...],
+        document_id: UUID | None,
+        evidence_ref_id: UUID | None,
+        actor: str,
+        reason: str,
+    ) -> UUID:
+        self._validate_audit_fields(
+            document_id=document_id,
+            evidence_ref_id=evidence_ref_id,
+            actor=actor,
+            reason=reason,
+        )
+        with self._session_factory() as session:
+            self._validate_evidence_pair(session, document_id, evidence_ref_id)
+            self._lock_and_validate_opportunities(
+                session,
+                tuple(member.opportunity_id for member in members),
+            )
+            records = load_identity_actions(session)
+            record = IdentityActionRecord(
+                action_id=self._id_factory(),
+                action_type=action_type,
+                members=members,
+                reversal_of_action_id=None,
+                actor=actor.strip(),
+                reason=reason.strip(),
+                source_document_id=document_id,
+                source_evidence_ref_id=evidence_ref_id,
+                occurred_at=self._clock(),
+            )
+            replay_identity_state((*records, record))
+            self._persist_identity_action(session, record)
+            session.commit()
+            return record.action_id
+
+    @staticmethod
+    def _validate_audit_fields(
+        *,
+        document_id: UUID | None,
+        evidence_ref_id: UUID | None,
+        actor: str,
+        reason: str,
+    ) -> None:
+        if not actor.strip():
+            raise ValueError("actor must be non-empty")
+        if not reason.strip():
+            raise ValueError("reason must be non-empty")
+        if (document_id is None) != (evidence_ref_id is None):
+            raise ValueError("document_id and evidence_ref_id must both be set or absent")
+
+    @staticmethod
+    def _validate_evidence_pair(
+        session: Session,
+        document_id: UUID | None,
+        evidence_ref_id: UUID | None,
+    ) -> None:
+        if document_id is None or evidence_ref_id is None:
+            return
+        pair = session.scalar(
+            select(EvidenceRef.evidence_ref_id).where(
+                EvidenceRef.evidence_ref_id == evidence_ref_id,
+                EvidenceRef.document_id == document_id,
+            )
+        )
+        if pair is None:
+            raise ValueError("evidence_ref_id does not belong to document_id")
+
+    @staticmethod
+    def _lock_and_validate_opportunities(
+        session: Session,
+        opportunity_ids: tuple[UUID, ...],
+    ) -> None:
+        expected = set(opportunity_ids)
+        rows = session.scalars(
+            select(Opportunity.opportunity_id)
+            .where(Opportunity.opportunity_id.in_(expected))
+            .order_by(Opportunity.opportunity_id)
+            .with_for_update()
+        ).all()
+        missing = expected.difference(rows)
+        if missing:
+            missing_text = ", ".join(str(item) for item in sorted(missing, key=str))
+            raise ValueError(f"opportunity does not exist: {missing_text}")
+
+    @staticmethod
+    def _persist_identity_action(
+        session: Session,
+        record: IdentityActionRecord,
+    ) -> None:
+        session.add(
+            OpportunityIdentityAction(
+                action_id=record.action_id,
+                action_type=record.action_type.value,
+                reversal_of_action_id=record.reversal_of_action_id,
+                actor=record.actor,
+                reason=record.reason,
+                source_document_id=record.source_document_id,
+                source_evidence_ref_id=record.source_evidence_ref_id,
+                occurred_at=record.occurred_at,
+            )
+        )
+        session.flush()
+        session.add_all(
+            [
+                OpportunityIdentityActionMember(
+                    action_id=record.action_id,
+                    opportunity_id=member.opportunity_id,
+                    role=member.role.value,
+                )
+                for member in record.members
+            ]
+        )
+        session.flush()
+
+
 __all__ = [
+    "OpportunityIdentityService",
     "OpportunityResolutionService",
     "ResolutionResult",
+    "load_identity_actions",
     "load_resolution_index",
 ]

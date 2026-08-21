@@ -684,6 +684,7 @@ git push
 
 - Modify: `backend/src/deepaha/opportunities/identity.py`
 - Modify: `backend/src/deepaha/opportunities/service.py`
+- Modify: `backend/src/deepaha/opportunities/__init__.py`
 - Create: `backend/tests/opportunities/test_identity_replay.py`
 - Create: `backend/tests/integration/test_opportunity_identity_service.py`
 
@@ -800,7 +801,7 @@ Mutation check: temporarily allow a second reversal of the same action; observe 
 Set-Location ..
 docker compose -f infra/compose.phase3.yaml -p $phase3Task6Project down --remove-orphans
 git diff --check
-git add backend/src/deepaha/opportunities/identity.py backend/src/deepaha/opportunities/service.py backend/tests/opportunities/test_identity_replay.py backend/tests/integration/test_opportunity_identity_service.py
+git add backend/src/deepaha/opportunities/identity.py backend/src/deepaha/opportunities/service.py backend/src/deepaha/opportunities/__init__.py backend/tests/opportunities/test_identity_replay.py backend/tests/integration/test_opportunity_identity_service.py docs/superpowers/plans/2026-08-22-phase-3-opportunity-resolution-versioning-and-change.md
 git diff --cached --check
 git commit -m "feat(opportunities): audit identity merge and split actions"
 git push

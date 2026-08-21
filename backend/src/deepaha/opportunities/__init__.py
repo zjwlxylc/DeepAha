@@ -1,6 +1,7 @@
 from deepaha.opportunities.models import Opportunity
 from deepaha.opportunities.resolver import resolve_document
 from deepaha.opportunities.service import (
+    OpportunityIdentityService,
     OpportunityResolutionService,
     ResolutionResult,
     load_resolution_index,
@@ -17,6 +18,7 @@ from deepaha.opportunities.types import (
 __all__ = [
     "UNSET",
     "Opportunity",
+    "OpportunityIdentityService",
     "OpportunityPatch",
     "OpportunityResolutionService",
     "ResolutionDecision",
