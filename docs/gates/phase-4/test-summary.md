@@ -2,9 +2,12 @@
 
 ## Evidence state
 
-- Implemented: isolated verifier and CI definitions are included in the Task 9 candidate.
-- Locally verified: `scripts/verify-phase4.ps1` and `scripts/verify.ps1` passed.
-- remote CI: pending an exact Actions run and job conclusion.
+- Implemented: isolated verifier and CI definitions are included in exact candidate
+  `94bab9e7397a8ccb43d95da3f68bfa1fc6df9a07`.
+- Locally verified: `scripts/verify-phase4.ps1` and `scripts/verify.ps1` passed at
+  `2026-08-21T22:41:13Z`.
+- remote CI: [run 32534085134](https://github.com/zjwlxylc/DeepAha/actions/runs/32534085134)
+  concluded `success`.
 - Synthetic evaluation: actual-engine integration uses fixed fixtures only.
 - Blocked: passing tests cannot close upstream or Phase 4 Gates.
 
@@ -20,5 +23,15 @@
 - Fixture regeneration before the final verifier: 6 JSON hashes unchanged.
 - v0.1/v0.2/v0.3 schema working-tree diff: empty.
 
-The exact evidence-commit SHA and remote CI URLs remain pending until this document is committed
-and pushed.
+## Remote job conclusions
+
+| Job | Conclusion |
+|---|---|
+| `backend-quality` | `success` |
+| `web-quality` | `success` |
+| `integration` | `success` |
+| `phase3-resolution` | `success` |
+| `phase4-eligibility` | `success` |
+
+Draft PR [#4](https://github.com/zjwlxylc/DeepAha/pull/4) is
+`OPEN/DRAFT/UNMERGED` and remains blocked from merge or promotion.

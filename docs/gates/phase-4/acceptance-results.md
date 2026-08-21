@@ -2,9 +2,12 @@
 
 ## Evidence state
 
-- Implemented: Tasks 1–8 are present at `fe96cabda9f34187b02604a725d8da7c57b30cd3`.
-- Locally verified: isolated Phase 4 verifier and root regression passed.
-- remote CI: pending.
+- Implemented: exact candidate `94bab9e7397a8ccb43d95da3f68bfa1fc6df9a07` contains Tasks
+  1–9.
+- Locally verified: isolated Phase 4 verifier and root regression passed at
+  `2026-08-21T22:41:13Z`.
+- remote CI: [run 32534085134](https://github.com/zjwlxylc/DeepAha/actions/runs/32534085134)
+  completed with all five jobs successful.
 - Synthetic evaluation: 12 fixed Golden cases passed with zero unexpected negatives.
 - Blocked: acceptance cannot close Phase 4 while upstream Gates remain blocked.
 
@@ -23,3 +26,6 @@
 | Real false-negative threshold | Governed real annotated dataset absent | Deferred / blocked |
 
 No row authorizes release, Gate closure or contract promotion.
+
+Delivery remains [draft PR #4](https://github.com/zjwlxylc/DeepAha/pull/4),
+`OPEN/DRAFT/UNMERGED`, with the exact stacked base and head branches.
