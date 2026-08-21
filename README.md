@@ -2,7 +2,7 @@
 
 DeepAha 青年机会智能系统：把分散、变化、复杂的机会信息转化为可理解、可判断、可行动的路径。
 
-> 当前状态：Phase 1 领域契约与原始证据已实现并通过本地、新鲜副本及远程 CI 验证；[Phase 1 Gate](docs/gates/phase-1/README.md) 已 `CLOSED`。未进入 Phase 2，也未提供面向用户的业务功能。
+> 当前状态：Phase 1 领域契约与原始证据已实现并通过本地、新鲜副本及远程 CI 验证；[Phase 1 Gate](docs/gates/phase-1/README.md) 已 `CLOSED`。Blueprint v1.2 基线协调、Phase 2 采集观察与文档证据 spec/plan 已形成，但 Phase 2 实现和 Gate 仍为 `PROPOSED`。尚未提供面向用户的业务功能。
 
 开发路线与架构见 `docs/development/README.md`。
 
