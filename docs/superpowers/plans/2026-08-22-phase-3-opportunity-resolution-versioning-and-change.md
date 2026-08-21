@@ -43,7 +43,7 @@
 - Consumes: `ContractModel`, `EntityId`, `Instant`, `Sha256`, `VersionNumber`, `OpportunityTypeV02`, `OpportunityStatus`, and all compatible v0.2 schemas.
 - Produces: `OpportunityReviewStatus`, `OpportunityDocumentRole`, `OpportunityEventType`, `OpportunityAliasType`, `OpportunityIdentityActionType`, `OpportunityIdentityMemberRole`, `SnapshotField`, `ApplicationWindowSchema`, `OpportunitySnapshotSchema`, `OpportunityFieldEvidenceSchema`, `OpportunityFieldChangeSchema`, `OpportunityVersionSchemaV03`, `OpportunityEventSchemaV03`, `DocumentOpportunityLinkSchema`, `OpportunityResolutionCandidateSchema`, `OpportunityAliasSchemaV03`, `OpportunityIdentityMemberSchema`, `OpportunityIdentityActionSchema`, `PHASE3_SCHEMAS`, `render_phase3_schemas()`, `write_phase3_schemas()`.
 
-- [ ] **Step 1: Write the failing contract tests**
+- [x] **Step 1: Write the failing contract tests**
 
 Before the test body, record the bugs these tests catch: old schema mutation, missing event-chain validation, identity-action shape drift, EvidenceRef-free high-impact records, and non-deterministic exporter output.
 
@@ -88,7 +88,7 @@ test_v03_renderer_matches_checked_in_schema_bytes
 test_v03_export_writes_only_to_v03_directory
 ```
 
-- [ ] **Step 2: Run the contract test and verify RED**
+- [x] **Step 2: Run the contract test and verify RED**
 
 Run:
 
@@ -99,7 +99,7 @@ uv run pytest tests/contracts/test_phase3_contracts.py -v
 
 Expected: collection fails because `deepaha.contracts.phase3` does not exist. If it fails for a typo or fixture syntax error, fix the test until the missing production module is the reason.
 
-- [ ] **Step 3: Implement exact v0.3 contract models**
+- [x] **Step 3: Implement exact v0.3 contract models**
 
 Use `StrEnum`, `extra="forbid"`, `JsonValue`, tuple fields, field validators and model validators. The core event validator is:
 
@@ -132,7 +132,7 @@ class OpportunityEventSchemaV03(ContractModel):
 
 The identity validator implements the exact member cardinalities from the spec. Reversal members are required and validated structurally; matching them to the referenced database action is a Task 6 service check.
 
-- [ ] **Step 4: Extend deterministic export without changing old behavior**
+- [x] **Step 4: Extend deterministic export without changing old behavior**
 
 Add `PHASE3_SCHEMAS` with all v0.2-compatible objects plus:
 
@@ -163,11 +163,11 @@ try {
 uv run pytest tests/contracts/test_phase1_contracts.py tests/contracts/test_phase2_contracts.py tests/contracts/test_phase3_contracts.py -v
 ```
 
-- [ ] **Step 5: Write the candidate contract document**
+- [x] **Step 5: Write the candidate contract document**
 
 `domain-contracts-v0.3.md` records status `PROPOSED_IMPLEMENTATION_BLOCKED_BY_PHASE2_GATE`, exact fields, compatibility rules, precedence table, no-LLM boundary, transition invariants, and the rule that no implementation evidence can mark it STABLE while Phase 2 remains open.
 
-- [ ] **Step 6: Verify GREEN and compatibility**
+- [x] **Step 6: Verify GREEN and compatibility**
 
 ```powershell
 uv run ruff format --check .
@@ -181,7 +181,7 @@ git status --short
 
 Expected: all contract tests pass; only Task 1 files are modified; old schema directories have zero diff.
 
-- [ ] **Step 7: Commit and push Task 1**
+- [x] **Step 7: Commit and push Task 1**
 
 ```powershell
 git add backend/src/deepaha/contracts/phase3.py backend/src/deepaha/contracts/export.py backend/tests/contracts/test_phase3_contracts.py contracts/examples/v0.3.0 contracts/schemas/v0.3.0 docs/development/domain-contracts-v0.3.md
@@ -209,7 +209,7 @@ git push
 - Consumes: Phase 1/2 tables and `Base.metadata`.
 - Produces ORM `OpportunityVersion`, `OpportunityEvent`, `DocumentOpportunityLink`, `OpportunityResolutionCandidate`, `OpportunityAlias`, `OpportunityIdentityAction`, `OpportunityIdentityActionMember`, revision `20260822_0003`, and a Phase 3-only PostgreSQL/Moto runtime.
 
-- [ ] **Step 1: Create and validate the isolated Compose configuration**
+- [x] **Step 1: Create and validate the isolated Compose configuration**
 
 This configuration is explicitly required by the user and is test infrastructure, not application behavior. Its exact contents are:
 
@@ -244,7 +244,7 @@ docker compose -f infra/compose.phase3.yaml -p deepaha-phase3-config config
 
 Read the output and confirm it contains only published ports 55433/55001.
 
-- [ ] **Step 2: Write RED persistence and migration tests**
+- [x] **Step 2: Write RED persistence and migration tests**
 
 ```python
 def test_current_version_must_reference_the_same_opportunity_version(session: Session) -> None:
@@ -282,7 +282,7 @@ PHASE3_TABLES = {
 
 The isolated round trip is exactly `0001 -> 0002 -> 0003 -> 0002 -> 0003`. A second test inserts one v0.3 version and proves downgrade raises `cannot downgrade Phase 3` while the row remains.
 
-- [ ] **Step 3: Start only Phase 3 services and verify RED**
+- [x] **Step 3: Start only Phase 3 services and verify RED**
 
 ```powershell
 $phase3Task2Project = "deepaha-phase3-task2-$PID"
@@ -295,7 +295,7 @@ uv run pytest tests/integration/test_migrations.py tests/integration/test_phase3
 
 Expected: import/collection failure because Phase 3 ORM classes/revision are absent. Verify `docker compose -p $phase3Task2Project ps` names only the Phase 3 project.
 
-- [ ] **Step 4: Implement ORM tables and the migration**
+- [x] **Step 4: Implement ORM tables and the migration**
 
 Use typed mappings and existing naming conventions. Add this deferred FK to `Opportunity.__table_args__`:
 
@@ -323,7 +323,7 @@ Index(
 
 Migration downgrade checks each Phase 3 table with `select exists(...)` and raises before any DDL when data exists. Do not query or alter Phase 2 live services.
 
-- [ ] **Step 5: Verify migration round trip and metadata**
+- [x] **Step 5: Verify migration round trip and metadata**
 
 ```powershell
 uv run alembic upgrade head
@@ -334,7 +334,7 @@ uv run ruff check .
 uv run mypy src tests
 ```
 
-- [ ] **Step 6: Stop only Task 2 services, verify scope, commit and push**
+- [x] **Step 6: Stop only Task 2 services, verify scope, commit and push**
 
 ```powershell
 Set-Location ..
@@ -366,7 +366,7 @@ git push
 - Produces `UNSET`, `OpportunityPatch`, `ResolutionDocument`, `ResolutionIndex`, `ResolutionDecision`, `normalize_identity_text()`, `normalize_official_url()`, `stable_public_id_for_key()`, `weak_fingerprint()`, and `resolve_document()`.
 - No SQLAlchemy, network, object store, LLM or clock reads are allowed in the pure Resolver.
 
-- [ ] **Step 1: Add the fixed synthetic fixture and RED tests**
+- [x] **Step 1: Add the fixed synthetic fixture and RED tests**
 
 Fixture metadata and cases are literal:
 
@@ -414,7 +414,7 @@ def test_conflicting_strong_keys_never_choose_by_input_order() -> None:
 
 Additional literal tests cover missing stable key, non-primary create attempt, missing attachment relation, community/secondary sources, URL query preservation, external ID source scoping, duplicate input replay and deterministic candidate sorting.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED**
 
 ```powershell
 Set-Location backend
@@ -423,7 +423,7 @@ uv run pytest tests/opportunities/test_resolver.py -v
 
 Expected: missing `deepaha.opportunities.types`/`resolver` import.
 
-- [ ] **Step 3: Implement frozen input/output types**
+- [x] **Step 3: Implement frozen input/output types**
 
 ```python
 class _Unset:
@@ -449,7 +449,7 @@ class OpportunityPatch:
 
 `ResolutionIndex` stores immutable maps for reference Document, external key and URL key plus weak candidates. Its constructor sorts all tuple values.
 
-- [ ] **Step 4: Implement normalization, stable public ID and Resolver**
+- [x] **Step 4: Implement normalization, stable public ID and Resolver**
 
 `stable_public_id_for_key()` is exactly:
 
@@ -461,7 +461,7 @@ def stable_public_id_for_key(identity_key: str) -> str:
 
 The Resolver follows the spec order: validate evidence-bearing input, resolve reference/external/URL strong keys, candidateize conflicts, candidateize weak duplicates, allow official-primary main create, and require strong relation for non-primary roles. It returns values only and performs no write.
 
-- [ ] **Step 5: Verify GREEN and mutation behavior**
+- [x] **Step 5: Verify GREEN and mutation behavior**
 
 ```powershell
 uv run pytest tests/opportunities/test_resolver.py -v
@@ -473,7 +473,7 @@ uv run mypy src tests
 Mutation check: temporarily allow a unique weak candidate to return LINKED; run
 `test_same_title_without_shared_strong_key_never_hard_merges` and observe failure; restore conservative behavior and rerun green.
 
-- [ ] **Step 6: Commit and push Task 3**
+- [x] **Step 6: Commit and push Task 3**
 
 ```powershell
 Set-Location ..
@@ -499,7 +499,7 @@ git push
 
 - Produces `VersionState`, `VersionPlan`, `VersionConflict`, `derive_precedence()`, `canonical_content_sha256()`, `plan_version()`, `classify_event_type()`, and `replay_opportunity_state()`.
 
-- [ ] **Step 1: Write RED precedence, diff, event and replay tests**
+- [x] **Step 1: Write RED precedence, diff, event and replay tests**
 
 ```python
 def test_latest_official_deadline_extension_wins_and_emits_deadline_event() -> None:
@@ -526,7 +526,7 @@ def test_replay_rejects_a_changed_before_value() -> None:
 
 Literal test names also cover precedence values 600/500/400/300/250, same value no-op, same precedence newer time, same-time conflict, cancellation, reopening, attachment replacement, correction, sorted canonical JSON, content hash literal, missing version, duplicate event, hash drift and deterministic replay.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED**
 
 ```powershell
 Set-Location backend
@@ -535,7 +535,7 @@ uv run pytest tests/opportunities/test_versioning.py tests/opportunities/test_re
 
 Expected: missing `deepaha.opportunities.versioning`.
 
-- [ ] **Step 3: Implement canonicalization and precedence**
+- [x] **Step 3: Implement canonicalization and precedence**
 
 Use a recursive conversion that accepts only JSON values, UUID, date, aware datetime and StrEnum. Normalize datetime to UTC `Z`, sort dict keys, and serialize with:
 
@@ -545,17 +545,17 @@ json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 Reject naive time and unsupported objects. `derive_precedence()` maps the exact table in the spec; Phase 3 never accepts a caller-provided rank.
 
-- [ ] **Step 4: Implement all-or-nothing version planning**
+- [x] **Step 4: Implement all-or-nothing version planning**
 
 Build changes in `SnapshotField` enum order. If any differing field loses precedence or conflicts at equal time, return `VersionConflict` and discard the complete tentative patch. Version 1 includes only non-null/explicitly set fields as `before=None` changes. A semantic no-op returns `None`.
 
 Event classification uses the exact priority from the spec. `content_sha256` covers snapshot and sorted field evidence only.
 
-- [ ] **Step 5: Implement strict replay**
+- [x] **Step 5: Implement strict replay**
 
 Replay applies event changes to an initially empty mapping, checks literal `before`, validates version/event continuity, reconstructs snapshot and field evidence, recalculates every hash, and returns the latest `VersionState`. It never repairs or skips malformed history.
 
-- [ ] **Step 6: Verify GREEN and regression**
+- [x] **Step 6: Verify GREEN and regression**
 
 ```powershell
 uv run pytest tests/opportunities/test_versioning.py tests/opportunities/test_replay.py -v
@@ -565,7 +565,7 @@ uv run ruff check .
 uv run mypy src tests
 ```
 
-- [ ] **Step 7: Commit and push Task 4**
+- [x] **Step 7: Commit and push Task 4**
 
 ```powershell
 Set-Location ..
@@ -594,7 +594,7 @@ git push
 - Produces `OpportunityResolutionService`, `ResolutionResult`, `resolve()`, and `load_resolution_index()`.
 - Consumes the fixed synthetic fixture, pure Resolver and pure Version planner.
 
-- [ ] **Step 1: Write RED vertical integration tests**
+- [x] **Step 1: Write RED vertical integration tests**
 
 ```python
 def test_notice_attachment_table_correction_extension_and_cancel_share_one_public_id(
@@ -623,7 +623,7 @@ def test_conflict_and_false_merge_candidates_do_not_change_projection(
 
 Additional tests prove Document/EvidenceRef mismatch rolls back, same Document replay is idempotent, duplicate announcement links without a version, no-op patch creates no event, public ID collision candidateizes, and a transaction failure leaves all old versions/events intact.
 
-- [ ] **Step 2: Start only Phase 3 services and verify RED**
+- [x] **Step 2: Start only Phase 3 services and verify RED**
 
 ```powershell
 $phase3Task5Project = "deepaha-phase3-task5-$PID"
@@ -636,13 +636,13 @@ uv run pytest tests/integration/test_opportunity_resolution_service.py tests/int
 
 Expected: missing `OpportunityResolutionService`.
 
-- [ ] **Step 3: Implement the transaction service**
+- [x] **Step 3: Implement the transaction service**
 
 The constructor has exact keyword-only parameters `session_factory: sessionmaker[Session]`, `clock: Callable[[], datetime]`, `id_factory: Callable[[], UUID] = uuid7`, and `resolver_version: str = "0.3.0"`. Its public method is `resolve(command: ResolutionDocument) -> ResolutionResult`.
 
 Implementation order exactly follows spec section 11.2. Validate `(evidence_ref_id, document_id)` before calling Resolver. Candidate commits without formal version. CREATED inserts Opportunity with null current version, link/aliases, Version 1/Event CREATED, then updates current projection. LINKED inserts link before version planning. Conflict saves candidate and does not update projection. The service owns commit/rollback and returns detached value objects only.
 
-- [ ] **Step 4: Verify full synthetic replay**
+- [x] **Step 4: Verify full synthetic replay**
 
 Run the fixture twice in two freshly created temporary databases. Compare these literal outputs, excluding internal random UUIDv7 IDs:
 
@@ -664,7 +664,7 @@ uv run ruff check .
 uv run mypy src tests
 ```
 
-- [ ] **Step 5: Stop only Task 5 services, commit and push**
+- [x] **Step 5: Stop only Task 5 services, commit and push**
 
 ```powershell
 Set-Location ..
@@ -692,7 +692,7 @@ git push
 
 - Produces `IdentityActionRecord`, `IdentityState`, `IdentityReplayError`, `replay_identity_state()`, `resolve_canonical_opportunity_id()`, `merge()`, `split()`, and `reverse_identity_action()`.
 
-- [ ] **Step 1: Write RED pure identity tests**
+- [x] **Step 1: Write RED pure identity tests**
 
 ```python
 def test_merge_reversal_restores_source_public_identity_without_deleting_history() -> None:
@@ -712,7 +712,7 @@ def test_split_reversal_removes_active_children_but_preserves_child_identities()
 
 Literal tests also reject merge cycles, multiple active targets, duplicate reversal, reversal of reversal, wrong reversal type, member mismatch and nondeterministic action ordering.
 
-- [ ] **Step 2: Write RED database service tests**
+- [x] **Step 2: Write RED database service tests**
 
 ```python
 def test_merge_split_reversal_never_delete_public_ids_or_history(identity_service) -> None:
@@ -757,7 +757,7 @@ def test_merge_split_reversal_never_delete_public_ids_or_history(identity_servic
 
 Other integration tests prove actor/reason required, evidence/document pairing, source/target existence, no action on failed cycle, copied reversal members, alias canonical resolution after merge/reversal, and deterministic database reload/replay.
 
-- [ ] **Step 3: Verify RED**
+- [x] **Step 3: Verify RED**
 
 ```powershell
 Set-Location backend
@@ -775,13 +775,13 @@ uv run pytest tests/integration/test_opportunity_identity_service.py -m integrat
 
 Expected: pure and service functions are absent.
 
-- [ ] **Step 4: Implement append-only identity replay and service operations**
+- [x] **Step 4: Implement append-only identity replay and service operations**
 
 Sort by `(occurred_at, action_id.hex)`. First build reversal map and validate it, then apply active MERGE/SPLIT actions. Detect cycles by following canonical targets before accepting a merge. `resolve_canonical_opportunity_id()` path-compresses only in an in-memory dict; it never writes or changes action rows.
 
 Service methods insert action and member rows in one transaction. A reversal reloads original members, compares the requested action type, copies the exact members, and inserts a new action referencing the original. It never deletes or updates the original action.
 
-- [ ] **Step 5: Verify GREEN, mutation and regressions**
+- [x] **Step 5: Verify GREEN, mutation and regressions**
 
 ```powershell
 uv run pytest tests/opportunities/test_identity_replay.py -v
@@ -795,7 +795,7 @@ uv run mypy src tests
 
 Mutation check: temporarily allow a second reversal of the same action; observe the duplicate-reversal test fail; restore and rerun green.
 
-- [ ] **Step 6: Stop only Task 6 services, commit and push**
+- [x] **Step 6: Stop only Task 6 services, commit and push**
 
 ```powershell
 Set-Location ..
@@ -832,7 +832,7 @@ git push
 - Produces a Phase 3-only local verification entry point and matching `phase3-resolution` GitHub Actions job.
 - Gate evidence distinguishes `IMPLEMENTED`, `LOCALLY_VERIFIED`, `REMOTE_CI`, and `BLOCKED_BY_PHASE2` without closing any Gate.
 
-- [ ] **Step 1: Write the scoped verifier**
+- [x] **Step 1: Write the scoped verifier**
 
 The script defines:
 
@@ -851,7 +851,7 @@ docker compose -f $phase3ComposeFile -p $phase3ComposeProject down --remove-orph
 
 It must not call `verify-phase1.ps1`, `verify-phase2.ps1`, use `-v`, enumerate projects, or reference 55432/55000.
 
-- [ ] **Step 2: Verify the verifier RED-GREEN**
+- [x] **Step 2: Verify the verifier RED-GREEN**
 
 First run with one expected fixture `content_sha256` intentionally changed in the test fixture expectation, not in production history. Confirm nonzero and inspect that only `deepaha-phase3-$PID` is cleaned. Restore the expected hash and run:
 
@@ -861,11 +861,11 @@ powershell -ExecutionPolicy Bypass -File scripts/verify-phase3.ps1
 
 Record actual exit code, test counts, migration head, PostgreSQL version, Moto version and Alembic check output. Never record a planned count.
 
-- [ ] **Step 3: Add matching CI**
+- [x] **Step 3: Add matching CI**
 
 Add `phase3-resolution` with PostgreSQL 18.4 and Moto 5.2.2 services, Python 3.14, locked sync, Alembic upgrade, Phase 3 unit/contract/integration tests and `alembic check`. Test-only environment constants use CI ports 5432/5000 and are explicitly labelled disposable. Do not set live permission.
 
-- [ ] **Step 4: Create truthful candidate Gate evidence**
+- [x] **Step 4: Create truthful candidate Gate evidence**
 
 `docs/gates/phase-3/README.md` begins:
 
@@ -878,7 +878,7 @@ Phase 2 prerequisite: OPEN
 
 Populate local evidence only from Step 2 output. Before remote CI, record it as PENDING. `acceptance-results.md` maps every Phase 3 exit to a test/command and explicitly states which evidence is synthetic. `resolver-evaluation-summary.md` reports fixture counts, not `>=98%` real-world precision. `deferred-decisions.md` copies every excluded capability and the post-Phase2 rebase/reverify sequence.
 
-- [ ] **Step 5: Run fresh full local verification and scope/security/artifact review**
+- [x] **Step 5: Run fresh full local verification and scope/security/artifact review**
 
 ```powershell
 git diff --check
@@ -893,7 +893,7 @@ rg -n "55432|55000|deepaha-phase2-live-gate" infra/compose.phase3.yaml scripts/v
 
 Review every match. The last command must have no Phase 3 verifier/compose match; existing historical Phase 1/2 files are outside that scoped command.
 
-- [ ] **Step 6: Commit and push verifier/evidence**
+- [x] **Step 6: Commit and push verifier/evidence**
 
 ```powershell
 git add scripts/verify-phase3.ps1 .github/workflows/ci.yml docs/gates/phase-3 docs/development/README.md docs/development/system-roadmap.md README.md
@@ -902,7 +902,7 @@ git commit -m "ci: verify phase 3 opportunity resolution"
 git push
 ```
 
-- [ ] **Step 7: Create stacked draft PR and inspect exact remote CI**
+- [x] **Step 7: Create stacked draft PR and inspect exact remote CI**
 
 Use GitHub CLI only after confirming authentication and remote branch. Create a draft PR with base `phase-2-source-ingestion`, head `codex/phase-3-opportunity-resolution`, title prefixed `[STACKED][DRAFT]`, and body stating Phase 2 Gate OPEN, no merge, v0.3 PROPOSED, independent ports, verification commands and post-Gate rebase requirement.
 
@@ -921,7 +921,7 @@ gh pr create --draft --base phase-2-source-ingestion --head codex/phase-3-opport
 
 Inspect the exact head SHA and required job conclusions with `gh pr checks` and `gh run view`. Do not merge or mark ready for review.
 
-- [ ] **Step 8: Update remote evidence only from actual results**
+- [x] **Step 8: Update remote evidence only from actual results**
 
 If every required job is `success`, update Phase 3 Gate docs with exact head SHA, run URL, job names and conclusions while retaining `BLOCKED_BY_PHASE2` and `IMPLEMENTED_PENDING_PHASE2_GATE`. Run `scripts/verify.ps1` and `scripts/verify-phase3.ps1` again after this docs-only change, then commit and push:
 

@@ -18,6 +18,7 @@ diff：
 - 数据库 URL 命中均为历史计划、测试断言或明确 disposable 的本地/CI 常量；
 - Phase 3 compose/verifier/CI 对 55432、55000、`deepaha-phase2-live-gate` 的 scoped 扫描零命中。
 
-当前结论：`LOCAL SCAN PASS`。精确候选 SHA 推送后的 GitHub diff/CI 仍需复核。
+当前结论：`LOCAL SCAN PASS`。精确候选 SHA `f5b89db…` 的 GitHub Actions run
+32523434567 四个 jobs 均成功；Phase 2 closing commit 后仍需重做 diff/CI 复核。
 
 本文件不是法律意见；Phase 3 没有面向公众发布、用户数据、招聘交易或 AI 内容输出。

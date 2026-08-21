@@ -3,7 +3,7 @@
 ## 当前本地环境
 
 - 最近 GREEN：2026-08-22T04:15+08:00 至 04:16+08:00。
-- 候选树基线：`14ab668ce719dac002f5afe136c28c72fa067d76` 加 Gate/CI 变更。
+- 远程候选实现 SHA：`f5b89db22afe08f3d5d62b4854627d2d68485400`。
 - uv `0.12.5`；Python `3.14.7`；Ruff `0.16.4`；mypy `1.20.2`；pytest `9.1.1`；Alembic `1.19.1`。
 - Node.js `24.14.0`；项目锁定 pnpm `10.15.0`；Docker Engine `29.6.1`。
 - verifier 实际输出：PostgreSQL `18.4`；Moto `5.2.2.dev`（镜像 tag 为 `5.2.2`）。
@@ -18,6 +18,7 @@
 | Phase 3 integration | `107 passed, 243 deselected`。 |
 | contracts + opportunities | `123 passed`。 |
 | Alembic | 应用 `20260821_0001`、`20260821_0002`、`20260822_0003`；`No new upgrade operations detected.` |
+| GitHub Actions | [run 32523434567](https://github.com/zjwlxylc/DeepAha/actions/runs/32523434567)：`backend-quality`、`web-quality`、`integration`、`phase3-resolution` 均 `success`。 |
 
 ## 故障注入
 
@@ -29,5 +30,5 @@
 ## 尚未发生
 
 - Phase 2 closing commit 上的兼容差异与全量复验；
-- 当前精确候选 SHA 的远程 CI；
+- Phase 2 closing commit 更新后的 pull_request merge-ref CI；
 - Phase 3 Gate 关闭、v0.3 STABLE、合并或发布。
