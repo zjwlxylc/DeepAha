@@ -96,7 +96,7 @@ Run:
 
 ```powershell
 Push-Location backend
-uv run pytest tests/opportunities/test_replay.py::test_resolution_fixture_bytes_are_fixed -q
+uv run pytest tests/opportunities/test_resolver.py::test_resolution_fixture_bytes_are_fixed -q
 Pop-Location
 ```
 
@@ -131,7 +131,7 @@ Run:
 
 ```powershell
 Push-Location backend
-uv run pytest tests/opportunities/test_replay.py::test_resolution_fixture_bytes_are_fixed -q
+uv run pytest tests/opportunities/test_resolver.py::test_resolution_fixture_bytes_are_fixed -q
 Pop-Location
 & ./scripts/verify.ps1
 ```

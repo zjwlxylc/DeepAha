@@ -3,5 +3,7 @@ backend/tests/fixtures/official/civil-service-fast-stream-news-2025.json -text
 backend/tests/fixtures/official/*.html binary
 backend/tests/fixtures/documents/*.pdf binary
 backend/tests/fixtures/documents/*.xlsx binary
+backend/tests/fixtures/opportunities/*.json text eol=lf
+backend/tests/fixtures/evaluation/*.json text eol=lf
 文档2/*.md binary
 文档2/*.docx binary
