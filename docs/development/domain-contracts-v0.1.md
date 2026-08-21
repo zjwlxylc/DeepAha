@@ -6,7 +6,9 @@
 >
 > 适用阶段：Phase 1—Phase 6 设计基线
 >
-> 来源基线：`文档/DeepAha_青年机会智能系统_Blueprint_v1.0.1.docx`
+> 历史来源基线：`文档/DeepAha_青年机会智能系统_Blueprint_v1.0.1.docx`
+>
+> Blueprint v1.2 已自 Phase 2 起晋升；本文件继续记录已经验证的 v0.1 历史契约，不因上位文档升级而改写。Phase 2 的兼容扩展见 `domain-contracts-v0.2.md`，在实现和 Gate 通过前保持 `PROPOSED`。
 
 ## 1. 目的
 
