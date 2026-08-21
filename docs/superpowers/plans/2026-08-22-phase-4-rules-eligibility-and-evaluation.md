@@ -323,7 +323,7 @@ git push origin codex/phase-4-rules-eligibility-evaluation
 
 **Interfaces:**
 - Consumes: v0.4 enum string values, Phase 3 `opportunities`/`opportunity_versions`, existing `Base`, PostgreSQL JSONB and UUID/text timestamp conventions。
-- Produces: ORM classes `RuleSetModel`, `RuleModel`, `RuleEvidenceModel`, `ProfileSnapshotModel`, `EligibilityResultModel`, `MatchSnapshotModel`, `MatchRuleResultModel`, `EvaluationRunModel`, `EvaluationCaseResultModel` and Alembic revision `20260822_0004`。
+- Produces: ORM classes `RuleSetModel`, `RuleModel`, `RuleEvidenceModel`, `ProfileSnapshotModel`, `EligibilityResultModel`, `MatchSnapshotModel`, `EvaluationRunModel`, `EvaluationCaseResultModel` and Alembic revision `20260822_0004`。
 
 - [ ] **Step 1: Write migration and ORM RED tests**
 
@@ -332,7 +332,7 @@ Add an integration test which upgrades from `20260822_0003` to `head`, then asse
 ```python
 expected = {
     "rule_sets", "rules", "rule_evidence", "profile_snapshots",
-    "eligibility_results", "match_snapshots", "match_rule_results",
+    "eligibility_results", "match_snapshots",
     "evaluation_runs", "evaluation_case_results",
 }
 assert expected <= set(inspector.get_table_names())
@@ -348,8 +348,12 @@ Run:
 $env:COMPOSE_PROJECT_NAME = 'deepaha-phase4-plan-task2'
 docker compose -f infra/compose.phase4.yaml up -d --wait
 Push-Location backend
-$env:DEEPAHA_DATABASE_URL = 'postgresql+psycopg://deepaha:deepaha@127.0.0.1:55434/deepaha'
-$env:DEEPAHA_S3_ENDPOINT_URL = 'http://127.0.0.1:55002'
+$env:DEEPAHA_DATABASE_URL = 'postgresql+psycopg://deepaha:deepaha_phase4_local_only@127.0.0.1:55434/deepaha'
+$env:DEEPAHA_OBJECT_STORE_ENDPOINT = 'http://127.0.0.1:55002'
+$env:DEEPAHA_OBJECT_STORE_REGION = 'us-east-1'
+$env:DEEPAHA_OBJECT_STORE_BUCKET = 'deepaha-raw'
+$env:DEEPAHA_OBJECT_STORE_ACCESS_KEY = 'phase4-local'
+$env:DEEPAHA_OBJECT_STORE_SECRET_KEY = 'phase4-local-secret'
 uv run pytest tests/integration/test_phase4_persistence_contract.py -q -m integration
 Pop-Location
 ```
@@ -776,7 +780,7 @@ Serialize with sorted keys and fixed separators; no database row timestamp or wa
 
 - [ ] **Step 4: Implement transactional idempotency and replay**
 
-Look up `input_sha256` before evaluation; on a uniqueness race, roll back and read the existing row。Save EligibilityResult, MatchSnapshot and ordered MatchRuleResult rows in one transaction。Replay reconstructs from saved rows and refuses current-config substitution。Diff compares exact version/input fields, status, per-rule outcome/reason/evidence IDs。
+Look up `input_sha256` before evaluation; on a uniqueness race, roll back and read the existing row。Save EligibilityResult with ordered rule-result JSON and MatchSnapshot in one transaction。Replay reconstructs from saved rows and refuses current-config substitution。Diff compares exact version/input fields, status, per-rule outcome/reason/evidence IDs。
 
 - [ ] **Step 5: Verify integration replay and old Phase 3 behavior**
 
