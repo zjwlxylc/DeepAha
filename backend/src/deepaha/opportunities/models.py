@@ -21,7 +21,8 @@ class Opportunity(Base):
         CheckConstraint(
             "type in ('PUBLIC_INSTITUTION_JOB', 'STATE_OWNED_ENTERPRISE_JOB', "
             "'CIVIL_SERVICE', 'GRASSROOTS_PROGRAM', 'YOUTH_POLICY_BENEFIT', "
-            "'POSTGRAD_RECOMMENDATION', 'ADMISSION_CHANGE')",
+            "'POSTGRAD_RECOMMENDATION', 'ADMISSION_CHANGE', 'COMPETITION', "
+            "'RESEARCH_PROGRAM', 'SCHOLARSHIP', 'YOUTH_DEVELOPMENT_PROGRAM')",
             name="type_values",
         ),
         CheckConstraint(

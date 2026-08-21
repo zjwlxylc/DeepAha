@@ -33,6 +33,7 @@ class RawArtifact(Base):
             name="content_addressed_object_key",
         ),
         UniqueConstraint("source_id", "content_sha256"),
+        UniqueConstraint("artifact_id", "source_id"),
     )
 
     artifact_id: Mapped[UUID] = mapped_column(
