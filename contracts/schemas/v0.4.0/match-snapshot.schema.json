@@ -1,0 +1,263 @@
+{
+  "$defs": {
+    "EligibilityResultSchemaV04": {
+      "additionalProperties": false,
+      "properties": {
+        "conflict_rule_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Conflict Rule Ids",
+          "type": "array"
+        },
+        "engine_version": {
+          "minLength": 1,
+          "title": "Engine Version",
+          "type": "string"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "missing_fields": {
+          "items": {
+            "$ref": "#/$defs/RuleField"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "result_id": {
+          "format": "uuid",
+          "title": "Result Id",
+          "type": "string"
+        },
+        "review_reasons": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Review Reasons",
+          "type": "array"
+        },
+        "rule_evaluations": {
+          "items": {
+            "$ref": "#/$defs/RuleEvaluationSchemaV04"
+          },
+          "minItems": 1,
+          "title": "Rule Evaluations",
+          "type": "array"
+        },
+        "satisfied_rule_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Satisfied Rule Ids",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/EligibilityStatus"
+        },
+        "unknown_rule_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Unknown Rule Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "result_id",
+        "status",
+        "rule_evaluations",
+        "satisfied_rule_ids",
+        "conflict_rule_ids",
+        "unknown_rule_ids",
+        "missing_fields",
+        "review_reasons",
+        "evaluated_at",
+        "engine_version"
+      ],
+      "title": "EligibilityResultSchemaV04",
+      "type": "object"
+    },
+    "EligibilityStatus": {
+      "enum": [
+        "ELIGIBLE",
+        "LIKELY_ELIGIBLE",
+        "UNCERTAIN",
+        "INELIGIBLE"
+      ],
+      "title": "EligibilityStatus",
+      "type": "string"
+    },
+    "RuleEvaluationSchemaV04": {
+      "additionalProperties": false,
+      "properties": {
+        "deterministic": {
+          "title": "Deterministic",
+          "type": "boolean"
+        },
+        "evidence_ref_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Evidence Ref Ids",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "$ref": "#/$defs/RuleField"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "official_evidence": {
+          "title": "Official Evidence",
+          "type": "boolean"
+        },
+        "outcome": {
+          "$ref": "#/$defs/RuleOutcome"
+        },
+        "reason_code": {
+          "minLength": 1,
+          "title": "Reason Code",
+          "type": "string"
+        },
+        "rule_id": {
+          "format": "uuid",
+          "title": "Rule Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule_id",
+        "outcome",
+        "deterministic",
+        "official_evidence",
+        "reason_code",
+        "evidence_ref_ids",
+        "missing_fields"
+      ],
+      "title": "RuleEvaluationSchemaV04",
+      "type": "object"
+    },
+    "RuleField": {
+      "enum": [
+        "education_level",
+        "major_code",
+        "graduation_year",
+        "student_status",
+        "birth_date",
+        "hukou_region",
+        "residence_region",
+        "target_regions",
+        "certificates"
+      ],
+      "title": "RuleField",
+      "type": "string"
+    },
+    "RuleOutcome": {
+      "enum": [
+        "SATISFIED",
+        "CONFLICT",
+        "UNKNOWN"
+      ],
+      "title": "RuleOutcome",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "compiler_version": {
+      "minLength": 1,
+      "title": "Compiler Version",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "eligibility_result": {
+      "$ref": "#/$defs/EligibilityResultSchemaV04"
+    },
+    "engine_version": {
+      "minLength": 1,
+      "title": "Engine Version",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "major_catalog_version": {
+      "minLength": 1,
+      "title": "Major Catalog Version",
+      "type": "string"
+    },
+    "major_mapping_version": {
+      "minLength": 1,
+      "title": "Major Mapping Version",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "profile_snapshot_id": {
+      "format": "uuid",
+      "title": "Profile Snapshot Id",
+      "type": "string"
+    },
+    "rule_set_id": {
+      "format": "uuid",
+      "title": "Rule Set Id",
+      "type": "string"
+    },
+    "rule_set_version": {
+      "minimum": 1,
+      "title": "Rule Set Version",
+      "type": "integer"
+    },
+    "scenario_clock": {
+      "format": "date",
+      "title": "Scenario Clock",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "format": "uuid",
+      "title": "Snapshot Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "opportunity_id",
+    "opportunity_version",
+    "rule_set_id",
+    "rule_set_version",
+    "profile_snapshot_id",
+    "eligibility_result",
+    "compiler_version",
+    "engine_version",
+    "major_catalog_version",
+    "major_mapping_version",
+    "scenario_clock",
+    "input_sha256",
+    "created_at"
+  ],
+  "title": "MatchSnapshotSchemaV04",
+  "type": "object"
+}

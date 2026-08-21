@@ -1,0 +1,257 @@
+{
+  "$defs": {
+    "EligibilityStatus": {
+      "enum": [
+        "ELIGIBLE",
+        "LIKELY_ELIGIBLE",
+        "UNCERTAIN",
+        "INELIGIBLE"
+      ],
+      "title": "EligibilityStatus",
+      "type": "string"
+    },
+    "EvaluationCaseResultSchemaV04": {
+      "additionalProperties": false,
+      "properties": {
+        "actual_status": {
+          "$ref": "#/$defs/EligibilityStatus"
+        },
+        "case_id": {
+          "minLength": 1,
+          "title": "Case Id",
+          "type": "string"
+        },
+        "expected_status": {
+          "$ref": "#/$defs/EligibilityStatus"
+        },
+        "match_snapshot_id": {
+          "format": "uuid",
+          "title": "Match Snapshot Id",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "reason_codes": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "case_id",
+        "expected_status",
+        "actual_status",
+        "passed",
+        "match_snapshot_id",
+        "reason_codes"
+      ],
+      "title": "EvaluationCaseResultSchemaV04",
+      "type": "object"
+    },
+    "EvaluationComponent": {
+      "enum": [
+        "RULE_ENGINE",
+        "ELIGIBILITY",
+        "MATCH_REPLAY"
+      ],
+      "title": "EvaluationComponent",
+      "type": "string"
+    },
+    "EvaluationComponentVersionsSchemaV04": {
+      "additionalProperties": false,
+      "properties": {
+        "compiler": {
+          "minLength": 1,
+          "title": "Compiler",
+          "type": "string"
+        },
+        "contract": {
+          "const": "0.4.0",
+          "title": "Contract",
+          "type": "string"
+        },
+        "engine": {
+          "minLength": 1,
+          "title": "Engine",
+          "type": "string"
+        },
+        "major_catalog": {
+          "minLength": 1,
+          "title": "Major Catalog",
+          "type": "string"
+        },
+        "major_mapping": {
+          "minLength": 1,
+          "title": "Major Mapping",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract",
+        "compiler",
+        "engine",
+        "major_catalog",
+        "major_mapping"
+      ],
+      "title": "EvaluationComponentVersionsSchemaV04",
+      "type": "object"
+    },
+    "EvaluationMetricsSchemaV04": {
+      "additionalProperties": false,
+      "properties": {
+        "passed_cases": {
+          "minimum": 0,
+          "title": "Passed Cases",
+          "type": "integer"
+        },
+        "replay_mismatch_count": {
+          "minimum": 0,
+          "title": "Replay Mismatch Count",
+          "type": "integer"
+        },
+        "status_counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "propertyNames": {
+            "$ref": "#/$defs/EligibilityStatus"
+          },
+          "title": "Status Counts",
+          "type": "object"
+        },
+        "total_cases": {
+          "minimum": 1,
+          "title": "Total Cases",
+          "type": "integer"
+        },
+        "unexpected_ineligible_count": {
+          "minimum": 0,
+          "title": "Unexpected Ineligible Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "total_cases",
+        "passed_cases",
+        "unexpected_ineligible_count",
+        "replay_mismatch_count",
+        "status_counts"
+      ],
+      "title": "EvaluationMetricsSchemaV04",
+      "type": "object"
+    },
+    "EvaluationRunStatus": {
+      "enum": [
+        "RUNNING",
+        "COMPLETED",
+        "FAILED"
+      ],
+      "title": "EvaluationRunStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "case_results": {
+      "items": {
+        "$ref": "#/$defs/EvaluationCaseResultSchemaV04"
+      },
+      "title": "Case Results",
+      "type": "array"
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Completed At"
+    },
+    "component": {
+      "$ref": "#/$defs/EvaluationComponent"
+    },
+    "component_versions": {
+      "$ref": "#/$defs/EvaluationComponentVersionsSchemaV04"
+    },
+    "dataset_id": {
+      "minLength": 1,
+      "title": "Dataset Id",
+      "type": "string"
+    },
+    "dataset_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Dataset Sha256",
+      "type": "string"
+    },
+    "dataset_version": {
+      "minLength": 1,
+      "title": "Dataset Version",
+      "type": "string"
+    },
+    "error_summary": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Error Summary"
+    },
+    "metrics": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EvaluationMetricsSchemaV04"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "run_id": {
+      "format": "uuid",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/EvaluationRunStatus"
+    },
+    "synthetic": {
+      "title": "Synthetic",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "run_id",
+    "dataset_id",
+    "dataset_version",
+    "dataset_sha256",
+    "component",
+    "component_versions",
+    "synthetic",
+    "status",
+    "case_results",
+    "metrics",
+    "started_at",
+    "completed_at",
+    "error_summary"
+  ],
+  "title": "EvaluationRunSchemaV04",
+  "type": "object"
+}

@@ -1,0 +1,267 @@
+{
+  "$defs": {
+    "ApplicationWindowSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "closes_on": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Closes On"
+        },
+        "opens_on": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Opens On"
+        },
+        "timezone": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Timezone"
+        }
+      },
+      "required": [
+        "opens_on",
+        "closes_on",
+        "timezone"
+      ],
+      "title": "ApplicationWindowSchema",
+      "type": "object"
+    },
+    "OpportunityDocumentRole": {
+      "enum": [
+        "PRIMARY_NOTICE",
+        "ATTACHMENT",
+        "POSITION_TABLE",
+        "CORRECTION",
+        "DEADLINE_EXTENSION",
+        "CANCELLATION",
+        "RESULT",
+        "OFFICIAL_GUIDANCE"
+      ],
+      "title": "OpportunityDocumentRole",
+      "type": "string"
+    },
+    "OpportunitySnapshotSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "application_url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "maxLength": 2083,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Application Url"
+        },
+        "application_window": {
+          "$ref": "#/$defs/ApplicationWindowSchema"
+        },
+        "attachment_urls": {
+          "items": {
+            "format": "uri",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Attachment Urls",
+          "type": "array"
+        },
+        "canonical_title": {
+          "minLength": 1,
+          "title": "Canonical Title",
+          "type": "string"
+        },
+        "issuer_name": {
+          "minLength": 1,
+          "title": "Issuer Name",
+          "type": "string"
+        },
+        "jurisdiction": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Jurisdiction"
+        },
+        "locations": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Locations",
+          "type": "array"
+        },
+        "published_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Published At"
+        },
+        "status": {
+          "$ref": "#/$defs/OpportunityStatus"
+        },
+        "type": {
+          "$ref": "#/$defs/OpportunityTypeV02"
+        }
+      },
+      "required": [
+        "canonical_title",
+        "type",
+        "issuer_name",
+        "jurisdiction",
+        "status",
+        "published_at",
+        "application_window",
+        "application_url",
+        "attachment_urls",
+        "locations"
+      ],
+      "title": "OpportunitySnapshotSchema",
+      "type": "object"
+    },
+    "OpportunityStatus": {
+      "enum": [
+        "DRAFT",
+        "OPEN",
+        "CLOSING_SOON",
+        "CLOSED",
+        "CANCELLED",
+        "SUPERSEDED",
+        "UNKNOWN"
+      ],
+      "title": "OpportunityStatus",
+      "type": "string"
+    },
+    "OpportunityTypeV02": {
+      "enum": [
+        "PUBLIC_INSTITUTION_JOB",
+        "STATE_OWNED_ENTERPRISE_JOB",
+        "CIVIL_SERVICE",
+        "GRASSROOTS_PROGRAM",
+        "YOUTH_POLICY_BENEFIT",
+        "POSTGRAD_RECOMMENDATION",
+        "ADMISSION_CHANGE",
+        "COMPETITION",
+        "RESEARCH_PROGRAM",
+        "SCHOLARSHIP",
+        "YOUTH_DEVELOPMENT_PROGRAM"
+      ],
+      "title": "OpportunityTypeV02",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "candidate_id": {
+      "format": "uuid",
+      "title": "Candidate Id",
+      "type": "string"
+    },
+    "candidate_opportunity_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Candidate Opportunity Ids",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "document_id": {
+      "format": "uuid",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "proposed_role": {
+      "$ref": "#/$defs/OpportunityDocumentRole"
+    },
+    "proposed_snapshot": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/OpportunitySnapshotSchema"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reason_codes": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "resolver_version": {
+      "minLength": 1,
+      "title": "Resolver Version",
+      "type": "string"
+    },
+    "review_status": {
+      "const": "PENDING",
+      "title": "Review Status",
+      "type": "string"
+    },
+    "source_evidence_ref_id": {
+      "format": "uuid",
+      "title": "Source Evidence Ref Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "candidate_id",
+    "document_id",
+    "candidate_opportunity_ids",
+    "proposed_role",
+    "proposed_snapshot",
+    "reason_codes",
+    "resolver_version",
+    "source_evidence_ref_id",
+    "review_status",
+    "created_at"
+  ],
+  "title": "OpportunityResolutionCandidateSchema",
+  "type": "object"
+}

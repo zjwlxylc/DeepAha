@@ -172,7 +172,7 @@ Expected: staged diff only contains two `.gitattributes` lines；commit and push
 
 **Interfaces:**
 - Consumes: `ContractModel`, `EntityId`, `Instant`, `NonEmptyString`, `Sha256`, `VersionNumber`, `JsonValue` and v0.3 `OpportunityVersionSchemaV03` identifiers。
-- Produces: `EvidenceAuthority`, `RuleOperator`, `RuleValueType`, `RuleOutcome`, `EligibilityStatus`, `RuleSetSchemaV04`, `RuleSchemaV04`, `RuleEvidenceSchemaV04`, `ProfileSnapshotSchemaV04`, `EligibilityResultSchemaV04`, `MatchSnapshotSchemaV04`, `EvaluationRunSchemaV04`。
+- Produces: `RuleEvidenceAuthority`, `RuleOperator`, `RuleValueType`, `RuleOutcome`, `EligibilityStatus`, `RuleSetSchemaV04`, `RuleSchemaV04`, `RuleEvidenceSchemaV04`, `ProfileSnapshotSchemaV04`, `EligibilityResultSchemaV04`, `MatchSnapshotSchemaV04`, `EvaluationRunSchemaV04`。
 
 - [ ] **Step 1: Write contract RED tests**
 
@@ -185,8 +185,8 @@ assert set(EligibilityStatus) == {
     EligibilityStatus.UNCERTAIN,
     EligibilityStatus.INELIGIBLE,
 }
-assert EvidenceAuthority.LATEST_OFFICIAL_CORRECTION.precedence == 600
-assert EvidenceAuthority.LLM_SEMANTIC_INFERENCE.precedence == 100
+assert RuleEvidenceAuthority.LATEST_OFFICIAL_CORRECTION.precedence == 600
+assert RuleEvidenceAuthority.LLM_SEMANTIC_INFERENCE.precedence == 100
 ```
 
 Also validate these rejection cases with `pytest.raises(ValidationError)`:
@@ -266,6 +266,7 @@ Run:
 
 ```powershell
 Push-Location backend
+$env:PYTHONPATH = 'src'
 uv run python -m deepaha.contracts.export .. --version 0.4.0
 Pop-Location
 ```
