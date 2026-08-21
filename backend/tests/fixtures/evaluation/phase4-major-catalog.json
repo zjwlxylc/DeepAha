@@ -1,0 +1,85 @@
+{
+  "version": "phase4-synthetic-major-catalog-v1",
+  "synthetic_only": true,
+  "license": "CC0-1.0",
+  "entries": [
+    {
+      "code": "08",
+      "name": "Synthetic Engineering",
+      "parent_codes": []
+    },
+    {
+      "code": "0809",
+      "name": "Synthetic Computer Studies",
+      "parent_codes": [
+        "08"
+      ]
+    },
+    {
+      "code": "080901",
+      "name": "Synthetic Computer Science",
+      "parent_codes": [
+        "0809"
+      ]
+    },
+    {
+      "code": "080902",
+      "name": "Synthetic Software Engineering",
+      "parent_codes": [
+        "0809"
+      ]
+    },
+    {
+      "code": "080903",
+      "name": "Synthetic Network Engineering",
+      "parent_codes": [
+        "0809"
+      ]
+    },
+    {
+      "code": "03",
+      "name": "Synthetic Social Sciences",
+      "parent_codes": []
+    },
+    {
+      "code": "0301",
+      "name": "Synthetic Law Studies",
+      "parent_codes": [
+        "03"
+      ]
+    },
+    {
+      "code": "030101",
+      "name": "Synthetic Law",
+      "parent_codes": [
+        "0301"
+      ]
+    },
+    {
+      "code": "12",
+      "name": "Synthetic Management",
+      "parent_codes": []
+    },
+    {
+      "code": "1204",
+      "name": "Synthetic Public Administration",
+      "parent_codes": [
+        "12"
+      ]
+    },
+    {
+      "code": "120401",
+      "name": "Synthetic Public Service Administration",
+      "parent_codes": [
+        "1204"
+      ]
+    },
+    {
+      "code": "120402",
+      "name": "Synthetic Administrative Management",
+      "parent_codes": [
+        "1204"
+      ]
+    }
+  ]
+}

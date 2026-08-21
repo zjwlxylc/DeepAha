@@ -1,0 +1,20 @@
+{
+  "version": "phase4-synthetic-major-mapping-v1",
+  "catalog_version": "phase4-synthetic-major-catalog-v1",
+  "synthetic_only": true,
+  "license": "CC0-1.0",
+  "approved_by": "phase4-fixture-governance",
+  "approved_at": "2026-08-22T00:00:00Z",
+  "entries": [
+    {
+      "source_code": "080903",
+      "target_code": "080902",
+      "approved": true
+    },
+    {
+      "source_code": "120402",
+      "target_code": "120401",
+      "approved": true
+    }
+  ]
+}
