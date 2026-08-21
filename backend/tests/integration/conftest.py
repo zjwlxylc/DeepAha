@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from alembic import command
 from alembic.config import Config
-from sqlalchemy import Connection, Engine, create_engine
+from sqlalchemy import Connection, Engine, create_engine, text
 from sqlalchemy.orm import Session
 
 from deepaha.core.settings import Settings
@@ -28,6 +28,14 @@ def migrated_engine(database_url: str) -> Iterator[Engine]:
         yield engine
     finally:
         engine.dispose()
+
+
+@pytest.fixture(autouse=True)
+def clean_committed_domain_rows(migrated_engine: Engine) -> Iterator[None]:
+    """Remove rows committed by services that intentionally own their transactions."""
+    yield
+    with migrated_engine.begin() as connection:
+        connection.execute(text("TRUNCATE TABLE sources, opportunities RESTART IDENTITY CASCADE"))
 
 
 @pytest.fixture
