@@ -23,6 +23,7 @@ class MatchSnapshotModel(Base):
         CheckConstraint("uuid_extract_version(snapshot_id) = 7", name="snapshot_id_uuid7"),
         CheckConstraint("opportunity_version >= 1", name="positive_opportunity_version"),
         CheckConstraint("rule_set_version >= 1", name="positive_rule_set_version"),
+        CheckConstraint("profile_version >= 1", name="positive_profile_version"),
         CheckConstraint("length(btrim(compiler_version)) >= 1", name="compiler_nonempty"),
         CheckConstraint("length(btrim(engine_version)) >= 1", name="engine_nonempty"),
         CheckConstraint("length(btrim(major_catalog_version)) >= 1", name="catalog_nonempty"),
@@ -55,6 +56,7 @@ class MatchSnapshotModel(Base):
         Uuid,
         ForeignKey("profile_snapshots.profile_snapshot_id", ondelete="RESTRICT"),
     )
+    profile_version: Mapped[int] = mapped_column(Integer)
     compiler_version: Mapped[str] = mapped_column(String(64))
     engine_version: Mapped[str] = mapped_column(String(64))
     major_catalog_version: Mapped[str] = mapped_column(String(128))

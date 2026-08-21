@@ -378,6 +378,7 @@ opportunity_version: VersionNumber
 rule_set_id: EntityId
 rule_set_version: VersionNumber
 profile_snapshot_id: EntityId
+profile_version: VersionNumber
 eligibility_result: EligibilityResult
 compiler_version: non-empty string
 engine_version: non-empty string

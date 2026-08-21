@@ -39,7 +39,7 @@ execution path.
 ## Version and replay boundary
 
 RuleSet, Rule, ProfileSnapshot, EligibilityResult, MatchSnapshot, and EvaluationRun are immutable
-versioned records. A MatchSnapshot fixes Opportunity and RuleSet versions, ProfileSnapshot ID,
+versioned records. A MatchSnapshot fixes Opportunity and RuleSet versions, ProfileSnapshot ID/version,
 compiler/engine versions, professional catalog/mapping versions, scenario clock, every rule
 outcome, EvidenceRef IDs, and a canonical input SHA-256. Re-evaluating identical inputs returns
 the same logical snapshot; changing any fixed input produces an explainable new snapshot.

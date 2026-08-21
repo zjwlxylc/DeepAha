@@ -53,7 +53,7 @@ class EvaluatedRule:
     official_evidence: bool
     reason_code: str
     evidence_ref_ids: tuple[UUID, ...]
-    missing_fields: tuple[str, ...]
+    missing_fields: tuple[RuleField, ...]
 
 
 @dataclass(frozen=True, slots=True)
@@ -63,7 +63,7 @@ class EligibilityDecision:
     satisfied_rule_ids: tuple[UUID, ...]
     conflict_rule_ids: tuple[UUID, ...]
     unknown_rule_ids: tuple[UUID, ...]
-    missing_fields: tuple[str, ...]
+    missing_fields: tuple[RuleField, ...]
     review_reasons: tuple[str, ...]
     engine_version: str = ENGINE_VERSION
 
@@ -150,7 +150,7 @@ def _evaluate_atomic(rule: CompiledRule, context: EvaluationContext) -> Evaluate
             official=False,
             reason="FIELD_MISSING",
             evidence_ids=evidence_ids,
-            missing_fields=(field_name,),
+            missing_fields=(rule.field,),
         )
     if rule.operator is RuleOperator.EXISTS:
         return _evaluation(
@@ -235,7 +235,7 @@ def _evaluate_major(
             reason=result.reason_code,
             evidence_ids=evidence_ids,
         )
-    missing = (RuleField.MAJOR_CODE.value,) if result.kind is MajorMatchKind.MISSING else ()
+    missing = (RuleField.MAJOR_CODE,) if result.kind is MajorMatchKind.MISSING else ()
     return _evaluation(
         rule,
         RuleOutcome.UNKNOWN,
@@ -488,7 +488,7 @@ def _evaluation(
     official: bool,
     reason: str,
     evidence_ids: tuple[UUID, ...],
-    missing_fields: tuple[str, ...] = (),
+    missing_fields: tuple[RuleField, ...] = (),
 ) -> EvaluatedRule:
     return EvaluatedRule(
         rule_id=rule.rule_id,

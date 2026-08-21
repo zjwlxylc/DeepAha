@@ -385,6 +385,7 @@
     "rule_set_id": "0198d239-4b00-7000-8000-000000000102",
     "rule_set_version": 1,
     "profile_snapshot_id": "0198d239-4b00-7000-8000-000000000103",
+    "profile_version": 1,
     "eligibility_result": {
       "result_id": "0198d239-4b00-7000-8000-000000000105",
       "status": "ELIGIBLE",

@@ -163,6 +163,7 @@ def match_values(**changes: object) -> dict[str, object]:
         "rule_set_id": RULE_SET_ID,
         "rule_set_version": 1,
         "profile_snapshot_id": PROFILE_SNAPSHOT_ID,
+        "profile_version": 1,
         "eligibility_result": result_values(),
         "compiler_version": "phase4-compiler-v1",
         "engine_version": "phase4-engine-v1",

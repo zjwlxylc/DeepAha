@@ -221,6 +221,11 @@
       "title": "Profile Snapshot Id",
       "type": "string"
     },
+    "profile_version": {
+      "minimum": 1,
+      "title": "Profile Version",
+      "type": "integer"
+    },
     "rule_set_id": {
       "format": "uuid",
       "title": "Rule Set Id",
@@ -249,6 +254,7 @@
     "rule_set_id",
     "rule_set_version",
     "profile_snapshot_id",
+    "profile_version",
     "eligibility_result",
     "compiler_version",
     "engine_version",

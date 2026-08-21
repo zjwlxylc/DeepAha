@@ -321,6 +321,7 @@ def upgrade() -> None:
         sa.Column("rule_set_id", sa.Uuid(), nullable=False),
         sa.Column("rule_set_version", sa.Integer(), nullable=False),
         sa.Column("profile_snapshot_id", sa.Uuid(), nullable=False),
+        sa.Column("profile_version", sa.Integer(), nullable=False),
         sa.Column("compiler_version", sa.String(length=64), nullable=False),
         sa.Column("engine_version", sa.String(length=64), nullable=False),
         sa.Column("major_catalog_version", sa.String(length=128), nullable=False),
@@ -348,6 +349,9 @@ def upgrade() -> None:
         ),
         sa.CheckConstraint(
             "opportunity_version >= 1", name=op.f("ck_match_snapshots_positive_opportunity_version")
+        ),
+        sa.CheckConstraint(
+            "profile_version >= 1", name=op.f("ck_match_snapshots_positive_profile_version")
         ),
         sa.CheckConstraint(
             "rule_set_version >= 1", name=op.f("ck_match_snapshots_positive_rule_set_version")

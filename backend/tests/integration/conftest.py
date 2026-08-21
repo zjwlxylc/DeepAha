@@ -35,7 +35,12 @@ def clean_committed_domain_rows(migrated_engine: Engine) -> Iterator[None]:
     """Remove rows committed by services that intentionally own their transactions."""
     yield
     with migrated_engine.begin() as connection:
-        connection.execute(text("TRUNCATE TABLE sources, opportunities RESTART IDENTITY CASCADE"))
+        connection.execute(
+            text(
+                "TRUNCATE TABLE sources, opportunities, profile_snapshots, "
+                "evaluation_runs RESTART IDENTITY CASCADE"
+            )
+        )
 
 
 @pytest.fixture

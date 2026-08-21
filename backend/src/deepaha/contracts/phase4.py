@@ -411,6 +411,7 @@ class MatchSnapshotSchemaV04(ContractModel):
     rule_set_id: EntityId
     rule_set_version: VersionNumber
     profile_snapshot_id: EntityId
+    profile_version: VersionNumber
     eligibility_result: EligibilityResultSchemaV04
     compiler_version: NonEmptyString
     engine_version: NonEmptyString
