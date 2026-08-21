@@ -23,7 +23,7 @@
 - `VERIFIED`：指定测试和证据已经运行并满足文档中的验收条件。
 - `SUPERSEDED`：被明确的新版本替代，只保留历史参考。
 
-当前状态：全部开发文档为 `PROPOSED`，项目尚无代码仓库。
+当前状态：Phase 0 工程基础已实现并通过 [Phase 0 Gate](../gates/phase-0/README.md)；Phase 1 及后续阶段仍为 `PROPOSED`，尚未开始实现。
 
 ## 维护规则
 
@@ -42,4 +42,3 @@
 - 事实源：PostgreSQL 与不可变原始证据；Redis、向量索引和 LLM 输出都不是事实源。
 - AI 边界：写入时智能（Write-time Intelligence）；LLM 负责理解与候选，确定性规则负责高影响裁决。
 - 首个纵向切片：一个真实官方机会从原始证据进入系统，形成 Opportunity、规则、资格四态、公开可信卡和反馈事件。
-
