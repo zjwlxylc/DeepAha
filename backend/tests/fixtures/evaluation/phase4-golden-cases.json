@@ -10,18 +10,48 @@
       "coverage_tags": [
         "age-boundary"
       ],
-      "profile_snapshot_id": "442983d1-6a59-777d-b4ad-11fdf6ded610",
+      "profile_snapshot_id": "1564b72f-52de-7f8e-93c4-5e5f1a646e66",
       "expected_status": "ELIGIBLE",
-      "protected_from_unexpected_ineligible": true
+      "protected_from_unexpected_ineligible": true,
+      "semantic_major_candidate": false,
+      "rule": {
+        "code": "birth-date-boundary",
+        "operator": "GTE",
+        "field": "birth_date",
+        "value_type": "DATE",
+        "value": "1997-08-22",
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          }
+        ]
+      }
     },
     {
       "case_id": "phase4-golden-02-missing-field",
       "coverage_tags": [
         "missing-field"
       ],
-      "profile_snapshot_id": "a3194dbe-db7e-7f39-a415-730ef254e296",
+      "profile_snapshot_id": "f8c3dc1c-292d-7c97-912a-90abc74025d4",
       "expected_status": "UNCERTAIN",
-      "protected_from_unexpected_ineligible": true
+      "protected_from_unexpected_ineligible": true,
+      "semantic_major_candidate": false,
+      "rule": {
+        "code": "major-required",
+        "operator": "IN",
+        "field": "major_code",
+        "value_type": "STRING",
+        "value": [
+          "080901"
+        ],
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          }
+        ]
+      }
     },
     {
       "case_id": "phase4-golden-03-evidence-conflict",
@@ -30,16 +60,50 @@
       ],
       "profile_snapshot_id": "086f7997-e91a-72ac-ac07-d17d96d4c392",
       "expected_status": "UNCERTAIN",
-      "protected_from_unexpected_ineligible": true
+      "protected_from_unexpected_ineligible": true,
+      "semantic_major_candidate": false,
+      "rule": {
+        "code": "education-evidence-conflict",
+        "operator": "EXISTS",
+        "field": "education_level",
+        "value_type": "STRING",
+        "value": null,
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          },
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "CONTRADICTS"
+          }
+        ]
+      }
     },
     {
       "case_id": "phase4-golden-04-major-exact",
       "coverage_tags": [
         "major-exact"
       ],
-      "profile_snapshot_id": "fec999c5-9a38-7325-a844-ead458bb1eba",
+      "profile_snapshot_id": "442983d1-6a59-777d-b4ad-11fdf6ded610",
       "expected_status": "ELIGIBLE",
-      "protected_from_unexpected_ineligible": true
+      "protected_from_unexpected_ineligible": true,
+      "semantic_major_candidate": false,
+      "rule": {
+        "code": "major-exact",
+        "operator": "IN",
+        "field": "major_code",
+        "value_type": "STRING",
+        "value": [
+          "080901"
+        ],
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          }
+        ]
+      }
     },
     {
       "case_id": "phase4-golden-05-major-catalog",
@@ -48,16 +112,48 @@
       ],
       "profile_snapshot_id": "b31f5d6c-ccd7-761a-a4db-486ad03a4873",
       "expected_status": "ELIGIBLE",
-      "protected_from_unexpected_ineligible": true
+      "protected_from_unexpected_ineligible": true,
+      "semantic_major_candidate": false,
+      "rule": {
+        "code": "major-catalog",
+        "operator": "IN",
+        "field": "major_code",
+        "value_type": "STRING",
+        "value": [
+          "0809"
+        ],
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          }
+        ]
+      }
     },
     {
       "case_id": "phase4-golden-06-major-approved-mapping",
       "coverage_tags": [
         "major-approved-mapping"
       ],
-      "profile_snapshot_id": "fe038bef-2b0f-7d9d-879a-a76ba7c09d70",
+      "profile_snapshot_id": "4eed25d7-18c3-7e87-a3a6-9828990d81e6",
       "expected_status": "LIKELY_ELIGIBLE",
-      "protected_from_unexpected_ineligible": true
+      "protected_from_unexpected_ineligible": true,
+      "semantic_major_candidate": false,
+      "rule": {
+        "code": "major-approved-mapping",
+        "operator": "IN",
+        "field": "major_code",
+        "value_type": "STRING",
+        "value": [
+          "080902"
+        ],
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          }
+        ]
+      }
     },
     {
       "case_id": "phase4-golden-07-major-semantic-candidate",
@@ -66,52 +162,140 @@
       ],
       "profile_snapshot_id": "7bc7017b-8c57-7295-b0c3-a3f34437071e",
       "expected_status": "UNCERTAIN",
-      "protected_from_unexpected_ineligible": true
+      "protected_from_unexpected_ineligible": true,
+      "semantic_major_candidate": true,
+      "rule": {
+        "code": "major-semantic-candidate",
+        "operator": "IN",
+        "field": "major_code",
+        "value_type": "STRING",
+        "value": [
+          "080902"
+        ],
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          }
+        ]
+      }
     },
     {
       "case_id": "phase4-golden-08-education",
       "coverage_tags": [
         "education"
       ],
-      "profile_snapshot_id": "b612ef47-38af-72f0-95c5-48739b8035c1",
+      "profile_snapshot_id": "442983d1-6a59-777d-b4ad-11fdf6ded610",
       "expected_status": "INELIGIBLE",
-      "protected_from_unexpected_ineligible": false
+      "protected_from_unexpected_ineligible": false,
+      "semantic_major_candidate": false,
+      "rule": {
+        "code": "education-master",
+        "operator": "GTE",
+        "field": "education_level",
+        "value_type": "STRING",
+        "value": "MASTER",
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          }
+        ]
+      }
     },
     {
       "case_id": "phase4-golden-09-graduation-status",
       "coverage_tags": [
         "graduation-status"
       ],
-      "profile_snapshot_id": "29527134-8e38-7b9d-a34a-d894b68e9fee",
+      "profile_snapshot_id": "442983d1-6a59-777d-b4ad-11fdf6ded610",
       "expected_status": "ELIGIBLE",
-      "protected_from_unexpected_ineligible": true
+      "protected_from_unexpected_ineligible": true,
+      "semantic_major_candidate": false,
+      "rule": {
+        "code": "graduation-status",
+        "operator": "EQ",
+        "field": "student_status",
+        "value_type": "STRING",
+        "value": "GRADUATING",
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          }
+        ]
+      }
     },
     {
       "case_id": "phase4-golden-10-hukou-region",
       "coverage_tags": [
         "hukou-region"
       ],
-      "profile_snapshot_id": "a36d25ea-eec5-77ec-881b-a3f3cfe6bbf5",
+      "profile_snapshot_id": "442983d1-6a59-777d-b4ad-11fdf6ded610",
       "expected_status": "INELIGIBLE",
-      "protected_from_unexpected_ineligible": false
+      "protected_from_unexpected_ineligible": false,
+      "semantic_major_candidate": false,
+      "rule": {
+        "code": "hukou-region",
+        "operator": "EQ",
+        "field": "hukou_region",
+        "value_type": "STRING",
+        "value": "SYN-ZJ-B",
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          }
+        ]
+      }
     },
     {
       "case_id": "phase4-golden-11-certificate",
       "coverage_tags": [
         "certificate"
       ],
-      "profile_snapshot_id": "674648e7-a87f-7964-bfb4-fca4925929d3",
+      "profile_snapshot_id": "442983d1-6a59-777d-b4ad-11fdf6ded610",
       "expected_status": "INELIGIBLE",
-      "protected_from_unexpected_ineligible": false
+      "protected_from_unexpected_ineligible": false,
+      "semantic_major_candidate": false,
+      "rule": {
+        "code": "certificate-required",
+        "operator": "CONTAINS_ALL",
+        "field": "certificates",
+        "value_type": "STRING_SET",
+        "value": [
+          "SYN-CERT-9"
+        ],
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          }
+        ]
+      }
     },
     {
       "case_id": "phase4-golden-12-false-negative-protection",
       "coverage_tags": [
         "false-negative-protection"
       ],
-      "profile_snapshot_id": "ca112624-5dda-70bd-a83e-5a90117e4fd6",
+      "profile_snapshot_id": "6fc7779a-2137-7baf-be9b-77ea9c16334e",
       "expected_status": "UNCERTAIN",
-      "protected_from_unexpected_ineligible": true
+      "protected_from_unexpected_ineligible": true,
+      "semantic_major_candidate": false,
+      "rule": {
+        "code": "future-birth-date-protection",
+        "operator": "LTE",
+        "field": "birth_date",
+        "value_type": "DATE",
+        "value": "2005-01-01",
+        "evidence": [
+          {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS"
+          }
+        ]
+      }
     }
   ]
 }

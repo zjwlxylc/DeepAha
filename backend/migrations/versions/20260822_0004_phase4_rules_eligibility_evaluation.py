@@ -37,6 +37,9 @@ def upgrade() -> None:
         sa.Column("dataset_id", sa.String(length=128), nullable=False),
         sa.Column("dataset_version", sa.String(length=64), nullable=False),
         sa.Column("dataset_sha256", sa.String(length=64), nullable=False),
+        sa.Column("evidence_label", sa.String(length=32), nullable=False),
+        sa.Column("scenario_clock", sa.DateTime(timezone=True), nullable=False),
+        sa.Column("report_sha256", sa.String(length=64), nullable=False),
         sa.Column("component", sa.String(length=24), nullable=False),
         sa.Column("component_versions", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.Column("synthetic", sa.Boolean(), nullable=False),
@@ -61,6 +64,14 @@ def upgrade() -> None:
         sa.CheckConstraint(
             "dataset_sha256 ~ '^[0-9a-f]{64}$'",
             name=op.f("ck_evaluation_runs_dataset_sha256_format"),
+        ),
+        sa.CheckConstraint(
+            "evidence_label = 'SYNTHETIC_EVALUATION_ONLY'",
+            name=op.f("ck_evaluation_runs_synthetic_evidence_label"),
+        ),
+        sa.CheckConstraint(
+            "report_sha256 ~ '^[0-9a-f]{64}$'",
+            name=op.f("ck_evaluation_runs_report_sha256_format"),
         ),
         sa.CheckConstraint(
             "jsonb_typeof(component_versions) = 'object'",
@@ -452,6 +463,8 @@ def upgrade() -> None:
         sa.Column("actual_status", sa.String(length=24), nullable=False),
         sa.Column("passed", sa.Boolean(), nullable=False),
         sa.Column("match_snapshot_id", sa.Uuid(), nullable=False),
+        sa.Column("input_sha256", sa.String(length=64), nullable=False),
+        sa.Column("unexpected_ineligible", sa.Boolean(), nullable=False),
         sa.Column("reason_codes", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.CheckConstraint(
             "actual_status in ('ELIGIBLE', 'LIKELY_ELIGIBLE', 'UNCERTAIN', 'INELIGIBLE')",
@@ -471,6 +484,15 @@ def upgrade() -> None:
         sa.CheckConstraint(
             "passed = (expected_status = actual_status)",
             name=op.f("ck_evaluation_case_results_passed_matches_status"),
+        ),
+        sa.CheckConstraint(
+            "unexpected_ineligible = (actual_status = 'INELIGIBLE' and "
+            "expected_status <> 'INELIGIBLE')",
+            name=op.f("ck_evaluation_case_results_unexpected_ineligible_matches_status"),
+        ),
+        sa.CheckConstraint(
+            "input_sha256 ~ '^[0-9a-f]{64}$'",
+            name=op.f("ck_evaluation_case_results_input_sha256_format"),
         ),
         sa.ForeignKeyConstraint(
             ["match_snapshot_id"],

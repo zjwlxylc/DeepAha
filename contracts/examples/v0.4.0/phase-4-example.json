@@ -425,6 +425,9 @@
     "dataset_id": "phase4-golden-synthetic",
     "dataset_version": "v1",
     "dataset_sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+    "evidence_label": "SYNTHETIC_EVALUATION_ONLY",
+    "scenario_clock": "2026-08-22T00:00:00Z",
+    "report_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
     "component": "ELIGIBILITY",
     "component_versions": {
       "contract": "0.4.0",
@@ -442,6 +445,8 @@
         "actual_status": "ELIGIBLE",
         "passed": true,
         "match_snapshot_id": "0198d239-4b00-7000-8000-000000000106",
+        "input_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+        "unexpected_ineligible": false,
         "reason_codes": [
           "RULE_SATISFIED"
         ]
@@ -450,7 +455,10 @@
     "metrics": {
       "total_cases": 1,
       "passed_cases": 1,
+      "expected_ineligible_count": 0,
+      "actual_ineligible_count": 0,
       "unexpected_ineligible_count": 0,
+      "unexpected_ineligible_case_ids": [],
       "replay_mismatch_count": 0,
       "status_counts": {
         "ELIGIBLE": 1,

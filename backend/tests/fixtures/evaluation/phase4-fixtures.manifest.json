@@ -7,8 +7,8 @@
   "files": [
     {
       "filename": "phase4-golden-cases.json",
-      "sha256": "c8446bdc21a777b499aa187f8b325d1bac5fd92365adb877fb39bb0564233444",
-      "byte_length": 3644,
+      "sha256": "91a3d69d99a1d57813e016d8cb55c15c545d92716984dd4b7aa2c6e2bd24ce3c",
+      "byte_length": 8313,
       "record_count": 12,
       "license": "CC0-1.0",
       "synthetic_only": true
@@ -39,8 +39,8 @@
     },
     {
       "filename": "phase4-synthetic-profiles.json",
-      "sha256": "b3308c8a719d3be812c57b5e42fabb1ba860ba555ea01d4622c2d6de4cac82ff",
-      "byte_length": 124381,
+      "sha256": "0ef88f8ec25b7d7d645080e283c22a24b0f0818ca2531a2204144c6961776f3a",
+      "byte_length": 124377,
       "record_count": 100,
       "license": "CC0-1.0",
       "synthetic_only": true

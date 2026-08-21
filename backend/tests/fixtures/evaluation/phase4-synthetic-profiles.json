@@ -225,7 +225,7 @@
         "attributes": {
           "education_level": "MASTER",
           "major_name": "Synthetic major family 2",
-          "major_code": "080903",
+          "major_code": null,
           "graduation_year": 2027,
           "student_status": "RECENT_GRADUATE",
           "birth_date": "1999-02-15",
@@ -1923,7 +1923,7 @@
           "major_code": "120401",
           "graduation_year": 2028,
           "student_status": "EMPLOYED",
-          "birth_date": "1998-08-22",
+          "birth_date": "2027-01-01",
           "hukou_region": "SYN-CN-C",
           "residence_region": "SYN-ZJ-A",
           "target_regions": [

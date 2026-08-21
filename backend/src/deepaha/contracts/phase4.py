@@ -434,12 +434,20 @@ class EvaluationCaseResultSchemaV04(ContractModel):
     actual_status: EligibilityStatus
     passed: bool
     match_snapshot_id: EntityId
+    input_sha256: Sha256
+    unexpected_ineligible: bool
     reason_codes: tuple[NonEmptyString, ...]
 
     @model_validator(mode="after")
     def require_consistent_pass_and_unique_reasons(self) -> Self:
         if self.passed != (self.expected_status is self.actual_status):
             raise ValueError("passed must match expected and actual status equality")
+        expected_unexpected = (
+            self.actual_status is EligibilityStatus.INELIGIBLE
+            and self.expected_status is not EligibilityStatus.INELIGIBLE
+        )
+        if self.unexpected_ineligible != expected_unexpected:
+            raise ValueError("unexpected_ineligible must match expected and actual status")
         if len(self.reason_codes) != len(set(self.reason_codes)):
             raise ValueError("reason_codes must be unique")
         return self
@@ -448,7 +456,10 @@ class EvaluationCaseResultSchemaV04(ContractModel):
 class EvaluationMetricsSchemaV04(ContractModel):
     total_cases: int = Field(ge=1)
     passed_cases: int = Field(ge=0)
+    expected_ineligible_count: int = Field(ge=0)
+    actual_ineligible_count: int = Field(ge=0)
     unexpected_ineligible_count: int = Field(ge=0)
+    unexpected_ineligible_case_ids: tuple[NonEmptyString, ...]
     replay_mismatch_count: int = Field(ge=0)
     status_counts: dict[EligibilityStatus, int]
 
@@ -464,6 +475,16 @@ class EvaluationMetricsSchemaV04(ContractModel):
             raise ValueError("passed_cases must not exceed total_cases")
         if self.unexpected_ineligible_count > self.total_cases:
             raise ValueError("unexpected_ineligible_count must not exceed total_cases")
+        if self.expected_ineligible_count > self.total_cases:
+            raise ValueError("expected_ineligible_count must not exceed total_cases")
+        if self.actual_ineligible_count > self.total_cases:
+            raise ValueError("actual_ineligible_count must not exceed total_cases")
+        if self.unexpected_ineligible_count != len(self.unexpected_ineligible_case_ids):
+            raise ValueError("unexpected ineligible count must match case IDs")
+        if len(self.unexpected_ineligible_case_ids) != len(
+            set(self.unexpected_ineligible_case_ids)
+        ):
+            raise ValueError("unexpected ineligible case IDs must be unique")
         if self.replay_mismatch_count > self.total_cases:
             raise ValueError("replay_mismatch_count must not exceed total_cases")
         return self
@@ -482,6 +503,9 @@ class EvaluationRunSchemaV04(ContractModel):
     dataset_id: NonEmptyString
     dataset_version: NonEmptyString
     dataset_sha256: Sha256
+    evidence_label: Literal["SYNTHETIC_EVALUATION_ONLY"]
+    scenario_clock: Instant
+    report_sha256: Sha256
     component: EvaluationComponent
     component_versions: EvaluationComponentVersionsSchemaV04
     synthetic: bool
@@ -528,11 +552,22 @@ class EvaluationRunSchemaV04(ContractModel):
         replay_mismatches = sum(
             "REPLAY_MISMATCH" in result.reason_codes for result in self.case_results
         )
+        unexpected_case_ids = tuple(
+            result.case_id for result in self.case_results if result.unexpected_ineligible
+        )
+        expected_ineligible = sum(
+            result.expected_status is EligibilityStatus.INELIGIBLE
+            for result in self.case_results
+        )
+        actual_ineligible = expected_counts[EligibilityStatus.INELIGIBLE]
         if (
             self.metrics.total_cases != len(self.case_results)
             or self.metrics.passed_cases != sum(result.passed for result in self.case_results)
             or self.metrics.status_counts != expected_counts
             or self.metrics.unexpected_ineligible_count != unexpected_ineligible
+            or self.metrics.expected_ineligible_count != expected_ineligible
+            or self.metrics.actual_ineligible_count != actual_ineligible
+            or self.metrics.unexpected_ineligible_case_ids != unexpected_case_ids
             or self.metrics.replay_mismatch_count != replay_mismatches
         ):
             raise ValueError("metrics must match case_results")

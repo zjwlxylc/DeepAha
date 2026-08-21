@@ -8,11 +8,19 @@ from pathlib import Path
 from typing import Literal, Self
 from uuid import UUID
 
-from pydantic import Field, ValidationError, model_validator
+from pydantic import Field, JsonValue, ValidationError, model_validator
 
 from deepaha.contracts.common import EntityId, Instant, NonEmptyString, Sha256
 from deepaha.contracts.phase1 import ContractModel
-from deepaha.contracts.phase4 import EligibilityStatus, ProfileSnapshotSchemaV04
+from deepaha.contracts.phase4 import (
+    EligibilityStatus,
+    EvidenceRelation,
+    ProfileSnapshotSchemaV04,
+    RuleEvidenceAuthority,
+    RuleField,
+    RuleOperator,
+    RuleValueType,
+)
 from deepaha.rules.major import (
     ApprovedMajorMapping,
     MajorAssetError,
@@ -77,12 +85,28 @@ class FixtureManifest(ContractModel):
         return self
 
 
+class GoldenRuleEvidenceFixture(ContractModel):
+    authority: RuleEvidenceAuthority
+    relation: EvidenceRelation
+
+
+class GoldenRuleFixture(ContractModel):
+    code: NonEmptyString
+    operator: RuleOperator
+    field: RuleField
+    value_type: RuleValueType
+    value: JsonValue | None
+    evidence: tuple[GoldenRuleEvidenceFixture, ...] = Field(min_length=1)
+
+
 class GoldenCaseFixture(ContractModel):
     case_id: NonEmptyString
     coverage_tags: tuple[NonEmptyString, ...] = Field(min_length=1)
     profile_snapshot_id: EntityId
     expected_status: EligibilityStatus
     protected_from_unexpected_ineligible: bool
+    semantic_major_candidate: bool
+    rule: GoldenRuleFixture
 
     @model_validator(mode="after")
     def require_protection_for_non_negative_case(self) -> Self:
@@ -312,6 +336,8 @@ __all__ = [
     "FixtureManifestEntry",
     "FixtureValidationError",
     "GoldenCaseFixture",
+    "GoldenRuleEvidenceFixture",
+    "GoldenRuleFixture",
     "ProfileFixture",
     "load_fixture_bundle",
     "verify_fixture_manifest",

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import shutil
+from datetime import date
 from pathlib import Path
 
 import pytest
@@ -61,6 +62,39 @@ def test_manifest_declares_every_phase4_evaluation_json() -> None:
     assert bundle.manifest.license == "CC0-1.0"
     assert bundle.manifest.synthetic_only is True
     assert bundle.manifest.generator_version == "phase4-fixture-generator-v1"
+
+
+def test_golden_cases_contain_executable_boundary_inputs() -> None:
+    bundle = load_fixture_bundle(FIXTURE_DIRECTORY)
+    cases = {case.coverage_tags[0]: case for case in bundle.golden_cases}
+    profiles = {
+        profile.snapshot.profile_snapshot_id: profile
+        for profile in bundle.mother_profiles + bundle.synthetic_profiles
+    }
+
+    age_case = cases["age-boundary"]
+    assert age_case.rule.field.value == "birth_date"
+    assert age_case.rule.value == "1997-08-22"
+    assert profiles[age_case.profile_snapshot_id].snapshot.attributes.birth_date == date(
+        1997, 8, 22
+    )
+
+    missing_case = cases["missing-field"]
+    assert missing_case.rule.field.value == "major_code"
+    assert profiles[missing_case.profile_snapshot_id].snapshot.attributes.major_code is None
+
+    mapping_case = cases["major-approved-mapping"]
+    assert mapping_case.rule.value == ["080902"]
+    assert profiles[mapping_case.profile_snapshot_id].snapshot.attributes.major_code == "080903"
+
+    semantic_case = cases["major-semantic-candidate"]
+    assert semantic_case.semantic_major_candidate is True
+    assert profiles[semantic_case.profile_snapshot_id].snapshot.attributes.major_code == "030101"
+
+    protection_case = cases["false-negative-protection"]
+    assert profiles[protection_case.profile_snapshot_id].snapshot.attributes.birth_date == date(
+        2027, 1, 1
+    )
 
 
 def test_manifest_verification_happens_before_json_parsing(tmp_path: Path) -> None:

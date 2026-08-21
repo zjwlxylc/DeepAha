@@ -27,6 +27,11 @@ class EvaluationRunModel(Base):
         ),
         CheckConstraint("dataset_sha256 ~ '^[0-9a-f]{64}$'", name="dataset_sha256_format"),
         CheckConstraint(
+            "evidence_label = 'SYNTHETIC_EVALUATION_ONLY'",
+            name="synthetic_evidence_label",
+        ),
+        CheckConstraint("report_sha256 ~ '^[0-9a-f]{64}$'", name="report_sha256_format"),
+        CheckConstraint(
             "component in ('RULE_ENGINE', 'ELIGIBILITY', 'MATCH_REPLAY')",
             name="component_values",
         ),
@@ -58,6 +63,9 @@ class EvaluationRunModel(Base):
     dataset_id: Mapped[str] = mapped_column(String(128))
     dataset_version: Mapped[str] = mapped_column(String(64))
     dataset_sha256: Mapped[str] = mapped_column(String(64))
+    evidence_label: Mapped[str] = mapped_column(String(32))
+    scenario_clock: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    report_sha256: Mapped[str] = mapped_column(String(64))
     component: Mapped[str] = mapped_column(String(24))
     component_versions: Mapped[dict[str, object]] = mapped_column(JSONB)
     synthetic: Mapped[bool] = mapped_column(Boolean)
@@ -84,6 +92,12 @@ class EvaluationCaseResultModel(Base):
             "passed = (expected_status = actual_status)",
             name="passed_matches_status",
         ),
+        CheckConstraint(
+            "unexpected_ineligible = (actual_status = 'INELIGIBLE' and "
+            "expected_status <> 'INELIGIBLE')",
+            name="unexpected_ineligible_matches_status",
+        ),
+        CheckConstraint("input_sha256 ~ '^[0-9a-f]{64}$'", name="input_sha256_format"),
         CheckConstraint("jsonb_typeof(reason_codes) = 'array'", name="reason_codes_array"),
     )
 
@@ -100,6 +114,8 @@ class EvaluationCaseResultModel(Base):
         Uuid,
         ForeignKey("match_snapshots.snapshot_id", ondelete="RESTRICT"),
     )
+    input_sha256: Mapped[str] = mapped_column(String(64))
+    unexpected_ineligible: Mapped[bool] = mapped_column(Boolean)
     reason_codes: Mapped[list[str]] = mapped_column(JSONB)
 
 

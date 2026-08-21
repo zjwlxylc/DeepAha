@@ -24,6 +24,11 @@
         "expected_status": {
           "$ref": "#/$defs/EligibilityStatus"
         },
+        "input_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Sha256",
+          "type": "string"
+        },
         "match_snapshot_id": {
           "format": "uuid",
           "title": "Match Snapshot Id",
@@ -40,6 +45,10 @@
           },
           "title": "Reason Codes",
           "type": "array"
+        },
+        "unexpected_ineligible": {
+          "title": "Unexpected Ineligible",
+          "type": "boolean"
         }
       },
       "required": [
@@ -48,6 +57,8 @@
         "actual_status",
         "passed",
         "match_snapshot_id",
+        "input_sha256",
+        "unexpected_ineligible",
         "reason_codes"
       ],
       "title": "EvaluationCaseResultSchemaV04",
@@ -104,6 +115,16 @@
     "EvaluationMetricsSchemaV04": {
       "additionalProperties": false,
       "properties": {
+        "actual_ineligible_count": {
+          "minimum": 0,
+          "title": "Actual Ineligible Count",
+          "type": "integer"
+        },
+        "expected_ineligible_count": {
+          "minimum": 0,
+          "title": "Expected Ineligible Count",
+          "type": "integer"
+        },
         "passed_cases": {
           "minimum": 0,
           "title": "Passed Cases",
@@ -129,6 +150,14 @@
           "title": "Total Cases",
           "type": "integer"
         },
+        "unexpected_ineligible_case_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unexpected Ineligible Case Ids",
+          "type": "array"
+        },
         "unexpected_ineligible_count": {
           "minimum": 0,
           "title": "Unexpected Ineligible Count",
@@ -138,7 +167,10 @@
       "required": [
         "total_cases",
         "passed_cases",
+        "expected_ineligible_count",
+        "actual_ineligible_count",
         "unexpected_ineligible_count",
+        "unexpected_ineligible_case_ids",
         "replay_mismatch_count",
         "status_counts"
       ],
@@ -209,6 +241,11 @@
       ],
       "title": "Error Summary"
     },
+    "evidence_label": {
+      "const": "SYNTHETIC_EVALUATION_ONLY",
+      "title": "Evidence Label",
+      "type": "string"
+    },
     "metrics": {
       "anyOf": [
         {
@@ -219,9 +256,19 @@
         }
       ]
     },
+    "report_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Report Sha256",
+      "type": "string"
+    },
     "run_id": {
       "format": "uuid",
       "title": "Run Id",
+      "type": "string"
+    },
+    "scenario_clock": {
+      "format": "date-time",
+      "title": "Scenario Clock",
       "type": "string"
     },
     "started_at": {
@@ -242,6 +289,9 @@
     "dataset_id",
     "dataset_version",
     "dataset_sha256",
+    "evidence_label",
+    "scenario_clock",
+    "report_sha256",
     "component",
     "component_versions",
     "synthetic",

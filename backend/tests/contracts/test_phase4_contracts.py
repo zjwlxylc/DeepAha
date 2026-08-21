@@ -183,6 +183,9 @@ def evaluation_run_values(**changes: object) -> dict[str, object]:
         "dataset_id": "phase4-golden-synthetic",
         "dataset_version": "v1",
         "dataset_sha256": "3" * 64,
+        "evidence_label": "SYNTHETIC_EVALUATION_ONLY",
+        "scenario_clock": NOW,
+        "report_sha256": "4" * 64,
         "component": "ELIGIBILITY",
         "component_versions": {
             "contract": "0.4.0",
@@ -200,13 +203,18 @@ def evaluation_run_values(**changes: object) -> dict[str, object]:
                 "actual_status": "ELIGIBLE",
                 "passed": True,
                 "match_snapshot_id": MATCH_SNAPSHOT_ID,
+                "input_sha256": "2" * 64,
+                "unexpected_ineligible": False,
                 "reason_codes": ["RULE_SATISFIED"],
             }
         ],
         "metrics": {
             "total_cases": 1,
             "passed_cases": 1,
+            "expected_ineligible_count": 0,
+            "actual_ineligible_count": 0,
             "unexpected_ineligible_count": 0,
+            "unexpected_ineligible_case_ids": [],
             "replay_mismatch_count": 0,
             "status_counts": {
                 "ELIGIBLE": 1,

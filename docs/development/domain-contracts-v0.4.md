@@ -44,6 +44,11 @@ compiler/engine versions, professional catalog/mapping versions, scenario clock,
 outcome, EvidenceRef IDs, and a canonical input SHA-256. Re-evaluating identical inputs returns
 the same logical snapshot; changing any fixed input produces an explainable new snapshot.
 
+An EvaluationRun fixes the fixture-manifest SHA-256, scenario clock, component versions, report
+SHA-256, ordered case results, each case input SHA-256, MatchSnapshot ID, and integer safety
+counts. Its evidence label is always `SYNTHETIC_EVALUATION_ONLY`; unexpected `INELIGIBLE` case
+IDs are explicit and never converted into a production-rate claim.
+
 Evaluation fixtures and examples are synthetic. Synthetic results support coverage, boundary,
 counterfactual, replay, and error-negative protection checks only. They do not prove real-user
 trust, retention, willingness to pay, or production accuracy. The planned `<=0.5%` false-negative

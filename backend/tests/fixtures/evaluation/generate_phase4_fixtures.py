@@ -86,8 +86,12 @@ def _build_profiles() -> tuple[list[JsonObject], list[JsonObject]]:
             }
         )
         variations: tuple[tuple[str, str, object], ...] = (
-            ("birth_date", "birth_date", f"{1997 + index % 5:04d}-08-22"),
-            ("major_code", "major_code", "080903"),
+            (
+                "birth_date",
+                "birth_date",
+                "2027-01-01" if index == 11 else f"{1997 + index % 5:04d}-08-22",
+            ),
+            ("major_code", "major_code", None if index == 1 else "080903"),
             ("education_level", "education_level", "ASSOCIATE"),
             ("hukou_region", "hukou_region", "SYN-OUTSIDE"),
             ("certificates", "certificates", []),
@@ -114,24 +118,174 @@ def _build_profiles() -> tuple[list[JsonObject], list[JsonObject]]:
     return mothers, derived
 
 
-def _build_golden_cases(mothers: list[JsonObject]) -> list[JsonObject]:
-    specifications: tuple[tuple[str, str], ...] = (
-        ("age-boundary", "ELIGIBLE"),
-        ("missing-field", "UNCERTAIN"),
-        ("evidence-conflict", "UNCERTAIN"),
-        ("major-exact", "ELIGIBLE"),
-        ("major-catalog", "ELIGIBLE"),
-        ("major-approved-mapping", "LIKELY_ELIGIBLE"),
-        ("major-semantic-candidate", "UNCERTAIN"),
-        ("education", "INELIGIBLE"),
-        ("graduation-status", "ELIGIBLE"),
-        ("hukou-region", "INELIGIBLE"),
-        ("certificate", "INELIGIBLE"),
-        ("false-negative-protection", "UNCERTAIN"),
+def _golden_rule(
+    code: str,
+    operator: str,
+    field: str,
+    value_type: str,
+    value: object,
+    *,
+    evidence_conflict: bool = False,
+) -> JsonObject:
+    evidence: list[JsonObject] = [
+        {
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "relation": "SUPPORTS",
+        }
+    ]
+    if evidence_conflict:
+        evidence.append(
+            {
+                "authority": "ORIGINAL_OFFICIAL_NOTICE",
+                "relation": "CONTRADICTS",
+            }
+        )
+    return {
+        "code": code,
+        "operator": operator,
+        "field": field,
+        "value_type": value_type,
+        "value": value,
+        "evidence": evidence,
+    }
+
+
+def _build_golden_cases(
+    mothers: list[JsonObject],
+    synthetic_profiles: list[JsonObject],
+) -> list[JsonObject]:
+    specifications: tuple[tuple[str, str, JsonObject, JsonObject, bool], ...] = (
+        (
+            "age-boundary",
+            "ELIGIBLE",
+            synthetic_profiles[0],
+            _golden_rule(
+                "birth-date-boundary",
+                "GTE",
+                "birth_date",
+                "DATE",
+                "1997-08-22",
+            ),
+            False,
+        ),
+        (
+            "missing-field",
+            "UNCERTAIN",
+            synthetic_profiles[6],
+            _golden_rule("major-required", "IN", "major_code", "STRING", ["080901"]),
+            False,
+        ),
+        (
+            "evidence-conflict",
+            "UNCERTAIN",
+            mothers[2],
+            _golden_rule(
+                "education-evidence-conflict",
+                "EXISTS",
+                "education_level",
+                "STRING",
+                None,
+                evidence_conflict=True,
+            ),
+            False,
+        ),
+        (
+            "major-exact",
+            "ELIGIBLE",
+            mothers[0],
+            _golden_rule("major-exact", "IN", "major_code", "STRING", ["080901"]),
+            False,
+        ),
+        (
+            "major-catalog",
+            "ELIGIBLE",
+            mothers[4],
+            _golden_rule("major-catalog", "IN", "major_code", "STRING", ["0809"]),
+            False,
+        ),
+        (
+            "major-approved-mapping",
+            "LIKELY_ELIGIBLE",
+            synthetic_profiles[26],
+            _golden_rule(
+                "major-approved-mapping",
+                "IN",
+                "major_code",
+                "STRING",
+                ["080902"],
+            ),
+            False,
+        ),
+        (
+            "major-semantic-candidate",
+            "UNCERTAIN",
+            mothers[6],
+            _golden_rule(
+                "major-semantic-candidate",
+                "IN",
+                "major_code",
+                "STRING",
+                ["080902"],
+            ),
+            True,
+        ),
+        (
+            "education",
+            "INELIGIBLE",
+            mothers[0],
+            _golden_rule("education-master", "GTE", "education_level", "STRING", "MASTER"),
+            False,
+        ),
+        (
+            "graduation-status",
+            "ELIGIBLE",
+            mothers[0],
+            _golden_rule(
+                "graduation-status",
+                "EQ",
+                "student_status",
+                "STRING",
+                "GRADUATING",
+            ),
+            False,
+        ),
+        (
+            "hukou-region",
+            "INELIGIBLE",
+            mothers[0],
+            _golden_rule("hukou-region", "EQ", "hukou_region", "STRING", "SYN-ZJ-B"),
+            False,
+        ),
+        (
+            "certificate",
+            "INELIGIBLE",
+            mothers[0],
+            _golden_rule(
+                "certificate-required",
+                "CONTAINS_ALL",
+                "certificates",
+                "STRING_SET",
+                ["SYN-CERT-9"],
+            ),
+            False,
+        ),
+        (
+            "false-negative-protection",
+            "UNCERTAIN",
+            synthetic_profiles[55],
+            _golden_rule(
+                "future-birth-date-protection",
+                "LTE",
+                "birth_date",
+                "DATE",
+                "2005-01-01",
+            ),
+            False,
+        ),
     )
     cases: list[JsonObject] = []
-    for index, (tag, expected_status) in enumerate(specifications):
-        snapshot = mothers[index]["snapshot"]
+    for index, (tag, expected_status, profile, rule, semantic) in enumerate(specifications):
+        snapshot = profile["snapshot"]
         if not isinstance(snapshot, dict):  # pragma: no cover - generator invariant
             raise TypeError("snapshot must be an object")
         cases.append(
@@ -141,6 +295,8 @@ def _build_golden_cases(mothers: list[JsonObject]) -> list[JsonObject]:
                 "profile_snapshot_id": snapshot["profile_snapshot_id"],
                 "expected_status": expected_status,
                 "protected_from_unexpected_ineligible": expected_status != "INELIGIBLE",
+                "semantic_major_candidate": semantic,
+                "rule": rule,
             }
         )
     return cases
@@ -178,7 +334,7 @@ def generate() -> None:
             "scenario_clock": SCENARIO_CLOCK,
             "synthetic_only": True,
             "license": LICENSE,
-            "cases": _build_golden_cases(mothers),
+            "cases": _build_golden_cases(mothers, synthetic_profiles),
         },
         "phase4-mother-profiles.json": {
             "dataset_version": "phase4-synthetic-mother-profiles-v1",
