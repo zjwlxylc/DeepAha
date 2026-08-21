@@ -1,5 +1,6 @@
 contracts/schemas/** text eol=lf
 backend/tests/fixtures/official/civil-service-fast-stream-news-2025.json -text
+backend/tests/fixtures/official/*.html binary
 backend/tests/fixtures/documents/*.pdf binary
 backend/tests/fixtures/documents/*.xlsx binary
 文档2/*.md binary

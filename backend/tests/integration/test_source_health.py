@@ -141,6 +141,7 @@ def test_health_is_derived_from_observations(session: Session) -> None:
     assert value.last_success_at == AS_OF - timedelta(hours=2)
     assert value.latest_artifact_id == artifact.artifact_id
     assert value.latest_content_sha256 == artifact.content_sha256
+    assert value.latest_object_key == artifact.object_key
 
 
 def test_not_modified_is_valid_without_replacing_last_artifact(session: Session) -> None:

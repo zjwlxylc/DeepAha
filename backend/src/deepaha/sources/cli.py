@@ -137,6 +137,7 @@ def _command_health(endpoint_id: UUID, as_of: str | None) -> dict[str, object]:
         if summary.latest_artifact_id is not None
         else None,
         "latest_content_sha256": summary.latest_content_sha256,
+        "latest_object_key": summary.latest_object_key,
         "parse_successes": summary.parse_successes,
         "parse_needs_review": summary.parse_needs_review,
         "parse_failures": summary.parse_failures,
@@ -169,6 +170,8 @@ def _collection_result(result: CollectionRunResult) -> dict[str, object]:
                 if attempt.artifact_id is not None
                 else None,
                 "error_code": attempt.error_code,
+                "started_at": attempt.started_at,
+                "completed_at": attempt.completed_at,
             }
             for attempt in result.attempts
         ],

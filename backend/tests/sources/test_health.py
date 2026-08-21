@@ -21,6 +21,7 @@ def test_source_health_summary_is_an_immutable_derived_value() -> None:
         failures_24h=0,
         latest_artifact_id=None,
         latest_content_sha256=None,
+        latest_object_key=None,
         parse_successes=0,
         parse_needs_review=0,
         parse_failures=0,

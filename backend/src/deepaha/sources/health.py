@@ -24,6 +24,7 @@ class SourceHealthSummary:
     failures_24h: int
     latest_artifact_id: UUID | None
     latest_content_sha256: str | None
+    latest_object_key: str | None
     parse_successes: int
     parse_needs_review: int
     parse_failures: int
@@ -98,6 +99,7 @@ def get_source_health(
         latest_content_sha256=(
             latest_artifact.content_sha256 if latest_artifact is not None else None
         ),
+        latest_object_key=latest_artifact.object_key if latest_artifact is not None else None,
         parse_successes=parse_outcomes.count("SUCCEEDED"),
         parse_needs_review=parse_outcomes.count("NEEDS_REVIEW"),
         parse_failures=parse_outcomes.count("FAILED"),
