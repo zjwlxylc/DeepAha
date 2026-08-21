@@ -584,6 +584,8 @@ git push
 
 - Create: `backend/src/deepaha/opportunities/service.py`
 - Modify: `backend/src/deepaha/opportunities/__init__.py`
+- Modify: `backend/src/deepaha/opportunities/models.py`
+- Create: `backend/tests/integration/__init__.py`
 - Create: `backend/tests/integration/test_opportunity_resolution_service.py`
 - Create: `backend/tests/integration/test_phase3_resolution_replay.py`
 
@@ -603,7 +605,7 @@ def test_notice_attachment_table_correction_extension_and_cancel_share_one_publi
         "opp_63be197cc6ef3632650c5f69b5938f0b"
     }
     assert [result.event_type for result in results if result.event_type] == [
-        "CREATED", "ATTACHMENT_REPLACED", "UPDATED", "CORRECTED",
+        "CREATED", "ATTACHMENT_REPLACED", "ATTACHMENT_REPLACED", "CORRECTED",
         "DEADLINE_CHANGED", "CANCELLED",
     ]
 
@@ -668,7 +670,7 @@ uv run mypy src tests
 Set-Location ..
 docker compose -f infra/compose.phase3.yaml -p $phase3Task5Project down --remove-orphans
 git diff --check
-git add backend/src/deepaha/opportunities/service.py backend/src/deepaha/opportunities/__init__.py backend/tests/integration/test_opportunity_resolution_service.py backend/tests/integration/test_phase3_resolution_replay.py
+git add backend/src/deepaha/opportunities/service.py backend/src/deepaha/opportunities/__init__.py backend/src/deepaha/opportunities/models.py backend/tests/integration/__init__.py backend/tests/integration/test_opportunity_resolution_service.py backend/tests/integration/test_phase3_resolution_replay.py docs/superpowers/plans/2026-08-22-phase-3-opportunity-resolution-versioning-and-change.md
 git diff --cached --check
 git commit -m "feat(opportunities): persist deterministic resolution history"
 git push

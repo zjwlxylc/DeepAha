@@ -329,7 +329,7 @@ class OpportunityResolutionCandidate(Base):
     )
     candidate_opportunity_ids: Mapped[list[str]] = mapped_column(JSONB)
     proposed_role: Mapped[str] = mapped_column(String(32))
-    proposed_snapshot: Mapped[dict[str, object] | None] = mapped_column(JSONB)
+    proposed_snapshot: Mapped[dict[str, object] | None] = mapped_column(JSONB(none_as_null=True))
     reason_codes: Mapped[list[str]] = mapped_column(JSONB)
     resolver_version: Mapped[str] = mapped_column(String(64))
     source_evidence_ref_id: Mapped[UUID] = mapped_column(Uuid)
