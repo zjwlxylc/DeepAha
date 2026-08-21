@@ -343,7 +343,7 @@ git commit -m "feat(contracts): define phase 1 domain schemas"
 - 产出：Alembic revision `20260821_0001`。
 - 输入：Task 1 Pydantic 契约和已确认的持久化映射。
 
-- [ ] **Step 1：先增加失败的设置测试**
+- [x] **Step 1：先增加失败的设置测试**
 
 Add tests for these environment variables:
 
@@ -368,13 +368,13 @@ def test_settings_read_phase1_storage_boundaries(monkeypatch: pytest.MonkeyPatch
     assert "local-secret" not in repr(settings)
 ```
 
-- [ ] **Step 2：运行设置测试并确认 RED**
+- [x] **Step 2：运行设置测试并确认 RED**
 
 Run `uv run pytest tests/core/test_settings.py -v` from `backend`.
 
 Expected: failure because the Phase 1 settings fields do not exist.
 
-- [ ] **Step 3：增加数据库依赖与设置**
+- [x] **Step 3：增加数据库依赖与设置**
 
 Run:
 
@@ -385,7 +385,7 @@ uv add "sqlalchemy>=2.0,<3" "alembic>=1.16,<2" "psycopg[binary]>=3.2,<4"
 
 Add optional Phase 1 settings so the existing health application can still start without infrastructure. Endpoint, region and bucket have development-safe defaults; `database_url`, access key and secret key default to `None`, and infrastructure constructors reject missing values when invoked. Credentials use `SecretStr`. Integration scripts set explicit local values.
 
-- [ ] **Step 4：创建本地服务定义**
+- [x] **Step 4：创建本地服务定义**
 
 `infra/compose.yaml` must use these images and host bindings:
 
@@ -415,7 +415,7 @@ services:
 
 PostgreSQL 18+ 的官方镜像把 `PGDATA` 放在 `/var/lib/postgresql/18/docker`，并把 `VOLUME` 移到 `/var/lib/postgresql`；上面的 `tmpfs` 明确覆盖该边界，避免 Compose 产生跨验证遗留的匿名数据库卷。Phase 1 不增加 bind mount 或 named volume。
 
-- [ ] **Step 5：编写失败的迁移与数据库契约测试**
+- [x] **Step 5：编写失败的迁移与数据库契约测试**
 
 Mark all database tests with `pytest.mark.integration`. Required assertions:
 
@@ -440,7 +440,7 @@ def test_document_and_opportunity_are_distinct_tables(inspector: Inspector) -> N
 
 Also add real insert tests proving: UUIDv4 is rejected, duplicate Source URL is rejected, duplicate `(source_id, content_sha256)` is rejected, malformed hash is rejected, byte size `0` is rejected, `current_version=0` is rejected, and EvidenceRef document/artifact mismatch is rejected.
 
-- [ ] **Step 6：启动本地 PostgreSQL 并确认迁移 RED**
+- [x] **Step 6：启动本地 PostgreSQL 并确认迁移 RED**
 
 Run:
 
@@ -453,7 +453,7 @@ uv run pytest tests/integration/test_migrations.py tests/integration/test_persis
 
 Expected: failure because Alembic configuration, tables and mappings do not exist.
 
-- [ ] **Step 7：实现 Base、会话所有权与领域映射**
+- [x] **Step 7：实现 Base、会话所有权与领域映射**
 
 Use SQLAlchemy typed mappings. `db/base.py` defines a deterministic naming convention for indexes, unique constraints, checks, foreign keys and primary keys. `db/session.py` creates an engine from explicit Settings and never logs the URL.
 
@@ -469,7 +469,7 @@ current_version is null or current_version >= 1
 
 The `RawArtifact.storage_uri` ORM property returns `f"s3://{storage_bucket}/{object_key}"`. `EvidenceRef` has internal UUIDv7 `evidence_ref_id`, but the contract adapter returns only public fields.
 
-- [ ] **Step 8：实现 Alembic 配置与初始 revision**
+- [x] **Step 8：实现 Alembic 配置与初始 revision**
 
 Set revision metadata exactly:
 
@@ -482,11 +482,11 @@ depends_on = None
 
 `migrations/env.py` imports `deepaha.db.models` before reading `Base.metadata`, reads the URL from Settings, and supports online migration only for this phase. The revision creates tables in dependency order `sources`, `raw_artifacts`, `documents`, `opportunities`, `evidence_refs`; downgrade reverses that order.
 
-- [ ] **Step 9：增加隔离的迁移往返 fixture**
+- [x] **Step 9：增加隔离的迁移往返 fixture**
 
 The migration test creates a uniquely named temporary database through the `postgres` maintenance database, runs `upgrade head -> downgrade base -> upgrade head`, and drops only that exact temporary database in `finally`. Validate the generated database name against `^deepaha_migration_[0-9a-f]{32}$` before executing `DROP DATABASE`.
 
-- [ ] **Step 10：运行数据库 GREEN 验证**
+- [x] **Step 10：运行数据库 GREEN 验证**
 
 Run:
 
@@ -502,7 +502,7 @@ uv run mypy src tests
 
 Expected: PostgreSQL 18 assertion passes, migration round-trip passes, invalid inserts are rejected, metadata comparison is empty, and static checks exit `0`.
 
-- [ ] **Step 11：停止本 Task 范围内的本地服务**
+- [x] **Step 11：停止本 Task 范围内的本地服务**
 
 From repository root run:
 
@@ -512,7 +512,7 @@ docker compose -f infra/compose.yaml -p deepaha-phase1-plan down --remove-orphan
 
 This removes only containers created with the exact `deepaha-phase1-plan` project name.
 
-- [ ] **Step 12：提交 Task 2**
+- [x] **Step 12：提交 Task 2**
 
 ```powershell
 git add backend/pyproject.toml backend/uv.lock backend/alembic.ini backend/migrations backend/src/deepaha/core/settings.py backend/src/deepaha/db backend/src/deepaha/sources backend/src/deepaha/artifacts backend/src/deepaha/documents backend/src/deepaha/opportunities backend/tests/core/test_settings.py backend/tests/integration infra/compose.yaml
@@ -954,7 +954,7 @@ git commit -m "test(phase1): add licensed official evidence slice"
 
 - [ ] **Step 1：让基线 pytest 明确排除集成测试**
 
-Set pytest configuration to register the marker and keep `uv run pytest` deterministic without Docker:
+Task 2 已注册 marker；本 Step 只把默认测试切换为显式排除集成测试，使 `uv run pytest` 在无 Docker 时保持确定性：
 
 ```toml
 [tool.pytest.ini_options]

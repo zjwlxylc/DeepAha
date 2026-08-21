@@ -4,9 +4,12 @@ version = "0.1.0"
 description = "DeepAha API"
 requires-python = ">=3.14,<3.15"
 dependencies = [
+  "alembic>=1.16,<2",
   "fastapi>=0.115,<1",
+  "psycopg[binary]>=3.2,<4",
   "pydantic>=2.11,<3",
   "pydantic-settings>=2.10,<3",
+  "sqlalchemy>=2.0,<3",
   "uvicorn[standard]>=0.35,<1",
 ]
 
@@ -22,6 +25,7 @@ dev = [
 
 [tool.pytest.ini_options]
 addopts = "-q"
+markers = ["integration: requires PostgreSQL 18 and the local S3 endpoint"]
 pythonpath = ["src"]
 testpaths = ["tests"]
 
