@@ -1,0 +1,124 @@
+{
+  "source": {
+    "source_id": "0198d239-4b00-7000-8000-000000000001",
+    "public_id": "src_0198d2394b0070008000000000000001",
+    "canonical_url": "https://example.gov/",
+    "authority_name": "Synthetic Example Authority",
+    "tier": "OFFICIAL_PRIMARY",
+    "jurisdiction": null,
+    "active": true,
+    "created_at": "2026-08-21T09:00:00Z",
+    "updated_at": "2026-08-21T09:00:00Z"
+  },
+  "source-endpoint": {
+    "endpoint_id": "0198d239-4b00-7000-8000-000000000002",
+    "source_id": "0198d239-4b00-7000-8000-000000000001",
+    "url": "https://example.gov/notices",
+    "allowed_hosts": [
+      "example.gov"
+    ],
+    "expected_media_types": [
+      "text/html"
+    ],
+    "browser_policy": "NEVER",
+    "minimum_interval_seconds": 21600,
+    "timeout_seconds": 30,
+    "max_attempts": 3,
+    "robots_url": "https://example.gov/robots.txt",
+    "robots_decision": "ALLOWED",
+    "robots_checked_at": "2026-08-21T09:00:00Z",
+    "content_use_basis": "OFFICIAL_PUBLIC_ACCESS",
+    "license_name": null,
+    "license_url": null,
+    "attribution": null,
+    "fixture_storage_allowed": false,
+    "usage_note": "Synthetic contract example only; it asserts no source or business fact.",
+    "policy_version": "2026-08-21.1",
+    "active": true,
+    "verified_at": "2026-08-21T09:00:00Z",
+    "created_at": "2026-08-21T09:00:00Z",
+    "updated_at": "2026-08-21T09:00:00Z"
+  },
+  "capture-observation": {
+    "observation_id": "0198d239-4b00-7000-8000-000000000003",
+    "collection_run_id": "0198d239-4b00-7000-8000-000000000004",
+    "attempt_number": 1,
+    "endpoint_id": "0198d239-4b00-7000-8000-000000000002",
+    "source_id": "0198d239-4b00-7000-8000-000000000001",
+    "requested_url": "https://example.gov/notices",
+    "resolved_url": "https://example.gov/notices",
+    "started_at": "2026-08-21T09:00:00Z",
+    "completed_at": "2026-08-21T09:00:01Z",
+    "outcome": "SUCCEEDED",
+    "http_status": 200,
+    "response_etag": null,
+    "response_last_modified": null,
+    "artifact_id": "0198d239-4b00-7000-8000-000000000005",
+    "error_code": null,
+    "collector_name": "synthetic_example",
+    "collector_version": "0.2.0",
+    "policy_version": "2026-08-21.1"
+  },
+  "raw-artifact": {
+    "artifact_id": "0198d239-4b00-7000-8000-000000000005",
+    "source_id": "0198d239-4b00-7000-8000-000000000001",
+    "requested_url": "https://example.gov/notices",
+    "resolved_url": "https://example.gov/notices",
+    "retrieved_at": "2026-08-21T09:00:01Z",
+    "http_status": 200,
+    "media_type": "text/html",
+    "content_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "storage_uri": "s3://deepaha-raw/raw/sha256/11/1111111111111111111111111111111111111111111111111111111111111111",
+    "byte_size": 128,
+    "collector_version": "synthetic_example/0.2.0",
+    "metadata_schema_version": "0.2.0"
+  },
+  "document": {
+    "document_id": "0198d239-4b00-7000-8000-000000000006",
+    "artifact_id": "0198d239-4b00-7000-8000-000000000005",
+    "title": "Synthetic scholarship example",
+    "published_at": null,
+    "language": "und",
+    "extracted_text_uri": "s3://deepaha-raw/derived/documents/1111111111111111111111111111111111111111111111111111111111111111/html_lxml/0.2.0/text.txt",
+    "parser_name": "html_lxml",
+    "parser_version": "0.2.0",
+    "parse_confidence": null,
+    "created_at": "2026-08-21T09:00:02Z"
+  },
+  "parse-attempt": {
+    "parse_attempt_id": "0198d239-4b00-7000-8000-000000000007",
+    "artifact_id": "0198d239-4b00-7000-8000-000000000005",
+    "parser_name": "html_lxml",
+    "parser_version": "0.2.0",
+    "started_at": "2026-08-21T09:00:01Z",
+    "completed_at": "2026-08-21T09:00:02Z",
+    "outcome": "SUCCEEDED",
+    "document_id": "0198d239-4b00-7000-8000-000000000006",
+    "error_code": null,
+    "input_media_type": "text/html"
+  },
+  "opportunity": {
+    "opportunity_id": "0198d239-4b00-7000-8000-000000000008",
+    "public_id": "opp_0198d2394b0070008000000000000008",
+    "type": "SCHOLARSHIP",
+    "canonical_title": "Synthetic scholarship opportunity; not a business fact",
+    "issuer_name": "Synthetic Example Authority",
+    "jurisdiction": null,
+    "current_version": null,
+    "status": "UNKNOWN",
+    "publication_status": "INTERNAL",
+    "created_at": "2026-08-21T09:00:02Z",
+    "updated_at": "2026-08-21T09:00:02Z"
+  },
+  "evidence-ref": {
+    "document_id": "0198d239-4b00-7000-8000-000000000006",
+    "artifact_id": "0198d239-4b00-7000-8000-000000000005",
+    "locator": {
+      "schema_version": "0.2.0",
+      "kind": "html_selector",
+      "selector": "main > p:nth-of-type(1)",
+      "text_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "quote_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+  }
+}

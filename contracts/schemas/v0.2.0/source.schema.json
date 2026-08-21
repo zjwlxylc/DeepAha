@@ -1,0 +1,81 @@
+{
+  "$defs": {
+    "SourceTier": {
+      "enum": [
+        "OFFICIAL_PRIMARY",
+        "OFFICIAL_AGGREGATOR",
+        "TRUSTED_SECONDARY",
+        "COMMUNITY_SIGNAL"
+      ],
+      "title": "SourceTier",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "active": {
+      "title": "Active",
+      "type": "boolean"
+    },
+    "authority_name": {
+      "minLength": 1,
+      "title": "Authority Name",
+      "type": "string"
+    },
+    "canonical_url": {
+      "format": "uri",
+      "maxLength": 2083,
+      "minLength": 1,
+      "title": "Canonical Url",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "jurisdiction": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Jurisdiction"
+    },
+    "public_id": {
+      "pattern": "^src_[0-9a-f]{32}$",
+      "title": "Public Id",
+      "type": "string"
+    },
+    "source_id": {
+      "format": "uuid",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "tier": {
+      "$ref": "#/$defs/SourceTier"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_id",
+    "public_id",
+    "canonical_url",
+    "authority_name",
+    "tier",
+    "jurisdiction",
+    "active",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "SourceSchema",
+  "type": "object"
+}
