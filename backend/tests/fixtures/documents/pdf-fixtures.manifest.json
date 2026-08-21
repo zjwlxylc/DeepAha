@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "generator": "tests/fixtures/documents/generate_fixtures.py",
+  "fixtures": [
+    {
+      "path": "minimal-text.pdf",
+      "byte_size": 880,
+      "content_sha256": "9773c35a9b32b46af4e810e2a8cc690f5c949dfa7ba1a9874335d8a94f0923c2",
+      "synthetic": true,
+      "business_facts": false
+    },
+    {
+      "path": "empty-text.pdf",
+      "byte_size": 549,
+      "content_sha256": "f27d6c439a046e830d133994210b67cd0a6fce6314e66b0cf7a7b8891d1c5a77",
+      "synthetic": true,
+      "business_facts": false
+    }
+  ]
+}
