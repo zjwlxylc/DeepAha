@@ -1,20 +1,32 @@
 from hashlib import sha256
+from io import BytesIO
 from pathlib import Path
 
 import pytest
+from openpyxl import Workbook
 
-from deepaha.contracts.phase2 import HtmlSelectorLocator, PdfPageTextLocator
+from deepaha.contracts.phase2 import (
+    HtmlSelectorLocator,
+    PdfPageTextLocator,
+    SpreadsheetRangeLocator,
+)
 from deepaha.documents.html import LxmlHtmlParser
 from deepaha.documents.locator import (
     LocatorReplayError,
     replay_html_locator,
     replay_pdf_locator,
+    replay_spreadsheet_locator,
 )
 from deepaha.documents.pdf import PypdfDocumentParser
+from deepaha.documents.spreadsheet import (
+    OpenpyxlSpreadsheetParser,
+    hash_normalized_cells,
+)
 
 FIXTURES = Path(__file__).parents[1] / "fixtures" / "documents"
 FIXTURE = FIXTURES / "minimal-official.html"
 TEXT_PDF = FIXTURES / "minimal-text.pdf"
+XLSX = FIXTURES / "minimal-table.xlsx"
 
 
 def test_html_locators_replay_hash() -> None:
@@ -92,3 +104,73 @@ def test_pdf_locator_replay_detects_hash_mismatch() -> None:
 
     with pytest.raises(LocatorReplayError, match="hash mismatch"):
         replay_pdf_locator(content, locator)
+
+
+def test_xlsx_locator_replays_cells() -> None:
+    content = XLSX.read_bytes()
+    parsed = OpenpyxlSpreadsheetParser().parse(
+        content,
+        artifact_sha256=sha256(content).hexdigest(),
+    )
+
+    assert all(isinstance(locator, SpreadsheetRangeLocator) for locator in parsed.locators)
+    xlsx_locators = [
+        locator for locator in parsed.locators if isinstance(locator, SpreadsheetRangeLocator)
+    ]
+    for locator in xlsx_locators:
+        cells = replay_spreadsheet_locator(content, locator)
+        assert hash_normalized_cells(cells) == locator.cells_sha256
+
+
+def test_xlsx_locator_replay_detects_hash_mismatch() -> None:
+    content = XLSX.read_bytes()
+    parsed = OpenpyxlSpreadsheetParser().parse(
+        content,
+        artifact_sha256=sha256(content).hexdigest(),
+    )
+    original = parsed.locators[0]
+    assert isinstance(original, SpreadsheetRangeLocator)
+    locator = original.model_copy(update={"cells_sha256": "0" * 64})
+
+    with pytest.raises(LocatorReplayError, match="hash mismatch"):
+        replay_spreadsheet_locator(content, locator)
+
+
+def test_xlsx_locator_replay_requires_existing_sheet() -> None:
+    content = XLSX.read_bytes()
+    parsed = OpenpyxlSpreadsheetParser().parse(
+        content,
+        artifact_sha256=sha256(content).hexdigest(),
+    )
+    original = parsed.locators[0]
+    assert isinstance(original, SpreadsheetRangeLocator)
+    locator = original.model_copy(update={"sheet_name": "不存在"})
+
+    with pytest.raises(LocatorReplayError, match="sheet does not exist"):
+        replay_spreadsheet_locator(content, locator)
+
+
+def test_xlsx_locator_replay_keeps_empty_cells_inside_range() -> None:
+    workbook = Workbook()
+    worksheet = workbook.active
+    assert worksheet is not None
+    worksheet["A1"] = "left"
+    worksheet["C1"] = "right"
+    output = BytesIO()
+    workbook.save(output)
+    workbook.close()
+    content = output.getvalue()
+    parsed = OpenpyxlSpreadsheetParser().parse(
+        content,
+        artifact_sha256=sha256(content).hexdigest(),
+    )
+    locator = parsed.locators[0]
+    assert isinstance(locator, SpreadsheetRangeLocator)
+
+    cells = replay_spreadsheet_locator(content, locator)
+
+    assert [(cell.row, cell.column, cell.value) for cell in cells] == [
+        (1, 1, "left"),
+        (1, 2, ""),
+        (1, 3, "right"),
+    ]

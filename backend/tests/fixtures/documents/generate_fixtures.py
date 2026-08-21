@@ -1,7 +1,13 @@
 import argparse
 import json
+import re
+from datetime import datetime
 from hashlib import sha256
+from io import BytesIO
 from pathlib import Path
+from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
+
+from openpyxl import Workbook
 
 PDF_FIXTURES = {
     "minimal-text.pdf": ("Synthetic PDF page one.", "Synthetic PDF page two."),
@@ -89,7 +95,92 @@ def generate(output_directory: Path) -> dict[str, object]:
         encoding="utf-8",
         newline="\n",
     )
-    return manifest
+
+    workbook = build_xlsx()
+    workbook_name = "minimal-table.xlsx"
+    (output_directory / workbook_name).write_bytes(workbook)
+    xlsx_manifest: dict[str, object] = {
+        "schema_version": "1.0.0",
+        "generator": "tests/fixtures/documents/generate_fixtures.py",
+        "fixtures": [
+            {
+                "path": workbook_name,
+                "byte_size": len(workbook),
+                "content_sha256": sha256(workbook).hexdigest(),
+                "synthetic": True,
+                "business_facts": False,
+                "contains_macros": False,
+                "external_links": False,
+            }
+        ],
+    }
+    (output_directory / "xlsx-fixtures.manifest.json").write_text(
+        json.dumps(xlsx_manifest, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    return {"pdf": manifest, "xlsx": xlsx_manifest}
+
+
+def build_xlsx() -> bytes:
+    workbook = Workbook()
+    workbook.properties.created = datetime(2026, 8, 21, 0, 0, 0)
+    workbook.properties.modified = datetime(2026, 8, 21, 0, 0, 0)
+    workbook.properties.creator = "DeepAha synthetic fixture generator"
+    workbook.properties.lastModifiedBy = "DeepAha synthetic fixture generator"
+
+    positions = workbook.active
+    if positions is None:
+        raise RuntimeError("new workbook has no active worksheet")
+    positions.title = "岗位表"
+    positions.append(["名称", "数量", "日期", "公式"])
+    positions.append(["合成岗位", 2, "2026-08-21", "=B2*2"])
+    positions["A4"] = "合并说明"
+    positions.merge_cells("A4:B4")
+
+    notes = workbook.create_sheet("说明")
+    notes["A1"] = "仅用于格式边界测试"
+
+    raw = BytesIO()
+    workbook.save(raw)
+    workbook.close()
+    return _normalize_zip(raw.getvalue())
+
+
+def _normalize_zip(content: bytes) -> bytes:
+    output = BytesIO()
+    with (
+        ZipFile(BytesIO(content), "r") as source,
+        ZipFile(
+            output,
+            "w",
+            compression=ZIP_DEFLATED,
+            compresslevel=9,
+        ) as target,
+    ):
+        for source_info in sorted(source.infolist(), key=lambda value: value.filename):
+            normalized = ZipInfo(source_info.filename, date_time=(1980, 1, 1, 0, 0, 0))
+            normalized.compress_type = ZIP_DEFLATED
+            normalized.create_system = 0
+            normalized.external_attr = 0
+            normalized.extra = b""
+            normalized.comment = b""
+            entry_content = source.read(source_info.filename)
+            if source_info.filename == "docProps/core.xml":
+                entry_content, replacements = re.subn(
+                    rb"(<dcterms:modified\b[^>]*>)[^<]*(</dcterms:modified>)",
+                    rb"\g<1>2026-08-21T00:00:00Z\g<2>",
+                    entry_content,
+                )
+                if replacements != 1:
+                    raise RuntimeError("expected exactly one workbook modified timestamp")
+            target.writestr(
+                normalized,
+                entry_content,
+                compress_type=ZIP_DEFLATED,
+                compresslevel=9,
+            )
+    return output.getvalue()
 
 
 def _escape_pdf_string(value: str) -> str:

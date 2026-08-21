@@ -1,9 +1,20 @@
 from hashlib import sha256
 
-from deepaha.contracts.phase2 import HtmlSelectorLocator, PdfPageTextLocator
+from deepaha.contracts.phase2 import (
+    HtmlSelectorLocator,
+    PdfPageTextLocator,
+    SpreadsheetRangeLocator,
+)
 from deepaha.documents.html import _normalized_visible_text, _parse_html_tree
 from deepaha.documents.parser import ExpectedParseError
 from deepaha.documents.pdf import _extract_page_text, _read_pdf
+from deepaha.documents.spreadsheet import (
+    NormalizedCell,
+    _cells_for_range,
+    _load_workbook,
+    _preflight_archive,
+    hash_normalized_cells,
+)
 
 
 class LocatorReplayError(RuntimeError):
@@ -46,3 +57,41 @@ def replay_pdf_locator(content: bytes, locator: PdfPageTextLocator) -> str:
     if sha256(text.encode()).hexdigest() != locator.text_sha256:
         raise LocatorReplayError("PDF locator text hash mismatch")
     return text
+
+
+def replay_spreadsheet_locator(
+    content: bytes,
+    locator: SpreadsheetRangeLocator,
+) -> tuple[NormalizedCell, ...]:
+    if (
+        not all(
+            isinstance(value, int)
+            for value in (
+                locator.start_row,
+                locator.end_row,
+                locator.start_column,
+                locator.end_column,
+            )
+        )
+        or locator.start_row < 1
+        or locator.end_row < locator.start_row
+        or locator.start_column < 1
+        or locator.end_column < locator.start_column
+    ):
+        raise LocatorReplayError("spreadsheet locator range must use ordered 1-based coordinates")
+    try:
+        _preflight_archive(content)
+        workbook = _load_workbook(content)
+        try:
+            cells = _cells_for_range(workbook, locator)
+        finally:
+            workbook.close()
+    except LookupError as error:
+        raise LocatorReplayError(str(error)) from error
+    except ExpectedParseError as error:
+        raise LocatorReplayError(
+            f"spreadsheet locator input cannot be parsed: {error.code}"
+        ) from error
+    if hash_normalized_cells(cells) != locator.cells_sha256:
+        raise LocatorReplayError("spreadsheet locator cell hash mismatch")
+    return cells
