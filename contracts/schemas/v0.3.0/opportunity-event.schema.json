@@ -1,0 +1,155 @@
+{
+  "$defs": {
+    "JsonValue": {},
+    "OpportunityEventType": {
+      "enum": [
+        "CREATED",
+        "UPDATED",
+        "CORRECTED",
+        "DEADLINE_CHANGED",
+        "ATTACHMENT_REPLACED",
+        "CANCELLED",
+        "REOPENED"
+      ],
+      "title": "OpportunityEventType",
+      "type": "string"
+    },
+    "OpportunityFieldChangeSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "after": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "before": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_ref_id": {
+          "format": "uuid",
+          "title": "Evidence Ref Id",
+          "type": "string"
+        },
+        "field_path": {
+          "$ref": "#/$defs/SnapshotField"
+        }
+      },
+      "required": [
+        "field_path",
+        "before",
+        "after",
+        "evidence_ref_id"
+      ],
+      "title": "OpportunityFieldChangeSchema",
+      "type": "object"
+    },
+    "SnapshotField": {
+      "enum": [
+        "canonical_title",
+        "type",
+        "issuer_name",
+        "jurisdiction",
+        "status",
+        "published_at",
+        "application_window.opens_on",
+        "application_window.closes_on",
+        "application_window.timezone",
+        "application_url",
+        "attachment_urls",
+        "locations"
+      ],
+      "title": "SnapshotField",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "changed_fields": {
+      "items": {
+        "$ref": "#/$defs/SnapshotField"
+      },
+      "minItems": 1,
+      "title": "Changed Fields",
+      "type": "array"
+    },
+    "changes": {
+      "items": {
+        "$ref": "#/$defs/OpportunityFieldChangeSchema"
+      },
+      "minItems": 1,
+      "title": "Changes",
+      "type": "array"
+    },
+    "detected_at": {
+      "format": "date-time",
+      "title": "Detected At",
+      "type": "string"
+    },
+    "event_id": {
+      "format": "uuid",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "event_type": {
+      "$ref": "#/$defs/OpportunityEventType"
+    },
+    "from_version": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "From Version"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "source_document_id": {
+      "format": "uuid",
+      "title": "Source Document Id",
+      "type": "string"
+    },
+    "source_evidence_ref_id": {
+      "format": "uuid",
+      "title": "Source Evidence Ref Id",
+      "type": "string"
+    },
+    "to_version": {
+      "minimum": 1,
+      "title": "To Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "event_id",
+    "opportunity_id",
+    "from_version",
+    "to_version",
+    "event_type",
+    "changed_fields",
+    "changes",
+    "source_document_id",
+    "source_evidence_ref_id",
+    "detected_at"
+  ],
+  "title": "OpportunityEventSchemaV03",
+  "type": "object"
+}

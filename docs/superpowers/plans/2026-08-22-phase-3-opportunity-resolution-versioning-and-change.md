@@ -153,7 +153,13 @@ PHASE3_SCHEMAS.update({
 Run:
 
 ```powershell
-uv run python -m deepaha.contracts.export .. --version 0.3.0
+$previousPhase3PythonPath = $env:PYTHONPATH
+try {
+    $env:PYTHONPATH = "src"
+    uv run python -m deepaha.contracts.export .. --version 0.3.0
+} finally {
+    $env:PYTHONPATH = $previousPhase3PythonPath
+}
 uv run pytest tests/contracts/test_phase1_contracts.py tests/contracts/test_phase2_contracts.py tests/contracts/test_phase3_contracts.py -v
 ```
 

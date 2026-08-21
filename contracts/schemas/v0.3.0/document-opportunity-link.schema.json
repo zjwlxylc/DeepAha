@@ -1,0 +1,97 @@
+{
+  "$defs": {
+    "OpportunityDocumentRole": {
+      "enum": [
+        "PRIMARY_NOTICE",
+        "ATTACHMENT",
+        "POSITION_TABLE",
+        "CORRECTION",
+        "DEADLINE_EXTENSION",
+        "CANCELLATION",
+        "RESULT",
+        "OFFICIAL_GUIDANCE"
+      ],
+      "title": "OpportunityDocumentRole",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "document_id": {
+      "format": "uuid",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "ended_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Ended At"
+    },
+    "ended_by_identity_action_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Ended By Identity Action Id"
+    },
+    "link_id": {
+      "format": "uuid",
+      "title": "Link Id",
+      "type": "string"
+    },
+    "linked_at": {
+      "format": "date-time",
+      "title": "Linked At",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "resolution_key": {
+      "minLength": 1,
+      "title": "Resolution Key",
+      "type": "string"
+    },
+    "resolver_version": {
+      "minLength": 1,
+      "title": "Resolver Version",
+      "type": "string"
+    },
+    "role": {
+      "$ref": "#/$defs/OpportunityDocumentRole"
+    },
+    "source_evidence_ref_id": {
+      "format": "uuid",
+      "title": "Source Evidence Ref Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "link_id",
+    "document_id",
+    "opportunity_id",
+    "role",
+    "resolution_key",
+    "resolver_version",
+    "source_evidence_ref_id",
+    "linked_at",
+    "ended_at",
+    "ended_by_identity_action_id"
+  ],
+  "title": "DocumentOpportunityLinkSchema",
+  "type": "object"
+}

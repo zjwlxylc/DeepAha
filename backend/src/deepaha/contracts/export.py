@@ -18,6 +18,14 @@ from deepaha.contracts.phase2 import (
     ParseAttemptSchema,
     SourceEndpointSchema,
 )
+from deepaha.contracts.phase3 import (
+    DocumentOpportunityLinkSchema,
+    OpportunityAliasSchemaV03,
+    OpportunityEventSchemaV03,
+    OpportunityIdentityActionSchema,
+    OpportunityResolutionCandidateSchema,
+    OpportunityVersionSchemaV03,
+)
 
 PHASE1_SCHEMAS: dict[str, type[BaseModel]] = {
     "source.schema.json": SourceSchema,
@@ -37,6 +45,18 @@ PHASE2_SCHEMAS: dict[str, type[BaseModel]] = {
     "opportunity.schema.json": OpportunitySchemaV02,
     "evidence-ref.schema.json": EvidenceRefSchemaV02,
 }
+
+PHASE3_SCHEMAS: dict[str, type[BaseModel]] = dict(PHASE2_SCHEMAS)
+PHASE3_SCHEMAS.update(
+    {
+        "opportunity-version.schema.json": OpportunityVersionSchemaV03,
+        "opportunity-event.schema.json": OpportunityEventSchemaV03,
+        "document-opportunity-link.schema.json": DocumentOpportunityLinkSchema,
+        "opportunity-resolution-candidate.schema.json": OpportunityResolutionCandidateSchema,
+        "opportunity-alias.schema.json": OpportunityAliasSchemaV03,
+        "opportunity-identity-action.schema.json": OpportunityIdentityActionSchema,
+    }
+)
 
 
 def render_phase1_schemas() -> dict[str, bytes]:
@@ -81,12 +101,35 @@ def write_phase2_schemas(repository_root: Path) -> dict[str, Path]:
     return written
 
 
+def render_phase3_schemas() -> dict[str, bytes]:
+    return {
+        name: (
+            json.dumps(model.model_json_schema(), ensure_ascii=False, indent=2, sort_keys=True)
+            + "\n"
+        ).encode("utf-8")
+        for name, model in PHASE3_SCHEMAS.items()
+    }
+
+
+def write_phase3_schemas(repository_root: Path) -> dict[str, Path]:
+    target_directory = repository_root.resolve() / "contracts" / "schemas" / "v0.3.0"
+    target_directory.mkdir(parents=True, exist_ok=True)
+    written: dict[str, Path] = {}
+    for name, content in render_phase3_schemas().items():
+        target = target_directory / name
+        target.write_bytes(content)
+        written[name] = target
+    return written
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export versioned DeepAha JSON Schemas")
     parser.add_argument("repository_root", type=Path)
-    parser.add_argument("--version", choices=("0.1.0", "0.2.0"), default="0.1.0")
+    parser.add_argument("--version", choices=("0.1.0", "0.2.0", "0.3.0"), default="0.1.0")
     arguments = parser.parse_args()
-    if arguments.version == "0.2.0":
+    if arguments.version == "0.3.0":
+        write_phase3_schemas(arguments.repository_root)
+    elif arguments.version == "0.2.0":
         write_phase2_schemas(arguments.repository_root)
     else:
         write_phase1_schemas(arguments.repository_root)
