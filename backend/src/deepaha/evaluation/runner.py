@@ -280,9 +280,7 @@ def _metrics(results: tuple[EvaluationCaseReport, ...]) -> EvaluationMetrics:
         actual_ineligible_count=status_counts[EligibilityStatus.INELIGIBLE],
         unexpected_ineligible_count=len(unexpected_case_ids),
         unexpected_ineligible_case_ids=unexpected_case_ids,
-        replay_mismatch_count=sum(
-            "REPLAY_MISMATCH" in result.reason_codes for result in results
-        ),
+        replay_mismatch_count=sum("REPLAY_MISMATCH" in result.reason_codes for result in results),
         status_counts=status_counts,
     )
 

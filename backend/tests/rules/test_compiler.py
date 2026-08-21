@@ -279,8 +279,6 @@ def test_equal_highest_precedence_evidence_conflict_is_compiled_as_uncertain_inp
         rule_evidence=(evidence(7), evidence(8, relation="CONTRADICTS")),
     )
     rules = valid_rules()
-    compiled = compile_rule_set(
-        rule_set((conflicting_rule, rules[1], rules[2], rules[3]))
-    )
+    compiled = compile_rule_set(rule_set((conflicting_rule, rules[1], rules[2], rules[3])))
     assert compiled.rules[0].evidence_conflicted is True
     assert compiled.rules[0].effective_precedence == 400

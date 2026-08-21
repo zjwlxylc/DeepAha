@@ -11,6 +11,7 @@
 | [领域契约 v0.1](./domain-contracts-v0.1.md) | 核心实体、枚举、证据定位和跨模块契约 | 设计数据库、API、Schema 或测试夹具时 |
 | [领域契约 v0.2](./domain-contracts-v0.2.md) | Phase 2 已实现、Gate 关闭前仍为 PROPOSED 的 Endpoint、采集观察、解析尝试和结构化定位契约 | 评审 Phase 2 实现时 |
 | [领域契约 v0.3](./domain-contracts-v0.3.md) | Phase 3 候选 Opportunity/Version/Event/identity 契约；受 Phase 2 Gate 阻塞，仍为 PROPOSED | 评审 Phase 3 候选实现时 |
+| [领域契约 v0.4](./domain-contracts-v0.4.md) | Phase 4 候选规则、资格、MatchSnapshot 与 EvaluationRun 契约；受 Phase 2/3 Gate 阻塞，仍为 PROPOSED | 评审 Phase 4 候选实现时 |
 | [质量与发布策略](./quality-and-release.md) | 测试层级、Golden Dataset、指标证据和发布流程 | 编写测试、评估或准备发布时 |
 | [Blueprint v1.2 基线协调](../superpowers/specs/2026-08-21-blueprint-v1.2-baseline-reconciliation-design.md) | 新旧 Blueprint 权威、D8–D12 和阶段映射 | 解释 Phase 2 及后续范围变化时 |
 | [Phase 0 设计](../superpowers/specs/2026-08-21-phase-0-engineering-foundation-design.md) | 第一个可交付子项目的设计与验收边界 | 开始创建代码仓库骨架前 |
@@ -24,6 +25,9 @@
 | [Phase 3 设计](../superpowers/specs/2026-08-22-phase-3-opportunity-resolution-versioning-and-change-design.md) | Opportunity 归并、版本、变化与 identity 审计设计 | 评审 Phase 3 候选实现时 |
 | [Phase 3 实现计划](../superpowers/plans/2026-08-22-phase-3-opportunity-resolution-versioning-and-change.md) | Task 1–7 的严格 TDD、验证与堆叠交付顺序 | 执行或复核 Phase 3 时 |
 | [Phase 3 Gate](../gates/phase-3/README.md) | 本地候选证据、远程 CI 与 Phase 2 前置阻塞 | 判断 Phase 3 候选状态时 |
+| [Phase 4 设计](../superpowers/specs/2026-08-22-phase-4-rules-eligibility-and-evaluation-design.md) | 受控规则、资格保护、版本回放和合成评估边界 | 评审 Phase 4 候选设计时 |
+| [Phase 4 实现计划](../superpowers/plans/2026-08-22-phase-4-rules-eligibility-and-evaluation.md) | Task 1–10 的 TDD、隔离验证与堆叠交付顺序 | 执行或复核 Phase 4 时 |
+| [Phase 4 Gate](../gates/phase-4/README.md) | 本地/远程候选证据、合成评估边界和双 Gate 阻塞 | 判断 Phase 4 候选状态时 |
 
 ## 文档状态词
 
@@ -35,7 +39,7 @@
 - `VERIFIED`：指定测试和证据已经运行并满足文档中的验收条件。
 - `SUPERSEDED`：被明确的新版本替代，只保留历史参考。
 
-当前状态：Phase 0/1 Gate 已 `CLOSED`；Phase 2 已实现但其 live Gate 仍 `OPEN`，v0.2 仍为 `PROPOSED`。经明确授权，Phase 3 已在独立堆叠分支形成候选实现并通过本地验证，但状态只能是 `IMPLEMENTED_PENDING_PHASE2_GATE`，[Phase 3 Gate](../gates/phase-3/README.md) 为 `BLOCKED_BY_PHASE2`，v0.3 仍为 `PROPOSED`。受控堆叠开发不得被解释为绕过前序 Gate、合并或发布授权。
+当前状态：Phase 0/1 Gate 已 `CLOSED`；Phase 2 已实现但其 live Gate 仍 `OPEN`，v0.2 仍为 `PROPOSED`。Phase 3 候选状态为 `IMPLEMENTED_PENDING_PHASE2_GATE`，[Phase 3 Gate](../gates/phase-3/README.md) 为 `BLOCKED_BY_PHASE2`，v0.3 仍为 `PROPOSED`。经明确授权，Phase 4 在下一层独立分支形成候选实现，但状态上限为 `IMPLEMENTED_PENDING_PHASE2_PHASE3_GATES`，[Phase 4 Gate](../gates/phase-4/README.md) 不得关闭，v0.4 仍为 `PROPOSED`。受控堆叠开发不得被解释为绕过前序 Gate、合并或发布授权。
 
 ## 维护规则
 

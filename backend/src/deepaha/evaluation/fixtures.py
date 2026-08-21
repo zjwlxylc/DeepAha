@@ -162,9 +162,7 @@ class FixtureBundle:
 
 def verify_fixture_manifest(directory: Path) -> None:
     manifest = _read_manifest(directory)
-    actual_json = {
-        path.name for path in directory.glob("*.json") if path.name != MANIFEST_FILENAME
-    }
+    actual_json = {path.name for path in directory.glob("*.json") if path.name != MANIFEST_FILENAME}
     declared_json = {entry.filename for entry in manifest.files}
     undeclared = sorted(actual_json - declared_json)
     missing = sorted(declared_json - actual_json)
@@ -186,21 +184,14 @@ def load_fixture_bundle(directory: Path) -> FixtureBundle:
     verify_fixture_manifest(directory)
     manifest = _read_manifest(directory)
     payloads = {
-        entry.filename: _read_verified_json(directory / entry.filename)
-        for entry in manifest.files
+        entry.filename: _read_verified_json(directory / entry.filename) for entry in manifest.files
     }
     try:
         golden = _GoldenDataset.model_validate(payloads["phase4-golden-cases.json"])
-        mothers = _ProfileDataset.model_validate(
-            payloads["phase4-mother-profiles.json"]
-        )
-        synthetic = _ProfileDataset.model_validate(
-            payloads["phase4-synthetic-profiles.json"]
-        )
+        mothers = _ProfileDataset.model_validate(payloads["phase4-mother-profiles.json"])
+        synthetic = _ProfileDataset.model_validate(payloads["phase4-synthetic-profiles.json"])
         catalog = load_major_catalog(directory / "phase4-major-catalog.json")
-        mapping = load_approved_major_mapping(
-            directory / "phase4-major-mapping.json", catalog
-        )
+        mapping = load_approved_major_mapping(directory / "phase4-major-mapping.json", catalog)
     except (KeyError, ValidationError, MajorAssetError) as error:
         raise FixtureValidationError(f"invalid Phase 4 fixture payload: {error}") from error
 
@@ -232,9 +223,7 @@ def load_fixture_bundle(directory: Path) -> FixtureBundle:
 
 def _read_manifest(directory: Path) -> FixtureManifest:
     try:
-        return FixtureManifest.model_validate_json(
-            (directory / MANIFEST_FILENAME).read_bytes()
-        )
+        return FixtureManifest.model_validate_json((directory / MANIFEST_FILENAME).read_bytes())
     except (OSError, ValidationError) as error:
         raise FixtureValidationError(f"invalid fixture manifest: {error}") from error
 

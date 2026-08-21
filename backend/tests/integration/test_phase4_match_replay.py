@@ -74,9 +74,7 @@ def match_input(
     evaluated_at: datetime = NOW,
     created_at: datetime = NOW,
 ) -> MatchInput:
-    opportunity_id, opportunity_version, rule_set_id, rule_set_version, profile_id = (
-        seeded_identity
-    )
+    opportunity_id, opportunity_version, rule_set_id, rule_set_version, profile_id = seeded_identity
     default_catalog, default_mapping = major_assets
     return MatchInput(
         opportunity_id=opportunity_id,

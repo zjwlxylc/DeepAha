@@ -2,7 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [main, codex/phase-3-opportunity-resolution]
+    branches:
+      [main, codex/phase-3-opportunity-resolution, codex/phase-4-rules-eligibility-evaluation]
   pull_request:
 
 permissions:
@@ -127,4 +128,56 @@ jobs:
       - run: >-
           uv run pytest tests/contracts tests/opportunities
           -m "not integration and not live_source" --strict-markers
+      - run: uv run alembic check
+
+  phase4-eligibility:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18.4-alpine3.23
+        env:
+          POSTGRES_DB: deepaha
+          POSTGRES_USER: deepaha
+          POSTGRES_PASSWORD: deepaha_phase4_local_only
+        ports: ["55434:5432"]
+        options: >-
+          --health-cmd "pg_isready -U deepaha -d deepaha"
+          --health-interval 2s --health-timeout 2s --health-retries 30
+      s3:
+        image: motoserver/moto:5.2.2
+        ports: ["55002:5000"]
+    # Test-only constants for disposable Phase 4 CI services.
+    env:
+      DEEPAHA_DATABASE_URL: postgresql+psycopg://deepaha:deepaha_phase4_local_only@127.0.0.1:55434/deepaha
+      DEEPAHA_OBJECT_STORE_ENDPOINT: http://127.0.0.1:55002
+      DEEPAHA_OBJECT_STORE_REGION: us-east-1
+      DEEPAHA_OBJECT_STORE_BUCKET: deepaha-raw
+      DEEPAHA_OBJECT_STORE_ACCESS_KEY: phase4-ci
+      DEEPAHA_OBJECT_STORE_SECRET_KEY: phase4-ci-secret
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.14"
+          enable-cache: true
+      - run: uv sync --locked --group dev
+      - run: uv run ruff format --check .
+      - run: uv run ruff check .
+      - run: uv run mypy src tests
+      - run: >-
+          uv run pytest tests/contracts/test_phase4_contracts.py tests/rules
+          tests/eligibility tests/evaluation tests/test_phase4_verifier_scope.py
+          --strict-markers
+      - run: uv run alembic upgrade head
+      - run: >-
+          uv run pytest -m integration
+          tests/integration/test_phase4_persistence_contract.py
+          tests/integration/test_phase4_match_replay.py
+          tests/integration/test_phase4_evaluation_run.py
+          --strict-markers
+      - run: uv run alembic downgrade 20260822_0003
+      - run: uv run alembic upgrade head
       - run: uv run alembic check

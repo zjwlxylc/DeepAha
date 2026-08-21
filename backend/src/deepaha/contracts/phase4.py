@@ -362,9 +362,7 @@ class EligibilityResultSchemaV04(ContractModel):
         if len(evaluations_by_id) != len(self.rule_evaluations):
             raise ValueError("rule evaluations must use unique rule IDs")
         expected = {
-            outcome: {
-                item.rule_id for item in self.rule_evaluations if item.outcome is outcome
-            }
+            outcome: {item.rule_id for item in self.rule_evaluations if item.outcome is outcome}
             for outcome in RuleOutcome
         }
         provided = {
@@ -556,8 +554,7 @@ class EvaluationRunSchemaV04(ContractModel):
             result.case_id for result in self.case_results if result.unexpected_ineligible
         )
         expected_ineligible = sum(
-            result.expected_status is EligibilityStatus.INELIGIBLE
-            for result in self.case_results
+            result.expected_status is EligibilityStatus.INELIGIBLE for result in self.case_results
         )
         actual_ineligible = expected_counts[EligibilityStatus.INELIGIBLE]
         if (

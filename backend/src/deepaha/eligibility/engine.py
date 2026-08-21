@@ -443,9 +443,7 @@ def _evaluate_composite(
         official=official,
         reason=f"{rule.operator.value}_{outcome.value}",
         evidence_ids=_unique_ids(item.evidence_ref_ids for item in selected),
-        missing_fields=tuple(
-            sorted({field for item in selected for field in item.missing_fields})
-        ),
+        missing_fields=tuple(sorted({field for item in selected for field in item.missing_fields})),
     )
 
 

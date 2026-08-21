@@ -109,8 +109,7 @@ def _build_profiles() -> tuple[list[JsonObject], list[JsonObject]]:
                         version=variation_index,
                         attributes=attributes,
                         label=(
-                            f"Synthetic profile {index:02d} variation "
-                            f"{variation_index - 1}: {axis}"
+                            f"Synthetic profile {index:02d} variation {variation_index - 1}: {axis}"
                         ),
                     ),
                 }
@@ -356,9 +355,7 @@ def generate() -> None:
 
     payloads = dict(generated)
     for filename in ("phase4-major-catalog.json", "phase4-major-mapping.json"):
-        payloads[filename] = json.loads(
-            (OUTPUT_DIRECTORY / filename).read_text(encoding="utf-8")
-        )
+        payloads[filename] = json.loads((OUTPUT_DIRECTORY / filename).read_text(encoding="utf-8"))
 
     files: list[JsonObject] = []
     for filename in sorted(payloads):

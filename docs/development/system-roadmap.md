@@ -128,6 +128,9 @@ Phase 2 Gate 仍 OPEN，因此 Phase 3 Gate 为 `BLOCKED_BY_PHASE2`，v0.3 仍�
 
 **目的：** 形成系统最核心的可审计资格能力。
 
+**候选状态：** `IMPLEMENTED_PENDING_PHASE2_PHASE3_GATES`。Phase 2 Gate 仍 `OPEN`，Phase 3
+Gate 为 `BLOCKED_BY_PHASE2`，因此 Phase 4 Gate 不可关闭，v0.4 仍为 `PROPOSED`。
+
 **范围：**
 
 - 规则 DSL、Rule Compiler、Eligibility Engine 和资格四态。
@@ -141,6 +144,9 @@ Phase 2 Gate 仍 OPEN，因此 Phase 3 Gate 为 `BLOCKED_BY_PHASE2`，v0.3 仍�
 - 所有硬结论证据可追溯率达到计划目标 `100%`。
 - `INELIGIBLE` 误杀率达到计划门槛 `<=0.5%`，严重错误逐例复盘。
 - 同一数据集与版本重复评估得到相同输出。
+
+当前固定合成数据只证明受控边界样本的确定性回放和零意外错误否定；它不证明真实
+`<=0.5%` 指标、真实用户价值或发布就绪。
 
 ### Phase 5：公开可信层
 
@@ -250,7 +256,7 @@ Phase 2 Gate 仍 OPEN，因此 Phase 3 Gate 为 `BLOCKED_BY_PHASE2`，v0.3 仍�
 
 - Phase 0、Phase 1 已有详细 spec、plan 和关闭证据。
 - Phase 2 已生成独立设计与实施计划，引用 Blueprint v1.2、基线协调记录和领域契约 v0.2。
-- Phase 3 已生成独立 spec/plan 与候选实现；Phase 4–9 启动前分别生成独立 spec 和 plan，并引用本路线与当时可用的上游契约，同时保留未关闭 Gate 阻塞状态。
+- Phase 3/4 已分别生成独立 spec/plan 与受阻塞候选实现；Phase 5–9 启动前分别生成独立 spec 和 plan，并引用本路线与当时可用的上游契约，同时保留未关闭 Gate 阻塞状态。
 - 任一阶段发现隐藏复杂度时，拆成可独立验收的子阶段；不得扩大一个计划直到所有系统都包含在内。
 - 每个阶段验收后更新本文状态和证据链接，不重写历史结果。
 

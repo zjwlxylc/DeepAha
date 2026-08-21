@@ -160,9 +160,7 @@ class EligibilityService:
             "input_sha256",
         ):
             if left_values[field] != right_values[field]:
-                differences.append(
-                    ReplayDifference(field, left_values[field], right_values[field])
-                )
+                differences.append(ReplayDifference(field, left_values[field], right_values[field]))
         if left.eligibility_result.status is not right.eligibility_result.status:
             differences.append(
                 ReplayDifference(
@@ -171,21 +169,15 @@ class EligibilityService:
                     right.eligibility_result.status.value,
                 )
             )
-        left_rules = {
-            item.rule_id: item for item in left.eligibility_result.rule_evaluations
-        }
-        right_rules = {
-            item.rule_id: item for item in right.eligibility_result.rule_evaluations
-        }
+        left_rules = {item.rule_id: item for item in left.eligibility_result.rule_evaluations}
+        right_rules = {item.rule_id: item for item in right.eligibility_result.rule_evaluations}
         for rule_id in sorted(set(left_rules) | set(right_rules), key=str):
             left_rule = left_rules.get(rule_id)
             right_rule = right_rules.get(rule_id)
             left_payload = None if left_rule is None else left_rule.model_dump(mode="json")
             right_payload = None if right_rule is None else right_rule.model_dump(mode="json")
             if left_payload != right_payload:
-                differences.append(
-                    ReplayDifference(f"rule:{rule_id}", left_payload, right_payload)
-                )
+                differences.append(ReplayDifference(f"rule:{rule_id}", left_payload, right_payload))
         return tuple(differences)
 
     def _load_input(self, session: Session, match_input: MatchInput) -> _LoadedInput:
@@ -314,9 +306,7 @@ class EligibilityService:
                 rule_set_version=snapshot.rule_set_version,
                 profile_snapshot_id=snapshot.profile_snapshot_id,
                 status=result.status.value,
-                rule_results=[
-                    item.model_dump(mode="json") for item in result.rule_evaluations
-                ],
+                rule_results=[item.model_dump(mode="json") for item in result.rule_evaluations],
                 satisfied_rule_ids=[str(item) for item in result.satisfied_rule_ids],
                 conflict_rule_ids=[str(item) for item in result.conflict_rule_ids],
                 unknown_rule_ids=[str(item) for item in result.unknown_rule_ids],
@@ -354,9 +344,7 @@ class EligibilityService:
         input_sha256: str,
     ) -> MatchSnapshotSchemaV04 | None:
         snapshot = session.scalar(
-            select(MatchSnapshotModel).where(
-                MatchSnapshotModel.input_sha256 == input_sha256
-            )
+            select(MatchSnapshotModel).where(MatchSnapshotModel.input_sha256 == input_sha256)
         )
         if snapshot is None:
             return None

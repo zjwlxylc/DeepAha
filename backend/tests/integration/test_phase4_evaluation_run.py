@@ -212,9 +212,7 @@ def _seed_real_case_evaluator(
                     }
                 )
             ),
-            replay_matched=(
-                replayed.model_dump(mode="json") == snapshot.model_dump(mode="json")
-            ),
+            replay_matched=(replayed.model_dump(mode="json") == snapshot.model_dump(mode="json")),
         )
 
     return evaluate

@@ -294,8 +294,7 @@ def test_profile_normalizes_unique_set_like_attributes() -> None:
     with pytest.raises(ValidationError, match="duplicates"):
         ProfileSnapshotSchemaV04.model_validate(
             profile_values(
-                attributes=profile_values()["attributes"]
-                | {"certificates": ["CET4", "CET4"]}  # type: ignore[operator]
+                attributes=profile_values()["attributes"] | {"certificates": ["CET4", "CET4"]}  # type: ignore[operator]
             )
         )
 

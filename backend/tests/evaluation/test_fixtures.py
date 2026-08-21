@@ -39,8 +39,7 @@ def test_loads_fixed_synthetic_bundle() -> None:
         profile.profile_id for profile in bundle.mother_profiles
     }
     assert all(
-        profile.synthetic_only
-        for profile in bundle.mother_profiles + bundle.synthetic_profiles
+        profile.synthetic_only for profile in bundle.mother_profiles + bundle.synthetic_profiles
     )
     assert {tag for case in bundle.golden_cases for tag in case.coverage_tags} == (
         EXPECTED_COVERAGE_TAGS
@@ -121,12 +120,10 @@ def test_rejects_duplicate_profile_version_after_valid_manifest(tmp_path: Path) 
     shutil.copytree(FIXTURE_DIRECTORY, copied)
     synthetic_path = copied / "phase4-synthetic-profiles.json"
     payload = json.loads(synthetic_path.read_text(encoding="utf-8"))
-    payload["profiles"][1]["snapshot"]["profile_id"] = payload["profiles"][0][
-        "snapshot"
-    ]["profile_id"]
-    payload["profiles"][1]["snapshot"]["version"] = payload["profiles"][0][
-        "snapshot"
-    ]["version"]
+    payload["profiles"][1]["snapshot"]["profile_id"] = payload["profiles"][0]["snapshot"][
+        "profile_id"
+    ]
+    payload["profiles"][1]["snapshot"]["version"] = payload["profiles"][0]["snapshot"]["version"]
     synthetic_path.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
