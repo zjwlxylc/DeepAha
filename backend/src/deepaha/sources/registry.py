@@ -212,12 +212,24 @@ def _require_endpoint_replay(row: SourceEndpoint, schema: SourceEndpointSchema) 
         "fixture_storage_allowed": schema.fixture_storage_allowed,
         "usage_note": schema.usage_note,
         "policy_version": schema.policy_version,
-        "active": schema.active,
         "verified_at": schema.verified_at,
         "created_at": schema.created_at,
-        "updated_at": schema.updated_at,
     }
     _require_replay(row, expected, "endpoint")
+    _apply_endpoint_lifecycle_transition(row, schema)
+
+
+def _apply_endpoint_lifecycle_transition(row: SourceEndpoint, schema: SourceEndpointSchema) -> None:
+    if row.active == schema.active:
+        if row.updated_at != schema.updated_at:
+            _conflict("changed endpoint field: updated_at")
+        return
+    if not row.active:
+        _conflict("cannot reactivate endpoint")
+    if schema.updated_at <= row.updated_at:
+        _conflict("endpoint deactivation must advance updated_at")
+    row.active = False
+    row.updated_at = schema.updated_at
 
 
 def _require_replay(row: object, expected: dict[str, object], label: str) -> None:
