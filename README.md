@@ -2,7 +2,7 @@
 
 DeepAha 青年机会智能系统：把分散、变化、复杂的机会信息转化为可理解、可判断、可行动的路径。
 
-> 当前状态：Phase 1 Gate 已 `CLOSED`；[Phase 2 Gate](docs/gates/phase-2/README.md) 仍为 `OPEN`，v0.2 仍为 `PROPOSED`。Phase 3 已在独立堆叠分支实现并通过本地候选验证，但[Phase 3 Gate](docs/gates/phase-3/README.md) 为 `BLOCKED_BY_PHASE2`，状态只能是 `IMPLEMENTED_PENDING_PHASE2_GATE`，v0.3 仍为 `PROPOSED`。尚未提供面向用户的业务功能，也未合并或发布 Phase 3。
+> 当前状态：Phase 1 历史 Gate 已 `CLOSED`。Phase 2 来源采集与文档证据已 `IMPLEMENTED`，Engineering Gate 已 `CLOSED`；[Phase 2 Release Qualification](docs/gates/phase-2/README.md) 因 24 小时 live 观察、新鲜副本和最终候选验证尚未完成而保持 `IN_PROGRESS`，领域契约 v0.2 为 `IMPLEMENTED`、不得标记 `STABLE`。Phase 3 机会归并、版本与变化已 `IMPLEMENTED`，自身 [Engineering Gate](docs/gates/phase-3/README.md) 已 `CLOSED`；Release Qualification 为 `NOT_STARTED`，领域契约 v0.3 为 `IMPLEMENTED`、不得标记 `STABLE`。本分支仍不提供面向用户的业务功能，Phase 3 未合并或发布。
 
 开发路线与架构见 `docs/development/README.md`。
 

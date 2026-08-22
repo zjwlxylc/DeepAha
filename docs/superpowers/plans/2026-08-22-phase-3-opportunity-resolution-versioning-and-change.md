@@ -1,5 +1,13 @@
 # DeepAha Phase 3 Opportunity Resolution, Versioning and Change Implementation Plan
 
+> **Governance update (2026-08-22):** This plan preserves the original stacked-execution
+> record. Phase 2 Engineering Gate closing commit
+> `6c8a8fb63c68cfbb0f4cf54b6032bfb49a0ef65c` is now integrated. Current Phase 3 axes are:
+> implementation `IMPLEMENTED`, Engineering Gate `CLOSED`, Release Qualification
+> `NOT_STARTED`, and v0.3 contract maturity `IMPLEMENTED`. Historical
+> `BLOCKED_BY_PHASE2` / `IMPLEMENTED_PENDING_PHASE2_GATE` instructions below are
+> superseded as current status and remain only as execution history.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. The user explicitly forbids sub-agents. Use `superpowers:test-driven-development` for every behavior change, `superpowers:systematic-debugging` for failures, and `superpowers:verification-before-completion` before every commit or status claim.
 
 **Goal:** Build a conservative, deterministic Phase 3 candidate that resolves evidenced Documents into stable Opportunities, appends replayable Versions/Events, and audits merge/split/reversal without crossing the still-open Phase 2 Gate.

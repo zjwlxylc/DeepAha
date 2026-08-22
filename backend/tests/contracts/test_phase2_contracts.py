@@ -138,6 +138,19 @@ def test_active_endpoint_requires_approved_policy_and_matching_host() -> None:
             SourceEndpointSchema.model_validate(endpoint_values(**changes))
 
 
+def test_endpoint_credentials_are_rejected_by_runtime_and_json_schema() -> None:
+    from jsonschema import Draft202012Validator
+    from jsonschema.exceptions import ValidationError as JsonSchemaValidationError
+
+    values = endpoint_values(url="https://operator:secret@official.example/notices")
+    json_values = json.loads(json.dumps(values, default=str))
+
+    with pytest.raises(ValidationError, match="must not contain credentials"):
+        SourceEndpointSchema.model_validate(values)
+    with pytest.raises(JsonSchemaValidationError):
+        Draft202012Validator(SourceEndpointSchema.model_json_schema()).validate(json_values)
+
+
 def test_endpoint_open_license_and_fixture_storage_require_permission() -> None:
     with pytest.raises(ValidationError, match="OPEN_LICENSE"):
         SourceEndpointSchema.model_validate(endpoint_values(content_use_basis="OPEN_LICENSE"))

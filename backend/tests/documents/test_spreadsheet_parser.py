@@ -6,6 +6,7 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 import pytest
 from openpyxl import Workbook
+from openpyxl.worksheet._read_only import ReadOnlyWorksheet
 
 from deepaha.contracts.phase2 import SpreadsheetRangeLocator
 from deepaha.documents.parser import ExpectedParseError
@@ -96,6 +97,30 @@ def test_empty_workbook_is_a_stable_failure() -> None:
     assert captured.value.code == "XLSX_EMPTY"
 
 
+def test_declared_dimension_cannot_expand_an_empty_grid(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    content = _replace_zip_bytes(
+        XLSX.read_bytes(),
+        "xl/worksheets/sheet1.xml",
+        b'<dimension ref="A1:D4"/>',
+        b'<dimension ref="A1:XFD1048576"/>',
+    )
+    original_iter_rows = ReadOnlyWorksheet.iter_rows
+
+    def guarded_iter_rows(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+        assert self.max_row is None
+        assert self.max_column is None
+        return original_iter_rows(self, *args, **kwargs)
+
+    monkeypatch.setattr(ReadOnlyWorksheet, "iter_rows", guarded_iter_rows)
+
+    parsed = parse(content)
+
+    assert "A2\t合成岗位" in parsed.normalized_text
+    assert len(parsed.locators) == 4
+
+
 def test_macro_entry_is_rejected() -> None:
     content = _append_zip_entry(XLSX.read_bytes(), "xl/vbaProject.bin", b"not executable")
 
@@ -170,4 +195,19 @@ def _append_zip_entry(content: bytes, name: str, value: bytes) -> bytes:
     output = BytesIO(content)
     with ZipFile(output, "a", compression=ZIP_DEFLATED) as archive:
         archive.writestr(name, value)
+    return output.getvalue()
+
+
+def _replace_zip_bytes(content: bytes, name: str, old: bytes, new: bytes) -> bytes:
+    output = BytesIO()
+    with (
+        ZipFile(BytesIO(content), "r") as source,
+        ZipFile(output, "w", compression=ZIP_DEFLATED) as target,
+    ):
+        for entry in source.infolist():
+            value = source.read(entry.filename)
+            if entry.filename == name:
+                assert old in value
+                value = value.replace(old, new, 1)
+            target.writestr(entry, value)
     return output.getvalue()

@@ -18,6 +18,7 @@ from deepaha.opportunities.models import (
 from deepaha.opportunities.service import (
     OpportunityIdentityService,
     OpportunityResolutionService,
+    load_resolution_index,
 )
 
 from .test_opportunity_resolution_service import (
@@ -218,6 +219,44 @@ def test_merge_and_reversal_change_only_canonical_resolution(
         reason="synthetic merge reversal",
     )
     assert identity_service.resolve_canonical_opportunity_id(MERGE_SOURCE_ID) == MERGE_SOURCE_ID
+
+
+def test_resolution_index_maps_merged_alias_owner_to_canonical_target(
+    identity_service: OpportunityIdentityService,
+    identity_session_factory: sessionmaker[Session],
+) -> None:
+    normalized_url = "https://phase3-identity.example.gov/source"
+    with identity_session_factory() as session:
+        session.add(
+            OpportunityAlias(
+                alias_id=uuid7(),
+                opportunity_id=MERGE_SOURCE_ID,
+                alias_type="URL",
+                alias_value=normalized_url,
+                normalized_value=normalized_url,
+                source_id=None,
+                source_document_id=DOCUMENT_ID,
+                source_evidence_ref_id=EVIDENCE_REF_ID,
+                created_at=CLOCK_TIME,
+            )
+        )
+        session.commit()
+
+    merge_id = merge(identity_service)
+    with identity_session_factory() as session:
+        merged_index = load_resolution_index(session)
+    assert merged_index.url_keys[f"url:{normalized_url}"][0].opportunity_id == MERGE_TARGET_ID
+
+    identity_service.reverse_identity_action(
+        action_id=merge_id,
+        document_id=DOCUMENT_ID,
+        evidence_ref_id=EVIDENCE_REF_ID,
+        actor=ACTOR,
+        reason="synthetic merge reversal",
+    )
+    with identity_session_factory() as session:
+        reversed_index = load_resolution_index(session)
+    assert reversed_index.url_keys[f"url:{normalized_url}"][0].opportunity_id == MERGE_SOURCE_ID
 
 
 def test_cycle_failure_is_atomic_and_does_not_append_an_action(

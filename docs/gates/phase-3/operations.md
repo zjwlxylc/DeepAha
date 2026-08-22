@@ -1,4 +1,4 @@
-# Phase 3 候选运维说明
+# Phase 3 工程验证运维说明
 
 ## 本地验证
 
@@ -17,11 +17,15 @@ project。不得把该脚本改为调用 Phase 1/2 verifier，也不得复用 55
   identity 事实。
 - Version/Event/IdentityAction 是追加事实；Projection 可重放，不通过覆盖历史来“修复”。
 
-## Phase 2 关闭后的强制流程
+## 上游基线变化流程
 
-1. 获取 Phase 2 精确 closing commit，并将本候选更新到该提交之上。
-2. 对 v0.2 Schema 字节、导入、迁移、ORM 与证据优先级做兼容差异审查。
-3. 分别验证空数据库升级、已有 Phase 2 数据升级、空 v0.3 降级/再升级和有 v0.3 数据降级拒绝。
-4. 运行 `scripts/verify.ps1` 与 `scripts/verify-phase3.ps1`。
-5. 推送更新后的候选，检查精确 SHA 的全部远程 CI，并刷新 Gate 证据。
-6. 只有前序 Gate 与本 Gate 均满足时，另行作出合并/发布/STABLE 决策。
+Phase 2 closing commit `6c8a8fb63c68cfbb0f4cf54b6032bfb49a0ef65c` 已通过非重写 merge
+纳入，并完成 v0.2/v0.3 Schema 差异修复、空库/已有数据迁移、全量本地与独立 Phase 3
+verifier、安全/scope 审查。若上游契约或迁移以后再变化，必须重新执行同一流程并重新判定
+受影响的 Engineering Gate；不得沿用旧 SHA 证据。
+
+## 发布边界
+
+Engineering Gate `CLOSED` 不授权合并或发布。Phase 3 Release Qualification 当前为
+`NOT_STARTED`；真实 Gold、真实来源、新鲜副本和生产相似环境证据必须通过独立候选流程保存，
+不能复用合成样本结论。

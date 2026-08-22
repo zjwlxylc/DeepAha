@@ -1,6 +1,11 @@
 # DeepAha Phase 2 Source Ingestion and Document Evidence Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` task-by-task. Do not create sub-agents. Use `superpowers:test-driven-development` for behavior changes and `superpowers:verification-before-completion` before commits or completion claims.
+>
+> **Governance update (2026-08-22):** 本计划的工程实现已完成，Phase 2 Engineering Gate 已
+> `CLOSED`；五轮 live、新鲜副本和最终候选 CI 继续作为 Release Qualification `IN_PROGRESS`。
+> 下文历史步骤中的单一 “Gate OPEN/CLOSED” 应按此拆分解释，不得用于阻塞下游正常工程开发，
+> 也不得据此把 v0.2 提前标记 `STABLE`。
 
 **Goal:** Build a reproducible Phase 2 slice in which registered official endpoints produce auditable capture observations, immutable/deduplicated RawArtifacts, deterministic HTML/PDF/XLSX Documents, and replayable Evidence Locator v0.2 records.
 
@@ -15,7 +20,8 @@
 - Work only in `D:\DeepAha\.worktrees\phase-2-source-ingestion` on `phase-2-source-ingestion`.
 - Base is Phase 1 Gate commit `fb3dd924cc85c19cc8a13564cebc441f4d569521`; do not rewrite Phase 1 history.
 - Preserve `contracts/schemas/v0.1.0/` byte-for-byte and keep v0.1 import paths working.
-- Target contract `0.2.0` remains `PROPOSED` until Task 11 has real Gate evidence.
+- Target contract `0.2.0` is `IMPLEMENTED`; it remains not `STABLE` until Phase 2 Release
+  Qualification is `QUALIFIED`.
 - Alembic is the only schema creation path; PostgreSQL must be `18.x`.
 - Raw objects remain under `raw/sha256/...`; derived text uses `derived/documents/...`.
 - Default tests/CI never access live sites, browsers or model APIs.
@@ -747,9 +753,11 @@ powershell -ExecutionPolicy Bypass -File scripts/verify-phase2.ps1
 
 Extend existing integration or add `phase2-contract-and-parser` with Python 3.14, locked deps, PostgreSQL 18.4, Moto 5.2.2, migration, all integration tests, offline parser/contracts and `alembic check`. Never set live permission. Only add workflow_dispatch live job if real secret/runner policy exists; otherwise defer it explicitly.
 
-- [ ] **Step 5: Create truthful OPEN Gate evidence**
+- [ ] **Step 5: Create truthful split Gate evidence**
 
-Before live/fresh/remote success, Gate says `OPEN`, implementation `IMPLEMENTED`, and lists missing evidence. Populate only actual commands, versions, counts, hashes and failures; never planned values.
+Record implementation, Engineering Gate, Release Qualification and contract maturity separately. Before
+live/fresh/final-remote success, Release Qualification remains `IN_PROGRESS` and v0.2 remains not
+`STABLE`. Populate only actual commands, versions, counts, hashes and failures; never planned values.
 
 - [ ] **Step 6: Run the five-round live window**
 
@@ -761,7 +769,10 @@ $phase2ObservationOutput = Join-Path ([System.IO.Path]::GetTempPath()) "deepaha-
 powershell -ExecutionPolicy Bypass -File scripts/run-phase2-source-observation.ps1 -Rounds 5 -IntervalSeconds 21600 -OutputPath $phase2ObservationOutput
 ```
 
-Rounds span at least 24h. Export only summaries and manual maintenance minutes. If final `SUCCEEDED+NOT_MODIFIED` ratio <98%, policy is violated, or one site forces a generic-code workaround, Gate remains OPEN.
+Rounds span at least 24h. Export only summaries and manual maintenance minutes. If final
+`SUCCEEDED+NOT_MODIFIED` ratio <98%, policy is violated, or one site forces a generic-code workaround,
+Release Qualification becomes `FAILED` or `BLOCKED`; only a real engineering defect triggers Engineering
+Gate re-evaluation.
 
 - [ ] **Step 7: Full and fresh-copy verification**
 
@@ -796,9 +807,13 @@ git push -u origin phase-2-source-ingestion
 
 Do not claim remote success until required job conclusions are inspected.
 
-- [ ] **Step 10: Close only with every real proof**
+- [ ] **Step 10: Qualify release only with every real proof**
 
-If local, fresh-copy, live-window and remote CI meet all spec exits: set Gate CLOSED; set v0.2 implemented objects STABLE; record commits/Actions; update status; preserve deferrals. Rerun all three verification scripts and commit/push `docs: close phase 2 collection evidence gate`. Otherwise keep OPEN, report the exact gap and do not enter Phase 3.
+Engineering Gate closes when implementation, contracts, migrations, tests, security, review and scope evidence
+meet their exits. Only when fresh-copy, live-window and final-candidate remote CI also meet all applicable
+release exits may Release Qualification become `QUALIFIED` and v0.2 become `STABLE`. Otherwise keep
+Release Qualification `IN_PROGRESS`, `FAILED` or `BLOCKED`, report the exact gap, and do not use that gap
+to block Phase 3 normal engineering development.
 
 ---
 
@@ -813,7 +828,7 @@ If local, fresh-copy, live-window and remote CI meet all spec exits: set Gate CL
 - [ ] Raw bytes/metadata remain unchanged after parse; unsafe files have audited failure.
 - [ ] Default tests use no live site/browser/model.
 - [ ] Ten Endpoint policies have robots/use evidence and no unknowns.
-- [ ] Five live rounds span >=24h and satisfy the Gate, or Gate remains OPEN.
+- [ ] Five live rounds span >=24h and satisfy Release Qualification, or its non-qualified state remains explicit.
 - [ ] `verify.ps1`, `verify-phase1.ps1`, `verify-phase2.ps1` pass locally/fresh before completion claim.
 - [ ] Required remote CI conclusions are inspected success for the claimed commit.
 - [ ] No Phase 3/infrastructure/model/user/UI expansion or prohibited artifact is tracked.

@@ -12,6 +12,7 @@ from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.utils.exceptions import InvalidFileException
 from openpyxl.workbook.workbook import Workbook
+from openpyxl.worksheet._read_only import ReadOnlyWorksheet
 
 from deepaha.contracts.phase2 import EvidenceLocatorV02, SpreadsheetRangeLocator
 from deepaha.documents.normalization import normalize_text
@@ -45,6 +46,7 @@ class OpenpyxlSpreadsheetParser:
             text_lines: list[str] = []
             locators: list[EvidenceLocatorV02] = []
             for worksheet in workbook.worksheets:
+                _ignore_declared_dimensions(worksheet)
                 sheet_lines: list[str] = []
                 for row_number, row in enumerate(worksheet.iter_rows(), start=1):
                     normalized_values = tuple(_normalize_cell_value(cell.value) for cell in row)
@@ -161,6 +163,12 @@ def _load_workbook(content: bytes) -> Workbook:
         )
     except (BadZipFile, InvalidFileException, KeyError, OSError, TypeError, ValueError) as error:
         raise ExpectedParseError("XLSX_PARSE_FAILED") from error
+
+
+def _ignore_declared_dimensions(worksheet: object) -> None:
+    if not isinstance(worksheet, ReadOnlyWorksheet):
+        raise RuntimeError("XLSX parser requires a read-only worksheet")
+    worksheet.reset_dimensions()
 
 
 def _normalize_cell_value(value: object) -> str:

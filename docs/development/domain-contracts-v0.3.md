@@ -1,15 +1,23 @@
-# DeepAha Domain Contract v0.3 Candidate
+# DeepAha Domain Contract v0.3
 
-Status: `PROPOSED_IMPLEMENTATION_BLOCKED_BY_PHASE2_GATE`
+Implementation Status: `IMPLEMENTED`
 
-This document defines the Phase 3 candidate contract for Opportunity resolution,
-immutable versions, change events and audited identity actions. It is implemented on the
-stacked branch `codex/phase-3-opportunity-resolution`; it is not a stable or released
-contract while the Phase 2 Gate remains open.
+Engineering Gate: `CLOSED`
+
+Release Qualification: `NOT_STARTED`
+
+Contract Maturity: `IMPLEMENTED` (not `STABLE`)
+
+This document defines the implemented Phase 3 contract for Opportunity resolution,
+immutable versions, change events and audited identity actions. Phase 2 closing commit
+`6c8a8fb63c68cfbb0f4cf54b6032bfb49a0ef65c` is an ancestor of the Phase 3 branch and the
+integrated contract has been revalidated. This is not a stable or released contract:
+Phase 3 Release Qualification has not started.
 
 ## Compatibility boundary
 
-- v0.1 and v0.2 Python import paths and checked-in Schema bytes are unchanged.
+- v0.1 and v0.2 Python import paths and canonical checked-in Schema bytes remain owned by
+  their versions; v0.3 does not overwrite either directory.
 - v0.3 re-exports the v0.2-compatible schema set and adds six Phase 3 objects.
 - Exporting v0.3 writes only `contracts/schemas/v0.3.0/`.
 - The exporter default remains v0.1; callers must explicitly request `--version 0.3.0`.
@@ -253,8 +261,7 @@ conflict becomes `NEEDS_REVIEW`. Title similarity alone never hard-merges Opport
 
 ## Gate and promotion rule
 
-The v0.3 contract remains `PROPOSED` and Phase 3 remains blocked while Phase 2 is open.
-Implementation, local tests and remote CI can establish only
-`IMPLEMENTED_PENDING_PHASE2_GATE`. After Phase 2 closes, this branch must update to the
-exact closing commit and rerun Schema byte compatibility, migrations, resolver fixtures,
-replay, full local verification and remote CI before any Phase 3 promotion decision.
+The v0.3 implementation and Engineering Gate are complete on the integrated Phase 2
+closing baseline. That engineering conclusion does not qualify real-world resolution or
+change-detection performance. Phase 3 Release Qualification remains `NOT_STARTED`, so
+v0.3 remains `IMPLEMENTED`; it cannot become `STABLE`, merge or release on this evidence.

@@ -72,7 +72,11 @@ class ParseOutcome(StrEnum):
 class SourceEndpointSchema(ContractModel):
     endpoint_id: EntityId
     source_id: EntityId
-    url: HttpUrl
+    url: HttpUrl = Field(
+        json_schema_extra={
+            "not": {"pattern": r"^[A-Za-z][A-Za-z0-9+.-]*://[^/?#]*@"},
+        }
+    )
     allowed_hosts: tuple[NonEmptyString, ...] = Field(min_length=1)
     expected_media_types: tuple[NonEmptyString, ...] = Field(min_length=1)
     browser_policy: BrowserPolicy
@@ -123,7 +127,10 @@ class SourceEndpointSchema(ContractModel):
 
     @model_validator(mode="after")
     def require_policy_consistency(self) -> Self:
-        host = (urlsplit(str(self.url)).hostname or "").lower().rstrip(".")
+        parsed_url = urlsplit(str(self.url))
+        if parsed_url.username is not None or parsed_url.password is not None:
+            raise ValueError("endpoint url must not contain credentials")
+        host = (parsed_url.hostname or "").lower().rstrip(".")
         if host not in self.allowed_hosts:
             raise ValueError("url host must be present in allowed_hosts")
         if self.active and self.robots_decision not in {
