@@ -11,6 +11,7 @@
 | [领域契约 v0.1](./domain-contracts-v0.1.md) | 核心实体、枚举、证据定位和跨模块契约 | 设计数据库、API、Schema 或测试夹具时 |
 | [领域契约 v0.2](./domain-contracts-v0.2.md) | Phase 2 已实现、Release Qualification 完成前不得标记 STABLE 的 Endpoint、采集观察、解析尝试和结构化定位契约 | 评审 Phase 2 实现时 |
 | [领域契约 v0.3](./domain-contracts-v0.3.md) | Phase 3 已实现、Release Qualification 完成前不得标记 STABLE 的 Opportunity/Version/Event/identity 契约 | 评审 Phase 3 实现时 |
+| [领域契约 v0.4](./domain-contracts-v0.4.md) | Phase 4 已实现、Release Qualification 完成前不得标记 STABLE 的规则、资格、MatchSnapshot 与 EvaluationRun 契约 | 评审 Phase 4 实现时 |
 | [质量与发布策略](./quality-and-release.md) | 测试层级、Golden Dataset、指标证据和发布流程 | 编写测试、评估或准备发布时 |
 | [Blueprint v1.2 基线协调](../superpowers/specs/2026-08-21-blueprint-v1.2-baseline-reconciliation-design.md) | 新旧 Blueprint 权威、D8–D12 和阶段映射 | 解释 Phase 2 及后续范围变化时 |
 | [Phase 0 设计](../superpowers/specs/2026-08-21-phase-0-engineering-foundation-design.md) | 第一个可交付子项目的设计与验收边界 | 开始创建代码仓库骨架前 |
@@ -24,6 +25,9 @@
 | [Phase 3 设计](../superpowers/specs/2026-08-22-phase-3-opportunity-resolution-versioning-and-change-design.md) | Opportunity 归并、版本、变化与 identity 审计设计 | 评审 Phase 3 候选实现时 |
 | [Phase 3 实现计划](../superpowers/plans/2026-08-22-phase-3-opportunity-resolution-versioning-and-change.md) | Task 1–7 的严格 TDD、验证与堆叠交付顺序 | 执行或复核 Phase 3 时 |
 | [Phase 3 Gate](../gates/phase-3/README.md) | Phase 3 Engineering Gate、Release Qualification 与 v0.3 成熟度证据 | 判断 Phase 3 工程或发布资格状态时 |
+| [Phase 4 设计](../superpowers/specs/2026-08-22-phase-4-rules-eligibility-and-evaluation-design.md) | 受控规则、资格保护、版本回放和合成评估边界 | 评审 Phase 4 设计时 |
+| [Phase 4 实现计划](../superpowers/plans/2026-08-22-phase-4-rules-eligibility-and-evaluation.md) | Task 1–10 的 TDD、隔离验证与堆叠交付顺序 | 执行或复核 Phase 4 时 |
+| [Phase 4 Gate](../gates/phase-4/README.md) | Phase 4 Engineering Gate、Release Qualification、合成评估边界与 v0.4 成熟度证据 | 判断 Phase 4 工程或发布资格状态时 |
 
 ## 文档状态词
 
@@ -43,6 +47,9 @@
 与变化已 `IMPLEMENTED`，自身 Engineering Gate 已 `CLOSED`；Phase 3 Release Qualification 为
 `NOT_STARTED`，领域契约 v0.3 为 `IMPLEMENTED`、不得标记 `STABLE`。Phase 3 不继承 Phase 2
 Release Qualification 的阻塞状态，但仍不得合并、发布或声称 Release Qualification 已完成。
+Phase 4 规则、资格与评估已 `IMPLEMENTED`，Engineering Gate 已 `CLOSED`；Release
+Qualification 为 `NOT_STARTED`，领域契约 v0.4 为 `IMPLEMENTED`、不得标记 `STABLE`。受控
+堆叠开发不构成合并、发布或 Release Qualification 授权。
 
 ## 维护规则
 

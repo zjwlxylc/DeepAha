@@ -168,6 +168,7 @@ Gold Dataset、真人和 live 项目按 Phase 适用，不能把全局候选清�
 | `backend-quality` | 每个提交和合并请求 | 格式、Lint、类型、单元与契约测试 |
 | `web-quality` | 每个提交和合并请求 | Lint、类型、组件测试、生产构建 |
 | `integration` | 影响迁移或服务边界时 | PostgreSQL 迁移和集成测试 |
+| `phase4-eligibility` | Phase 4 分支和相关合并请求 | v0.4 字节契约、规则/资格/评估、PostgreSQL 18/Moto 隔离集成与迁移往返 |
 | `phase2-contract-and-parser` | Phase 2 契约、采集或解析变更时 | v0.1/v0.2 契约、观察语义、固定 HTML/PDF/XLSX、locator 回放 |
 | `source-live` | 人工触发；Phase 2 Release Qualification 观察窗口 | 十个登记官方 Endpoint 的策略化 live 观察；不作为每次提交必跑作业 |
 | `golden-evaluation` | 数据管线、规则、匹配或模型变更时 | 固定数据集回归和差异报告 |
@@ -175,6 +176,11 @@ Gold Dataset、真人和 live 项目按 Phase 适用，不能把全局候选清�
 | `release-evidence` | 版本候选 | 全矩阵、构建产物、迁移与回滚证据 |
 
 CI 固定运行时大版本；依赖锁文件必须纳入版本控制。依赖升级单独提交，避免与业务变化混在一起。
+
+Phase 4 的 `golden-evaluation` 当前仅指固定 CC0 合成案例：保存整数案例数、期望/实际
+`INELIGIBLE` 数、意外案例 ID 与重放差异，不计算或命名为生产准确率。计划门槛
+`<=0.5%` 必须由另行治理的真实人工标注评估证明，不能由 12 个 Golden 案例、20 个母
+画像或 100 个合成画像换算。
 
 ## 6. 发布流程
 

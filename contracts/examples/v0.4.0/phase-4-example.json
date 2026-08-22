@@ -1,0 +1,474 @@
+{
+  "source": {
+    "source_id": "0198d239-4b00-7000-8000-000000000001",
+    "public_id": "src_0198d2394b0070008000000000000001",
+    "canonical_url": "https://example.gov/",
+    "authority_name": "Synthetic Example Authority",
+    "tier": "OFFICIAL_PRIMARY",
+    "jurisdiction": null,
+    "active": true,
+    "created_at": "2026-08-21T09:00:00Z",
+    "updated_at": "2026-08-21T09:00:00Z"
+  },
+  "source-endpoint": {
+    "endpoint_id": "0198d239-4b00-7000-8000-000000000002",
+    "source_id": "0198d239-4b00-7000-8000-000000000001",
+    "url": "https://example.gov/notices",
+    "allowed_hosts": [
+      "example.gov"
+    ],
+    "expected_media_types": [
+      "text/html"
+    ],
+    "browser_policy": "NEVER",
+    "minimum_interval_seconds": 21600,
+    "timeout_seconds": 30,
+    "max_attempts": 3,
+    "robots_url": "https://example.gov/robots.txt",
+    "robots_decision": "ALLOWED",
+    "robots_checked_at": "2026-08-21T09:00:00Z",
+    "content_use_basis": "OFFICIAL_PUBLIC_ACCESS",
+    "license_name": null,
+    "license_url": null,
+    "attribution": null,
+    "fixture_storage_allowed": false,
+    "usage_note": "Synthetic contract example only; it asserts no source or business fact.",
+    "policy_version": "2026-08-21.1",
+    "active": true,
+    "verified_at": "2026-08-21T09:00:00Z",
+    "created_at": "2026-08-21T09:00:00Z",
+    "updated_at": "2026-08-21T09:00:00Z"
+  },
+  "capture-observation": {
+    "observation_id": "0198d239-4b00-7000-8000-000000000003",
+    "collection_run_id": "0198d239-4b00-7000-8000-000000000004",
+    "attempt_number": 1,
+    "endpoint_id": "0198d239-4b00-7000-8000-000000000002",
+    "source_id": "0198d239-4b00-7000-8000-000000000001",
+    "requested_url": "https://example.gov/notices",
+    "resolved_url": "https://example.gov/notices",
+    "started_at": "2026-08-21T09:00:00Z",
+    "completed_at": "2026-08-21T09:00:01Z",
+    "outcome": "SUCCEEDED",
+    "http_status": 200,
+    "response_etag": null,
+    "response_last_modified": null,
+    "artifact_id": "0198d239-4b00-7000-8000-000000000005",
+    "error_code": null,
+    "collector_name": "synthetic_example",
+    "collector_version": "0.2.0",
+    "policy_version": "2026-08-21.1"
+  },
+  "raw-artifact": {
+    "artifact_id": "0198d239-4b00-7000-8000-000000000005",
+    "source_id": "0198d239-4b00-7000-8000-000000000001",
+    "requested_url": "https://example.gov/notices",
+    "resolved_url": "https://example.gov/notices",
+    "retrieved_at": "2026-08-21T09:00:01Z",
+    "http_status": 200,
+    "media_type": "text/html",
+    "content_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "storage_uri": "s3://deepaha-raw/raw/sha256/11/1111111111111111111111111111111111111111111111111111111111111111",
+    "byte_size": 128,
+    "collector_version": "synthetic_example/0.2.0",
+    "metadata_schema_version": "0.2.0"
+  },
+  "document": {
+    "document_id": "0198d239-4b00-7000-8000-000000000006",
+    "artifact_id": "0198d239-4b00-7000-8000-000000000005",
+    "title": "Synthetic scholarship example",
+    "published_at": null,
+    "language": "und",
+    "extracted_text_uri": "s3://deepaha-raw/derived/documents/1111111111111111111111111111111111111111111111111111111111111111/html_lxml/0.2.0/text.txt",
+    "parser_name": "html_lxml",
+    "parser_version": "0.2.0",
+    "parse_confidence": null,
+    "created_at": "2026-08-21T09:00:02Z"
+  },
+  "parse-attempt": {
+    "parse_attempt_id": "0198d239-4b00-7000-8000-000000000007",
+    "artifact_id": "0198d239-4b00-7000-8000-000000000005",
+    "parser_name": "html_lxml",
+    "parser_version": "0.2.0",
+    "started_at": "2026-08-21T09:00:01Z",
+    "completed_at": "2026-08-21T09:00:02Z",
+    "outcome": "SUCCEEDED",
+    "document_id": "0198d239-4b00-7000-8000-000000000006",
+    "error_code": null,
+    "input_media_type": "text/html"
+  },
+  "opportunity": {
+    "opportunity_id": "0198d239-4b00-7000-8000-000000000008",
+    "public_id": "opp_0198d2394b0070008000000000000008",
+    "type": "SCHOLARSHIP",
+    "canonical_title": "Synthetic scholarship opportunity; not a business fact",
+    "issuer_name": "Synthetic Example Authority",
+    "jurisdiction": null,
+    "current_version": 1,
+    "status": "OPEN",
+    "publication_status": "INTERNAL",
+    "created_at": "2026-08-21T09:00:02Z",
+    "updated_at": "2026-08-21T09:00:03Z"
+  },
+  "evidence-ref": {
+    "document_id": "0198d239-4b00-7000-8000-000000000006",
+    "artifact_id": "0198d239-4b00-7000-8000-000000000005",
+    "locator": {
+      "schema_version": "0.2.0",
+      "kind": "html_selector",
+      "selector": "main > p:nth-of-type(1)",
+      "text_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "quote_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "opportunity-version": {
+    "opportunity_id": "0198d239-4b00-7000-8000-000000000008",
+    "version": 1,
+    "effective_from": "2026-08-21T09:00:02Z",
+    "source_document_id": "0198d239-4b00-7000-8000-000000000006",
+    "source_evidence_ref_id": "0198d239-4b00-7000-8000-000000000009",
+    "snapshot": {
+      "canonical_title": "Synthetic scholarship opportunity; not a business fact",
+      "type": "SCHOLARSHIP",
+      "issuer_name": "Synthetic Example Authority",
+      "jurisdiction": null,
+      "status": "OPEN",
+      "published_at": "2026-08-21T09:00:00Z",
+      "application_window": {
+        "opens_on": "2026-08-21",
+        "closes_on": "2026-09-21",
+        "timezone": "Asia/Shanghai"
+      },
+      "application_url": "https://example.gov/apply",
+      "attachment_urls": [
+        "https://example.gov/files/notice.pdf"
+      ],
+      "locations": [
+        "Synthetic Location"
+      ]
+    },
+    "field_evidence": [
+      {
+        "field_path": "canonical_title",
+        "precedence": 600,
+        "evidence_ref_id": "0198d239-4b00-7000-8000-000000000009",
+        "effective_at": "2026-08-21T09:00:00Z"
+      }
+    ],
+    "changes": [
+      {
+        "field_path": "canonical_title",
+        "before": null,
+        "after": "Synthetic scholarship opportunity; not a business fact",
+        "evidence_ref_id": "0198d239-4b00-7000-8000-000000000009"
+      }
+    ],
+    "content_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+    "review_status": "NOT_REQUIRED",
+    "created_at": "2026-08-21T09:00:03Z"
+  },
+  "opportunity-event": {
+    "event_id": "0198d239-4b00-7000-8000-000000000010",
+    "opportunity_id": "0198d239-4b00-7000-8000-000000000008",
+    "from_version": null,
+    "to_version": 1,
+    "event_type": "CREATED",
+    "changed_fields": [
+      "canonical_title"
+    ],
+    "changes": [
+      {
+        "field_path": "canonical_title",
+        "before": null,
+        "after": "Synthetic scholarship opportunity; not a business fact",
+        "evidence_ref_id": "0198d239-4b00-7000-8000-000000000009"
+      }
+    ],
+    "source_document_id": "0198d239-4b00-7000-8000-000000000006",
+    "source_evidence_ref_id": "0198d239-4b00-7000-8000-000000000009",
+    "detected_at": "2026-08-21T09:00:03Z"
+  },
+  "document-opportunity-link": {
+    "link_id": "0198d239-4b00-7000-8000-000000000011",
+    "document_id": "0198d239-4b00-7000-8000-000000000006",
+    "opportunity_id": "0198d239-4b00-7000-8000-000000000008",
+    "role": "PRIMARY_NOTICE",
+    "resolution_key": "external:0198d239-4b00-7000-8000-000000000001:synthetic-001",
+    "resolver_version": "0.3.0",
+    "source_evidence_ref_id": "0198d239-4b00-7000-8000-000000000009",
+    "linked_at": "2026-08-21T09:00:03Z",
+    "ended_at": null,
+    "ended_by_identity_action_id": null
+  },
+  "opportunity-resolution-candidate": {
+    "candidate_id": "0198d239-4b00-7000-8000-000000000012",
+    "document_id": "0198d239-4b00-7000-8000-000000000006",
+    "candidate_opportunity_ids": [
+      "0198d239-4b00-7000-8000-000000000008"
+    ],
+    "proposed_role": "CORRECTION",
+    "proposed_snapshot": null,
+    "reason_codes": [
+      "SYNTHETIC_REVIEW_EXAMPLE"
+    ],
+    "resolver_version": "0.3.0",
+    "source_evidence_ref_id": "0198d239-4b00-7000-8000-000000000009",
+    "review_status": "PENDING",
+    "created_at": "2026-08-21T09:00:03Z"
+  },
+  "opportunity-alias": {
+    "alias_id": "0198d239-4b00-7000-8000-000000000013",
+    "opportunity_id": "0198d239-4b00-7000-8000-000000000008",
+    "alias_type": "EXTERNAL_ID",
+    "alias_value": "SYNTHETIC-001",
+    "normalized_value": "synthetic-001",
+    "source_id": "0198d239-4b00-7000-8000-000000000001",
+    "source_document_id": "0198d239-4b00-7000-8000-000000000006",
+    "source_evidence_ref_id": "0198d239-4b00-7000-8000-000000000009",
+    "created_at": "2026-08-21T09:00:03Z"
+  },
+  "opportunity-identity-action": {
+    "action_id": "0198d239-4b00-7000-8000-000000000014",
+    "action_type": "MERGE",
+    "members": [
+      {
+        "opportunity_id": "0198d239-4b00-7000-8000-000000000015",
+        "role": "SOURCE"
+      },
+      {
+        "opportunity_id": "0198d239-4b00-7000-8000-000000000008",
+        "role": "TARGET"
+      }
+    ],
+    "reversal_of_action_id": null,
+    "actor": "phase3-synthetic-example",
+    "reason": "Synthetic duplicate correction",
+    "source_document_id": "0198d239-4b00-7000-8000-000000000006",
+    "source_evidence_ref_id": "0198d239-4b00-7000-8000-000000000009",
+    "occurred_at": "2026-08-21T09:00:03Z"
+  },
+  "rule-evidence": {
+    "evidence_ref_id": "0198d239-4b00-7000-8000-000000000009",
+    "document_id": "0198d239-4b00-7000-8000-000000000006",
+    "authority": "ORIGINAL_OFFICIAL_NOTICE",
+    "precedence": 400,
+    "relation": "SUPPORTS",
+    "effective_at": "2026-08-21T09:00:00Z",
+    "assertion_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  "rule": {
+    "rule_id": "0198d239-4b00-7000-8000-000000000101",
+    "code": "education-bachelor",
+    "operator": "IN",
+    "field": "education_level",
+    "value_type": "STRING",
+    "value": [
+      "BACHELOR",
+      "DOCTORATE",
+      "MASTER"
+    ],
+    "operand_rule_ids": [],
+    "required": true,
+    "reason_template": "Synthetic education rule; not a business fact.",
+    "evidence": [
+      {
+        "evidence_ref_id": "0198d239-4b00-7000-8000-000000000009",
+        "document_id": "0198d239-4b00-7000-8000-000000000006",
+        "authority": "ORIGINAL_OFFICIAL_NOTICE",
+        "precedence": 400,
+        "relation": "SUPPORTS",
+        "effective_at": "2026-08-21T09:00:00Z",
+        "assertion_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+      }
+    ]
+  },
+  "rule-set": {
+    "rule_set_id": "0198d239-4b00-7000-8000-000000000102",
+    "version": 1,
+    "opportunity_id": "0198d239-4b00-7000-8000-000000000008",
+    "opportunity_version": 1,
+    "rules": [
+      {
+        "rule_id": "0198d239-4b00-7000-8000-000000000101",
+        "code": "education-bachelor",
+        "operator": "IN",
+        "field": "education_level",
+        "value_type": "STRING",
+        "value": [
+          "BACHELOR",
+          "DOCTORATE",
+          "MASTER"
+        ],
+        "operand_rule_ids": [],
+        "required": true,
+        "reason_template": "Synthetic education rule; not a business fact.",
+        "evidence": [
+          {
+            "evidence_ref_id": "0198d239-4b00-7000-8000-000000000009",
+            "document_id": "0198d239-4b00-7000-8000-000000000006",
+            "authority": "ORIGINAL_OFFICIAL_NOTICE",
+            "precedence": 400,
+            "relation": "SUPPORTS",
+            "effective_at": "2026-08-21T09:00:00Z",
+            "assertion_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+          }
+        ]
+      }
+    ],
+    "root_rule_ids": [
+      "0198d239-4b00-7000-8000-000000000101"
+    ],
+    "review_status": "APPROVED",
+    "rule_schema_version": "0.4.0",
+    "created_at": "2026-08-22T00:00:00Z"
+  },
+  "profile-snapshot": {
+    "profile_snapshot_id": "0198d239-4b00-7000-8000-000000000103",
+    "profile_id": "0198d239-4b00-7000-8000-000000000104",
+    "version": 1,
+    "synthetic": true,
+    "persona_family_id": null,
+    "attributes": {
+      "education_level": "BACHELOR",
+      "major_name": "Synthetic software engineering",
+      "major_code": "080902",
+      "graduation_year": 2026,
+      "student_status": "GRADUATING",
+      "birth_date": "2003-08-22",
+      "hukou_region": "Synthetic-Zhejiang",
+      "residence_region": "Synthetic-Hangzhou",
+      "target_regions": [
+        "Synthetic-Hangzhou",
+        "Synthetic-Ningbo"
+      ],
+      "certificates": [
+        "CET4"
+      ]
+    },
+    "scenario_clock": "2026-08-22",
+    "profile_schema_version": "0.4.0",
+    "created_at": "2026-08-22T00:00:00Z",
+    "created_by": "phase4-fixture-generator",
+    "reviewed_by": "phase4-fixture-governance",
+    "change_note": "Synthetic contract example only; not a real user."
+  },
+  "eligibility-result": {
+    "result_id": "0198d239-4b00-7000-8000-000000000105",
+    "status": "ELIGIBLE",
+    "rule_evaluations": [
+      {
+        "rule_id": "0198d239-4b00-7000-8000-000000000101",
+        "outcome": "SATISFIED",
+        "deterministic": true,
+        "official_evidence": true,
+        "reason_code": "RULE_SATISFIED",
+        "evidence_ref_ids": [
+          "0198d239-4b00-7000-8000-000000000009"
+        ],
+        "missing_fields": []
+      }
+    ],
+    "satisfied_rule_ids": [
+      "0198d239-4b00-7000-8000-000000000101"
+    ],
+    "conflict_rule_ids": [],
+    "unknown_rule_ids": [],
+    "missing_fields": [],
+    "review_reasons": [],
+    "evaluated_at": "2026-08-22T00:00:00Z",
+    "engine_version": "phase4-engine-v1"
+  },
+  "match-snapshot": {
+    "snapshot_id": "0198d239-4b00-7000-8000-000000000106",
+    "opportunity_id": "0198d239-4b00-7000-8000-000000000008",
+    "opportunity_version": 1,
+    "rule_set_id": "0198d239-4b00-7000-8000-000000000102",
+    "rule_set_version": 1,
+    "profile_snapshot_id": "0198d239-4b00-7000-8000-000000000103",
+    "profile_version": 1,
+    "eligibility_result": {
+      "result_id": "0198d239-4b00-7000-8000-000000000105",
+      "status": "ELIGIBLE",
+      "rule_evaluations": [
+        {
+          "rule_id": "0198d239-4b00-7000-8000-000000000101",
+          "outcome": "SATISFIED",
+          "deterministic": true,
+          "official_evidence": true,
+          "reason_code": "RULE_SATISFIED",
+          "evidence_ref_ids": [
+            "0198d239-4b00-7000-8000-000000000009"
+          ],
+          "missing_fields": []
+        }
+      ],
+      "satisfied_rule_ids": [
+        "0198d239-4b00-7000-8000-000000000101"
+      ],
+      "conflict_rule_ids": [],
+      "unknown_rule_ids": [],
+      "missing_fields": [],
+      "review_reasons": [],
+      "evaluated_at": "2026-08-22T00:00:00Z",
+      "engine_version": "phase4-engine-v1"
+    },
+    "compiler_version": "phase4-compiler-v1",
+    "engine_version": "phase4-engine-v1",
+    "major_catalog_version": "phase4-synthetic-major-catalog-v1",
+    "major_mapping_version": "phase4-synthetic-major-mapping-v1",
+    "scenario_clock": "2026-08-22",
+    "input_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+    "created_at": "2026-08-22T00:00:00Z"
+  },
+  "evaluation-run": {
+    "run_id": "0198d239-4b00-7000-8000-000000000107",
+    "dataset_id": "phase4-golden-synthetic",
+    "dataset_version": "v1",
+    "dataset_sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+    "evidence_label": "SYNTHETIC_EVALUATION_ONLY",
+    "scenario_clock": "2026-08-22T00:00:00Z",
+    "report_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+    "component": "ELIGIBILITY",
+    "component_versions": {
+      "contract": "0.4.0",
+      "compiler": "phase4-compiler-v1",
+      "engine": "phase4-engine-v1",
+      "major_catalog": "phase4-synthetic-major-catalog-v1",
+      "major_mapping": "phase4-synthetic-major-mapping-v1"
+    },
+    "synthetic": true,
+    "status": "COMPLETED",
+    "case_results": [
+      {
+        "case_id": "phase4-case-001",
+        "expected_status": "ELIGIBLE",
+        "actual_status": "ELIGIBLE",
+        "passed": true,
+        "match_snapshot_id": "0198d239-4b00-7000-8000-000000000106",
+        "input_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+        "unexpected_ineligible": false,
+        "reason_codes": [
+          "RULE_SATISFIED"
+        ]
+      }
+    ],
+    "metrics": {
+      "total_cases": 1,
+      "passed_cases": 1,
+      "expected_ineligible_count": 0,
+      "actual_ineligible_count": 0,
+      "unexpected_ineligible_count": 0,
+      "unexpected_ineligible_case_ids": [],
+      "replay_mismatch_count": 0,
+      "status_counts": {
+        "ELIGIBLE": 1,
+        "LIKELY_ELIGIBLE": 0,
+        "UNCERTAIN": 0,
+        "INELIGIBLE": 0
+      }
+    },
+    "started_at": "2026-08-22T00:00:00Z",
+    "completed_at": "2026-08-22T00:00:00Z",
+    "error_summary": null
+  }
+}

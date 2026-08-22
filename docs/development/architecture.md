@@ -42,6 +42,12 @@ flowchart LR
 
 Phase 2 先用显式 CLI 调用同一应用服务，验证观察、幂等、重试和解析语义；不以“未来会异步”为理由提前加入队列。后续允许 API、Worker、Scheduler 和 Evaluation Runner 共享同一 Python 包，但必须以独立进程入口运行。共享代码不等于共享职责。
 
+Phase 4 候选当前把 Evaluation Runner 实现为离线验证库和隔离验证脚本，不部署长期
+进程、API 或 UI。其确定性路径是 `OpportunityVersion + Approved RuleSet + versioned
+synthetic ProfileSnapshot -> EligibilityResult -> MatchSnapshot -> EvaluationRun`；每次运行
+固定编译器、引擎、专业目录/映射、场景时钟、输入哈希和 EvidenceRef。该候选受 Phase
+2/3 Gate 阻塞，不代表已发布运行拓扑。
+
 ## 3. 代码仓库布局
 
 ```text
@@ -176,6 +182,8 @@ Phase 2 不实现上述队列拓扑。采集和解析由显式命令同步编排
 ## 7. 数据与存储规则
 
 - PostgreSQL 是结构化事实、规则、用户状态、审核和评估的唯一事实源。
+- Phase 4 候选在 PostgreSQL 中追加不可变 RuleSet、ProfileSnapshot、EligibilityResult、
+  MatchSnapshot 和 EvaluationRun；旧 OpportunityVersion 和原始证据不重写。
 - 对象存储保存原始 HTML/PDF/Excel/图片和不可变快照；数据库保存哈希、大小、MIME、对象键和证据引用。
 - Redis 若在后续阶段引入，只用于缓存、队列、锁和限流；缓存丢失不能改变业务事实。Phase 2 不依赖 Redis。
 - pgvector 若在后续阶段引入，只用于去重候选、专业语义候选和检索，不用于硬资格最终裁决。Phase 2 不创建向量列或扩展。

@@ -1,0 +1,92 @@
+{
+  "$defs": {
+    "ParseOutcome": {
+      "enum": [
+        "SUCCEEDED",
+        "NEEDS_REVIEW",
+        "FAILED"
+      ],
+      "title": "ParseOutcome",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_id": {
+      "format": "uuid",
+      "title": "Artifact Id",
+      "type": "string"
+    },
+    "completed_at": {
+      "format": "date-time",
+      "title": "Completed At",
+      "type": "string"
+    },
+    "document_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Document Id"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Error Code"
+    },
+    "input_media_type": {
+      "minLength": 1,
+      "title": "Input Media Type",
+      "type": "string"
+    },
+    "outcome": {
+      "$ref": "#/$defs/ParseOutcome"
+    },
+    "parse_attempt_id": {
+      "format": "uuid",
+      "title": "Parse Attempt Id",
+      "type": "string"
+    },
+    "parser_name": {
+      "minLength": 1,
+      "title": "Parser Name",
+      "type": "string"
+    },
+    "parser_version": {
+      "minLength": 1,
+      "title": "Parser Version",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "parse_attempt_id",
+    "artifact_id",
+    "parser_name",
+    "parser_version",
+    "started_at",
+    "completed_at",
+    "outcome",
+    "document_id",
+    "error_code",
+    "input_media_type"
+  ],
+  "title": "ParseAttemptSchema",
+  "type": "object"
+}

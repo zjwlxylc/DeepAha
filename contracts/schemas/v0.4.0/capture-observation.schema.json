@@ -1,0 +1,173 @@
+{
+  "$defs": {
+    "CaptureOutcome": {
+      "enum": [
+        "SUCCEEDED",
+        "NOT_MODIFIED",
+        "FAILED"
+      ],
+      "title": "CaptureOutcome",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Artifact Id"
+    },
+    "attempt_number": {
+      "minimum": 1,
+      "title": "Attempt Number",
+      "type": "integer"
+    },
+    "collection_run_id": {
+      "format": "uuid",
+      "title": "Collection Run Id",
+      "type": "string"
+    },
+    "collector_name": {
+      "minLength": 1,
+      "title": "Collector Name",
+      "type": "string"
+    },
+    "collector_version": {
+      "minLength": 1,
+      "title": "Collector Version",
+      "type": "string"
+    },
+    "completed_at": {
+      "format": "date-time",
+      "title": "Completed At",
+      "type": "string"
+    },
+    "endpoint_id": {
+      "format": "uuid",
+      "title": "Endpoint Id",
+      "type": "string"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Error Code"
+    },
+    "http_status": {
+      "anyOf": [
+        {
+          "maximum": 599,
+          "minimum": 100,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Http Status"
+    },
+    "observation_id": {
+      "format": "uuid",
+      "title": "Observation Id",
+      "type": "string"
+    },
+    "outcome": {
+      "$ref": "#/$defs/CaptureOutcome"
+    },
+    "policy_version": {
+      "minLength": 1,
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "requested_url": {
+      "format": "uri",
+      "maxLength": 2083,
+      "minLength": 1,
+      "title": "Requested Url",
+      "type": "string"
+    },
+    "resolved_url": {
+      "anyOf": [
+        {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Resolved Url"
+    },
+    "response_etag": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Response Etag"
+    },
+    "response_last_modified": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Response Last Modified"
+    },
+    "source_id": {
+      "format": "uuid",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "observation_id",
+    "collection_run_id",
+    "attempt_number",
+    "endpoint_id",
+    "source_id",
+    "requested_url",
+    "resolved_url",
+    "started_at",
+    "completed_at",
+    "outcome",
+    "http_status",
+    "response_etag",
+    "response_last_modified",
+    "artifact_id",
+    "error_code",
+    "collector_name",
+    "collector_version",
+    "policy_version"
+  ],
+  "title": "CaptureObservationSchema",
+  "type": "object"
+}

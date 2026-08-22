@@ -1,0 +1,3468 @@
+{
+  "dataset_version": "phase4-synthetic-derived-profiles-v1",
+  "scenario_clock": "2026-08-22T00:00:00Z",
+  "synthetic_only": true,
+  "license": "CC0-1.0",
+  "profiles": [
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "62b28aac-f155-78f1-9591-43f06d2625b5",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "1564b72f-52de-7f8e-93c4-5e5f1a646e66",
+        "profile_id": "62b28aac-f155-78f1-9591-43f06d2625b5",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "c58f6707-2e47-717a-8677-db077f9ca7d0",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1997-08-22",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 00 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "62b28aac-f155-78f1-9591-43f06d2625b5",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "09184948-6e58-71df-abdb-ba1b22700d2d",
+        "profile_id": "62b28aac-f155-78f1-9591-43f06d2625b5",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "c58f6707-2e47-717a-8677-db077f9ca7d0",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080903",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-01-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 00 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "62b28aac-f155-78f1-9591-43f06d2625b5",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "852d423c-d33f-73c8-bbb0-40ff1c639a6b",
+        "profile_id": "62b28aac-f155-78f1-9591-43f06d2625b5",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "c58f6707-2e47-717a-8677-db077f9ca7d0",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-01-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 00 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "62b28aac-f155-78f1-9591-43f06d2625b5",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "a1c0cbfe-ef91-7914-836f-c0b57ed5441c",
+        "profile_id": "62b28aac-f155-78f1-9591-43f06d2625b5",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "c58f6707-2e47-717a-8677-db077f9ca7d0",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-01-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 00 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "62b28aac-f155-78f1-9591-43f06d2625b5",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "8fa5a890-1b65-7ab4-bbb1-5fad6677cc5e",
+        "profile_id": "62b28aac-f155-78f1-9591-43f06d2625b5",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "c58f6707-2e47-717a-8677-db077f9ca7d0",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-01-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 00 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "bb68e28c-ba03-768c-ab4b-6fb7537a756b",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "baf6d96b-06ca-7db6-b0f8-e929d66aa6bc",
+        "profile_id": "bb68e28c-ba03-768c-ab4b-6fb7537a756b",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "8d58c66f-31db-77ce-a52f-3c77258fb7ef",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1998-08-22",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 01 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "bb68e28c-ba03-768c-ab4b-6fb7537a756b",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "f8c3dc1c-292d-7c97-912a-90abc74025d4",
+        "profile_id": "bb68e28c-ba03-768c-ab4b-6fb7537a756b",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "8d58c66f-31db-77ce-a52f-3c77258fb7ef",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 2",
+          "major_code": null,
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1999-02-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 01 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "bb68e28c-ba03-768c-ab4b-6fb7537a756b",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "51ce7cd4-0a00-7640-8428-38cd48e768a6",
+        "profile_id": "bb68e28c-ba03-768c-ab4b-6fb7537a756b",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "8d58c66f-31db-77ce-a52f-3c77258fb7ef",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1999-02-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 01 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "bb68e28c-ba03-768c-ab4b-6fb7537a756b",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "7172be81-8bd9-70f5-b6fa-ff5c283c0fd3",
+        "profile_id": "bb68e28c-ba03-768c-ab4b-6fb7537a756b",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "8d58c66f-31db-77ce-a52f-3c77258fb7ef",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1999-02-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 01 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "bb68e28c-ba03-768c-ab4b-6fb7537a756b",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "e49baf0d-bcc3-7cc0-b5eb-5e0ea0d919b9",
+        "profile_id": "bb68e28c-ba03-768c-ab4b-6fb7537a756b",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "8d58c66f-31db-77ce-a52f-3c77258fb7ef",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1999-02-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 01 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "912e367f-269b-7680-af83-6d43ec806752",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "b44094ee-cae1-766f-b38b-e01315438f4c",
+        "profile_id": "912e367f-269b-7680-af83-6d43ec806752",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "c449e724-b346-75bc-bd6c-f8048cab4792",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "1999-08-22",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 02 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "912e367f-269b-7680-af83-6d43ec806752",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "19c4dc6a-4ba8-702e-8a33-767b8f14a8ab",
+        "profile_id": "912e367f-269b-7680-af83-6d43ec806752",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "c449e724-b346-75bc-bd6c-f8048cab4792",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "080903",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2000-03-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 02 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "912e367f-269b-7680-af83-6d43ec806752",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "2769a91a-8dab-7177-bcd9-913635e01f36",
+        "profile_id": "912e367f-269b-7680-af83-6d43ec806752",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "c449e724-b346-75bc-bd6c-f8048cab4792",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2000-03-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 02 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "912e367f-269b-7680-af83-6d43ec806752",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "df1eccc9-e009-761f-80b6-19ceedc5163c",
+        "profile_id": "912e367f-269b-7680-af83-6d43ec806752",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "c449e724-b346-75bc-bd6c-f8048cab4792",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2000-03-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 02 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "912e367f-269b-7680-af83-6d43ec806752",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "43262ac7-bc1b-785f-9ce1-e22da457f93b",
+        "profile_id": "912e367f-269b-7680-af83-6d43ec806752",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "c449e724-b346-75bc-bd6c-f8048cab4792",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2000-03-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 02 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "9c29098d-4b6f-75b0-821d-4232fe4be42d",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "3f3b8c55-ef13-7909-9dd9-a49e88c58707",
+        "profile_id": "9c29098d-4b6f-75b0-821d-4232fe4be42d",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "7dddb1ab-4481-72eb-b1c1-17474263a388",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2000-08-22",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 03 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "9c29098d-4b6f-75b0-821d-4232fe4be42d",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "801d351f-002b-702a-bac5-28913586de89",
+        "profile_id": "9c29098d-4b6f-75b0-821d-4232fe4be42d",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "7dddb1ab-4481-72eb-b1c1-17474263a388",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 4",
+          "major_code": "080903",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2001-04-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 03 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "9c29098d-4b6f-75b0-821d-4232fe4be42d",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "2c0d430d-212d-7bfc-8da4-94b39bea8e32",
+        "profile_id": "9c29098d-4b6f-75b0-821d-4232fe4be42d",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "7dddb1ab-4481-72eb-b1c1-17474263a388",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2001-04-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 03 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "9c29098d-4b6f-75b0-821d-4232fe4be42d",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "f61dfd9f-fd24-79a4-85f9-82de7edb07cc",
+        "profile_id": "9c29098d-4b6f-75b0-821d-4232fe4be42d",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "7dddb1ab-4481-72eb-b1c1-17474263a388",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2001-04-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 03 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "9c29098d-4b6f-75b0-821d-4232fe4be42d",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "d70ba2d6-b52c-7ad9-9c72-767047c633ff",
+        "profile_id": "9c29098d-4b6f-75b0-821d-4232fe4be42d",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "7dddb1ab-4481-72eb-b1c1-17474263a388",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2001-04-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 03 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "63c8a804-23cb-711a-ad3c-4ec58500e8ea",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "ad2a8260-6b3b-7600-8ddb-ef267f640894",
+        "profile_id": "63c8a804-23cb-711a-ad3c-4ec58500e8ea",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "a12e22c6-61ac-7666-ae01-8c84d9f706c5",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2001-08-22",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 04 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "63c8a804-23cb-711a-ad3c-4ec58500e8ea",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "83470011-0203-7847-b343-73f6e3622eba",
+        "profile_id": "63c8a804-23cb-711a-ad3c-4ec58500e8ea",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "a12e22c6-61ac-7666-ae01-8c84d9f706c5",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080903",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2002-05-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 04 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "63c8a804-23cb-711a-ad3c-4ec58500e8ea",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "ab5b5c42-db9c-736f-a965-363f0d003f11",
+        "profile_id": "63c8a804-23cb-711a-ad3c-4ec58500e8ea",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "a12e22c6-61ac-7666-ae01-8c84d9f706c5",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2002-05-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 04 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "63c8a804-23cb-711a-ad3c-4ec58500e8ea",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "f03dc8af-4c3b-7d10-976d-0b6b624ac13a",
+        "profile_id": "63c8a804-23cb-711a-ad3c-4ec58500e8ea",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "a12e22c6-61ac-7666-ae01-8c84d9f706c5",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2002-05-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 04 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "63c8a804-23cb-711a-ad3c-4ec58500e8ea",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "295ac05f-e0c5-729a-a1b6-e1b47ca00ad1",
+        "profile_id": "63c8a804-23cb-711a-ad3c-4ec58500e8ea",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "a12e22c6-61ac-7666-ae01-8c84d9f706c5",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2002-05-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 04 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "68953e34-a7fe-728c-a381-91b6dd2a81f2",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "228e0a85-a6b7-7406-bdf4-6c6afa9680ed",
+        "profile_id": "68953e34-a7fe-728c-a381-91b6dd2a81f2",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "1260ed6a-376f-7506-abde-812e34f781ac",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "1997-08-22",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 05 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "68953e34-a7fe-728c-a381-91b6dd2a81f2",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "4eed25d7-18c3-7e87-a3a6-9828990d81e6",
+        "profile_id": "68953e34-a7fe-728c-a381-91b6dd2a81f2",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "1260ed6a-376f-7506-abde-812e34f781ac",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080903",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "1998-06-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 05 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "68953e34-a7fe-728c-a381-91b6dd2a81f2",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "dfd0eb87-b951-778e-ae9a-24808a5113b9",
+        "profile_id": "68953e34-a7fe-728c-a381-91b6dd2a81f2",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "1260ed6a-376f-7506-abde-812e34f781ac",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "1998-06-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 05 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "68953e34-a7fe-728c-a381-91b6dd2a81f2",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "b8e3027b-f38a-755d-8062-2a7302956abb",
+        "profile_id": "68953e34-a7fe-728c-a381-91b6dd2a81f2",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "1260ed6a-376f-7506-abde-812e34f781ac",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "1998-06-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 05 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "68953e34-a7fe-728c-a381-91b6dd2a81f2",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "96913db5-9bcc-708e-853d-b2a0ef72cd43",
+        "profile_id": "68953e34-a7fe-728c-a381-91b6dd2a81f2",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "1260ed6a-376f-7506-abde-812e34f781ac",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "1998-06-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 05 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "7543ca90-0943-75f3-a9ce-00a2dc547ced",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "773fd48b-78e4-7f1c-b043-1aaef5724395",
+        "profile_id": "7543ca90-0943-75f3-a9ce-00a2dc547ced",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "6f03e332-7255-7bd7-9bd8-ba0a8e80582f",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-08-22",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 06 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "7543ca90-0943-75f3-a9ce-00a2dc547ced",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "4c804f3a-6a13-7fa4-bd43-804df44ce089",
+        "profile_id": "7543ca90-0943-75f3-a9ce-00a2dc547ced",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "6f03e332-7255-7bd7-9bd8-ba0a8e80582f",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 3",
+          "major_code": "080903",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1999-07-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 06 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "7543ca90-0943-75f3-a9ce-00a2dc547ced",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "b09eb7e0-c868-7740-afdf-7175a2d88db1",
+        "profile_id": "7543ca90-0943-75f3-a9ce-00a2dc547ced",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "6f03e332-7255-7bd7-9bd8-ba0a8e80582f",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1999-07-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 06 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "7543ca90-0943-75f3-a9ce-00a2dc547ced",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "dbcd1c69-7e5c-72a4-b592-f21e316aa3e0",
+        "profile_id": "7543ca90-0943-75f3-a9ce-00a2dc547ced",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "6f03e332-7255-7bd7-9bd8-ba0a8e80582f",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1999-07-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 06 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "7543ca90-0943-75f3-a9ce-00a2dc547ced",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "1c52e341-17e8-77b8-8c55-9b1885417f65",
+        "profile_id": "7543ca90-0943-75f3-a9ce-00a2dc547ced",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "6f03e332-7255-7bd7-9bd8-ba0a8e80582f",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1999-07-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 06 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "81a1dd2a-bcaf-7f65-aefe-9243efa294ea",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "ef418a02-52dc-78fb-afb3-2bf4d1c50923",
+        "profile_id": "81a1dd2a-bcaf-7f65-aefe-9243efa294ea",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "03d63726-714d-718a-99b5-e68a4daf5003",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1999-08-22",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 07 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "81a1dd2a-bcaf-7f65-aefe-9243efa294ea",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "50d3c3e3-e9cb-768c-91ff-053b541e6aa6",
+        "profile_id": "81a1dd2a-bcaf-7f65-aefe-9243efa294ea",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "03d63726-714d-718a-99b5-e68a4daf5003",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 4",
+          "major_code": "080903",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2000-08-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 07 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "81a1dd2a-bcaf-7f65-aefe-9243efa294ea",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "cae259bb-b4c7-77fd-b2ae-52dbb77ff8ce",
+        "profile_id": "81a1dd2a-bcaf-7f65-aefe-9243efa294ea",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "03d63726-714d-718a-99b5-e68a4daf5003",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2000-08-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 07 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "81a1dd2a-bcaf-7f65-aefe-9243efa294ea",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "5a14777f-98ae-7e40-ac57-1927e30f1771",
+        "profile_id": "81a1dd2a-bcaf-7f65-aefe-9243efa294ea",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "03d63726-714d-718a-99b5-e68a4daf5003",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2000-08-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 07 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "81a1dd2a-bcaf-7f65-aefe-9243efa294ea",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "3329306c-1fa7-71dc-a923-c0738bc4a461",
+        "profile_id": "81a1dd2a-bcaf-7f65-aefe-9243efa294ea",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "03d63726-714d-718a-99b5-e68a4daf5003",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2000-08-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 07 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "304e8e7f-1581-7805-9881-3c1ce9f79a75",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "2b89c221-52ef-74a1-b8d0-d763faf06b11",
+        "profile_id": "304e8e7f-1581-7805-9881-3c1ce9f79a75",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "275d3ed4-9f16-7bde-a111-578c7a6aca50",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2000-08-22",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 08 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "304e8e7f-1581-7805-9881-3c1ce9f79a75",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "ebc3d98e-e407-7f78-84ab-94a1c5cb351f",
+        "profile_id": "304e8e7f-1581-7805-9881-3c1ce9f79a75",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "275d3ed4-9f16-7bde-a111-578c7a6aca50",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080903",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2001-09-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 08 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "304e8e7f-1581-7805-9881-3c1ce9f79a75",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "86dd272e-cd97-7c87-b58f-2b795a870d47",
+        "profile_id": "304e8e7f-1581-7805-9881-3c1ce9f79a75",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "275d3ed4-9f16-7bde-a111-578c7a6aca50",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2001-09-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 08 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "304e8e7f-1581-7805-9881-3c1ce9f79a75",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "d7cf8ec6-1911-7156-a019-c88c9dba665b",
+        "profile_id": "304e8e7f-1581-7805-9881-3c1ce9f79a75",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "275d3ed4-9f16-7bde-a111-578c7a6aca50",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2001-09-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 08 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "304e8e7f-1581-7805-9881-3c1ce9f79a75",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "d747019e-721d-7769-bf27-ab29623b830f",
+        "profile_id": "304e8e7f-1581-7805-9881-3c1ce9f79a75",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "275d3ed4-9f16-7bde-a111-578c7a6aca50",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2001-09-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 08 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "7016d95c-72c0-7ab8-a330-760f54e3fef9",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "924d9316-147b-7e9d-b5fb-cfd07f2ac34f",
+        "profile_id": "7016d95c-72c0-7ab8-a330-760f54e3fef9",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "d7d8428d-9bd2-716a-bc68-9634bab0e51e",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2001-08-22",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 09 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "7016d95c-72c0-7ab8-a330-760f54e3fef9",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "812df7e0-1dc4-744d-89ee-2c958efb3196",
+        "profile_id": "7016d95c-72c0-7ab8-a330-760f54e3fef9",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "d7d8428d-9bd2-716a-bc68-9634bab0e51e",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080903",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2002-10-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 09 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "7016d95c-72c0-7ab8-a330-760f54e3fef9",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "21da5fc8-1fe8-71cc-9c77-0090df12e443",
+        "profile_id": "7016d95c-72c0-7ab8-a330-760f54e3fef9",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "d7d8428d-9bd2-716a-bc68-9634bab0e51e",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2002-10-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 09 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "7016d95c-72c0-7ab8-a330-760f54e3fef9",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "26bf4e68-07e1-73ce-b278-01ac2e69a1ef",
+        "profile_id": "7016d95c-72c0-7ab8-a330-760f54e3fef9",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "d7d8428d-9bd2-716a-bc68-9634bab0e51e",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2002-10-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 09 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "7016d95c-72c0-7ab8-a330-760f54e3fef9",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "aa3c5877-59b5-7627-917e-17daafb8af2b",
+        "profile_id": "7016d95c-72c0-7ab8-a330-760f54e3fef9",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "d7d8428d-9bd2-716a-bc68-9634bab0e51e",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2002-10-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 09 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "fedfe88a-66a4-7070-99cc-761b7c5411a3",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "00714bb4-9efe-70be-928c-8f212e686bfe",
+        "profile_id": "fedfe88a-66a4-7070-99cc-761b7c5411a3",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "7ec8ab0a-887f-741f-b545-9a9d97874c3c",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1997-08-22",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 10 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "fedfe88a-66a4-7070-99cc-761b7c5411a3",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "191e2744-016b-7442-ad87-3998a8600bb6",
+        "profile_id": "fedfe88a-66a4-7070-99cc-761b7c5411a3",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "7ec8ab0a-887f-741f-b545-9a9d97874c3c",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 3",
+          "major_code": "080903",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1998-11-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 10 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "fedfe88a-66a4-7070-99cc-761b7c5411a3",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "a83fb1ee-6b09-7341-ac6a-9330e7e0afc9",
+        "profile_id": "fedfe88a-66a4-7070-99cc-761b7c5411a3",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "7ec8ab0a-887f-741f-b545-9a9d97874c3c",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1998-11-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 10 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "fedfe88a-66a4-7070-99cc-761b7c5411a3",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "048b95ca-00d7-7713-bd45-c7f2d605eec7",
+        "profile_id": "fedfe88a-66a4-7070-99cc-761b7c5411a3",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "7ec8ab0a-887f-741f-b545-9a9d97874c3c",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1998-11-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 10 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "fedfe88a-66a4-7070-99cc-761b7c5411a3",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "746cf1e6-51ed-7d73-9bcc-ca203df88de0",
+        "profile_id": "fedfe88a-66a4-7070-99cc-761b7c5411a3",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "7ec8ab0a-887f-741f-b545-9a9d97874c3c",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1998-11-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 10 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "c2cdd068-fcd1-7166-a02e-71f975e89409",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "6fc7779a-2137-7baf-be9b-77ea9c16334e",
+        "profile_id": "c2cdd068-fcd1-7166-a02e-71f975e89409",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "203eb259-87f1-7639-9788-b824c58d1d16",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2027-01-01",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 11 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "c2cdd068-fcd1-7166-a02e-71f975e89409",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "02890294-846b-7b5e-a1e3-d1c5a1e45794",
+        "profile_id": "c2cdd068-fcd1-7166-a02e-71f975e89409",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "203eb259-87f1-7639-9788-b824c58d1d16",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 4",
+          "major_code": "080903",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "1999-12-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 11 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "c2cdd068-fcd1-7166-a02e-71f975e89409",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "36f0adf7-c271-7a31-b77a-21cb134dab3a",
+        "profile_id": "c2cdd068-fcd1-7166-a02e-71f975e89409",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "203eb259-87f1-7639-9788-b824c58d1d16",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "1999-12-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 11 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "c2cdd068-fcd1-7166-a02e-71f975e89409",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "5cc2ffbe-b9c4-7ad3-af20-2a4ca16f5b28",
+        "profile_id": "c2cdd068-fcd1-7166-a02e-71f975e89409",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "203eb259-87f1-7639-9788-b824c58d1d16",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "1999-12-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 11 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "c2cdd068-fcd1-7166-a02e-71f975e89409",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "58af33db-eed2-7edb-b40a-4b4bef2ecc56",
+        "profile_id": "c2cdd068-fcd1-7166-a02e-71f975e89409",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "203eb259-87f1-7639-9788-b824c58d1d16",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "1999-12-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 11 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "43da6bc5-0a77-77a1-b1dc-31b16a5f82c9",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "7c7fe413-0770-7753-bbb7-1f661b3cc6e5",
+        "profile_id": "43da6bc5-0a77-77a1-b1dc-31b16a5f82c9",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "57a3e113-63d7-7396-a45b-00118a05523c",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1999-08-22",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 12 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "43da6bc5-0a77-77a1-b1dc-31b16a5f82c9",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "0b54cc49-8cde-781c-b96e-27dfbef0b7c5",
+        "profile_id": "43da6bc5-0a77-77a1-b1dc-31b16a5f82c9",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "57a3e113-63d7-7396-a45b-00118a05523c",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080903",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2000-01-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 12 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "43da6bc5-0a77-77a1-b1dc-31b16a5f82c9",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "ecd99670-f6a6-755c-9249-053efede2b1f",
+        "profile_id": "43da6bc5-0a77-77a1-b1dc-31b16a5f82c9",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "57a3e113-63d7-7396-a45b-00118a05523c",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2000-01-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 12 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "43da6bc5-0a77-77a1-b1dc-31b16a5f82c9",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "ee98554f-1483-7ec4-a474-5593be480b71",
+        "profile_id": "43da6bc5-0a77-77a1-b1dc-31b16a5f82c9",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "57a3e113-63d7-7396-a45b-00118a05523c",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2000-01-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 12 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "43da6bc5-0a77-77a1-b1dc-31b16a5f82c9",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "858abedf-e3df-730a-b0ee-5b4099b7c03f",
+        "profile_id": "43da6bc5-0a77-77a1-b1dc-31b16a5f82c9",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "57a3e113-63d7-7396-a45b-00118a05523c",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2000-01-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 12 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "6a7cd4ea-4324-7abe-9d82-a822ed2d21b5",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "5c30ba9e-6a95-7244-a389-71c90763c50f",
+        "profile_id": "6a7cd4ea-4324-7abe-9d82-a822ed2d21b5",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "cf663d2c-5390-7ca2-a8e2-f756479219dc",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2000-08-22",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 13 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "6a7cd4ea-4324-7abe-9d82-a822ed2d21b5",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "3186aad2-5341-752c-a9a4-9e739911c205",
+        "profile_id": "6a7cd4ea-4324-7abe-9d82-a822ed2d21b5",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "cf663d2c-5390-7ca2-a8e2-f756479219dc",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080903",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2001-02-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 13 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "6a7cd4ea-4324-7abe-9d82-a822ed2d21b5",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "ca892a3d-58c8-7f69-b3cb-bcdce1ed37ce",
+        "profile_id": "6a7cd4ea-4324-7abe-9d82-a822ed2d21b5",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "cf663d2c-5390-7ca2-a8e2-f756479219dc",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2001-02-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 13 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "6a7cd4ea-4324-7abe-9d82-a822ed2d21b5",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "279fcdb5-d30a-79a3-97a3-38e97f20f650",
+        "profile_id": "6a7cd4ea-4324-7abe-9d82-a822ed2d21b5",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "cf663d2c-5390-7ca2-a8e2-f756479219dc",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2001-02-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 13 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "6a7cd4ea-4324-7abe-9d82-a822ed2d21b5",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "f7a79a13-79aa-7730-88c0-fd00c9b47dc5",
+        "profile_id": "6a7cd4ea-4324-7abe-9d82-a822ed2d21b5",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "cf663d2c-5390-7ca2-a8e2-f756479219dc",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2001-02-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 13 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b55c44f9-5e55-7f4a-bd08-1d0c08b42574",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "33cd0e4b-9e1e-77c0-89ed-e6a1bf2fee55",
+        "profile_id": "b55c44f9-5e55-7f4a-bd08-1d0c08b42574",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "be4b7c66-be41-7190-9eac-cd93fbe36611",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2001-08-22",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 14 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b55c44f9-5e55-7f4a-bd08-1d0c08b42574",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "6160ad3a-8f3b-71ce-9f4b-f3ea6d70a186",
+        "profile_id": "b55c44f9-5e55-7f4a-bd08-1d0c08b42574",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "be4b7c66-be41-7190-9eac-cd93fbe36611",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "080903",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2002-03-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 14 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b55c44f9-5e55-7f4a-bd08-1d0c08b42574",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "e906933b-867e-798d-ba85-5f730b00af37",
+        "profile_id": "b55c44f9-5e55-7f4a-bd08-1d0c08b42574",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "be4b7c66-be41-7190-9eac-cd93fbe36611",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2002-03-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 14 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b55c44f9-5e55-7f4a-bd08-1d0c08b42574",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "dc06ba69-5dc5-7cb8-a2c3-7e9aefc4f125",
+        "profile_id": "b55c44f9-5e55-7f4a-bd08-1d0c08b42574",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "be4b7c66-be41-7190-9eac-cd93fbe36611",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2002-03-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 14 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b55c44f9-5e55-7f4a-bd08-1d0c08b42574",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "39611d0f-8407-7917-8137-9fb3f35daafb",
+        "profile_id": "b55c44f9-5e55-7f4a-bd08-1d0c08b42574",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "be4b7c66-be41-7190-9eac-cd93fbe36611",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2002-03-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 14 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "01d09b2c-03a7-7262-8909-8e3459372d32",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "c770bf37-5849-7fdc-a26b-c1b05bb064ba",
+        "profile_id": "01d09b2c-03a7-7262-8909-8e3459372d32",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "d8c7a447-3e01-720e-8d55-2095d1ac56a4",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1997-08-22",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 15 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "01d09b2c-03a7-7262-8909-8e3459372d32",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "a933147d-70e1-7958-acaa-8a6cbf46c64a",
+        "profile_id": "01d09b2c-03a7-7262-8909-8e3459372d32",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "d8c7a447-3e01-720e-8d55-2095d1ac56a4",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 4",
+          "major_code": "080903",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-04-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 15 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "01d09b2c-03a7-7262-8909-8e3459372d32",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "43d30514-f5b7-7535-b0a1-09afa65a8922",
+        "profile_id": "01d09b2c-03a7-7262-8909-8e3459372d32",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "d8c7a447-3e01-720e-8d55-2095d1ac56a4",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-04-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 15 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "01d09b2c-03a7-7262-8909-8e3459372d32",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "25d6e9bd-2c13-7a09-a9d2-c5c629fa406a",
+        "profile_id": "01d09b2c-03a7-7262-8909-8e3459372d32",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "d8c7a447-3e01-720e-8d55-2095d1ac56a4",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-04-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 15 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "01d09b2c-03a7-7262-8909-8e3459372d32",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "a981962b-545c-74e5-a47e-26c264873674",
+        "profile_id": "01d09b2c-03a7-7262-8909-8e3459372d32",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "d8c7a447-3e01-720e-8d55-2095d1ac56a4",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-04-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 15 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "4b41d9b1-e943-7a14-be79-2a7f4f3bce61",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "43baba1f-fe1d-7f9f-8219-2cfe7545dca0",
+        "profile_id": "4b41d9b1-e943-7a14-be79-2a7f4f3bce61",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "5d954b99-6d3b-7629-add6-0ff261fa47d2",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1998-08-22",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 16 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "4b41d9b1-e943-7a14-be79-2a7f4f3bce61",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "583adcb3-e619-7b89-93b1-86ddf50bca2f",
+        "profile_id": "4b41d9b1-e943-7a14-be79-2a7f4f3bce61",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "5d954b99-6d3b-7629-add6-0ff261fa47d2",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080903",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1999-05-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 16 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "4b41d9b1-e943-7a14-be79-2a7f4f3bce61",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "40c66f4d-38cf-7e14-bec7-c6dfbb00efe5",
+        "profile_id": "4b41d9b1-e943-7a14-be79-2a7f4f3bce61",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "5d954b99-6d3b-7629-add6-0ff261fa47d2",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1999-05-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 16 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "4b41d9b1-e943-7a14-be79-2a7f4f3bce61",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "86c088da-3cf8-74e3-9c2d-739fa5a30836",
+        "profile_id": "4b41d9b1-e943-7a14-be79-2a7f4f3bce61",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "5d954b99-6d3b-7629-add6-0ff261fa47d2",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1999-05-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 16 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "4b41d9b1-e943-7a14-be79-2a7f4f3bce61",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "f1031651-a805-7cb0-81fc-cc07fda99ddc",
+        "profile_id": "4b41d9b1-e943-7a14-be79-2a7f4f3bce61",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "5d954b99-6d3b-7629-add6-0ff261fa47d2",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "1999-05-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 16 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b6002405-8973-77f8-bc61-bd49dd98be3a",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "364ad3b0-f9f2-7f32-a423-9d13d214a713",
+        "profile_id": "b6002405-8973-77f8-bc61-bd49dd98be3a",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "0d5725ca-4c4a-7b3b-ac06-f9fea9b0d2c7",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "1999-08-22",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 17 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b6002405-8973-77f8-bc61-bd49dd98be3a",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "e5093399-c266-70c3-8d92-c0d14b355ef3",
+        "profile_id": "b6002405-8973-77f8-bc61-bd49dd98be3a",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "0d5725ca-4c4a-7b3b-ac06-f9fea9b0d2c7",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080903",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2000-06-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 17 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b6002405-8973-77f8-bc61-bd49dd98be3a",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "b5a5ad26-1dc3-7690-b3d3-89719de56734",
+        "profile_id": "b6002405-8973-77f8-bc61-bd49dd98be3a",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "0d5725ca-4c4a-7b3b-ac06-f9fea9b0d2c7",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2000-06-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 17 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b6002405-8973-77f8-bc61-bd49dd98be3a",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "ff564ac0-6146-72c4-946c-dc9e1ac8ec65",
+        "profile_id": "b6002405-8973-77f8-bc61-bd49dd98be3a",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "0d5725ca-4c4a-7b3b-ac06-f9fea9b0d2c7",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2000-06-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": [
+            "SYN-CERT-2"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 17 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b6002405-8973-77f8-bc61-bd49dd98be3a",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "990f01d4-a70e-71f9-9109-aa7c1fe9b36c",
+        "profile_id": "b6002405-8973-77f8-bc61-bd49dd98be3a",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "0d5725ca-4c4a-7b3b-ac06-f9fea9b0d2c7",
+        "attributes": {
+          "education_level": "DOCTORATE",
+          "major_name": "Synthetic major family 2",
+          "major_code": "080902",
+          "graduation_year": 2028,
+          "student_status": "EMPLOYED",
+          "birth_date": "2000-06-15",
+          "hukou_region": "SYN-CN-C",
+          "residence_region": "SYN-ZJ-A",
+          "target_regions": [
+            "SYN-CN-C",
+            "SYN-NATIONAL"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 17 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "3732c6c7-2457-78dc-9d8c-041c90662a45",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "462a2d0e-8062-7f03-933c-731d18e3b1ad",
+        "profile_id": "3732c6c7-2457-78dc-9d8c-041c90662a45",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "e0a0ca01-e882-73a3-a04f-e0cba20fe341",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2000-08-22",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 18 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "3732c6c7-2457-78dc-9d8c-041c90662a45",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "966bb459-c0d3-7e5e-8866-d0164790637c",
+        "profile_id": "3732c6c7-2457-78dc-9d8c-041c90662a45",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "e0a0ca01-e882-73a3-a04f-e0cba20fe341",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 3",
+          "major_code": "080903",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2001-07-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 18 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "3732c6c7-2457-78dc-9d8c-041c90662a45",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "bba9c05c-ca93-7c0e-b9ba-3d186cc72124",
+        "profile_id": "3732c6c7-2457-78dc-9d8c-041c90662a45",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "e0a0ca01-e882-73a3-a04f-e0cba20fe341",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2001-07-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 18 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "3732c6c7-2457-78dc-9d8c-041c90662a45",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "a051e8ae-0cb9-7fec-bbb9-8626e0f99113",
+        "profile_id": "3732c6c7-2457-78dc-9d8c-041c90662a45",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "e0a0ca01-e882-73a3-a04f-e0cba20fe341",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2001-07-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-3"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 18 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "3732c6c7-2457-78dc-9d8c-041c90662a45",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "85cc5adc-4703-7e61-811f-cc084718722f",
+        "profile_id": "3732c6c7-2457-78dc-9d8c-041c90662a45",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "e0a0ca01-e882-73a3-a04f-e0cba20fe341",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 3",
+          "major_code": "030101",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "2001-07-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 18 variation 5: certificates"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b22e9128-6ae6-70b8-a16a-374c7fc4fe03",
+      "variation_axis": "birth_date",
+      "snapshot": {
+        "profile_snapshot_id": "e8e4dd91-50ef-7cfc-b55c-087ecc53bad1",
+        "profile_id": "b22e9128-6ae6-70b8-a16a-374c7fc4fe03",
+        "version": 2,
+        "synthetic": true,
+        "persona_family_id": "74a846f7-fee7-7c7e-ae6c-19ffb124d456",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2001-08-22",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 19 variation 1: birth_date"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b22e9128-6ae6-70b8-a16a-374c7fc4fe03",
+      "variation_axis": "major_code",
+      "snapshot": {
+        "profile_snapshot_id": "c6d587ea-2962-7215-80a5-9bd153a2bd61",
+        "profile_id": "b22e9128-6ae6-70b8-a16a-374c7fc4fe03",
+        "version": 3,
+        "synthetic": true,
+        "persona_family_id": "74a846f7-fee7-7c7e-ae6c-19ffb124d456",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 4",
+          "major_code": "080903",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2002-08-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 19 variation 2: major_code"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b22e9128-6ae6-70b8-a16a-374c7fc4fe03",
+      "variation_axis": "education_level",
+      "snapshot": {
+        "profile_snapshot_id": "52549719-def8-7120-bb17-c8cb1d005df7",
+        "profile_id": "b22e9128-6ae6-70b8-a16a-374c7fc4fe03",
+        "version": 4,
+        "synthetic": true,
+        "persona_family_id": "74a846f7-fee7-7c7e-ae6c-19ffb124d456",
+        "attributes": {
+          "education_level": "ASSOCIATE",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2002-08-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 19 variation 3: education_level"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b22e9128-6ae6-70b8-a16a-374c7fc4fe03",
+      "variation_axis": "hukou_region",
+      "snapshot": {
+        "profile_snapshot_id": "a1e17ff0-2f93-72e6-8e80-e6baba74a6a1",
+        "profile_id": "b22e9128-6ae6-70b8-a16a-374c7fc4fe03",
+        "version": 5,
+        "synthetic": true,
+        "persona_family_id": "74a846f7-fee7-7c7e-ae6c-19ffb124d456",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2002-08-15",
+          "hukou_region": "SYN-OUTSIDE",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": [
+            "SYN-CERT-4"
+          ]
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 19 variation 4: hukou_region"
+      }
+    },
+    {
+      "synthetic_only": true,
+      "mother_profile_id": "b22e9128-6ae6-70b8-a16a-374c7fc4fe03",
+      "variation_axis": "certificates",
+      "snapshot": {
+        "profile_snapshot_id": "b9107620-3117-7753-be12-31fffdafe107",
+        "profile_id": "b22e9128-6ae6-70b8-a16a-374c7fc4fe03",
+        "version": 6,
+        "synthetic": true,
+        "persona_family_id": "74a846f7-fee7-7c7e-ae6c-19ffb124d456",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 4",
+          "major_code": "120401",
+          "graduation_year": 2027,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": "2002-08-15",
+          "hukou_region": "SYN-ZJ-B",
+          "residence_region": "SYN-CN-C",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-B"
+          ],
+          "certificates": []
+        },
+        "scenario_clock": "2026-08-22",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-08-22T00:00:00Z",
+        "created_by": "phase4-fixture-generator",
+        "reviewed_by": "phase4-fixture-governance",
+        "change_note": "Synthetic profile 19 variation 5: certificates"
+      }
+    }
+  ]
+}
