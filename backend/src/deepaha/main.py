@@ -4,9 +4,13 @@ from time import perf_counter
 from uuid import uuid4
 
 from fastapi import FastAPI, Request, Response
+from sqlalchemy.exc import SQLAlchemyError
 from starlette.middleware.base import RequestResponseEndpoint
+from starlette.responses import JSONResponse
 
 from deepaha.api.health import router as system_router
+from deepaha.api.public_opportunities import public_catalog_unavailable_response
+from deepaha.api.public_opportunities import router as public_opportunities_router
 from deepaha.core.logging import configure_logging
 from deepaha.core.settings import get_settings
 
@@ -18,6 +22,13 @@ def create_app() -> FastAPI:
     settings = get_settings()
     configure_logging(settings.log_level)
     application = FastAPI(title="DeepAha API", version=settings.app_version)
+
+    @application.exception_handler(SQLAlchemyError)
+    async def database_dependency_failure(
+        request: Request,
+        _error: SQLAlchemyError,
+    ) -> JSONResponse:
+        return public_catalog_unavailable_response(request)
 
     @application.middleware("http")
     async def request_context(
@@ -43,6 +54,7 @@ def create_app() -> FastAPI:
         return response
 
     application.include_router(system_router)
+    application.include_router(public_opportunities_router)
     return application
 
 
