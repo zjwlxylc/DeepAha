@@ -69,7 +69,7 @@ export interface PublicOpportunityDetail extends PublicOpportunityCard {
   attachment_urls: string[];
   key_evidence: PublicEvidence[];
   history: PublicHistoryEvent[];
-  personalization_availability: "PHASE_6_NOT_IMPLEMENTED";
+  personalization_availability: "AVAILABLE_WITH_PERSONAL_SESSION";
 }
 
 export class PublicApiError extends Error {

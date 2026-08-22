@@ -2,7 +2,7 @@ import json
 from collections import defaultdict
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 from hashlib import sha256
 from uuid import UUID, uuid7
 
@@ -18,6 +18,7 @@ from deepaha.contracts.phase4 import (
     RuleSchemaV04,
     RuleSetSchemaV04,
 )
+from deepaha.contracts.phase6 import UserProfileAttributesSchemaV05
 from deepaha.eligibility.engine import (
     ENGINE_VERSION,
     EligibilityDecision,
@@ -62,7 +63,10 @@ class ReplayDifference:
 class _LoadedInput:
     opportunity_version: OpportunityVersion
     rule_set: RuleSetSchemaV04
-    profile: ProfileSnapshotSchemaV04
+    profile_version: int
+    profile_attributes: dict[str, object]
+    profile_scenario_clock: date
+    profile_payload: dict[str, object]
 
 
 class EligibilityService:
@@ -76,10 +80,28 @@ class EligibilityService:
         self._id_factory = id_factory
 
     def evaluate_and_save(self, match_input: MatchInput) -> MatchSnapshotSchemaV04:
+        return self._evaluate_and_save(match_input, require_synthetic=True)
+
+    def evaluate_personal_and_save(
+        self,
+        match_input: MatchInput,
+    ) -> MatchSnapshotSchemaV04:
+        return self._evaluate_and_save(match_input, require_synthetic=False)
+
+    def _evaluate_and_save(
+        self,
+        match_input: MatchInput,
+        *,
+        require_synthetic: bool,
+    ) -> MatchSnapshotSchemaV04:
         input_sha256: str | None = None
         with self._session_factory() as session:
             try:
-                loaded = self._load_input(session, match_input)
+                loaded = self._load_input(
+                    session,
+                    match_input,
+                    require_synthetic=require_synthetic,
+                )
                 compiled = compile_rule_set(loaded.rule_set)
                 input_sha256 = _input_sha256(match_input, loaded, compiled.compiled_sha256)
                 existing = self._existing_by_hash(session, input_sha256)
@@ -89,10 +111,10 @@ class EligibilityService:
                 decision = evaluate_eligibility(
                     EvaluationContext(
                         rule_set=compiled,
-                        profile_attributes=loaded.profile.attributes.model_dump(mode="python"),
+                        profile_attributes=loaded.profile_attributes,
                         major_catalog=match_input.major_catalog,
                         major_mapping=match_input.major_mapping,
-                        scenario_clock=loaded.profile.scenario_clock,
+                        scenario_clock=loaded.profile_scenario_clock,
                         semantic_major_candidate=match_input.semantic_major_candidate,
                     )
                 )
@@ -108,13 +130,13 @@ class EligibilityService:
                     rule_set_id=match_input.rule_set_id,
                     rule_set_version=match_input.rule_set_version,
                     profile_snapshot_id=match_input.profile_snapshot_id,
-                    profile_version=loaded.profile.version,
+                    profile_version=loaded.profile_version,
                     eligibility_result=result_contract,
                     compiler_version=COMPILER_VERSION,
                     engine_version=ENGINE_VERSION,
                     major_catalog_version=match_input.major_catalog.version,
                     major_mapping_version=match_input.major_mapping.version,
-                    scenario_clock=loaded.profile.scenario_clock,
+                    scenario_clock=loaded.profile_scenario_clock,
                     input_sha256=input_sha256,
                     created_at=match_input.created_at,
                 )
@@ -180,7 +202,13 @@ class EligibilityService:
                 differences.append(ReplayDifference(f"rule:{rule_id}", left_payload, right_payload))
         return tuple(differences)
 
-    def _load_input(self, session: Session, match_input: MatchInput) -> _LoadedInput:
+    def _load_input(
+        self,
+        session: Session,
+        match_input: MatchInput,
+        *,
+        require_synthetic: bool,
+    ) -> _LoadedInput:
         opportunity_version = session.get(
             OpportunityVersion,
             (match_input.opportunity_id, match_input.opportunity_version),
@@ -201,28 +229,55 @@ class EligibilityService:
         profile_row = session.get(ProfileSnapshotModel, match_input.profile_snapshot_id)
         if profile_row is None:
             raise MatchInputError("exact ProfileSnapshot does not exist")
-        if not profile_row.synthetic:
+        if require_synthetic and not profile_row.synthetic:
             raise MatchInputError("Phase 4 accepts synthetic ProfileSnapshot only")
         rule_set = self._rule_set_contract(session, rule_set_row)
-        profile = ProfileSnapshotSchemaV04.model_validate(
-            {
-                "profile_snapshot_id": profile_row.profile_snapshot_id,
-                "profile_id": profile_row.profile_id,
-                "version": profile_row.version,
-                "synthetic": profile_row.synthetic,
-                "persona_family_id": profile_row.persona_family_id,
-                "attributes": profile_row.attributes,
-                "scenario_clock": profile_row.scenario_clock,
-                "profile_schema_version": profile_row.profile_schema_version,
-                "created_at": profile_row.created_at,
-                "created_by": profile_row.created_by,
-                "reviewed_by": profile_row.reviewed_by,
-                "change_note": profile_row.change_note,
+        profile_values = {
+            "profile_snapshot_id": profile_row.profile_snapshot_id,
+            "profile_id": profile_row.profile_id,
+            "version": profile_row.version,
+            "synthetic": profile_row.synthetic,
+            "persona_family_id": profile_row.persona_family_id,
+            "attributes": profile_row.attributes,
+            "scenario_clock": profile_row.scenario_clock,
+            "profile_schema_version": profile_row.profile_schema_version,
+            "created_at": profile_row.created_at,
+            "created_by": profile_row.created_by,
+            "reviewed_by": profile_row.reviewed_by,
+            "change_note": profile_row.change_note,
+        }
+        if require_synthetic:
+            profile = ProfileSnapshotSchemaV04.model_validate(profile_values)
+            profile_attributes = profile.attributes.model_dump(mode="python")
+            profile_payload = profile.model_dump(mode="json")
+        else:
+            if profile_row.synthetic or profile_row.profile_schema_version != "0.5.0":
+                raise MatchInputError("Phase 6 personal matching requires a v0.5 profile")
+            attributes = UserProfileAttributesSchemaV05.model_validate(profile_row.attributes)
+            profile_attributes = attributes.model_dump(mode="python")
+            profile_payload = {
+                **profile_values,
+                "profile_snapshot_id": str(profile_row.profile_snapshot_id),
+                "profile_id": str(profile_row.profile_id),
+                "persona_family_id": (
+                    None
+                    if profile_row.persona_family_id is None
+                    else str(profile_row.persona_family_id)
+                ),
+                "attributes": attributes.model_dump(mode="json"),
+                "scenario_clock": profile_row.scenario_clock.isoformat(),
+                "created_at": profile_row.created_at.isoformat(),
             }
-        )
         if match_input.major_mapping.catalog_version != match_input.major_catalog.version:
             raise MatchInputError("major mapping catalog version does not match catalog")
-        return _LoadedInput(opportunity_version, rule_set, profile)
+        return _LoadedInput(
+            opportunity_version=opportunity_version,
+            rule_set=rule_set,
+            profile_version=profile_row.version,
+            profile_attributes=profile_attributes,
+            profile_scenario_clock=profile_row.scenario_clock,
+            profile_payload=profile_payload,
+        )
 
     @staticmethod
     def _rule_set_contract(
@@ -446,7 +501,7 @@ def _input_sha256(
         },
         "rule_set": loaded.rule_set.model_dump(mode="json"),
         "compiled_rule_set_sha256": compiled_rule_set_sha256,
-        "profile_snapshot": loaded.profile.model_dump(mode="json"),
+        "profile_snapshot": loaded.profile_payload,
         "compiler_version": COMPILER_VERSION,
         "engine_version": ENGINE_VERSION,
         "major_catalog": {
@@ -460,7 +515,7 @@ def _input_sha256(
             "approved_at": match_input.major_mapping.approved_at.isoformat(),
             "entries": mapping_entries,
         },
-        "scenario_clock": loaded.profile.scenario_clock.isoformat(),
+        "scenario_clock": loaded.profile_scenario_clock.isoformat(),
         "semantic_major_candidate": match_input.semantic_major_candidate,
     }
     encoded = json.dumps(

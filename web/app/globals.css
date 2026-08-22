@@ -47,14 +47,16 @@ a:hover {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
 button,
 a,
 input,
-select {
+select,
+textarea {
   border-radius: 0.35rem;
 }
 
@@ -99,6 +101,9 @@ select {
 }
 
 .brand {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
   color: var(--navy);
   font-size: 1.45rem;
   font-weight: 800;
@@ -383,6 +388,9 @@ h3 {
 }
 
 .opportunity-card h2 a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
   color: var(--navy);
   text-decoration-thickness: 0.08em;
 }
@@ -665,6 +673,248 @@ code {
   font-size: clamp(2rem, 5vw, 3.3rem);
 }
 
+.personal-shell {
+  max-width: 68rem;
+}
+
+.personal-heading {
+  max-width: 52rem;
+}
+
+.privacy-note,
+.risk-note,
+.risk-note[role="note"] {
+  border-left: 0.3rem solid var(--orange);
+  background: var(--orange-soft);
+  padding: 1rem;
+  color: #653005;
+}
+
+.profile-form {
+  display: grid;
+  max-width: 58rem;
+  gap: 1.25rem;
+}
+
+.profile-form fieldset {
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow);
+}
+
+.profile-form legend {
+  padding-inline: 0.4rem;
+  color: var(--navy);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.form-grid,
+.explanation-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.profile-form label,
+.action-panel label {
+  display: grid;
+  color: var(--navy);
+  font-weight: 750;
+  gap: 0.35rem;
+}
+
+.profile-form input,
+.profile-form select,
+.action-panel input,
+.action-panel select {
+  width: 100%;
+  min-height: 2.75rem;
+  border: 1px solid #7890a3;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0.55rem 0.7rem;
+}
+
+.profile-form .check-label {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.check-label input {
+  width: 1.25rem;
+  min-height: 1.25rem;
+}
+
+.field-help {
+  margin-top: 0;
+  color: var(--ink-muted);
+}
+
+.breadcrumbs a,
+.evidence-card > a,
+.evidence-links a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+}
+
+.personal-priority-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.personal-opportunity-card,
+.eligibility-panel,
+.action-panel,
+.official-summary {
+  border: 1px solid var(--border);
+  background: var(--paper);
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow);
+}
+
+.personal-opportunity-card {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.personal-opportunity-card h2,
+.personal-opportunity-card p {
+  margin: 0;
+}
+
+.personal-opportunity-card h2 a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+}
+
+.priority-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.priority-number,
+.eligibility-badge {
+  display: inline-flex;
+  min-height: 1.9rem;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.priority-number {
+  background: var(--navy);
+  color: #ffffff;
+}
+
+.eligibility-badge {
+  border: 1px solid var(--border);
+  color: var(--navy);
+}
+
+.eligibility-eligible {
+  border-color: #72aa86;
+  background: #e9f7ee;
+  color: var(--success);
+}
+
+.eligibility-likely_eligible,
+.eligibility-uncertain {
+  border-color: #d68a3c;
+  background: var(--orange-soft);
+  color: #6e3100;
+}
+
+.eligibility-ineligible {
+  border-color: #c77b7b;
+  background: #fff0f0;
+  color: var(--danger);
+}
+
+.compact-facts {
+  display: grid;
+  margin: 0;
+  gap: 0.6rem;
+}
+
+.compact-facts div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.compact-facts dt {
+  color: var(--ink-muted);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.compact-facts dd {
+  margin: 0;
+}
+
+.personal-detail-grid {
+  display: grid;
+  align-items: start;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.45fr) minmax(17rem, 0.75fr);
+}
+
+.eligibility-panel {
+  border-top: 0.35rem solid var(--blue);
+}
+
+.eligibility-panel h2,
+.action-panel h2,
+.official-summary h2 {
+  margin-top: 0;
+}
+
+.explanation-grid section {
+  border: 1px solid var(--border);
+  padding: 1rem;
+}
+
+.explanation-grid h3,
+.explanation-grid p {
+  margin-block: 0 0.4rem;
+}
+
+.evidence-links,
+.material-list {
+  margin-bottom: 0;
+  padding-left: 1.25rem;
+}
+
+.action-panel {
+  border-top: 0.35rem solid var(--orange);
+}
+
+.action-forms,
+.action-forms form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.action-forms form {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.official-summary {
+  margin-top: 1rem;
+}
+
 .site-footer {
   border-top: 1px solid var(--border);
   background: var(--navy);
@@ -705,7 +955,10 @@ code {
 
   .principle-grid,
   .opportunity-grid,
-  .evidence-grid {
+  .evidence-grid,
+  .form-grid,
+  .explanation-grid,
+  .personal-detail-grid {
     grid-template-columns: 1fr;
   }
 
@@ -737,6 +990,17 @@ code {
 
   .fit-entry .button {
     width: 100%;
+  }
+
+  .profile-form .button,
+  .personal-opportunity-card .button,
+  .action-forms .button {
+    width: 100%;
+  }
+
+  .priority-row {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .footer-inner {

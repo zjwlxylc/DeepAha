@@ -14,6 +14,9 @@ export default function SiteHeader() {
           <Link className="nav-link" href="/opportunities">
             公开机会
           </Link>
+          <Link className="nav-link" href="/me/opportunities">
+            个人行动
+          </Link>
         </nav>
       </div>
     </header>

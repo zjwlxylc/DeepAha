@@ -69,5 +69,5 @@ export const publicDetail: PublicOpportunityDetail = {
       official_url: "https://phase5-fixture.example.test/alpha/notice-v2",
     },
   ],
-  personalization_availability: "PHASE_6_NOT_IMPLEMENTED",
+  personalization_availability: "AVAILABLE_WITH_PERSONAL_SESSION",
 };

@@ -1,0 +1,75 @@
+{
+  "schema_version": "phase6-personal-fixture-v1",
+  "synthetic": true,
+  "contains_personal_data": false,
+  "business_truth": false,
+  "release_qualification_eligible": false,
+  "license": "CC0-1.0 synthetic fixture",
+  "scenario_clock": "2026-08-22",
+  "users": [
+    {
+      "key": "fixture-user-a",
+      "user_id": "019b0000-0000-7000-8000-000000000501",
+      "user_state_id": "019b0000-0000-7000-8000-000000000511",
+      "profile": {
+        "life_stage": "GRADUATING",
+        "goal_types": ["PUBLIC_SERVICE_EMPLOYMENT"],
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "合成软件工程",
+          "major_code": "080902",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": null,
+          "hukou_region": null,
+          "residence_region": "合成杭州市",
+          "target_regions": null,
+          "certificates": null
+        },
+        "preference_regions": ["合成杭州市"],
+        "preference_types": ["YOUTH_POLICY_BENEFIT"],
+        "skipped_fields": ["birth_date", "certificates", "hukou_region", "target_regions"],
+        "personalization_enabled": true,
+        "consent_version": "phase6-consent-v1",
+        "allowed_purposes": ["ACTION_TRACKING", "ELIGIBILITY", "PERSONAL_RANKING"],
+        "scenario_clock": "2026-08-22"
+      }
+    },
+    {
+      "key": "fixture-user-b",
+      "user_id": "019b0000-0000-7000-8000-000000000502",
+      "user_state_id": "019b0000-0000-7000-8000-000000000512",
+      "profile": {
+        "life_stage": "EARLY_CAREER",
+        "goal_types": ["STATE_OWNED_ENTERPRISE_EMPLOYMENT"],
+        "attributes": {
+          "education_level": null,
+          "major_name": null,
+          "major_code": null,
+          "graduation_year": 2025,
+          "student_status": "RECENT_GRADUATE",
+          "birth_date": null,
+          "hukou_region": null,
+          "residence_region": "合成宁波市",
+          "target_regions": null,
+          "certificates": null
+        },
+        "preference_regions": ["合成宁波市"],
+        "preference_types": ["STATE_OWNED_ENTERPRISE_JOB"],
+        "skipped_fields": [
+          "birth_date",
+          "certificates",
+          "education_level",
+          "hukou_region",
+          "major_code",
+          "major_name",
+          "target_regions"
+        ],
+        "personalization_enabled": true,
+        "consent_version": "phase6-consent-v1",
+        "allowed_purposes": ["ACTION_TRACKING", "ELIGIBILITY", "PERSONAL_RANKING"],
+        "scenario_clock": "2026-08-22"
+      }
+    }
+  ]
+}

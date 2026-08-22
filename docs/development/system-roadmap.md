@@ -178,6 +178,10 @@ Phase 2/3 的 Release Qualification 状态，也不授权合并、发布或把 v
 
 **目的：** 让用户在提交画像前看见系统掌握了什么以及信息是否可信。
 
+**当前状态（2026-08-22）：** 实现状态 `IMPLEMENTED`；Engineering Gate `CLOSED`；Release
+Qualification `NOT_STARTED`；Phase 5 Public API Contract Maturity `IMPLEMENTED`。工程证据使用
+3 条许可安全合成机会；真实 Gold 数量为 0，不能据此宣称 200 条真实 Gold 或发布就绪。
+
 **范围：**
 
 - 200 个 Gold 机会驱动的只读公开索引和详情页。
@@ -200,6 +204,11 @@ Phase 2/3 的 Release Qualification 状态，也不授权合并、发布或把 v
 
 **目的：** 将可信机会转换为少量、解释充分、可行动的个人结果。
 
+**当前状态（2026-08-22）：** 实现状态 `IMPLEMENTED`；Engineering Gate `CLOSED`，stacked
+draft PR #6 保持 open/draft/unmerged，候选 `d30fbac84e94a3b465ead09f17c1b8c220ab638d`
+的七个远程 CI jobs 在 run `32559110870` 全部成功；Release Qualification `NOT_STARTED`；
+v0.5 契约成熟度 `IMPLEMENTED`。证据只含 2 个合成画像、3 个合成机会、0 真人和 0 真实 Gold。
+
 **范围：**
 
 - 最小 UserState、渐进画像和版本记录。
@@ -207,12 +216,20 @@ Phase 2/3 的 Release Qualification 状态，也不授权合并、发布或把 v
 - 未来 90 天结果、3 个优先机会、缺失字段和风险说明。
 - 官方跳转、保存、材料计划和行动状态。
 
-**退出条件：**
+**Engineering Gate 退出条件：**
 
 - 删除软偏好不会改变硬资格。
 - 用户能理解每个结论的满足项、冲突项、缺失项和官方证据。
+- 画像、排序和行动按服务端身份与用途授权隔离，写操作幂等且可审计。
+- 版本绑定、90 天窗口、最多 3 条、浏览器流程和失败恢复有可复现工程证据。
+
+**Release Qualification：**
+
 - 最小画像完成率达到计划门槛 `>=60%`，不依赖强迫字段。
-- 端到端薄链路从公开浏览走到至少一个高意图动作。
+- 真人能理解四态、证据和下一步，认知负担在受治理研究中可接受。
+- 端到端薄链路从公开浏览走到至少一个真实高意图动作。
+
+固定合成 fixture、CI 和浏览器测试只属于 Engineering Gate，不能形成上述真人结论。
 
 ### Phase 7：反馈、审核与双轨验证
 

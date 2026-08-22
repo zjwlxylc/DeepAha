@@ -1,0 +1,125 @@
+{
+  "$defs": {
+    "OpportunityIdentityActionType": {
+      "enum": [
+        "MERGE",
+        "SPLIT",
+        "MERGE_REVERSAL",
+        "SPLIT_REVERSAL"
+      ],
+      "title": "OpportunityIdentityActionType",
+      "type": "string"
+    },
+    "OpportunityIdentityMemberRole": {
+      "enum": [
+        "SOURCE",
+        "TARGET",
+        "PARENT",
+        "CHILD"
+      ],
+      "title": "OpportunityIdentityMemberRole",
+      "type": "string"
+    },
+    "OpportunityIdentityMemberSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "opportunity_id": {
+          "format": "uuid",
+          "title": "Opportunity Id",
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/$defs/OpportunityIdentityMemberRole"
+        }
+      },
+      "required": [
+        "opportunity_id",
+        "role"
+      ],
+      "title": "OpportunityIdentityMemberSchema",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action_id": {
+      "format": "uuid",
+      "title": "Action Id",
+      "type": "string"
+    },
+    "action_type": {
+      "$ref": "#/$defs/OpportunityIdentityActionType"
+    },
+    "actor": {
+      "minLength": 1,
+      "title": "Actor",
+      "type": "string"
+    },
+    "members": {
+      "items": {
+        "$ref": "#/$defs/OpportunityIdentityMemberSchema"
+      },
+      "title": "Members",
+      "type": "array"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "reason": {
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "reversal_of_action_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Reversal Of Action Id"
+    },
+    "source_document_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Source Document Id"
+    },
+    "source_evidence_ref_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Source Evidence Ref Id"
+    }
+  },
+  "required": [
+    "action_id",
+    "action_type",
+    "members",
+    "reversal_of_action_id",
+    "actor",
+    "reason",
+    "source_document_id",
+    "source_evidence_ref_id",
+    "occurred_at"
+  ],
+  "title": "OpportunityIdentityActionSchema",
+  "type": "object"
+}

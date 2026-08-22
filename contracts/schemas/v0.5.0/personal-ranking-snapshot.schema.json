@@ -1,0 +1,156 @@
+{
+  "$defs": {
+    "EligibilityStatus": {
+      "enum": [
+        "ELIGIBLE",
+        "LIKELY_ELIGIBLE",
+        "UNCERTAIN",
+        "INELIGIBLE"
+      ],
+      "title": "EligibilityStatus",
+      "type": "string"
+    },
+    "PersonalRankingItemSchemaV05": {
+      "additionalProperties": false,
+      "properties": {
+        "deadline": {
+          "format": "date",
+          "title": "Deadline",
+          "type": "string"
+        },
+        "eligibility_status": {
+          "$ref": "#/$defs/EligibilityStatus"
+        },
+        "match_snapshot_id": {
+          "format": "uuid",
+          "title": "Match Snapshot Id",
+          "type": "string"
+        },
+        "opportunity_id": {
+          "format": "uuid",
+          "title": "Opportunity Id",
+          "type": "string"
+        },
+        "opportunity_version": {
+          "minimum": 1,
+          "title": "Opportunity Version",
+          "type": "integer"
+        },
+        "ordinal": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Ordinal",
+          "type": "integer"
+        },
+        "reason_codes": {
+          "items": {
+            "$ref": "#/$defs/RankingReasonCode"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "ordinal",
+        "opportunity_id",
+        "opportunity_version",
+        "match_snapshot_id",
+        "eligibility_status",
+        "reason_codes",
+        "deadline"
+      ],
+      "title": "PersonalRankingItemSchemaV05",
+      "type": "object"
+    },
+    "RankingReasonCode": {
+      "enum": [
+        "ELIGIBILITY_ELIGIBLE",
+        "ELIGIBILITY_LIKELY",
+        "ELIGIBILITY_UNCERTAIN",
+        "ELIGIBILITY_INELIGIBLE",
+        "PREFERRED_REGION",
+        "PREFERRED_TYPE",
+        "EARLIER_DEADLINE",
+        "STABLE_ID_TIE_BREAK"
+      ],
+      "title": "RankingReasonCode",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/PersonalRankingItemSchemaV05"
+      },
+      "maxItems": 3,
+      "title": "Items",
+      "type": "array"
+    },
+    "omitted_rule_set_count": {
+      "minimum": 0,
+      "title": "Omitted Rule Set Count",
+      "type": "integer"
+    },
+    "qualification_profile_snapshot_id": {
+      "format": "uuid",
+      "title": "Qualification Profile Snapshot Id",
+      "type": "string"
+    },
+    "qualification_profile_version": {
+      "minimum": 1,
+      "title": "Qualification Profile Version",
+      "type": "integer"
+    },
+    "ranker_version": {
+      "minLength": 1,
+      "title": "Ranker Version",
+      "type": "string"
+    },
+    "ranking_snapshot_id": {
+      "format": "uuid",
+      "title": "Ranking Snapshot Id",
+      "type": "string"
+    },
+    "scenario_clock": {
+      "format": "date",
+      "title": "Scenario Clock",
+      "type": "string"
+    },
+    "user_state_snapshot_id": {
+      "format": "uuid",
+      "title": "User State Snapshot Id",
+      "type": "string"
+    },
+    "window_end": {
+      "format": "date",
+      "title": "Window End",
+      "type": "string"
+    }
+  },
+  "required": [
+    "ranking_snapshot_id",
+    "user_state_snapshot_id",
+    "qualification_profile_snapshot_id",
+    "qualification_profile_version",
+    "scenario_clock",
+    "window_end",
+    "ranker_version",
+    "input_sha256",
+    "items",
+    "omitted_rule_set_count",
+    "created_at"
+  ],
+  "title": "PersonalRankingSnapshotSchemaV05",
+  "type": "object"
+}

@@ -1,0 +1,216 @@
+{
+  "$defs": {
+    "BrowserPolicy": {
+      "enum": [
+        "NEVER",
+        "FALLBACK"
+      ],
+      "title": "BrowserPolicy",
+      "type": "string"
+    },
+    "ContentUseBasis": {
+      "enum": [
+        "OPEN_LICENSE",
+        "OFFICIAL_PUBLIC_ACCESS",
+        "LINK_ONLY",
+        "UNKNOWN"
+      ],
+      "title": "ContentUseBasis",
+      "type": "string"
+    },
+    "RobotsDecision": {
+      "enum": [
+        "ALLOWED",
+        "NOT_APPLICABLE",
+        "DISALLOWED",
+        "UNKNOWN"
+      ],
+      "title": "RobotsDecision",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "active": {
+      "title": "Active",
+      "type": "boolean"
+    },
+    "allowed_hosts": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Allowed Hosts",
+      "type": "array"
+    },
+    "attribution": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Attribution"
+    },
+    "browser_policy": {
+      "$ref": "#/$defs/BrowserPolicy"
+    },
+    "content_use_basis": {
+      "$ref": "#/$defs/ContentUseBasis"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "endpoint_id": {
+      "format": "uuid",
+      "title": "Endpoint Id",
+      "type": "string"
+    },
+    "expected_media_types": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Expected Media Types",
+      "type": "array"
+    },
+    "fixture_storage_allowed": {
+      "title": "Fixture Storage Allowed",
+      "type": "boolean"
+    },
+    "license_name": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "License Name"
+    },
+    "license_url": {
+      "anyOf": [
+        {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "License Url"
+    },
+    "max_attempts": {
+      "maximum": 3,
+      "minimum": 1,
+      "title": "Max Attempts",
+      "type": "integer"
+    },
+    "minimum_interval_seconds": {
+      "minimum": 1,
+      "title": "Minimum Interval Seconds",
+      "type": "integer"
+    },
+    "policy_version": {
+      "minLength": 1,
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "robots_checked_at": {
+      "format": "date-time",
+      "title": "Robots Checked At",
+      "type": "string"
+    },
+    "robots_decision": {
+      "$ref": "#/$defs/RobotsDecision"
+    },
+    "robots_url": {
+      "anyOf": [
+        {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Robots Url"
+    },
+    "source_id": {
+      "format": "uuid",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "timeout_seconds": {
+      "maximum": 120,
+      "minimum": 1,
+      "title": "Timeout Seconds",
+      "type": "integer"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    },
+    "url": {
+      "format": "uri",
+      "maxLength": 2083,
+      "minLength": 1,
+      "not": {
+        "pattern": "^[A-Za-z][A-Za-z0-9+.-]*://[^/?#]*@"
+      },
+      "title": "Url",
+      "type": "string"
+    },
+    "usage_note": {
+      "minLength": 1,
+      "title": "Usage Note",
+      "type": "string"
+    },
+    "verified_at": {
+      "format": "date-time",
+      "title": "Verified At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "endpoint_id",
+    "source_id",
+    "url",
+    "allowed_hosts",
+    "expected_media_types",
+    "browser_policy",
+    "minimum_interval_seconds",
+    "timeout_seconds",
+    "max_attempts",
+    "robots_url",
+    "robots_decision",
+    "robots_checked_at",
+    "content_use_basis",
+    "license_name",
+    "license_url",
+    "attribution",
+    "fixture_storage_allowed",
+    "usage_note",
+    "policy_version",
+    "active",
+    "verified_at",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "SourceEndpointSchema",
+  "type": "object"
+}

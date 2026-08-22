@@ -1,0 +1,273 @@
+{
+  "$defs": {
+    "EvidenceRelation": {
+      "enum": [
+        "SUPPORTS",
+        "CONTRADICTS"
+      ],
+      "title": "EvidenceRelation",
+      "type": "string"
+    },
+    "JsonValue": {},
+    "RuleEvidenceAuthority": {
+      "enum": [
+        "LATEST_OFFICIAL_CORRECTION",
+        "FORMAL_OFFICIAL_ATTACHMENT",
+        "ORIGINAL_OFFICIAL_NOTICE",
+        "OFFICIAL_FAQ_GUIDANCE",
+        "HUMAN_APPROVED_MAPPING",
+        "LLM_SEMANTIC_INFERENCE"
+      ],
+      "title": "RuleEvidenceAuthority",
+      "type": "string"
+    },
+    "RuleEvidenceSchemaV04": {
+      "additionalProperties": false,
+      "properties": {
+        "assertion_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Assertion Sha256",
+          "type": "string"
+        },
+        "authority": {
+          "$ref": "#/$defs/RuleEvidenceAuthority"
+        },
+        "document_id": {
+          "format": "uuid",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "effective_at": {
+          "format": "date-time",
+          "title": "Effective At",
+          "type": "string"
+        },
+        "evidence_ref_id": {
+          "format": "uuid",
+          "title": "Evidence Ref Id",
+          "type": "string"
+        },
+        "precedence": {
+          "maximum": 600,
+          "minimum": 100,
+          "title": "Precedence",
+          "type": "integer"
+        },
+        "relation": {
+          "$ref": "#/$defs/EvidenceRelation"
+        }
+      },
+      "required": [
+        "evidence_ref_id",
+        "document_id",
+        "authority",
+        "precedence",
+        "relation",
+        "effective_at",
+        "assertion_sha256"
+      ],
+      "title": "RuleEvidenceSchemaV04",
+      "type": "object"
+    },
+    "RuleField": {
+      "enum": [
+        "education_level",
+        "major_code",
+        "graduation_year",
+        "student_status",
+        "birth_date",
+        "hukou_region",
+        "residence_region",
+        "target_regions",
+        "certificates"
+      ],
+      "title": "RuleField",
+      "type": "string"
+    },
+    "RuleOperator": {
+      "enum": [
+        "EQ",
+        "NE",
+        "IN",
+        "NOT_IN",
+        "GTE",
+        "LTE",
+        "BETWEEN",
+        "CONTAINS_ANY",
+        "CONTAINS_ALL",
+        "EXISTS",
+        "NOT_EXISTS",
+        "AND",
+        "OR",
+        "NOT"
+      ],
+      "title": "RuleOperator",
+      "type": "string"
+    },
+    "RuleSchemaV04": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/RuleEvidenceSchemaV04"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RuleField"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operand_rule_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Operand Rule Ids",
+          "type": "array"
+        },
+        "operator": {
+          "$ref": "#/$defs/RuleOperator"
+        },
+        "reason_template": {
+          "minLength": 1,
+          "title": "Reason Template",
+          "type": "string"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "rule_id": {
+          "format": "uuid",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value_type": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RuleValueType"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "rule_id",
+        "code",
+        "operator",
+        "field",
+        "value_type",
+        "value",
+        "operand_rule_ids",
+        "required",
+        "reason_template",
+        "evidence"
+      ],
+      "title": "RuleSchemaV04",
+      "type": "object"
+    },
+    "RuleValueType": {
+      "enum": [
+        "STRING",
+        "INTEGER",
+        "DATE",
+        "STRING_SET",
+        "BOOLEAN"
+      ],
+      "title": "RuleValueType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "review_status": {
+      "const": "APPROVED",
+      "title": "Review Status",
+      "type": "string"
+    },
+    "root_rule_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Root Rule Ids",
+      "type": "array"
+    },
+    "rule_schema_version": {
+      "const": "0.4.0",
+      "title": "Rule Schema Version",
+      "type": "string"
+    },
+    "rule_set_id": {
+      "format": "uuid",
+      "title": "Rule Set Id",
+      "type": "string"
+    },
+    "rules": {
+      "items": {
+        "$ref": "#/$defs/RuleSchemaV04"
+      },
+      "minItems": 1,
+      "title": "Rules",
+      "type": "array"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "rule_set_id",
+    "version",
+    "opportunity_id",
+    "opportunity_version",
+    "rules",
+    "root_rule_ids",
+    "review_status",
+    "rule_schema_version",
+    "created_at"
+  ],
+  "title": "RuleSetSchemaV04",
+  "type": "object"
+}

@@ -1,0 +1,128 @@
+{
+  "$defs": {
+    "ActionState": {
+      "enum": [
+        "NOT_STARTED",
+        "PREPARING",
+        "APPLIED",
+        "COMPLETED",
+        "DISMISSED"
+      ],
+      "title": "ActionState",
+      "type": "string"
+    },
+    "MaterialPlanItemSchemaV05": {
+      "additionalProperties": false,
+      "properties": {
+        "completed": {
+          "title": "Completed",
+          "type": "boolean"
+        },
+        "due_on": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Due On"
+        },
+        "label": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "material_item_id": {
+          "format": "uuid",
+          "title": "Material Item Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "material_item_id",
+        "label",
+        "completed",
+        "due_on"
+      ],
+      "title": "MaterialPlanItemSchemaV05",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action_id": {
+      "format": "uuid",
+      "title": "Action Id",
+      "type": "string"
+    },
+    "action_snapshot_id": {
+      "format": "uuid",
+      "title": "Action Snapshot Id",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "last_event_id": {
+      "format": "uuid",
+      "title": "Last Event Id",
+      "type": "string"
+    },
+    "material_items": {
+      "items": {
+        "$ref": "#/$defs/MaterialPlanItemSchemaV05"
+      },
+      "maxItems": 20,
+      "title": "Material Items",
+      "type": "array"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "saved": {
+      "title": "Saved",
+      "type": "boolean"
+    },
+    "state": {
+      "$ref": "#/$defs/ActionState"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "action_snapshot_id",
+    "action_id",
+    "version",
+    "opportunity_id",
+    "opportunity_version",
+    "saved",
+    "state",
+    "material_items",
+    "last_event_id",
+    "input_sha256",
+    "created_at"
+  ],
+  "title": "PersonalActionSnapshotSchemaV05",
+  "type": "object"
+}

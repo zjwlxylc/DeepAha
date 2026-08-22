@@ -12,6 +12,7 @@
 | [领域契约 v0.2](./domain-contracts-v0.2.md) | Phase 2 已实现、Release Qualification 完成前不得标记 STABLE 的 Endpoint、采集观察、解析尝试和结构化定位契约 | 评审 Phase 2 实现时 |
 | [领域契约 v0.3](./domain-contracts-v0.3.md) | Phase 3 已实现、Release Qualification 完成前不得标记 STABLE 的 Opportunity/Version/Event/identity 契约 | 评审 Phase 3 实现时 |
 | [领域契约 v0.4](./domain-contracts-v0.4.md) | Phase 4 已实现、Release Qualification 完成前不得标记 STABLE 的规则、资格、MatchSnapshot 与 EvaluationRun 契约 | 评审 Phase 4 实现时 |
+| [领域契约 v0.5](./domain-contracts-v0.5.md) | Phase 6 已实现、Release Qualification 完成前不得标记 STABLE 的 UserState、个人排序与行动契约 | 评审 Phase 6 实现时 |
 | [质量与发布策略](./quality-and-release.md) | 测试层级、Golden Dataset、指标证据和发布流程 | 编写测试、评估或准备发布时 |
 | [Blueprint v1.2 基线协调](../superpowers/specs/2026-08-21-blueprint-v1.2-baseline-reconciliation-design.md) | 新旧 Blueprint 权威、D8–D12 和阶段映射 | 解释 Phase 2 及后续范围变化时 |
 | [Phase 0 设计](../superpowers/specs/2026-08-21-phase-0-engineering-foundation-design.md) | 第一个可交付子项目的设计与验收边界 | 开始创建代码仓库骨架前 |
@@ -28,6 +29,12 @@
 | [Phase 4 设计](../superpowers/specs/2026-08-22-phase-4-rules-eligibility-and-evaluation-design.md) | 受控规则、资格保护、版本回放和合成评估边界 | 评审 Phase 4 设计时 |
 | [Phase 4 实现计划](../superpowers/plans/2026-08-22-phase-4-rules-eligibility-and-evaluation.md) | Task 1–10 的 TDD、隔离验证与堆叠交付顺序 | 执行或复核 Phase 4 时 |
 | [Phase 4 Gate](../gates/phase-4/README.md) | Phase 4 Engineering Gate、Release Qualification、合成评估边界与 v0.4 成熟度证据 | 判断 Phase 4 工程或发布资格状态时 |
+| [Phase 5 设计](../superpowers/specs/2026-08-22-phase-5-public-trust-layer-design.md) | 公开可信目录、只读 API 与 Web/PWA 边界 | 评审 Phase 5 时 |
+| [Phase 5 实现计划](../superpowers/plans/2026-08-22-phase-5-public-trust-layer.md) | Phase 5 TDD、浏览器验证与堆叠交付顺序 | 复核 Phase 5 实现证据时 |
+| [Phase 5 Gate](../gates/phase-5/README.md) | Phase 5 工程、真实 Gold Release Qualification 与公开 API 成熟度证据 | 判断 Phase 5 状态时 |
+| [Phase 6 设计](../superpowers/specs/2026-08-22-phase-6-profile-match-personal-action-design.md) | 渐进画像、授权隔离、确定性匹配与个人行动设计 | 评审 Phase 6 时 |
+| [Phase 6 实现计划](../superpowers/plans/2026-08-22-phase-6-profile-match-personal-action.md) | Phase 6 Task 1–8 的 TDD、浏览器、Gate 与堆叠交付顺序 | 执行或复核 Phase 6 时 |
+| [Phase 6 Gate](../gates/phase-6/README.md) | Phase 6 四轴状态、合成证据边界、授权安全与真人资格缺口 | 判断 Phase 6 工程或发布资格状态时 |
 
 ## 文档状态词
 
@@ -49,7 +56,12 @@
 Release Qualification 的阻塞状态，但仍不得合并、发布或声称 Release Qualification 已完成。
 Phase 4 规则、资格与评估已 `IMPLEMENTED`，Engineering Gate 已 `CLOSED`；Release
 Qualification 为 `NOT_STARTED`，领域契约 v0.4 为 `IMPLEMENTED`、不得标记 `STABLE`。受控
-堆叠开发不构成合并、发布或 Release Qualification 授权。
+堆叠开发不构成合并、发布或 Release Qualification 授权。Phase 5 公开可信层已
+`IMPLEMENTED`、Engineering Gate `CLOSED`、Release Qualification `NOT_STARTED`，公开 API
+契约成熟度为 `IMPLEMENTED`；其 3 条合成机会不替代 200 条真实 Gold 资格。Phase 6 画像、
+匹配与个人行动已 `IMPLEMENTED`，Engineering Gate `CLOSED`，Release Qualification
+`NOT_STARTED`，v0.5 成熟度 `IMPLEMENTED`；本地合成、浏览器和 CI 证据不替代真人完成、理解、
+认知负担或真实高意图动作。
 
 ## 维护规则
 

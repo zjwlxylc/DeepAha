@@ -14,6 +14,16 @@ from deepaha.opportunities.models import (
     OpportunityResolutionCandidate,
     OpportunityVersion,
 )
+from deepaha.personal.models import (
+    PersonalActionEventModel,
+    PersonalActionSnapshotModel,
+    PersonalAuthSessionModel,
+    PersonalIdempotencyRecordModel,
+    PersonalRankingItemModel,
+    PersonalRankingSnapshotModel,
+    PersonalUserModel,
+    UserStateSnapshotModel,
+)
 from deepaha.profiles.models import ProfileSnapshotModel
 from deepaha.public_catalog.models import PublicCatalogEntry
 from deepaha.rules.models import RuleEvidenceModel, RuleModel, RuleSetModel
@@ -36,6 +46,13 @@ __all__ = [
     "OpportunityResolutionCandidate",
     "OpportunityVersion",
     "ParseAttempt",
+    "PersonalActionEventModel",
+    "PersonalActionSnapshotModel",
+    "PersonalAuthSessionModel",
+    "PersonalIdempotencyRecordModel",
+    "PersonalRankingItemModel",
+    "PersonalRankingSnapshotModel",
+    "PersonalUserModel",
     "RawArtifact",
     "MatchSnapshotModel",
     "ProfileSnapshotModel",
@@ -45,4 +62,5 @@ __all__ = [
     "RuleSetModel",
     "Source",
     "SourceEndpoint",
+    "UserStateSnapshotModel",
 ]

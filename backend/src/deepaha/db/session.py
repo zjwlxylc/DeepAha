@@ -27,3 +27,17 @@ def get_read_only_session() -> Generator[Session]:
         session.rollback()
         session.close()
         engine.dispose()
+
+
+def get_write_session() -> Generator[Session]:
+    engine = get_engine()
+    session = Session(engine)
+    try:
+        yield session
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+        engine.dispose()

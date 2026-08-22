@@ -169,6 +169,8 @@ Gold Dataset、真人和 live 项目按 Phase 适用，不能把全局候选清�
 | `web-quality` | 每个提交和合并请求 | Lint、类型、组件测试、生产构建 |
 | `integration` | 影响迁移或服务边界时 | PostgreSQL 迁移和集成测试 |
 | `phase4-eligibility` | Phase 4 分支和相关合并请求 | v0.4 字节契约、规则/资格/评估、PostgreSQL 18/Moto 隔离集成与迁移往返 |
+| `phase5-public-trust` | Phase 5 及后续堆叠分支 | 只读公开目录/API、证据投影、Web 与 Phase 5 迁移往返 |
+| `phase6-profile-action` | Phase 6 分支和相关合并请求 | v0.5 契约、身份/用途隔离、画像/匹配/行动、Web 与 Phase 6 迁移往返 |
 | `phase2-contract-and-parser` | Phase 2 契约、采集或解析变更时 | v0.1/v0.2 契约、观察语义、固定 HTML/PDF/XLSX、locator 回放 |
 | `source-live` | 人工触发；Phase 2 Release Qualification 观察窗口 | 十个登记官方 Endpoint 的策略化 live 观察；不作为每次提交必跑作业 |
 | `golden-evaluation` | 数据管线、规则、匹配或模型变更时 | 固定数据集回归和差异报告 |
@@ -181,6 +183,10 @@ Phase 4 的 `golden-evaluation` 当前仅指固定 CC0 合成案例：保存整�
 `INELIGIBLE` 数、意外案例 ID 与重放差异，不计算或命名为生产准确率。计划门槛
 `<=0.5%` 必须由另行治理的真实人工标注评估证明，不能由 12 个 Golden 案例、20 个母
 画像或 100 个合成画像换算。
+
+Phase 6 的固定 2 个合成画像、3 个合成机会、浏览器动作和 CI 只证明工程边界。最小画像
+完成率、理解度、认知负担和真实高意图动作必须来自受治理真人验证；在此之前 Phase 6
+Release Qualification 保持 `NOT_STARTED`，v0.5 不得标记 `STABLE`。
 
 ## 6. 发布流程
 
