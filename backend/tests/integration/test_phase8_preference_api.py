@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
 from deepaha.api.personal import require_principal
+from deepaha.contracts.phase8 import ReminderPreferenceSnapshotSchemaV07
 from deepaha.core.settings import get_settings
 from deepaha.main import create_app
 from deepaha.notifications.models import (
@@ -76,7 +77,7 @@ def test_concurrent_preference_commands_serialize_one_owner_stream(
     principal = Principal(user_id=USER_A_ID)
     start = Barrier(2)
 
-    def set_enabled(enabled: bool, key: str) -> object:
+    def set_enabled(enabled: bool, key: str) -> ReminderPreferenceSnapshotSchemaV07:
         start.wait()
         return service.set_enabled(principal, enabled, idempotency_key=key)
 
@@ -112,7 +113,7 @@ def test_concurrent_same_idempotency_key_replays_one_snapshot(
     principal = Principal(user_id=USER_A_ID)
     start = Barrier(2)
 
-    def enable() -> object:
+    def enable() -> ReminderPreferenceSnapshotSchemaV07:
         start.wait()
         return service.set_enabled(
             principal,
