@@ -158,9 +158,7 @@ def test_ci_keeps_inherited_jobs_and_adds_scoped_phase8_job() -> None:
 def test_phase8_browser_smoke_uses_real_chromium_and_exact_owner_flow() -> None:
     package = (REPOSITORY_ROOT / "web" / "package.json").read_text("utf-8")
     config = (REPOSITORY_ROOT / "web" / "playwright.config.ts").read_text("utf-8").lower()
-    spec = (REPOSITORY_ROOT / "web" / "e2e" / "phase8-reminder.spec.ts").read_text(
-        "utf-8"
-    )
+    spec = (REPOSITORY_ROOT / "web" / "e2e" / "phase8-reminder.spec.ts").read_text("utf-8")
     normalized_spec = spec.lower()
 
     assert '"@playwright/test"' in package
