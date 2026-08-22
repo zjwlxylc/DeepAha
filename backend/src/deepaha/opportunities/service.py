@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 from collections import defaultdict
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
+from typing import TYPE_CHECKING
 from uuid import UUID, uuid7
 
 from sqlalchemy import select
@@ -56,6 +59,9 @@ from deepaha.opportunities.versioning import (
     plan_version,
 )
 from deepaha.sources.models import Source
+
+if TYPE_CHECKING:
+    from deepaha.notifications.candidates import DeadlineReminderCandidateService
 
 
 @dataclass(frozen=True, slots=True)
@@ -184,11 +190,17 @@ class OpportunityResolutionService:
         clock: Callable[[], datetime],
         id_factory: Callable[[], UUID] = uuid7,
         resolver_version: str = "0.3.0",
+        candidate_service: DeadlineReminderCandidateService | None = None,
     ) -> None:
         self._session_factory = session_factory
         self._clock = clock
         self._id_factory = id_factory
         self._resolver_version = resolver_version
+        if candidate_service is None:
+            from deepaha.notifications.candidates import DeadlineReminderCandidateService
+
+            candidate_service = DeadlineReminderCandidateService(id_factory=id_factory)
+        self._candidate_service = candidate_service
 
     def resolve(self, command: ResolutionDocument) -> ResolutionResult:
         with self._session_factory() as session:
@@ -566,19 +578,24 @@ class OpportunityResolutionService:
         # The composite event foreign key targets this exact version. The ORM
         # has no relationship that would otherwise communicate insert order.
         session.flush()
-        session.add(
-            OpportunityEvent(
-                event_id=self._id_factory(),
-                opportunity_id=planned.opportunity_id,
-                from_version=None if planned.version == 1 else planned.version - 1,
-                to_version=planned.version,
-                event_type=planned.event_type.value,
-                changed_fields=[item.field_path.value for item in planned.changes],
-                changes=[item.model_dump(mode="json") for item in planned.changes],
-                source_document_id=planned.source_document_id,
-                source_evidence_ref_id=planned.source_evidence_ref_id,
-                detected_at=created_at,
-            )
+        event = OpportunityEvent(
+            event_id=self._id_factory(),
+            opportunity_id=planned.opportunity_id,
+            from_version=None if planned.version == 1 else planned.version - 1,
+            to_version=planned.version,
+            event_type=planned.event_type.value,
+            changed_fields=[item.field_path.value for item in planned.changes],
+            changes=[item.model_dump(mode="json") for item in planned.changes],
+            source_document_id=planned.source_document_id,
+            source_evidence_ref_id=planned.source_evidence_ref_id,
+            detected_at=created_at,
+        )
+        session.add(event)
+        session.flush()
+        self._candidate_service.capture_for_event(
+            session,
+            event,
+            created_at=created_at,
         )
         opportunity.canonical_title = planned.snapshot.canonical_title
         opportunity.type = planned.snapshot.type.value
