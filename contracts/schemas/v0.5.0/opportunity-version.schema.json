@@ -1,0 +1,352 @@
+{
+  "$defs": {
+    "ApplicationWindowSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "closes_on": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Closes On"
+        },
+        "opens_on": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Opens On"
+        },
+        "timezone": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Timezone"
+        }
+      },
+      "required": [
+        "opens_on",
+        "closes_on",
+        "timezone"
+      ],
+      "title": "ApplicationWindowSchema",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "OpportunityFieldChangeSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "after": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "before": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_ref_id": {
+          "format": "uuid",
+          "title": "Evidence Ref Id",
+          "type": "string"
+        },
+        "field_path": {
+          "$ref": "#/$defs/SnapshotField"
+        }
+      },
+      "required": [
+        "field_path",
+        "before",
+        "after",
+        "evidence_ref_id"
+      ],
+      "title": "OpportunityFieldChangeSchema",
+      "type": "object"
+    },
+    "OpportunityFieldEvidenceSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "effective_at": {
+          "format": "date-time",
+          "title": "Effective At",
+          "type": "string"
+        },
+        "evidence_ref_id": {
+          "format": "uuid",
+          "title": "Evidence Ref Id",
+          "type": "string"
+        },
+        "field_path": {
+          "$ref": "#/$defs/SnapshotField"
+        },
+        "precedence": {
+          "maximum": 600,
+          "minimum": 100,
+          "title": "Precedence",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "field_path",
+        "precedence",
+        "evidence_ref_id",
+        "effective_at"
+      ],
+      "title": "OpportunityFieldEvidenceSchema",
+      "type": "object"
+    },
+    "OpportunityReviewStatus": {
+      "enum": [
+        "NOT_REQUIRED",
+        "PENDING",
+        "APPROVED",
+        "REJECTED"
+      ],
+      "title": "OpportunityReviewStatus",
+      "type": "string"
+    },
+    "OpportunitySnapshotSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "application_url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "maxLength": 2083,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Application Url"
+        },
+        "application_window": {
+          "$ref": "#/$defs/ApplicationWindowSchema"
+        },
+        "attachment_urls": {
+          "items": {
+            "format": "uri",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Attachment Urls",
+          "type": "array"
+        },
+        "canonical_title": {
+          "minLength": 1,
+          "title": "Canonical Title",
+          "type": "string"
+        },
+        "issuer_name": {
+          "minLength": 1,
+          "title": "Issuer Name",
+          "type": "string"
+        },
+        "jurisdiction": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Jurisdiction"
+        },
+        "locations": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Locations",
+          "type": "array"
+        },
+        "published_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Published At"
+        },
+        "status": {
+          "$ref": "#/$defs/OpportunityStatus"
+        },
+        "type": {
+          "$ref": "#/$defs/OpportunityTypeV02"
+        }
+      },
+      "required": [
+        "canonical_title",
+        "type",
+        "issuer_name",
+        "jurisdiction",
+        "status",
+        "published_at",
+        "application_window",
+        "application_url",
+        "attachment_urls",
+        "locations"
+      ],
+      "title": "OpportunitySnapshotSchema",
+      "type": "object"
+    },
+    "OpportunityStatus": {
+      "enum": [
+        "DRAFT",
+        "OPEN",
+        "CLOSING_SOON",
+        "CLOSED",
+        "CANCELLED",
+        "SUPERSEDED",
+        "UNKNOWN"
+      ],
+      "title": "OpportunityStatus",
+      "type": "string"
+    },
+    "OpportunityTypeV02": {
+      "enum": [
+        "PUBLIC_INSTITUTION_JOB",
+        "STATE_OWNED_ENTERPRISE_JOB",
+        "CIVIL_SERVICE",
+        "GRASSROOTS_PROGRAM",
+        "YOUTH_POLICY_BENEFIT",
+        "POSTGRAD_RECOMMENDATION",
+        "ADMISSION_CHANGE",
+        "COMPETITION",
+        "RESEARCH_PROGRAM",
+        "SCHOLARSHIP",
+        "YOUTH_DEVELOPMENT_PROGRAM"
+      ],
+      "title": "OpportunityTypeV02",
+      "type": "string"
+    },
+    "SnapshotField": {
+      "enum": [
+        "canonical_title",
+        "type",
+        "issuer_name",
+        "jurisdiction",
+        "status",
+        "published_at",
+        "application_window.opens_on",
+        "application_window.closes_on",
+        "application_window.timezone",
+        "application_url",
+        "attachment_urls",
+        "locations"
+      ],
+      "title": "SnapshotField",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "changes": {
+      "items": {
+        "$ref": "#/$defs/OpportunityFieldChangeSchema"
+      },
+      "minItems": 1,
+      "title": "Changes",
+      "type": "array"
+    },
+    "content_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Sha256",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "effective_from": {
+      "format": "date-time",
+      "title": "Effective From",
+      "type": "string"
+    },
+    "field_evidence": {
+      "items": {
+        "$ref": "#/$defs/OpportunityFieldEvidenceSchema"
+      },
+      "title": "Field Evidence",
+      "type": "array"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "review_status": {
+      "$ref": "#/$defs/OpportunityReviewStatus"
+    },
+    "snapshot": {
+      "$ref": "#/$defs/OpportunitySnapshotSchema"
+    },
+    "source_document_id": {
+      "format": "uuid",
+      "title": "Source Document Id",
+      "type": "string"
+    },
+    "source_evidence_ref_id": {
+      "format": "uuid",
+      "title": "Source Evidence Ref Id",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "opportunity_id",
+    "version",
+    "effective_from",
+    "source_document_id",
+    "source_evidence_ref_id",
+    "snapshot",
+    "field_evidence",
+    "changes",
+    "content_sha256",
+    "review_status",
+    "created_at"
+  ],
+  "title": "OpportunityVersionSchemaV03",
+  "type": "object"
+}

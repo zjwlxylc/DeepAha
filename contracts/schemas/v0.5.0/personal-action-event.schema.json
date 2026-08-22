@@ -1,0 +1,55 @@
+{
+  "$defs": {
+    "ActionEventType": {
+      "enum": [
+        "SAVED_CHANGED",
+        "OFFICIAL_LINK_OPENED",
+        "MATERIAL_PLAN_CHANGED",
+        "ACTION_STATE_CHANGED"
+      ],
+      "title": "ActionEventType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action_id": {
+      "format": "uuid",
+      "title": "Action Id",
+      "type": "string"
+    },
+    "action_snapshot_id": {
+      "format": "uuid",
+      "title": "Action Snapshot Id",
+      "type": "string"
+    },
+    "event_id": {
+      "format": "uuid",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "event_type": {
+      "$ref": "#/$defs/ActionEventType"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "payload_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Payload Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "action_id",
+    "action_snapshot_id",
+    "event_type",
+    "payload_sha256",
+    "occurred_at"
+  ],
+  "title": "PersonalActionEventSchemaV05",
+  "type": "object"
+}

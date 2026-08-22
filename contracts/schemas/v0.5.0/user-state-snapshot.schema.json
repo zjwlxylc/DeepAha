@@ -1,0 +1,355 @@
+{
+  "$defs": {
+    "EducationLevel": {
+      "enum": [
+        "SECONDARY",
+        "ASSOCIATE",
+        "BACHELOR",
+        "MASTER",
+        "DOCTORATE"
+      ],
+      "title": "EducationLevel",
+      "type": "string"
+    },
+    "GoalType": {
+      "enum": [
+        "PUBLIC_SERVICE_EMPLOYMENT",
+        "STATE_OWNED_ENTERPRISE_EMPLOYMENT",
+        "CIVIL_SERVICE",
+        "GRASSROOTS_SERVICE",
+        "POLICY_BENEFIT",
+        "GROWTH_PROGRAM"
+      ],
+      "title": "GoalType",
+      "type": "string"
+    },
+    "LifeStage": {
+      "enum": [
+        "STUDENT",
+        "GRADUATING",
+        "EARLY_CAREER",
+        "UNEMPLOYED",
+        "OTHER"
+      ],
+      "title": "LifeStage",
+      "type": "string"
+    },
+    "OpportunityTypeV02": {
+      "enum": [
+        "PUBLIC_INSTITUTION_JOB",
+        "STATE_OWNED_ENTERPRISE_JOB",
+        "CIVIL_SERVICE",
+        "GRASSROOTS_PROGRAM",
+        "YOUTH_POLICY_BENEFIT",
+        "POSTGRAD_RECOMMENDATION",
+        "ADMISSION_CHANGE",
+        "COMPETITION",
+        "RESEARCH_PROGRAM",
+        "SCHOLARSHIP",
+        "YOUTH_DEVELOPMENT_PROGRAM"
+      ],
+      "title": "OpportunityTypeV02",
+      "type": "string"
+    },
+    "ProfileFieldV05": {
+      "enum": [
+        "life_stage",
+        "goal_types",
+        "education_level",
+        "major_name",
+        "major_code",
+        "graduation_year",
+        "student_status",
+        "birth_date",
+        "hukou_region",
+        "residence_region",
+        "target_regions",
+        "certificates"
+      ],
+      "title": "ProfileFieldV05",
+      "type": "string"
+    },
+    "StudentStatus": {
+      "enum": [
+        "ENROLLED",
+        "GRADUATING",
+        "RECENT_GRADUATE",
+        "EMPLOYED",
+        "OTHER"
+      ],
+      "title": "StudentStatus",
+      "type": "string"
+    },
+    "UserDataPurpose": {
+      "enum": [
+        "ELIGIBILITY",
+        "PERSONAL_RANKING",
+        "ACTION_TRACKING"
+      ],
+      "title": "UserDataPurpose",
+      "type": "string"
+    },
+    "UserProfileAttributesSchemaV05": {
+      "additionalProperties": false,
+      "properties": {
+        "birth_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Birth Date"
+        },
+        "certificates": {
+          "anyOf": [
+            {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Certificates"
+        },
+        "education_level": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EducationLevel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "graduation_year": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Graduation Year"
+        },
+        "hukou_region": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Hukou Region"
+        },
+        "major_code": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Major Code"
+        },
+        "major_name": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Major Name"
+        },
+        "residence_region": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Residence Region"
+        },
+        "student_status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StudentStatus"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "target_regions": {
+          "anyOf": [
+            {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Target Regions"
+        }
+      },
+      "required": [
+        "education_level",
+        "major_name",
+        "major_code",
+        "graduation_year",
+        "student_status",
+        "birth_date",
+        "hukou_region",
+        "residence_region",
+        "target_regions",
+        "certificates"
+      ],
+      "title": "UserProfileAttributesSchemaV05",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allowed_purposes": {
+      "items": {
+        "$ref": "#/$defs/UserDataPurpose"
+      },
+      "title": "Allowed Purposes",
+      "type": "array"
+    },
+    "attributes": {
+      "$ref": "#/$defs/UserProfileAttributesSchemaV05"
+    },
+    "consent_version": {
+      "minLength": 1,
+      "title": "Consent Version",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "goal_types": {
+      "items": {
+        "$ref": "#/$defs/GoalType"
+      },
+      "title": "Goal Types",
+      "type": "array"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "life_stage": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LifeStage"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "personalization_enabled": {
+      "title": "Personalization Enabled",
+      "type": "boolean"
+    },
+    "preference_regions": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Preference Regions",
+      "type": "array"
+    },
+    "preference_types": {
+      "items": {
+        "$ref": "#/$defs/OpportunityTypeV02"
+      },
+      "title": "Preference Types",
+      "type": "array"
+    },
+    "qualification_profile_snapshot_id": {
+      "format": "uuid",
+      "title": "Qualification Profile Snapshot Id",
+      "type": "string"
+    },
+    "qualification_profile_version": {
+      "minimum": 1,
+      "title": "Qualification Profile Version",
+      "type": "integer"
+    },
+    "scenario_clock": {
+      "format": "date",
+      "title": "Scenario Clock",
+      "type": "string"
+    },
+    "skipped_fields": {
+      "items": {
+        "$ref": "#/$defs/ProfileFieldV05"
+      },
+      "title": "Skipped Fields",
+      "type": "array"
+    },
+    "user_state_id": {
+      "format": "uuid",
+      "title": "User State Id",
+      "type": "string"
+    },
+    "user_state_snapshot_id": {
+      "format": "uuid",
+      "title": "User State Snapshot Id",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "user_state_snapshot_id",
+    "user_state_id",
+    "version",
+    "qualification_profile_snapshot_id",
+    "qualification_profile_version",
+    "life_stage",
+    "goal_types",
+    "attributes",
+    "preference_regions",
+    "preference_types",
+    "skipped_fields",
+    "personalization_enabled",
+    "consent_version",
+    "allowed_purposes",
+    "scenario_clock",
+    "input_sha256",
+    "created_at"
+  ],
+  "title": "UserStateSnapshotSchemaV05",
+  "type": "object"
+}

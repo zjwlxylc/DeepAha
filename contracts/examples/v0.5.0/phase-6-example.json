@@ -1,0 +1,107 @@
+{
+  "schema_version": "0.5.0",
+  "synthetic": true,
+  "business_truth": false,
+  "release_qualification_eligible": false,
+  "contains_personal_data": false,
+  "license": "CC0-1.0 synthetic fixture",
+  "user_state_snapshot": {
+    "user_state_snapshot_id": "019b0000-0000-7000-8000-000000000201",
+    "user_state_id": "019b0000-0000-7000-8000-000000000202",
+    "version": 1,
+    "qualification_profile_snapshot_id": "019b0000-0000-7000-8000-000000000203",
+    "qualification_profile_version": 1,
+    "life_stage": "GRADUATING",
+    "goal_types": [
+      "PUBLIC_SERVICE_EMPLOYMENT"
+    ],
+    "attributes": {
+      "education_level": "BACHELOR",
+      "major_name": "合成软件工程",
+      "major_code": "080902",
+      "graduation_year": 2026,
+      "student_status": "GRADUATING",
+      "birth_date": null,
+      "hukou_region": null,
+      "residence_region": "合成杭州市",
+      "target_regions": null,
+      "certificates": null
+    },
+    "preference_regions": [
+      "合成杭州市"
+    ],
+    "preference_types": [
+      "PUBLIC_INSTITUTION_JOB"
+    ],
+    "skipped_fields": [
+      "birth_date",
+      "certificates",
+      "hukou_region",
+      "target_regions"
+    ],
+    "personalization_enabled": true,
+    "consent_version": "phase6-consent-v1",
+    "allowed_purposes": [
+      "ACTION_TRACKING",
+      "ELIGIBILITY",
+      "PERSONAL_RANKING"
+    ],
+    "scenario_clock": "2026-08-22",
+    "input_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "created_at": "2026-08-22T09:00:00Z"
+  },
+  "personal_ranking_snapshot": {
+    "ranking_snapshot_id": "019b0000-0000-7000-8000-000000000204",
+    "user_state_snapshot_id": "019b0000-0000-7000-8000-000000000201",
+    "qualification_profile_snapshot_id": "019b0000-0000-7000-8000-000000000203",
+    "qualification_profile_version": 1,
+    "scenario_clock": "2026-08-22",
+    "window_end": "2026-11-20",
+    "ranker_version": "phase6-deterministic-ranker-v1",
+    "input_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "items": [
+      {
+        "ordinal": 1,
+        "opportunity_id": "019b0000-0000-7000-8000-000000000301",
+        "opportunity_version": 1,
+        "match_snapshot_id": "019b0000-0000-7000-8000-000000000401",
+        "eligibility_status": "ELIGIBLE",
+        "reason_codes": [
+          "ELIGIBILITY_ELIGIBLE",
+          "EARLIER_DEADLINE"
+        ],
+        "deadline": "2026-09-11"
+      }
+    ],
+    "omitted_rule_set_count": 0,
+    "created_at": "2026-08-22T09:00:00Z"
+  },
+  "personal_action_snapshot": {
+    "action_snapshot_id": "019b0000-0000-7000-8000-000000000206",
+    "action_id": "019b0000-0000-7000-8000-000000000205",
+    "version": 1,
+    "opportunity_id": "019b0000-0000-7000-8000-000000000301",
+    "opportunity_version": 1,
+    "saved": true,
+    "state": "PREPARING",
+    "material_items": [
+      {
+        "material_item_id": "019b0000-0000-7000-8000-000000000208",
+        "label": "合成报名表",
+        "completed": false,
+        "due_on": "2026-09-01"
+      }
+    ],
+    "last_event_id": "019b0000-0000-7000-8000-000000000207",
+    "input_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+    "created_at": "2026-08-22T09:00:00Z"
+  },
+  "personal_action_event": {
+    "event_id": "019b0000-0000-7000-8000-000000000207",
+    "action_id": "019b0000-0000-7000-8000-000000000205",
+    "action_snapshot_id": "019b0000-0000-7000-8000-000000000206",
+    "event_type": "MATERIAL_PLAN_CHANGED",
+    "payload_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+    "occurred_at": "2026-08-22T09:00:00Z"
+  }
+}

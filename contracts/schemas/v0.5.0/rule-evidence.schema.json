@@ -1,0 +1,70 @@
+{
+  "$defs": {
+    "EvidenceRelation": {
+      "enum": [
+        "SUPPORTS",
+        "CONTRADICTS"
+      ],
+      "title": "EvidenceRelation",
+      "type": "string"
+    },
+    "RuleEvidenceAuthority": {
+      "enum": [
+        "LATEST_OFFICIAL_CORRECTION",
+        "FORMAL_OFFICIAL_ATTACHMENT",
+        "ORIGINAL_OFFICIAL_NOTICE",
+        "OFFICIAL_FAQ_GUIDANCE",
+        "HUMAN_APPROVED_MAPPING",
+        "LLM_SEMANTIC_INFERENCE"
+      ],
+      "title": "RuleEvidenceAuthority",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assertion_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Assertion Sha256",
+      "type": "string"
+    },
+    "authority": {
+      "$ref": "#/$defs/RuleEvidenceAuthority"
+    },
+    "document_id": {
+      "format": "uuid",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "effective_at": {
+      "format": "date-time",
+      "title": "Effective At",
+      "type": "string"
+    },
+    "evidence_ref_id": {
+      "format": "uuid",
+      "title": "Evidence Ref Id",
+      "type": "string"
+    },
+    "precedence": {
+      "maximum": 600,
+      "minimum": 100,
+      "title": "Precedence",
+      "type": "integer"
+    },
+    "relation": {
+      "$ref": "#/$defs/EvidenceRelation"
+    }
+  },
+  "required": [
+    "evidence_ref_id",
+    "document_id",
+    "authority",
+    "precedence",
+    "relation",
+    "effective_at",
+    "assertion_sha256"
+  ],
+  "title": "RuleEvidenceSchemaV04",
+  "type": "object"
+}

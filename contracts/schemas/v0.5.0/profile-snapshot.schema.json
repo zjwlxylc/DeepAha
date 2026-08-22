@@ -1,0 +1,235 @@
+{
+  "$defs": {
+    "EducationLevel": {
+      "enum": [
+        "SECONDARY",
+        "ASSOCIATE",
+        "BACHELOR",
+        "MASTER",
+        "DOCTORATE"
+      ],
+      "title": "EducationLevel",
+      "type": "string"
+    },
+    "ProfileAttributesSchemaV04": {
+      "additionalProperties": false,
+      "properties": {
+        "birth_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Birth Date"
+        },
+        "certificates": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Certificates",
+          "type": "array"
+        },
+        "education_level": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EducationLevel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "graduation_year": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Graduation Year"
+        },
+        "hukou_region": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Hukou Region"
+        },
+        "major_code": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Major Code"
+        },
+        "major_name": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Major Name"
+        },
+        "residence_region": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Residence Region"
+        },
+        "student_status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StudentStatus"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "target_regions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Target Regions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "education_level",
+        "major_name",
+        "major_code",
+        "graduation_year",
+        "student_status",
+        "birth_date",
+        "hukou_region",
+        "residence_region",
+        "target_regions",
+        "certificates"
+      ],
+      "title": "ProfileAttributesSchemaV04",
+      "type": "object"
+    },
+    "StudentStatus": {
+      "enum": [
+        "ENROLLED",
+        "GRADUATING",
+        "RECENT_GRADUATE",
+        "EMPLOYED",
+        "OTHER"
+      ],
+      "title": "StudentStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "attributes": {
+      "$ref": "#/$defs/ProfileAttributesSchemaV04"
+    },
+    "change_note": {
+      "minLength": 1,
+      "title": "Change Note",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "created_by": {
+      "minLength": 1,
+      "title": "Created By",
+      "type": "string"
+    },
+    "persona_family_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Persona Family Id"
+    },
+    "profile_id": {
+      "format": "uuid",
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "profile_schema_version": {
+      "const": "0.4.0",
+      "title": "Profile Schema Version",
+      "type": "string"
+    },
+    "profile_snapshot_id": {
+      "format": "uuid",
+      "title": "Profile Snapshot Id",
+      "type": "string"
+    },
+    "reviewed_by": {
+      "minLength": 1,
+      "title": "Reviewed By",
+      "type": "string"
+    },
+    "scenario_clock": {
+      "format": "date",
+      "title": "Scenario Clock",
+      "type": "string"
+    },
+    "synthetic": {
+      "title": "Synthetic",
+      "type": "boolean"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "profile_snapshot_id",
+    "profile_id",
+    "version",
+    "synthetic",
+    "persona_family_id",
+    "attributes",
+    "scenario_clock",
+    "profile_schema_version",
+    "created_at",
+    "created_by",
+    "reviewed_by",
+    "change_note"
+  ],
+  "title": "ProfileSnapshotSchemaV04",
+  "type": "object"
+}

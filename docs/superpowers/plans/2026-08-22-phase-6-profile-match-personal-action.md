@@ -79,7 +79,7 @@ Actions.
   `PersonalActionEventSchemaV05`, `ActionState`, `ActionEventType`, `LifeStage`, `GoalType`,
   `ProfileFieldV05` and `render_phase6_schemas()` writing directory `v0.5.0`.
 
-- [ ] **Step 1: Write failing contract tests**
+- [x] **Step 1: Write failing contract tests**
 
 ```python
 def test_user_state_preserves_unknown_and_rejects_skipped_provided_conflict() -> None:
@@ -104,13 +104,13 @@ def test_prior_schema_bytes_are_unchanged() -> None:
     assert render_phase4_schemas() == committed_schema_bytes("v0.4.0")
 ```
 
-- [ ] **Step 2: Run the RED contract target**
+- [x] **Step 2: Run the RED contract target**
 
 Run: `cd backend; uv run pytest tests/contracts/test_phase6_contracts.py -q`
 
 Expected: collection fails because `deepaha.contracts.phase6` does not exist.
 
-- [ ] **Step 3: Implement the minimum frozen v0.5 types**
+- [x] **Step 3: Implement the minimum frozen v0.5 types**
 
 ```python
 class UserProfileAttributesSchemaV05(ContractModel):
@@ -158,20 +158,20 @@ consecutive ranks, unique opportunities, no `INELIGIBLE` priority item and actio
 Extend the exporter with `PHASE6_SCHEMAS`, `render_phase6_schemas()` and CLI choice `0.5.0`; the
 function name follows the project phase while the output directory carries the contract version.
 
-- [ ] **Step 4: Export Schemas and add the strict synthetic example**
+- [x] **Step 4: Export Schemas and add the strict synthetic example**
 
-Run: `cd backend; uv run python -m deepaha.contracts.export .. --version 0.5.0`
+Run: `cd backend; $env:PYTHONPATH = "src"; uv run python -m deepaha.contracts.export .. --version 0.5.0`
 
 The example must contain `synthetic=true`, `business_truth=false`,
 `release_qualification_eligible=false`, one unknown optional field and no personal identifiers.
 
-- [ ] **Step 5: Verify contract parity and prior bytes**
+- [x] **Step 5: Verify contract parity and prior bytes**
 
 Run: `cd backend; uv run pytest tests/contracts/test_phase1_contracts.py tests/contracts/test_phase2_contracts.py tests/contracts/test_phase3_contracts.py tests/contracts/test_phase4_contracts.py tests/contracts/test_phase6_contracts.py -q`
 
 Expected: PASS and the test confirms all committed v0.1-v0.4 bytes still equal their renderers.
 
-- [ ] **Step 6: Commit and push exact files**
+- [x] **Step 6: Commit and push exact files**
 
 ```powershell
 git add -- backend/src/deepaha/contracts/phase6.py backend/src/deepaha/contracts/export.py backend/src/deepaha/contracts/__init__.py backend/tests/contracts/test_phase6_contracts.py contracts/schemas/v0.5.0 contracts/examples/v0.5.0/phase-6-example.json
