@@ -18,6 +18,11 @@ export default async function PersonalOpportunitiesPage() {
       <aside className="fixture-notice" aria-label="数据证据边界">
         当前工程流程使用固定合成许可安全夹具，不是真人指标、真实 Gold 机会或发布资格证据。
       </aside>
+      <p>
+        <Link className="button button-secondary" href="/me/reminders">
+          查看截止变化提醒测试收件箱
+        </Link>
+      </p>
       {priorities.items.length === 0 ? (
         <div className="empty-state" role="status">
           <h2>暂时没有需要优先处理的机会</h2>

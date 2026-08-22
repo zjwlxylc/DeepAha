@@ -5,6 +5,8 @@ import OpportunityDetailError from "../app/opportunities/[publicId]/error";
 import OpportunityDetailLoading from "../app/opportunities/[publicId]/loading";
 import OpportunitiesError from "../app/opportunities/error";
 import OpportunitiesLoading from "../app/opportunities/loading";
+import ReminderError from "../app/me/reminders/error";
+import ReminderLoading from "../app/me/reminders/loading";
 
 
 describe("public trust route states", () => {
@@ -14,6 +16,9 @@ describe("public trust route states", () => {
 
     rerender(<OpportunityDetailLoading />);
     expect(screen.getByRole("status")).toHaveTextContent("正在核对机会详情");
+
+    rerender(<ReminderLoading />);
+    expect(screen.getByRole("status")).toHaveTextContent("正在读取截止变化提醒");
   });
 
   it("shows explicit retryable errors without leaking exception text", () => {
@@ -25,6 +30,10 @@ describe("public trust route states", () => {
 
     rerender(<OpportunityDetailError error={error} reset={reset} />);
     expect(screen.getByRole("alert")).toHaveTextContent("暂时无法核对机会详情");
+    expect(screen.queryByText(/database password/)).not.toBeInTheDocument();
+
+    rerender(<ReminderError error={error} reset={reset} />);
+    expect(screen.getByRole("alert")).toHaveTextContent("截止变化提醒暂时不可用");
     expect(screen.queryByText(/database password/)).not.toBeInTheDocument();
   });
 });

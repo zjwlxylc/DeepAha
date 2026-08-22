@@ -1015,6 +1015,95 @@ code {
   margin-top: 1rem;
 }
 
+.reminder-preference,
+.reminder-inbox-card {
+  border: 1px solid var(--border);
+  background: var(--paper);
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow);
+}
+
+.reminder-preference {
+  border-top: 0.35rem solid var(--blue);
+}
+
+.reminder-preference h2,
+.reminder-inbox-card h2 {
+  margin-top: 0;
+}
+
+.reminder-preference form {
+  display: flex;
+  margin-top: 1rem;
+  align-items: center;
+  gap: 1rem;
+}
+
+.reminder-preference .check-label {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  color: var(--navy);
+  font-weight: 750;
+  gap: 0.65rem;
+}
+
+.reminder-preference .check-label input {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.reminder-fixed-settings,
+.deadline-change-facts {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.reminder-inbox {
+  margin-top: 3rem;
+}
+
+.reminder-inbox-list {
+  display: grid;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.deadline-direction {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  background: var(--orange-soft);
+  color: #723706;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.deadline-change-facts div {
+  border-left: 0.2rem solid var(--border);
+  padding-left: 0.75rem;
+}
+
+.deadline-change-facts dt {
+  color: var(--ink-muted);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.deadline-change-facts dd {
+  margin: 0;
+  color: var(--navy);
+  font-weight: 750;
+}
+
+.reminder-evidence-links {
+  display: flex;
+  margin-block: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .site-footer {
   border-top: 1px solid var(--border);
   background: var(--navy);
@@ -1097,6 +1186,22 @@ code {
   .review-form .button,
   .personal-opportunity-card .button,
   .action-forms .button {
+    width: 100%;
+  }
+
+  .reminder-preference form,
+  .reminder-evidence-links {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .reminder-fixed-settings,
+  .deadline-change-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .reminder-preference .button,
+  .reminder-inbox-card .button {
     width: 100%;
   }
 
