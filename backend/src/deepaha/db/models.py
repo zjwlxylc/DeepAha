@@ -9,6 +9,13 @@ from deepaha.feedback.models import (
     FeedbackIdempotencyRecordModel,
 )
 from deepaha.matching.models import MatchSnapshotModel
+from deepaha.notifications.models import (
+    NotificationDeliveryAttemptModel,
+    NotificationOutboxModel,
+    ReminderPreferenceIdempotencyRecordModel,
+    ReminderPreferenceSnapshotModel,
+    TestInboxEntryModel,
+)
 from deepaha.opportunities.models import (
     DocumentOpportunityLink,
     Opportunity,
@@ -84,9 +91,13 @@ __all__ = [
     "PersonalUserModel",
     "RawArtifact",
     "MatchSnapshotModel",
+    "NotificationDeliveryAttemptModel",
+    "NotificationOutboxModel",
     "ProfileSnapshotModel",
     "PublicCatalogEntry",
     "ReleaseGateDecisionModel",
+    "ReminderPreferenceIdempotencyRecordModel",
+    "ReminderPreferenceSnapshotModel",
     "ReviewerAccountModel",
     "ReviewerAuthSessionModel",
     "ReviewerIdempotencyRecordModel",
@@ -95,6 +106,7 @@ __all__ = [
     "RuleSetModel",
     "Source",
     "SourceEndpoint",
+    "TestInboxEntryModel",
     "ShadowTestCandidateModel",
     "UserStateSnapshotModel",
     "ValidationRunModel",

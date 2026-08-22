@@ -53,6 +53,115 @@ PHASE7_TABLES = {
     "validation_runs",
     "release_gate_decisions",
 }
+PHASE8_TABLES = {
+    "reminder_preference_snapshots",
+    "reminder_preference_idempotency_records",
+    "notification_outbox",
+    "notification_delivery_attempts",
+    "test_inbox_entries",
+}
+
+
+def test_phase8_migration_round_trips_through_phase7_in_an_isolated_database(
+    database_url: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    database_name = f"deepaha_migration_{uuid4().hex}"
+    assert re.fullmatch(r"deepaha_migration_[0-9a-f]{32}", database_name)
+    url = make_url(database_url)
+    maintenance_url = url.set(database="postgres")
+    temporary_url = url.set(database=database_name)
+    maintenance_engine = create_engine(maintenance_url, isolation_level="AUTOCOMMIT")
+    temporary_engine = None
+    try:
+        with maintenance_engine.connect() as maintenance_connection:
+            maintenance_connection.exec_driver_sql(f'CREATE DATABASE "{database_name}"')
+        monkeypatch.setenv(
+            "DEEPAHA_DATABASE_URL",
+            temporary_url.render_as_string(hide_password=False),
+        )
+        config = Config(str(BACKEND_ROOT / "alembic.ini"))
+        command.upgrade(config, "head")
+        temporary_engine = create_engine(temporary_url)
+        with temporary_engine.connect() as connection:
+            assert set(inspect(connection).get_table_names()) >= PHASE8_TABLES
+
+        command.downgrade(config, "20260822_0007")
+        with temporary_engine.connect() as connection:
+            assert set(inspect(connection).get_table_names()).isdisjoint(PHASE8_TABLES)
+
+        command.upgrade(config, "head")
+        with temporary_engine.connect() as connection:
+            assert set(inspect(connection).get_table_names()) >= PHASE8_TABLES
+    finally:
+        if temporary_engine is not None:
+            temporary_engine.dispose()
+        with maintenance_engine.connect() as maintenance_connection:
+            maintenance_connection.exec_driver_sql(
+                f'DROP DATABASE IF EXISTS "{database_name}" WITH (FORCE)'
+            )
+        maintenance_engine.dispose()
+
+
+def test_phase8_downgrade_refuses_reminder_data(
+    database_url: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    database_name = f"deepaha_migration_{uuid4().hex}"
+    assert re.fullmatch(r"deepaha_migration_[0-9a-f]{32}", database_name)
+    url = make_url(database_url)
+    maintenance_url = url.set(database="postgres")
+    temporary_url = url.set(database=database_name)
+    maintenance_engine = create_engine(maintenance_url, isolation_level="AUTOCOMMIT")
+    temporary_engine = None
+    try:
+        with maintenance_engine.connect() as maintenance_connection:
+            maintenance_connection.exec_driver_sql(f'CREATE DATABASE "{database_name}"')
+        monkeypatch.setenv(
+            "DEEPAHA_DATABASE_URL",
+            temporary_url.render_as_string(hide_password=False),
+        )
+        config = Config(str(BACKEND_ROOT / "alembic.ini"))
+        command.upgrade(config, "head")
+        temporary_engine = create_engine(temporary_url)
+        with temporary_engine.begin() as connection:
+            connection.exec_driver_sql(
+                "insert into personal_users "
+                "(user_id, user_state_id, active, created_at) values "
+                "('019b0000-0000-7000-8000-000000000801', "
+                "'019b0000-0000-7000-8000-000000000802', true, now())"
+            )
+            connection.exec_driver_sql(
+                "insert into reminder_preference_snapshots "
+                "(preference_snapshot_id, preference_id, user_id, version, "
+                "predecessor_snapshot_id, reminder_kind, enabled, cadence, target, "
+                "actor_user_id, preference_policy_version, contract_version, created_at) values "
+                "('019b0000-0000-7000-8000-000000000803', "
+                "'019b0000-0000-7000-8000-000000000804', "
+                "'019b0000-0000-7000-8000-000000000801', 1, null, "
+                "'DEADLINE_CHANGED', true, 'AS_SOON_AS_GOVERNED', 'TEST_INBOX', "
+                "'019b0000-0000-7000-8000-000000000801', "
+                "'phase8-deadline-reminder-v1', '0.7.0', now())"
+            )
+
+        with pytest.raises(RuntimeError, match="cannot downgrade Phase 8"):
+            command.downgrade(config, "20260822_0007")
+
+        with temporary_engine.connect() as connection:
+            assert (
+                connection.exec_driver_sql(
+                    "select count(*) from reminder_preference_snapshots"
+                ).scalar_one()
+                == 1
+            )
+    finally:
+        if temporary_engine is not None:
+            temporary_engine.dispose()
+        with maintenance_engine.connect() as maintenance_connection:
+            maintenance_connection.exec_driver_sql(
+                f'DROP DATABASE IF EXISTS "{database_name}" WITH (FORCE)'
+            )
+        maintenance_engine.dispose()
 
 
 def test_database_is_postgresql_18(connection: Connection) -> None:

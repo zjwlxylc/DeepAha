@@ -212,6 +212,12 @@ class OpportunityEvent(Base):
             ondelete="RESTRICT",
         ),
         UniqueConstraint("opportunity_id", "to_version"),
+        UniqueConstraint(
+            "event_id",
+            "opportunity_id",
+            "to_version",
+            name="uq_opportunity_events_reminder_binding",
+        ),
     )
 
     event_id: Mapped[UUID] = mapped_column(

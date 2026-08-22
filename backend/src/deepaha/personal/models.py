@@ -8,11 +8,13 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     ForeignKeyConstraint,
+    Index,
     Integer,
     PrimaryKeyConstraint,
     String,
     UniqueConstraint,
     Uuid,
+    desc,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
@@ -100,6 +102,7 @@ class UserStateSnapshotModel(Base):
             name="uq_user_state_snapshots_feedback_binding",
         ),
         UniqueConstraint("user_id", "input_sha256", name="uq_user_state_snapshots_owner_input"),
+        Index("ix_user_state_snapshots_owner_version", "user_id", desc("version")),
     )
 
     user_state_snapshot_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
@@ -241,6 +244,12 @@ class PersonalActionSnapshotModel(Base):
         UniqueConstraint("action_id", "version", name="uq_personal_action_stream_version"),
         UniqueConstraint(
             "user_id", "opportunity_id", "input_sha256", name="uq_personal_action_owner_input"
+        ),
+        Index(
+            "ix_personal_action_snapshots_opportunity_owner_version",
+            "opportunity_id",
+            "user_id",
+            desc("version"),
         ),
     )
 

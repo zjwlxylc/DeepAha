@@ -1,8 +1,10 @@
 from functools import lru_cache
-from typing import Literal
+from typing import Final, Literal
 
-from pydantic import AnyHttpUrl, SecretStr
+from pydantic import AnyHttpUrl, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+RETRY_DELAYS_SECONDS: Final = (60, 300)
 
 
 class Settings(BaseSettings):
@@ -21,6 +23,8 @@ class Settings(BaseSettings):
     allow_live_source_check: bool = False
     personal_auth_mode: Literal["disabled", "fixture"] = "disabled"
     reviewer_auth_mode: Literal["disabled", "fixture"] = "disabled"
+    notification_worker_batch_size: int = Field(default=50, ge=1, le=100)
+    notification_lease_seconds: int = Field(default=60, ge=10, le=3600)
     database_url: str | None = None
     object_store_endpoint: AnyHttpUrl = AnyHttpUrl("http://127.0.0.1:55000")
     object_store_region: str = "us-east-1"
