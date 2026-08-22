@@ -1,5 +1,12 @@
 # DeepAha Phase 3 Opportunity 归并、版本与变化设计
 
+> 治理更新（2026-08-22）：本文正文保留最初受控堆叠设计的历史前提和措辞，不机械改写。
+> Phase 2 Engineering Gate closing commit `6c8a8fb63c68cfbb0f4cf54b6032bfb49a0ef65c`
+> 已完整纳入 Phase 3。当前实现状态为 `IMPLEMENTED`，Phase 3 Engineering Gate 为
+> `CLOSED`，Release Qualification 为 `NOT_STARTED`，v0.3 契约成熟度为 `IMPLEMENTED`。
+> 正文中的 `BLOCKED_BY_PHASE2`、`IMPLEMENTED_PENDING_PHASE2_GATE` 及 v0.2/v0.3
+> `PROPOSED` 是当时执行边界，现已由四轴治理状态取代；它们不代表当前状态。
+
 > 状态：`PROPOSED_IMPLEMENTATION_BLOCKED_BY_PHASE2_GATE`
 >
 > 日期：2026-08-22

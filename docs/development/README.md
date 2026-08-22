@@ -40,9 +40,9 @@
 迁移、来源采集和三格式解析已 `IMPLEMENTED`，Engineering Gate 已 `CLOSED`；live 24 小时观察、
 新鲜副本和最终候选验证尚未完成，因此 [Phase 2 Release Qualification](../gates/phase-2/README.md)
 为 `IN_PROGRESS`，领域契约 v0.2 为 `IMPLEMENTED`、不得标记 `STABLE`。Phase 3 机会归并、版本
-与变化已 `IMPLEMENTED`，正在基于 Phase 2 closing commit 重新判定自身 Engineering Gate；v0.3
-为 `IMPLEMENTED`、不得标记 `STABLE`。Phase 3 不继承 Phase 2 Release Qualification 的阻塞状态，
-但仍不得合并、发布或声称 Release Qualification 已完成。
+与变化已 `IMPLEMENTED`，自身 Engineering Gate 已 `CLOSED`；Phase 3 Release Qualification 为
+`NOT_STARTED`，领域契约 v0.3 为 `IMPLEMENTED`、不得标记 `STABLE`。Phase 3 不继承 Phase 2
+Release Qualification 的阻塞状态，但仍不得合并、发布或声称 Release Qualification 已完成。
 
 ## 维护规则
 

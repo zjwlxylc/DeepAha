@@ -5,20 +5,19 @@
 - 只使用官方证据等级与许可安全/CC0 合成 fixture；不提交受限原件。
 - 高影响 Version/Event 必须绑定同一 Document 的 EvidenceRef；数据库复合外键执行该约束。
 - Resolver 不访问 LLM、浏览器或 live 站点；弱/冲突证据进入 NEEDS_REVIEW。
-- Phase 3 本地服务仅使用 `infra/compose.phase3.yaml`、55433/55001 与独立 project name。
+- Phase 3 本地服务仅使用 `infra/compose.phase3.yaml`、55433/55001 与唯一 project name。
 - 测试凭据是 disposable 本地/CI 常量，不是外部 secret，也不授权 live 采集。
 
-## 交付前扫描
+## Engineering Gate 扫描
 
-2026-08-22 已实际复核 tracked artifact、secret pattern、Phase 2 live 标识/端口隔离和完整
-diff：
+2026-08-22 在纳入 Phase 2 closing commit 后实际复核完整 Phase 3 diff、tracked artifacts、
+secret patterns、fixture 许可和 Phase 2 live 隔离：
 
-- tracked `.env`、数据库、缓存、依赖目录、对象/data 目录规则零命中；
-- AKIA 与私钥规则零命中；`Set-Cookie` 仅命中“不保存”设计文字和防泄漏测试；
-- 数据库 URL 命中均为历史计划、测试断言或明确 disposable 的本地/CI 常量；
-- Phase 3 compose/verifier/CI 对 55432、55000、`deepaha-phase2-live-gate` 的 scoped 扫描零命中。
+- tracked `.env`、数据库、缓存、依赖目录、构建目录、对象/data 目录：`0` 命中；
+- AKIA 与私钥规则：`0` 文件命中；
+- Phase 3 verifier/compose/CI 对 55432、55000、`deepaha-phase2-live-gate`：`0` 命中；
+- Resolver fixture 明确标记 `synthetic: true` 与 `CC0-1.0 synthetic fixture`；
+- Phase 3 verifier 仅创建并清理 `deepaha-phase3-$PID`，实际运行后 project/network 均移除。
 
-当前结论：`LOCAL SCAN PASS`。精确候选 SHA `f5b89db…` 的 GitHub Actions run
-32523434567 四个 jobs 均成功；Phase 2 closing commit 后仍需重做 diff/CI 复核。
-
-本文件不是法律意见；Phase 3 没有面向公众发布、用户数据、招聘交易或 AI 内容输出。
+当前结论：`ENGINEERING SCAN PASS`。本文件不是法律意见；Phase 3 没有面向公众发布、用户
+数据、招聘交易或 AI 内容输出。Release Qualification 尚未开始，不能由本扫描推出生产安全。

@@ -107,12 +107,19 @@ def load_resolution_index(session: Session) -> ResolutionIndex:
     aliases_by_opportunity: dict[UUID, list[OpportunityAlias]] = defaultdict(list)
     for alias in aliases:
         aliases_by_opportunity[alias.opportunity_id].append(alias)
-    targets = {
+    raw_targets = {
         opportunity.opportunity_id: _target_for_opportunity(
             opportunity,
             aliases_by_opportunity[opportunity.opportunity_id],
         )
         for opportunity in opportunities
+    }
+    identity_state = replay_identity_state(load_identity_actions(session))
+    targets = {
+        opportunity_id: raw_targets[
+            resolve_canonical_opportunity_id(identity_state, opportunity_id)
+        ]
+        for opportunity_id in raw_targets
     }
 
     document_links: dict[UUID, ResolutionTarget] = {}

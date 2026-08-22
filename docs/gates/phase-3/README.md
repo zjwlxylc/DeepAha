@@ -1,32 +1,38 @@
-Gate status: BLOCKED_BY_PHASE2
-Implementation status: IMPLEMENTED_PENDING_PHASE2_GATE
-v0.3 contract status: PROPOSED
-Phase 2 prerequisite: OPEN
+Implementation Status: IMPLEMENTED
+Engineering Gate: CLOSED
+Release Qualification: NOT_STARTED
+v0.3 Contract Maturity: IMPLEMENTED
 
-# Phase 3 Opportunity 归并、版本与变化候选 Gate
+# Phase 3 Opportunity 归并、版本与变化 Engineering Gate
 
-证据更新时间：2026-08-22。远程候选实现 SHA：
-`f5b89db22afe08f3d5d62b4854627d2d68485400`。
+证据更新时间：2026-08-22。Phase 2 Engineering Gate closing commit：
+`6c8a8fb63c68cfbb0f4cf54b6032bfb49a0ef65c`；非重写整合提交：
+`66940b368b176774801d49a4d62446607630fdd8`。
 
 ## 当前结论
 
 候选 v0.3 契约、PostgreSQL/Alembic 扩展、保守 Resolver、Version/Event、字段级 diff、
-确定性重放以及 merge/split/reversal 追加式审计已实现。本地统一 Phase 3 入口实际退出 0：
-默认后端 `243 passed, 107 deselected`，集成 `107 passed, 243 deselected`，contracts 与
-opportunities `123 passed`，Web 测试/构建与 Alembic 漂移检查通过。
+确定性重放以及 merge/split/reversal 追加式审计均已实现。整合后重新执行根验证与独立
+Phase 3 verifier：默认后端 `247 passed, 109 deselected`，集成 `109 passed, 247 deselected`，
+contracts 与 opportunities `124 passed`，Web lint/typecheck/test/build、`0001 → 0002 → 0003`
+迁移和 Alembic drift 检查均通过。
 
-远程 push CI [run 32523434567](https://github.com/zjwlxylc/DeepAha/actions/runs/32523434567)
-的 `backend-quality`、`web-quality`、`integration`、`phase3-resolution` 均为 `success`。
-stacked draft [PR #3](https://github.com/zjwlxylc/DeepAha/pull/3) 保持 draft/unmerged；因正在变化
-的 Phase 2 base 没有 merge ref，当前远程证据来自精确 head 的 push run，Phase 2 closing
-commit 后必须更新并重新运行 PR CI。
+Engineering Gate 自审发现 MERGE 后 alias owner 未进入 canonical lookup 的 `Important` 缺口；
+新增 PostgreSQL 集成测试先复现 SOURCE 被错误返回，再以 identity replay 映射修复，并验证
+MERGE_REVERSAL 恢复 SOURCE。当前没有未解决的 `Critical` 或 `Important` 发现；详细记录见
+[代码审查](./code-review.md)。
 
-这不是 Gate 关闭结论。Phase 2 Gate 仍为 `OPEN`，所以 Phase 3 只能是
-`IMPLEMENTED_PENDING_PHASE2_GATE`；不得合并、发布、把 v0.3 标记为 `STABLE`，也不得声称
-已完成最终验证。
+上述实现、契约、迁移、测试、安全、scope 和审查证据支持 Phase 3 Engineering Gate
+`CLOSED`。该结论允许后续 Phase 正常工程开发，不代表 PR 可合并、系统可发布或真实环境验收
+完成。stacked draft [PR #3](https://github.com/zjwlxylc/DeepAha/pull/3) 必须保持
+OPEN/DRAFT/UNMERGED；精确最终提交的远程 CI 结果记录在该 PR。
 
-Phase 2 关闭后必须更新到它的精确 closing commit，做契约兼容差异审查，并重新执行空库、
-已有数据、全量本地、独立 Phase 3 和远程 CI 验证后，才能重新判定本 Gate。
+## Release Qualification 与契约成熟度
+
+Phase 3 尚未启动真实 Gold Opportunity、真实来源变化识别、新鲜副本或生产相似环境候选验证，
+因此 Release Qualification 为 `NOT_STARTED`。固定 CC0 合成样本、常规 CI 与本地 PostgreSQL
+验证不能换算为真实准确率、覆盖率或用户价值证据。v0.3 当前只能是 `IMPLEMENTED`；只有对应
+Release Qualification 明确为 `QUALIFIED` 后，才可另行评估 `STABLE`。
 
 详细证据见[验收结果](./acceptance-results.md)、[测试摘要](./test-summary.md)、
 [Resolver 评估](./resolver-evaluation-summary.md)、[安全合规](./security-and-compliance.md)、

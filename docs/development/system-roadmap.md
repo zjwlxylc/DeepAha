@@ -119,9 +119,10 @@ Model Gateway、Playwright、Docling 和 OCR 不是 Phase 2 默认范围；只�
 
 ### Phase 3：Opportunity 归并、版本与变化
 
-**候选状态（2026-08-22）：** `IMPLEMENTED_PENDING_PHASE2_GATE`。独立堆叠分支已本地验证；
-Phase 2 Gate 仍 OPEN，因此 Phase 3 Gate 为 `BLOCKED_BY_PHASE2`，v0.3 仍为 PROPOSED，
-不得合并、发布或标记 STABLE。
+**当前状态（2026-08-22）：** 实现状态 `IMPLEMENTED`；Engineering Gate `CLOSED`；
+Release Qualification `NOT_STARTED`；v0.3 契约成熟度 `IMPLEMENTED`。Phase 2 closing commit 已
+完整纳入并重新执行契约、迁移、Resolver、identity replay、安全与 scope 验证。该结论只允许
+后续阶段正常工程开发，不授权合并、发布或把 v0.3 标记为 `STABLE`。
 
 **目的：** 把多文档组织成稳定机会，追踪更正、延期和状态变化。
 
@@ -137,6 +138,12 @@ Phase 2 Gate 仍 OPEN，因此 Phase 3 Gate 为 `BLOCKED_BY_PHASE2`，v0.3 仍�
 - 历史版本、旧链接、收藏引用和证据关系不因合并丢失。
 - 代表性更正与延期样本能产生正确的高影响变更事件。
 - 任意公开状态能从版本与事件重新计算。
+
+**Release Qualification：**
+
+- 尚未开始真实 Gold Opportunity、真实来源变化识别、新鲜副本或生产相似环境候选验证。
+- 合成 Resolver 样本与常规 CI 只属于 Engineering Gate 证据，不转换成真实准确率结论。
+- 只有对应 Release Qualification 明确为 `QUALIFIED` 后，v0.3 才可另行评估 `STABLE`。
 
 ### Phase 4：规则、资格与评估
 
@@ -271,7 +278,7 @@ Phase 2 Gate 仍 OPEN，因此 Phase 3 Gate 为 `BLOCKED_BY_PHASE2`，v0.3 仍�
 
 - Phase 0、Phase 1 已有详细 spec、plan 和关闭证据。
 - Phase 2 已生成独立设计与实施计划，引用 Blueprint v1.2、基线协调记录和领域契约 v0.2。
-- Phase 3 已生成独立 spec/plan 与候选实现；Phase 4–9 启动前分别生成独立 spec 和 plan，并引用本路线与当时可用的上游契约，同时保留未关闭 Gate 阻塞状态。
+- Phase 3 已生成独立 spec/plan、实现和 Engineering Gate 证据；Phase 4–9 启动前分别生成独立 spec 和 plan，并引用本路线与当时可用的上游契约，独立记录 Engineering Gate 与 Release Qualification。
 - 任一阶段发现隐藏复杂度时，拆成可独立验收的子阶段；不得扩大一个计划直到所有系统都包含在内。
 - 每个阶段验收后更新本文状态和证据链接，不重写历史结果。
 
