@@ -780,9 +780,6 @@ def upgrade() -> None:
             name=op.f("ck_feedback_review_case_snapshots_status_values"),
         ),
         sa.CheckConstraint(
-            "due_at >= created_at", name=op.f("ck_feedback_review_case_snapshots_due_time_order")
-        ),
-        sa.CheckConstraint(
             "length(btrim(transition_reason)) between 1 and 300",
             name=op.f("ck_feedback_review_case_snapshots_transition_reason_bounds"),
         ),

@@ -110,7 +110,6 @@ class FeedbackReviewCaseSnapshotModel(Base):
             name="status_values",
         ),
         CheckConstraint("priority between 1 and 3", name="priority_range"),
-        CheckConstraint("due_at >= created_at", name="due_time_order"),
         CheckConstraint(
             "length(btrim(transition_reason)) between 1 and 300",
             name="transition_reason_bounds",
