@@ -171,6 +171,22 @@ RuleSet、EligibilityResult、MatchSnapshot 或排序，离线/影子候选也�
 身份由服务端分别解析并按用途/角色授权；模拟和真人使用不同 evidence class 与指标契约。固定合成
 工程夹具没有真人参与，因此只能得到 `HOLD_MISSING_HUMAN_EVIDENCE`。
 
+### 5.4 截止变化提醒
+
+```text
+Governed DEADLINE_CHANGED OpportunityEvent
+  + event-time latest saved action / enabled preference / ACTION_TRACKING state
+  -> immutable NotificationOutbox intent
+  -> public-governance + current-control + exact-binding recheck
+  -> bounded lease/retry worker
+  -> PostgreSQL TEST_INBOX
+```
+
+Phase 8 只实现 `application_window.closes_on` 一个变化变量。候选与 OpportunityVersion/Event 在
+同一事务写入；Outbox 保存新旧版本、两端 EvidenceRef 和三个用户控制快照。Worker 同时复核
+事件时点的精确 audience 与投递时的当前控制，避免后来重新启用追溯捕获旧事件。当前适配器仅是
+测试收件箱，不是生产通知渠道。
+
 ## 6. 同步与异步边界
 
 同步 API 只承担可在用户等待时间内确定完成的操作：查询、画像更新、保存行动、反馈接收和读取评估结果。
@@ -191,6 +207,10 @@ RuleSet、EligibilityResult、MatchSnapshot 或排序，离线/影子候选也�
 
 Phase 2 不实现上述队列拓扑。采集和解析由显式命令同步编排，但其应用服务必须使用稳定 ID、幂等键和可注入的 transport/clock/sleeper，使未来 Worker 只能替换触发方式，不能改变领域语义。
 
+Phase 8 的首个 Worker 是显式调用的有界 PostgreSQL worker，不引入 Redis、消息平台或真实
+供应商。它使用 `SKIP LOCKED`、租约 token、有界批次和固定退避；这只证明单进程/并发工程语义，
+不批准生产调度拓扑。
+
 ## 7. 数据与存储规则
 
 - PostgreSQL 是结构化事实、规则、用户状态、审核和评估的唯一事实源。
@@ -201,6 +221,9 @@ Phase 2 不实现上述队列拓扑。采集和解析由显式命令同步编排
 - Phase 7 在 PostgreSQL 中追加 FeedbackEvent、EvidenceLink、ReviewCaseSnapshot、assessment、
   adjudication、approved label、offline/shadow candidate 和 Gate decision；所有治理事实拒绝
   UPDATE/DELETE，反馈链只读历史决策输入，不回写在线规则、资格、匹配或排序。
+- Phase 8 在 PostgreSQL 中追加 reminder preference snapshot、不可变 Outbox intent、delivery
+  attempt 与 TEST_INBOX entry；事实绑定拒绝 UPDATE/DELETE，只有租约、重试、状态和错误码等
+  运维投影可受控更新。候选 audience 与投递前重检都以 PostgreSQL 版本化事实为准。
 - 对象存储保存原始 HTML/PDF/Excel/图片和不可变快照；数据库保存哈希、大小、MIME、对象键和证据引用。
 - Redis 若在后续阶段引入，只用于缓存、队列、锁和限流；缓存丢失不能改变业务事实。Phase 2 不依赖 Redis。
 - pgvector 若在后续阶段引入，只用于去重候选、专业语义候选和检索，不用于硬资格最终裁决。Phase 2 不创建向量列或扩展。

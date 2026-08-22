@@ -261,18 +261,36 @@ v0.5 契约成熟度 `IMPLEMENTED`。证据只含 2 个合成画像、3 个合�
 
 **目的：** 证明“替我盯着”能带来真实行动，而不是通知噪声。
 
-**范围：**
+**当前工程状态（2026-08-23）：** Implementation `IMPLEMENTED`；Engineering Gate `OPEN`
+（实现候选 `6586f4b784afb05b0a5070d07a379dc663372e92` 的本地完整验证与九项 CI 已通过，
+仍等待精确 Gate 文档候选的九项 CI）；Release Qualification `NOT_STARTED`；v0.7
+`IMPLEMENTED`，不得标记 `STABLE`。固定合成夹具的真人参与者为 `0`，唯一投递目标是
+`TEST_INBOX`。
 
-- 新机会、截止临近、重大更正和关注机会事件提醒。
-- 事务性 Outbox、幂等发送、退避重试、失败审计和用户频率控制。
-- 日历/材料计划；小程序承接今日、机会、计划和我的。
+**当前最小范围：**
 
-**退出条件：**
+- 只处理绑定精确 OpportunityVersion、OpportunityEvent 与 EvidenceRef 的
+  `application_window.closes_on` 高影响变化。
+- 事务性 Outbox、事件时点 audience、用户独立开关、幂等投递、有界退避、租约恢复、失败
+  审计和当前控制抑制。
+- owner-scoped API 与响应式 Web 测试收件箱；固定 cadence，仅投递到 PostgreSQL
+  `TEST_INBOX`。
 
-- 重复任务不会重复发送同一提醒。
-- 用户能关闭个性化推荐和通知渠道。
-- 高影响提醒打开率与投诉/关闭率同时纳入评估。
-- Web/PWA 与小程序共享 API、状态和审计记录。
+**Engineering Gate 退出条件：**
+
+- 重复捕获、重试和 replay 不会形成重复投递。
+- 事件时点绑定、当前用户开关/保存/用途和公开治理都在适配器调用前复核。
+- 迁移往返、失败恢复、浏览器键盘/移动端路径和精确隔离清理可复现。
+
+**Release Qualification：**
+
+- 真人打开、投诉/关闭、理解、真实行动和留存必须在另行治理的真实通知实验中验证。
+- 当前工程计数不能转换成任何真人指标；真实供应商、推送、小程序、日历、多渠道、运营后台、
+  生产身份和商业化仍明确延期。
+
+Phase 6/7 真人 Release Qualification 仍各自为 `NOT_STARTED`，真人参与者 `0`，结论为
+`HOLD_MISSING_HUMAN_EVIDENCE`。它们不级联阻塞 Phase 8 Engineering，但继续阻塞各自的真人/
+生产结论。
 
 ### Phase 9：稳定性、Beta 与商业 Gate
 
