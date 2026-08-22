@@ -27,6 +27,14 @@ GitHub Actions.
 
 **Branch:** `codex/phase-7-feedback-review-validation`
 
+## Execution status (2026-08-22)
+
+- Tasks 1–8: completed with independent commits and ordinary pushes.
+- Task 9: in progress; fresh local verification and full implementation review pass, Gate candidate
+  evidence is being recorded with Engineering Gate `OPEN`.
+- Task 10: pending stacked draft PR, exact-SHA remote CI, docs-only Gate closure and final exact-SHA
+  CI. Release Qualification remains `NOT_STARTED`; v0.6 is `IMPLEMENTED`, not `STABLE`.
+
 ## Global constraints
 
 - Keep Phase 6 PR #6 open/draft/unmerged and do not modify its branch or worktree.

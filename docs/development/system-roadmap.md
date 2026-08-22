@@ -235,6 +235,10 @@ v0.5 契约成熟度 `IMPLEMENTED`。证据只含 2 个合成画像、3 个合�
 
 **目的：** 把用户回复变成候选证据，而不是直接污染线上规则。
 
+**当前工程状态：** Implementation `IMPLEMENTED`；Engineering Gate `OPEN`（等待精确候选远程
+CI）；Release Qualification `NOT_STARTED`；v0.6 `IMPLEMENTED`，不得标记 `STABLE`。当前只用
+固定合成反馈夹具证明工程链路，真人参与者为 `0`。
+
 **范围：**
 
 - FeedbackEvent、审核状态、证据补充、裁决和发布关联。
@@ -247,6 +251,10 @@ v0.5 契约成熟度 `IMPLEMENTED`。证据只含 2 个合成画像、3 个合�
 - 用户纠错不会直接改变线上规则或历史 MatchSnapshot。
 - 真人反馈与模拟结果使用不同指标和结论语言。
 - 首轮复盘只批准一个最关键改进方向，避免多变量混淆。
+
+当前工程夹具仅选择 `EXPLANATION_CLARITY`，并强制得到
+`HOLD_MISSING_HUMAN_EVIDENCE`；100 个模拟画像和 20–30 名真人设计伙伴仍是分别治理的验证
+计划，不能由合成夹具替代。
 
 ### Phase 8：提醒、计划与多端承接
 

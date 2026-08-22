@@ -13,6 +13,7 @@
 | [领域契约 v0.3](./domain-contracts-v0.3.md) | Phase 3 已实现、Release Qualification 完成前不得标记 STABLE 的 Opportunity/Version/Event/identity 契约 | 评审 Phase 3 实现时 |
 | [领域契约 v0.4](./domain-contracts-v0.4.md) | Phase 4 已实现、Release Qualification 完成前不得标记 STABLE 的规则、资格、MatchSnapshot 与 EvaluationRun 契约 | 评审 Phase 4 实现时 |
 | [领域契约 v0.5](./domain-contracts-v0.5.md) | Phase 6 已实现、Release Qualification 完成前不得标记 STABLE 的 UserState、个人排序与行动契约 | 评审 Phase 6 实现时 |
+| [领域契约 v0.6](./domain-contracts-v0.6.md) | Phase 7 已实现、Release Qualification 完成前不得标记 STABLE 的反馈、审核、标签与双轨验证契约 | 评审 Phase 7 实现时 |
 | [质量与发布策略](./quality-and-release.md) | 测试层级、Golden Dataset、指标证据和发布流程 | 编写测试、评估或准备发布时 |
 | [Blueprint v1.2 基线协调](../superpowers/specs/2026-08-21-blueprint-v1.2-baseline-reconciliation-design.md) | 新旧 Blueprint 权威、D8–D12 和阶段映射 | 解释 Phase 2 及后续范围变化时 |
 | [Phase 0 设计](../superpowers/specs/2026-08-21-phase-0-engineering-foundation-design.md) | 第一个可交付子项目的设计与验收边界 | 开始创建代码仓库骨架前 |
@@ -35,6 +36,9 @@
 | [Phase 6 设计](../superpowers/specs/2026-08-22-phase-6-profile-match-personal-action-design.md) | 渐进画像、授权隔离、确定性匹配与个人行动设计 | 评审 Phase 6 时 |
 | [Phase 6 实现计划](../superpowers/plans/2026-08-22-phase-6-profile-match-personal-action.md) | Phase 6 Task 1–8 的 TDD、浏览器、Gate 与堆叠交付顺序 | 执行或复核 Phase 6 时 |
 | [Phase 6 Gate](../gates/phase-6/README.md) | Phase 6 四轴状态、合成证据边界、授权安全与真人资格缺口 | 判断 Phase 6 工程或发布资格状态时 |
+| [Phase 7 设计](../superpowers/specs/2026-08-22-phase-7-feedback-review-validation-design.md) | 不可变反馈、受控审核、标签资产、双轨验证和发布 HOLD 边界 | 评审 Phase 7 时 |
+| [Phase 7 实现计划](../superpowers/plans/2026-08-22-phase-7-feedback-review-validation.md) | Phase 7 Task 1–10 的 TDD、浏览器、Gate 与堆叠交付顺序 | 执行或复核 Phase 7 时 |
+| [Phase 7 Gate](../gates/phase-7/README.md) | Phase 7 四轴、合成/真人分轨、授权安全与远程候选证据 | 判断 Phase 7 工程或发布资格状态时 |
 
 ## 文档状态词
 
@@ -62,6 +66,10 @@ Qualification 为 `NOT_STARTED`，领域契约 v0.4 为 `IMPLEMENTED`、不得�
 匹配与个人行动已 `IMPLEMENTED`，Engineering Gate `CLOSED`，Release Qualification
 `NOT_STARTED`，v0.5 成熟度 `IMPLEMENTED`；本地合成、浏览器和 CI 证据不替代真人完成、理解、
 认知负担或真实高意图动作。
+Phase 7 反馈、审核与双轨验证已 `IMPLEMENTED`，Engineering Gate 暂为 `OPEN`，等待 stacked
+draft PR 的精确候选远程 CI；Release Qualification `NOT_STARTED`，v0.6 成熟度
+`IMPLEMENTED`、不得标记 `STABLE`。固定合成反馈/审核夹具的真人参与者为 `0`，唯一
+`EXPLANATION_CLARITY` 方向只是工程输入，发布决定为 `HOLD_MISSING_HUMAN_EVIDENCE`。
 
 ## 维护规则
 

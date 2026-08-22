@@ -5,13 +5,15 @@
 - Design approval: approved by the user on 2026-08-22.
 - Exact upstream SHA: `7f2cebc2afcfc6cb7061ed5bb91d79b824e91a3d`.
 - Branch: `codex/phase-7-feedback-review-validation`.
-- Implementation Status: `PLANNED`.
+- Implementation Status: `IMPLEMENTED`.
 - Engineering Gate: `OPEN`.
 - Release Qualification: `NOT_STARTED`.
-- Proposed v0.6 Contract Maturity: `PROPOSED`.
+- v0.6 Contract Maturity: `IMPLEMENTED` (not `STABLE`).
 
-This document is the approved Phase 7 engineering design. It is not implementation evidence,
-Release Qualification evidence, a production authorization or a contract-stability claim.
+This is the approved design realized by local engineering candidate
+`50f0794f5470a64691ea938936ac832bf5d67796`. Engineering Gate remains `OPEN` pending exact-candidate
+remote CI. The implementation and fixed synthetic evidence are not Release Qualification evidence,
+a production authorization or a contract-stability claim.
 
 ## 1. Goal
 
