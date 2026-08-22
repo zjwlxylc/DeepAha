@@ -68,6 +68,12 @@ class ReminderPreferenceSnapshotModel(Base):
             name="uq_reminder_preference_stream_version",
         ),
         UniqueConstraint(
+            "user_id",
+            "reminder_kind",
+            "version",
+            name="uq_reminder_preference_owner_kind_version",
+        ),
+        UniqueConstraint(
             "preference_snapshot_id",
             "user_id",
             name="uq_reminder_preference_snapshot_owner",

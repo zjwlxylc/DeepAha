@@ -77,7 +77,11 @@ class ReminderPreferenceService:
 
         with self._session_factory() as session:
             try:
-                user = session.get(PersonalUserModel, principal.user_id)
+                user = session.scalar(
+                    select(PersonalUserModel)
+                    .where(PersonalUserModel.user_id == principal.user_id)
+                    .with_for_update()
+                )
                 if user is None or not user.active:
                     raise ReminderPreferenceAccessError("reminder preference unavailable")
 

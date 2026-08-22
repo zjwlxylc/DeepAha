@@ -117,6 +117,8 @@ def _audience_statement(
             PersonalActionSnapshotModel.user_id,
             PersonalActionSnapshotModel.opportunity_id,
             PersonalActionSnapshotModel.version.desc(),
+            PersonalActionSnapshotModel.created_at.desc(),
+            PersonalActionSnapshotModel.action_snapshot_id.desc(),
         )
         .subquery("latest_phase8_actions")
     )
@@ -138,6 +140,8 @@ def _audience_statement(
             ReminderPreferenceSnapshotModel.user_id,
             ReminderPreferenceSnapshotModel.reminder_kind,
             ReminderPreferenceSnapshotModel.version.desc(),
+            ReminderPreferenceSnapshotModel.created_at.desc(),
+            ReminderPreferenceSnapshotModel.preference_snapshot_id.desc(),
         )
         .subquery("latest_phase8_preferences")
     )
@@ -153,6 +157,8 @@ def _audience_statement(
         .order_by(
             UserStateSnapshotModel.user_id,
             UserStateSnapshotModel.version.desc(),
+            UserStateSnapshotModel.created_at.desc(),
+            UserStateSnapshotModel.user_state_snapshot_id.desc(),
         )
         .subquery("latest_phase8_user_states")
     )

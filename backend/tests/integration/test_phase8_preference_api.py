@@ -1,9 +1,12 @@
+from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
+from threading import Barrier
 from uuid import uuid7
 
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import Engine, func, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
 from deepaha.api.personal import require_principal
@@ -32,6 +35,105 @@ from tests.integration.test_phase6_profile_persistence import (
 
 pytestmark = pytest.mark.integration
 NOW = datetime(2026, 8, 22, 13, 0, tzinfo=UTC)
+
+
+def test_database_rejects_parallel_preference_streams_for_one_user(
+    migrated_engine: Engine,
+) -> None:
+    seed_users(migrated_engine)
+    with Session(migrated_engine) as session:
+        for enabled in (True, False):
+            session.add(
+                ReminderPreferenceSnapshotModel(
+                    preference_snapshot_id=uuid7(),
+                    preference_id=uuid7(),
+                    user_id=USER_A_ID,
+                    version=1,
+                    predecessor_snapshot_id=None,
+                    reminder_kind="DEADLINE_CHANGED",
+                    enabled=enabled,
+                    cadence="AS_SOON_AS_GOVERNED",
+                    target="TEST_INBOX",
+                    actor_user_id=USER_A_ID,
+                    preference_policy_version="phase8-deadline-reminder-v1",
+                    contract_version="0.7.0",
+                    created_at=NOW,
+                )
+            )
+        with pytest.raises(IntegrityError):
+            session.commit()
+
+
+def test_concurrent_preference_commands_serialize_one_owner_stream(
+    migrated_engine: Engine,
+) -> None:
+    seed_users(migrated_engine)
+    service = ReminderPreferenceService(
+        session_factory=sessionmaker(bind=migrated_engine, expire_on_commit=False),
+        id_factory=uuid7,
+        now_factory=lambda: NOW,
+    )
+    principal = Principal(user_id=USER_A_ID)
+    start = Barrier(2)
+
+    def set_enabled(enabled: bool, key: str) -> object:
+        start.wait()
+        return service.set_enabled(principal, enabled, idempotency_key=key)
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        futures = (
+            executor.submit(set_enabled, True, "phase8-concurrent-enable"),
+            executor.submit(set_enabled, False, "phase8-concurrent-disable"),
+        )
+        results = [future.result() for future in futures]
+
+    with Session(migrated_engine) as session:
+        rows = session.scalars(
+            select(ReminderPreferenceSnapshotModel)
+            .where(ReminderPreferenceSnapshotModel.user_id == USER_A_ID)
+            .order_by(ReminderPreferenceSnapshotModel.version)
+        ).all()
+
+    assert {result.version for result in results} == {1, 2}
+    assert [row.version for row in rows] == [1, 2]
+    assert len({row.preference_id for row in rows}) == 1
+    assert rows[1].predecessor_snapshot_id == rows[0].preference_snapshot_id
+
+
+def test_concurrent_same_idempotency_key_replays_one_snapshot(
+    migrated_engine: Engine,
+) -> None:
+    seed_users(migrated_engine)
+    service = ReminderPreferenceService(
+        session_factory=sessionmaker(bind=migrated_engine, expire_on_commit=False),
+        id_factory=uuid7,
+        now_factory=lambda: NOW,
+    )
+    principal = Principal(user_id=USER_A_ID)
+    start = Barrier(2)
+
+    def enable() -> object:
+        start.wait()
+        return service.set_enabled(
+            principal,
+            True,
+            idempotency_key="phase8-concurrent-replay",
+        )
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        results = [future.result() for future in (executor.submit(enable), executor.submit(enable))]
+
+    assert results[0] == results[1]
+    with Session(migrated_engine) as session:
+        assert (
+            session.scalar(select(func.count()).select_from(ReminderPreferenceSnapshotModel)) == 1
+        )
+        assert (
+            session.scalar(
+                select(func.count()).select_from(ReminderPreferenceIdempotencyRecordModel)
+            )
+            == 1
+        )
 
 
 def test_preference_snapshots_are_append_only_idempotent_and_owner_scoped(

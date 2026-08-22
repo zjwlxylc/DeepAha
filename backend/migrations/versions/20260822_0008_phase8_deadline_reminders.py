@@ -121,6 +121,12 @@ def upgrade() -> None:
             "preference_id", "version", name="uq_reminder_preference_stream_version"
         ),
         sa.UniqueConstraint(
+            "user_id",
+            "reminder_kind",
+            "version",
+            name="uq_reminder_preference_owner_kind_version",
+        ),
+        sa.UniqueConstraint(
             "preference_snapshot_id", "user_id", name="uq_reminder_preference_snapshot_owner"
         ),
     )
