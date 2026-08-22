@@ -501,11 +501,20 @@ git push
 - Create: `web/tests/profile.test.tsx`
 - Create: `web/tests/personal-opportunities.test.tsx`
 - Create: `web/tests/personal-detail.test.tsx`
+- Create: `web/tests/personal-actions.test.ts`
+- Create: `web/tests/personal-route-states.test.tsx`
+- Create: `web/tests/personal-fixtures.ts`
+- Modify: `backend/src/deepaha/public_catalog/schemas.py`
+- Modify: `backend/tests/api/test_public_opportunities.py`
 - Modify: `web/app/opportunities/[publicId]/fit-check/page.tsx`
 - Modify: `web/app/opportunities/[publicId]/page.tsx`
 - Modify: `web/components/site-header.tsx`
 - Modify: `web/app/globals.css`
 - Modify: `web/tests/fit-check-boundary.test.tsx`
+- Modify: `web/tests/fixtures.ts`
+- Modify: `web/vitest.setup.ts`
+- Modify: `web/package.json`
+- Modify: `web/pnpm-lock.yaml`
 
 **Interfaces:**
 - Consumes: personal API DTOs and an HttpOnly `deepaha_phase6_session` cookie preloaded only by the
@@ -513,7 +522,7 @@ git push
 - Produces: server-only `personalFetch<T>()`, server actions for profile/match/action writes and the
   four personal routes.
 
-- [ ] **Step 1: Write failing UI/client tests**
+- [x] **Step 1: Write failing UI/client tests**
 
 ```tsx
 it("renders uncertainty and evidence without a matching percentage", async () => {
@@ -535,13 +544,13 @@ it("profile form labels optional fields and supports skip", async () => {
 Add loading/empty/error tests, all four state labels, max-three cards, keyboard-native buttons/forms,
 save/status/material states, official-link action, fixture/privacy notice and Phase 7/8 negative text.
 
-- [ ] **Step 2: Run RED Web target**
+- [x] **Step 2: Run RED Web target**
 
 Run: `cd web; corepack pnpm test -- personal-api-client profile personal-opportunities personal-detail fit-check-boundary`
 
 Expected: fail because the personal modules/routes do not exist and the Phase 5 boundary is static.
 
-- [ ] **Step 3: Implement server-only API client and actions**
+- [x] **Step 3: Implement server-only API client and actions**
 
 ```typescript
 async function personalFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
@@ -560,23 +569,23 @@ async function personalFetch<T>(path: string, init: RequestInit = {}): Promise<T
 Mark the module `server-only`. Server actions derive a fresh UUID idempotency key per submitted user
 action and call `revalidatePath`; no token enters rendered props, URLs or client JavaScript.
 
-- [ ] **Step 4: Implement progressive profile and personal routes**
+- [x] **Step 4: Implement progressive profile and personal routes**
 
 Keep the Phase 5 color/typography tokens. Add only scoped classes for progressive form groups,
 eligibility badges/explanation lists, priority cards and action panel. Use ordinary controls with
 visible labels, 44px targets, focus rings, text plus color state, mobile single-column layout and
 route-level loading/error recovery.
 
-- [ ] **Step 5: Run Web tests and production build**
+- [x] **Step 5: Run Web tests and production build**
 
 Run: `cd web; corepack pnpm lint; corepack pnpm typecheck; corepack pnpm test; corepack pnpm build`
 
 Expected: all PASS; tests assert no token in rendered output and no percentage/feedback/reminder UI.
 
-- [ ] **Step 6: Commit and push exact files**
+- [x] **Step 6: Commit and push exact files**
 
 ```powershell
-git add -- web/lib/personal-opportunities.ts web/app/personal-actions.ts web/components/profile-form.tsx web/components/eligibility-explanation.tsx web/components/personal-opportunity-card.tsx web/components/action-panel.tsx web/app/profile web/app/me web/app/opportunities/[publicId]/fit-check/page.tsx web/app/opportunities/[publicId]/page.tsx web/components/site-header.tsx web/app/globals.css web/tests/personal-api-client.test.ts web/tests/profile.test.tsx web/tests/personal-opportunities.test.tsx web/tests/personal-detail.test.tsx web/tests/fit-check-boundary.test.tsx
+git add -- backend/src/deepaha/public_catalog/schemas.py backend/tests/api/test_public_opportunities.py docs/superpowers/plans/2026-08-22-phase-6-profile-match-personal-action.md web/lib/personal-opportunities.ts web/app/personal-actions.ts web/components/profile-form.tsx web/components/eligibility-explanation.tsx web/components/personal-opportunity-card.tsx web/components/action-panel.tsx web/app/profile web/app/me web/app/opportunities/[publicId]/fit-check/page.tsx web/app/opportunities/[publicId]/page.tsx web/components/site-header.tsx web/app/globals.css web/package.json web/pnpm-lock.yaml web/vitest.setup.ts web/tests/personal-api-client.test.ts web/tests/profile.test.tsx web/tests/personal-opportunities.test.tsx web/tests/personal-detail.test.tsx web/tests/personal-actions.test.ts web/tests/personal-route-states.test.tsx web/tests/personal-fixtures.ts web/tests/fit-check-boundary.test.tsx web/tests/fixtures.ts
 git commit -m "feat: add personal opportunity web flow"
 git push
 ```

@@ -12,19 +12,19 @@ export default async function FitCheckBoundaryPage({ params }: FitCheckBoundaryP
       <nav className="breadcrumbs" aria-label="面包屑">
         <Link href={`/opportunities/${publicId}`}>机会详情</Link>
         <span aria-hidden="true">/</span>
-        <span aria-current="page">个人判断边界</span>
+        <span aria-current="page">开始个人判断</span>
       </nav>
       <section className="boundary-card" aria-labelledby="boundary-title">
-        <p className="eyebrow">Phase 5 边界</p>
-        <h1 id="boundary-title">个人判断尚未开放</h1>
+        <p className="eyebrow">Phase 6 · 受控入口</p>
+        <h1 id="boundary-title">先完成最小画像</h1>
         <p>
-          真实画像采集、个人资格四态、个性化排序和行动台属于 Phase 6。当前页面不会收集你的画像，也不会计算个人资格。
+          只询问当前资格与行动需要的信息。可选字段可跳过，缺失信息会保留为未知，不会默认成不符合。
         </p>
         <p>
-          你仍可返回详情页核对官方条件、截止时间、证据定位与变化历史，并自行前往官方入口。
+          保存后将使用精确机会版本、RuleSet、画像快照与场景日期重放判断；软偏好只影响顺序。
         </p>
-        <Link className="button button-primary" href={`/opportunities/${publicId}`}>
-          返回机会详情
+        <Link className="button button-primary" href={`/profile?returnTo=/me/opportunities/${publicId}`}>
+          填写最小画像
         </Link>
       </section>
     </main>

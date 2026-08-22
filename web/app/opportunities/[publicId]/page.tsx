@@ -190,10 +190,10 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
         <div>
           <p className="section-kicker">个人判断入口</p>
           <h2 id="fit-entry-title">想知道自己是否适合？</h2>
-          <p>Phase 5 只展示公开事实。个人画像与资格计算尚未开放。</p>
+          <p>进入受控的最小画像、资格四态与个人行动流程；缺失信息会明确显示为未知。</p>
         </div>
         <Link className="button button-secondary" href={`/opportunities/${publicId}/fit-check`}>
-          查看个人判断边界
+          判断我是否适合
         </Link>
       </section>
     </main>

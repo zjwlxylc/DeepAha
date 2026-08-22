@@ -206,7 +206,7 @@ def test_detail_and_unknown_id_contract(
     missing = client.get("/api/v1/public/opportunities/opp_ffffffffffffffffffffffffffffffff")
 
     assert response.status_code == 200
-    assert response.json()["personalization_availability"] == "PHASE_6_NOT_IMPLEMENTED"
+    assert response.json()["personalization_availability"] == "AVAILABLE_WITH_PERSONAL_SESSION"
     assert response.json()["history"][0]["event_type"] == "DEADLINE_CHANGED"
     assert missing.status_code == 404
     assert missing.headers["content-type"].startswith("application/problem+json")

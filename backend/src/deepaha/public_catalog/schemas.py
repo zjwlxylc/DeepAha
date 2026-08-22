@@ -24,7 +24,7 @@ class PublicOpportunitySort(StrEnum):
 
 
 class PersonalizationAvailability(StrEnum):
-    PHASE_6_NOT_IMPLEMENTED = "PHASE_6_NOT_IMPLEMENTED"
+    AVAILABLE_WITH_PERSONAL_SESSION = "AVAILABLE_WITH_PERSONAL_SESSION"
 
 
 class PublicOpportunityQuery(PublicSchema):
@@ -110,6 +110,6 @@ class PublicOpportunityDetail(PublicOpportunityCard):
     attachment_urls: tuple[HttpUrl, ...]
     key_evidence: tuple[PublicEvidence, ...] = Field(min_length=1)
     history: tuple[PublicHistoryEvent, ...] = Field(min_length=1)
-    personalization_availability: Literal[PersonalizationAvailability.PHASE_6_NOT_IMPLEMENTED] = (
-        PersonalizationAvailability.PHASE_6_NOT_IMPLEMENTED
-    )
+    personalization_availability: Literal[
+        PersonalizationAvailability.AVAILABLE_WITH_PERSONAL_SESSION
+    ] = PersonalizationAvailability.AVAILABLE_WITH_PERSONAL_SESSION
