@@ -235,8 +235,9 @@ v0.5 契约成熟度 `IMPLEMENTED`。证据只含 2 个合成画像、3 个合�
 
 **目的：** 把用户回复变成候选证据，而不是直接污染线上规则。
 
-**当前工程状态：** Implementation `IMPLEMENTED`；Engineering Gate `OPEN`（等待精确候选远程
-CI）；Release Qualification `NOT_STARTED`；v0.6 `IMPLEMENTED`，不得标记 `STABLE`。当前只用
+**当前工程状态：** Implementation `IMPLEMENTED`；Engineering Gate `CLOSED`（精确候选
+`63536985...` 的八项远程 CI 已通过）；Release Qualification `NOT_STARTED`；v0.6
+`IMPLEMENTED`，不得标记 `STABLE`。当前只用
 固定合成反馈夹具证明工程链路，真人参与者为 `0`。
 
 **范围：**

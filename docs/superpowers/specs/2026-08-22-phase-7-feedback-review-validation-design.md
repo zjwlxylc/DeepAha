@@ -6,14 +6,15 @@
 - Exact upstream SHA: `7f2cebc2afcfc6cb7061ed5bb91d79b824e91a3d`.
 - Branch: `codex/phase-7-feedback-review-validation`.
 - Implementation Status: `IMPLEMENTED`.
-- Engineering Gate: `OPEN`.
+- Engineering Gate: `CLOSED`.
 - Release Qualification: `NOT_STARTED`.
 - v0.6 Contract Maturity: `IMPLEMENTED` (not `STABLE`).
 
-This is the approved design realized by local engineering candidate
-`50f0794f5470a64691ea938936ac832bf5d67796`. Engineering Gate remains `OPEN` pending exact-candidate
-remote CI. The implementation and fixed synthetic evidence are not Release Qualification evidence,
-a production authorization or a contract-stability claim.
+This is the approved design realized by exact engineering candidate
+`63536985d5b03b3ad5dbb5bea1cf82120ee866fc`. GitHub Actions run `32571667136` completed all eight
+required jobs successfully, closing only the Engineering Gate. The implementation and fixed
+synthetic evidence are not Release Qualification evidence, a production authorization or a
+contract-stability claim.
 
 ## 1. Goal
 

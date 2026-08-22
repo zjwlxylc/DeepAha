@@ -1,6 +1,6 @@
 # Phase 7 Security And Compliance Review
 
-Status: locally verified engineering candidate. This is not legal advice, production identity
+Status: locally and exact-SHA remotely verified engineering candidate. This is not legal advice, production identity
 approval, human-research authorization or public-launch qualification.
 
 ## Identity, authorization and existence privacy

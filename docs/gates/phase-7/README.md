@@ -4,7 +4,7 @@ Evidence date: 2026-08-22 (Asia/Shanghai).
 
 Implementation: `IMPLEMENTED`
 
-Engineering Gate: `OPEN`
+Engineering Gate: `CLOSED`
 
 Release Qualification: `NOT_STARTED`
 
@@ -12,14 +12,14 @@ v0.6 Contract Maturity: `IMPLEMENTED` (not `STABLE`)
 
 ## Candidate conclusion
 
-Candidate `50f0794f5470a64691ea938936ac832bf5d67796` implements the bounded Phase 7 feedback,
+Candidate `63536985d5b03b3ad5dbb5bea1cf82120ee866fc` implements the bounded Phase 7 feedback,
 review and dual-track validation engineering slice on exact Phase 6 ancestor
 `7f2cebc2afcfc6cb7061ed5bb91d79b824e91a3d`. Fresh local verification, PostgreSQL migration and
 integration checks, fixed-fixture replay, full-diff review and real-browser engineering QA pass.
 
-The Engineering Gate remains `OPEN` until the stacked draft PR exists and every required GitHub
-Actions job succeeds on the exact implementation candidate. No local or synthetic result can close
-that remote-evidence item.
+Stacked draft PR #8 is open/draft/unmerged. GitHub Actions run `32571667136` completed successfully
+on that exact candidate; all eight required jobs concluded `success`. This closes only the bounded
+Engineering Gate. It does not start Release Qualification or authorize integration or release.
 
 ## Evidence boundary
 

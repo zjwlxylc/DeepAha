@@ -66,8 +66,8 @@ Qualification 为 `NOT_STARTED`，领域契约 v0.4 为 `IMPLEMENTED`、不得�
 匹配与个人行动已 `IMPLEMENTED`，Engineering Gate `CLOSED`，Release Qualification
 `NOT_STARTED`，v0.5 成熟度 `IMPLEMENTED`；本地合成、浏览器和 CI 证据不替代真人完成、理解、
 认知负担或真实高意图动作。
-Phase 7 反馈、审核与双轨验证已 `IMPLEMENTED`，Engineering Gate 暂为 `OPEN`，等待 stacked
-draft PR 的精确候选远程 CI；Release Qualification `NOT_STARTED`，v0.6 成熟度
+Phase 7 反馈、审核与双轨验证已 `IMPLEMENTED`，Engineering Gate `CLOSED`；stacked draft PR #8
+的精确候选 `63536985...` 已通过八项远程 CI。Release Qualification `NOT_STARTED`，v0.6 成熟度
 `IMPLEMENTED`、不得标记 `STABLE`。固定合成反馈/审核夹具的真人参与者为 `0`，唯一
 `EXPLANATION_CLARITY` 方向只是工程输入，发布决定为 `HOLD_MISSING_HUMAN_EVIDENCE`。
 

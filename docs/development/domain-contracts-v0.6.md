@@ -2,15 +2,16 @@
 
 Implementation: `IMPLEMENTED`
 
-Engineering Gate: `OPEN`
+Engineering Gate: `CLOSED`
 
 Release Qualification: `NOT_STARTED`
 
 Contract Maturity: `IMPLEMENTED` (not `STABLE`)
 
 This additive Phase 7 contract is implemented on exact Phase 6 ancestor
-`7f2cebc2afcfc6cb7061ed5bb91d79b824e91a3d`. Local engineering evidence applies through candidate
-`50f0794f5470a64691ea938936ac832bf5d67796`; exact-candidate remote CI remains pending.
+`7f2cebc2afcfc6cb7061ed5bb91d79b824e91a3d`. Engineering evidence applies through exact candidate
+`63536985d5b03b3ad5dbb5bea1cf82120ee866fc`; GitHub Actions run `32571667136` completed all eight
+required jobs successfully. This does not make v0.6 `STABLE`.
 
 ## Compatibility boundary
 

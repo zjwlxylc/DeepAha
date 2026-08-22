@@ -1,6 +1,6 @@
 # Phase 7 Acceptance Results
 
-Candidate: `50f0794f5470a64691ea938936ac832bf5d67796`.
+Candidate: `63536985d5b03b3ad5dbb5bea1cf82120ee866fc`.
 
 | Exit condition | Result | Evidence boundary |
 | --- | --- | --- |
@@ -21,8 +21,8 @@ Candidate: `50f0794f5470a64691ea938936ac832bf5d67796`.
 | Browser/accessibility | PASS | desktop/mobile, keyboard/focus, reduced motion, failure/retry, no overflow and privacy projections inspected |
 | Fixture license/provenance | PASS | manifest says CC0 synthetic, no personal/business truth, RQ-ineligible; file SHA-256 matches manifest |
 | Local verifier | PASS | backend 434; Phase 7 offline 130; PostgreSQL Phase 7 13; Web 20 files/47 tests; migrations and builds pass |
-| Remote exact-SHA CI | PENDING | stacked draft PR and exact-candidate eight-job run are required before Engineering Gate closure |
+| Remote exact-SHA CI | PASS | run `32571667136` on exact candidate `63536985d5b03b3ad5dbb5bea1cf82120ee866fc`; all eight required jobs success |
 | Governed human validation | NOT STARTED | real participants `0`; no comprehension, cognitive-load, action, trust, retention or payment evidence exists |
 
-Implementation is `IMPLEMENTED`; Engineering Gate remains `OPEN`; Release Qualification is
+Implementation is `IMPLEMENTED`; Engineering Gate is `CLOSED`; Release Qualification is
 `NOT_STARTED`; v0.6 is `IMPLEMENTED`, never `STABLE` on this evidence.

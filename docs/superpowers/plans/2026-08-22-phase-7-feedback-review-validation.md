@@ -30,10 +30,11 @@ GitHub Actions.
 ## Execution status (2026-08-22)
 
 - Tasks 1–8: completed with independent commits and ordinary pushes.
-- Task 9: in progress; fresh local verification and full implementation review pass, Gate candidate
-  evidence is being recorded with Engineering Gate `OPEN`.
-- Task 10: pending stacked draft PR, exact-SHA remote CI, docs-only Gate closure and final exact-SHA
-  CI. Release Qualification remains `NOT_STARTED`; v0.6 is `IMPLEMENTED`, not `STABLE`.
+- Task 9: completed; fresh local verification, full implementation review and Gate candidate
+  evidence pass.
+- Task 10: in progress; PR #8 is open/draft/unmerged and implementation candidate `63536985...`
+  passed all eight jobs in run `32571667136`. The docs-only closure and its final exact-SHA CI remain.
+  Release Qualification is `NOT_STARTED`; v0.6 is `IMPLEMENTED`, not `STABLE`.
 
 ## Global constraints
 
@@ -614,12 +615,12 @@ Commit `ci: verify phase 7 feedback review`.
 - Create: `docs/development/domain-contracts-v0.6.md`
 - Modify: Phase 7 spec/plan only for truthful implementation evidence/check boxes.
 
-- [ ] **Step 1: Run fresh verification-before-completion**
+- [x] **Step 1: Run fresh verification-before-completion**
 
 Rerun Phase 7 and root verifiers from fresh output. Record exact commands, timestamps, counts,
 migration result and synthetic/human boundary. Do not reuse earlier output.
 
-- [ ] **Step 2: Review the full diff**
+- [x] **Step 2: Review the full diff**
 
 Inspect `7f2cebc2...HEAD` for every path and line. Run diff/whitespace, tracked artifact, secret,
 credential, database/cache/build/browser artifact, license, old-Schema-byte, migration mutation,
@@ -628,7 +629,7 @@ mutation, notification/Outbox and claim-language scans. Inspect every hit in con
 
 Any Critical/Important defect returns to RED and a separate minimal fix commit before Gate docs.
 
-- [ ] **Step 3: Write truthful Gate candidate evidence**
+- [x] **Step 3: Write truthful Gate candidate evidence**
 
 Before exact-SHA remote CI:
 
@@ -640,7 +641,7 @@ Before exact-SHA remote CI:
 - single direction `EXPLANATION_CLARITY` described only as fixture input;
 - Gate decision `HOLD_MISSING_HUMAN_EVIDENCE`.
 
-- [ ] **Step 4: Exact commit and push**
+- [x] **Step 4: Exact commit and push**
 
 Commit `docs: record phase 7 engineering evidence`.
 
@@ -650,12 +651,12 @@ Commit `docs: record phase 7 engineering evidence`.
 
 **Files:** update Phase 7 Gate/design evidence only after exact candidate CI success.
 
-- [ ] **Step 1: Verify branch and upstream boundary**
+- [x] **Step 1: Verify branch and upstream boundary**
 
 Fetch origin; prove clean local/remote equality and exact Phase 6 ancestry. Re-fetch PR #6 and
 confirm open/draft/unmerged, exact head `7f2cebc2...`, and no unexpected base movement.
 
-- [ ] **Step 2: Create stacked draft PR**
+- [x] **Step 2: Create stacked draft PR**
 
 Use the authenticated GitHub connector:
 
@@ -667,7 +668,7 @@ Use the authenticated GitHub connector:
 The body records exact base/head, four axes, local commands/counts, browser evidence, synthetic vs
 human boundary, one candidate direction, mandatory hold and explicit Phase 8/release exclusions.
 
-- [ ] **Step 3: Wait for exact implementation candidate CI**
+- [x] **Step 3: Wait for exact implementation candidate CI**
 
 Required jobs:
 

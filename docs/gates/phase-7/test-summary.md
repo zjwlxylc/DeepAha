@@ -1,7 +1,7 @@
 # Phase 7 Test Summary
 
 Evidence date: 2026-08-22. Candidate:
-`50f0794f5470a64691ea938936ac832bf5d67796`.
+`63536985d5b03b3ad5dbb5bea1cf82120ee866fc`.
 
 ## Fresh local candidate
 
@@ -49,5 +49,16 @@ focus and reduced motion. See [browser-verification.md](browser-verification.md)
 
 ## Remote evidence
 
-Not recorded yet. Engineering Gate remains `OPEN` until the stacked draft PR's exact candidate has
-all eight required GitHub Actions jobs successful.
+GitHub Actions run `32571667136` completed on exact candidate
+`63536985d5b03b3ad5dbb5bea1cf82120ee866fc` with overall `success`:
+
+- `backend-quality`: `success`;
+- `web-quality`: `success`;
+- `integration`: `success`;
+- `phase3-resolution`: `success`;
+- `phase4-eligibility`: `success`;
+- `phase5-public-trust`: `success`;
+- `phase6-profile-action`: `success`;
+- `phase7-feedback-review`: `success`.
+
+This is engineering CI evidence. It is not human-participant or Release Qualification evidence.
