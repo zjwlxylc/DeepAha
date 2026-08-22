@@ -97,3 +97,26 @@ def test_browser_seeder_prints_only_synthetic_token_and_expected_route(
     assert "Release Qualification=NOT_STARTED" in output
     assert "bearer_token=fixed-synthetic-token" in output
     assert "web_route=/me/reminders" in output
+
+
+@pytest.mark.parametrize(
+    "candidate",
+    [
+        *(
+            f"postgresql+psycopg://deepaha:test@127.0.0.1:{port}/deepaha"
+            for port in range(55432, 55438)
+        ),
+        "postgresql+psycopg://deepaha:test@localhost:55438/deepaha",
+        "postgresql+psycopg://deepaha:test@127.0.0.1:55438/other",
+        "postgresql+psycopg://deepaha:test@example.test:55438/deepaha",
+    ],
+)
+def test_phase8_browser_seed_rejects_every_non_exact_database(candidate: str) -> None:
+    with pytest.raises(ValueError, match="127.0.0.1:55438/deepaha"):
+        browser_seed.assert_phase8_browser_database_url(candidate)
+
+
+def test_phase8_browser_seed_accepts_only_the_exact_disposable_database() -> None:
+    browser_seed.assert_phase8_browser_database_url(
+        "postgresql+psycopg://deepaha:test@127.0.0.1:55438/deepaha"
+    )

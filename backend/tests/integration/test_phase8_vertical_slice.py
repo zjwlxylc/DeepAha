@@ -1,4 +1,5 @@
 from dataclasses import asdict
+from urllib.parse import urlparse
 
 import pytest
 from fastapi.testclient import TestClient
@@ -33,6 +34,10 @@ def test_phase8_browser_seed_is_synthetic_and_refuses_reuse(
     migrated_engine: Engine,
     database_url: str,
 ) -> None:
+    target = urlparse(database_url)
+    if target.hostname != "127.0.0.1" or target.port != 55438 or target.path != "/deepaha":
+        pytest.skip("requires the exact disposable Phase 8 database")
+
     identity = seed_phase8_browser(database_url)
 
     assert identity.route == "/me/reminders"
