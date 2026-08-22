@@ -165,10 +165,6 @@ def upgrade() -> None:
             name=op.f("pk_user_state_snapshots"),
         ),
         sa.UniqueConstraint(
-            "qualification_profile_snapshot_id",
-            name=op.f("uq_user_state_snapshots_qualification_profile_snapshot_id"),
-        ),
-        sa.UniqueConstraint(
             "user_state_id",
             "version",
             name="uq_user_state_snapshots_stream_version",

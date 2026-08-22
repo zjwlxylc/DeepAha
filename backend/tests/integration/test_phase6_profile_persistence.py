@@ -121,11 +121,29 @@ def test_profile_snapshots_are_versioned_idempotent_and_owner_scoped(
         profile_command(preference_regions=["合成宁波市"]),
         idempotency_key="profile-request-0003",
     )
+    changed_attributes = profile_command().attributes.model_dump(mode="json") | {
+        "education_level": "MASTER"
+    }
+    qualification_changed = service.save(
+        principal_a,
+        profile_command(
+            attributes=changed_attributes,
+            preference_regions=["合成宁波市"],
+        ),
+        idempotency_key="profile-request-0004",
+    )
 
     assert replay.user_state_snapshot_id == first.user_state_snapshot_id
     assert same_content.user_state_snapshot_id == first.user_state_snapshot_id
     assert changed.version == 2
-    assert service.get_current(principal_a) == changed
+    assert changed.qualification_profile_snapshot_id == first.qualification_profile_snapshot_id
+    assert changed.qualification_profile_version == first.qualification_profile_version
+    assert qualification_changed.version == 3
+    assert qualification_changed.qualification_profile_snapshot_id != (
+        first.qualification_profile_snapshot_id
+    )
+    assert qualification_changed.qualification_profile_version == 2
+    assert service.get_current(principal_a) == qualification_changed
     assert service.get_current(principal_b) is None
     assert service.get_snapshot(principal_b, first.user_state_snapshot_id) is None
     assert service.get_snapshot(principal_a, uuid7()) is None
@@ -143,7 +161,7 @@ def test_profile_snapshots_are_versioned_idempotent_and_owner_scoped(
         ).all()
         profile = session.get(ProfileSnapshotModel, first.qualification_profile_snapshot_id)
 
-    assert len(state_rows) == 2
+    assert len(state_rows) == 3
     assert profile is not None
     assert profile.synthetic is False
     assert profile.profile_schema_version == "0.5.0"

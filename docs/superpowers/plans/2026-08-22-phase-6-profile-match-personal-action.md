@@ -310,10 +310,12 @@ git push
 
 **Files:**
 - Create: `backend/src/deepaha/personal/matching.py`
-- Create: `backend/tests/personal/test_matching.py`
 - Create: `backend/tests/personal/test_ranking.py`
-- Create: `backend/tests/integration/test_phase6_match_replay.py`
+- Create: `backend/tests/integration/test_phase6_personal_match_replay.py`
 - Modify: `backend/src/deepaha/eligibility/service.py`
+- Modify: `backend/src/deepaha/personal/profile.py`
+- Modify: `backend/src/deepaha/personal/models.py`
+- Modify: `backend/migrations/versions/20260822_0006_phase6_personal_action.py`
 
 **Interfaces:**
 - Consumes: `ProfileService` current state, Phase 5 public candidates, approved RuleSet,
@@ -322,7 +324,7 @@ git push
   `PersonalMatchService.run(principal)`, `PersonalMatchService.get_detail(principal, public_id)` and
   pure `rank_personal_matches(matches, state, window_end)`.
 
-- [ ] **Step 1: Write failing personal-match and counterfactual tests**
+- [x] **Step 1: Write failing personal-match and counterfactual tests**
 
 ```python
 def test_personal_match_binds_exact_versions_and_replays() -> None:
@@ -344,13 +346,13 @@ def test_soft_preference_changes_order_not_eligibility() -> None:
 Add cases for all four states, missing-field downgrade, official conflict protection, no exact
 RuleSet, deadline exactly today/+90, deadline +91, closed/cancelled/unknown status and max three.
 
-- [ ] **Step 2: Run RED targets**
+- [x] **Step 2: Run RED targets**
 
-Run: `cd backend; uv run pytest tests/personal/test_matching.py tests/personal/test_ranking.py -q`
+Run: `cd backend; uv run pytest tests/personal/test_ranking.py -q`
 
 Expected: fail because `PersonalMatchService` and `evaluate_personal_and_save` are absent.
 
-- [ ] **Step 3: Add a narrow personal entry to EligibilityService**
+- [x] **Step 3: Add a narrow personal entry to EligibilityService**
 
 ```python
 def evaluate_personal_and_save(self, match_input: MatchInput) -> MatchSnapshotSchemaV04:
@@ -363,7 +365,7 @@ def evaluate_and_save(self, match_input: MatchInput) -> MatchSnapshotSchemaV04:
 Factor only the existing method body and `_load_input` guard; do not change v0.4 output or default
 synthetic behavior. Ownership remains enforced by `PersonalMatchService` before this method is called.
 
-- [ ] **Step 4: Implement deterministic candidate selection and ranking**
+- [x] **Step 4: Implement deterministic candidate selection and ranking**
 
 ```python
 def rank_personal_matches(
@@ -379,19 +381,19 @@ def rank_personal_matches(
 preference matches zero when personalization is disabled. Persist one canonical ranking snapshot
 bound to state, window, ranker version and all match hashes.
 
-- [ ] **Step 5: Verify matching and replay**
+- [x] **Step 5: Verify matching and replay**
 
-Run: `cd backend; uv run pytest tests/eligibility tests/personal/test_matching.py tests/personal/test_ranking.py -q`
+Run: `cd backend; uv run pytest tests/eligibility tests/personal/test_ranking.py -q`
 
 Run in Phase 6 disposable PostgreSQL only:
-`cd backend; uv run pytest -m integration tests/integration/test_phase4_match_replay.py tests/integration/test_phase6_match_replay.py -q`
+`cd backend; uv run pytest -m integration tests/integration/test_phase4_match_replay.py tests/integration/test_phase6_personal_match_replay.py -q`
 
 Expected: PASS; Phase 4 synthetic guard still rejects personal rows through its original method.
 
-- [ ] **Step 6: Commit and push exact files**
+- [x] **Step 6: Commit and push exact files**
 
 ```powershell
-git add -- backend/src/deepaha/eligibility/service.py backend/src/deepaha/personal/matching.py backend/tests/personal/test_matching.py backend/tests/personal/test_ranking.py backend/tests/integration/test_phase6_match_replay.py
+git add -- backend/migrations/versions/20260822_0006_phase6_personal_action.py backend/src/deepaha/eligibility/service.py backend/src/deepaha/personal/matching.py backend/src/deepaha/personal/models.py backend/src/deepaha/personal/profile.py backend/tests/personal/test_ranking.py backend/tests/integration/test_phase6_profile_persistence.py backend/tests/integration/test_phase6_personal_match_replay.py docs/superpowers/plans/2026-08-22-phase-6-profile-match-personal-action.md
 git commit -m "feat: rank reproducible personal matches"
 git push
 ```

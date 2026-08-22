@@ -136,35 +136,62 @@ class ProfileService:
                     session.commit()
                     return self._contract_from_row(session, existing)
 
-                current_version = session.scalar(
-                    select(func.max(UserStateSnapshotModel.version)).where(
-                        UserStateSnapshotModel.user_id == principal.user_id
+                current_state = session.scalar(
+                    select(UserStateSnapshotModel)
+                    .where(UserStateSnapshotModel.user_id == principal.user_id)
+                    .order_by(UserStateSnapshotModel.version.desc())
+                    .limit(1)
+                )
+                version = 1 if current_state is None else current_state.version + 1
+                attributes_payload = command.attributes.model_dump(mode="json")
+                profile: ProfileSnapshotModel | None = None
+                current_profile = (
+                    None
+                    if current_state is None
+                    else session.get(
+                        ProfileSnapshotModel,
+                        current_state.qualification_profile_snapshot_id,
                     )
                 )
-                version = (current_version or 0) + 1
-                profile_snapshot_id = self._id_factory()
+                if (
+                    current_profile is not None
+                    and not current_profile.synthetic
+                    and current_profile.profile_schema_version == "0.5.0"
+                    and current_profile.attributes == attributes_payload
+                    and current_profile.scenario_clock == command.scenario_clock
+                ):
+                    profile_snapshot_id = current_profile.profile_snapshot_id
+                    profile_version = current_profile.version
+                else:
+                    latest_profile_version = session.scalar(
+                        select(func.max(ProfileSnapshotModel.version)).where(
+                            ProfileSnapshotModel.profile_id == user.user_state_id
+                        )
+                    )
+                    profile_version = (latest_profile_version or 0) + 1
+                    profile_snapshot_id = self._id_factory()
+                    profile = ProfileSnapshotModel(
+                        profile_snapshot_id=profile_snapshot_id,
+                        profile_id=user.user_state_id,
+                        version=profile_version,
+                        synthetic=False,
+                        persona_family_id=None,
+                        attributes=attributes_payload,
+                        scenario_clock=command.scenario_clock,
+                        profile_schema_version="0.5.0",
+                        created_at=created_at,
+                        created_by="USER_SELF_SERVICE",
+                        reviewed_by="NOT_REVIEWED_PHASE6",
+                        change_note="Phase 6 immutable self-service qualification projection.",
+                    )
                 state_snapshot_id = self._id_factory()
-                profile = ProfileSnapshotModel(
-                    profile_snapshot_id=profile_snapshot_id,
-                    profile_id=user.user_state_id,
-                    version=version,
-                    synthetic=False,
-                    persona_family_id=None,
-                    attributes=command.attributes.model_dump(mode="json"),
-                    scenario_clock=command.scenario_clock,
-                    profile_schema_version="0.5.0",
-                    created_at=created_at,
-                    created_by="USER_SELF_SERVICE",
-                    reviewed_by="NOT_REVIEWED_PHASE6",
-                    change_note="Phase 6 immutable self-service qualification projection.",
-                )
                 state = UserStateSnapshotModel(
                     user_state_snapshot_id=state_snapshot_id,
                     user_state_id=user.user_state_id,
                     user_id=user.user_id,
                     version=version,
                     qualification_profile_snapshot_id=profile_snapshot_id,
-                    qualification_profile_version=version,
+                    qualification_profile_version=profile_version,
                     life_stage=None if command.life_stage is None else command.life_stage.value,
                     goal_types=[item.value for item in command.goal_types],
                     preference_regions=list(command.preference_regions),
@@ -177,8 +204,9 @@ class ProfileService:
                     input_sha256=request_sha256,
                     created_at=created_at,
                 )
-                session.add(profile)
-                session.flush()
+                if profile is not None:
+                    session.add(profile)
+                    session.flush()
                 session.add(state)
                 session.flush()
                 self._record_idempotency(

@@ -93,7 +93,6 @@ class UserStateSnapshotModel(Base):
             ondelete="RESTRICT",
         ),
         UniqueConstraint("user_state_id", "version", name="uq_user_state_snapshots_stream_version"),
-        UniqueConstraint("qualification_profile_snapshot_id"),
         UniqueConstraint("user_id", "input_sha256", name="uq_user_state_snapshots_owner_input"),
     )
 
