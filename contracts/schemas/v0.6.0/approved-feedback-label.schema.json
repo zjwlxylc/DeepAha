@@ -1,0 +1,98 @@
+{
+  "$defs": {
+    "FeedbackClaimKind": {
+      "enum": [
+        "ELIGIBILITY_CORRECTION",
+        "OPPORTUNITY_FACT_CORRECTION",
+        "EXPLANATION_UNCLEAR",
+        "RANKING_IRRELEVANT"
+      ],
+      "title": "FeedbackClaimKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "approved_feedback_label_id": {
+      "format": "uuid",
+      "title": "Approved Feedback Label Id",
+      "type": "string"
+    },
+    "approved_target_value": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Approved Target Value",
+      "type": "string"
+    },
+    "claim_kind": {
+      "$ref": "#/$defs/FeedbackClaimKind"
+    },
+    "content_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Sha256",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "evidence_class": {
+      "enum": [
+        "SYNTHETIC_FEEDBACK_WORKFLOW_ONLY",
+        "CONSENTED_HUMAN_PARTICIPANT"
+      ],
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "evidence_ref_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Evidence Ref Ids",
+      "type": "array"
+    },
+    "feedback_adjudication_id": {
+      "format": "uuid",
+      "title": "Feedback Adjudication Id",
+      "type": "string"
+    },
+    "feedback_event_id": {
+      "format": "uuid",
+      "title": "Feedback Event Id",
+      "type": "string"
+    },
+    "match_snapshot_id": {
+      "format": "uuid",
+      "title": "Match Snapshot Id",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "approved_feedback_label_id",
+    "feedback_event_id",
+    "feedback_adjudication_id",
+    "match_snapshot_id",
+    "opportunity_id",
+    "opportunity_version",
+    "claim_kind",
+    "approved_target_value",
+    "evidence_ref_ids",
+    "evidence_class",
+    "content_sha256",
+    "created_at"
+  ],
+  "title": "ApprovedFeedbackLabelSchemaV06",
+  "type": "object"
+}

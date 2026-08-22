@@ -93,6 +93,12 @@ class UserStateSnapshotModel(Base):
             ondelete="RESTRICT",
         ),
         UniqueConstraint("user_state_id", "version", name="uq_user_state_snapshots_stream_version"),
+        UniqueConstraint(
+            "user_state_snapshot_id",
+            "version",
+            "user_id",
+            name="uq_user_state_snapshots_feedback_binding",
+        ),
         UniqueConstraint("user_id", "input_sha256", name="uq_user_state_snapshots_owner_input"),
     )
 
@@ -189,6 +195,13 @@ class PersonalRankingItemModel(Base):
             "ranking_snapshot_id",
             "match_snapshot_id",
             name="uq_personal_ranking_items_match_snapshot",
+        ),
+        UniqueConstraint(
+            "ranking_snapshot_id",
+            "match_snapshot_id",
+            "opportunity_id",
+            "opportunity_version",
+            name="uq_personal_ranking_items_feedback_binding",
         ),
     )
 

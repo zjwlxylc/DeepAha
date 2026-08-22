@@ -36,6 +36,23 @@ PHASE6_TABLES = {
     "personal_action_events",
     "personal_idempotency_records",
 }
+PHASE7_TABLES = {
+    "reviewer_accounts",
+    "reviewer_auth_sessions",
+    "feedback_idempotency_records",
+    "reviewer_idempotency_records",
+    "feedback_events",
+    "feedback_evidence_links",
+    "feedback_review_case_snapshots",
+    "feedback_confidence_assessments",
+    "feedback_adjudications",
+    "approved_feedback_labels",
+    "feedback_improvement_candidates",
+    "offline_evaluation_candidates",
+    "shadow_test_candidates",
+    "validation_runs",
+    "release_gate_decisions",
+}
 
 
 def test_database_is_postgresql_18(connection: Connection) -> None:
@@ -451,6 +468,104 @@ def test_phase6_downgrade_refuses_personal_rows_without_deleting_them(
             assert (
                 temporary_connection.exec_driver_sql(
                     "select count(*) from personal_users"
+                ).scalar_one()
+                == 1
+            )
+    finally:
+        if temporary_engine is not None:
+            temporary_engine.dispose()
+        with maintenance_engine.connect() as maintenance_connection:
+            maintenance_connection.exec_driver_sql(
+                f'DROP DATABASE IF EXISTS "{database_name}" WITH (FORCE)'
+            )
+        maintenance_engine.dispose()
+
+
+def test_phase7_migration_round_trips_through_phase6_in_an_isolated_database(
+    database_url: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    database_name = f"deepaha_migration_{uuid4().hex}"
+    assert re.fullmatch(r"deepaha_migration_[0-9a-f]{32}", database_name)
+
+    url = make_url(database_url)
+    maintenance_url = url.set(database="postgres")
+    temporary_url = url.set(database=database_name)
+    maintenance_engine = create_engine(maintenance_url, isolation_level="AUTOCOMMIT")
+    temporary_engine = None
+    try:
+        with maintenance_engine.connect() as maintenance_connection:
+            maintenance_connection.exec_driver_sql(f'CREATE DATABASE "{database_name}"')
+
+        monkeypatch.setenv(
+            "DEEPAHA_DATABASE_URL",
+            temporary_url.render_as_string(hide_password=False),
+        )
+        config = Config(str(BACKEND_ROOT / "alembic.ini"))
+        command.upgrade(config, "head")
+        temporary_engine = create_engine(temporary_url)
+        with temporary_engine.connect() as temporary_connection:
+            assert set(inspect(temporary_connection).get_table_names()) >= PHASE7_TABLES
+
+        command.downgrade(config, "20260822_0006")
+        with temporary_engine.connect() as temporary_connection:
+            tables = set(inspect(temporary_connection).get_table_names())
+            assert tables >= PHASE6_TABLES
+            assert tables.isdisjoint(PHASE7_TABLES)
+
+        command.upgrade(config, "head")
+        with temporary_engine.connect() as temporary_connection:
+            assert set(inspect(temporary_connection).get_table_names()) >= PHASE7_TABLES
+    finally:
+        if temporary_engine is not None:
+            temporary_engine.dispose()
+        with maintenance_engine.connect() as maintenance_connection:
+            maintenance_connection.exec_driver_sql(
+                f'DROP DATABASE IF EXISTS "{database_name}" WITH (FORCE)'
+            )
+        maintenance_engine.dispose()
+
+
+def test_phase7_downgrade_refuses_governance_rows_without_deleting_them(
+    database_url: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    database_name = f"deepaha_migration_{uuid4().hex}"
+    assert re.fullmatch(r"deepaha_migration_[0-9a-f]{32}", database_name)
+
+    url = make_url(database_url)
+    maintenance_url = url.set(database="postgres")
+    temporary_url = url.set(database=database_name)
+    maintenance_engine = create_engine(maintenance_url, isolation_level="AUTOCOMMIT")
+    temporary_engine = None
+    try:
+        with maintenance_engine.connect() as maintenance_connection:
+            maintenance_connection.exec_driver_sql(f'CREATE DATABASE "{database_name}"')
+
+        monkeypatch.setenv(
+            "DEEPAHA_DATABASE_URL",
+            temporary_url.render_as_string(hide_password=False),
+        )
+        config = Config(str(BACKEND_ROOT / "alembic.ini"))
+        command.upgrade(config, "head")
+        temporary_engine = create_engine(temporary_url)
+        with temporary_engine.begin() as temporary_connection:
+            temporary_connection.exec_driver_sql(
+                "insert into reviewer_accounts "
+                "(reviewer_id, active, synthetic, principal_label, roles, allowed_purposes, "
+                "created_at) values "
+                "('019b0000-0000-7000-8000-000000000701', true, true, "
+                "'SYNTHETIC_PHASE7_REVIEWER', '[\"FEEDBACK_REVIEWER\"]'::jsonb, "
+                "'[\"FEEDBACK_REVIEW_AND_VALIDATION\"]'::jsonb, now())"
+            )
+
+        with pytest.raises(RuntimeError, match="cannot downgrade Phase 7"):
+            command.downgrade(config, "20260822_0006")
+
+        with temporary_engine.connect() as temporary_connection:
+            assert (
+                temporary_connection.exec_driver_sql(
+                    "select count(*) from reviewer_accounts"
                 ).scalar_one()
                 == 1
             )

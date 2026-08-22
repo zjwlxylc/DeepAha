@@ -171,6 +171,7 @@ Gold Dataset、真人和 live 项目按 Phase 适用，不能把全局候选清�
 | `phase4-eligibility` | Phase 4 分支和相关合并请求 | v0.4 字节契约、规则/资格/评估、PostgreSQL 18/Moto 隔离集成与迁移往返 |
 | `phase5-public-trust` | Phase 5 及后续堆叠分支 | 只读公开目录/API、证据投影、Web 与 Phase 5 迁移往返 |
 | `phase6-profile-action` | Phase 6 分支和相关合并请求 | v0.5 契约、身份/用途隔离、画像/匹配/行动、Web 与 Phase 6 迁移往返 |
+| `phase7-feedback-review` | Phase 7 分支和相关合并请求 | v0.6 契约、不可变反馈、身份/用途/角色隔离、审核/标签/双轨 HOLD、Web 与 Phase 7 迁移往返 |
 | `phase2-contract-and-parser` | Phase 2 契约、采集或解析变更时 | v0.1/v0.2 契约、观察语义、固定 HTML/PDF/XLSX、locator 回放 |
 | `source-live` | 人工触发；Phase 2 Release Qualification 观察窗口 | 十个登记官方 Endpoint 的策略化 live 观察；不作为每次提交必跑作业 |
 | `golden-evaluation` | 数据管线、规则、匹配或模型变更时 | 固定数据集回归和差异报告 |
@@ -187,6 +188,11 @@ Phase 4 的 `golden-evaluation` 当前仅指固定 CC0 合成案例：保存整�
 Phase 6 的固定 2 个合成画像、3 个合成机会、浏览器动作和 CI 只证明工程边界。最小画像
 完成率、理解度、认知负担和真实高意图动作必须来自受治理真人验证；在此之前 Phase 6
 Release Qualification 保持 `NOT_STARTED`，v0.5 不得标记 `STABLE`。
+
+Phase 7 的固定 CC0 合成反馈工作流只报告整数工程结果，真人参与者固定为 `0`。模拟与真人
+ValidationRun 必须使用不同 evidence class、数据集和指标；合成 reviewer 裁决不等于真人裁决。
+缺少真人证据时只能输出 `HOLD_MISSING_HUMAN_EVIDENCE`，Release Qualification 保持
+`NOT_STARTED`，v0.6 不得标记 `STABLE`。
 
 ## 6. 发布流程
 

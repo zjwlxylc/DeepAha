@@ -1,0 +1,89 @@
+{
+  "$defs": {
+    "FeedbackAdjudicationDecision": {
+      "enum": [
+        "NEEDS_EVIDENCE",
+        "CONFLICT",
+        "CONFIRMED",
+        "REJECTED"
+      ],
+      "title": "FeedbackAdjudicationDecision",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "adjudicator_id": {
+      "format": "uuid",
+      "title": "Adjudicator Id",
+      "type": "string"
+    },
+    "confidence_assessment_id": {
+      "format": "uuid",
+      "title": "Confidence Assessment Id",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "decision": {
+      "$ref": "#/$defs/FeedbackAdjudicationDecision"
+    },
+    "evidence_ref_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Evidence Ref Ids",
+      "type": "array"
+    },
+    "feedback_adjudication_id": {
+      "format": "uuid",
+      "title": "Feedback Adjudication Id",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "review_case_id": {
+      "format": "uuid",
+      "title": "Review Case Id",
+      "type": "string"
+    },
+    "review_case_version": {
+      "minimum": 1,
+      "title": "Review Case Version",
+      "type": "integer"
+    },
+    "review_purpose": {
+      "const": "FEEDBACK_REVIEW_AND_VALIDATION",
+      "title": "Review Purpose",
+      "type": "string"
+    }
+  },
+  "required": [
+    "feedback_adjudication_id",
+    "review_case_id",
+    "review_case_version",
+    "confidence_assessment_id",
+    "decision",
+    "evidence_ref_ids",
+    "reason",
+    "adjudicator_id",
+    "review_purpose",
+    "input_sha256",
+    "created_at"
+  ],
+  "title": "FeedbackAdjudicationSchemaV06",
+  "type": "object"
+}

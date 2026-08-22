@@ -11,6 +11,7 @@ export const metadata: Metadata = {
     template: "%s | DeepAha",
   },
   description: "查看机会来源、状态、核验时间、官方证据与变化历史。",
+  icons: { icon: "data:," },
   manifest: "/manifest.webmanifest",
 };
 

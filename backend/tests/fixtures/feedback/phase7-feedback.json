@@ -1,0 +1,74 @@
+{
+  "schema_version": "phase7-feedback-fixture-v1",
+  "synthetic": true,
+  "contains_personal_data": false,
+  "business_truth": false,
+  "release_qualification_eligible": false,
+  "license": "CC0-1.0 synthetic fixture",
+  "scenario_clock": "2026-08-22T12:00:00Z",
+  "feedback": {
+    "claim_kind": "EXPLANATION_UNCLEAR",
+    "user_statement": "合成反馈：解释没有明确指出官方证据位置。",
+    "evidence_relation": "SUPPORTS",
+    "evidence_note": "合成证据补充：关联提交时机会版本的官方 EvidenceRef。"
+  },
+  "review": {
+    "assessment": {
+      "evidence_complete": true,
+      "confidence_band": "HIGH",
+      "risk_level": "NORMAL",
+      "conflict": false,
+      "rationale": "合成审核：现有官方证据足以审核解释清晰度问题。"
+    },
+    "adjudication": {
+      "decision": "CONFIRMED",
+      "reason": "合成裁决：只确认解释清晰度问题，不改变资格或排序。"
+    },
+    "approved_target_value": "解释应明确显示官方证据入口和仍不确定的条件。"
+  },
+  "validation": {
+    "validation_cycle_id": "019b0000-0000-7000-8000-000000000801",
+    "direction": "EXPLANATION_CLARITY",
+    "component": "personal-explanation",
+    "input_manifest_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "change_statement": "只改善证据入口与不确定条件的解释呈现。",
+    "offline": {
+      "dataset_id": "019b0000-0000-7000-8000-000000000802",
+      "dataset_version": 1,
+      "dataset_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "baseline_component_version": "explanation-v0.5",
+      "candidate_component_version": "explanation-v0.6-candidate-1",
+      "outcome": "PASSED",
+      "result_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "evidence_class": "SYNTHETIC_SIMULATION_ONLY"
+    },
+    "shadow": {
+      "baseline_component_version": "explanation-v0.5",
+      "candidate_component_version": "explanation-v0.6-candidate-1",
+      "outcome": "PASSED",
+      "comparison_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "evidence_class": "SYNTHETIC_SIMULATION_ONLY"
+    },
+    "simulation": {
+      "dataset_id": "019b0000-0000-7000-8000-000000000803",
+      "dataset_version": 1,
+      "dataset_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "track": "SIMULATION",
+      "evidence_class": "SYNTHETIC_SIMULATION_ONLY",
+      "synthetic": true,
+      "release_qualification_eligible": false,
+      "outcome": "PASSED",
+      "metrics": {
+        "case_count": 2,
+        "expected_status_reproduced_count": 2,
+        "unexpected_ineligible_count": 0,
+        "unexpected_ineligible_case_ids": [],
+        "replay_mismatch_count": 0,
+        "candidate_difference_count": 1
+      },
+      "started_at": "2026-08-22T12:00:00Z",
+      "completed_at": "2026-08-22T12:00:01Z"
+    },
+    "expected_gate_decision": "HOLD_MISSING_HUMAN_EVIDENCE"
+  }
+}

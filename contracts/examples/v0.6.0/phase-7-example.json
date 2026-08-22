@@ -1,0 +1,178 @@
+{
+  "fixture_id": "phase7-synthetic-feedback-workflow-v1",
+  "license": "CC0-1.0",
+  "synthetic": true,
+  "contains_personal_data": false,
+  "business_truth": false,
+  "release_qualification_eligible": false,
+  "evidence_class": "SYNTHETIC_FEEDBACK_WORKFLOW_ONLY",
+  "human_participant_track_status": "NOT_STARTED",
+  "feedback_event": {
+    "feedback_event_id": "019b0000-0000-7000-8000-000000000601",
+    "owner_user_id": "019b0000-0000-7000-8000-000000000626",
+    "ranking_snapshot_id": "019b0000-0000-7000-8000-000000000602",
+    "match_snapshot_id": "019b0000-0000-7000-8000-000000000603",
+    "opportunity_id": "019b0000-0000-7000-8000-000000000604",
+    "opportunity_version": 3,
+    "user_state_snapshot_id": "019b0000-0000-7000-8000-000000000605",
+    "user_state_version": 2,
+    "event_type": "STRUCTURED_CORRECTION",
+    "claim_kind": "EXPLANATION_UNCLEAR",
+    "user_statement": "合成反馈：这条解释没有指出仍待确认的材料。",
+    "structured_reason_code": "MISSING_EVIDENCE_EXPLANATION",
+    "consent_version": "phase7-feedback-consent-v1",
+    "consent_scope": "FEEDBACK_REVIEW_AND_VALIDATION",
+    "contract_version": "0.6.0",
+    "input_sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+    "created_at": "2026-08-22T10:00:00Z"
+  },
+  "feedback_evidence_link": {
+    "feedback_evidence_link_id": "019b0000-0000-7000-8000-000000000606",
+    "feedback_event_id": "019b0000-0000-7000-8000-000000000601",
+    "evidence_ref_id": "019b0000-0000-7000-8000-000000000607",
+    "document_id": "019b0000-0000-7000-8000-000000000608",
+    "relation": "SUPPORTS",
+    "actor_kind": "USER",
+    "actor_id": "019b0000-0000-7000-8000-000000000626",
+    "note": "合成证据定位已由服务端验证。",
+    "input_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+    "created_at": "2026-08-22T10:00:00Z"
+  },
+  "review_case_snapshot": {
+    "review_case_snapshot_id": "019b0000-0000-7000-8000-000000000609",
+    "review_case_id": "019b0000-0000-7000-8000-000000000610",
+    "feedback_event_id": "019b0000-0000-7000-8000-000000000601",
+    "version": 1,
+    "status": "RECEIVED",
+    "priority": 2,
+    "due_at": "2026-08-24T10:00:00Z",
+    "assigned_reviewer_id": null,
+    "transition_reason": "INITIAL_SUBMISSION",
+    "input_sha256": "8888888888888888888888888888888888888888888888888888888888888888",
+    "created_at": "2026-08-22T10:00:00Z"
+  },
+  "confidence_assessment": {
+    "confidence_assessment_id": "019b0000-0000-7000-8000-000000000611",
+    "review_case_id": "019b0000-0000-7000-8000-000000000610",
+    "review_case_version": 1,
+    "evidence_complete": true,
+    "confidence_band": "HIGH",
+    "risk_level": "NORMAL",
+    "conflict": false,
+    "evidence_ref_ids": [
+      "019b0000-0000-7000-8000-000000000607"
+    ],
+    "rationale": "合成证据足以确认解释缺少关键定位。",
+    "reviewer_id": "019b0000-0000-7000-8000-000000000612",
+    "review_purpose": "FEEDBACK_REVIEW_AND_VALIDATION",
+    "input_sha256": "9999999999999999999999999999999999999999999999999999999999999999",
+    "created_at": "2026-08-22T10:00:00Z"
+  },
+  "adjudication": {
+    "feedback_adjudication_id": "019b0000-0000-7000-8000-000000000613",
+    "review_case_id": "019b0000-0000-7000-8000-000000000610",
+    "review_case_version": 1,
+    "confidence_assessment_id": "019b0000-0000-7000-8000-000000000611",
+    "decision": "CONFIRMED",
+    "evidence_ref_ids": [
+      "019b0000-0000-7000-8000-000000000607"
+    ],
+    "reason": "合成审核确认解释清晰度纠错。",
+    "adjudicator_id": "019b0000-0000-7000-8000-000000000614",
+    "review_purpose": "FEEDBACK_REVIEW_AND_VALIDATION",
+    "input_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "created_at": "2026-08-22T10:00:00Z"
+  },
+  "approved_label": {
+    "approved_feedback_label_id": "019b0000-0000-7000-8000-000000000615",
+    "feedback_event_id": "019b0000-0000-7000-8000-000000000601",
+    "feedback_adjudication_id": "019b0000-0000-7000-8000-000000000613",
+    "match_snapshot_id": "019b0000-0000-7000-8000-000000000603",
+    "opportunity_id": "019b0000-0000-7000-8000-000000000604",
+    "opportunity_version": 3,
+    "claim_kind": "EXPLANATION_UNCLEAR",
+    "approved_target_value": "EXPLANATION_MUST_NAME_UNCERTAIN_EVIDENCE",
+    "evidence_ref_ids": [
+      "019b0000-0000-7000-8000-000000000607"
+    ],
+    "evidence_class": "SYNTHETIC_FEEDBACK_WORKFLOW_ONLY",
+    "content_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "created_at": "2026-08-22T10:00:00Z"
+  },
+  "improvement_candidate": {
+    "improvement_candidate_id": "019b0000-0000-7000-8000-000000000616",
+    "validation_cycle_id": "019b0000-0000-7000-8000-000000000617",
+    "approved_label_ids": [
+      "019b0000-0000-7000-8000-000000000615"
+    ],
+    "direction": "EXPLANATION_CLARITY",
+    "component": "personal-explanation-template",
+    "input_manifest_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "change_statement": "只验证解释是否明确指出仍不确定的证据。",
+    "candidate_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "evidence_class": "SYNTHETIC_FEEDBACK_WORKFLOW_ONLY",
+    "selected": true,
+    "created_at": "2026-08-22T10:00:00Z"
+  },
+  "offline_candidate": {
+    "offline_evaluation_candidate_id": "019b0000-0000-7000-8000-000000000618",
+    "improvement_candidate_id": "019b0000-0000-7000-8000-000000000616",
+    "dataset_id": "019b0000-0000-7000-8000-000000000619",
+    "dataset_version": 1,
+    "dataset_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "baseline_component_version": "phase6-explanation-v1",
+    "candidate_component_version": "phase7-explanation-candidate-v1",
+    "outcome": "PASSED",
+    "result_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "evidence_class": "SYNTHETIC_SIMULATION_ONLY",
+    "created_at": "2026-08-22T10:00:00Z"
+  },
+  "shadow_candidate": {
+    "shadow_test_candidate_id": "019b0000-0000-7000-8000-000000000620",
+    "improvement_candidate_id": "019b0000-0000-7000-8000-000000000616",
+    "offline_evaluation_candidate_id": "019b0000-0000-7000-8000-000000000618",
+    "baseline_component_version": "phase6-explanation-v1",
+    "candidate_component_version": "phase7-explanation-candidate-v1",
+    "outcome": "PASSED",
+    "comparison_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "evidence_class": "SYNTHETIC_SIMULATION_ONLY",
+    "created_at": "2026-08-22T10:00:00Z"
+  },
+  "simulation_validation_run": {
+    "validation_run_id": "019b0000-0000-7000-8000-000000000621",
+    "validation_cycle_id": "019b0000-0000-7000-8000-000000000617",
+    "improvement_candidate_id": "019b0000-0000-7000-8000-000000000616",
+    "dataset_id": "019b0000-0000-7000-8000-000000000622",
+    "dataset_version": 1,
+    "dataset_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "track": "SIMULATION",
+    "evidence_class": "SYNTHETIC_SIMULATION_ONLY",
+    "synthetic": true,
+    "release_qualification_eligible": false,
+    "outcome": "PASSED",
+    "metrics": {
+      "case_count": 2,
+      "expected_status_reproduced_count": 2,
+      "unexpected_ineligible_count": 0,
+      "unexpected_ineligible_case_ids": [],
+      "replay_mismatch_count": 0,
+      "candidate_difference_count": 1
+    },
+    "input_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "started_at": "2026-08-22T10:00:00Z",
+    "completed_at": "2026-08-22T10:00:00Z"
+  },
+  "release_gate_decision": {
+    "release_gate_decision_id": "019b0000-0000-7000-8000-000000000625",
+    "validation_cycle_id": "019b0000-0000-7000-8000-000000000617",
+    "improvement_candidate_id": "019b0000-0000-7000-8000-000000000616",
+    "offline_evaluation_candidate_id": "019b0000-0000-7000-8000-000000000618",
+    "shadow_test_candidate_id": "019b0000-0000-7000-8000-000000000620",
+    "simulation_validation_run_id": "019b0000-0000-7000-8000-000000000621",
+    "human_validation_run_id": null,
+    "decision": "HOLD_MISSING_HUMAN_EVIDENCE",
+    "rationale": "合成工程验证不能替代真人参与者证据。",
+    "input_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+    "created_at": "2026-08-22T10:00:00Z"
+  }
+}

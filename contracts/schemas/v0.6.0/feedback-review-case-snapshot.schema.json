@@ -1,0 +1,95 @@
+{
+  "$defs": {
+    "FeedbackReviewStatus": {
+      "enum": [
+        "RECEIVED",
+        "NEEDS_EVIDENCE",
+        "CONFLICT",
+        "CONFIRMED",
+        "REJECTED"
+      ],
+      "title": "FeedbackReviewStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assigned_reviewer_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Assigned Reviewer Id"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "due_at": {
+      "format": "date-time",
+      "title": "Due At",
+      "type": "string"
+    },
+    "feedback_event_id": {
+      "format": "uuid",
+      "title": "Feedback Event Id",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "priority": {
+      "maximum": 3,
+      "minimum": 1,
+      "title": "Priority",
+      "type": "integer"
+    },
+    "review_case_id": {
+      "format": "uuid",
+      "title": "Review Case Id",
+      "type": "string"
+    },
+    "review_case_snapshot_id": {
+      "format": "uuid",
+      "title": "Review Case Snapshot Id",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/FeedbackReviewStatus"
+    },
+    "transition_reason": {
+      "maxLength": 300,
+      "minLength": 1,
+      "title": "Transition Reason",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "review_case_snapshot_id",
+    "review_case_id",
+    "feedback_event_id",
+    "version",
+    "status",
+    "priority",
+    "due_at",
+    "assigned_reviewer_id",
+    "transition_reason",
+    "input_sha256",
+    "created_at"
+  ],
+  "title": "FeedbackReviewCaseSnapshotSchemaV06",
+  "type": "object"
+}

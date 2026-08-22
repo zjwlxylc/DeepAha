@@ -1,0 +1,91 @@
+{
+  "$defs": {
+    "FeedbackActorKind": {
+      "enum": [
+        "USER",
+        "REVIEWER"
+      ],
+      "title": "FeedbackActorKind",
+      "type": "string"
+    },
+    "FeedbackEvidenceRelation": {
+      "enum": [
+        "SUPPORTS",
+        "CONTRADICTS"
+      ],
+      "title": "FeedbackEvidenceRelation",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "format": "uuid",
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "actor_kind": {
+      "$ref": "#/$defs/FeedbackActorKind"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "document_id": {
+      "format": "uuid",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "evidence_ref_id": {
+      "format": "uuid",
+      "title": "Evidence Ref Id",
+      "type": "string"
+    },
+    "feedback_event_id": {
+      "format": "uuid",
+      "title": "Feedback Event Id",
+      "type": "string"
+    },
+    "feedback_evidence_link_id": {
+      "format": "uuid",
+      "title": "Feedback Evidence Link Id",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "note": {
+      "anyOf": [
+        {
+          "maxLength": 300,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Note"
+    },
+    "relation": {
+      "$ref": "#/$defs/FeedbackEvidenceRelation"
+    }
+  },
+  "required": [
+    "feedback_evidence_link_id",
+    "feedback_event_id",
+    "evidence_ref_id",
+    "document_id",
+    "relation",
+    "actor_kind",
+    "actor_id",
+    "note",
+    "input_sha256",
+    "created_at"
+  ],
+  "title": "FeedbackEvidenceLinkSchemaV06",
+  "type": "object"
+}

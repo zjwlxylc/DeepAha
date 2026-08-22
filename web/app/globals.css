@@ -690,13 +690,16 @@ code {
   color: #653005;
 }
 
-.profile-form {
+.profile-form,
+.feedback-form,
+.review-form {
   display: grid;
   max-width: 58rem;
   gap: 1.25rem;
 }
 
-.profile-form fieldset {
+.profile-form fieldset,
+.feedback-form fieldset {
   min-width: 0;
   margin: 0;
   border: 1px solid var(--border);
@@ -705,7 +708,8 @@ code {
   box-shadow: var(--shadow);
 }
 
-.profile-form legend {
+.profile-form legend,
+.feedback-form legend {
   padding-inline: 0.4rem;
   color: var(--navy);
   font-size: 1.1rem;
@@ -720,7 +724,9 @@ code {
 }
 
 .profile-form label,
-.action-panel label {
+.action-panel label,
+.feedback-form label,
+.review-form label {
   display: grid;
   color: var(--navy);
   font-weight: 750;
@@ -729,8 +735,15 @@ code {
 
 .profile-form input,
 .profile-form select,
+.profile-form textarea,
 .action-panel input,
-.action-panel select {
+.action-panel select,
+.feedback-form input,
+.feedback-form select,
+.feedback-form textarea,
+.review-form input,
+.review-form select,
+.review-form textarea {
   width: 100%;
   min-height: 2.75rem;
   border: 1px solid #7890a3;
@@ -749,6 +762,93 @@ code {
 .check-label input {
   width: 1.25rem;
   min-height: 1.25rem;
+}
+
+.checkbox-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.form-alert,
+.form-success {
+  border-left: 0.3rem solid var(--danger);
+  background: #fff0f0;
+  padding: 0.8rem 1rem;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.form-success {
+  border-left-color: var(--success);
+  background: #e9f7ee;
+  color: var(--success);
+}
+
+.feedback-status,
+.review-section,
+.feedback-list li,
+.review-queue li {
+  border: 1px solid var(--border);
+  background: var(--paper);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow);
+}
+
+.feedback-status {
+  max-width: 58rem;
+}
+
+.feedback-status h2,
+.review-section h2 {
+  margin-top: 0;
+}
+
+.feedback-list,
+.review-queue,
+.review-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 1rem;
+  list-style: none;
+}
+
+.feedback-list li,
+.review-queue li {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.feedback-list a,
+.review-queue a {
+  font-size: 1.05rem;
+  font-weight: 750;
+}
+
+.feedback-list span,
+.review-queue span {
+  color: var(--ink-muted);
+}
+
+.review-case,
+.review-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.review-section {
+  max-width: 58rem;
+}
+
+.overdue-badge {
+  display: inline-flex;
+  margin-left: 0.5rem;
+  border-radius: 999px;
+  background: #fff0f0;
+  padding: 0.2rem 0.7rem;
+  color: var(--danger) !important;
+  font-size: 0.82rem;
+  font-weight: 800;
 }
 
 .field-help {
@@ -993,6 +1093,8 @@ code {
   }
 
   .profile-form .button,
+  .feedback-form .button,
+  .review-form .button,
   .personal-opportunity-card .button,
   .action-forms .button {
     width: 100%;

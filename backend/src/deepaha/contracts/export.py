@@ -41,6 +41,19 @@ from deepaha.contracts.phase6 import (
     PersonalRankingSnapshotSchemaV05,
     UserStateSnapshotSchemaV05,
 )
+from deepaha.contracts.phase7 import (
+    ApprovedFeedbackLabelSchemaV06,
+    FeedbackAdjudicationSchemaV06,
+    FeedbackConfidenceAssessmentSchemaV06,
+    FeedbackEventSchemaV06,
+    FeedbackEvidenceLinkSchemaV06,
+    FeedbackReviewCaseSnapshotSchemaV06,
+    ImprovementCandidateSchemaV06,
+    OfflineEvaluationCandidateSchemaV06,
+    ReleaseGateDecisionSchemaV06,
+    ShadowTestCandidateSchemaV06,
+    ValidationRunSchemaV06,
+)
 
 PHASE1_SCHEMAS: dict[str, type[BaseModel]] = {
     "source.schema.json": SourceSchema,
@@ -95,6 +108,20 @@ PHASE6_SCHEMAS.update(
         "personal-action-event.schema.json": PersonalActionEventSchemaV05,
     }
 )
+
+PHASE7_SCHEMAS: dict[str, type[BaseModel]] = {
+    "feedback-event.schema.json": FeedbackEventSchemaV06,
+    "feedback-evidence-link.schema.json": FeedbackEvidenceLinkSchemaV06,
+    "feedback-review-case-snapshot.schema.json": FeedbackReviewCaseSnapshotSchemaV06,
+    "feedback-confidence-assessment.schema.json": FeedbackConfidenceAssessmentSchemaV06,
+    "feedback-adjudication.schema.json": FeedbackAdjudicationSchemaV06,
+    "approved-feedback-label.schema.json": ApprovedFeedbackLabelSchemaV06,
+    "improvement-candidate.schema.json": ImprovementCandidateSchemaV06,
+    "offline-evaluation-candidate.schema.json": OfflineEvaluationCandidateSchemaV06,
+    "shadow-test-candidate.schema.json": ShadowTestCandidateSchemaV06,
+    "validation-run.schema.json": ValidationRunSchemaV06,
+    "release-gate-decision.schema.json": ReleaseGateDecisionSchemaV06,
+}
 
 
 def render_phase1_schemas() -> dict[str, bytes]:
@@ -202,16 +229,39 @@ def write_phase6_schemas(repository_root: Path) -> dict[str, Path]:
     return written
 
 
+def render_phase7_schemas() -> dict[str, bytes]:
+    return {
+        name: (
+            json.dumps(model.model_json_schema(), ensure_ascii=False, indent=2, sort_keys=True)
+            + "\n"
+        ).encode("utf-8")
+        for name, model in PHASE7_SCHEMAS.items()
+    }
+
+
+def write_phase7_schemas(repository_root: Path) -> dict[str, Path]:
+    target_directory = repository_root.resolve() / "contracts" / "schemas" / "v0.6.0"
+    target_directory.mkdir(parents=True, exist_ok=True)
+    written: dict[str, Path] = {}
+    for name, content in render_phase7_schemas().items():
+        target = target_directory / name
+        target.write_bytes(content)
+        written[name] = target
+    return written
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export versioned DeepAha JSON Schemas")
     parser.add_argument("repository_root", type=Path)
     parser.add_argument(
         "--version",
-        choices=("0.1.0", "0.2.0", "0.3.0", "0.4.0", "0.5.0"),
+        choices=("0.1.0", "0.2.0", "0.3.0", "0.4.0", "0.5.0", "0.6.0"),
         default="0.1.0",
     )
     arguments = parser.parse_args()
-    if arguments.version == "0.5.0":
+    if arguments.version == "0.6.0":
+        write_phase7_schemas(arguments.repository_root)
+    elif arguments.version == "0.5.0":
         write_phase6_schemas(arguments.repository_root)
     elif arguments.version == "0.4.0":
         write_phase4_schemas(arguments.repository_root)

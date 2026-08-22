@@ -10,6 +10,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from starlette.middleware.base import RequestResponseEndpoint
 from starlette.responses import JSONResponse
 
+from deepaha.api.feedback import router as feedback_router
 from deepaha.api.health import router as system_router
 from deepaha.api.personal import (
     PersonalApiProblem,
@@ -20,6 +21,13 @@ from deepaha.api.personal import (
 from deepaha.api.personal import router as personal_router
 from deepaha.api.public_opportunities import public_catalog_unavailable_response
 from deepaha.api.public_opportunities import router as public_opportunities_router
+from deepaha.api.review import (
+    ReviewApiProblem,
+    review_invalid_request_response,
+    review_problem_response,
+    review_unavailable_response,
+)
+from deepaha.api.review import router as review_router
 from deepaha.core.logging import configure_logging
 from deepaha.core.settings import get_settings
 
@@ -39,6 +47,13 @@ def create_app() -> FastAPI:
     ) -> JSONResponse:
         return personal_problem_response(error)
 
+    @application.exception_handler(ReviewApiProblem)
+    async def review_problem(
+        _request: Request,
+        error: ReviewApiProblem,
+    ) -> JSONResponse:
+        return review_problem_response(error)
+
     @application.exception_handler(RequestValidationError)
     async def invalid_request(
         request: Request,
@@ -46,6 +61,8 @@ def create_app() -> FastAPI:
     ) -> Response:
         if request.url.path.startswith("/api/v1/me"):
             return personal_invalid_request_response()
+        if request.url.path.startswith("/api/v1/review"):
+            return review_invalid_request_response()
         return await request_validation_exception_handler(request, error)
 
     @application.exception_handler(SQLAlchemyError)
@@ -55,6 +72,8 @@ def create_app() -> FastAPI:
     ) -> JSONResponse:
         if request.url.path.startswith("/api/v1/me"):
             return personal_unavailable_response()
+        if request.url.path.startswith("/api/v1/review"):
+            return review_unavailable_response()
         return public_catalog_unavailable_response(request)
 
     @application.middleware("http")
@@ -83,6 +102,8 @@ def create_app() -> FastAPI:
     application.include_router(system_router)
     application.include_router(public_opportunities_router)
     application.include_router(personal_router)
+    application.include_router(feedback_router)
+    application.include_router(review_router)
     return application
 
 

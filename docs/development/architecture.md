@@ -166,6 +166,11 @@ FeedbackEvent
   -> release decision
 ```
 
+Phase 7 已把该链实现为分离的不可变/版本化事实：原始事件不包含审核结论，批准标签不能回写
+RuleSet、EligibilityResult、MatchSnapshot 或排序，离线/影子候选也没有部署路径。个人与 reviewer
+身份由服务端分别解析并按用途/角色授权；模拟和真人使用不同 evidence class 与指标契约。固定合成
+工程夹具没有真人参与，因此只能得到 `HOLD_MISSING_HUMAN_EVIDENCE`。
+
 ## 6. 同步与异步边界
 
 同步 API 只承担可在用户等待时间内确定完成的操作：查询、画像更新、保存行动、反馈接收和读取评估结果。
@@ -193,6 +198,9 @@ Phase 2 不实现上述队列拓扑。采集和解析由显式命令同步编排
   MatchSnapshot 和 EvaluationRun；旧 OpportunityVersion 和原始证据不重写。
 - Phase 6 在 PostgreSQL 中追加 owner-scoped UserState、PersonalRanking、PersonalAction 和
   ActionEvent；当前用途撤销后不再读取旧个人结果，审计记录仍保留且不被就地改写。
+- Phase 7 在 PostgreSQL 中追加 FeedbackEvent、EvidenceLink、ReviewCaseSnapshot、assessment、
+  adjudication、approved label、offline/shadow candidate 和 Gate decision；所有治理事实拒绝
+  UPDATE/DELETE，反馈链只读历史决策输入，不回写在线规则、资格、匹配或排序。
 - 对象存储保存原始 HTML/PDF/Excel/图片和不可变快照；数据库保存哈希、大小、MIME、对象键和证据引用。
 - Redis 若在后续阶段引入，只用于缓存、队列、锁和限流；缓存丢失不能改变业务事实。Phase 2 不依赖 Redis。
 - pgvector 若在后续阶段引入，只用于去重候选、专业语义候选和检索，不用于硬资格最终裁决。Phase 2 不创建向量列或扩展。
