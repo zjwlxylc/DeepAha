@@ -1,0 +1,143 @@
+{
+  "$defs": {
+    "DeadlineChangeDirection": {
+      "enum": [
+        "ADVANCED",
+        "EXTENDED"
+      ],
+      "title": "DeadlineChangeDirection",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action_snapshot_id": {
+      "format": "uuid",
+      "title": "Action Snapshot Id",
+      "type": "string"
+    },
+    "cadence": {
+      "const": "AS_SOON_AS_GOVERNED",
+      "title": "Cadence",
+      "type": "string"
+    },
+    "consent_version": {
+      "minLength": 1,
+      "title": "Consent Version",
+      "type": "string"
+    },
+    "contract_version": {
+      "const": "0.7.0",
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "current_evidence_ref_id": {
+      "format": "uuid",
+      "title": "Current Evidence Ref Id",
+      "type": "string"
+    },
+    "detected_at": {
+      "format": "date-time",
+      "title": "Detected At",
+      "type": "string"
+    },
+    "direction": {
+      "$ref": "#/$defs/DeadlineChangeDirection"
+    },
+    "event_id": {
+      "format": "uuid",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "from_version": {
+      "minimum": 1,
+      "title": "From Version",
+      "type": "integer"
+    },
+    "new_closes_on": {
+      "format": "date",
+      "title": "New Closes On",
+      "type": "string"
+    },
+    "old_closes_on": {
+      "format": "date",
+      "title": "Old Closes On",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "preference_snapshot_id": {
+      "format": "uuid",
+      "title": "Preference Snapshot Id",
+      "type": "string"
+    },
+    "previous_evidence_ref_id": {
+      "format": "uuid",
+      "title": "Previous Evidence Ref Id",
+      "type": "string"
+    },
+    "reminder_id": {
+      "format": "uuid",
+      "title": "Reminder Id",
+      "type": "string"
+    },
+    "reminder_kind": {
+      "const": "DEADLINE_CHANGED",
+      "title": "Reminder Kind",
+      "type": "string"
+    },
+    "target": {
+      "const": "TEST_INBOX",
+      "title": "Target",
+      "type": "string"
+    },
+    "to_version": {
+      "minimum": 1,
+      "title": "To Version",
+      "type": "integer"
+    },
+    "user_id": {
+      "format": "uuid",
+      "title": "User Id",
+      "type": "string"
+    },
+    "user_state_snapshot_id": {
+      "format": "uuid",
+      "title": "User State Snapshot Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "reminder_id",
+    "user_id",
+    "opportunity_id",
+    "event_id",
+    "from_version",
+    "to_version",
+    "old_closes_on",
+    "new_closes_on",
+    "direction",
+    "previous_evidence_ref_id",
+    "current_evidence_ref_id",
+    "action_snapshot_id",
+    "preference_snapshot_id",
+    "user_state_snapshot_id",
+    "consent_version",
+    "detected_at",
+    "created_at",
+    "reminder_kind",
+    "cadence",
+    "target",
+    "contract_version"
+  ],
+  "title": "DeadlineChangeReminderIntentSchemaV07",
+  "type": "object"
+}

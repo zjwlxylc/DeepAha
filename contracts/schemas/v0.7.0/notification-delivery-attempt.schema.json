@@ -1,0 +1,86 @@
+{
+  "$defs": {
+    "NotificationDeliveryOutcome": {
+      "enum": [
+        "SUCCEEDED",
+        "TRANSIENT_FAILURE",
+        "PERMANENT_FAILURE"
+      ],
+      "title": "NotificationDeliveryOutcome",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "adapter": {
+      "const": "POSTGRES_TEST_INBOX",
+      "title": "Adapter",
+      "type": "string"
+    },
+    "attempt_number": {
+      "maximum": 3,
+      "minimum": 1,
+      "title": "Attempt Number",
+      "type": "integer"
+    },
+    "completed_at": {
+      "format": "date-time",
+      "title": "Completed At",
+      "type": "string"
+    },
+    "contract_version": {
+      "const": "0.7.0",
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "delivery_attempt_id": {
+      "format": "uuid",
+      "title": "Delivery Attempt Id",
+      "type": "string"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "pattern": "^[A-Z][A-Z0-9_]{0,63}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Error Code"
+    },
+    "lease_token": {
+      "format": "uuid",
+      "title": "Lease Token",
+      "type": "string"
+    },
+    "outcome": {
+      "$ref": "#/$defs/NotificationDeliveryOutcome"
+    },
+    "reminder_id": {
+      "format": "uuid",
+      "title": "Reminder Id",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "delivery_attempt_id",
+    "reminder_id",
+    "attempt_number",
+    "lease_token",
+    "adapter",
+    "outcome",
+    "error_code",
+    "started_at",
+    "completed_at",
+    "contract_version"
+  ],
+  "title": "NotificationDeliveryAttemptSchemaV07",
+  "type": "object"
+}

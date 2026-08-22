@@ -1,0 +1,147 @@
+{
+  "$defs": {
+    "DeadlineChangeDirection": {
+      "enum": [
+        "ADVANCED",
+        "EXTENDED"
+      ],
+      "title": "DeadlineChangeDirection",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "const": "0.7.0",
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "current_evidence_ref_id": {
+      "format": "uuid",
+      "title": "Current Evidence Ref Id",
+      "type": "string"
+    },
+    "current_official_url": {
+      "format": "uri",
+      "maxLength": 2083,
+      "minLength": 1,
+      "title": "Current Official Url",
+      "type": "string"
+    },
+    "delivered_at": {
+      "format": "date-time",
+      "title": "Delivered At",
+      "type": "string"
+    },
+    "detected_at": {
+      "format": "date-time",
+      "title": "Detected At",
+      "type": "string"
+    },
+    "direction": {
+      "$ref": "#/$defs/DeadlineChangeDirection"
+    },
+    "event_id": {
+      "format": "uuid",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "from_version": {
+      "minimum": 1,
+      "title": "From Version",
+      "type": "integer"
+    },
+    "inbox_entry_id": {
+      "format": "uuid",
+      "title": "Inbox Entry Id",
+      "type": "string"
+    },
+    "new_closes_on": {
+      "format": "date",
+      "title": "New Closes On",
+      "type": "string"
+    },
+    "old_closes_on": {
+      "format": "date",
+      "title": "Old Closes On",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_public_id": {
+      "pattern": "^opp_[0-9a-f]{32}$",
+      "title": "Opportunity Public Id",
+      "type": "string"
+    },
+    "opportunity_title": {
+      "minLength": 1,
+      "title": "Opportunity Title",
+      "type": "string"
+    },
+    "personal_detail_path": {
+      "pattern": "^/me/opportunities/opp_[0-9a-f]{32}$",
+      "title": "Personal Detail Path",
+      "type": "string"
+    },
+    "previous_evidence_ref_id": {
+      "format": "uuid",
+      "title": "Previous Evidence Ref Id",
+      "type": "string"
+    },
+    "previous_official_url": {
+      "format": "uri",
+      "maxLength": 2083,
+      "minLength": 1,
+      "title": "Previous Official Url",
+      "type": "string"
+    },
+    "reminder_id": {
+      "format": "uuid",
+      "title": "Reminder Id",
+      "type": "string"
+    },
+    "target": {
+      "const": "TEST_INBOX",
+      "title": "Target",
+      "type": "string"
+    },
+    "to_version": {
+      "minimum": 1,
+      "title": "To Version",
+      "type": "integer"
+    },
+    "user_id": {
+      "format": "uuid",
+      "title": "User Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "inbox_entry_id",
+    "reminder_id",
+    "user_id",
+    "opportunity_id",
+    "opportunity_public_id",
+    "opportunity_title",
+    "event_id",
+    "from_version",
+    "to_version",
+    "old_closes_on",
+    "new_closes_on",
+    "direction",
+    "previous_evidence_ref_id",
+    "current_evidence_ref_id",
+    "previous_official_url",
+    "current_official_url",
+    "personal_detail_path",
+    "detected_at",
+    "delivered_at",
+    "target",
+    "contract_version"
+  ],
+  "title": "TestInboxEntrySchemaV07",
+  "type": "object"
+}

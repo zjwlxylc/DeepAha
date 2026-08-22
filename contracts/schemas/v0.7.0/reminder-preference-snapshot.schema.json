@@ -1,0 +1,93 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "actor_user_id": {
+      "format": "uuid",
+      "title": "Actor User Id",
+      "type": "string"
+    },
+    "cadence": {
+      "const": "AS_SOON_AS_GOVERNED",
+      "title": "Cadence",
+      "type": "string"
+    },
+    "contract_version": {
+      "const": "0.7.0",
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "enabled": {
+      "title": "Enabled",
+      "type": "boolean"
+    },
+    "predecessor_snapshot_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Predecessor Snapshot Id"
+    },
+    "preference_id": {
+      "format": "uuid",
+      "title": "Preference Id",
+      "type": "string"
+    },
+    "preference_policy_version": {
+      "const": "phase8-deadline-reminder-v1",
+      "title": "Preference Policy Version",
+      "type": "string"
+    },
+    "preference_snapshot_id": {
+      "format": "uuid",
+      "title": "Preference Snapshot Id",
+      "type": "string"
+    },
+    "reminder_kind": {
+      "const": "DEADLINE_CHANGED",
+      "title": "Reminder Kind",
+      "type": "string"
+    },
+    "target": {
+      "const": "TEST_INBOX",
+      "title": "Target",
+      "type": "string"
+    },
+    "user_id": {
+      "format": "uuid",
+      "title": "User Id",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "preference_snapshot_id",
+    "preference_id",
+    "user_id",
+    "version",
+    "predecessor_snapshot_id",
+    "reminder_kind",
+    "enabled",
+    "cadence",
+    "target",
+    "actor_user_id",
+    "preference_policy_version",
+    "contract_version",
+    "created_at"
+  ],
+  "title": "ReminderPreferenceSnapshotSchemaV07",
+  "type": "object"
+}
