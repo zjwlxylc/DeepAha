@@ -88,12 +88,16 @@ A user becomes a reminder candidate only when, at event-commit time:
 
 1. the user's latest PersonalActionSnapshot for the stable opportunity has `saved == true`;
 2. the user's independently versioned deadline-change reminder preference has `enabled == true`;
-3. the bound opportunity and action data are owned by the server-derived authenticated user;
-4. the event satisfies the exact rule in section 3.1.
+3. the user's latest UserStateSnapshot still permits the existing `ACTION_TRACKING` purpose;
+4. the bound opportunity, user-state and action data are owned by the server-derived authenticated
+   user;
+5. the event satisfies the exact rule in section 3.1.
 
 Saving an opportunity is not notification consent. A preference enabled after the event does not
 retroactively create a reminder candidate. An already-created candidate is suppressed before
 delivery when the current preference is disabled or the opportunity is no longer saved.
+Revoking the `ACTION_TRACKING` purpose also suppresses a pending candidate; a historical saved
+snapshot cannot override current purpose authorization.
 
 Merely appearing in a top-three ranking, being eligible, viewing a detail page or submitting
 feedback does not create reminder eligibility.
@@ -181,8 +185,8 @@ Any failure rolls back all four effects. A committed event cannot have a partial
 of candidates. Non-qualifying events do not create reminder rows.
 
 Candidate generation uses the transaction's database view and a fixed clock. It stores the
-preference snapshot and action snapshot IDs that justified inclusion. Later changes cannot rewrite
-that historical reason.
+preference snapshot, action snapshot and UserStateSnapshot IDs that justified inclusion. Later
+changes cannot rewrite that historical reason.
 
 ### 6.2 Concurrency
 
@@ -225,6 +229,7 @@ The intent binds:
 - exact old and new deadline values and derived direction;
 - exact prior and current EvidenceRef identifiers;
 - the qualifying PersonalActionSnapshot and preference snapshot;
+- the qualifying UserStateSnapshot and its consent version;
 - event detection time, candidate creation time and contract version;
 - fixed cadence and fixed target.
 
@@ -309,11 +314,13 @@ Immediately before adapter invocation, the worker verifies:
 - the exact `to_version` is still the visible governed public version;
 - the user's latest reminder preference is still enabled;
 - the user's latest action snapshot for the opportunity is still saved;
+- the user's latest UserStateSnapshot still permits `ACTION_TRACKING`;
 - the immutable event, version, evidence and candidate bindings remain internally consistent.
 
-Missing public governance returns the row to `WAITING_GOVERNANCE`. Preference-off or unsaved state
-terminates it as `SUPPRESSED` with a stable reason code. Broken immutable bindings terminate it as
-`FAILED` and require defect review; the worker never repairs facts silently.
+Missing public governance returns the row to `WAITING_GOVERNANCE`. Preference-off, unsaved state
+or revoked `ACTION_TRACKING` purpose terminates it as `SUPPRESSED` with a stable reason code. Broken
+immutable bindings terminate it as `FAILED` and require defect review; the worker never repairs
+facts silently.
 
 ### 9.3 Adapter atomicity
 
@@ -436,7 +443,7 @@ open. A successful test adapter insert is not a delivered real push.
 - Prove version, event and all candidates commit atomically.
 - Inject candidate-insert failure and prove no partial version/event commit.
 - Prove one candidate per logical delivery key under replay and concurrency.
-- Prove event-time enabled/saved selection and no retroactive enable behavior.
+- Prove event-time enabled/saved/current-purpose selection and no retroactive enable behavior.
 
 ### 14.3 Governance tests
 
@@ -453,7 +460,7 @@ open. A successful test adapter insert is not a delivered real push.
 - Prove successful replay cannot duplicate an inbox entry.
 - Prove transient failures follow exactly the 1-minute/5-minute schedule and fail on attempt 3.
 - Prove permanent validation failure does not retry.
-- Prove disable or unsave before delivery produces audited `SUPPRESSED`.
+- Prove disable, unsave or purpose revocation before delivery produces audited `SUPPRESSED`.
 - Prove governance wait and lease expiry do not incorrectly consume retry budget.
 
 ### 14.5 Authorization and API tests
@@ -556,7 +563,8 @@ This design and its implementation plan are committed separately and pushed ordi
 The design is complete when it makes these decisions unambiguous:
 
 1. exactly one deadline-change variable is eligible;
-2. saved state and independent opt-in are both required at event time;
+2. saved state, current `ACTION_TRACKING` purpose and independent opt-in are all required at event
+   time;
 3. version/event/candidate capture is atomic and idempotent;
 4. exact `to_version` public governance is mandatory before delivery;
 5. retry, lease, suppression and crash recovery are bounded and auditable;
