@@ -1,17 +1,23 @@
 # DeepAha Domain Contracts v0.4
 
-Status: `PROPOSED`
+Implementation: `IMPLEMENTED`
 
-Implementation state: `IMPLEMENTED_PENDING_PHASE2_PHASE3_GATES`
+Engineering Gate: `OPEN` pending the exact integrated candidate's remote CI.
 
-This document describes the Phase 4 candidate contract layered on the exact Phase 3 candidate
-commit `5a5847be266980e83eccd8718c23b77e788ee481`. Phase 2 remains `OPEN`, Phase 3 remains
-`BLOCKED_BY_PHASE2`, and v0.2/v0.3/v0.4 remain `PROPOSED`. This contract is not released,
-stable, or final-verified.
+Release Qualification: `NOT_STARTED`
+
+Contract Maturity: `IMPLEMENTED` (not `STABLE`)
+
+This document describes the Phase 4 contract layered on the exact Phase 3 closing commit
+`8003a1c2ab2485a1173b2d4bb9deafbbab6e949c`, integrated by merge commit
+`09526c61a1a0410e9a9127c989ecfaecf3f0ea02`. It is implemented and locally verified, but it is
+not released, `STABLE`, or Release Qualified.
 
 ## Compatibility boundary
 
-- `contracts/schemas/v0.1.0`, `v0.2.0`, and `v0.3.0` retain their existing paths and bytes.
+- `contracts/schemas/v0.1.0`, `v0.2.0`, and `v0.3.0` retain their paths and imports. The Phase 3
+  closing commit intentionally updates the v0.2/v0.3 `source-endpoint` schema bytes; the v0.4
+  compatibility copy was re-exported to the identical closing-contract bytes.
 - Python v0.4 types live in `deepaha.contracts.phase4`; no older import is moved or renamed.
 - `--version 0.4.0` exports a compatibility collection to `contracts/schemas/v0.4.0` only.
 - Phase 4 adds `rule-set`, `rule`, `rule-evidence`, `profile-snapshot`,
@@ -60,10 +66,12 @@ This candidate does not implement a public opportunity index or UI, real user pr
 ranking, personal actions, LLM/Model Gateway, Redis/Valkey/Celery, pgvector, OCR, notifications,
 feedback, commercialization, production cloud, or Phase 2 live collection changes.
 
-## Upstream Gate closure requirement
+## Closing-baseline integration
 
-If a Phase 2 or Phase 3 closing commit changes a base schema, migration, identifier, evidence
-meaning, or replay behavior, Phase 4 must update to the exact Phase 3 closing commit, repeat the
-compatibility review, re-export v0.4 only, and rerun the complete root and Phase 4 verification
-before any promotion decision. Promotion to `STABLE` or Gate closure requires separate authority
-and evidence.
+The current Phase 2 and Phase 3 closing commits are integrated. Compatibility review covered
+schema bytes/imports, migrations, identifiers, evidence semantics and replay behavior; only the
+derived v0.4 `source-endpoint` compatibility copy required regeneration. If a later authorized
+closing commit supersedes either baseline, merge the new exact Phase 3 commit without rewriting
+history, repeat this review, re-export v0.4 only, and rerun the complete root and Phase 4
+verification before another promotion decision. `STABLE` still requires separate Release
+Qualification evidence and authority.

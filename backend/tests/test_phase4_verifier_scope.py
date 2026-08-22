@@ -4,6 +4,7 @@ REPOSITORY_ROOT = Path(__file__).parents[2]
 GATE_FILENAMES = {
     "README.md",
     "acceptance-results.md",
+    "code-review.md",
     "deferred-decisions.md",
     "evaluation-summary.md",
     "operations.md",
@@ -56,7 +57,10 @@ def test_phase4_verifier_covers_offline_quality_and_integration_checks() -> None
         "test_phase4_persistence_contract.py",
         "test_phase4_match_replay.py",
         "test_phase4_evaluation_run.py",
-        "implemented_pending_phase2_phase3_gates",
+        "implementation: implemented",
+        "engineering verification: pass",
+        "release qualification: not_started",
+        "v0.4 contract maturity: implemented",
         "synthetic_evaluation_only",
     ):
         assert required in normalized
@@ -73,7 +77,7 @@ def test_ci_has_a_phase4_scoped_job_and_fixed_service_ports() -> None:
     assert "live_source" not in _phase4_job(ci)
 
 
-def test_gate_package_is_explicitly_synthetic_and_blocked() -> None:
+def test_gate_package_separates_engineering_and_release_states() -> None:
     gate_directory = REPOSITORY_ROOT / "docs" / "gates" / "phase-4"
     assert {path.name for path in gate_directory.glob("*.md")} == GATE_FILENAMES
     for filename in GATE_FILENAMES:
@@ -82,13 +86,15 @@ def test_gate_package_is_explicitly_synthetic_and_blocked() -> None:
         assert "locally verified" in text.lower()
         assert "remote CI" in text
         assert "synthetic evaluation" in text.lower()
-        assert "blocked" in text.lower()
+        assert "Release Qualification" in text
+        assert "Contract Maturity" in text
+        assert "IMPLEMENTED_PENDING_PHASE2_PHASE3_GATES" not in text
+        assert "BLOCKED_BY_PHASE2" not in text
     readme = (gate_directory / "README.md").read_text("utf-8")
-    assert "IMPLEMENTED_PENDING_PHASE2_PHASE3_GATES" in readme
-    assert "Phase 2" in readme and "OPEN" in readme
-    assert "Phase 3" in readme and "BLOCKED_BY_PHASE2" in readme
-    assert "v0.2" in readme and "v0.3" in readme and "v0.4" in readme
-    assert "PROPOSED" in readme
+    assert "Implementation: `IMPLEMENTED`" in readme
+    assert "Engineering Gate: `OPEN`" in readme
+    assert "Release Qualification: `NOT_STARTED`" in readme
+    assert "Contract Maturity: `IMPLEMENTED`" in readme
 
 
 def test_operations_never_touches_upstream_live_observation() -> None:

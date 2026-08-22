@@ -1,30 +1,36 @@
 # Phase 4 Gate — Rules, Eligibility and Evaluation
 
-Status: `IMPLEMENTED_PENDING_PHASE2_PHASE3_GATES`
+Implementation: `IMPLEMENTED`
 
-This is a stacked candidate built from Phase 3 candidate commit
-`5a5847be266980e83eccd8718c23b77e788ee481`. The exact verified candidate SHA is
-`94bab9e7397a8ccb43d95da3f68bfa1fc6df9a07`.
+Engineering Gate: `OPEN` pending exact-SHA remote CI.
+
+Release Qualification: `NOT_STARTED`
+
+Contract Maturity: `IMPLEMENTED` (not `STABLE`)
+
+This stacked implementation includes Phase 3 closing commit
+`8003a1c2ab2485a1173b2d4bb9deafbbab6e949c` through explicit merge commit
+`09526c61a1a0410e9a9127c989ecfaecf3f0ea02`.
 
 ## Evidence state
 
-- Implemented: candidate rules, four-state eligibility, replay and evaluation code exists.
-- Locally verified: isolated Phase 4 verifier and root verifier passed at
-  `2026-08-21T22:41:13Z` on the exact pushed candidate SHA.
-- remote CI: [Actions run 32534085134](https://github.com/zjwlxylc/DeepAha/actions/runs/32534085134)
-  completed successfully; `backend-quality`, `web-quality`, `integration`,
-  `phase3-resolution`, and `phase4-eligibility` all concluded `success`.
+- Implemented: rules, four-state eligibility, replay and evaluation code exists on the integrated
+  closing baseline.
+- Locally verified: `scripts/verify-phase4.ps1` and `scripts/verify.ps1` passed at
+  `2026-08-22T01:27:25Z`; the contract compatibility suite also passed 73/73.
+- remote CI: pending for the exact integrated candidate; Engineering Gate remains `OPEN` until
+  all required jobs succeed.
 - Synthetic evaluation: fixed CC0 fixtures reproduce 12 expected statuses with zero unexpected
   `INELIGIBLE`; this is not a production accuracy claim.
-- Blocked: Phase 2 is `OPEN`; Phase 3 is `BLOCKED_BY_PHASE2`; v0.2, v0.3 and v0.4 remain
-  `PROPOSED`.
+- Release Qualification has not started because no governed real annotated dataset, real-user
+  evidence or production-similar qualification run exists.
 
 ## Decision
 
-Phase 4 is a reviewable candidate only. This package does not close the Phase 3 or Phase 4 Gate,
-promote any contract to `STABLE`, authorize merge or release, or establish the planned `<=0.5%`
-false-negative threshold. Any Phase 2 or Phase 3 closing-commit contract change requires rebasing
-onto the exact closing commit, compatibility review and complete re-verification.
+Phase 4 implementation exists and its closing baseline is integrated. Engineering Gate remains
+`OPEN` only for the outstanding exact-SHA remote CI evidence. Release Qualification remains
+`NOT_STARTED`; the package does not authorize merge, release, `STABLE`, or establish the planned
+`<=0.5%` false-negative threshold.
 
 Draft PR: [#4](https://github.com/zjwlxylc/DeepAha/pull/4), `OPEN`, `DRAFT`, `UNMERGED`;
 base `codex/phase-3-opportunity-resolution`, head
@@ -33,6 +39,7 @@ base `codex/phase-3-opportunity-resolution`, head
 ## Evidence map
 
 - Acceptance: [acceptance-results.md](./acceptance-results.md)
+- Code review: [code-review.md](./code-review.md)
 - Tests: [test-summary.md](./test-summary.md)
 - Fixed evaluation: [evaluation-summary.md](./evaluation-summary.md)
 - Security and compliance: [security-and-compliance.md](./security-and-compliance.md)

@@ -115,7 +115,10 @@ try {
     }
 
     Write-Host "SYNTHETIC_EVALUATION_ONLY: 12 Golden cases; 12 expected statuses reproduced; unexpected INELIGIBLE=0; replay mismatches=0"
-    Write-Host "IMPLEMENTED_PENDING_PHASE2_PHASE3_GATES"
+    Write-Host "Implementation: IMPLEMENTED"
+    Write-Host "Engineering verification: PASS"
+    Write-Host "Release Qualification: NOT_STARTED"
+    Write-Host "v0.4 Contract Maturity: IMPLEMENTED"
 }
 finally {
     if ($cleanupProject) {

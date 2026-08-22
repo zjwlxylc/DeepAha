@@ -1,17 +1,19 @@
-# Phase 4 Candidate Operations
+# Phase 4 Engineering Verification Operations
 
 ## Evidence state
 
-- Implemented: a disposable isolated verifier exists for the Phase 4 candidate.
+- Implementation: `IMPLEMENTED`; a disposable isolated verifier exists for Phase 4.
+- Engineering Gate: `OPEN` pending exact-SHA remote CI.
+- Release Qualification: `NOT_STARTED`.
+- Contract Maturity: `IMPLEMENTED` (not `STABLE`).
 - Locally verified: the isolated verifier passed and removed its exact disposable project.
-- remote CI: pending.
+- remote CI: pending for the exact integrated candidate.
 - Synthetic evaluation: verifier runs offline fixed data and prints its scoped result.
-- Blocked: these commands do not promote, merge, release or close a Gate.
 
-## Current candidate verification
+## Current integrated verification
 
 ```powershell
-$env:COMPOSE_PROJECT_NAME = "deepaha-phase4-candidate"
+$env:COMPOSE_PROJECT_NAME = "deepaha-phase4-engineering-gate"
 & ./scripts/verify-phase4.ps1
 Remove-Item Env:COMPOSE_PROJECT_NAME
 & ./scripts/verify.ps1
@@ -20,22 +22,28 @@ Remove-Item Env:COMPOSE_PROJECT_NAME
 The Phase 4 verifier owns and removes only the exact project name passed to it and uses
 `infra/compose.phase4.yaml`.
 
-## Required update after upstream Gate closure
+## Closing-baseline record
 
-After receiving the exact Phase 3 closing SHA and verifying that it includes the authorized Phase
-2 closing baseline:
+Phase 2 closing commit `6c8a8fb63c68cfbb0f4cf54b6032bfb49a0ef65c` is an ancestor of Phase 3
+closing commit `8003a1c2ab2485a1173b2d4bb9deafbbab6e949c`. Phase 4 integrated the latter
+with merge commit `09526c61a1a0410e9a9127c989ecfaecf3f0ea02`, preserving both histories.
+
+If a later authorized closing commit supersedes this baseline, use another explicit merge commit;
+do not rebase or force-push the Phase 4 branch:
 
 ```powershell
 git fetch origin
 git switch codex/phase-4-rules-eligibility-evaluation
-git rebase --onto <exact-phase-3-closing-sha> 5a5847be266980e83eccd8718c23b77e788ee481
-git diff <exact-phase-3-closing-sha>...HEAD -- backend/src/deepaha/contracts backend/migrations contracts
-$env:COMPOSE_PROJECT_NAME = "deepaha-phase4-post-gates"
+git merge --no-ff --no-commit <new-exact-phase-3-closing-sha>
+git diff <new-exact-phase-3-closing-sha>...HEAD -- backend/src/deepaha/contracts backend/migrations contracts
+$env:COMPOSE_PROJECT_NAME = "deepaha-phase4-updated-baseline"
 & ./scripts/verify-phase4.ps1
 Remove-Item Env:COMPOSE_PROJECT_NAME
 & ./scripts/verify.ps1
-git push --force-with-lease origin codex/phase-4-rules-eligibility-evaluation
+git push origin codex/phase-4-rules-eligibility-evaluation
 ```
 
-Then wait for all required remote CI jobs, update exact evidence URLs and perform a new promotion
-decision. Do not reuse the current synthetic result as real annotated evidence.
+Resolve and commit only after schema/import, migration, identifier, evidence-semantics and replay
+compatibility review succeeds. Then wait for all required remote CI jobs and update exact evidence.
+These commands do not start Release Qualification, promote Contract Maturity to `STABLE`, merge
+the draft PR or release the system. Do not reuse synthetic evaluation as real annotated evidence.
