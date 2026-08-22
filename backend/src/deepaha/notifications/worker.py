@@ -20,6 +20,7 @@ from deepaha.notifications.adapters import (
 from deepaha.notifications.candidates import (
     DeadlineReminderBindingError,
     load_deadline_change_binding,
+    load_deadline_reminder_audience_binding,
 )
 from deepaha.notifications.models import (
     NotificationDeliveryAttemptModel,
@@ -427,11 +428,21 @@ class ReminderWorker:
             binding = load_deadline_change_binding(session, event)
         except DeadlineReminderBindingError:
             return False
+        audience_binding = load_deadline_reminder_audience_binding(
+            session,
+            event,
+            row.user_id,
+        )
         action = session.get(PersonalActionSnapshotModel, row.action_snapshot_id)
         preference = session.get(ReminderPreferenceSnapshotModel, row.preference_snapshot_id)
         state = session.get(UserStateSnapshotModel, row.user_state_snapshot_id)
         return bool(
             binding is not None
+            and audience_binding is not None
+            and audience_binding.action_snapshot_id == row.action_snapshot_id
+            and audience_binding.preference_snapshot_id == row.preference_snapshot_id
+            and audience_binding.user_state_snapshot_id == row.user_state_snapshot_id
+            and audience_binding.consent_version == row.consent_version
             and event.opportunity_id == row.opportunity_id
             and event.from_version == row.from_version
             and event.to_version == row.to_version

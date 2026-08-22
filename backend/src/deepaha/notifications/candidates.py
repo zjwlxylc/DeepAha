@@ -44,6 +44,14 @@ class DeadlineChangeBinding:
     current_evidence_ref_id: UUID
 
 
+@dataclass(frozen=True, slots=True)
+class DeadlineReminderAudienceBinding:
+    action_snapshot_id: UUID
+    preference_snapshot_id: UUID
+    user_state_snapshot_id: UUID
+    consent_version: str
+
+
 def _strict_iso_date(value: object) -> date | None:
     if not isinstance(value, str) or ISO_DATE_PATTERN.fullmatch(value) is None:
         return None
@@ -144,6 +152,8 @@ def load_deadline_change_binding(
 
 def _audience_statement(
     event: OpportunityEvent,
+    *,
+    user_id: UUID | None = None,
 ) -> Select[tuple[UUID, UUID, UUID, UUID, str]]:
     latest_actions = (
         select(
@@ -209,7 +219,7 @@ def _audience_statement(
         )
         .subquery("latest_phase8_user_states")
     )
-    return (
+    statement = (
         select(
             latest_actions.c.user_id,
             latest_actions.c.action_snapshot_id,
@@ -229,7 +239,25 @@ def _audience_statement(
             latest_states.c.allowed_purposes.contains(["ACTION_TRACKING"]),
             PersonalUserModel.active.is_(True),
         )
-        .order_by(latest_actions.c.user_id)
+    )
+    if user_id is not None:
+        statement = statement.where(latest_actions.c.user_id == user_id)
+    return statement.order_by(latest_actions.c.user_id)
+
+
+def load_deadline_reminder_audience_binding(
+    session: Session,
+    event: OpportunityEvent,
+    user_id: UUID,
+) -> DeadlineReminderAudienceBinding | None:
+    audience = session.execute(_audience_statement(event, user_id=user_id)).one_or_none()
+    if audience is None:
+        return None
+    return DeadlineReminderAudienceBinding(
+        action_snapshot_id=audience.action_snapshot_id,
+        preference_snapshot_id=audience.preference_snapshot_id,
+        user_state_snapshot_id=audience.user_state_snapshot_id,
+        consent_version=audience.consent_version,
     )
 
 
@@ -312,9 +340,11 @@ class DeadlineReminderCandidateService:
 
 __all__ = [
     "DeadlineReminderBindingError",
+    "DeadlineReminderAudienceBinding",
     "DeadlineChangeBinding",
     "DeadlineReminderCandidateService",
     "RecognizedDeadlineChange",
     "load_deadline_change_binding",
+    "load_deadline_reminder_audience_binding",
     "recognize_deadline_change",
 ]

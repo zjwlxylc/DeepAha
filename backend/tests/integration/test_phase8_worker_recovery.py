@@ -28,6 +28,7 @@ from deepaha.notifications.models import (
     TestInboxEntryModel as InboxEntryModel,
 )
 from deepaha.notifications.worker import ReminderWorker, ReminderWorkerRunSummary
+from deepaha.opportunities.models import OpportunityEvent
 from deepaha.personal.models import PersonalActionSnapshotModel, UserStateSnapshotModel
 from deepaha.public_catalog.models import PublicCatalogEntry
 from tests.integration.test_phase8_public_governance import seed_governed_reminder
@@ -416,6 +417,150 @@ def test_schema_valid_outbox_tamper_fails_before_delivery(migrated_engine: Engin
         assert row is not None
         assert row.status == "FAILED"
         assert row.attempt_count == 0
+        assert row.last_error_code == "REMINDER_BINDING_INVALID"
+        assert session.scalar(select(func.count()).select_from(InboxEntryModel)) == 0
+
+
+@pytest.mark.parametrize("control", ["preference", "action", "purpose"])
+def test_non_latest_event_time_control_binding_fails_before_delivery(
+    migrated_engine: Engine,
+    control: str,
+) -> None:
+    factory = sessionmaker(migrated_engine, expire_on_commit=False)
+    seed = seed_governed_reminder(factory)
+    with factory.begin() as session:
+        row = session.get(NotificationOutboxModel, seed.reminder_id)
+        assert row is not None
+        event = session.get(OpportunityEvent, row.event_id)
+        assert event is not None
+        after_event = event.detected_at + timedelta(seconds=1)
+        if control == "preference":
+            bound_preference = session.get(
+                ReminderPreferenceSnapshotModel,
+                row.preference_snapshot_id,
+            )
+            assert bound_preference is not None
+            disabled_id = uuid7()
+            session.add_all(
+                [
+                    ReminderPreferenceSnapshotModel(
+                        preference_snapshot_id=disabled_id,
+                        preference_id=bound_preference.preference_id,
+                        user_id=bound_preference.user_id,
+                        version=bound_preference.version + 1,
+                        predecessor_snapshot_id=bound_preference.preference_snapshot_id,
+                        reminder_kind=bound_preference.reminder_kind,
+                        enabled=False,
+                        cadence=bound_preference.cadence,
+                        target=bound_preference.target,
+                        actor_user_id=bound_preference.actor_user_id,
+                        preference_policy_version=bound_preference.preference_policy_version,
+                        contract_version=bound_preference.contract_version,
+                        created_at=event.detected_at,
+                    ),
+                    ReminderPreferenceSnapshotModel(
+                        preference_snapshot_id=uuid7(),
+                        preference_id=bound_preference.preference_id,
+                        user_id=bound_preference.user_id,
+                        version=bound_preference.version + 2,
+                        predecessor_snapshot_id=disabled_id,
+                        reminder_kind=bound_preference.reminder_kind,
+                        enabled=True,
+                        cadence=bound_preference.cadence,
+                        target=bound_preference.target,
+                        actor_user_id=bound_preference.actor_user_id,
+                        preference_policy_version=bound_preference.preference_policy_version,
+                        contract_version=bound_preference.contract_version,
+                        created_at=after_event,
+                    ),
+                ]
+            )
+        elif control == "action":
+            bound_action = session.get(PersonalActionSnapshotModel, row.action_snapshot_id)
+            assert bound_action is not None
+            unsaved_id = uuid7()
+            session.add_all(
+                [
+                    PersonalActionSnapshotModel(
+                        action_snapshot_id=unsaved_id,
+                        action_id=bound_action.action_id,
+                        user_id=bound_action.user_id,
+                        version=bound_action.version + 1,
+                        opportunity_id=bound_action.opportunity_id,
+                        opportunity_version=bound_action.opportunity_version,
+                        saved=False,
+                        state=bound_action.state,
+                        material_items=bound_action.material_items,
+                        last_event_id=uuid7(),
+                        input_sha256="e" * 64,
+                        created_at=event.detected_at,
+                    ),
+                    PersonalActionSnapshotModel(
+                        action_snapshot_id=uuid7(),
+                        action_id=bound_action.action_id,
+                        user_id=bound_action.user_id,
+                        version=bound_action.version + 2,
+                        opportunity_id=bound_action.opportunity_id,
+                        opportunity_version=bound_action.opportunity_version,
+                        saved=True,
+                        state=bound_action.state,
+                        material_items=bound_action.material_items,
+                        last_event_id=uuid7(),
+                        input_sha256="f" * 64,
+                        created_at=after_event,
+                    ),
+                ]
+            )
+        else:
+            bound_state = session.get(UserStateSnapshotModel, row.user_state_snapshot_id)
+            assert bound_state is not None
+            revoked_id = uuid7()
+            common = {
+                "user_state_id": bound_state.user_state_id,
+                "user_id": bound_state.user_id,
+                "qualification_profile_snapshot_id": (
+                    bound_state.qualification_profile_snapshot_id
+                ),
+                "qualification_profile_version": bound_state.qualification_profile_version,
+                "life_stage": bound_state.life_stage,
+                "goal_types": bound_state.goal_types,
+                "preference_regions": bound_state.preference_regions,
+                "preference_types": bound_state.preference_types,
+                "skipped_fields": bound_state.skipped_fields,
+                "personalization_enabled": bound_state.personalization_enabled,
+                "consent_version": bound_state.consent_version,
+                "scenario_clock": bound_state.scenario_clock,
+            }
+            session.add_all(
+                [
+                    UserStateSnapshotModel(
+                        user_state_snapshot_id=revoked_id,
+                        version=bound_state.version + 1,
+                        allowed_purposes=["PROFILE_PERSONALIZATION"],
+                        input_sha256="0" * 64,
+                        created_at=event.detected_at,
+                        **common,
+                    ),
+                    UserStateSnapshotModel(
+                        user_state_snapshot_id=uuid7(),
+                        version=bound_state.version + 2,
+                        allowed_purposes=bound_state.allowed_purposes,
+                        input_sha256="1" * 64,
+                        created_at=after_event,
+                        **common,
+                    ),
+                ]
+            )
+
+    summary = ReminderWorker(
+        session_factory=factory,
+        clock=lambda: datetime(2026, 8, 22, 4, tzinfo=UTC),
+    ).run_once()
+
+    assert summary.failed == 1
+    with factory() as session:
+        row = session.get(NotificationOutboxModel, seed.reminder_id)
+        assert row is not None and row.status == "FAILED"
         assert row.last_error_code == "REMINDER_BINDING_INVALID"
         assert session.scalar(select(func.count()).select_from(InboxEntryModel)) == 0
 
