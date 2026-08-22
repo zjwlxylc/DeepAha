@@ -40,9 +40,14 @@ export default async function PersonalOpportunityPage({ params }: { params: Prom
       <section className="official-summary" aria-labelledby="official-summary-title">
         <h2 id="official-summary-title">官方事实仍是最终入口</h2>
         <p>DeepAha 的解释不替代公告。行动前请复核附件、截止时间和最新变化。</p>
-        <Link className="button button-secondary" href={`/opportunities/${publicId}`}>
-          返回公开证据与变化历史
-        </Link>
+        <div className="card-actions">
+          <Link className="button button-secondary" href={`/opportunities/${publicId}`}>
+            返回公开证据与变化历史
+          </Link>
+          <Link className="button button-secondary" href={`/me/opportunities/${publicId}/feedback`}>
+            纠正这条判断
+          </Link>
+        </div>
       </section>
     </main>
   );

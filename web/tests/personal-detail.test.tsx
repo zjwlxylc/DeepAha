@@ -38,6 +38,10 @@ describe("personal opportunity detail", () => {
       personalDetail.opportunity.key_evidence[0].official_url,
     );
     expect(screen.getByRole("button", { name: "记录并打开官方入口" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "纠正这条判断" })).toHaveAttribute(
+      "href",
+      `/me/opportunities/${publicId}/feedback`,
+    );
     expect(document.body.textContent).not.toMatch(/匹配度|置信度|\d+%/);
   });
 
