@@ -1,0 +1,121 @@
+{
+  "schema_version": "phase5-public-catalog-fixture-v1",
+  "synthetic": true,
+  "business_truth": false,
+  "release_qualification_eligible": false,
+  "license": "CC0-1.0 synthetic fixture",
+  "items": [
+    {
+      "key": "alpha",
+      "type": "YOUTH_POLICY_BENEFIT",
+      "title": "合成青年人才补贴计划",
+      "issuer_name": "合成浙江公共服务机构",
+      "jurisdiction": "合成浙江省",
+      "published_at": "2026-08-20T01:00:00Z",
+      "opens_on": "2026-08-20",
+      "closes_on": "2026-09-20",
+      "timezone": "Asia/Shanghai",
+      "application_url": "https://phase5-fixture.example.test/alpha/apply",
+      "attachment_urls": [
+        "https://phase5-fixture.example.test/alpha/conditions.pdf"
+      ],
+      "locations": ["合成杭州市"],
+      "media_type": "text/html",
+      "locator": {
+        "schema_version": "0.2.0",
+        "kind": "html_selector",
+        "selector": "main article",
+        "text_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "versions": [
+        {
+          "effective_at": "2026-08-20T01:00:00Z",
+          "status": "OPEN",
+          "event_type": "CREATED",
+          "changed_fields": ["canonical_title"]
+        }
+      ],
+      "approved_at": "2026-08-20T02:00:00Z",
+      "last_verified_at": "2026-08-22T01:00:00Z"
+    },
+    {
+      "key": "beta",
+      "type": "STATE_OWNED_ENTERPRISE_JOB",
+      "title": "合成国企校园招聘项目",
+      "issuer_name": "合成中央企业",
+      "jurisdiction": "全国（合成）",
+      "published_at": "2026-08-18T02:00:00Z",
+      "opens_on": "2026-08-18",
+      "closes_on": "2026-09-05",
+      "timezone": "Asia/Shanghai",
+      "application_url": "https://phase5-fixture.example.test/beta/apply",
+      "attachment_urls": [
+        "https://phase5-fixture.example.test/beta/positions.xlsx"
+      ],
+      "locations": ["合成北京市", "合成宁波市"],
+      "media_type": "application/pdf",
+      "locator": {
+        "schema_version": "0.2.0",
+        "kind": "pdf_page_text",
+        "page_number": 2,
+        "text_start": 10,
+        "text_end": 80,
+        "text_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "versions": [
+        {
+          "effective_at": "2026-08-18T02:00:00Z",
+          "status": "OPEN",
+          "event_type": "CREATED",
+          "changed_fields": ["canonical_title"]
+        },
+        {
+          "effective_at": "2026-08-21T03:00:00Z",
+          "status": "CLOSING_SOON",
+          "closes_on": "2026-09-12",
+          "event_type": "DEADLINE_CHANGED",
+          "changed_fields": ["application_window.closes_on"]
+        }
+      ],
+      "approved_at": "2026-08-21T04:00:00Z",
+      "last_verified_at": "2026-08-22T02:00:00Z"
+    },
+    {
+      "key": "gamma_percent_%_underscore_",
+      "type": "SCHOLARSHIP",
+      "title": "合成科研奖学金 100% 专项",
+      "issuer_name": "合成教育基金会_测试",
+      "jurisdiction": "合成浙江省",
+      "published_at": "2026-08-10T03:00:00Z",
+      "opens_on": "2026-08-10",
+      "closes_on": "2026-08-31",
+      "timezone": "Asia/Shanghai",
+      "application_url": "https://phase5-fixture.example.test/gamma/apply",
+      "attachment_urls": [
+        "https://phase5-fixture.example.test/gamma/rules.xlsx"
+      ],
+      "locations": ["合成温州市"],
+      "media_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "locator": {
+        "schema_version": "0.2.0",
+        "kind": "spreadsheet_range",
+        "sheet_name": "合成条件",
+        "start_row": 2,
+        "end_row": 4,
+        "start_column": 1,
+        "end_column": 3,
+        "cells_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "versions": [
+        {
+          "effective_at": "2026-08-10T03:00:00Z",
+          "status": "CLOSED",
+          "event_type": "CREATED",
+          "changed_fields": ["canonical_title"]
+        }
+      ],
+      "approved_at": "2026-08-10T04:00:00Z",
+      "last_verified_at": "2026-08-22T03:00:00Z"
+    }
+  ]
+}
