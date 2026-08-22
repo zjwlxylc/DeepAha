@@ -36,6 +36,8 @@ def test_phase8_verifier_uses_only_exact_isolated_project_and_ports() -> None:
         "docker compose --project-name $projectname --file $composefile ps -q",
         "assert-portavailableorowned 55438",
         "assert-portavailableorowned 55006",
+        "assert-portavailableorowned 8008",
+        "assert-portavailableorowned 3088",
         "finally",
         "down --volumes --remove-orphans",
     ):
@@ -95,6 +97,8 @@ def test_phase8_verifier_covers_contracts_runtime_integrations_and_boundaries() 
         "pnpm typecheck",
         "pnpm test",
         "pnpm build",
+        "pnpm exec playwright install chromium",
+        "pnpm exec playwright test e2e/phase8-reminder.spec.ts",
         "synthetic_reminder_delivery_only",
         "real participants=0",
         "human track=not_started",
@@ -143,7 +147,42 @@ def test_ci_keeps_inherited_jobs_and_adds_scoped_phase8_job() -> None:
         "pnpm typecheck",
         "pnpm test",
         "pnpm build",
+        "pnpm exec playwright install --with-deps chromium",
+        "pnpm exec playwright test e2e/phase8-reminder.spec.ts",
     ):
         assert required in job
     for forbidden in (*PRIOR_PORTS, *PRIOR_PROJECTS, "live_source"):
         assert forbidden not in job.lower()
+
+
+def test_phase8_browser_smoke_uses_real_chromium_and_exact_owner_flow() -> None:
+    package = (REPOSITORY_ROOT / "web" / "package.json").read_text("utf-8")
+    config = (REPOSITORY_ROOT / "web" / "playwright.config.ts").read_text("utf-8").lower()
+    spec = (REPOSITORY_ROOT / "web" / "e2e" / "phase8-reminder.spec.ts").read_text(
+        "utf-8"
+    )
+    normalized_spec = spec.lower()
+
+    assert '"@playwright/test"' in package
+    for required in (
+        "deepaha.main:app",
+        "/api/v1/health/ready",
+        "pnpm start",
+        "deepaha_api_base_url",
+        "chromium",
+    ):
+        assert required in config
+    for required in (
+        "deepaha_phase6_session",
+        "phase8-synthetic-reminder-owner-token",
+        "1280",
+        "390",
+        "deadline-reminder-enabled",
+        "保存提醒设置",
+        "测试收件箱",
+        "2026-09-20",
+        "2026-09-30",
+        "scrollwidth",
+        "page.keyboard.press",
+    ):
+        assert required in normalized_spec

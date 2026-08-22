@@ -374,7 +374,6 @@ jobs:
         working-directory: web
       - run: pnpm build
         working-directory: web
-
   phase8-deadline-reminder:
     runs-on: ubuntu-latest
     services:
@@ -450,4 +449,8 @@ jobs:
       - run: pnpm test
         working-directory: web
       - run: pnpm build
+        working-directory: web
+      - run: pnpm exec playwright install --with-deps chromium
+        working-directory: web
+      - run: pnpm exec playwright test e2e/phase8-reminder.spec.ts
         working-directory: web

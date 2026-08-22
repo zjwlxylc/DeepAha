@@ -75,6 +75,8 @@ Assert-NativeSuccess "Docker daemon check"
 
 Assert-PortAvailableOrOwned 55438
 Assert-PortAvailableOrOwned 55006
+Assert-PortAvailableOrOwned 8008
+Assert-PortAvailableOrOwned 3088
 
 & powershell -ExecutionPolicy Bypass -File (Join-Path $projectRoot "scripts/verify.ps1")
 Assert-NativeSuccess "root repository verification"
@@ -149,6 +151,10 @@ try {
         Assert-NativeSuccess "Phase 8 web tests"
         corepack pnpm build
         Assert-NativeSuccess "Phase 8 web build"
+        corepack pnpm exec playwright install chromium
+        Assert-NativeSuccess "Phase 8 Chromium installation"
+        corepack pnpm exec playwright test e2e/phase8-reminder.spec.ts
+        Assert-NativeSuccess "Phase 8 real-browser reminder smoke"
     }
     finally {
         Pop-Location
