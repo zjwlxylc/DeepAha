@@ -236,7 +236,7 @@ class ReminderWorker:
             if not self._user_controls_allow(session, row):
                 row.status = "SUPPRESSED"
                 row.terminal_at = now
-                row.last_error_code = None
+                row.last_error_code = "USER_CONTROL_SUPPRESSED"
                 row.updated_at = now
                 self._clear_lease(row)
                 self._logger.info(

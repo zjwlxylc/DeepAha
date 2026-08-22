@@ -182,6 +182,7 @@ def test_latest_user_control_suppresses_without_delivery(
     with factory() as session:
         outbox = session.get(NotificationOutboxModel, seed.reminder_id)
         assert outbox is not None and outbox.status == "SUPPRESSED"
+        assert outbox.last_error_code == "USER_CONTROL_SUPPRESSED"
         assert (
             session.scalar(select(func.count()).select_from(NotificationDeliveryAttemptModel)) == 0
         )
