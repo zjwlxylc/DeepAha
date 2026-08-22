@@ -41,6 +41,12 @@ Phase 9 稳定性、Beta 与商业 Gate
 
 横向能力“安全与隐私、可观测性、数据质量、评估可复现”从 Phase 0 开始贯穿，不作为上线前补丁。
 
+阶段箭头表达真实的代码、迁移与契约依赖顺序，不表示下一 Phase 必须等待上一 Phase 的真实环境
+Release Qualification。每个阶段的实现状态、Engineering Gate、Release Qualification 和契约成熟度
+独立记录：Engineering Gate `CLOSED` 后允许下一 Phase 正常开发；Release Qualification 未完成只
+阻塞对应正式发布、真实环境完成声明和契约 `STABLE`。下游仍须基于实际依赖提交完成兼容验证，
+但不得形成 `BLOCKED_BY_PHASE2` 或 `IMPLEMENTED_PENDING_*` 级联状态。
+
 ## 3. 阶段定义
 
 ### Phase 0：工程基础
@@ -92,14 +98,22 @@ Phase 9 稳定性、Beta 与商业 Gate
 - 低置信度、格式不支持与永久失败保存稳定状态和原因码；不提前建设完整审核系统。
 - 十个代表性官方入口的显式 live 观察窗口；默认测试只使用固定夹具。
 
-**退出条件：**
+**Engineering Gate 退出条件：**
 
 - 相同内容的两次抓取保留两条 CaptureObservation，只复用一个 RawArtifact。
-- 10 个代表性官方入口完成至少 24 小时、五轮策略间隔的显式观察并有源健康和维护成本记录。
 - 固定 HTML、PDF、XLSX 能定位回 DOM 文本、PDF 页内文本或 Excel 单元格范围并校验片段哈希。
 - 网络失败可重试，永久采集/解析失败可审计且不会丢失或覆盖原始证据。
 - v0.1 与 v0.2 Schema、迁移、ORM 和契约测试一致；固定样本回放得到确定性相同结果。
 - 默认 CI 不访问实时来源、浏览器或模型；live 观察必须显式开启。
+- 代码审查、安全扫描和 Phase 2 scope 检查不存在未解决的工程 blocker。
+
+**Release Qualification：**
+
+- 10 个代表性官方入口完成至少 24 小时、五轮策略间隔、至少 50 个最终结果的显式观察，
+  `SUCCEEDED + NOT_MODIFIED` 有效率达到 `>=98%`，并有源健康和维护成本记录。
+- 精确最终候选在新鲜副本完成统一验证，最终候选远程 CI 成功。
+- 未达到这些真实环境条件前不得宣称 Phase 2 真实环境验收完成，v0.2 不得标记 `STABLE`；
+  但该状态不阻塞 Phase 3 正常工程开发和独立 Engineering Gate 判断。
 
 Model Gateway、Playwright、Docling 和 OCR 不是 Phase 2 默认范围；只有固定失败样本证明确定性路径不足时，才通过独立 spec 评估。Opportunity Resolver、版本和变化仍严格属于 Phase 3。
 
@@ -113,7 +127,7 @@ Model Gateway、Playwright、Docling 和 OCR 不是 Phase 2 默认范围；只�
 - OpportunityVersion、OpportunityEvent 和字段级差异。
 - 更正优先级、附件替换、延期、取消和状态机。
 
-**退出条件：**
+**Engineering Gate 退出条件：**
 
 - 公告正文、岗位表和更正通知可归并为一个 Opportunity。
 - 历史版本、旧链接、收藏引用和证据关系不因合并丢失。
@@ -131,12 +145,15 @@ Model Gateway、Playwright、Docling 和 OCR 不是 Phase 2 默认范围；只�
 - Golden Dataset、100 个版本化模拟画像和批量回放。
 - MatchSnapshot、组件版本和证据链。
 
-**退出条件：**
+**Engineering Gate 退出条件：**
 
 - LLM 语义推断不能单独产生 `INELIGIBLE`。
-- 所有硬结论证据可追溯率达到计划目标 `100%`。
-- `INELIGIBLE` 误杀率达到计划门槛 `<=0.5%`，严重错误逐例复盘。
 - 同一数据集与版本重复评估得到相同输出。
+
+**Release Qualification：**
+
+- 在版本固定、人工标注的适用 Golden Dataset 上，所有硬结论证据可追溯率达到计划目标 `100%`。
+- `INELIGIBLE` 误杀率达到计划门槛 `<=0.5%`，严重错误逐例复盘；合成画像结果不能替代该结论。
 
 ### Phase 5：公开可信层
 
@@ -149,12 +166,16 @@ Model Gateway、Playwright、Docling 和 OCR 不是 Phase 2 默认范围；只�
 - 移动响应式 Web/PWA 壳、搜索与筛选的最小实现。
 - 从公开机会进入“判断我是否适合”的入口。
 
-**退出条件：**
+**Engineering Gate 退出条件：**
 
-- 公开可信字段完整率达到计划要求 `100%`。
 - 页面不显示未经画像计算的个人资格或虚构匹配百分比。
 - 用户能从任何硬信息回到官方证据。
 - 公开索引仅服务 Gold 样本，不扩成无限公告流。
+
+**Release Qualification：**
+
+- 200 个真实 Gold 机会的公开可信字段完整率达到计划要求 `100%`，官方回链、核验时间和变化
+  历史在真实候选环境可复现。
 
 ### Phase 6：画像、匹配与个人行动
 

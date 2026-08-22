@@ -34,5 +34,6 @@ GOV.UK HTML 依 OGL v3.0 单独核验并保留署名。代码审查修复提交 
 
 DNS 检查与 HTTP 客户端二次解析之间仍有 TOCTOU 窗口；当前只接受受版本控制、人工核验的
 固定官方 Registry host。live runner 还要求单写者操作。两项边界详见[代码审查](./code-review.md)。
-Gate 关闭前仍须对 live 后形成的精确最终候选重新执行 scope/secret/artifact 扫描、新鲜副本和
-远程 CI，因此本文件不是 Gate 关闭结论。
+Release Qualification 完成前仍须对 live 后形成的精确最终候选重新执行
+scope/secret/artifact 扫描、新鲜副本和远程 CI。现有结果支持 Engineering Gate `CLOSED`，
+但不构成 Release Qualification `QUALIFIED` 或契约 `STABLE` 结论。

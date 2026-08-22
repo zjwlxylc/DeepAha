@@ -246,6 +246,28 @@ DeepAha 青年机会智能系统持续监控权威公开信息，把分散公告
 5. Gate E 商业/扩张：用户为持续判断与监控产生真实付费或续约证据。
 6. Gate F 合规扩张：面向公众或机构规模扩张前，按实际功能完成招聘服务、AI 内容标识、数据保护、内容使用和人工责任边界核验。
 
+### 9.1 阶段 Engineering Gate 与 Release Qualification
+
+阶段工程验收与真实环境发布资格必须分轴记录，不得再用一个 `Gate` 状态同时表达两者：
+
+- 实现状态只使用 `PLANNED`、`IN_PROGRESS`、`IMPLEMENTED`。
+- 工程门（Engineering Gate）只使用 `OPEN`、`CLOSED`。它判断本阶段实现、契约、迁移、测试、
+  安全、评审和范围是否足以允许下一阶段开发；`CLOSED` 后，下一阶段不因本阶段 Release
+  Qualification 尚未完成而形成级联阻塞状态。
+- 发布资格（Release Qualification）独立使用 `NOT_STARTED`、`IN_PROGRESS`、`QUALIFIED`、
+  `FAILED`、`BLOCKED`。每个阶段只采用自身基线适用的真实时间、真实环境、Gold Dataset、
+  真人验证、新鲜副本或最终候选 CI 项目；这些项目阻塞正式生产发布，不阻塞下一阶段正常工程开发。
+- 契约成熟度独立使用 `PROPOSED`、`IMPLEMENTED`、`STABLE`。实现已存在且 Engineering Gate
+  已关闭时可标记 `IMPLEMENTED`；只有对应 Release Qualification 为 `QUALIFIED` 才可标记
+  `STABLE`。
+- Release Qualification 未完成或环境性失败不自动重开 Engineering Gate；若它暴露可复现的
+  代码、契约、迁移或安全缺陷，则必须记录缺陷并重新评估受影响阶段的 Engineering Gate。
+- 阶段间真实的代码、迁移和契约依赖仍须按顺序集成和兼容验证；禁止把技术依赖重新包装成
+  `BLOCKED_BY_PHASE2` 或 `IMPLEMENTED_PENDING_*` 这类跨阶段状态链。
+
+本节的阶段状态不替代上面的 Gate A–F 产品发布门。Gate A–F 仍按产品验证顺序执行，不得因
+Engineering Gate 关闭而宣称真实数据、真人行动、商业或合规验证已经完成。
+
 未通过前一道 Gate，不得用扩大地域、增加聊天、增加内容、营销投放或复杂 UI 掩盖问题。
 
 ## 10. 开发顺序与工作流

@@ -1,6 +1,6 @@
 # DeepAha Phase 2 采集观察与文档证据设计
 
-> 状态：`PROPOSED`，设计决策已获用户全权授权，等待按实施计划执行
+> 状态：`IMPLEMENTED`；Phase 2 Engineering Gate `CLOSED`，Release Qualification `IN_PROGRESS`
 >
 > 日期：2026-08-21
 >
@@ -8,9 +8,11 @@
 >
 > 前置 Gate：Phase 1 `CLOSED`
 >
-> 当前运行契约：`0.1.0`；目标契约：`0.2.0`
+> 当前 `STABLE` 契约：`0.1.0`；`0.2.0` 已 `IMPLEMENTED`、尚未 `STABLE`
 >
-> 本文描述计划方案，不表示采集器、解析器、迁移、十个来源观察或 Phase 2 Gate 已经实现或验证。
+> 本文保存设计基线；实际实现与验收状态以 `docs/gates/phase-2/` 为准。五轮 live、新鲜副本和
+> 最终候选 CI 属于 Release Qualification，未完成前不得标记 v0.2 `STABLE`，但不阻塞下游
+> Phase 的正常工程开发。
 
 ## 1. 目的
 
@@ -343,13 +345,13 @@ needs_review_reasons: tuple[str, ...]
 
 ### 13.4 Live 验证
 
-Live 命令默认关闭，必须显式设置 `DEEPAHA_ALLOW_LIVE_SOURCE_CHECK=true`。Phase 2 Gate 要求十个 Endpoint 在至少 24 小时内完成五轮策略间隔观察，共至少 50 次最终运行结果；有效 `SUCCEEDED + NOT_MODIFIED` 比率达到计划目标 `>=98%`，所有失败均有 observation 和稳定错误码，期间不为适配单个页面修改通用采集器。
+Live 命令默认关闭，必须显式设置 `DEEPAHA_ALLOW_LIVE_SOURCE_CHECK=true`。Phase 2 Release Qualification 要求十个 Endpoint 在至少 24 小时内完成五轮策略间隔观察，共至少 50 次最终运行结果；有效 `SUCCEEDED + NOT_MODIFIED` 比率达到计划目标 `>=98%`，所有失败均有 observation 和稳定错误码，期间不为适配单个页面修改通用采集器。
 
 Live 结果证明“这些入口在观察窗口内可按策略访问”，不证明长期 SLA、机会发现覆盖率或转载许可。
 
 ## 14. 可观测与成本证据
 
-Phase 2 Gate 保存：
+Phase 2 Release Qualification 保存：
 
 - 每 Endpoint 的观察次数、成功/未变化/失败和连续失败；
 - 响应字节、RawArtifact 去重率、解析耗时和派生字节；
@@ -359,20 +361,27 @@ Phase 2 Gate 保存：
 
 不得用吞吐量、公告数量或成功 HTTP 数替代机会价值、字段准确率或真实行动。
 
-## 15. Phase 2 Gate
+## 15. Phase 2 Engineering Gate 与 Release Qualification
 
-### 15.1 退出条件
+### 15.1 Engineering Gate 退出条件
 
 1. 同一内容的两次真实语义抓取产生两个 CaptureObservation、一个 RawArtifact，且每次时间/URL/status 可重放。
 2. 失败和 304 均有独立记录；失败不创建 RawArtifact，304 必须引用已有 Artifact。
-3. 十个代表性官方 Endpoint 完成规定的 live 观察窗口并有源健康/维护证据。
-4. 固定 HTML、PDF、XLSX 分别生成确定性 Document、派生文本和可回放的结构化 locator。
-5. 原始对象没有被派生结果覆盖；解析升级保留旧 Document。
-6. v0.1 与 v0.2 Schema、迁移、ORM 和契约测试一致；v0.2 达到条件后才标记 `STABLE`。
-7. 新鲜环境可复现默认测试、集成测试和固定样本；默认测试不依赖实时网络。
-8. 没有进入 Phase 3、引入未批准基础设施、提交秘密/真实用户数据/数据库文件/对象内容或无许可来源原件。
+3. 固定 HTML、PDF、XLSX 分别生成确定性 Document、派生文本和可回放的结构化 locator。
+4. 原始对象没有被派生结果覆盖；解析升级保留旧 Document。
+5. v0.1 与 v0.2 Schema、迁移、ORM 和契约测试一致。
+6. 默认离线测试、隔离集成、代码审查、安全和 scope 检查没有未解决的工程 blocker。
+7. 没有进入 Phase 3、引入未批准基础设施、提交秘密/真实用户数据/数据库文件/对象内容或无许可来源原件。
 
-### 15.2 Gate 证据包
+### 15.2 Release Qualification 条件
+
+1. 十个代表性官方 Endpoint 完成五轮、至少 24 小时、至少 50 个最终结果的 live 观察，
+   `SUCCEEDED + NOT_MODIFIED` 有效率达到 `>=98%`，并保存源健康和维护证据。
+2. 精确最终候选在新鲜副本完成统一验证，最终候选远程 CI 成功。
+3. 上述实际证据完成后才能把 Release Qualification 标记 `QUALIFIED` 并把 v0.2 标记
+   `STABLE`；此前保持 `IN_PROGRESS`，但不阻塞下游正常工程开发。
+
+### 15.3 Gate 证据包
 
 ```text
 docs/gates/phase-2/
@@ -387,7 +396,9 @@ docs/gates/phase-2/
 └── deferred-decisions.md
 ```
 
-在 live 窗口、完整验证和远程 CI 尚未实际成功前，Gate 必须保持 `OPEN`。计划阈值、预期测试数和候选 URL 不能写成通过证据。
+在 live 窗口、新鲜副本、完整验证和最终候选远程 CI 尚未实际成功前，Release Qualification
+必须保持非 `QUALIFIED`，v0.2 不得标记 `STABLE`。计划阈值、预期测试数和候选 URL 不能写成
+通过证据；该状态不自动推翻已经关闭的 Engineering Gate。
 
 ## 16. 明确延期
 
