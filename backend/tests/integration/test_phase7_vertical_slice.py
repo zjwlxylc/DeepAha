@@ -211,9 +211,7 @@ def test_complete_synthetic_feedback_workflow_is_held_without_online_mutation(
     simulation = validation.record_simulation_run(
         reviewer,
         fixture.validation.validation_cycle_id,
-        SimulationValidationRunWrite.model_validate(
-            fixture.validation.simulation.model_dump()
-        ),
+        SimulationValidationRunWrite.model_validate(fixture.validation.simulation.model_dump()),
     )
     decision = validation.decide(reviewer, fixture.validation.validation_cycle_id)
 

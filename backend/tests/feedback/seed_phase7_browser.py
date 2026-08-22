@@ -59,9 +59,7 @@ class SyntheticFixtureEligibilityService(EligibilityService):
 def assert_phase7_browser_database_url(database_url: str) -> None:
     url = make_url(database_url)
     if url.host != "127.0.0.1" or url.port != 55437 or url.database != "deepaha":
-        raise ValueError(
-            "browser seed requires exact disposable database 127.0.0.1:55437/deepaha"
-        )
+        raise ValueError("browser seed requires exact disposable database 127.0.0.1:55437/deepaha")
 
 
 def _persist_synthetic_profile(session: Session, identity: Phase6FixtureIdentity) -> None:
@@ -170,9 +168,7 @@ def seed_phase7_browser(database_url: str) -> Phase7BrowserIdentity:
                 "personal_users": session.scalar(
                     select(func.count()).select_from(PersonalUserModel)
                 ),
-                "reviewers": session.scalar(
-                    select(func.count()).select_from(ReviewerAccountModel)
-                ),
+                "reviewers": session.scalar(select(func.count()).select_from(ReviewerAccountModel)),
                 "sources": session.scalar(select(func.count()).select_from(Source)),
                 "opportunities": session.scalar(select(func.count()).select_from(Opportunity)),
                 "feedback_events": session.scalar(

@@ -76,9 +76,7 @@ def test_phase7_browser_seed_rejects_every_non_exact_database(candidate: str) ->
 
 
 def test_phase7_browser_seed_accepts_only_the_exact_disposable_database() -> None:
-    assert_phase7_browser_database_url(
-        "postgresql+psycopg://deepaha:test@127.0.0.1:55437/deepaha"
-    )
+    assert_phase7_browser_database_url("postgresql+psycopg://deepaha:test@127.0.0.1:55437/deepaha")
 
 
 def test_phase7_fixture_paths_stay_inside_declared_feedback_directory() -> None:

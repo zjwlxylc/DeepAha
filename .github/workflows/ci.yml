@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      [main, codex/phase-3-opportunity-resolution, codex/phase-4-rules-eligibility-evaluation, codex/phase-5-public-trust-layer, codex/phase-6-profile-match-personal-action]
+      [main, codex/phase-3-opportunity-resolution, codex/phase-4-rules-eligibility-evaluation, codex/phase-5-public-trust-layer, codex/phase-6-profile-match-personal-action, codex/phase-7-feedback-review-validation]
   pull_request:
 
 permissions:
@@ -291,6 +291,84 @@ jobs:
       - run: uv run alembic upgrade head
       - run: uv run alembic check
       - run: pnpm install --frozen-lockfile
+        working-directory: web
+      - run: pnpm test
+        working-directory: web
+      - run: pnpm build
+        working-directory: web
+
+  phase7-feedback-review:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18.4-alpine3.23
+        env:
+          POSTGRES_DB: deepaha
+          POSTGRES_USER: deepaha
+          POSTGRES_PASSWORD: deepaha_phase7_local_only
+        ports: ["55437:5432"]
+        options: >-
+          --health-cmd "pg_isready -U deepaha -d deepaha"
+          --health-interval 2s --health-timeout 2s --health-retries 30
+      s3:
+        image: motoserver/moto:5.2.2
+        ports: ["55005:5000"]
+    # Test-only constants for disposable Phase 7 CI services.
+    env:
+      DEEPAHA_DATABASE_URL: postgresql+psycopg://deepaha:deepaha_phase7_local_only@127.0.0.1:55437/deepaha
+      DEEPAHA_OBJECT_STORE_ENDPOINT: http://127.0.0.1:55005
+      DEEPAHA_OBJECT_STORE_REGION: us-east-1
+      DEEPAHA_OBJECT_STORE_BUCKET: deepaha-raw
+      DEEPAHA_OBJECT_STORE_ACCESS_KEY: phase7-ci
+      DEEPAHA_OBJECT_STORE_SECRET_KEY: phase7-ci-secret
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.14"
+          enable-cache: true
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+      - run: uv sync --locked --group dev
+      - run: >-
+          uv run pytest tests/contracts/test_phase1_contracts.py
+          tests/contracts/test_phase2_contracts.py
+          tests/contracts/test_phase3_contracts.py
+          tests/contracts/test_phase4_contracts.py
+          tests/contracts/test_phase6_contracts.py
+          tests/contracts/test_phase7_contracts.py
+          tests/feedback tests/review tests/validation
+          tests/api/test_feedback.py tests/api/test_review.py
+          tests/test_phase7_verifier_scope.py --strict-markers
+      - run: uv run alembic upgrade head
+      - run: >-
+          uv run pytest -m integration
+          tests/integration/test_phase7_feedback_submission.py
+          tests/integration/test_phase7_feedback_isolation.py
+          tests/integration/test_phase7_persistence.py
+          tests/integration/test_phase7_reviewer_authorization.py
+          tests/integration/test_phase7_review_workflow.py
+          tests/integration/test_phase7_validation_gate.py
+          tests/integration/test_phase7_vertical_slice.py
+          tests/integration/test_phase7_transaction_rollback.py
+          --strict-markers
+      - run: uv run alembic downgrade 20260822_0006
+      - run: uv run alembic upgrade head
+      - run: uv run alembic check
+      - run: pnpm install --frozen-lockfile
+        working-directory: web
+      - run: pnpm lint
+        working-directory: web
+      - run: pnpm typecheck
         working-directory: web
       - run: pnpm test
         working-directory: web
