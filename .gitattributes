@@ -5,5 +5,6 @@ backend/tests/fixtures/documents/*.pdf binary
 backend/tests/fixtures/documents/*.xlsx binary
 backend/tests/fixtures/opportunities/*.json text eol=lf
 backend/tests/fixtures/evaluation/*.json text eol=lf
+backend/tests/fixtures/public_catalog/*.json text eol=lf
 文档2/*.md binary
 文档2/*.docx binary

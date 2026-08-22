@@ -1,0 +1,11 @@
+{
+  "fixture": "phase5-public-catalog.json",
+  "sha256": "0dc0f1899338b8ec6e8935441f5b913fce70bca2096976cfa7845e626d861b89",
+  "license": "CC0-1.0 synthetic fixture",
+  "synthetic": true,
+  "business_truth": false,
+  "release_qualification_eligible": false,
+  "contains_personal_data": false,
+  "item_count": 3,
+  "purpose": "Deterministic Phase 5 public trust engineering tests and local browser QA only"
+}

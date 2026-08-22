@@ -15,6 +15,7 @@ from deepaha.opportunities.models import (
     OpportunityVersion,
 )
 from deepaha.profiles.models import ProfileSnapshotModel
+from deepaha.public_catalog.models import PublicCatalogEntry
 from deepaha.rules.models import RuleEvidenceModel, RuleModel, RuleSetModel
 from deepaha.sources.models import CaptureObservation, Source, SourceEndpoint
 
@@ -38,6 +39,7 @@ __all__ = [
     "RawArtifact",
     "MatchSnapshotModel",
     "ProfileSnapshotModel",
+    "PublicCatalogEntry",
     "RuleEvidenceModel",
     "RuleModel",
     "RuleSetModel",
