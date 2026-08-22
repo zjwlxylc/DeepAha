@@ -14,6 +14,10 @@ from tests.personal.support import persist_phase6_fixture
 
 @pytest.mark.integration
 def test_phase6_browser_seed_refuses_a_nonempty_database(database_url: str) -> None:
+    target = urlparse(database_url)
+    if target.hostname != "127.0.0.1" or target.port != 55436 or target.path != "/deepaha":
+        pytest.skip("requires the exact disposable Phase 6 database")
+
     identity = seed_phase6_browser(database_url)
 
     assert len(identity.public_ids) == 3
