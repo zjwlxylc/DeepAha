@@ -1,3 +1,4 @@
+import re
 from datetime import UTC, date, datetime
 
 import pytest
@@ -13,6 +14,12 @@ def test_fixture_manifest_and_deterministic_ids_are_reproducible() -> None:
     assert len(fixture.items) == 3
     assert stable_uuid7("alpha:opportunity") == stable_uuid7("alpha:opportunity")
     assert stable_uuid7("alpha:opportunity").version == 7
+
+
+def test_fixture_titles_do_not_look_like_personal_or_marketing_percentages() -> None:
+    fixture = load_phase5_fixture()
+
+    assert all(re.search(r"\d+%", item.title) is None for item in fixture.items)
 
 
 @pytest.mark.parametrize(

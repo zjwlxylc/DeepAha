@@ -83,7 +83,7 @@
     {
       "key": "gamma_percent_%_underscore_",
       "type": "SCHOLARSHIP",
-      "title": "合成科研奖学金 100% 专项",
+      "title": "合成科研奖学金 %_ 字面量专项",
       "issuer_name": "合成教育基金会_测试",
       "jurisdiction": "合成浙江省",
       "published_at": "2026-08-10T03:00:00Z",

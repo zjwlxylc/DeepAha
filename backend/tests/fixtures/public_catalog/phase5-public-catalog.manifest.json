@@ -1,6 +1,6 @@
 {
   "fixture": "phase5-public-catalog.json",
-  "sha256": "9a5080048e67265e88154a05223d4215f375dcaf79f49b6ff7ca39431358162a",
+  "sha256": "0dc0f1899338b8ec6e8935441f5b913fce70bca2096976cfa7845e626d861b89",
   "license": "CC0-1.0 synthetic fixture",
   "synthetic": true,
   "business_truth": false,

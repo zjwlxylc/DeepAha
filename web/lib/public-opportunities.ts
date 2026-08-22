@@ -116,8 +116,8 @@ export function opportunitiesHref(
 async function fetchPublicJson<T>(path: string): Promise<T> {
   const baseUrl = process.env.DEEPAHA_API_BASE_URL ?? "http://127.0.0.1:8000";
   const response = await fetch(new URL(path, baseUrl), {
+    cache: "no-store",
     headers: { Accept: "application/json" },
-    next: { revalidate: 60 },
   });
   if (!response.ok) {
     throw new PublicApiError(response.status, "Public opportunity request failed");

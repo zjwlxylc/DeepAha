@@ -14,9 +14,28 @@ from deepaha.public_catalog.schemas import (
     PublicOpportunitySort,
 )
 from deepaha.public_catalog.service import PublicCatalogService
+from tests.public_catalog.seed_phase5_browser import assert_phase5_browser_database_url
 from tests.public_catalog.support import persist_phase5_fixture, stable_uuid7
 
 pytestmark = pytest.mark.integration
+
+
+@pytest.mark.parametrize(
+    "candidate_url",
+    [
+        "postgresql+psycopg://deepaha:test@127.0.0.1:55432/deepaha",
+        "postgresql+psycopg://deepaha:test@127.0.0.1:55434/deepaha",
+        "postgresql+psycopg://deepaha:test@localhost:55435/deepaha",
+        "postgresql+psycopg://deepaha:test@127.0.0.1:55435/other",
+    ],
+)
+def test_browser_seed_refuses_non_phase5_database(candidate_url: str) -> None:
+    with pytest.raises(ValueError, match="127.0.0.1:55435/deepaha"):
+        assert_phase5_browser_database_url(candidate_url)
+
+
+def test_browser_seed_accepts_only_exact_phase5_database() -> None:
+    assert_phase5_browser_database_url("postgresql+psycopg://deepaha:test@127.0.0.1:55435/deepaha")
 
 
 def test_list_projects_complete_governed_cards_in_published_order(session: Session) -> None:
@@ -40,14 +59,14 @@ def test_search_filters_and_deadline_sort_are_literal_and_finite(session: Sessio
     persist_phase5_fixture(session)
     service = PublicCatalogService(session)
 
-    assert service.list_opportunities(PublicOpportunityQuery(q="100%")).count == 1
+    assert service.list_opportunities(PublicOpportunityQuery(q="%_")).count == 1
     assert service.list_opportunities(PublicOpportunityQuery(q="_测试")).count == 1
     assert service.list_opportunities(PublicOpportunityQuery(q="opp_")).count == 3
     assert (
         service.list_opportunities(PublicOpportunityQuery(type=OpportunityTypeV02.SCHOLARSHIP))
         .items[0]
         .title
-        == "合成科研奖学金 100% 专项"
+        == "合成科研奖学金 %_ 字面量专项"
     )
     assert (
         service.list_opportunities(PublicOpportunityQuery(status=OpportunityStatus.OPEN)).count == 1
