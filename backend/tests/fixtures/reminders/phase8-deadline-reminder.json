@@ -1,0 +1,90 @@
+{
+  "schema_version": "phase8-deadline-reminder-fixture-v1",
+  "marker": "SYNTHETIC_REMINDER_DELIVERY_ONLY",
+  "synthetic": true,
+  "contains_personal_data": false,
+  "business_truth": false,
+  "release_qualification_eligible": false,
+  "license": "CC0-1.0 synthetic fixture",
+  "scenario_clock": "2026-08-22T12:00:00Z",
+  "opportunity": {
+    "public_id": "opp_63be197cc6ef3632650c5f69b5938f0b",
+    "from_version": 6,
+    "to_version": 7,
+    "old_closes_on": "2026-09-20",
+    "new_closes_on": "2026-09-30",
+    "previous_evidence_ref_id": "019b0000-0000-7000-8000-00000000001d",
+    "current_evidence_ref_id": "019b0000-0000-7000-8000-00000000001b"
+  },
+  "qualifying_event": {
+    "event_type": "DEADLINE_CHANGED",
+    "changed_fields": ["application_window.closes_on"],
+    "expected_candidate_count": 1
+  },
+  "non_qualifying_events": [
+    {
+      "case": "multi_field_update",
+      "event_type": "UPDATED",
+      "changed_fields": ["application_window.closes_on", "status"],
+      "expected_candidate_count": 0
+    },
+    {
+      "case": "cancellation",
+      "event_type": "CANCELLED",
+      "changed_fields": ["status"],
+      "expected_candidate_count": 0
+    }
+  ],
+  "audiences": [
+    {
+      "role": "saved_enabled_authorized",
+      "user_id": "019b0000-0000-7000-8000-000000000831",
+      "expected_reminder_count": 1,
+      "reason": "saved, independently enabled and ACTION_TRACKING authorized"
+    },
+    {
+      "role": "saved_disabled",
+      "user_id": "019b0000-0000-7000-8000-000000000832",
+      "expected_reminder_count": 0,
+      "reason": "latest independent reminder preference is disabled"
+    },
+    {
+      "role": "unsaved_enabled",
+      "user_id": "019b0000-0000-7000-8000-000000000833",
+      "expected_reminder_count": 0,
+      "reason": "latest action snapshot is unsaved"
+    },
+    {
+      "role": "ranked_only_enabled",
+      "user_id": "019b0000-0000-7000-8000-000000000834",
+      "expected_reminder_count": 0,
+      "reason": "ranking alone is not a saved action"
+    },
+    {
+      "role": "purpose_revoked",
+      "user_id": "019b0000-0000-7000-8000-000000000835",
+      "expected_reminder_count": 0,
+      "reason": "latest UserStateSnapshot lacks ACTION_TRACKING"
+    }
+  ],
+  "expected_engineering_counts": {
+    "audiences": 5,
+    "counterexamples": 4,
+    "candidates": 1,
+    "waiting_before_governance": 1,
+    "attempts_before_governance": 0,
+    "inbox_before_governance": 0,
+    "promoted": 1,
+    "claimed": 1,
+    "delivered": 1,
+    "delivery_attempts": 1,
+    "inbox_entries": 1,
+    "replay_mismatches": 0
+  },
+  "evidence_boundary": {
+    "real_participants": 0,
+    "human_track": "NOT_STARTED",
+    "release_qualification": "NOT_STARTED",
+    "release_decision": "HOLD_MISSING_HUMAN_EVIDENCE"
+  }
+}
