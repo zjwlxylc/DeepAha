@@ -11,7 +11,7 @@ from deepaha.eligibility.service import EligibilityService, MatchInput, MatchInp
 from deepaha.matching.models import MatchSnapshotModel
 from deepaha.opportunities.models import Opportunity, OpportunityVersion
 from deepaha.personal.auth import Principal
-from deepaha.personal.matching import PersonalMatchService
+from deepaha.personal.matching import PersonalMatchError, PersonalMatchService
 from deepaha.personal.models import (
     PersonalRankingItemModel,
     PersonalRankingSnapshotModel,
@@ -268,6 +268,17 @@ def test_personal_ranking_is_owner_scoped_replayable_and_preference_only(
     assert service.get_match(principal, "opp_00000000000000000000000000000000") is None
     assert service.get_snapshot(principal, uuid7()) is None
     assert service.get_latest(principal_b) is None
+
+    profile_service.save(
+        principal,
+        profile_command(allowed_purposes=["ACTION_TRACKING"]),
+        idempotency_key="personal-ranking-purpose-revoked-0001",
+    )
+    with pytest.raises(PersonalMatchError, match="personal matching unavailable"):
+        service.run(principal)
+    assert service.get_latest(principal) is None
+    assert service.get_snapshot(principal, first.ranking_snapshot_id) is None
+    assert service.get_match(principal, first_public_id) is None
 
     with Session(migrated_engine) as session:
         assert session.scalar(select(func.count()).select_from(MatchSnapshotModel)) == 2

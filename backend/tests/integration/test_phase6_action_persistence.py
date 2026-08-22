@@ -184,3 +184,17 @@ def test_action_writes_are_idempotent_owner_scoped_and_audited(
             )
             == 6
         )
+
+    profile_service.save(
+        principal_a,
+        profile_command(allowed_purposes=["ELIGIBILITY", "PERSONAL_RANKING"]),
+        idempotency_key="action-purpose-revoked-0001",
+    )
+    assert service.get_current(principal_a, public_id) is None
+    with pytest.raises(ActionUnavailable, match="personal action unavailable"):
+        service.set_status(
+            principal_a,
+            public_id,
+            ActionState.APPLIED,
+            idempotency_key="action-purpose-revoked-write-0001",
+        )

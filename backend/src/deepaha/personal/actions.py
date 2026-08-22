@@ -77,6 +77,8 @@ class ActionService:
         principal: Principal,
         public_id: str,
     ) -> PersonalActionSnapshotSchemaV05 | None:
+        if not self._action_tracking_allowed(principal):
+            return None
         with self._session_factory() as session:
             opportunity = session.scalar(
                 select(Opportunity).where(Opportunity.public_id == public_id)
@@ -324,9 +326,12 @@ class ActionService:
                 raise
 
     def _assert_action_tracking_allowed(self, principal: Principal) -> None:
-        state = self._profile_service.get_current(principal)
-        if state is None or UserDataPurpose.ACTION_TRACKING not in state.allowed_purposes:
+        if not self._action_tracking_allowed(principal):
             raise ActionUnavailable("personal action unavailable")
+
+    def _action_tracking_allowed(self, principal: Principal) -> bool:
+        state = self._profile_service.get_current(principal)
+        return state is not None and UserDataPurpose.ACTION_TRACKING in state.allowed_purposes
 
     @staticmethod
     def _governed_opportunity(

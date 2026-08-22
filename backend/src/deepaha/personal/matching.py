@@ -149,8 +149,8 @@ class PersonalMatchService:
         self._now_factory = now_factory
 
     def run(self, principal: Principal) -> PersonalRankingSnapshotSchemaV05:
-        state = self._profile_service.get_current(principal)
-        if state is None or UserDataPurpose.PERSONAL_RANKING not in state.allowed_purposes:
+        state = self._ranking_state(principal)
+        if state is None:
             raise PersonalMatchError("personal matching unavailable")
         candidates = self._load_public_candidates(state)
         created_at = self._now_factory()
@@ -257,6 +257,8 @@ class PersonalMatchService:
         self,
         principal: Principal,
     ) -> PersonalRankingSnapshotSchemaV05 | None:
+        if self._ranking_state(principal) is None:
+            return None
         with self._session_factory() as session:
             row = session.scalar(
                 select(PersonalRankingSnapshotModel)
@@ -280,6 +282,8 @@ class PersonalMatchService:
         principal: Principal,
         snapshot_id: UUID,
     ) -> PersonalRankingSnapshotSchemaV05 | None:
+        if self._ranking_state(principal) is None:
+            return None
         with self._session_factory() as session:
             row = session.scalar(
                 select(PersonalRankingSnapshotModel).where(
@@ -294,7 +298,7 @@ class PersonalMatchService:
         principal: Principal,
         public_id: str,
     ) -> MatchSnapshotSchemaV04 | None:
-        state = self._profile_service.get_current(principal)
+        state = self._ranking_state(principal)
         if state is None:
             return None
         with self._session_factory() as session:
@@ -329,6 +333,16 @@ class PersonalMatchService:
                 .limit(1)
             )
         return None if snapshot_id is None else self._eligibility_service.replay(snapshot_id)
+
+    def _ranking_state(
+        self,
+        principal: Principal,
+    ) -> UserStateSnapshotSchemaV05 | None:
+        state = self._profile_service.get_current(principal)
+        required = {UserDataPurpose.ELIGIBILITY, UserDataPurpose.PERSONAL_RANKING}
+        if state is None or not required.issubset(state.allowed_purposes):
+            return None
+        return state
 
     def _load_public_candidates(
         self,
