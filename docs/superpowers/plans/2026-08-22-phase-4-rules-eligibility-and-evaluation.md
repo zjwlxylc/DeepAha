@@ -1,5 +1,19 @@
 # DeepAha Phase 4 Rules, Eligibility and Evaluation Implementation Plan
 
+> **Governance update (2026-08-22):** This completed plan preserves the original controlled
+> stacked-execution record; its body and task instructions remain as auditable history, not
+> current instructions. Phase 2 closing commit
+> `6c8a8fb63c68cfbb0f4cf54b6032bfb49a0ef65c` and Phase 3 closing commit
+> `8003a1c2ab2485a1173b2d4bb9deafbbab6e949c` are integrated through history-preserving
+> merge commit `09526c61a1a0410e9a9127c989ecfaecf3f0ea02`. Current Phase 4 axes are:
+> implementation `IMPLEMENTED`, Engineering Gate `CLOSED`, Release Qualification
+> `NOT_STARTED`, and v0.4 contract maturity `IMPLEMENTED`. Historical
+> `PROPOSED_IMPLEMENTATION_BLOCKED_BY_PHASE2_PHASE3_GATES`, `BLOCKED_BY_PHASE2`,
+> `IMPLEMENTED_PENDING_PHASE2_PHASE3_GATES`, Phase 2 `OPEN` / Phase 3 blocked, and
+> v0.2-v0.4 `PROPOSED` statements below are superseded as current status and remain only as
+> execution history. The historical sub-agent instructions below must not be re-executed;
+> this governance-only task prohibits sub-agents.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 在 Phase 3 精确候选提交之上，以受控堆叠方式实现可版本化、可审计、可确定性回放的规则、资格四态、匹配快照与合成评估候选，并保持 Phase 2/3 Gate 阻塞边界。

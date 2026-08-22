@@ -1,5 +1,15 @@
 # DeepAha Phase 4 规则、资格与评估设计
 
+> 治理更新（2026-08-22）：本文正文保留最初受控堆叠执行的历史前提和措辞，不机械改写。
+> Phase 2 closing commit `6c8a8fb63c68cfbb0f4cf54b6032bfb49a0ef65c` 与 Phase 3 closing
+> commit `8003a1c2ab2485a1173b2d4bb9deafbbab6e949c` 已通过历史保留 merge commit
+> `09526c61a1a0410e9a9127c989ecfaecf3f0ea02` 完整纳入 Phase 4。当前四轴状态为：
+> Implementation `IMPLEMENTED`，Engineering Gate `CLOSED`，Release Qualification
+> `NOT_STARTED`，v0.4 Contract Maturity `IMPLEMENTED`。正文中的
+> `PROPOSED_IMPLEMENTATION_BLOCKED_BY_PHASE2_PHASE3_GATES`、`BLOCKED_BY_PHASE2`、
+> `IMPLEMENTED_PENDING_PHASE2_PHASE3_GATES`、Phase 2 `OPEN` / Phase 3 blocked，以及
+> v0.2-v0.4 `PROPOSED` 均为当时执行边界，现已由四轴治理状态取代；它们不代表当前状态。
+
 > 状态：`PROPOSED_IMPLEMENTATION_BLOCKED_BY_PHASE2_PHASE3_GATES`
 >
 > 日期：2026-08-22
