@@ -93,7 +93,6 @@ def test_latest_user_control_suppresses_without_delivery(
 ) -> None:
     factory = sessionmaker(migrated_engine, expire_on_commit=False)
     seed = seed_governed_reminder(factory)
-    changed_at = datetime(2026, 8, 22, 3, 30, tzinfo=UTC)
     with factory.begin() as session:
         if revocation == "disabled":
             previous_preference = session.scalar(
@@ -102,6 +101,7 @@ def test_latest_user_control_suppresses_without_delivery(
                 )
             )
             assert previous_preference is not None
+            changed_at = previous_preference.created_at - timedelta(minutes=1)
             session.add(
                 ReminderPreferenceSnapshotModel(
                     preference_snapshot_id=uuid7(),
@@ -126,6 +126,7 @@ def test_latest_user_control_suppresses_without_delivery(
                 )
             )
             assert previous_action is not None
+            changed_at = previous_action.created_at - timedelta(minutes=1)
             session.add(
                 PersonalActionSnapshotModel(
                     action_snapshot_id=uuid7(),
@@ -147,6 +148,7 @@ def test_latest_user_control_suppresses_without_delivery(
                 select(UserStateSnapshotModel).where(UserStateSnapshotModel.user_id == seed.user_id)
             )
             assert previous_state is not None
+            changed_at = previous_state.created_at - timedelta(minutes=1)
             session.add(
                 UserStateSnapshotModel(
                     user_state_snapshot_id=uuid7(),

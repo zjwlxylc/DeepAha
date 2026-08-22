@@ -360,8 +360,8 @@ class ReminderWorker:
                 PersonalActionSnapshotModel.opportunity_id == row.opportunity_id,
             )
             .order_by(
-                PersonalActionSnapshotModel.created_at.desc(),
                 PersonalActionSnapshotModel.version.desc(),
+                PersonalActionSnapshotModel.created_at.desc(),
                 PersonalActionSnapshotModel.action_snapshot_id.desc(),
             )
             .limit(1)
@@ -373,8 +373,8 @@ class ReminderWorker:
                 ReminderPreferenceSnapshotModel.reminder_kind == "DEADLINE_CHANGED",
             )
             .order_by(
-                ReminderPreferenceSnapshotModel.created_at.desc(),
                 ReminderPreferenceSnapshotModel.version.desc(),
+                ReminderPreferenceSnapshotModel.created_at.desc(),
                 ReminderPreferenceSnapshotModel.preference_snapshot_id.desc(),
             )
             .limit(1)
@@ -383,8 +383,8 @@ class ReminderWorker:
             select(UserStateSnapshotModel)
             .where(UserStateSnapshotModel.user_id == row.user_id)
             .order_by(
-                UserStateSnapshotModel.created_at.desc(),
                 UserStateSnapshotModel.version.desc(),
+                UserStateSnapshotModel.created_at.desc(),
                 UserStateSnapshotModel.user_state_snapshot_id.desc(),
             )
             .limit(1)
