@@ -1,4 +1,3 @@
-from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta
 from uuid import UUID
 
@@ -56,19 +55,26 @@ def state_values(**changes: object) -> UserStateSnapshotSchemaV05:
     return UserStateSnapshotSchemaV05.model_validate(values)
 
 
-def match(index: int, **changes: object) -> RankableMatch:
-    value = RankableMatch(
+def match(
+    index: int,
+    *,
+    eligibility_status: EligibilityStatus = EligibilityStatus.ELIGIBLE,
+    opportunity_type: OpportunityTypeV02 = OpportunityTypeV02.PUBLIC_INSTITUTION_JOB,
+    locations: tuple[str, ...] = ("合成杭州市",),
+    public_status: OpportunityStatus = OpportunityStatus.OPEN,
+    deadline: date | None = None,
+) -> RankableMatch:
+    return RankableMatch(
         public_id=f"opp_{index:032x}",
         opportunity_id=UUID(f"019b0000-0000-7000-8000-{700 + index:012d}"),
         opportunity_version=1,
         match_snapshot_id=UUID(f"019b0000-0000-7000-8000-{800 + index:012d}"),
-        eligibility_status=EligibilityStatus.ELIGIBLE,
-        opportunity_type=OpportunityTypeV02.PUBLIC_INSTITUTION_JOB,
-        locations=("合成杭州市",),
-        public_status=OpportunityStatus.OPEN,
-        deadline=TODAY + timedelta(days=index),
+        eligibility_status=eligibility_status,
+        opportunity_type=opportunity_type,
+        locations=locations,
+        public_status=public_status,
+        deadline=deadline or TODAY + timedelta(days=index),
     )
-    return replace(value, **changes)
 
 
 def test_ranking_enforces_public_status_inclusive_ninety_days_and_max_three() -> None:

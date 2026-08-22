@@ -174,7 +174,8 @@ def test_detail_exposes_official_evidence_and_ordered_change_history(session: Se
     assert [item.event_type for item in detail.history] == ["CREATED", "DEADLINE_CHANGED"]
     assert [item.to_version for item in detail.history] == [1, 2]
     assert (
-        detail.personalization_availability is PersonalizationAvailability.PHASE_6_NOT_IMPLEMENTED
+        detail.personalization_availability
+        is PersonalizationAvailability.AVAILABLE_WITH_PERSONAL_SESSION
     )
 
 

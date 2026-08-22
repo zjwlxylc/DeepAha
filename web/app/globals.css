@@ -101,6 +101,9 @@ textarea {
 }
 
 .brand {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
   color: var(--navy);
   font-size: 1.45rem;
   font-weight: 800;
@@ -385,6 +388,9 @@ h3 {
 }
 
 .opportunity-card h2 a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
   color: var(--navy);
   text-decoration-thickness: 0.08em;
 }
@@ -750,6 +756,14 @@ code {
   color: var(--ink-muted);
 }
 
+.breadcrumbs a,
+.evidence-card > a,
+.evidence-links a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+}
+
 .personal-priority-list {
   display: grid;
   gap: 1rem;
@@ -773,6 +787,12 @@ code {
 .personal-opportunity-card h2,
 .personal-opportunity-card p {
   margin: 0;
+}
+
+.personal-opportunity-card h2 a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
 }
 
 .priority-row {

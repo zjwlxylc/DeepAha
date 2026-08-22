@@ -8,6 +8,12 @@ import PersonalOpportunitiesLoading from "../app/me/opportunities/loading";
 import ProfileError from "../app/profile/error";
 import ProfileLoading from "../app/profile/loading";
 
+const { refresh } = vi.hoisted(() => ({ refresh: vi.fn() }));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh }),
+}));
+
 describe("personal route states", () => {
   it.each([
     [ProfileLoading, "正在读取你的最小画像"],
@@ -25,6 +31,7 @@ describe("personal route states", () => {
     [PersonalOpportunitiesError, "个人行动台暂时不可用", "重新加载"],
     [PersonalDetailError, "个人解释暂时无法读取", "重试"],
   ])("renders an explicit recoverable error", (ErrorState, heading, buttonName) => {
+    refresh.mockClear();
     const reset = vi.fn();
     render(<ErrorState reset={reset} />);
 
@@ -32,5 +39,6 @@ describe("personal route states", () => {
     expect(screen.getByRole("heading", { name: heading })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: buttonName }));
     expect(reset).toHaveBeenCalledOnce();
+    expect(refresh).toHaveBeenCalledOnce();
   });
 });

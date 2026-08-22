@@ -71,7 +71,7 @@ export default function EligibilityExplanation({ eligibility, evidence }: Eligib
       {linkedEvidence.length > 0 ? (
         <ul className="evidence-links" aria-label="资格判断官方证据">
           {linkedEvidence.map((item) => (
-            <li key={item.evidence_ref_id}>
+            <li key={`${item.evidence_ref_id}:${item.field_path}`}>
               <a href={item.official_url} target="_blank" rel="noreferrer">
                 查看官方证据
               </a>

@@ -15,20 +15,21 @@ const stateLabels = {
 } as const;
 
 export default function ActionPanel({ publicId, action }: { publicId: string; action: PersonalActionSnapshot | null }) {
+  const snapshotKey = action?.action_snapshot_id ?? "no-action";
   return (
     <aside className="action-panel" aria-labelledby="action-title">
       <p className="section-kicker">个人行动</p>
       <h2 id="action-title">下一步怎么做</h2>
       <p>当前状态：{action ? stateLabels[action.state] : "尚未开始"}</p>
       <div className="action-forms">
-        <form action={toggleSavedAction}>
+        <form action={toggleSavedAction} key={`saved-${snapshotKey}`}>
           <input type="hidden" name="public_id" value={publicId} />
           <input type="hidden" name="saved" value={action?.saved ? "false" : "true"} />
           <button className="button button-secondary" type="submit">
             {action?.saved ? "取消保存" : "保存机会"}
           </button>
         </form>
-        <form action={setActionStatusAction}>
+        <form action={setActionStatusAction} key={`status-${snapshotKey}`}>
           <input type="hidden" name="public_id" value={publicId} />
           <label>
             行动状态
@@ -40,7 +41,7 @@ export default function ActionPanel({ publicId, action }: { publicId: string; ac
           </label>
           <button className="button button-secondary" type="submit">更新状态</button>
         </form>
-        <form action={addMaterialAction}>
+        <form action={addMaterialAction} key={`materials-${snapshotKey}`}>
           <input type="hidden" name="public_id" value={publicId} />
           <label>
             新增材料项

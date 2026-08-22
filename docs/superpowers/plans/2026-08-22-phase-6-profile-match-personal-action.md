@@ -674,7 +674,7 @@ git push
 - Produces: exact-scope Phase 6 verification command, CI job `phase6-profile-action`, auditable
   non-sensitive browser observation record.
 
-- [ ] **Step 1: Write failing verifier-scope tests**
+- [x] **Step 1: Write failing verifier-scope tests**
 
 ```python
 def test_phase6_verifier_uses_only_phase6_scope() -> None:
@@ -689,13 +689,13 @@ def test_phase6_cleanup_is_exact_project_only() -> None:
     assert "docker system prune" not in script
 ```
 
-- [ ] **Step 2: Run RED verifier target**
+- [x] **Step 2: Run RED verifier target**
 
 Run: `cd backend; uv run pytest tests/test_phase6_verifier_scope.py -q`
 
 Expected: fail because Phase 6 compose/verifier files do not exist.
 
-- [ ] **Step 3: Implement exact compose/verifier and CI job**
+- [x] **Step 3: Implement exact compose/verifier and CI job**
 
 Copy the proven Phase 5 ownership-check structure, changing only project regex, ports, database
 password and Phase 6 test targets. Before `up`, call `Assert-PortAvailableOrOwned 55436` and `55004`.
@@ -708,14 +708,14 @@ docker compose --project-name $projectName --file $composeFile down --volumes --
 CI `phase6-profile-action` starts PostgreSQL 18 and Moto on container-local ports, runs migration,
 Phase 6 offline/integration/Web targets and the verifier-scope test. Keep all six inherited jobs.
 
-- [ ] **Step 4: Run full isolated Phase 6 verifier**
+- [x] **Step 4: Run full isolated Phase 6 verifier**
 
 Run: `powershell -ExecutionPolicy Bypass -File scripts/verify-phase6.ps1`
 
 Expected: root regression, Phase 6 tests, migration cycle and Web build PASS; final output labels
 fixture counts as synthetic, real users `0`, Release Qualification `NOT_STARTED`.
 
-- [ ] **Step 5: Apply Playwright skill and perform real-browser checks**
+- [x] **Step 5: Apply Playwright skill and perform real-browser checks**
 
 Read `superpowers:verification-before-completion`, `playwright` and the UI skill
 `references/pro-rules.md` before the browser run. Start only the exact Phase 6 compose project, seed
@@ -737,7 +737,7 @@ Record viewport, commands, fixture IDs, expected/actual observations and cleanup
 `docs/gates/phase-6/browser-verification.md`. Do not commit screenshots, cookies, storage state,
 tokens, browser profiles or build output.
 
-- [ ] **Step 6: Commit and push exact verification files**
+- [x] **Step 6: Commit and push exact verification files**
 
 ```powershell
 git add -- infra/compose.phase6.yaml scripts/verify-phase6.ps1 backend/tests/test_phase6_verifier_scope.py .github/workflows/ci.yml docs/gates/phase-6/browser-verification.md

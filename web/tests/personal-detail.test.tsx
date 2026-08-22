@@ -62,4 +62,19 @@ describe("personal opportunity detail", () => {
 
     expect(screen.getByRole("heading", { name: label })).toBeVisible();
   });
+
+  it("renders one EvidenceRef supporting multiple fields without duplicate React keys", () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const evidence = personalDetail.opportunity.key_evidence[0];
+
+    render(
+      <EligibilityExplanation
+        eligibility={personalDetail.eligibility}
+        evidence={[evidence, { ...evidence, field_path: "application_window.closes_on" }]}
+      />,
+    );
+
+    expect(consoleError.mock.calls.flat().join(" ")).not.toMatch(/same key|unique key/i);
+    consoleError.mockRestore();
+  });
 });
