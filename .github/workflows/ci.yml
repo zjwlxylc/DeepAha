@@ -282,6 +282,7 @@ jobs:
           uv run pytest -m integration
           tests/integration/test_phase6_profile_persistence.py
           tests/integration/test_phase6_personal_match_replay.py
+          tests/integration/test_phase6_action_persistence.py
           tests/integration/test_phase6_personal_api.py
           tests/integration/test_phase6_vertical_slice.py
           tests/integration/test_phase6_user_isolation.py

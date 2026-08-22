@@ -97,7 +97,7 @@ try {
         Assert-NativeSuccess "Phase 6 migration upgrade"
         uv run pytest tests/contracts/test_phase6_contracts.py tests/personal tests/api/test_personal.py tests/test_phase6_verifier_scope.py --strict-markers
         Assert-NativeSuccess "Phase 6 offline contract, personal, API, and scope tests"
-        uv run pytest -m integration tests/integration/test_phase6_profile_persistence.py tests/integration/test_phase6_personal_match_replay.py tests/integration/test_phase6_personal_api.py tests/integration/test_phase6_vertical_slice.py tests/integration/test_phase6_user_isolation.py --strict-markers
+        uv run pytest -m integration tests/integration/test_phase6_profile_persistence.py tests/integration/test_phase6_personal_match_replay.py tests/integration/test_phase6_action_persistence.py tests/integration/test_phase6_personal_api.py tests/integration/test_phase6_vertical_slice.py tests/integration/test_phase6_user_isolation.py --strict-markers
         Assert-NativeSuccess "Phase 6 profile, match, action, and isolation integration tests"
         uv run alembic downgrade 20260822_0005
         Assert-NativeSuccess "Phase 6 migration downgrade"
