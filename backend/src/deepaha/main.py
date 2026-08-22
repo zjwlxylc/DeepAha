@@ -21,6 +21,7 @@ from deepaha.api.personal import (
 from deepaha.api.personal import router as personal_router
 from deepaha.api.public_opportunities import public_catalog_unavailable_response
 from deepaha.api.public_opportunities import router as public_opportunities_router
+from deepaha.api.reminders import router as reminder_router
 from deepaha.api.review import (
     ReviewApiProblem,
     review_invalid_request_response,
@@ -102,6 +103,7 @@ def create_app() -> FastAPI:
     application.include_router(system_router)
     application.include_router(public_opportunities_router)
     application.include_router(personal_router)
+    application.include_router(reminder_router)
     application.include_router(feedback_router)
     application.include_router(review_router)
     return application
