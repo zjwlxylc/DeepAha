@@ -144,22 +144,33 @@ def _factory(session: Session) -> sessionmaker[Session]:
     return sessionmaker(bind=session.get_bind(), expire_on_commit=False)
 
 
+def _allow_synthetic_fixture_profile(settings: Settings) -> bool:
+    return settings.personal_auth_mode == "fixture" and settings.environment in {
+        "development",
+        "test",
+    }
+
+
 def get_profile_service(
     session: Annotated[Session, Depends(get_write_session)],
+    settings: Annotated[Settings, Depends(get_settings)],
 ) -> ProfileService:
     return ProfileService(
         session_factory=_factory(session),
         now_factory=lambda: datetime.now(UTC),
+        allow_synthetic_fixture_profile=_allow_synthetic_fixture_profile(settings),
     )
 
 
 def get_personal_match_service(
     session: Annotated[Session, Depends(get_write_session)],
+    settings: Annotated[Settings, Depends(get_settings)],
 ) -> PersonalMatchService:
     factory = _factory(session)
     profile_service = ProfileService(
         session_factory=factory,
         now_factory=lambda: datetime.now(UTC),
+        allow_synthetic_fixture_profile=_allow_synthetic_fixture_profile(settings),
     )
     catalog = load_major_catalog(FIXTURE_DIRECTORY / "phase4-major-catalog.json")
     mapping = load_approved_major_mapping(
@@ -178,6 +189,7 @@ def get_personal_match_service(
 
 def get_action_service(
     session: Annotated[Session, Depends(get_write_session)],
+    settings: Annotated[Settings, Depends(get_settings)],
 ) -> ActionService:
     factory = _factory(session)
     return ActionService(
@@ -185,6 +197,7 @@ def get_action_service(
         profile_service=ProfileService(
             session_factory=factory,
             now_factory=lambda: datetime.now(UTC),
+            allow_synthetic_fixture_profile=_allow_synthetic_fixture_profile(settings),
         ),
         now_factory=lambda: datetime.now(UTC),
     )

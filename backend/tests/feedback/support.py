@@ -2,11 +2,15 @@ import json
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from hashlib import sha256
+from pathlib import Path
+from typing import Literal
 from uuid import UUID, uuid7
 
+from pydantic import BaseModel, ConfigDict
 from sqlalchemy import Table, select
 from sqlalchemy.orm import Session
 
+from deepaha.contracts.phase7 import SimulationValidationMetricsSchemaV06
 from deepaha.eligibility.models import EligibilityResultModel
 from deepaha.matching.models import MatchSnapshotModel
 from deepaha.opportunities.models import Opportunity, OpportunityVersion
@@ -25,6 +29,132 @@ NOW = datetime(2026, 8, 22, 12, 0, tzinfo=UTC)
 EXPIRES_AT = datetime(2099, 1, 1, tzinfo=UTC)
 TOKEN_A = "phase7-personal-token-owner-a"
 TOKEN_B = "phase7-personal-token-owner-b"
+PHASE7_FIXTURE_ROOT = Path(__file__).parents[1] / "fixtures" / "feedback"
+PHASE7_FIXTURE_PATH = PHASE7_FIXTURE_ROOT / "phase7-feedback.json"
+PHASE7_MANIFEST_PATH = PHASE7_FIXTURE_ROOT / "phase7-feedback.manifest.json"
+
+
+class Phase7FixtureModel(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+
+class Phase7FeedbackInput(Phase7FixtureModel):
+    claim_kind: Literal["EXPLANATION_UNCLEAR"]
+    user_statement: str
+    evidence_relation: Literal["SUPPORTS"]
+    evidence_note: str
+
+
+class Phase7AssessmentInput(Phase7FixtureModel):
+    evidence_complete: Literal[True]
+    confidence_band: Literal["HIGH"]
+    risk_level: Literal["NORMAL"]
+    conflict: Literal[False]
+    rationale: str
+
+
+class Phase7AdjudicationInput(Phase7FixtureModel):
+    decision: Literal["CONFIRMED"]
+    reason: str
+
+
+class Phase7ReviewInput(Phase7FixtureModel):
+    assessment: Phase7AssessmentInput
+    adjudication: Phase7AdjudicationInput
+    approved_target_value: str
+
+
+class Phase7OfflineInput(Phase7FixtureModel):
+    dataset_id: UUID
+    dataset_version: Literal[1]
+    dataset_sha256: str
+    baseline_component_version: Literal["explanation-v0.5"]
+    candidate_component_version: Literal["explanation-v0.6-candidate-1"]
+    outcome: Literal["PASSED"]
+    result_sha256: str
+    evidence_class: Literal["SYNTHETIC_SIMULATION_ONLY"]
+
+
+class Phase7ShadowInput(Phase7FixtureModel):
+    baseline_component_version: Literal["explanation-v0.5"]
+    candidate_component_version: Literal["explanation-v0.6-candidate-1"]
+    outcome: Literal["PASSED"]
+    comparison_sha256: str
+    evidence_class: Literal["SYNTHETIC_SIMULATION_ONLY"]
+
+
+class Phase7SimulationInput(Phase7FixtureModel):
+    dataset_id: UUID
+    dataset_version: Literal[1]
+    dataset_sha256: str
+    track: Literal["SIMULATION"]
+    evidence_class: Literal["SYNTHETIC_SIMULATION_ONLY"]
+    synthetic: Literal[True]
+    release_qualification_eligible: Literal[False]
+    outcome: Literal["PASSED"]
+    metrics: SimulationValidationMetricsSchemaV06
+    started_at: datetime
+    completed_at: datetime
+
+
+class Phase7ValidationInput(Phase7FixtureModel):
+    validation_cycle_id: UUID
+    direction: Literal["EXPLANATION_CLARITY"]
+    component: Literal["personal-explanation"]
+    input_manifest_sha256: str
+    change_statement: str
+    offline: Phase7OfflineInput
+    shadow: Phase7ShadowInput
+    simulation: Phase7SimulationInput
+    expected_gate_decision: Literal["HOLD_MISSING_HUMAN_EVIDENCE"]
+
+
+class Phase7FeedbackFixture(Phase7FixtureModel):
+    schema_version: Literal["phase7-feedback-fixture-v1"]
+    synthetic: Literal[True]
+    contains_personal_data: Literal[False]
+    business_truth: Literal[False]
+    release_qualification_eligible: Literal[False]
+    license: Literal["CC0-1.0 synthetic fixture"]
+    scenario_clock: datetime
+    feedback: Phase7FeedbackInput
+    review: Phase7ReviewInput
+    validation: Phase7ValidationInput
+
+
+class Phase7FixtureManifest(Phase7FixtureModel):
+    manifest_schema_version: Literal["phase7-feedback-manifest-v1"]
+    fixture: Literal["phase7-feedback.json"]
+    sha256: str
+    license: Literal["CC0-1.0 synthetic fixture"]
+    synthetic: Literal[True]
+    contains_personal_data: Literal[False]
+    business_truth: Literal[False]
+    release_qualification_eligible: Literal[False]
+    workflow_count: Literal[1]
+    direction_count: Literal[1]
+    human_participant_count: Literal[0]
+    purpose: str
+
+
+def validate_phase7_feedback_fixture_bytes(
+    fixture_bytes: bytes,
+    manifest_bytes: bytes,
+) -> Phase7FeedbackFixture:
+    manifest = Phase7FixtureManifest.model_validate_json(manifest_bytes)
+    if sha256(fixture_bytes).hexdigest() != manifest.sha256:
+        raise ValueError("Phase 7 fixture hash does not match its manifest")
+    fixture = Phase7FeedbackFixture.model_validate_json(fixture_bytes)
+    if fixture.license != manifest.license:
+        raise ValueError("Phase 7 fixture license does not match its manifest")
+    return fixture
+
+
+def load_phase7_feedback_fixture() -> Phase7FeedbackFixture:
+    return validate_phase7_feedback_fixture_bytes(
+        PHASE7_FIXTURE_PATH.read_bytes(),
+        PHASE7_MANIFEST_PATH.read_bytes(),
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -164,6 +294,14 @@ def protected_fact_digest(session: Session) -> str:
     return sha256(encoded).hexdigest()
 
 
+def protected_fact_counts(session: Session) -> dict[str, int]:
+    result: dict[str, int] = {}
+    for table in PROTECTED_TABLES:
+        assert isinstance(table, Table)
+        result[table.name] = len(session.execute(select(table)).all())
+    return result
+
+
 def submission_body(
     fixture: FeedbackOwnerFixture,
     **changes: object,
@@ -188,7 +326,13 @@ def submission_body(
 __all__ = [
     "FeedbackOwnerFixture",
     "NOW",
+    "PHASE7_FIXTURE_PATH",
+    "PHASE7_MANIFEST_PATH",
+    "Phase7FeedbackFixture",
+    "load_phase7_feedback_fixture",
     "persist_feedback_prerequisites",
+    "protected_fact_counts",
     "protected_fact_digest",
     "submission_body",
+    "validate_phase7_feedback_fixture_bytes",
 ]

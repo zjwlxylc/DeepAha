@@ -1,0 +1,14 @@
+{
+  "manifest_schema_version": "phase7-feedback-manifest-v1",
+  "fixture": "phase7-feedback.json",
+  "sha256": "e67c7081ef69c68d64b6934c90520484bf8ab6985623f2a04828f2e2d5a81ffe",
+  "license": "CC0-1.0 synthetic fixture",
+  "synthetic": true,
+  "contains_personal_data": false,
+  "business_truth": false,
+  "release_qualification_eligible": false,
+  "workflow_count": 1,
+  "direction_count": 1,
+  "human_participant_count": 0,
+  "purpose": "Fixed synthetic Phase 7 feedback, review and dual-track engineering workflow; not human evidence or release qualification."
+}

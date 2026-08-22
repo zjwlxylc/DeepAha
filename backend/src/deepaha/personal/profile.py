@@ -60,10 +60,12 @@ class ProfileService:
         session_factory: sessionmaker[Session],
         id_factory: Callable[[], UUID] = uuid7,
         now_factory: Callable[[], datetime],
+        allow_synthetic_fixture_profile: bool = False,
     ) -> None:
         self._session_factory = session_factory
         self._id_factory = id_factory
         self._now_factory = now_factory
+        self._allow_synthetic_fixture_profile = allow_synthetic_fixture_profile
 
     def get_current(self, principal: Principal) -> UserStateSnapshotSchemaV05 | None:
         with self._session_factory() as session:
@@ -259,16 +261,23 @@ class ProfileService:
         )
         session.flush()
 
-    @staticmethod
     def _contract_from_row(
+        self,
         session: Session,
         row: UserStateSnapshotModel,
     ) -> UserStateSnapshotSchemaV05:
         profile = session.get(ProfileSnapshotModel, row.qualification_profile_snapshot_id)
+        accepted_provenance = profile is not None and (
+            (not profile.synthetic and profile.profile_schema_version == "0.5.0")
+            or (
+                self._allow_synthetic_fixture_profile
+                and profile.synthetic
+                and profile.profile_schema_version == "0.4.0"
+            )
+        )
         if (
             profile is None
-            or profile.synthetic
-            or profile.profile_schema_version != "0.5.0"
+            or not accepted_provenance
             or profile.version != row.qualification_profile_version
             or profile.scenario_clock != row.scenario_clock
         ):
