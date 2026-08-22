@@ -31,9 +31,12 @@ class ProfileSnapshotModel(Base):
             name="persona_family_id_uuid7",
         ),
         CheckConstraint("version >= 1", name="positive_version"),
-        CheckConstraint("synthetic is true", name="synthetic_only"),
         CheckConstraint("jsonb_typeof(attributes) = 'object'", name="attributes_object"),
-        CheckConstraint("profile_schema_version = '0.4.0'", name="schema_version_v04"),
+        CheckConstraint(
+            "(synthetic is true and profile_schema_version = '0.4.0') or "
+            "(synthetic is false and profile_schema_version = '0.5.0')",
+            name="provenance_schema_version",
+        ),
         CheckConstraint("length(btrim(created_by)) >= 1", name="created_by_nonempty"),
         CheckConstraint("length(btrim(reviewed_by)) >= 1", name="reviewed_by_nonempty"),
         CheckConstraint("length(btrim(change_note)) >= 1", name="change_note_nonempty"),

@@ -37,7 +37,7 @@ def clean_committed_domain_rows(migrated_engine: Engine) -> Iterator[None]:
     with migrated_engine.begin() as connection:
         connection.execute(
             text(
-                "TRUNCATE TABLE sources, opportunities, profile_snapshots, "
+                "TRUNCATE TABLE personal_users, sources, opportunities, profile_snapshots, "
                 "evaluation_runs RESTART IDENTITY CASCADE"
             )
         )

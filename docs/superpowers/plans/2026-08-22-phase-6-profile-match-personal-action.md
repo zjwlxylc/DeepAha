@@ -188,6 +188,8 @@ git push
 - Create: `backend/src/deepaha/personal/profile.py`
 - Create: `backend/src/deepaha/personal/schemas.py`
 - Create: `backend/migrations/versions/20260822_0006_phase6_personal_action.py`
+- Create: `infra/compose.phase6.yaml`（先供本任务的隔离 PostgreSQL 集成验证使用，Task 7
+  增加 verifier/CI 约束）
 - Create: `backend/tests/personal/__init__.py`
 - Create: `backend/tests/personal/test_auth.py`
 - Create: `backend/tests/personal/test_profile.py`
@@ -202,7 +204,7 @@ git push
   `get_personal_session()`, `ProfileService.save(principal, command)`, and
   `ProfileService.get_current(principal)`.
 
-- [ ] **Step 1: Write authorization and profile RED tests**
+- [x] **Step 1: Write authorization and profile RED tests**
 
 ```python
 def test_auth_uses_digest_and_fails_closed() -> None:
@@ -226,13 +228,13 @@ def test_profile_save_versions_and_identical_request_reuses_snapshot() -> None:
 Add negative tests for missing/invalid/expired/revoked tokens, caller-supplied extra `user_id`,
 optional skips, cross-user reads and absence of tokens/sensitive fields in errors/log records.
 
-- [ ] **Step 2: Run RED targets**
+- [x] **Step 2: Run RED targets**
 
 Run: `cd backend; uv run pytest tests/personal/test_auth.py tests/personal/test_profile.py -q`
 
 Expected: collection fails because `deepaha.personal` does not exist.
 
-- [ ] **Step 3: Implement principal and writable transaction dependency**
+- [x] **Step 3: Implement principal and writable transaction dependency**
 
 ```python
 @dataclass(frozen=True, slots=True)
@@ -259,7 +261,7 @@ def get_personal_session() -> Generator[Session]:
 parses exactly one bearer token, compares its digest server-side and checks active user,
 `expires_at > now`, and `revoked_at is None`.
 
-- [ ] **Step 4: Implement migration and ORM constraints**
+- [x] **Step 4: Implement migration and ORM constraints**
 
 Create the seven tables from the design. Replace the named
 `ck_profile_snapshots_synthetic_only` and `ck_profile_snapshots_schema_version_v04` checks with a
@@ -268,7 +270,7 @@ version='0.5.0')`, without modifying existing rows. Add composite owner/version 
 type checks, token/hash format checks,
 restrictive foreign keys and downgrade refusal when personal or non-synthetic rows exist.
 
-- [ ] **Step 5: Implement immutable ProfileService**
+- [x] **Step 5: Implement immutable ProfileService**
 
 ```python
 class ProfileService:
@@ -287,7 +289,7 @@ Canonicalize the request, hash it with owner and operation, reuse an identical i
 create a non-synthetic v0.5 nullable qualification projection and immutable UserState in one transaction,
 and never infer values for skipped fields.
 
-- [ ] **Step 6: Run unit and migration integration tests**
+- [x] **Step 6: Run unit and migration integration tests**
 
 Run: `cd backend; uv run pytest tests/personal/test_auth.py tests/personal/test_profile.py -q`
 
@@ -296,7 +298,7 @@ Run in Phase 6 disposable PostgreSQL only:
 
 Expected: PASS; migration downgrade refuses with Phase 6 rows and succeeds only when empty.
 
-- [ ] **Step 7: Commit and push exact files**
+- [x] **Step 7: Commit and push exact files**
 
 ```powershell
 git add -- backend/src/deepaha/personal backend/src/deepaha/core/settings.py backend/src/deepaha/db/session.py backend/src/deepaha/db/models.py backend/migrations/versions/20260822_0006_phase6_personal_action.py backend/tests/personal backend/tests/integration/test_phase6_profile_persistence.py backend/tests/integration/test_migrations.py
@@ -646,7 +648,7 @@ git push
 ### Task 7: Isolated verifier, CI and real-browser evidence
 
 **Files:**
-- Create: `infra/compose.phase6.yaml`
+- Modify: `infra/compose.phase6.yaml`
 - Create: `scripts/verify-phase6.ps1`
 - Create: `backend/tests/test_phase6_verifier_scope.py`
 - Create: `docs/gates/phase-6/browser-verification.md`

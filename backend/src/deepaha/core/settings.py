@@ -1,4 +1,5 @@
 from functools import lru_cache
+from typing import Literal
 
 from pydantic import AnyHttpUrl, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -18,6 +19,7 @@ class Settings(BaseSettings):
     environment: str = "development"
     log_level: str = "INFO"
     allow_live_source_check: bool = False
+    personal_auth_mode: Literal["disabled", "fixture"] = "disabled"
     database_url: str | None = None
     object_store_endpoint: AnyHttpUrl = AnyHttpUrl("http://127.0.0.1:55000")
     object_store_region: str = "us-east-1"
