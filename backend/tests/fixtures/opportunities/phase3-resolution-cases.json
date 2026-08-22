@@ -1,0 +1,161 @@
+{
+  "schema_version": "0.3.0",
+  "synthetic": true,
+  "contains_business_facts": false,
+  "license": "CC0-1.0 synthetic fixture",
+  "cases": [
+    {
+      "case_id": "primary",
+      "expected": "CREATED",
+      "document_id": "019b0000-0000-7000-8000-000000000010",
+      "evidence_ref_id": "019b0000-0000-7000-8000-000000000011",
+      "source_id": "019b0000-0000-7000-8000-000000000001",
+      "source_tier": "OFFICIAL_PRIMARY",
+      "role": "PRIMARY_NOTICE",
+      "canonical_url": "https://example.gov/notices/1",
+      "external_id": "DeepAha-2026-001",
+      "references_document_ids": [],
+      "effective_at": "2026-08-22T09:00:00Z",
+      "facts": {
+        "canonical_title": "Synthetic youth opportunity",
+        "type": "YOUTH_DEVELOPMENT_PROGRAM",
+        "issuer_name": "Synthetic Example Authority",
+        "jurisdiction": "Synthetic Region",
+        "status": "OPEN"
+      }
+    },
+    {
+      "case_id": "duplicate",
+      "expected": "LINKED",
+      "document_id": "019b0000-0000-7000-8000-000000000012",
+      "evidence_ref_id": "019b0000-0000-7000-8000-000000000013",
+      "source_id": "019b0000-0000-7000-8000-000000000001",
+      "source_tier": "OFFICIAL_PRIMARY",
+      "role": "PRIMARY_NOTICE",
+      "canonical_url": "https://example.gov/notices/1-copy",
+      "external_id": "DeepAha-2026-001",
+      "references_document_ids": [],
+      "effective_at": "2026-08-22T09:01:00Z",
+      "facts": {
+        "canonical_title": "Synthetic youth opportunity",
+        "type": "YOUTH_DEVELOPMENT_PROGRAM",
+        "issuer_name": "Synthetic Example Authority",
+        "jurisdiction": "Synthetic Region",
+        "status": "OPEN"
+      }
+    },
+    {
+      "case_id": "attachment",
+      "expected": "LINKED",
+      "document_id": "019b0000-0000-7000-8000-000000000014",
+      "evidence_ref_id": "019b0000-0000-7000-8000-000000000015",
+      "source_id": "019b0000-0000-7000-8000-000000000001",
+      "source_tier": "OFFICIAL_PRIMARY",
+      "role": "ATTACHMENT",
+      "canonical_url": "https://example.gov/files/notice.pdf",
+      "external_id": null,
+      "references_document_ids": ["019b0000-0000-7000-8000-000000000010"],
+      "effective_at": "2026-08-22T09:02:00Z",
+      "facts": {"attachment_urls": ["https://example.gov/files/notice.pdf"]}
+    },
+    {
+      "case_id": "position_table",
+      "expected": "LINKED",
+      "document_id": "019b0000-0000-7000-8000-000000000016",
+      "evidence_ref_id": "019b0000-0000-7000-8000-000000000017",
+      "source_id": "019b0000-0000-7000-8000-000000000001",
+      "source_tier": "OFFICIAL_PRIMARY",
+      "role": "POSITION_TABLE",
+      "canonical_url": "https://example.gov/files/positions.xlsx",
+      "external_id": null,
+      "references_document_ids": ["019b0000-0000-7000-8000-000000000010"],
+      "effective_at": "2026-08-22T09:03:00Z",
+      "facts": {
+        "attachment_urls": ["https://example.gov/files/positions.xlsx"],
+        "locations": ["Synthetic Location"]
+      }
+    },
+    {
+      "case_id": "correction",
+      "expected": "LINKED",
+      "document_id": "019b0000-0000-7000-8000-000000000018",
+      "evidence_ref_id": "019b0000-0000-7000-8000-000000000019",
+      "source_id": "019b0000-0000-7000-8000-000000000001",
+      "source_tier": "OFFICIAL_PRIMARY",
+      "role": "CORRECTION",
+      "canonical_url": "https://example.gov/notices/1-correction",
+      "external_id": "DeepAha-2026-001",
+      "references_document_ids": ["019b0000-0000-7000-8000-000000000010"],
+      "effective_at": "2026-08-22T09:04:00Z",
+      "facts": {"canonical_title": "Synthetic corrected youth opportunity"}
+    },
+    {
+      "case_id": "deadline_extension",
+      "expected": "LINKED",
+      "document_id": "019b0000-0000-7000-8000-00000000001a",
+      "evidence_ref_id": "019b0000-0000-7000-8000-00000000001b",
+      "source_id": "019b0000-0000-7000-8000-000000000001",
+      "source_tier": "OFFICIAL_PRIMARY",
+      "role": "DEADLINE_EXTENSION",
+      "canonical_url": "https://example.gov/notices/1-extension",
+      "external_id": "DeepAha-2026-001",
+      "references_document_ids": ["019b0000-0000-7000-8000-000000000010"],
+      "effective_at": "2026-08-22T09:05:00Z",
+      "facts": {
+        "application_window": {
+          "opens_on": "2026-08-22",
+          "closes_on": "2026-09-30",
+          "timezone": "Asia/Shanghai"
+        }
+      }
+    },
+    {
+      "case_id": "cancellation",
+      "expected": "LINKED",
+      "document_id": "019b0000-0000-7000-8000-00000000001c",
+      "evidence_ref_id": "019b0000-0000-7000-8000-00000000001d",
+      "source_id": "019b0000-0000-7000-8000-000000000001",
+      "source_tier": "OFFICIAL_PRIMARY",
+      "role": "CANCELLATION",
+      "canonical_url": "https://example.gov/notices/1-cancel",
+      "external_id": "DeepAha-2026-001",
+      "references_document_ids": ["019b0000-0000-7000-8000-000000000010"],
+      "effective_at": "2026-08-22T09:06:00Z",
+      "facts": {"status": "CANCELLED"}
+    },
+    {
+      "case_id": "lower_priority_conflict",
+      "expected": "NEEDS_REVIEW",
+      "document_id": "019b0000-0000-7000-8000-00000000001e",
+      "evidence_ref_id": "019b0000-0000-7000-8000-00000000001f",
+      "source_id": "019b0000-0000-7000-8000-000000000002",
+      "source_tier": "TRUSTED_SECONDARY",
+      "role": "CORRECTION",
+      "canonical_url": "https://example.gov/signals/conflict",
+      "external_id": "OTHER-001",
+      "references_document_ids": ["019b0000-0000-7000-8000-000000000010"],
+      "effective_at": "2026-08-22T09:07:00Z",
+      "facts": {"status": "CANCELLED"}
+    },
+    {
+      "case_id": "possible_false_merge",
+      "expected": "NEEDS_REVIEW",
+      "document_id": "019b0000-0000-7000-8000-000000000022",
+      "evidence_ref_id": "019b0000-0000-7000-8000-000000000023",
+      "source_id": "019b0000-0000-7000-8000-000000000001",
+      "source_tier": "OFFICIAL_PRIMARY",
+      "role": "PRIMARY_NOTICE",
+      "canonical_url": null,
+      "external_id": "DEEPAHA-2026-OTHER",
+      "references_document_ids": [],
+      "effective_at": "2026-08-22T09:08:00Z",
+      "facts": {
+        "canonical_title": "Synthetic youth opportunity",
+        "type": "YOUTH_DEVELOPMENT_PROGRAM",
+        "issuer_name": "Synthetic Example Authority",
+        "jurisdiction": "Synthetic Region",
+        "status": "OPEN"
+      }
+    }
+  ]
+}

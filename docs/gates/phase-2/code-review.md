@@ -4,7 +4,9 @@
 >
 > 审查范围：`6c2db59db3d3031041c9b7af1700fa41c85ea661..5779b619dc0260a87a83bee9c5be2d5b0ff77984`
 >
-> Gate 状态：`OPEN`
+> Engineering Gate：`CLOSED`
+>
+> Release Qualification：`IN_PROGRESS`
 
 本次审查覆盖 v0.2 契约与生成 Schema、`20260821_0002` 迁移/ORM、Source Registry、
 CaptureObservation、同步 HTTP 采集、源健康/CLI、解析持久化、HTML/PDF/XLSX 解析器、
@@ -40,5 +42,6 @@ Evidence Locator、live runner 及其测试。审查以 Phase 2 spec、Task 1–
 
 ## 判定
 
-当前代码适合继续收集 Phase 2 Gate 证据。该判定不关闭 Gate，也不把 v0.2 标记为
-`STABLE`；五轮 live、新鲜副本、最终统一验证及精确候选提交远程 CI 仍必须实际成功。
+本次审查没有未解决的 `Critical` 或 `Important`，与迁移、契约、测试、安全及 scope 证据共同
+支持 Phase 2 Engineering Gate `CLOSED`。该判定不把 v0.2 标记为 `STABLE`；五轮 live、
+新鲜副本、最终统一验证及精确候选提交远程 CI 仍属于 Release Qualification，必须实际成功。

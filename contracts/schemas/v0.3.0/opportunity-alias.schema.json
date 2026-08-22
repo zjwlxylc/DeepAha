@@ -1,0 +1,79 @@
+{
+  "$defs": {
+    "OpportunityAliasType": {
+      "enum": [
+        "TITLE",
+        "URL",
+        "EXTERNAL_ID"
+      ],
+      "title": "OpportunityAliasType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "alias_id": {
+      "format": "uuid",
+      "title": "Alias Id",
+      "type": "string"
+    },
+    "alias_type": {
+      "$ref": "#/$defs/OpportunityAliasType"
+    },
+    "alias_value": {
+      "minLength": 1,
+      "title": "Alias Value",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "normalized_value": {
+      "minLength": 1,
+      "title": "Normalized Value",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "source_document_id": {
+      "format": "uuid",
+      "title": "Source Document Id",
+      "type": "string"
+    },
+    "source_evidence_ref_id": {
+      "format": "uuid",
+      "title": "Source Evidence Ref Id",
+      "type": "string"
+    },
+    "source_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Source Id"
+    }
+  },
+  "required": [
+    "alias_id",
+    "opportunity_id",
+    "alias_type",
+    "alias_value",
+    "normalized_value",
+    "source_id",
+    "source_document_id",
+    "source_evidence_ref_id",
+    "created_at"
+  ],
+  "title": "OpportunityAliasSchemaV03",
+  "type": "object"
+}

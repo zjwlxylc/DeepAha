@@ -1,0 +1,229 @@
+{
+  "$defs": {
+    "HtmlSelectorLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "html_selector",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "0.2.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "selector": {
+          "minLength": 1,
+          "title": "Selector",
+          "type": "string"
+        },
+        "text_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Text Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "selector",
+        "text_sha256"
+      ],
+      "title": "HtmlSelectorLocator",
+      "type": "object"
+    },
+    "LegacyEvidenceLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "page",
+            "paragraph",
+            "css_selector",
+            "text_span",
+            "full_document"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "minLength": 1,
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "title": "LegacyEvidenceLocator",
+      "type": "object"
+    },
+    "PdfPageTextLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "pdf_page_text",
+          "title": "Kind",
+          "type": "string"
+        },
+        "page_number": {
+          "minimum": 1,
+          "title": "Page Number",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "0.2.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "text_end": {
+          "exclusiveMinimum": 0,
+          "title": "Text End",
+          "type": "integer"
+        },
+        "text_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Text Sha256",
+          "type": "string"
+        },
+        "text_start": {
+          "minimum": 0,
+          "title": "Text Start",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "page_number",
+        "text_start",
+        "text_end",
+        "text_sha256"
+      ],
+      "title": "PdfPageTextLocator",
+      "type": "object"
+    },
+    "SpreadsheetRangeLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "cells_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Cells Sha256",
+          "type": "string"
+        },
+        "end_column": {
+          "minimum": 1,
+          "title": "End Column",
+          "type": "integer"
+        },
+        "end_row": {
+          "minimum": 1,
+          "title": "End Row",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "spreadsheet_range",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "0.2.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sheet_name": {
+          "minLength": 1,
+          "title": "Sheet Name",
+          "type": "string"
+        },
+        "start_column": {
+          "minimum": 1,
+          "title": "Start Column",
+          "type": "integer"
+        },
+        "start_row": {
+          "minimum": 1,
+          "title": "Start Row",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "sheet_name",
+        "start_row",
+        "end_row",
+        "start_column",
+        "end_column",
+        "cells_sha256"
+      ],
+      "title": "SpreadsheetRangeLocator",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_id": {
+      "format": "uuid",
+      "title": "Artifact Id",
+      "type": "string"
+    },
+    "document_id": {
+      "format": "uuid",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "locator": {
+      "discriminator": {
+        "mapping": {
+          "css_selector": "#/$defs/LegacyEvidenceLocator",
+          "full_document": "#/$defs/LegacyEvidenceLocator",
+          "html_selector": "#/$defs/HtmlSelectorLocator",
+          "page": "#/$defs/LegacyEvidenceLocator",
+          "paragraph": "#/$defs/LegacyEvidenceLocator",
+          "pdf_page_text": "#/$defs/PdfPageTextLocator",
+          "spreadsheet_range": "#/$defs/SpreadsheetRangeLocator",
+          "text_span": "#/$defs/LegacyEvidenceLocator"
+        },
+        "propertyName": "kind"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/LegacyEvidenceLocator"
+        },
+        {
+          "$ref": "#/$defs/HtmlSelectorLocator"
+        },
+        {
+          "$ref": "#/$defs/PdfPageTextLocator"
+        },
+        {
+          "$ref": "#/$defs/SpreadsheetRangeLocator"
+        }
+      ],
+      "title": "Locator"
+    },
+    "quote_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Quote Sha256"
+    }
+  },
+  "required": [
+    "document_id",
+    "artifact_id",
+    "locator",
+    "quote_sha256"
+  ],
+  "title": "EvidenceRefSchemaV02",
+  "type": "object"
+}

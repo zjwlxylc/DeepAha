@@ -3,8 +3,10 @@
 Status: **TEMPLATE ONLY — NOT VALIDATED EVIDENCE**
 
 This template defines the evidence shape for the Phase 2 live source window. Its
-presence does not close the Phase 2 Gate. The Gate remains OPEN until a real run,
-fresh-copy verification, unified verification, and remote CI all succeed.
+presence does not qualify the Phase 2 release. Release Qualification remains
+`IN_PROGRESS` until a real run, fresh-copy verification, unified verification,
+and final-candidate remote CI all succeed. This does not reopen or block the
+Phase 2 Engineering Gate by itself.
 
 ## Safe execution
 
