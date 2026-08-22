@@ -240,7 +240,7 @@ Phase 2 不实现上述队列拓扑。采集和解析由显式命令同步编排
 | 数据访问 | SQLAlchemy 2.x + Alembic | 显式事务与迁移 |
 | PostgreSQL | 18.x | 使用 UUIDv7、约束、JSONB 和事务能力 |
 | Node.js | 24 LTS | 生产使用 LTS，不使用 Current 分支 |
-| Web | Next.js 16.2.x LTS + React 19.2 | 使用 App Router；跟随安全补丁，不追 16.3 新特性 |
+| Web | Next.js 16.3.2 + React 19.2 | 使用 App Router；16.3.2 是已验证的安全更新，不据此扩大 Web 功能范围 |
 | TypeScript | 5.x strict | 禁止隐式 `any` |
 | Python 质量 | Ruff + mypy + pytest | 格式、静态检查、测试分责 |
 | Web 质量 | ESLint + TypeScript + Vitest + Playwright | 单元、组件、构建和关键旅程 |

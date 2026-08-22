@@ -1,4 +1,5 @@
 from copy import deepcopy
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
@@ -75,3 +76,25 @@ def test_new_policy_version_preserves_old_endpoint(
     assert result.created_sources == 0
     assert result.created_endpoints == 1
     assert session.scalar(select(func.count()).select_from(SourceEndpoint)) == 2
+
+
+def test_old_endpoint_version_can_be_deactivated_without_rewriting_policy(
+    session: Session, manifest: SourceRegistryManifest
+) -> None:
+    import_registry(session, manifest)
+    payload = deepcopy(manifest.model_dump(mode="json"))
+    endpoint = payload["sources"][0]["endpoints"][0]
+    endpoint["active"] = False
+    endpoint["updated_at"] = "2026-08-22T00:00:00Z"
+    deactivated = SourceRegistryManifest.model_validate(payload)
+
+    result = import_registry(session, deactivated)
+
+    row = session.get(SourceEndpoint, deactivated.sources[0].endpoints[0].endpoint_id)
+    assert result.created_endpoints == 0
+    assert row is not None
+    assert row.active is False
+    assert row.updated_at == datetime(2026, 8, 22, tzinfo=UTC)
+
+    with pytest.raises(SourcePolicyConflict, match="cannot reactivate endpoint"):
+        import_registry(session, manifest)

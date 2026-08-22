@@ -169,6 +169,9 @@
       "format": "uri",
       "maxLength": 2083,
       "minLength": 1,
+      "not": {
+        "pattern": "^[A-Za-z][A-Za-z0-9+.-]*://[^/?#]*@"
+      },
       "title": "Url",
       "type": "string"
     },

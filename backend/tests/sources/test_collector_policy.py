@@ -237,6 +237,21 @@ def test_unapproved_redirect_stops_before_follow() -> None:
     assert len(result.requests) == 1
 
 
+def test_redirect_with_embedded_credentials_stops_before_follow() -> None:
+    result = run_scripted(
+        [
+            response(
+                302,
+                b"",
+                location="https://operator:secret@official.example/file",
+            )
+        ]
+    )
+
+    assert errors(result) == ["REDIRECT_HOST_NOT_ALLOWED"]
+    assert len(result.requests) == 1
+
+
 @pytest.mark.parametrize(
     ("policy_changes", "source_active", "rate_elapsed", "error_code"),
     [

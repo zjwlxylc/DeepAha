@@ -1,6 +1,6 @@
 # DeepAha 领域契约 v0.2
 
-> 状态：`PROPOSED`
+> 状态：`IMPLEMENTED`（不得标记 `STABLE`）
 >
 > 契约版本：`0.2.0`
 >
@@ -8,7 +8,9 @@
 >
 > 上位基线：Blueprint v1.2、D8–D12
 >
-> 当前已验证的运行契约仍是 `0.1.0`。本文只有在 Pydantic、JSON Schema、PostgreSQL 迁移、ORM、契约测试和 Phase 2 Gate 一致通过后，才能转为 `STABLE`。
+> v0.2 的 Pydantic、JSON Schema、PostgreSQL 迁移、ORM 和契约测试已经实现并支持 Phase 2
+> Engineering Gate `CLOSED`；live 观察、新鲜副本和最终候选验证仍在 Release Qualification，
+> 因此本文当前只能标记 `IMPLEMENTED`，不能转为 `STABLE`。
 
 ## 1. 演进目的
 
@@ -91,7 +93,8 @@ updated_at: Instant
 - `OPEN_LICENSE` 必须同时提供 `license_name` 和 `license_url`。
 - `fixture_storage_allowed=true` 只能用于已经记录开放许可或得到明确授权的内容。
 - `LINK_ONLY` 和 `UNKNOWN` 的完整响应不得作为仓库 fixture 提交。
-- Endpoint 不得配置登录、验证码、付费墙绕过或未授权的请求头/cookie。
+- Endpoint URL 不得包含 username/password 用户信息；Endpoint 也不得配置登录、验证码、
+  付费墙绕过或未授权的请求头/cookie。重定向目标遵守同一凭据禁令和 host/IP 策略。
 - `updated_at >= created_at`。同一 `(source_id,url,policy_version)` 含义不可变；策略变化必须递增 `policy_version` 并创建新 Endpoint 版本，旧行只允许停用，不得就地改写策略字段。
 
 ## 5. `CaptureObservation`
@@ -240,7 +243,7 @@ derived/documents/{artifact_sha256}/{parser_name}/{parser_version}/text.txt
 - `InstitutionAccount`、`CommercialPlacement`、高校后台和商业价格对象不进入当前契约。
 - 完整审核工作流延期到 Phase 7；Phase 2 只保存 `NEEDS_REVIEW` 状态和原因码。
 
-## 10. 转为 `STABLE` 的条件
+## 10. Engineering Gate 关闭证据
 
 - v0.1 与 v0.2 Schema 均能在同一代码版本中确定性导出和校验。
 - PostgreSQL 18 可从 Phase 1 revision 升级、降级再升级，Alembic metadata 无差异。
@@ -248,4 +251,14 @@ derived/documents/{artifact_sha256}/{parser_name}/{parser_version}/text.txt
 - 新抓取相同内容产生两条观察、一个 RawArtifact；失败抓取产生观察但不产生 RawArtifact。
 - legacy 与 v0.2 locator 均可读；HTML/PDF/Excel 新定位能回放并验证哈希。
 - ParseAttempt 能保留成功、需审核和永久失败，不覆盖原始证据。
-- 新鲜环境能运行统一验证，并且没有提交秘密、数据库文件、对象存储内容或未经许可的来源原件。
+- 默认离线验证、隔离集成、代码审查、安全与 scope 检查没有未解决的工程 blocker。
+
+## 11. 转为 `STABLE` 的条件
+
+- Phase 2 Engineering Gate 保持 `CLOSED`，且没有被 Release Qualification 暴露的真实工程缺陷推翻。
+- 十个登记官方 Endpoint 完成五轮、至少 24 小时、至少 50 个最终结果且有效率 `>=98%` 的
+  live 观察，并保存源健康、维护成本和策略合规证据。
+- 精确最终候选在新鲜副本运行统一验证，最终候选远程 CI 成功。
+- 没有提交秘密、数据库文件、对象存储内容或未经许可的来源原件。
+- 上述 Phase 2 Release Qualification 被明确记录为 `QUALIFIED`；在此之前状态保持
+  `IMPLEMENTED`。

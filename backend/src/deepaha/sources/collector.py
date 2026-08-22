@@ -407,7 +407,8 @@ def _require_public_allowed_url(
     parsed = urlsplit(url)
     host = (parsed.hostname or "").lower().rstrip(".")
     error_code = "REDIRECT_HOST_NOT_ALLOWED" if redirect else "HOST_NOT_ALLOWED"
-    if parsed.scheme not in {"http", "https"} or host not in allowed_hosts:
+    contains_credentials = parsed.username is not None or parsed.password is not None
+    if parsed.scheme not in {"http", "https"} or host not in allowed_hosts or contains_credentials:
         raise _HostPolicyError(error_code)
     try:
         literal = ipaddress.ip_address(host)

@@ -140,6 +140,14 @@ def test_endpoint_url_must_be_inside_allowed_hosts() -> None:
         SourceRegistryManifest.model_validate(payload)
 
 
+def test_endpoint_url_must_not_embed_credentials() -> None:
+    payload = valid_payload()
+    endpoint(payload)["url"] = "https://operator:secret@notices.example.gov/list/"
+
+    with pytest.raises(ValidationError, match="must not contain credentials"):
+        SourceRegistryManifest.model_validate(payload)
+
+
 def test_endpoint_source_id_must_match_owning_source() -> None:
     payload = valid_payload()
     endpoint(payload)["source_id"] = "0198d239-4b00-7000-8000-000000000299"
