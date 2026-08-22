@@ -3,7 +3,7 @@
 ## Status axes
 
 - Implementation: `IMPLEMENTED`.
-- Engineering Gate: `OPEN` pending exact-SHA remote CI.
+- Engineering Gate: `CLOSED`.
 - Release Qualification: `NOT_STARTED`.
 - Contract Maturity: `IMPLEMENTED` (not `STABLE`).
 
@@ -14,7 +14,8 @@
   `09526c61a1a0410e9a9127c989ecfaecf3f0ea02`.
 - Locally verified: contract, compiler, eligibility, persistence, replay, fixture, evaluation,
   migration, verifier and CI boundaries were reviewed after the closing-baseline merge.
-- remote CI: pending for the exact integrated candidate.
+- remote CI: exact candidate `1160c96f446f92a5cdce97b4aef11a7200262f0b` passed all five
+  required jobs in [run 32543551989](https://github.com/zjwlxylc/DeepAha/actions/runs/32543551989).
 - Synthetic evaluation: reviewed only as deterministic engineering evidence; it is not real-world
   accuracy or Release Qualification evidence.
 

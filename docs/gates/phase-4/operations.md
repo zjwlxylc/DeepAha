@@ -3,11 +3,12 @@
 ## Evidence state
 
 - Implementation: `IMPLEMENTED`; a disposable isolated verifier exists for Phase 4.
-- Engineering Gate: `OPEN` pending exact-SHA remote CI.
+- Engineering Gate: `CLOSED`.
 - Release Qualification: `NOT_STARTED`.
 - Contract Maturity: `IMPLEMENTED` (not `STABLE`).
 - Locally verified: the isolated verifier passed and removed its exact disposable project.
-- remote CI: pending for the exact integrated candidate.
+- remote CI: exact candidate `1160c96f446f92a5cdce97b4aef11a7200262f0b` passed all five
+  required jobs in [run 32543551989](https://github.com/zjwlxylc/DeepAha/actions/runs/32543551989).
 - Synthetic evaluation: verifier runs offline fixed data and prints its scoped result.
 
 ## Current integrated verification

@@ -149,10 +149,10 @@ Release Qualification `NOT_STARTED`；v0.3 契约成熟度 `IMPLEMENTED`。Phase
 
 **目的：** 形成系统最核心的可审计资格能力。
 
-**当前状态（2026-08-22）：** 实现状态 `IMPLEMENTED`；合入 Phase 3 closing commit 后的
-Engineering Gate 复验正在进行；Release Qualification `NOT_STARTED`；v0.4 契约成熟度
-`IMPLEMENTED`。这些状态独立记录，不继承 Phase 2/3 的 Release Qualification 状态，也不授权
-合并、发布或把 v0.4 标记为 `STABLE`。
+**当前状态（2026-08-22）：** 实现状态 `IMPLEMENTED`；Engineering Gate `CLOSED`；Release
+Qualification `NOT_STARTED`；v0.4 契约成熟度 `IMPLEMENTED`。Phase 3 closing commit 已完整
+合入，兼容审查、本地全量验证与精确候选 SHA 远程 CI 已通过。这些状态独立记录，不继承
+Phase 2/3 的 Release Qualification 状态，也不授权合并、发布或把 v0.4 标记为 `STABLE`。
 
 **范围：**
 
@@ -286,8 +286,8 @@ Engineering Gate 复验正在进行；Release Qualification `NOT_STARTED`；v0.4
 
 - Phase 0、Phase 1 已有详细 spec、plan 和关闭证据。
 - Phase 2 已生成独立设计与实施计划，引用 Blueprint v1.2、基线协调记录和领域契约 v0.2。
-- Phase 3 已生成独立 spec/plan、实现和 Engineering Gate 证据；Phase 4 已生成独立 spec/plan
-  与实现并正在完成集成复验。Phase 5–9 启动前分别生成独立 spec 和 plan，并引用本路线与
+- Phase 3 已生成独立 spec/plan、实现和 Engineering Gate 证据；Phase 4 已生成独立 spec/plan、
+  实现和 Engineering Gate 证据。Phase 5–9 启动前分别生成独立 spec 和 plan，并引用本路线与
   当时可用的上游契约，独立记录 Engineering Gate 与 Release Qualification。
 - 任一阶段发现隐藏复杂度时，拆成可独立验收的子阶段；不得扩大一个计划直到所有系统都包含在内。
 - 每个阶段验收后更新本文状态和证据链接，不重写历史结果。

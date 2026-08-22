@@ -4,11 +4,12 @@
 
 - Implementation: `IMPLEMENTED`; deterministic fixture loader, runner, protected-negative stop
   and immutable run rows exist.
-- Engineering Gate: `OPEN` pending exact-SHA remote CI.
+- Engineering Gate: `CLOSED`.
 - Release Qualification: `NOT_STARTED`.
 - Contract Maturity: `IMPLEMENTED` (not `STABLE`).
 - Locally verified: 12/12 fixed Golden statuses reproduced through the real eligibility engine.
-- remote CI: pending.
+- remote CI: exact candidate passed all five required jobs in
+  [run 32543551989](https://github.com/zjwlxylc/DeepAha/actions/runs/32543551989).
 - Synthetic evaluation: `SYNTHETIC_EVALUATION_ONLY`; manifest SHA-256
   `5b9f5ba97c5f236e7fdf618760cca9871dcc27782a4f2f6e8be7b5ac35932272`.
 

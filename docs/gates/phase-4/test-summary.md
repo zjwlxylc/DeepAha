@@ -4,12 +4,13 @@
 
 - Implementation: `IMPLEMENTED`; isolated verifier and CI definitions are present on integrated
   merge commit `09526c61a1a0410e9a9127c989ecfaecf3f0ea02`.
-- Engineering Gate: `OPEN` pending exact-SHA remote CI.
+- Engineering Gate: `CLOSED`.
 - Release Qualification: `NOT_STARTED`.
 - Contract Maturity: `IMPLEMENTED` (not `STABLE`).
 - Locally verified: `scripts/verify-phase4.ps1` and `scripts/verify.ps1` passed at
-  `2026-08-22T01:27:25Z`.
-- remote CI: pending for the integrated candidate.
+  `2026-08-22T01:33:31Z`.
+- remote CI: exact candidate `1160c96f446f92a5cdce97b4aef11a7200262f0b` passed
+  [run 32543551989](https://github.com/zjwlxylc/DeepAha/actions/runs/32543551989).
 - Synthetic evaluation: actual-engine integration uses fixed fixtures only.
 
 ## Final local results
@@ -26,9 +27,13 @@
 
 ## Remote job conclusions
 
-Pending for the exact integrated candidate. Engineering Gate remains `OPEN` until
-`backend-quality`, `web-quality`, `integration`, `phase3-resolution`, and
-`phase4-eligibility` all conclude `success`.
+| Job | Conclusion |
+|---|---|
+| `backend-quality` | `success` |
+| `web-quality` | `success` |
+| `integration` | `success` |
+| `phase3-resolution` | `success` |
+| `phase4-eligibility` | `success` |
 
 Draft PR [#4](https://github.com/zjwlxylc/DeepAha/pull/4) is
 `OPEN/DRAFT/UNMERGED`; no merge, release, Release Qualification or `STABLE` promotion is

@@ -92,7 +92,7 @@ def test_gate_package_separates_engineering_and_release_states() -> None:
         assert "BLOCKED_BY_PHASE2" not in text
     readme = (gate_directory / "README.md").read_text("utf-8")
     assert "Implementation: `IMPLEMENTED`" in readme
-    assert "Engineering Gate: `OPEN`" in readme
+    assert "Engineering Gate: `CLOSED`" in readme
     assert "Release Qualification: `NOT_STARTED`" in readme
     assert "Contract Maturity: `IMPLEMENTED`" in readme
 

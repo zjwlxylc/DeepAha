@@ -47,9 +47,9 @@
 与变化已 `IMPLEMENTED`，自身 Engineering Gate 已 `CLOSED`；Phase 3 Release Qualification 为
 `NOT_STARTED`，领域契约 v0.3 为 `IMPLEMENTED`、不得标记 `STABLE`。Phase 3 不继承 Phase 2
 Release Qualification 的阻塞状态，但仍不得合并、发布或声称 Release Qualification 已完成。
-Phase 4 规则、资格与评估已 `IMPLEMENTED`；合入 Phase 3 closing commit 后的 Engineering Gate
-复验正在进行，Release Qualification 为 `NOT_STARTED`，领域契约 v0.4 为 `IMPLEMENTED`、不得
-标记 `STABLE`。受控堆叠开发不构成合并、发布或 Release Qualification 授权。
+Phase 4 规则、资格与评估已 `IMPLEMENTED`，Engineering Gate 已 `CLOSED`；Release
+Qualification 为 `NOT_STARTED`，领域契约 v0.4 为 `IMPLEMENTED`、不得标记 `STABLE`。受控
+堆叠开发不构成合并、发布或 Release Qualification 授权。
 
 ## 维护规则
 

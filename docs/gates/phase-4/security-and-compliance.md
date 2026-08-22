@@ -4,12 +4,13 @@
 
 - Implementation: `IMPLEMENTED`; synthetic-only database checks, evidence authority checks and
   restrictive FKs exist.
-- Engineering Gate: `OPEN` pending exact-SHA remote CI.
+- Engineering Gate: `CLOSED`.
 - Release Qualification: `NOT_STARTED`.
 - Contract Maturity: `IMPLEMENTED` (not `STABLE`).
 - Locally verified: scope, high-confidence secret-pattern, prohibited-artifact, migration-mutation
   and diff checks completed after the closing-baseline merge.
-- remote CI: pending for the exact integrated candidate.
+- remote CI: exact candidate passed all five required jobs in
+  [run 32543551989](https://github.com/zjwlxylc/DeepAha/actions/runs/32543551989).
 - Synthetic evaluation: fixtures are CC0-1.0, generated offline and contain no real person record.
 
 ## Review boundary

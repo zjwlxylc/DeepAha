@@ -2,7 +2,7 @@
 
 Implementation: `IMPLEMENTED`
 
-Engineering Gate: `OPEN` pending the exact integrated candidate's remote CI.
+Engineering Gate: `CLOSED`
 
 Release Qualification: `NOT_STARTED`
 
@@ -10,8 +10,9 @@ Contract Maturity: `IMPLEMENTED` (not `STABLE`)
 
 This document describes the Phase 4 contract layered on the exact Phase 3 closing commit
 `8003a1c2ab2485a1173b2d4bb9deafbbab6e949c`, integrated by merge commit
-`09526c61a1a0410e9a9127c989ecfaecf3f0ea02`. It is implemented and locally verified, but it is
-not released, `STABLE`, or Release Qualified.
+`09526c61a1a0410e9a9127c989ecfaecf3f0ea02`. Local verification and exact candidate SHA
+`1160c96f446f92a5cdce97b4aef11a7200262f0b` remote CI support the closed Engineering Gate.
+The contract is not released, `STABLE`, or Release Qualified.
 
 ## Compatibility boundary
 

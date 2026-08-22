@@ -3,11 +3,12 @@
 ## Evidence state
 
 - Implementation: `IMPLEMENTED` for the bounded deterministic Phase 4 scope only.
-- Engineering Gate: `OPEN` pending exact-SHA remote CI.
+- Engineering Gate: `CLOSED`.
 - Release Qualification: `NOT_STARTED`.
 - Contract Maturity: `IMPLEMENTED` (not `STABLE`).
 - Locally verified: synthetic and local technical checks only.
-- remote CI: pending for the exact integrated candidate.
+- remote CI: exact candidate passed all five required jobs in
+  [run 32543551989](https://github.com/zjwlxylc/DeepAha/actions/runs/32543551989).
 - Synthetic evaluation: useful for coverage and replay, not real-world validation.
 
 ## Deferred
