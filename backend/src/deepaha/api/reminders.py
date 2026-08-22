@@ -12,12 +12,13 @@ from deepaha.api.personal import (
 )
 from deepaha.contracts.phase8 import ReminderPreferenceSnapshotSchemaV07
 from deepaha.db.session import get_write_session
+from deepaha.notifications.inbox import ReminderInboxService
 from deepaha.notifications.preferences import (
     ReminderPreferenceAccessError,
     ReminderPreferenceIdempotencyConflict,
     ReminderPreferenceService,
 )
-from deepaha.notifications.schemas import ReminderPreferenceWrite
+from deepaha.notifications.schemas import ReminderInboxPage, ReminderPreferenceWrite
 from deepaha.personal.auth import Principal
 
 router = APIRouter(prefix="/api/v1/me", tags=["reminders"])
@@ -32,6 +33,17 @@ def get_reminder_preference_service(
             expire_on_commit=False,
         ),
         now_factory=lambda: datetime.now(UTC),
+    )
+
+
+def get_reminder_inbox_service(
+    session: Annotated[Session, Depends(get_write_session)],
+) -> ReminderInboxService:
+    return ReminderInboxService(
+        session_factory=sessionmaker(
+            bind=session.get_bind(),
+            expire_on_commit=False,
+        )
     )
 
 
@@ -96,4 +108,15 @@ def put_deadline_change_preference(
     return result
 
 
-__all__ = ["get_reminder_preference_service", "router"]
+@router.get("/reminder-inbox")
+def get_reminder_inbox(
+    response: Response,
+    principal: Annotated[Principal, Depends(require_principal)],
+    service: Annotated[ReminderInboxService, Depends(get_reminder_inbox_service)],
+) -> ReminderInboxPage:
+    result = service.list_for_owner(principal)
+    _private(response)
+    return result
+
+
+__all__ = ["get_reminder_inbox_service", "get_reminder_preference_service", "router"]

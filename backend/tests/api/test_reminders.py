@@ -6,11 +6,12 @@ import pytest
 from fastapi.testclient import TestClient
 
 from deepaha.api.personal import require_principal
-from deepaha.api.reminders import get_reminder_preference_service
+from deepaha.api.reminders import get_reminder_inbox_service, get_reminder_preference_service
 from deepaha.api.reminders import router as reminder_router
 from deepaha.contracts.phase8 import ReminderPreferenceSnapshotSchemaV07
 from deepaha.main import create_app
 from deepaha.notifications.preferences import ReminderPreferenceIdempotencyConflict
+from deepaha.notifications.schemas import ReminderInboxPage
 from deepaha.personal.auth import Principal
 
 NOW = datetime(2026, 8, 22, 13, 0, tzinfo=UTC)
@@ -63,21 +64,35 @@ class FakeReminderPreferenceService:
         return self.current
 
 
+class FakeReminderInboxService:
+    def __init__(self) -> None:
+        self.last_principal: Principal | None = None
+
+    def list_for_owner(self, principal: Principal, *, limit: int = 50) -> ReminderInboxPage:
+        self.last_principal = principal
+        assert limit == 50
+        return ReminderInboxPage(items=(), count=0)
+
+
 @pytest.fixture
-def api_client() -> Iterator[tuple[TestClient, FakeReminderPreferenceService]]:
+def api_client() -> Iterator[
+    tuple[TestClient, FakeReminderPreferenceService, FakeReminderInboxService]
+]:
     application = create_app()
     service = FakeReminderPreferenceService()
+    inbox_service = FakeReminderInboxService()
     application.dependency_overrides[require_principal] = lambda: Principal(user_id=USER_A_ID)
     application.dependency_overrides[get_reminder_preference_service] = lambda: service
+    application.dependency_overrides[get_reminder_inbox_service] = lambda: inbox_service
     with TestClient(application) as client:
-        yield client, service
+        yield client, service, inbox_service
     application.dependency_overrides.clear()
 
 
 def test_get_absent_preference_is_private_json_null(
-    api_client: tuple[TestClient, FakeReminderPreferenceService],
+    api_client: tuple[TestClient, FakeReminderPreferenceService, FakeReminderInboxService],
 ) -> None:
-    client, _service = api_client
+    client, _service, _inbox_service = api_client
 
     response = client.get("/api/v1/me/reminder-preferences/deadline-change")
 
@@ -87,9 +102,9 @@ def test_get_absent_preference_is_private_json_null(
 
 
 def test_put_accepts_only_enabled_and_one_idempotency_key(
-    api_client: tuple[TestClient, FakeReminderPreferenceService],
+    api_client: tuple[TestClient, FakeReminderPreferenceService, FakeReminderInboxService],
 ) -> None:
-    client, service = api_client
+    client, service, _inbox_service = api_client
     path = "/api/v1/me/reminder-preferences/deadline-change"
 
     response = client.put(
@@ -127,9 +142,9 @@ def test_put_accepts_only_enabled_and_one_idempotency_key(
 
 
 def test_idempotency_conflict_is_stable_and_private(
-    api_client: tuple[TestClient, FakeReminderPreferenceService],
+    api_client: tuple[TestClient, FakeReminderPreferenceService, FakeReminderInboxService],
 ) -> None:
-    client, service = api_client
+    client, service, _inbox_service = api_client
     service.conflict = True
 
     response = client.put(
@@ -144,10 +159,39 @@ def test_idempotency_conflict_is_stable_and_private(
     assert "sensitive" not in response.text.lower()
 
 
-def test_reminder_router_exposes_only_the_preference_resource() -> None:
+def test_get_inbox_is_private_owner_scoped_and_read_only(
+    api_client: tuple[TestClient, FakeReminderPreferenceService, FakeReminderInboxService],
+) -> None:
+    client, _preference_service, inbox_service = api_client
+
+    response = client.get("/api/v1/me/reminder-inbox")
+
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "private, no-store"
+    assert response.json() == {"items": [], "count": 0}
+    assert inbox_service.last_principal == Principal(user_id=USER_A_ID)
+
+
+def test_get_inbox_fails_closed_without_personal_authentication() -> None:
+    application = create_app()
+    inbox_service = FakeReminderInboxService()
+    application.dependency_overrides[get_reminder_inbox_service] = lambda: inbox_service
+
+    with TestClient(application) as client:
+        response = client.get("/api/v1/me/reminder-inbox")
+
+    assert response.status_code == 401
+    assert response.headers["cache-control"] == "private, no-store"
+    assert inbox_service.last_principal is None
+
+
+def test_reminder_router_exposes_only_preferences_and_read_only_inbox() -> None:
     routes = [route for route in reminder_router.routes if getattr(route, "path", None)]
     paths = {str(getattr(route, "path")) for route in routes}
     methods = set().union(*(getattr(route, "methods", set()) or set() for route in routes))
 
-    assert paths == {"/api/v1/me/reminder-preferences/deadline-change"}
+    assert paths == {
+        "/api/v1/me/reminder-preferences/deadline-change",
+        "/api/v1/me/reminder-inbox",
+    }
     assert methods == {"GET", "PUT"}
