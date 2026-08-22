@@ -559,15 +559,9 @@ def test_concurrent_resolution_keeps_one_event_and_one_candidate(
         barrier.wait()
         return service.resolve(command)
 
-    results: list[object] = []
-    failures: list[Exception] = []
     with ThreadPoolExecutor(max_workers=2) as executor:
         futures = [executor.submit(resolve_once) for _ in range(2)]
-        for future in futures:
-            try:
-                results.append(future.result())
-            except Exception as error:
-                failures.append(error)
+        results = [future.result() for future in futures]
 
     with factory() as session:
         event_count = session.scalar(
@@ -581,8 +575,8 @@ def test_concurrent_resolution_keeps_one_event_and_one_candidate(
         )
         outbox_count = session.scalar(select(func.count()).select_from(NotificationOutboxModel))
 
-    assert results
-    assert len(results) + len(failures) == 2
+    assert len(results) == 2
+    assert results[0] == results[1]
     assert event_count == 1
     assert outbox_count == 1
 

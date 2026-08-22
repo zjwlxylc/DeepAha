@@ -223,6 +223,11 @@ class OpportunityResolutionService:
                     return result
 
                 opportunity = self._resolve_opportunity(session, command, decision, now)
+                if decision.disposition is ResolutionDisposition.LINKED:
+                    concurrent_result = self._existing_link_result(session, command.document_id)
+                    if concurrent_result is not None:
+                        session.rollback()
+                        return concurrent_result
                 link = DocumentOpportunityLink(
                     link_id=self._id_factory(),
                     document_id=command.document_id,
@@ -440,7 +445,12 @@ class OpportunityResolutionService:
         if decision.disposition is ResolutionDisposition.LINKED:
             if decision.opportunity_id is None:
                 raise ValueError("LINKED resolution requires opportunity_id")
-            opportunity = session.get(Opportunity, decision.opportunity_id)
+            opportunity = session.scalar(
+                select(Opportunity)
+                .where(Opportunity.opportunity_id == decision.opportunity_id)
+                .with_for_update()
+                .execution_options(populate_existing=True)
+            )
             if opportunity is None:
                 raise ValueError("resolved Opportunity no longer exists")
             return opportunity
