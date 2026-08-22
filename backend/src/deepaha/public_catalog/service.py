@@ -52,8 +52,6 @@ AUTHORITY_BY_PRECEDENCE = {
     500: "FORMAL_OFFICIAL_ATTACHMENT",
     400: "ORIGINAL_OFFICIAL_NOTICE",
     300: "OFFICIAL_FAQ_GUIDANCE",
-    200: "HUMAN_APPROVED_MAPPING",
-    100: "LLM_SEMANTIC_INFERENCE",
 }
 
 
@@ -339,6 +337,8 @@ class PublicCatalogService:
             return False
         evidence_by_field = {item.field_path.value: item for item in contract.field_evidence}
         if not evidence_by_field.keys() >= REQUIRED_EVIDENCE_FIELDS:
+            return False
+        if any(item.precedence < 300 for item in contract.field_evidence):
             return False
         if any(
             evidence_by_field[field_path].evidence_ref_id not in evidence

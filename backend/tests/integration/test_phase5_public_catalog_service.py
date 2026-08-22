@@ -98,7 +98,10 @@ def test_cursor_pagination_has_no_duplicate_or_skip(session: Session) -> None:
     assert third.next_cursor is None
 
 
-@pytest.mark.parametrize("failure_mode", ["internal", "stale", "incomplete", "non_official"])
+@pytest.mark.parametrize(
+    "failure_mode",
+    ["internal", "stale", "incomplete", "non_official", "semantic_inference"],
+)
 def test_visibility_excludes_unapproved_or_incomplete_rows(
     session: Session,
     failure_mode: str,
@@ -121,10 +124,19 @@ def test_visibility_excludes_unapproved_or_incomplete_rows(
             ),
             {"opportunity_id": alpha_id},
         )
-    else:
+    elif failure_mode == "non_official":
         session.execute(
             text("UPDATE sources SET tier = 'COMMUNITY_SIGNAL' WHERE source_id = :source_id"),
             {"source_id": stable_uuid7("alpha:source")},
+        )
+    else:
+        session.execute(
+            text(
+                "UPDATE opportunity_versions "
+                "SET field_evidence = jsonb_set(field_evidence, '{0,precedence}', '100') "
+                "WHERE opportunity_id = :opportunity_id AND version = 1"
+            ),
+            {"opportunity_id": alpha_id},
         )
     session.flush()
 
