@@ -231,6 +231,16 @@ def test_personal_ranking_is_owner_scoped_replayable_and_preference_only(
         first_state.qualification_profile_snapshot_id
     )
     first_match_ids = {item.opportunity_id: item.match_snapshot_id for item in first.items}
+    with Session(migrated_engine) as session:
+        first_public_id = session.scalar(
+            select(Opportunity.public_id).where(
+                Opportunity.opportunity_id == first.items[0].opportunity_id
+            )
+        )
+    assert first_public_id is not None
+    assert service.get_match(principal, first_public_id) == eligibility_service.replay(
+        first.items[0].match_snapshot_id
+    )
 
     second_state = profile_service.save(
         principal,
@@ -254,6 +264,8 @@ def test_personal_ranking_is_owner_scoped_replayable_and_preference_only(
     principal_b = Principal(user_id=UUID("019b0000-0000-7000-8000-000000000502"))
     assert service.get_snapshot(principal, first.ranking_snapshot_id) == first
     assert service.get_snapshot(principal_b, first.ranking_snapshot_id) is None
+    assert service.get_match(principal_b, first_public_id) is None
+    assert service.get_match(principal, "opp_00000000000000000000000000000000") is None
     assert service.get_snapshot(principal, uuid7()) is None
     assert service.get_latest(principal_b) is None
 

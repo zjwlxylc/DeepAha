@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from deepaha.contracts.phase1 import OpportunityStatus
 from deepaha.contracts.phase2 import OpportunityTypeV02
-from deepaha.contracts.phase4 import EligibilityStatus
+from deepaha.contracts.phase4 import EligibilityStatus, MatchSnapshotSchemaV04
 from deepaha.contracts.phase6 import (
     PersonalRankingItemSchemaV05,
     PersonalRankingSnapshotSchemaV05,
@@ -20,6 +20,7 @@ from deepaha.contracts.phase6 import (
     UserStateSnapshotSchemaV05,
 )
 from deepaha.eligibility.service import EligibilityService, MatchInput
+from deepaha.matching.models import MatchSnapshotModel
 from deepaha.opportunities.models import Opportunity, OpportunityVersion
 from deepaha.personal.auth import Principal
 from deepaha.personal.models import (
@@ -287,6 +288,47 @@ class PersonalMatchService:
                 )
             )
             return None if row is None else self._contract_from_row(session, row)
+
+    def get_match(
+        self,
+        principal: Principal,
+        public_id: str,
+    ) -> MatchSnapshotSchemaV04 | None:
+        state = self._profile_service.get_current(principal)
+        if state is None:
+            return None
+        with self._session_factory() as session:
+            opportunity = session.scalar(
+                select(Opportunity)
+                .join(
+                    PublicCatalogEntry,
+                    PublicCatalogEntry.opportunity_id == Opportunity.opportunity_id,
+                )
+                .where(
+                    Opportunity.public_id == public_id,
+                    Opportunity.publication_status == "PUBLISHED",
+                    Opportunity.current_version == PublicCatalogEntry.opportunity_version,
+                )
+            )
+            if opportunity is None or opportunity.current_version is None:
+                return None
+            snapshot_id = session.scalar(
+                select(MatchSnapshotModel.snapshot_id)
+                .where(
+                    MatchSnapshotModel.opportunity_id == opportunity.opportunity_id,
+                    MatchSnapshotModel.opportunity_version == opportunity.current_version,
+                    MatchSnapshotModel.profile_snapshot_id
+                    == state.qualification_profile_snapshot_id,
+                    MatchSnapshotModel.profile_version == state.qualification_profile_version,
+                    MatchSnapshotModel.scenario_clock == state.scenario_clock,
+                )
+                .order_by(
+                    MatchSnapshotModel.created_at.desc(),
+                    MatchSnapshotModel.snapshot_id.desc(),
+                )
+                .limit(1)
+            )
+        return None if snapshot_id is None else self._eligibility_service.replay(snapshot_id)
 
     def _load_public_candidates(
         self,

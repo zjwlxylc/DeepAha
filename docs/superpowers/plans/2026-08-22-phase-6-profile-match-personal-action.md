@@ -406,6 +406,10 @@ git push
 - Create: `backend/tests/personal/test_actions.py`
 - Create: `backend/tests/api/test_personal.py`
 - Create: `backend/tests/integration/test_phase6_personal_api.py`
+- Create: `backend/tests/integration/test_phase6_action_persistence.py`
+- Modify: `backend/src/deepaha/personal/schemas.py`
+- Modify: `backend/src/deepaha/personal/matching.py`
+- Modify: `backend/tests/integration/test_phase6_personal_match_replay.py`
 - Modify: `backend/src/deepaha/main.py`
 
 **Interfaces:**
@@ -414,7 +418,7 @@ git push
 - Produces: `ActionService.set_saved`, `record_official_link`, `set_material_plan`, `set_status` and
   `/api/v1/me` response models with private/no-store headers.
 
-- [ ] **Step 1: Write failing action and API security tests**
+- [x] **Step 1: Write failing action and API security tests**
 
 ```python
 def test_action_writes_are_idempotent_and_audited_once() -> None:
@@ -433,13 +437,13 @@ Add tests for missing auth, `user_id` extra-field rejection, changed request und
 `409`, owner isolation, transaction rollback, bounded material labels, official URL provenance,
 private/no-store and absence of feedback/reminder/percentage fields.
 
-- [ ] **Step 2: Run RED targets**
+- [x] **Step 2: Run RED targets**
 
 Run: `cd backend; uv run pytest tests/personal/test_actions.py tests/api/test_personal.py -q`
 
 Expected: fail because action service and personal router are absent.
 
-- [ ] **Step 3: Implement the action service**
+- [x] **Step 3: Implement the action service**
 
 ```python
 class ActionService:
@@ -452,13 +456,13 @@ class ActionService:
 Use one transaction for snapshot, event and idempotency record. Official-link recording returns only
 the current governed Phase 5 application URL and event identity.
 
-- [ ] **Step 4: Implement `/api/v1/me` routes and stable problems**
+- [x] **Step 4: Implement `/api/v1/me` routes and stable problems**
 
 Use `Depends(require_principal)` and the writable session. Validate exactly one `Idempotency-Key` for
 writes. Apply `Cache-Control: private, no-store` to success and problem responses. Keep public routes
 unchanged and include the new router in `create_app()`.
 
-- [ ] **Step 5: Verify unit/API/integration behavior**
+- [x] **Step 5: Verify unit/API/integration behavior**
 
 Run: `cd backend; uv run pytest tests/personal tests/api/test_personal.py -q`
 
@@ -467,10 +471,10 @@ Run in Phase 6 disposable PostgreSQL only:
 
 Expected: PASS, including all owner/isolation and negative-shape assertions.
 
-- [ ] **Step 6: Commit and push exact files**
+- [x] **Step 6: Commit and push exact files**
 
 ```powershell
-git add -- backend/src/deepaha/personal/actions.py backend/src/deepaha/api/personal.py backend/src/deepaha/main.py backend/tests/personal/test_actions.py backend/tests/api/test_personal.py backend/tests/integration/test_phase6_personal_api.py
+git add -- backend/src/deepaha/personal/actions.py backend/src/deepaha/personal/matching.py backend/src/deepaha/personal/schemas.py backend/src/deepaha/api/personal.py backend/src/deepaha/main.py backend/tests/personal/test_actions.py backend/tests/api/test_personal.py backend/tests/integration/test_phase6_action_persistence.py backend/tests/integration/test_phase6_personal_api.py backend/tests/integration/test_phase6_personal_match_replay.py docs/superpowers/plans/2026-08-22-phase-6-profile-match-personal-action.md
 git commit -m "feat: expose isolated personal action api"
 git push
 ```

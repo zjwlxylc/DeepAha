@@ -1,16 +1,26 @@
 from datetime import date
 from typing import Literal, Self
 
-from pydantic import ConfigDict, field_validator, model_validator
+from pydantic import ConfigDict, Field, HttpUrl, field_validator, model_validator
 
+from deepaha.contracts.common import EntityId
 from deepaha.contracts.phase2 import OpportunityTypeV02
+from deepaha.contracts.phase4 import MatchSnapshotSchemaV04
 from deepaha.contracts.phase6 import (
+    ActionState,
     GoalType,
     LifeStage,
+    PersonalActionEventSchemaV05,
+    PersonalActionSnapshotSchemaV05,
+    PersonalRankingItemSchemaV05,
     Phase6ContractModel,
     ProfileFieldV05,
     UserDataPurpose,
     UserProfileAttributesSchemaV05,
+)
+from deepaha.public_catalog.schemas import (
+    PublicOpportunityCard,
+    PublicOpportunityDetail,
 )
 
 
@@ -70,4 +80,68 @@ class ProfileWrite(PersonalInputModel):
         return self
 
 
-__all__ = ["ProfileWrite"]
+class SavedWrite(PersonalInputModel):
+    saved: bool
+
+
+class ActionStatusWrite(PersonalInputModel):
+    state: ActionState
+
+
+class MaterialPlanItemWrite(PersonalInputModel):
+    material_item_id: EntityId
+    label: str = Field(min_length=1, max_length=80)
+    completed: bool
+    due_on: date | None
+
+    @field_validator("label", mode="before")
+    @classmethod
+    def normalize_label(cls, value: object) -> object:
+        return value.strip() if isinstance(value, str) else value
+
+
+class MaterialPlanWrite(PersonalInputModel):
+    items: tuple[MaterialPlanItemWrite, ...] = Field(max_length=20)
+
+    @model_validator(mode="after")
+    def require_unique_item_ids(self) -> Self:
+        item_ids = tuple(item.material_item_id for item in self.items)
+        if len(item_ids) != len(set(item_ids)):
+            raise ValueError("material item IDs must be unique")
+        return self
+
+
+class OfficialLinkResult(PersonalInputModel):
+    official_url: HttpUrl
+    action: PersonalActionSnapshotSchemaV05
+    event: PersonalActionEventSchemaV05
+
+
+class PersonalPriorityItem(PersonalInputModel):
+    ranking: PersonalRankingItemSchemaV05
+    opportunity: PublicOpportunityCard
+
+
+class PersonalPriorityPage(PersonalInputModel):
+    ranking_snapshot_id: EntityId
+    items: tuple[PersonalPriorityItem, ...] = Field(max_length=3)
+    omitted_rule_set_count: int = Field(ge=0)
+
+
+class PersonalOpportunityDetail(PersonalInputModel):
+    opportunity: PublicOpportunityDetail
+    eligibility: MatchSnapshotSchemaV04
+    action: PersonalActionSnapshotSchemaV05 | None
+
+
+__all__ = [
+    "ActionStatusWrite",
+    "MaterialPlanItemWrite",
+    "MaterialPlanWrite",
+    "OfficialLinkResult",
+    "PersonalOpportunityDetail",
+    "PersonalPriorityItem",
+    "PersonalPriorityPage",
+    "ProfileWrite",
+    "SavedWrite",
+]
