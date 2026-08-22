@@ -7,6 +7,7 @@ from uuid import UUID, uuid7
 
 from pydantic import ValidationError
 from sqlalchemy import or_, select
+from sqlalchemy.exc import DataError, IntegrityError, OperationalError
 from sqlalchemy.orm import Session, sessionmaker
 
 from deepaha.contracts.phase8 import DeadlineChangeReminderIntentSchemaV07
@@ -16,12 +17,16 @@ from deepaha.notifications.adapters import (
     PostgresTestInboxAdapter,
     TransientDeliveryError,
 )
+from deepaha.notifications.candidates import (
+    DeadlineReminderBindingError,
+    load_deadline_change_binding,
+)
 from deepaha.notifications.models import (
     NotificationDeliveryAttemptModel,
     NotificationOutboxModel,
     ReminderPreferenceSnapshotModel,
 )
-from deepaha.opportunities.models import Opportunity
+from deepaha.opportunities.models import Opportunity, OpportunityEvent
 from deepaha.personal.models import (
     PersonalActionSnapshotModel,
     PersonalUserModel,
@@ -245,6 +250,18 @@ class ReminderWorker:
                 )
                 return "SUPPRESSED"
 
+            if not self._intent_bindings_are_valid(session, row):
+                row.status = "FAILED"
+                row.terminal_at = now
+                row.last_error_code = "REMINDER_BINDING_INVALID"
+                row.updated_at = now
+                self._clear_lease(row)
+                self._logger.warning(
+                    "reminder binding failed reminder_id=%s code=REMINDER_BINDING_INVALID",
+                    claim.reminder_id,
+                )
+                return "FAILED"
+
             try:
                 intent = self._intent(row)
             except ValidationError:
@@ -263,7 +280,7 @@ class ReminderWorker:
             started_at = now
             try:
                 with session.begin_nested():
-                    self._adapter.deliver(session, intent, delivered_at=now)
+                    self._deliver_with_classification(session, intent, delivered_at=now)
             except TransientDeliveryError as error:
                 self._record_attempt(
                     session,
@@ -397,6 +414,66 @@ class ReminderWorker:
             and state is not None
             and "ACTION_TRACKING" in state.allowed_purposes
         )
+
+    @staticmethod
+    def _intent_bindings_are_valid(
+        session: Session,
+        row: NotificationOutboxModel,
+    ) -> bool:
+        event = session.get(OpportunityEvent, row.event_id)
+        if event is None:
+            return False
+        try:
+            binding = load_deadline_change_binding(session, event)
+        except DeadlineReminderBindingError:
+            return False
+        action = session.get(PersonalActionSnapshotModel, row.action_snapshot_id)
+        preference = session.get(ReminderPreferenceSnapshotModel, row.preference_snapshot_id)
+        state = session.get(UserStateSnapshotModel, row.user_state_snapshot_id)
+        return bool(
+            binding is not None
+            and event.opportunity_id == row.opportunity_id
+            and event.from_version == row.from_version
+            and event.to_version == row.to_version
+            and event.detected_at == row.detected_at
+            and binding.recognized.old_closes_on == row.old_closes_on
+            and binding.recognized.new_closes_on == row.new_closes_on
+            and binding.recognized.direction.value == row.direction
+            and binding.previous_evidence_ref_id == row.previous_evidence_ref_id
+            and binding.current_evidence_ref_id == row.current_evidence_ref_id
+            and action is not None
+            and action.user_id == row.user_id
+            and action.opportunity_id == row.opportunity_id
+            and action.saved
+            and preference is not None
+            and preference.user_id == row.user_id
+            and preference.reminder_kind == row.reminder_kind
+            and preference.cadence == row.cadence
+            and preference.target == row.target
+            and preference.enabled
+            and state is not None
+            and state.user_id == row.user_id
+            and state.consent_version == row.consent_version
+            and "ACTION_TRACKING" in state.allowed_purposes
+        )
+
+    def _deliver_with_classification(
+        self,
+        session: Session,
+        intent: DeadlineChangeReminderIntentSchemaV07,
+        *,
+        delivered_at: datetime,
+    ) -> None:
+        try:
+            self._adapter.deliver(session, intent, delivered_at=delivered_at)
+        except TransientDeliveryError, PermanentDeliveryError:
+            raise
+        except ValidationError as error:
+            raise PermanentDeliveryError("ADAPTER_CONTRACT_INVALID") from error
+        except (IntegrityError, DataError) as error:
+            raise PermanentDeliveryError("ADAPTER_PERSISTENCE_INVALID") from error
+        except OperationalError as error:
+            raise TransientDeliveryError("ADAPTER_PERSISTENCE_TRANSIENT") from error
 
     @staticmethod
     def _intent(row: NotificationOutboxModel) -> DeadlineChangeReminderIntentSchemaV07:

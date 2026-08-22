@@ -37,6 +37,11 @@ def upgrade() -> None:
         "opportunity_events",
         ["event_id", "opportunity_id", "to_version"],
     )
+    op.create_unique_constraint(
+        "uq_user_state_snapshots_phase8_owner",
+        "user_state_snapshots",
+        ["user_state_snapshot_id", "user_id"],
+    )
     op.create_table(
         "reminder_preference_snapshots",
         sa.Column("preference_snapshot_id", sa.Uuid(), nullable=False),
@@ -276,9 +281,9 @@ def upgrade() -> None:
             name=op.f("ck_notification_outbox_reminder_id_uuid7"),
         ),
         sa.ForeignKeyConstraint(
-            ["action_snapshot_id"],
-            ["personal_action_snapshots.action_snapshot_id"],
-            name=op.f("fk_notification_outbox_action_snapshot_id_personal_action_snapshots"),
+            ["action_snapshot_id", "user_id"],
+            ["personal_action_snapshots.action_snapshot_id", "personal_action_snapshots.user_id"],
+            name="fk_notification_outbox_action_snapshot_owner",
             ondelete="RESTRICT",
         ),
         sa.ForeignKeyConstraint(
@@ -304,11 +309,12 @@ def upgrade() -> None:
             ondelete="RESTRICT",
         ),
         sa.ForeignKeyConstraint(
-            ["preference_snapshot_id"],
-            ["reminder_preference_snapshots.preference_snapshot_id"],
-            name=op.f(
-                "fk_notification_outbox_preference_snapshot_id_reminder_preference_snapshots"
-            ),
+            ["preference_snapshot_id", "user_id"],
+            [
+                "reminder_preference_snapshots.preference_snapshot_id",
+                "reminder_preference_snapshots.user_id",
+            ],
+            name="fk_notification_outbox_preference_snapshot_owner",
             ondelete="RESTRICT",
         ),
         sa.ForeignKeyConstraint(
@@ -324,9 +330,9 @@ def upgrade() -> None:
             ondelete="RESTRICT",
         ),
         sa.ForeignKeyConstraint(
-            ["user_state_snapshot_id"],
-            ["user_state_snapshots.user_state_snapshot_id"],
-            name=op.f("fk_notification_outbox_user_state_snapshot_id_user_state_snapshots"),
+            ["user_state_snapshot_id", "user_id"],
+            ["user_state_snapshots.user_state_snapshot_id", "user_state_snapshots.user_id"],
+            name="fk_notification_outbox_user_state_snapshot_owner",
             ondelete="RESTRICT",
         ),
         sa.PrimaryKeyConstraint("reminder_id", name=op.f("pk_notification_outbox")),
@@ -529,6 +535,75 @@ def upgrade() -> None:
                 "FOR EACH ROW EXECUTE FUNCTION phase8_reject_immutable_mutation()"
             )
         )
+    op.execute(
+        """
+        CREATE FUNCTION phase8_reject_outbox_fact_mutation()
+        RETURNS trigger
+        LANGUAGE plpgsql
+        AS $$
+        BEGIN
+            IF TG_OP = 'DELETE' THEN
+                RAISE EXCEPTION 'Phase 8 governed reminder fact is immutable';
+            END IF;
+            IF ROW(
+                OLD.reminder_id,
+                OLD.user_id,
+                OLD.opportunity_id,
+                OLD.event_id,
+                OLD.from_version,
+                OLD.to_version,
+                OLD.old_closes_on,
+                OLD.new_closes_on,
+                OLD.direction,
+                OLD.previous_evidence_ref_id,
+                OLD.current_evidence_ref_id,
+                OLD.action_snapshot_id,
+                OLD.preference_snapshot_id,
+                OLD.user_state_snapshot_id,
+                OLD.consent_version,
+                OLD.detected_at,
+                OLD.created_at,
+                OLD.reminder_kind,
+                OLD.cadence,
+                OLD.target,
+                OLD.contract_version
+            ) IS DISTINCT FROM ROW(
+                NEW.reminder_id,
+                NEW.user_id,
+                NEW.opportunity_id,
+                NEW.event_id,
+                NEW.from_version,
+                NEW.to_version,
+                NEW.old_closes_on,
+                NEW.new_closes_on,
+                NEW.direction,
+                NEW.previous_evidence_ref_id,
+                NEW.current_evidence_ref_id,
+                NEW.action_snapshot_id,
+                NEW.preference_snapshot_id,
+                NEW.user_state_snapshot_id,
+                NEW.consent_version,
+                NEW.detected_at,
+                NEW.created_at,
+                NEW.reminder_kind,
+                NEW.cadence,
+                NEW.target,
+                NEW.contract_version
+            ) THEN
+                RAISE EXCEPTION 'Phase 8 governed reminder fact is immutable';
+            END IF;
+            RETURN NEW;
+        END;
+        $$
+        """
+    )
+    op.execute(
+        """
+        CREATE TRIGGER phase8_reject_outbox_fact_mutation
+        BEFORE UPDATE OR DELETE ON notification_outbox
+        FOR EACH ROW EXECUTE FUNCTION phase8_reject_outbox_fact_mutation()
+        """
+    )
     # ### end Alembic commands ###
 
 
@@ -545,6 +620,8 @@ def downgrade() -> None:
 
     for table_name in IMMUTABLE_PHASE8_TABLES:
         op.execute(sa.text(f"DROP TRIGGER phase8_reject_mutation ON {table_name}"))
+    op.execute("DROP TRIGGER phase8_reject_outbox_fact_mutation ON notification_outbox")
+    op.execute("DROP FUNCTION phase8_reject_outbox_fact_mutation()")
     op.execute("DROP FUNCTION phase8_reject_immutable_mutation()")
     op.drop_index("ix_user_state_snapshots_owner_version", table_name="user_state_snapshots")
     op.drop_index(
@@ -560,6 +637,9 @@ def downgrade() -> None:
     op.drop_table("notification_outbox")
     op.drop_constraint(
         "uq_opportunity_events_reminder_binding", "opportunity_events", type_="unique"
+    )
+    op.drop_constraint(
+        "uq_user_state_snapshots_phase8_owner", "user_state_snapshots", type_="unique"
     )
     op.drop_table("reminder_preference_idempotency_records")
     op.drop_index(

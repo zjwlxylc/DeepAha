@@ -37,6 +37,13 @@ class RecognizedDeadlineChange:
     direction: DeadlineChangeDirection
 
 
+@dataclass(frozen=True, slots=True)
+class DeadlineChangeBinding:
+    recognized: RecognizedDeadlineChange
+    previous_evidence_ref_id: UUID
+    current_evidence_ref_id: UUID
+
+
 def _strict_iso_date(value: object) -> date | None:
     if not isinstance(value, str) or ISO_DATE_PATTERN.fullmatch(value) is None:
         return None
@@ -93,6 +100,46 @@ def _deadline_evidence_id(version: OpportunityVersion) -> UUID | None:
         return UUID(str(matches[0].get("evidence_ref_id")))
     except TypeError, ValueError:
         return None
+
+
+def load_deadline_change_binding(
+    session: Session,
+    event: OpportunityEvent,
+) -> DeadlineChangeBinding | None:
+    recognized = recognize_deadline_change(event)
+    if recognized is None:
+        return None
+    assert event.from_version is not None
+    previous_version = session.get(
+        OpportunityVersion,
+        (event.opportunity_id, event.from_version),
+    )
+    current_version = session.get(
+        OpportunityVersion,
+        (event.opportunity_id, event.to_version),
+    )
+    if previous_version is None or current_version is None:
+        raise DeadlineReminderBindingError("deadline versions are unavailable")
+    previous_evidence_ref_id = _deadline_evidence_id(previous_version)
+    current_evidence_ref_id = _deadline_evidence_id(current_version)
+    try:
+        changed_evidence_ref_id = UUID(str(event.changes[0].get("evidence_ref_id")))
+    except (TypeError, ValueError) as error:
+        raise DeadlineReminderBindingError("deadline change evidence is invalid") from error
+    if (
+        _version_deadline(previous_version) != recognized.old_closes_on
+        or _version_deadline(current_version) != recognized.new_closes_on
+        or previous_evidence_ref_id is None
+        or current_evidence_ref_id is None
+        or current_evidence_ref_id != changed_evidence_ref_id
+        or current_evidence_ref_id != event.source_evidence_ref_id
+    ):
+        raise DeadlineReminderBindingError("deadline event/version evidence mismatch")
+    return DeadlineChangeBinding(
+        recognized=recognized,
+        previous_evidence_ref_id=previous_evidence_ref_id,
+        current_evidence_ref_id=current_evidence_ref_id,
+    )
 
 
 def _audience_statement(
@@ -199,35 +246,10 @@ class DeadlineReminderCandidateService:
     ) -> tuple[UUID, ...]:
         if created_at.tzinfo is None or created_at.utcoffset() is None:
             raise ValueError("candidate creation time must be timezone-aware")
-        recognized = recognize_deadline_change(event)
-        if recognized is None:
+        binding = load_deadline_change_binding(session, event)
+        if binding is None:
             return ()
-        assert event.from_version is not None
-        previous_version = session.get(
-            OpportunityVersion,
-            (event.opportunity_id, event.from_version),
-        )
-        current_version = session.get(
-            OpportunityVersion,
-            (event.opportunity_id, event.to_version),
-        )
-        if previous_version is None or current_version is None:
-            raise DeadlineReminderBindingError("deadline versions are unavailable")
-        previous_evidence_ref_id = _deadline_evidence_id(previous_version)
-        current_evidence_ref_id = _deadline_evidence_id(current_version)
-        try:
-            changed_evidence_ref_id = UUID(str(event.changes[0].get("evidence_ref_id")))
-        except (TypeError, ValueError) as error:
-            raise DeadlineReminderBindingError("deadline change evidence is invalid") from error
-        if (
-            _version_deadline(previous_version) != recognized.old_closes_on
-            or _version_deadline(current_version) != recognized.new_closes_on
-            or previous_evidence_ref_id is None
-            or current_evidence_ref_id is None
-            or current_evidence_ref_id != changed_evidence_ref_id
-            or current_evidence_ref_id != event.source_evidence_ref_id
-        ):
-            raise DeadlineReminderBindingError("deadline event/version evidence mismatch")
+        recognized = binding.recognized
 
         reminder_ids: list[UUID] = []
         for audience in session.execute(_audience_statement(event)):
@@ -255,8 +277,8 @@ class DeadlineReminderCandidateService:
                     "old_closes_on": recognized.old_closes_on,
                     "new_closes_on": recognized.new_closes_on,
                     "direction": recognized.direction,
-                    "previous_evidence_ref_id": previous_evidence_ref_id,
-                    "current_evidence_ref_id": current_evidence_ref_id,
+                    "previous_evidence_ref_id": binding.previous_evidence_ref_id,
+                    "current_evidence_ref_id": binding.current_evidence_ref_id,
                     "action_snapshot_id": audience.action_snapshot_id,
                     "preference_snapshot_id": audience.preference_snapshot_id,
                     "user_state_snapshot_id": audience.user_state_snapshot_id,
@@ -290,7 +312,9 @@ class DeadlineReminderCandidateService:
 
 __all__ = [
     "DeadlineReminderBindingError",
+    "DeadlineChangeBinding",
     "DeadlineReminderCandidateService",
     "RecognizedDeadlineChange",
+    "load_deadline_change_binding",
     "recognize_deadline_change",
 ]

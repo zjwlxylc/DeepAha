@@ -219,6 +219,23 @@ def test_phase8_tables_and_operational_indexes_exist(migrated_engine: Engine) ->
         in index_definitions["ix_test_inbox_entries_owner_delivery"]
     )
 
+    outbox_foreign_keys = {
+        tuple(item["constrained_columns"]): tuple(item["referred_columns"])
+        for item in inspector.get_foreign_keys("notification_outbox")
+    }
+    assert outbox_foreign_keys[("action_snapshot_id", "user_id")] == (
+        "action_snapshot_id",
+        "user_id",
+    )
+    assert outbox_foreign_keys[("preference_snapshot_id", "user_id")] == (
+        "preference_snapshot_id",
+        "user_id",
+    )
+    assert outbox_foreign_keys[("user_state_snapshot_id", "user_id")] == (
+        "user_state_snapshot_id",
+        "user_id",
+    )
+
 
 def test_logical_delivery_key_is_unique(session: Session) -> None:
     first = _seed_intent_graph(session)
@@ -240,11 +257,11 @@ def test_event_opportunity_version_binding_is_enforced(session: Session) -> None
     first = _seed_intent_graph(session)
     first.opportunity_id = uuid7()
 
-    with pytest.raises(IntegrityError):
+    with pytest.raises(DBAPIError, match="immutable"):
         session.flush()
 
 
-def test_preference_attempt_and_inbox_are_insert_only(migrated_engine: Engine) -> None:
+def test_governed_reminder_facts_are_insert_only(migrated_engine: Engine) -> None:
     with Session(migrated_engine) as session:
         outbox = _seed_intent_graph(session)
         attempt = NotificationDeliveryAttemptModel(
@@ -289,6 +306,10 @@ def test_preference_attempt_and_inbox_are_insert_only(migrated_engine: Engine) -
         inbox_id = entry.inbox_entry_id
 
     statements = (
+        (
+            "update notification_outbox set old_closes_on = '2026-09-19' where reminder_id = :id",
+            outbox.reminder_id,
+        ),
         (
             "update reminder_preference_snapshots set enabled = false "
             "where preference_snapshot_id = :id",

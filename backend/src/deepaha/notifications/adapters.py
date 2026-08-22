@@ -3,6 +3,7 @@ from collections.abc import Callable
 from datetime import datetime
 from uuid import UUID, uuid7
 
+from pydantic import ValidationError
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -75,8 +76,6 @@ class PostgresTestInboxAdapter:
         existing = session.scalar(
             select(TestInboxEntryModel).where(TestInboxEntryModel.reminder_id == intent.reminder_id)
         )
-        if existing is not None:
-            return _entry_contract(existing)
 
         opportunity = session.get(Opportunity, intent.opportunity_id)
         if opportunity is None:
@@ -96,31 +95,46 @@ class PostgresTestInboxAdapter:
         if previous_url is None or current_url is None:
             raise PermanentDeliveryError("OFFICIAL_EVIDENCE_BINDING_MISSING")
 
-        contract = TestInboxEntrySchemaV07.model_validate(
-            {
-                "inbox_entry_id": self._id_factory(),
-                "reminder_id": intent.reminder_id,
-                "user_id": intent.user_id,
-                "opportunity_id": intent.opportunity_id,
-                "opportunity_public_id": detail.public_id,
-                "opportunity_title": detail.title,
-                "event_id": intent.event_id,
-                "from_version": intent.from_version,
-                "to_version": intent.to_version,
-                "old_closes_on": intent.old_closes_on,
-                "new_closes_on": intent.new_closes_on,
-                "direction": intent.direction,
-                "previous_evidence_ref_id": intent.previous_evidence_ref_id,
-                "current_evidence_ref_id": intent.current_evidence_ref_id,
-                "previous_official_url": previous_url,
-                "current_official_url": current_url,
-                "personal_detail_path": f"/me/opportunities/{detail.public_id}",
-                "detected_at": intent.detected_at,
-                "delivered_at": delivered_at,
-                "target": intent.target,
-                "contract_version": intent.contract_version,
-            }
-        )
+        try:
+            contract = TestInboxEntrySchemaV07.model_validate(
+                {
+                    "inbox_entry_id": (
+                        existing.inbox_entry_id if existing is not None else self._id_factory()
+                    ),
+                    "reminder_id": intent.reminder_id,
+                    "user_id": intent.user_id,
+                    "opportunity_id": intent.opportunity_id,
+                    "opportunity_public_id": detail.public_id,
+                    "opportunity_title": detail.title,
+                    "event_id": intent.event_id,
+                    "from_version": intent.from_version,
+                    "to_version": intent.to_version,
+                    "old_closes_on": intent.old_closes_on,
+                    "new_closes_on": intent.new_closes_on,
+                    "direction": intent.direction,
+                    "previous_evidence_ref_id": intent.previous_evidence_ref_id,
+                    "current_evidence_ref_id": intent.current_evidence_ref_id,
+                    "previous_official_url": previous_url,
+                    "current_official_url": current_url,
+                    "personal_detail_path": f"/me/opportunities/{detail.public_id}",
+                    "detected_at": intent.detected_at,
+                    "delivered_at": (
+                        existing.delivered_at if existing is not None else delivered_at
+                    ),
+                    "target": intent.target,
+                    "contract_version": intent.contract_version,
+                }
+            )
+        except ValidationError as error:
+            raise PermanentDeliveryError("TEST_INBOX_CONTRACT_INVALID") from error
+        if existing is not None:
+            try:
+                persisted = _entry_contract(existing)
+            except ValidationError as error:
+                raise PermanentDeliveryError("TEST_INBOX_REPLAY_INVALID") from error
+            if persisted != contract:
+                raise PermanentDeliveryError("TEST_INBOX_REPLAY_MISMATCH")
+            return persisted
         session.add(
             TestInboxEntryModel(
                 inbox_entry_id=contract.inbox_entry_id,

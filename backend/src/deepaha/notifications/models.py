@@ -196,6 +196,24 @@ class NotificationOutboxModel(Base):
             ["opportunity_versions.opportunity_id", "opportunity_versions.version"],
             ondelete="RESTRICT",
         ),
+        ForeignKeyConstraint(
+            ["action_snapshot_id", "user_id"],
+            ["personal_action_snapshots.action_snapshot_id", "personal_action_snapshots.user_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["preference_snapshot_id", "user_id"],
+            [
+                "reminder_preference_snapshots.preference_snapshot_id",
+                "reminder_preference_snapshots.user_id",
+            ],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["user_state_snapshot_id", "user_id"],
+            ["user_state_snapshots.user_state_snapshot_id", "user_state_snapshots.user_id"],
+            ondelete="RESTRICT",
+        ),
         UniqueConstraint(
             "user_id",
             "event_id",
@@ -244,21 +262,9 @@ class NotificationOutboxModel(Base):
         Uuid,
         ForeignKey("evidence_refs.evidence_ref_id", ondelete="RESTRICT"),
     )
-    action_snapshot_id: Mapped[UUID] = mapped_column(
-        Uuid,
-        ForeignKey("personal_action_snapshots.action_snapshot_id", ondelete="RESTRICT"),
-    )
-    preference_snapshot_id: Mapped[UUID] = mapped_column(
-        Uuid,
-        ForeignKey(
-            "reminder_preference_snapshots.preference_snapshot_id",
-            ondelete="RESTRICT",
-        ),
-    )
-    user_state_snapshot_id: Mapped[UUID] = mapped_column(
-        Uuid,
-        ForeignKey("user_state_snapshots.user_state_snapshot_id", ondelete="RESTRICT"),
-    )
+    action_snapshot_id: Mapped[UUID] = mapped_column(Uuid)
+    preference_snapshot_id: Mapped[UUID] = mapped_column(Uuid)
+    user_state_snapshot_id: Mapped[UUID] = mapped_column(Uuid)
     consent_version: Mapped[str] = mapped_column(String(32))
     detected_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

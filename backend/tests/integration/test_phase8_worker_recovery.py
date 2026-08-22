@@ -1,10 +1,11 @@
 import logging
 from concurrent.futures import ThreadPoolExecutor
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
+from typing import Any
 from uuid import UUID, uuid7
 
 import pytest
-from sqlalchemy import Engine, func, select
+from sqlalchemy import Engine, func, select, text
 from sqlalchemy.orm import Session, sessionmaker
 
 from deepaha.contracts.phase8 import (
@@ -195,6 +196,21 @@ class AlwaysPermanentAdapter:
         raise PermanentDeliveryError("TEST_PERMANENT")
 
 
+class InvalidContractAdapter:
+    def deliver(self, session: Session, intent: object, *, delivered_at: datetime) -> None:
+        del session, intent, delivered_at
+        DeadlineChangeReminderIntentSchemaV07.model_validate({})
+
+
+class InvalidPersistenceAdapter:
+    def deliver(self, session: Session, intent: object, *, delivered_at: datetime) -> None:
+        del intent, delivered_at
+        session.execute(
+            text("insert into test_inbox_entries (inbox_entry_id) values (:entry_id)"),
+            {"entry_id": uuid7()},
+        )
+
+
 class InsertThenCrashAdapter(PostgresTestInboxAdapter):
     def deliver(
         self,
@@ -224,6 +240,45 @@ def test_permanent_failure_consumes_one_attempt_and_fails(migrated_engine: Engin
         assert outbox.status == "FAILED"
         assert outbox.attempt_count == 1
         assert outbox.last_error_code == "TEST_PERMANENT"
+
+
+@pytest.mark.parametrize(
+    ("adapter", "error_code"),
+    [
+        (InvalidContractAdapter(), "ADAPTER_CONTRACT_INVALID"),
+        (
+            InvalidPersistenceAdapter(),
+            "ADAPTER_PERSISTENCE_INVALID",
+        ),
+    ],
+)
+def test_deterministic_adapter_errors_are_audited_and_bounded(
+    migrated_engine: Engine,
+    adapter: Any,
+    error_code: str,
+) -> None:
+    factory = sessionmaker(migrated_engine, expire_on_commit=False)
+    seed = seed_governed_reminder(factory)
+    now = datetime(2026, 8, 22, 4, tzinfo=UTC)
+
+    summary = ReminderWorker(
+        session_factory=factory,
+        adapter=adapter,
+        clock=lambda: now,
+    ).run_once()
+
+    assert summary.failed == 1
+    with factory() as session:
+        outbox = session.get(NotificationOutboxModel, seed.reminder_id)
+        assert outbox is not None
+        assert outbox.status == "FAILED"
+        assert outbox.attempt_count == 1
+        assert outbox.last_error_code == error_code
+        attempt = session.scalar(select(NotificationDeliveryAttemptModel))
+        assert attempt is not None
+        assert attempt.outcome == "PERMANENT_FAILURE"
+        assert attempt.error_code == error_code
+        assert session.scalar(select(func.count()).select_from(InboxEntryModel)) == 0
 
 
 def test_expired_lease_does_not_consume_retry_budget(migrated_engine: Engine) -> None:
@@ -327,6 +382,76 @@ def test_committed_inbox_replay_converges_without_duplicate(migrated_engine: Eng
     with factory() as session:
         row = session.get(NotificationOutboxModel, seed.reminder_id)
         assert row is not None and row.status == "DELIVERED"
+        assert session.scalar(select(func.count()).select_from(InboxEntryModel)) == 1
+
+
+def test_schema_valid_outbox_tamper_fails_before_delivery(migrated_engine: Engine) -> None:
+    factory = sessionmaker(migrated_engine, expire_on_commit=False)
+    seed = seed_governed_reminder(factory)
+    now = datetime(2026, 8, 22, 4, tzinfo=UTC)
+    with migrated_engine.begin() as connection:
+        connection.execute(
+            text(
+                "alter table notification_outbox disable trigger phase8_reject_outbox_fact_mutation"
+            )
+        )
+        connection.execute(
+            text(
+                "update notification_outbox set old_closes_on = :wrong_date "
+                "where reminder_id = :reminder_id"
+            ),
+            {"wrong_date": date(2026, 9, 6), "reminder_id": seed.reminder_id},
+        )
+        connection.execute(
+            text(
+                "alter table notification_outbox enable trigger phase8_reject_outbox_fact_mutation"
+            )
+        )
+
+    summary = ReminderWorker(session_factory=factory, clock=lambda: now).run_once()
+
+    assert summary.failed == 1
+    with factory() as session:
+        row = session.get(NotificationOutboxModel, seed.reminder_id)
+        assert row is not None
+        assert row.status == "FAILED"
+        assert row.attempt_count == 0
+        assert row.last_error_code == "REMINDER_BINDING_INVALID"
+        assert session.scalar(select(func.count()).select_from(InboxEntryModel)) == 0
+
+
+def test_existing_inbox_mismatch_is_a_permanent_failure(migrated_engine: Engine) -> None:
+    factory = sessionmaker(migrated_engine, expire_on_commit=False)
+    seed = seed_governed_reminder(factory)
+    now = datetime(2026, 8, 22, 4, tzinfo=UTC)
+    adapter = PostgresTestInboxAdapter()
+    with factory() as session:
+        row = session.get(NotificationOutboxModel, seed.reminder_id)
+        assert row is not None
+        contract = adapter.deliver(session, ReminderWorker._intent(row), delivered_at=now)
+        session.rollback()
+    payload = contract.model_dump()
+    payload["opportunity_title"] = "Mismatched replay title"
+    payload["previous_official_url"] = str(payload["previous_official_url"])
+    payload["current_official_url"] = str(payload["current_official_url"])
+    payload["direction"] = payload["direction"].value
+    payload["target"] = payload["target"].value
+    with factory.begin() as session:
+        session.add(InboxEntryModel(**payload))
+
+    summary = ReminderWorker(
+        session_factory=factory,
+        adapter=adapter,
+        clock=lambda: now,
+    ).run_once()
+
+    assert summary.failed == 1
+    with factory() as session:
+        row = session.get(NotificationOutboxModel, seed.reminder_id)
+        assert row is not None
+        assert row.status == "FAILED"
+        assert row.attempt_count == 1
+        assert row.last_error_code == "TEST_INBOX_REPLAY_MISMATCH"
         assert session.scalar(select(func.count()).select_from(InboxEntryModel)) == 1
 
 

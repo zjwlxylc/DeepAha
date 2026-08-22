@@ -101,6 +101,11 @@ class UserStateSnapshotModel(Base):
             "user_id",
             name="uq_user_state_snapshots_feedback_binding",
         ),
+        UniqueConstraint(
+            "user_state_snapshot_id",
+            "user_id",
+            name="uq_user_state_snapshots_phase8_owner",
+        ),
         UniqueConstraint("user_id", "input_sha256", name="uq_user_state_snapshots_owner_input"),
         Index("ix_user_state_snapshots_owner_version", "user_id", desc("version")),
     )
