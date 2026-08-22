@@ -7,14 +7,15 @@ audited personal actions. This package records engineering evidence only.
 ## Four-axis status
 
 - Implementation: `IMPLEMENTED`
-- Engineering Gate: `OPEN`
+- Engineering Gate: `CLOSED`
 - Release Qualification: `NOT_STARTED`
 - v0.5 Contract Maturity: `IMPLEMENTED`
 
-Implementation and final local verification apply through code commit
-`66aaaac94ae8062740452daed6f855ee2b56f083`. The Engineering Gate remains `OPEN` until the
-stacked draft PR exists and every required GitHub Actions job succeeds on an exact candidate SHA.
-Contract Maturity is not `STABLE` because Release Qualification has not started.
+Engineering Gate closure is based on implementation candidate
+`d30fbac84e94a3b465ead09f17c1b8c220ab638d`, stacked draft PR #6 and GitHub Actions run
+`32559110870`: all seven required jobs completed successfully. Contract Maturity is not `STABLE`
+because Release Qualification has not started. Final docs-only handoff evidence belongs in the
+draft PR rather than another repository commit, avoiding a self-referential documentation loop.
 
 ## Evidence index
 

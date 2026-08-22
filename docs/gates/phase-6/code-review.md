@@ -1,10 +1,10 @@
 # Phase 6 Code Review
 
-Review scope: `8d9b36c96174bffb303e7f981bd1775ebd8fa672..66aaaac94ae8062740452daed6f855ee2b56f083`.
+Review scope: `8d9b36c96174bffb303e7f981bd1775ebd8fa672..d30fbac84e94a3b465ead09f17c1b8c220ab638d`.
 
 The user prohibited sub-agent dispatch, so the primary session reviewed the full diff against the
 Blueprint, Phase 4/5 contracts, implementation plan and executable tests. No Critical or Important
-finding remains open; remote exact-SHA review evidence is still pending.
+finding remains open; exact-SHA remote evidence is recorded below.
 
 ## Findings resolved
 
@@ -28,6 +28,10 @@ finding remains open; remote exact-SHA review evidence is still pending.
    latest `PREPARING` state.
 8. **Minor — mobile title/brand/evidence links were below the 44px touch target.** Surgical CSS
    minimums were remeasured at 375x812 with no horizontal overflow.
+9. **Important — a Phase 6-only browser-seed assertion ran in generic CI databases.** Run
+   `32558860910` reproduced identical failures in `integration` and `phase3-resolution` before the
+   non-empty assertion could execute. Commit `d30fbac` skips only that assertion outside the exact
+   disposable 55436 database; the Phase 6 job and full local verifier still execute it and pass.
 
 ## Scope and architecture conclusion
 
@@ -43,5 +47,6 @@ finding remains open; remote exact-SHA review evidence is still pending.
 ## Current decision
 
 Implementation is `IMPLEMENTED`, local engineering review passes and Contract Maturity is
-`IMPLEMENTED`. Engineering Gate remains `OPEN` until the stacked draft PR and final exact-SHA
-seven-job remote CI evidence exist. Release Qualification remains `NOT_STARTED`.
+`IMPLEMENTED`. Stacked draft PR #6 and run `32559110870` provide successful seven-job evidence for
+candidate `d30fbac84e94a3b465ead09f17c1b8c220ab638d`; Engineering Gate is `CLOSED`. Release
+Qualification remains `NOT_STARTED`.

@@ -801,7 +801,7 @@ git push
 Stage only files that exist and changed; never replace the exact-path list with `git add .` or
 `git add -A`.
 
-- [ ] **Step 4: Create the stacked draft PR through the authenticated official GitHub API**
+- [x] **Step 4: Create the stacked draft PR through the authenticated official GitHub API**
 
 Create with title `Phase 6: profile, match and personal action`, head
 `codex/phase-6-profile-match-personal-action`, base `codex/phase-5-public-trust-layer`,
@@ -809,14 +809,14 @@ Create with title `Phase 6: profile, match and personal action`, head
 four-axis state and explicit Phase 7/8 exclusions. Verify `open=true`, `draft=true`, `merged=false`
 and exact base/head SHAs.
 
-- [ ] **Step 5: Wait for every job on the final exact SHA**
+- [x] **Step 5: Wait for every job on the implementation candidate exact SHA**
 
 Poll the official Actions run for exact `head_sha`, reporting only state changes. Required jobs are
 the six inherited names plus `phase6-profile-action`. If a job fails, use
 `superpowers:systematic-debugging`, reproduce locally, add a minimal fix commit, push, and restart
 the exact-SHA evidence cycle.
 
-- [ ] **Step 6: Close Engineering Gate only after exact-SHA success**
+- [x] **Step 6: Close Engineering Gate only after exact-SHA success**
 
 After the implementation candidate and its exact-SHA CI succeed, update Gate documents and design
 closure evidence with that candidate SHA, run ID and every job conclusion. Set Engineering Gate

@@ -2,7 +2,7 @@
 
 Date: 2026-08-22
 
-Status: Implementation `IMPLEMENTED`; Engineering Gate `OPEN`; Release Qualification
+Status: Implementation `IMPLEMENTED`; Engineering Gate `CLOSED`; Release Qualification
 `NOT_STARTED`; v0.5 Contract Maturity `IMPLEMENTED`.
 
 | Acceptance item | Result | Evidence boundary |
@@ -23,10 +23,10 @@ Status: Implementation `IMPLEMENTED`; Engineering Gate `OPEN`; Release Qualifica
 | Negative scope | PASS | no percentage/confidence, FeedbackEvent/review queue, reminder/notification, LLM or production auth claim |
 | Synthetic boundary | PASS | profiles=2, public opportunities=3, real users=0, real Gold=0; runtime credentials are not committed |
 | Local verifier | PASS | backend 383, Phase 6 offline 35, integration 10, Web 15 files/31 tests, migration round trip/drift and builds |
-| Stacked draft PR | PENDING | must be open/draft/unmerged with Phase 5 base and exact Phase 6 head |
-| Remote exact-SHA CI | PENDING | all six inherited jobs plus `phase6-profile-action` must complete successfully on one exact candidate SHA |
+| Stacked draft PR | PASS | PR #6 is open/draft/unmerged; base is `8d9b36c96174bffb303e7f981bd1775ebd8fa672`; implementation candidate is `d30fbac84e94a3b465ead09f17c1b8c220ab638d` |
+| Remote exact-SHA CI | PASS | run `32559110870` on `d30fbac84e94a3b465ead09f17c1b8c220ab638d`: all six inherited jobs plus `phase6-profile-action` completed successfully |
 | Governed real-user qualification | NOT STARTED | no governed completion, comprehension, cognitive-load or real high-intent-action evidence exists |
 
-The Engineering Gate remains `OPEN` because PR and remote exact-SHA evidence are pending. Nothing
-in this table authorizes merge, ready-for-review, release, production deployment, Release
-Qualification or contract `STABLE` status.
+The Engineering Gate is `CLOSED` for the implemented engineering scope. Nothing in this table
+authorizes merge, ready-for-review, release, production deployment, Release Qualification or
+contract `STABLE` status.

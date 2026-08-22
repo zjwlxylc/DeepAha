@@ -1,7 +1,8 @@
 # Phase 6 Security And Compliance Review
 
-Status: implemented and locally verified; remote exact-SHA CI is pending. This is engineering
-review, not legal advice, production authentication or public-launch authorization.
+Status: implemented, locally verified and remotely verified on candidate
+`d30fbac84e94a3b465ead09f17c1b8c220ab638d` in run `32559110870`. This is engineering review, not
+legal advice, production authentication or public-launch authorization.
 
 ## Identity, authorization and existence privacy
 

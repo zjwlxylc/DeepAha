@@ -1,11 +1,12 @@
 # Phase 6 Test Summary
 
-Evidence date: 2026-08-22. Evidence type: local engineering verification with fixed synthetic data.
+Evidence date: 2026-08-22. Evidence types: local engineering verification and remote exact-SHA CI
+with fixed synthetic data.
 
 ## Final local candidate
 
 `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-phase6.ps1` completed on code
-commit `66aaaac94ae8062740452daed6f855ee2b56f083`:
+commit `d30fbac84e94a3b465ead09f17c1b8c220ab638d`:
 
 - Ruff format: 169 files; Ruff lint: pass;
 - mypy: 161 source files, no issues;
@@ -19,7 +20,8 @@ commit `66aaaac94ae8062740452daed6f855ee2b56f083`:
 
 Targeted RED/GREEN evidence additionally covers removal of committed plaintext fixture credentials,
 purpose-revocation read denial, backslash-based return redirect rejection, duplicate EvidenceRef
-React keys, stale action form state and API error-boundary refresh.
+React keys, stale action form state, API error-boundary refresh and Phase 6-only browser-seed test
+collection.
 
 ## Browser evidence
 
@@ -30,6 +32,13 @@ showed the explicit failure state and recovered after API restoration. See
 
 ## Remote evidence
 
-Not yet available. Engineering Gate closure requires the final stacked candidate's exact SHA and
-all seven required GitHub Actions jobs. Synthetic CI remains engineering evidence and cannot
-qualify real-user metrics.
+Initial candidate `9b859ac912dcb98438a82635f4d5a8685e172ff0` failed run `32558860910` in
+`integration` and `phase3-resolution`: both generic jobs collected a browser-seed assertion that is
+safe to execute only against the exact Phase 6 disposable database on port 55436. The dedicated
+`phase6-profile-action` job succeeded. Commit `d30fbac` scopes that assertion to its exact database;
+the full local verifier then passed again.
+
+Corrected candidate `d30fbac84e94a3b465ead09f17c1b8c220ab638d` completed GitHub Actions run
+`32559110870` with all seven jobs successful: `backend-quality`, `web-quality`, `integration`,
+`phase3-resolution`, `phase4-eligibility`, `phase5-public-trust` and `phase6-profile-action`.
+Synthetic CI remains engineering evidence and cannot qualify real-user metrics.

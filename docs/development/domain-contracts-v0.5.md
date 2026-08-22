@@ -2,7 +2,7 @@
 
 Implementation: `IMPLEMENTED`
 
-Engineering Gate: `OPEN`
+Engineering Gate: `CLOSED`
 
 Release Qualification: `NOT_STARTED`
 
@@ -10,7 +10,8 @@ Contract Maturity: `IMPLEMENTED` (not `STABLE`)
 
 This document describes the additive Phase 6 contract layered on exact Phase 5 head
 `8d9b36c96174bffb303e7f981bd1775ebd8fa672`. Local verification applies through
-`66aaaac94ae8062740452daed6f855ee2b56f083`; remote exact-SHA evidence is pending.
+`d30fbac84e94a3b465ead09f17c1b8c220ab638d`; GitHub Actions run `32559110870` completed all seven
+required jobs successfully. This Engineering Gate evidence does not make the contract `STABLE`.
 
 ## Compatibility boundary
 

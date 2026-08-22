@@ -204,9 +204,10 @@ Qualification `NOT_STARTED`；Phase 5 Public API Contract Maturity `IMPLEMENTED`
 
 **目的：** 将可信机会转换为少量、解释充分、可行动的个人结果。
 
-**当前状态（2026-08-22）：** 实现状态 `IMPLEMENTED`；Engineering Gate `OPEN`，等待 stacked
-draft PR 与最终精确 SHA 的七个远程 CI jobs；Release Qualification `NOT_STARTED`；v0.5 契约
-成熟度 `IMPLEMENTED`。本地证据只含 2 个合成画像、3 个合成机会、0 真人和 0 真实 Gold。
+**当前状态（2026-08-22）：** 实现状态 `IMPLEMENTED`；Engineering Gate `CLOSED`，stacked
+draft PR #6 保持 open/draft/unmerged，候选 `d30fbac84e94a3b465ead09f17c1b8c220ab638d`
+的七个远程 CI jobs 在 run `32559110870` 全部成功；Release Qualification `NOT_STARTED`；
+v0.5 契约成熟度 `IMPLEMENTED`。证据只含 2 个合成画像、3 个合成机会、0 真人和 0 真实 Gold。
 
 **范围：**
 

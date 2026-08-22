@@ -59,8 +59,8 @@ Qualification 为 `NOT_STARTED`，领域契约 v0.4 为 `IMPLEMENTED`、不得�
 堆叠开发不构成合并、发布或 Release Qualification 授权。Phase 5 公开可信层已
 `IMPLEMENTED`、Engineering Gate `CLOSED`、Release Qualification `NOT_STARTED`，公开 API
 契约成熟度为 `IMPLEMENTED`；其 3 条合成机会不替代 200 条真实 Gold 资格。Phase 6 画像、
-匹配与个人行动已 `IMPLEMENTED`，当前 Engineering Gate `OPEN`，Release Qualification
-`NOT_STARTED`，v0.5 成熟度 `IMPLEMENTED`；本地合成和浏览器证据不替代真人完成、理解、
+匹配与个人行动已 `IMPLEMENTED`，Engineering Gate `CLOSED`，Release Qualification
+`NOT_STARTED`，v0.5 成熟度 `IMPLEMENTED`；本地合成、浏览器和 CI 证据不替代真人完成、理解、
 认知负担或真实高意图动作。
 
 ## 维护规则

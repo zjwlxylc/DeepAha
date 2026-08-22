@@ -481,14 +481,14 @@ open, draft and unmerged.
 
 ## 15. Current engineering evidence
 
-As of local code candidate `66aaaac94ae8062740452daed6f855ee2b56f083`, Implementation is
-`IMPLEMENTED`, Engineering Gate is `OPEN`, Release Qualification is `NOT_STARTED`, and v0.5
+As of implementation candidate `d30fbac84e94a3b465ead09f17c1b8c220ab638d`, Implementation is
+`IMPLEMENTED`, Engineering Gate is `CLOSED`, Release Qualification is `NOT_STARTED`, and v0.5
 Contract Maturity is `IMPLEMENTED`. The full verifier passed backend 383, Phase 6 offline 35,
 integration 10 and Web 15 files/31 tests, including migration round trip, drift check and production
 build. Headed Chromium covered desktop/mobile/keyboard and real API failure recovery.
 
 Full-diff review removed committed fixture credentials, enforced current-purpose checks, restricted
-return redirects and added action persistence to verifier/CI. The Gate remains `OPEN` until the
-stacked draft PR exists and the final exact SHA succeeds in all seven required remote jobs. The
-synthetic fixture still contains zero real users and zero real Gold records and does not start
-Release Qualification.
+return redirects and added action persistence to verifier/CI. Stacked draft PR #6 remains
+open/draft/unmerged, and GitHub Actions run `32559110870` succeeded in all seven required jobs on
+the exact candidate. The synthetic fixture still contains zero real users and zero real Gold
+records and does not start Release Qualification.
