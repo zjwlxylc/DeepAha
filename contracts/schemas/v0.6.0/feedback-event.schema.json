@@ -1,0 +1,135 @@
+{
+  "$defs": {
+    "FeedbackClaimKind": {
+      "enum": [
+        "ELIGIBILITY_CORRECTION",
+        "OPPORTUNITY_FACT_CORRECTION",
+        "EXPLANATION_UNCLEAR",
+        "RANKING_IRRELEVANT"
+      ],
+      "title": "FeedbackClaimKind",
+      "type": "string"
+    },
+    "FeedbackEventType": {
+      "enum": [
+        "STRUCTURED_CORRECTION",
+        "EXPLICIT_EVALUATION"
+      ],
+      "title": "FeedbackEventType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "claim_kind": {
+      "$ref": "#/$defs/FeedbackClaimKind"
+    },
+    "consent_scope": {
+      "const": "FEEDBACK_REVIEW_AND_VALIDATION",
+      "title": "Consent Scope",
+      "type": "string"
+    },
+    "consent_version": {
+      "const": "phase7-feedback-consent-v1",
+      "title": "Consent Version",
+      "type": "string"
+    },
+    "contract_version": {
+      "const": "0.6.0",
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "event_type": {
+      "$ref": "#/$defs/FeedbackEventType"
+    },
+    "feedback_event_id": {
+      "format": "uuid",
+      "title": "Feedback Event Id",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "match_snapshot_id": {
+      "format": "uuid",
+      "title": "Match Snapshot Id",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "owner_user_id": {
+      "format": "uuid",
+      "title": "Owner User Id",
+      "type": "string"
+    },
+    "ranking_snapshot_id": {
+      "format": "uuid",
+      "title": "Ranking Snapshot Id",
+      "type": "string"
+    },
+    "structured_reason_code": {
+      "minLength": 1,
+      "title": "Structured Reason Code",
+      "type": "string"
+    },
+    "user_state_snapshot_id": {
+      "format": "uuid",
+      "title": "User State Snapshot Id",
+      "type": "string"
+    },
+    "user_state_version": {
+      "minimum": 1,
+      "title": "User State Version",
+      "type": "integer"
+    },
+    "user_statement": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "User Statement"
+    }
+  },
+  "required": [
+    "feedback_event_id",
+    "owner_user_id",
+    "ranking_snapshot_id",
+    "match_snapshot_id",
+    "opportunity_id",
+    "opportunity_version",
+    "user_state_snapshot_id",
+    "user_state_version",
+    "event_type",
+    "claim_kind",
+    "user_statement",
+    "structured_reason_code",
+    "consent_version",
+    "consent_scope",
+    "contract_version",
+    "input_sha256",
+    "created_at"
+  ],
+  "title": "FeedbackEventSchemaV06",
+  "type": "object"
+}

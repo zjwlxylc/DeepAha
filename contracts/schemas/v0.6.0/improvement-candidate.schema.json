@@ -1,0 +1,92 @@
+{
+  "$defs": {
+    "ImprovementDirection": {
+      "enum": [
+        "EXPLANATION_CLARITY",
+        "OPPORTUNITY_FACT_QUALITY",
+        "ELIGIBILITY_RULE_CANDIDATE",
+        "RANKING_POLICY_CANDIDATE"
+      ],
+      "title": "ImprovementDirection",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "approved_label_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Approved Label Ids",
+      "type": "array"
+    },
+    "candidate_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Candidate Sha256",
+      "type": "string"
+    },
+    "change_statement": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Change Statement",
+      "type": "string"
+    },
+    "component": {
+      "minLength": 1,
+      "title": "Component",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "direction": {
+      "$ref": "#/$defs/ImprovementDirection"
+    },
+    "evidence_class": {
+      "enum": [
+        "SYNTHETIC_FEEDBACK_WORKFLOW_ONLY",
+        "CONSENTED_HUMAN_PARTICIPANT"
+      ],
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "improvement_candidate_id": {
+      "format": "uuid",
+      "title": "Improvement Candidate Id",
+      "type": "string"
+    },
+    "input_manifest_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Manifest Sha256",
+      "type": "string"
+    },
+    "selected": {
+      "const": true,
+      "title": "Selected",
+      "type": "boolean"
+    },
+    "validation_cycle_id": {
+      "format": "uuid",
+      "title": "Validation Cycle Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "improvement_candidate_id",
+    "validation_cycle_id",
+    "approved_label_ids",
+    "direction",
+    "component",
+    "input_manifest_sha256",
+    "change_statement",
+    "candidate_sha256",
+    "evidence_class",
+    "selected",
+    "created_at"
+  ],
+  "title": "ImprovementCandidateSchemaV06",
+  "type": "object"
+}

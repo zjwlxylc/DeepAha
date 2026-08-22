@@ -1,0 +1,100 @@
+{
+  "$defs": {
+    "ReleaseGateDecision": {
+      "enum": [
+        "HOLD_MISSING_HUMAN_EVIDENCE",
+        "HOLD_ENGINEERING_FAILURE",
+        "REJECTED",
+        "CANDIDATE_ACCEPTED_FOR_FUTURE_IMPLEMENTATION"
+      ],
+      "title": "ReleaseGateDecision",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "decision": {
+      "$ref": "#/$defs/ReleaseGateDecision"
+    },
+    "human_validation_run_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Human Validation Run Id"
+    },
+    "improvement_candidate_id": {
+      "format": "uuid",
+      "title": "Improvement Candidate Id",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "offline_evaluation_candidate_id": {
+      "format": "uuid",
+      "title": "Offline Evaluation Candidate Id",
+      "type": "string"
+    },
+    "rationale": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Rationale",
+      "type": "string"
+    },
+    "release_gate_decision_id": {
+      "format": "uuid",
+      "title": "Release Gate Decision Id",
+      "type": "string"
+    },
+    "shadow_test_candidate_id": {
+      "format": "uuid",
+      "title": "Shadow Test Candidate Id",
+      "type": "string"
+    },
+    "simulation_validation_run_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Simulation Validation Run Id"
+    },
+    "validation_cycle_id": {
+      "format": "uuid",
+      "title": "Validation Cycle Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "release_gate_decision_id",
+    "validation_cycle_id",
+    "improvement_candidate_id",
+    "offline_evaluation_candidate_id",
+    "shadow_test_candidate_id",
+    "simulation_validation_run_id",
+    "human_validation_run_id",
+    "decision",
+    "rationale",
+    "input_sha256",
+    "created_at"
+  ],
+  "title": "ReleaseGateDecisionSchemaV06",
+  "type": "object"
+}

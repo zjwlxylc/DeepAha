@@ -1,0 +1,74 @@
+{
+  "$defs": {
+    "ValidationOutcome": {
+      "enum": [
+        "PASSED",
+        "FAILED"
+      ],
+      "title": "ValidationOutcome",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "baseline_component_version": {
+      "minLength": 1,
+      "title": "Baseline Component Version",
+      "type": "string"
+    },
+    "candidate_component_version": {
+      "minLength": 1,
+      "title": "Candidate Component Version",
+      "type": "string"
+    },
+    "comparison_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Comparison Sha256",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "evidence_class": {
+      "enum": [
+        "SYNTHETIC_SIMULATION_ONLY",
+        "CONSENTED_HUMAN_PARTICIPANT"
+      ],
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "improvement_candidate_id": {
+      "format": "uuid",
+      "title": "Improvement Candidate Id",
+      "type": "string"
+    },
+    "offline_evaluation_candidate_id": {
+      "format": "uuid",
+      "title": "Offline Evaluation Candidate Id",
+      "type": "string"
+    },
+    "outcome": {
+      "$ref": "#/$defs/ValidationOutcome"
+    },
+    "shadow_test_candidate_id": {
+      "format": "uuid",
+      "title": "Shadow Test Candidate Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "shadow_test_candidate_id",
+    "improvement_candidate_id",
+    "offline_evaluation_candidate_id",
+    "baseline_component_version",
+    "candidate_component_version",
+    "outcome",
+    "comparison_sha256",
+    "evidence_class",
+    "created_at"
+  ],
+  "title": "ShadowTestCandidateSchemaV06",
+  "type": "object"
+}

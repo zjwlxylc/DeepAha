@@ -1,0 +1,86 @@
+{
+  "$defs": {
+    "ValidationOutcome": {
+      "enum": [
+        "PASSED",
+        "FAILED"
+      ],
+      "title": "ValidationOutcome",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "baseline_component_version": {
+      "minLength": 1,
+      "title": "Baseline Component Version",
+      "type": "string"
+    },
+    "candidate_component_version": {
+      "minLength": 1,
+      "title": "Candidate Component Version",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "dataset_id": {
+      "format": "uuid",
+      "title": "Dataset Id",
+      "type": "string"
+    },
+    "dataset_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Dataset Sha256",
+      "type": "string"
+    },
+    "dataset_version": {
+      "minimum": 1,
+      "title": "Dataset Version",
+      "type": "integer"
+    },
+    "evidence_class": {
+      "enum": [
+        "SYNTHETIC_SIMULATION_ONLY",
+        "CONSENTED_HUMAN_PARTICIPANT"
+      ],
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "improvement_candidate_id": {
+      "format": "uuid",
+      "title": "Improvement Candidate Id",
+      "type": "string"
+    },
+    "offline_evaluation_candidate_id": {
+      "format": "uuid",
+      "title": "Offline Evaluation Candidate Id",
+      "type": "string"
+    },
+    "outcome": {
+      "$ref": "#/$defs/ValidationOutcome"
+    },
+    "result_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Result Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "offline_evaluation_candidate_id",
+    "improvement_candidate_id",
+    "dataset_id",
+    "dataset_version",
+    "dataset_sha256",
+    "baseline_component_version",
+    "candidate_component_version",
+    "outcome",
+    "result_sha256",
+    "evidence_class",
+    "created_at"
+  ],
+  "title": "OfflineEvaluationCandidateSchemaV06",
+  "type": "object"
+}

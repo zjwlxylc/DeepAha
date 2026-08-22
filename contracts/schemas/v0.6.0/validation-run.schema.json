@@ -1,0 +1,310 @@
+{
+  "$defs": {
+    "HumanValidationMetricsSchemaV06": {
+      "additionalProperties": false,
+      "properties": {
+        "cognitive_load_review_count": {
+          "minimum": 0,
+          "title": "Cognitive Load Review Count",
+          "type": "integer"
+        },
+        "comprehension_review_count": {
+          "minimum": 0,
+          "title": "Comprehension Review Count",
+          "type": "integer"
+        },
+        "high_intent_action_count": {
+          "minimum": 0,
+          "title": "High Intent Action Count",
+          "type": "integer"
+        },
+        "participant_count": {
+          "exclusiveMinimum": 0,
+          "title": "Participant Count",
+          "type": "integer"
+        },
+        "structured_feedback_count": {
+          "minimum": 0,
+          "title": "Structured Feedback Count",
+          "type": "integer"
+        },
+        "withdrawal_exclusion_count": {
+          "minimum": 0,
+          "title": "Withdrawal Exclusion Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "participant_count",
+        "structured_feedback_count",
+        "comprehension_review_count",
+        "cognitive_load_review_count",
+        "high_intent_action_count",
+        "withdrawal_exclusion_count"
+      ],
+      "title": "HumanValidationMetricsSchemaV06",
+      "type": "object"
+    },
+    "HumanValidationRunSchemaV06": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "dataset_id": {
+          "format": "uuid",
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "dataset_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Dataset Sha256",
+          "type": "string"
+        },
+        "dataset_version": {
+          "minimum": 1,
+          "title": "Dataset Version",
+          "type": "integer"
+        },
+        "evidence_class": {
+          "const": "CONSENTED_HUMAN_PARTICIPANT",
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "improvement_candidate_id": {
+          "format": "uuid",
+          "title": "Improvement Candidate Id",
+          "type": "string"
+        },
+        "input_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Sha256",
+          "type": "string"
+        },
+        "metrics": {
+          "$ref": "#/$defs/HumanValidationMetricsSchemaV06"
+        },
+        "outcome": {
+          "$ref": "#/$defs/ValidationOutcome"
+        },
+        "release_qualification_eligible": {
+          "title": "Release Qualification Eligible",
+          "type": "boolean"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "synthetic": {
+          "const": false,
+          "title": "Synthetic",
+          "type": "boolean"
+        },
+        "track": {
+          "const": "HUMAN_PARTICIPANT",
+          "title": "Track",
+          "type": "string"
+        },
+        "validation_cycle_id": {
+          "format": "uuid",
+          "title": "Validation Cycle Id",
+          "type": "string"
+        },
+        "validation_run_id": {
+          "format": "uuid",
+          "title": "Validation Run Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "validation_run_id",
+        "validation_cycle_id",
+        "improvement_candidate_id",
+        "dataset_id",
+        "dataset_version",
+        "dataset_sha256",
+        "track",
+        "evidence_class",
+        "synthetic",
+        "release_qualification_eligible",
+        "outcome",
+        "metrics",
+        "input_sha256",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "HumanValidationRunSchemaV06",
+      "type": "object"
+    },
+    "SimulationValidationMetricsSchemaV06": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_difference_count": {
+          "minimum": 0,
+          "title": "Candidate Difference Count",
+          "type": "integer"
+        },
+        "case_count": {
+          "minimum": 0,
+          "title": "Case Count",
+          "type": "integer"
+        },
+        "expected_status_reproduced_count": {
+          "minimum": 0,
+          "title": "Expected Status Reproduced Count",
+          "type": "integer"
+        },
+        "replay_mismatch_count": {
+          "minimum": 0,
+          "title": "Replay Mismatch Count",
+          "type": "integer"
+        },
+        "unexpected_ineligible_case_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unexpected Ineligible Case Ids",
+          "type": "array"
+        },
+        "unexpected_ineligible_count": {
+          "minimum": 0,
+          "title": "Unexpected Ineligible Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "case_count",
+        "expected_status_reproduced_count",
+        "unexpected_ineligible_count",
+        "unexpected_ineligible_case_ids",
+        "replay_mismatch_count",
+        "candidate_difference_count"
+      ],
+      "title": "SimulationValidationMetricsSchemaV06",
+      "type": "object"
+    },
+    "SimulationValidationRunSchemaV06": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "dataset_id": {
+          "format": "uuid",
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "dataset_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Dataset Sha256",
+          "type": "string"
+        },
+        "dataset_version": {
+          "minimum": 1,
+          "title": "Dataset Version",
+          "type": "integer"
+        },
+        "evidence_class": {
+          "const": "SYNTHETIC_SIMULATION_ONLY",
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "improvement_candidate_id": {
+          "format": "uuid",
+          "title": "Improvement Candidate Id",
+          "type": "string"
+        },
+        "input_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Sha256",
+          "type": "string"
+        },
+        "metrics": {
+          "$ref": "#/$defs/SimulationValidationMetricsSchemaV06"
+        },
+        "outcome": {
+          "$ref": "#/$defs/ValidationOutcome"
+        },
+        "release_qualification_eligible": {
+          "const": false,
+          "title": "Release Qualification Eligible",
+          "type": "boolean"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "synthetic": {
+          "const": true,
+          "title": "Synthetic",
+          "type": "boolean"
+        },
+        "track": {
+          "const": "SIMULATION",
+          "title": "Track",
+          "type": "string"
+        },
+        "validation_cycle_id": {
+          "format": "uuid",
+          "title": "Validation Cycle Id",
+          "type": "string"
+        },
+        "validation_run_id": {
+          "format": "uuid",
+          "title": "Validation Run Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "validation_run_id",
+        "validation_cycle_id",
+        "improvement_candidate_id",
+        "dataset_id",
+        "dataset_version",
+        "dataset_sha256",
+        "track",
+        "evidence_class",
+        "synthetic",
+        "release_qualification_eligible",
+        "outcome",
+        "metrics",
+        "input_sha256",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "SimulationValidationRunSchemaV06",
+      "type": "object"
+    },
+    "ValidationOutcome": {
+      "enum": [
+        "PASSED",
+        "FAILED"
+      ],
+      "title": "ValidationOutcome",
+      "type": "string"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "HUMAN_PARTICIPANT": "#/$defs/HumanValidationRunSchemaV06",
+      "SIMULATION": "#/$defs/SimulationValidationRunSchemaV06"
+    },
+    "propertyName": "track"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/SimulationValidationRunSchemaV06"
+    },
+    {
+      "$ref": "#/$defs/HumanValidationRunSchemaV06"
+    }
+  ],
+  "title": "ValidationRunSchemaV06"
+}

@@ -1,0 +1,104 @@
+{
+  "$defs": {
+    "FeedbackConfidenceBand": {
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "title": "FeedbackConfidenceBand",
+      "type": "string"
+    },
+    "FeedbackRiskLevel": {
+      "enum": [
+        "NORMAL",
+        "HIGH_IMPACT"
+      ],
+      "title": "FeedbackRiskLevel",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "confidence_assessment_id": {
+      "format": "uuid",
+      "title": "Confidence Assessment Id",
+      "type": "string"
+    },
+    "confidence_band": {
+      "$ref": "#/$defs/FeedbackConfidenceBand"
+    },
+    "conflict": {
+      "title": "Conflict",
+      "type": "boolean"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "evidence_complete": {
+      "title": "Evidence Complete",
+      "type": "boolean"
+    },
+    "evidence_ref_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Evidence Ref Ids",
+      "type": "array"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "rationale": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Rationale",
+      "type": "string"
+    },
+    "review_case_id": {
+      "format": "uuid",
+      "title": "Review Case Id",
+      "type": "string"
+    },
+    "review_case_version": {
+      "minimum": 1,
+      "title": "Review Case Version",
+      "type": "integer"
+    },
+    "review_purpose": {
+      "const": "FEEDBACK_REVIEW_AND_VALIDATION",
+      "title": "Review Purpose",
+      "type": "string"
+    },
+    "reviewer_id": {
+      "format": "uuid",
+      "title": "Reviewer Id",
+      "type": "string"
+    },
+    "risk_level": {
+      "$ref": "#/$defs/FeedbackRiskLevel"
+    }
+  },
+  "required": [
+    "confidence_assessment_id",
+    "review_case_id",
+    "review_case_version",
+    "evidence_complete",
+    "confidence_band",
+    "risk_level",
+    "conflict",
+    "evidence_ref_ids",
+    "rationale",
+    "reviewer_id",
+    "review_purpose",
+    "input_sha256",
+    "created_at"
+  ],
+  "title": "FeedbackConfidenceAssessmentSchemaV06",
+  "type": "object"
+}
