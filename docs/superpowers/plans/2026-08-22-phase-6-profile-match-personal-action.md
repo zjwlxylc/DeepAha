@@ -597,9 +597,9 @@ git push
 - Create: `backend/tests/fixtures/personal/phase6-users.manifest.json`
 - Create: `backend/tests/personal/support.py`
 - Create: `backend/tests/personal/seed_phase6_browser.py`
+- Create: `backend/tests/personal/test_phase6_fixture.py`
 - Create: `backend/tests/integration/test_phase6_vertical_slice.py`
 - Create: `backend/tests/integration/test_phase6_user_isolation.py`
-- Modify: `backend/tests/public_catalog/support.py`
 
 **Interfaces:**
 - Consumes: Phase 5 three-item CC0 fixture and helper, Phase 4 RuleSet fixture patterns, personal
@@ -607,7 +607,7 @@ git push
 - Produces: `persist_phase6_fixture(session) -> Phase6FixtureIdentity` and browser seeder restricted
   to exact `127.0.0.1:55436/deepaha`.
 
-- [ ] **Step 1: Write failing provenance and vertical-slice tests**
+- [x] **Step 1: Write failing provenance and vertical-slice tests**
 
 ```python
 def test_phase6_fixture_is_non_personal_synthetic_evidence() -> None:
@@ -630,13 +630,13 @@ def test_official_to_action_vertical_slice(database) -> None:
     assert action.saved is True
 ```
 
-- [ ] **Step 2: Run RED integration target in Phase 6 disposable services**
+- [x] **Step 2: Run RED integration target in Phase 6 disposable services**
 
 Run: `cd backend; uv run pytest -m integration tests/integration/test_phase6_vertical_slice.py tests/integration/test_phase6_user_isolation.py -q`
 
 Expected: fail because fixture loader/seeder is absent.
 
-- [ ] **Step 3: Implement deterministic fixture, manifest and seeder**
+- [x] **Step 3: Implement deterministic fixture, manifest and seeder**
 
 Use two fictional users, opaque disposable session tokens documented only in the fixture helper,
 three current Phase 5 opportunities, approved deterministic RuleSets and profile variants covering
@@ -646,16 +646,16 @@ addresses, phone/email or upstream copyrighted content.
 `seed_phase6_browser()` rejects any database URL not exactly host `127.0.0.1`, port `55436`, database
 `deepaha`, and refuses a non-empty personal/public fixture database.
 
-- [ ] **Step 4: Verify the complete personal integration set**
+- [x] **Step 4: Verify the complete personal integration set**
 
-Run: `cd backend; uv run pytest -m integration tests/integration/test_phase6_profile_persistence.py tests/integration/test_phase6_match_replay.py tests/integration/test_phase6_personal_api.py tests/integration/test_phase6_vertical_slice.py tests/integration/test_phase6_user_isolation.py -q`
+Run: `cd backend; uv run pytest -m integration tests/integration/test_phase6_profile_persistence.py tests/integration/test_phase6_personal_match_replay.py tests/integration/test_phase6_personal_api.py tests/integration/test_phase6_vertical_slice.py tests/integration/test_phase6_user_isolation.py -q`
 
 Expected: PASS with explicit fixture counts and zero cross-user disclosures.
 
-- [ ] **Step 5: Commit and push exact files**
+- [x] **Step 5: Commit and push exact files**
 
 ```powershell
-git add -- backend/tests/fixtures/personal backend/tests/personal/support.py backend/tests/personal/seed_phase6_browser.py backend/tests/integration/test_phase6_vertical_slice.py backend/tests/integration/test_phase6_user_isolation.py backend/tests/public_catalog/support.py
+git add -- docs/superpowers/plans/2026-08-22-phase-6-profile-match-personal-action.md backend/tests/fixtures/personal backend/tests/personal/support.py backend/tests/personal/seed_phase6_browser.py backend/tests/personal/test_phase6_fixture.py backend/tests/integration/test_phase6_vertical_slice.py backend/tests/integration/test_phase6_user_isolation.py
 git commit -m "test: cover phase 6 synthetic vertical slice"
 git push
 ```

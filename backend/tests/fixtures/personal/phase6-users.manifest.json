@@ -1,0 +1,11 @@
+{
+  "fixture": "phase6-users.json",
+  "sha256": "329885bba8e4c78c1418311d2bd7a6db3c96782609b388e5a725cc3d6153a26f",
+  "license": "CC0-1.0 synthetic fixture",
+  "synthetic": true,
+  "contains_personal_data": false,
+  "business_truth": false,
+  "release_qualification_eligible": false,
+  "user_count": 2,
+  "purpose": "Deterministic Phase 6 profile, match, action and browser engineering tests only"
+}
