@@ -10,6 +10,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from starlette.middleware.base import RequestResponseEndpoint
 from starlette.responses import JSONResponse
 
+from deepaha.api.feedback import router as feedback_router
 from deepaha.api.health import router as system_router
 from deepaha.api.personal import (
     PersonalApiProblem,
@@ -83,6 +84,7 @@ def create_app() -> FastAPI:
     application.include_router(system_router)
     application.include_router(public_opportunities_router)
     application.include_router(personal_router)
+    application.include_router(feedback_router)
     return application
 
 
