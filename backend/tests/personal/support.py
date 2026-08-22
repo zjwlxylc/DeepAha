@@ -4,6 +4,7 @@ import hashlib
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from secrets import token_urlsafe
 from typing import Literal
 from uuid import UUID
 
@@ -23,9 +24,6 @@ FIXTURE_PATH = FIXTURE_ROOT / "phase6-users.json"
 MANIFEST_PATH = FIXTURE_ROOT / "phase6-users.manifest.json"
 FIXTURE_NOW = datetime(2026, 8, 22, 9, 0, tzinfo=UTC)
 FIXTURE_EXPIRES_AT = datetime(2099, 1, 1, tzinfo=UTC)
-# Non-secret deterministic credentials accepted only by development/test fixture auth.
-_SYNTHETIC_SESSION_TOKEN_A = "K7vJg8mQ2xN4pR6tV9yB3cD5fH1sW0zL"
-_SYNTHETIC_SESSION_TOKEN_B = "T5nC9qA1uE7kM3rX8bF2hJ6pV4wY0sGd"
 
 
 class FixtureModel(BaseModel):
@@ -153,9 +151,13 @@ def persist_phase6_fixture(session: Session) -> Phase6FixtureIdentity:
     fixture = load_phase6_fixture()
     public_ids = persist_phase5_fixture(session)
     _persist_rule_sets(session)
+    token_a = token_urlsafe(32)
+    token_b = token_urlsafe(32)
+    while token_b == token_a:
+        token_b = token_urlsafe(32)
     for user, token in zip(
         fixture.users,
-        (_SYNTHETIC_SESSION_TOKEN_A, _SYNTHETIC_SESSION_TOKEN_B),
+        (token_a, token_b),
         strict=True,
     ):
         session.add(
@@ -181,8 +183,8 @@ def persist_phase6_fixture(session: Session) -> Phase6FixtureIdentity:
     return Phase6FixtureIdentity(
         user_a_id=user_a.user_id,
         user_b_id=user_b.user_id,
-        token_a=_SYNTHETIC_SESSION_TOKEN_A,
-        token_b=_SYNTHETIC_SESSION_TOKEN_B,
+        token_a=token_a,
+        token_b=token_b,
         profile_a=user_a.profile,
         profile_b=user_b.profile,
         public_ids=public_ids,

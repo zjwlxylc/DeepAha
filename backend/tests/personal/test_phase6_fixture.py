@@ -1,7 +1,11 @@
+from pathlib import Path
+
 import pytest
 
 from tests.personal.seed_phase6_browser import assert_phase6_browser_database_url
 from tests.personal.support import load_phase6_fixture
+
+SUPPORT_MODULE = Path(__file__).with_name("support.py")
 
 
 def test_phase6_fixture_is_non_personal_synthetic_evidence() -> None:
@@ -12,6 +16,12 @@ def test_phase6_fixture_is_non_personal_synthetic_evidence() -> None:
     assert fixture.business_truth is False
     assert fixture.release_qualification_eligible is False
     assert len(fixture.users) == 2
+
+
+def test_phase6_fixture_does_not_commit_plaintext_session_credentials() -> None:
+    source = SUPPORT_MODULE.read_text(encoding="utf-8")
+
+    assert "_SYNTHETIC_SESSION_TOKEN" not in source
 
 
 @pytest.mark.parametrize(
