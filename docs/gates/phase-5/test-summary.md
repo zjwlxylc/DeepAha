@@ -34,9 +34,20 @@ results and production build. `git diff --check` passed.
 
 ## Remote evidence
 
-Remote CI is not yet recorded. Engineering Gate is therefore `OPEN`. After the stacked draft PR
-has an exact-SHA successful run, this file will be updated with run ID and every required job
-conclusion.
+Exact candidate SHA `492c8b34562dca59c2a66d6e4d3ea769345803ca` completed GitHub Actions
+[run 32549701629](https://github.com/zjwlxylc/DeepAha/actions/runs/32549701629) with overall
+conclusion `success`:
+
+- `backend-quality`: `success`;
+- `web-quality`: `success`;
+- `integration`: `success`;
+- `phase3-resolution`: `success`;
+- `phase4-eligibility`: `success`;
+- `phase5-public-trust`: `success`.
+
+This satisfies the remote evidence required to close the Engineering Gate. The subsequent
+docs-only final head is separately required to pass the same six jobs and is recorded in draft PR
+#5 after it completes.
 
 Release Qualification remains `NOT_STARTED`; fixed fixtures and synthetic browser output do not
 measure real Gold completeness, source freshness or official-link reproducibility at candidate

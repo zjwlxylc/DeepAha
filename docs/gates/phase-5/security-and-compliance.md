@@ -1,7 +1,7 @@
 # Phase 5 Security And Compliance Review
 
-Status: implemented and locally verified; remote CI pending. This is engineering review, not legal
-advice or production authorization.
+Status: implemented, locally verified and included in the exact-candidate-SHA successful remote CI
+run `32549701629`. This is engineering review, not legal advice or production authorization.
 
 ## Read-only and data-minimization controls
 

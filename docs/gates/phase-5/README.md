@@ -7,15 +7,20 @@ it does not turn synthetic fixtures into real Gold evidence.
 ## Four-axis status
 
 - Implementation: `IMPLEMENTED`
-- Engineering Gate: `OPEN`
+- Engineering Gate: `CLOSED`
 - Release Qualification: `NOT_STARTED`
 - Phase 5 Public API Contract Maturity: `IMPLEMENTED`
 
 The implementation and local verification apply to code commit
-`cc5e240fa3a458ebb211ff39f439583e843cc3bd`. The remaining Engineering
-Gate item is successful GitHub Actions execution on the exact candidate SHA, including
-`phase5-public-trust`. Contract Maturity is not `STABLE` because Release Qualification has not
+`cc5e240fa3a458ebb211ff39f439583e843cc3bd`. Engineering Gate closure is supported by exact
+candidate SHA `492c8b34562dca59c2a66d6e4d3ea769345803ca` and GitHub Actions
+[run 32549701629](https://github.com/zjwlxylc/DeepAha/actions/runs/32549701629), where all six
+required jobs succeeded. Contract Maturity is not `STABLE` because Release Qualification has not
 started.
+
+The docs-only closure commit must also pass all six jobs on its final exact SHA. That non-recursive
+final-head evidence is recorded in draft PR #5 rather than by creating an endless chain of
+self-referential documentation commits.
 
 ## Evidence index
 

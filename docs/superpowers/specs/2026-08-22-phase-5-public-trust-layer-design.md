@@ -11,6 +11,11 @@
 > Startup axes: Implementation `NOT_STARTED`; Engineering Gate `OPEN`; Release Qualification
 > `NOT_STARTED`; Phase 5 Public API Contract Maturity `PROPOSED`
 
+> Closure evidence (2026-08-22): Implementation `IMPLEMENTED`; Engineering Gate `CLOSED` on exact
+> candidate SHA `492c8b34562dca59c2a66d6e4d3ea769345803ca` and successful GitHub Actions run
+> `32549701629`; Release Qualification `NOT_STARTED`; Phase 5 Public API Contract Maturity
+> `IMPLEMENTED` and not `STABLE`.
+
 ## 1. Purpose and bounded outcome
 
 Phase 5 delivers one read-only vertical slice from the governed Opportunity record to a public,

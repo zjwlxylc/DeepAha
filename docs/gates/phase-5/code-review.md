@@ -37,6 +37,7 @@ or Important finding remains open.
 
 ## Current decision
 
-Implementation is `IMPLEMENTED` and locally verified. Engineering Gate remains `OPEN` only for
-exact-SHA remote CI. Phase 5 Public API Contract Maturity is `IMPLEMENTED`, not `STABLE`, and
-Release Qualification is `NOT_STARTED`.
+Implementation is `IMPLEMENTED`. With exact candidate SHA
+`492c8b34562dca59c2a66d6e4d3ea769345803ca` passing all six jobs in GitHub Actions run
+`32549701629`, the Engineering Gate is `CLOSED`. Phase 5 Public API Contract Maturity remains
+`IMPLEMENTED`, not `STABLE`, and Release Qualification remains `NOT_STARTED`.

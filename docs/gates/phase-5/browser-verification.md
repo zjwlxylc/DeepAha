@@ -72,5 +72,7 @@ to the expected empty search result instead of reusing a cached 503 response.
 This evidence used exactly three license-safe synthetic records. It does not establish the
 required 200 real, permission-clear, verified Gold opportunities, 100% public trustworthy-field
 completeness, reproducible official-link coverage, or real-candidate freshness. Release
-Qualification therefore remains `NOT_STARTED`, and the Engineering Gate remains `OPEN` pending
-the rest of the Gate package and exact-SHA remote CI.
+Qualification therefore remains `NOT_STARTED`. The completed browser evidence, the rest of the
+Gate package and all six successful jobs for exact candidate SHA
+`492c8b34562dca59c2a66d6e4d3ea769345803ca` in run `32549701629` support Engineering Gate
+`CLOSED`; they do not support release or production qualification.
