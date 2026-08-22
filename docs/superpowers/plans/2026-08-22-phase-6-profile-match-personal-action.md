@@ -8,8 +8,8 @@
 reproducible v0.4 eligibility, separate deterministic priority ranking and idempotent personal action.
 
 **Architecture:** Add v0.5 UserState/ranking/action contracts while keeping v0.1-v0.4 bytes and
-imports unchanged. Persist an immutable owner-scoped UserState linked to a non-synthetic v0.4 profile
-projection, use the existing RuleSet/compiler/Eligibility Engine/MatchSnapshot for hard eligibility,
+imports unchanged. Persist an immutable owner-scoped UserState linked to a nullable non-synthetic
+v0.5 profile projection, use the existing RuleSet/compiler/Eligibility Engine/MatchSnapshot for hard eligibility,
 and persist ranking and actions separately behind `/api/v1/me` authenticated-principal routes.
 
 **Tech Stack:** Python 3.14, FastAPI, Pydantic v2, SQLAlchemy 2, Alembic, PostgreSQL 18, pytest,
@@ -71,7 +71,8 @@ Actions.
 - Modify: `backend/src/deepaha/contracts/__init__.py`
 
 **Interfaces:**
-- Consumes: `ProfileAttributesSchemaV04`, `EligibilityStatus`, `OpportunityTypeV02`, UUIDv7 common
+- Consumes: v0.4 controlled education/student/rule-field enums, `EligibilityStatus`,
+  `OpportunityTypeV02`, UUIDv7 common
   types and existing export functions.
 - Produces: `UserStateSnapshotSchemaV05`, `PersonalRankingSnapshotSchemaV05`,
   `PersonalRankingItemSchemaV05`, `PersonalActionSnapshotSchemaV05`,
@@ -112,6 +113,18 @@ Expected: collection fails because `deepaha.contracts.phase6` does not exist.
 - [ ] **Step 3: Implement the minimum frozen v0.5 types**
 
 ```python
+class UserProfileAttributesSchemaV05(ContractModel):
+    education_level: EducationLevel | None = None
+    major_name: NonEmptyString | None = None
+    major_code: NonEmptyString | None = None
+    graduation_year: int | None = None
+    student_status: StudentStatus | None = None
+    birth_date: date | None = None
+    hukou_region: NonEmptyString | None = None
+    residence_region: NonEmptyString | None = None
+    target_regions: tuple[NonEmptyString, ...] | None = None
+    certificates: tuple[NonEmptyString, ...] | None = None
+
 class UserStateSnapshotSchemaV05(ContractModel):
     user_state_snapshot_id: EntityId
     user_state_id: EntityId
@@ -119,7 +132,7 @@ class UserStateSnapshotSchemaV05(ContractModel):
     qualification_profile_snapshot_id: EntityId
     life_stage: LifeStage | None
     goal_types: tuple[GoalType, ...]
-    attributes: ProfileAttributesSchemaV04
+    attributes: UserProfileAttributesSchemaV05
     preference_regions: tuple[NonEmptyString, ...]
     preference_types: tuple[OpportunityTypeV02, ...]
     skipped_fields: tuple[ProfileFieldV05, ...]
@@ -249,8 +262,10 @@ parses exactly one bearer token, compares its digest server-side and checks acti
 - [ ] **Step 4: Implement migration and ORM constraints**
 
 Create the seven tables from the design. Replace the named
-`ck_profile_snapshots_synthetic_only` check with `synthetic in (true, false)` without modifying
-existing rows. Add composite owner/version uniqueness, JSON type checks, token/hash format checks,
+`ck_profile_snapshots_synthetic_only` and `ck_profile_snapshots_schema_version_v04` checks with a
+provenance check requiring `(synthetic and version='0.4.0') or (not synthetic and
+version='0.5.0')`, without modifying existing rows. Add composite owner/version uniqueness, JSON
+type checks, token/hash format checks,
 restrictive foreign keys and downgrade refusal when personal or non-synthetic rows exist.
 
 - [ ] **Step 5: Implement immutable ProfileService**
@@ -269,7 +284,7 @@ class ProfileService:
 ```
 
 Canonicalize the request, hash it with owner and operation, reuse an identical idempotency record,
-create a non-synthetic v0.4 qualification projection and immutable UserState in one transaction,
+create a non-synthetic v0.5 nullable qualification projection and immutable UserState in one transaction,
 and never infer values for skipped fields.
 
 - [ ] **Step 6: Run unit and migration integration tests**

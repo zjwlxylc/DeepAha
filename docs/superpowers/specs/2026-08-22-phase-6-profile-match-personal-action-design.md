@@ -65,7 +65,7 @@ The following inherited invariants remain unchanged:
 ### 3.1 In scope
 
 - additive v0.5 contracts for user-state snapshots, ranking snapshots and action snapshots/events;
-- an immutable personal user-state store and a v0.4-compatible non-synthetic qualification
+- an immutable personal user-state store and a v0.5 nullable non-synthetic qualification
   projection;
 - a bounded non-production authentication session boundary with bearer-token digest lookup;
 - exact owner scoping and non-enumerating personal errors;
@@ -110,10 +110,11 @@ reference (IDOR) bugs. It is rejected. Personal routes use `/me` and the server-
 ### 4.4 Selected approach: additive v0.5 user/action contracts plus v0.4 match reuse
 
 Phase 6 adds the domain objects absent from v0.4 and links each immutable `UserStateSnapshot` to a
-non-synthetic qualification projection stored in the existing `profile_snapshots` table. Migration
-`0006` removes only the database-level `synthetic is true` restriction; it keeps v0.4 profile Schema
-bytes unchanged. The existing Phase 4 service continues to reject non-synthetic inputs. A new
-owner-aware personal service may evaluate the linked projection and persists the ordinary v0.4
+non-synthetic v0.5 qualification projection stored in the existing `profile_snapshots` table.
+Migration `0006` replaces only the database-level synthetic/schema-version provenance check; it
+keeps v0.4 profile Schema bytes unchanged. The existing Phase 4 service continues to reject
+non-synthetic inputs. A new owner-aware personal service may evaluate the linked projection and
+persists the ordinary v0.4
 EligibilityResult and MatchSnapshot. Ranking and action data remain separate v0.5 records.
 
 This provides one qualification truth while retaining an explicit provenance boundary.
@@ -170,10 +171,10 @@ re-exporting none of the prior files. Historical v0.1-v0.4 files remain byte-ide
 | `user_state_snapshot_id` | UUIDv7 immutable snapshot identity |
 | `user_state_id` | stable UUIDv7 identity for one user's state stream |
 | `version` | positive, monotonically increasing per user-state |
-| `qualification_profile_snapshot_id` | exact non-synthetic v0.4 profile projection |
+| `qualification_profile_snapshot_id` | exact non-synthetic v0.5 profile projection |
 | `life_stage` | finite optional user context; not a hard rule by itself |
 | `goal_types` | finite non-empty set when provided |
-| `attributes` | inherited v0.4 qualification attributes; null means unknown |
+| `attributes` | v0.5 nullable qualification attributes over the same finite v0.4 rule fields |
 | `preference_regions` / `preference_types` | optional soft-ranking inputs only |
 | `skipped_fields` | unique finite field names explicitly skipped |
 | `personalization_enabled` | false disables soft preferences, not qualification |
@@ -182,9 +183,12 @@ re-exporting none of the prior files. Historical v0.1-v0.4 files remain byte-ide
 | `input_sha256` | canonical hash for idempotent identical snapshots |
 | `created_at` | audit instant |
 
-The contract rejects sensitive/unknown keys, duplicate set values, contradictory “skipped and
-provided” fields, an empty purpose set, or a scenario clock that differs from its qualification
-projection.
+`UserProfileAttributesSchemaV05` preserves the v0.4 field names and controlled scalar values but
+makes every field, including `target_regions` and `certificates`, nullable. This distinction is
+required because the Phase 4 engine interprets `None` as unknown while an empty set is a known value
+that may deterministically conflict. The contract rejects sensitive/unknown keys, duplicate set
+values, contradictory “skipped and provided” fields, an empty purpose set, or a scenario clock that
+differs from its qualification projection.
 
 ### 6.2 `PersonalRankingSnapshotSchemaV05`
 
@@ -217,9 +221,10 @@ feedback text, correction verdict, reviewer state, reminder schedule or notifica
 
 ## 7. Persistence model and migration
 
-Migration `20260822_0006` is additive except for replacing the Phase 4 synthetic-only profile check
-with a provenance check that accepts either synthetic or personal profile rows. Existing v0.4 rows,
-columns, keys and data remain unchanged.
+Migration `20260822_0006` is additive except for replacing the Phase 4 synthetic-only and v0.4-only
+profile checks with one provenance check: synthetic rows require `profile_schema_version = 0.4.0`,
+and non-synthetic rows require `profile_schema_version = 0.5.0`. Existing v0.4 rows, columns, keys
+and data remain unchanged.
 
 ### 7.1 Tables
 
@@ -245,9 +250,11 @@ projection exists, preventing silent evidence deletion.
 Saving a UserState snapshot creates one `profile_snapshots` row with:
 
 - `synthetic = false`;
-- attributes limited to `ProfileAttributesSchemaV04`;
+- attributes validated by `UserProfileAttributesSchemaV05`; absent scalar and set fields are stored
+  as JSON null so the existing engine evaluates them as unknown;
 - the same scenario clock;
-- `profile_schema_version = 0.4.0` because the projection exactly validates that unchanged Schema;
+- `profile_schema_version = 0.5.0`, making personal provenance mechanically distinct from v0.4
+  synthetic fixtures;
 - non-sensitive provenance markers identifying self-service creation, never a fake human review.
 
 The projection is immutable and ownership is proven only through its restrictive link from the
@@ -261,7 +268,7 @@ For each governed public candidate, the personal match service fixes:
 
 - Phase 5 allowlisted current OpportunityVersion;
 - the approved RuleSet belonging to that exact version;
-- the current UserState snapshot and linked v0.4 qualification profile projection;
+- the current UserState snapshot and linked v0.5 qualification profile projection;
 - the snapshot scenario clock;
 - compiler, eligibility engine, major catalog and approved mapping versions;
 - semantic-major-candidate `false`.
