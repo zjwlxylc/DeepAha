@@ -4,7 +4,7 @@ Evidence date: 2026-08-23 (Asia/Shanghai).
 
 Implementation: `IMPLEMENTED`
 
-Engineering Gate: `OPEN`
+Engineering Gate: `CLOSED`
 
 Release Qualification: `NOT_STARTED`
 
@@ -21,8 +21,10 @@ the local PostgreSQL `TEST_INBOX` adapter.
 Fresh local verification, migration round trip, PostgreSQL integration, real Chromium smoke and an
 independent review have passed. GitHub Actions run
 [`32586782360`](https://github.com/zjwlxylc/DeepAha/actions/runs/32586782360) is successful on the
-implementation candidate with all nine required jobs. The Engineering Gate remains `OPEN` until
-the exact Gate-package commit also completes all nine jobs successfully.
+implementation candidate with all nine required jobs. Gate-package candidate
+`17d5f99ed0545e4bda737b74e19ccbfe9dc0fee0` then completed all nine jobs successfully in run
+[`32587210108`](https://github.com/zjwlxylc/DeepAha/actions/runs/32587210108). This closes only the
+bounded Engineering Gate; it does not authorize merge, ready-for-review, release or deployment.
 
 ## Evidence boundary
 

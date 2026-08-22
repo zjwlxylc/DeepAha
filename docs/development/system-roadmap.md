@@ -261,9 +261,10 @@ v0.5 契约成熟度 `IMPLEMENTED`。证据只含 2 个合成画像、3 个合�
 
 **目的：** 证明“替我盯着”能带来真实行动，而不是通知噪声。
 
-**当前工程状态（2026-08-23）：** Implementation `IMPLEMENTED`；Engineering Gate `OPEN`
-（实现候选 `6586f4b784afb05b0a5070d07a379dc663372e92` 的本地完整验证与九项 CI 已通过，
-仍等待精确 Gate 文档候选的九项 CI）；Release Qualification `NOT_STARTED`；v0.7
+**当前工程状态（2026-08-23）：** Implementation `IMPLEMENTED`；Engineering Gate `CLOSED`
+（实现候选 `6586f4b784afb05b0a5070d07a379dc663372e92` 的完整本地验证与 run
+`32586782360` 九项 CI，以及 Gate 文档候选 `17d5f99ed0545e4bda737b74e19ccbfe9dc0fee0`
+的 run `32587210108` 九项 CI 均通过）；Release Qualification `NOT_STARTED`；v0.7
 `IMPLEMENTED`，不得标记 `STABLE`。固定合成夹具的真人参与者为 `0`，唯一投递目标是
 `TEST_INBOX`。
 

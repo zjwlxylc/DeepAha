@@ -30,6 +30,7 @@ delivery-rate estimate.
 | Web component/unit tests | 59 passed |
 | Real Chromium journeys | 1 passed |
 | Required implementation CI jobs | 9 success |
+| Required Gate-package CI jobs | 9 success |
 | Real participants | 0 |
 
 There is no denominator or observation window for open rate, provider success rate, complaint or

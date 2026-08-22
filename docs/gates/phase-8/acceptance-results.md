@@ -24,8 +24,8 @@ Implementation candidate: `6586f4b784afb05b0a5070d07a379dc663372e92`.
 | Independent review | PASS | initial P1 findings were fixed with RED/GREEN tests; final review reports no unresolved P0/P1/P2 |
 | Fresh local verifier | PASS | root 509; Phase 8 focused 75; PostgreSQL integration 43; Web 59; Chromium 1; exit `0` |
 | Implementation exact-SHA CI | PASS | run `32586782360` on `6586f4b...`; all nine required jobs are `success` |
-| Gate-package exact-SHA CI | PENDING | Engineering Gate remains `OPEN` until the documentation candidate's nine jobs succeed |
+| Gate-package exact-SHA CI | PASS | run `32587210108` on `17d5f99...`; all nine required jobs are `success` |
 | Human/production qualification | NOT STARTED | real participants `0`; no open, complaint, retention, action or real-provider evidence |
 
-Implementation is `IMPLEMENTED`; Engineering Gate is currently `OPEN`; Release Qualification is
+Implementation is `IMPLEMENTED`; Engineering Gate is `CLOSED`; Release Qualification is
 `NOT_STARTED`; v0.7 is `IMPLEMENTED`, not `STABLE`.

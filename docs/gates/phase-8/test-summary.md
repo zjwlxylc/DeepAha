@@ -49,5 +49,8 @@ implementation SHA `6586f4b784afb05b0a5070d07a379dc663372e92`. All nine jobs suc
 `phase5-public-trust`, `phase6-profile-action`, `phase7-feedback-review` and
 `phase8-deadline-reminder`.
 
-This is engineering evidence only. The exact Gate-package commit still requires its own nine-job
-success before Engineering Gate closure.
+Gate-package candidate `17d5f99ed0545e4bda737b74e19ccbfe9dc0fee0` subsequently completed
+GitHub Actions run
+[`32587210108`](https://github.com/zjwlxylc/DeepAha/actions/runs/32587210108); the same nine jobs all
+succeeded. This closes only the Phase 8 Engineering Gate. Release Qualification remains
+`NOT_STARTED`.
