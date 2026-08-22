@@ -48,6 +48,11 @@ synthetic ProfileSnapshot -> EligibilityResult -> MatchSnapshot -> EvaluationRun
 固定编译器、引擎、专业目录/映射、场景时钟、输入哈希和 EvidenceRef。该候选受 Phase
 2/3 Gate 阻塞，不代表已发布运行拓扑。
 
+Phase 6 工程实现新增只在 `development/test` 开启的 fixture 身份边界、`/api/v1/me` 个人 API
+和响应式 Web/PWA Server Action。FastAPI 从凭据解析 principal，Next.js 仅在服务端读取临时
+Cookie；PostgreSQL 保存凭据摘要、不可变画像/排序/行动快照和审计事件。该拓扑不是生产身份、
+部署或 Release Qualification 证据。
+
 ## 3. 代码仓库布局
 
 ```text
@@ -67,6 +72,7 @@ DeepAha/
 │   │   ├── rules/
 │   │   ├── eligibility/
 │   │   ├── profiles/
+│   │   ├── personal/
 │   │   ├── matching/
 │   │   ├── actions/
 │   │   ├── feedback/
@@ -108,6 +114,7 @@ DeepAha/
 | `rules` | 规则 DSL、编译、证据和审核状态 | 保存用户行为 |
 | `eligibility` | 用确定性规则产生资格四态 | 个性化价值排序 |
 | `profiles` | 最小画像、动态状态、版本和用户控制 | 机会事实 |
+| `personal` | 服务端身份/用途边界与画像、匹配、行动的用户级编排 | 生产身份、反馈审核或通知 |
 | `matching` | 组合资格、偏好、价值、紧迫性和不确定性 | 覆盖硬资格结论 |
 | `actions` | 保存、官方跳转、材料计划和真实行动状态 | 自动代报名 |
 | `feedback` | 接收原始反馈、证据声明和处理状态 | 直接修改规则 |
@@ -139,13 +146,13 @@ Source poll
 Published OpportunityVersion
   + Approved RuleSet
   + UserStateVersion
-  -> EligibilityResult
-  -> RankingResult
-  -> MatchSnapshot
-  -> public explanation / action
+  -> EligibilityResult + MatchSnapshot
+  -> PersonalRankingSnapshot (deterministic, <= 3, 90 days)
+  -> personal explanation / audited action
 ```
 
-MatchSnapshot 保存输入版本与输出，历史判断不因当前规则升级而被覆盖。
+MatchSnapshot 保存资格输入版本与输出，PersonalRankingSnapshot 另行保存软排序输入和原因；
+历史判断不因当前规则升级或偏好变化而被覆盖，排序也不能改写资格四态。
 
 ### 5.3 反馈学习
 
@@ -184,6 +191,8 @@ Phase 2 不实现上述队列拓扑。采集和解析由显式命令同步编排
 - PostgreSQL 是结构化事实、规则、用户状态、审核和评估的唯一事实源。
 - Phase 4 候选在 PostgreSQL 中追加不可变 RuleSet、ProfileSnapshot、EligibilityResult、
   MatchSnapshot 和 EvaluationRun；旧 OpportunityVersion 和原始证据不重写。
+- Phase 6 在 PostgreSQL 中追加 owner-scoped UserState、PersonalRanking、PersonalAction 和
+  ActionEvent；当前用途撤销后不再读取旧个人结果，审计记录仍保留且不被就地改写。
 - 对象存储保存原始 HTML/PDF/Excel/图片和不可变快照；数据库保存哈希、大小、MIME、对象键和证据引用。
 - Redis 若在后续阶段引入，只用于缓存、队列、锁和限流；缓存丢失不能改变业务事实。Phase 2 不依赖 Redis。
 - pgvector 若在后续阶段引入，只用于去重候选、专业语义候选和检索，不用于硬资格最终裁决。Phase 2 不创建向量列或扩展。

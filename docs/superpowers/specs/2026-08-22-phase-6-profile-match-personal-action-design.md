@@ -8,7 +8,7 @@
 > Exact upstream: Phase 5 final head
 > `8d9b36c96174bffb303e7f981bd1775ebd8fa672`
 >
-> Startup axes: Implementation `NOT_STARTED`; Engineering Gate `OPEN`; Release Qualification
+> Historical startup axes: Implementation `NOT_STARTED`; Engineering Gate `OPEN`; Release Qualification
 > `NOT_STARTED`; Phase 6 Contract Maturity `PROPOSED`
 
 ## 1. Purpose and bounded outcome
@@ -478,3 +478,17 @@ Phase 6 uses independent, reviewable commits in this order:
 Each commit stages exact related paths only and is pushed normally. The final draft PR uses base
 `codex/phase-5-public-trust-layer` and head `codex/phase-6-profile-match-personal-action`; it remains
 open, draft and unmerged.
+
+## 15. Current engineering evidence
+
+As of local code candidate `66aaaac94ae8062740452daed6f855ee2b56f083`, Implementation is
+`IMPLEMENTED`, Engineering Gate is `OPEN`, Release Qualification is `NOT_STARTED`, and v0.5
+Contract Maturity is `IMPLEMENTED`. The full verifier passed backend 383, Phase 6 offline 35,
+integration 10 and Web 15 files/31 tests, including migration round trip, drift check and production
+build. Headed Chromium covered desktop/mobile/keyboard and real API failure recovery.
+
+Full-diff review removed committed fixture credentials, enforced current-purpose checks, restricted
+return redirects and added action persistence to verifier/CI. The Gate remains `OPEN` until the
+stacked draft PR exists and the final exact SHA succeeds in all seven required remote jobs. The
+synthetic fixture still contains zero real users and zero real Gold records and does not start
+Release Qualification.

@@ -7,7 +7,7 @@
 
 - 独立 Compose project：`deepaha-phase6-browser-root`。
 - 仅使用 PostgreSQL `55436`、Moto `55004`、本地 API `8000`、本地 Web `3000`。
-- 后端只在 `development + fixture` 模式接受数据库中保存摘要的固定合成会话；浏览器 Cookie、Bearer token、storage state 和会话摘要均未写入本文档或提交。
+- 后端只在 `development + fixture` 模式接受数据库中保存摘要的本轮临时合成会话；浏览器 Cookie、Bearer token、storage state 和会话摘要均未写入本文档或提交。
 - Phase 2–5 的端口、project、容器和工作区未连接、修改、停止或占用。
 - 验证完成后关闭 Chromium、Uvicorn 和 Next 开发进程，并仅对上述精确 project 执行 `down --volumes --remove-orphans`；随后确认 `55436`、`55004`、`8000`、`3000` 均无监听。
 

@@ -768,7 +768,7 @@ git push
 - Produces: truthful Phase 6 Gate package, final docs-only candidate commit, open/draft/unmerged
   stacked PR and exact-SHA CI record.
 
-- [ ] **Step 1: Run verification-before-completion and full reviews**
+- [x] **Step 1: Run verification-before-completion and full reviews**
 
 Run the full Phase 6 verifier again and capture exact counts. Then run:
 
@@ -784,13 +784,13 @@ Inspect every hit in context. Record scope, authorization, privacy, secret, arti
 migration, dependency, accessibility and full-diff conclusions. Any defect returns to RED and gets a
 separate minimal fix commit.
 
-- [ ] **Step 2: Write Gate evidence with truthful axes**
+- [x] **Step 2: Write Gate evidence with truthful axes**
 
 Until remote CI passes, record Implementation `IMPLEMENTED`, Engineering Gate `OPEN`, Release
 Qualification `NOT_STARTED`, Contract Maturity `IMPLEMENTED`. State synthetic counts and real users
 `0`; do not promote completion/action/coverage metrics.
 
-- [ ] **Step 3: Commit and push Gate candidate docs**
+- [x] **Step 3: Commit and push Gate candidate docs**
 
 ```powershell
 git add -- docs/gates/phase-6 docs/development/README.md docs/development/system-roadmap.md docs/development/architecture.md docs/development/domain-contracts-v0.5.md docs/development/quality-and-release.md docs/superpowers/specs/2026-08-22-phase-6-profile-match-personal-action-design.md docs/superpowers/plans/2026-08-22-phase-6-profile-match-personal-action.md
