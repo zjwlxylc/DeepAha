@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { redirect } from "next/navigation";
 
-import { addMaterialAction } from "../app/personal-actions";
+import { addMaterialAction, saveProfileAction } from "../app/personal-actions";
 import { personalFetch } from "../lib/personal-opportunities";
 import { personalDetail, publicId } from "./personal-fixtures";
 
@@ -12,6 +13,7 @@ vi.mock("../lib/personal-opportunities", async (importOriginal) => {
 });
 
 const mockedPersonalFetch = vi.mocked(personalFetch);
+const mockedRedirect = vi.mocked(redirect);
 
 describe("personal action server mutations", () => {
   beforeEach(() => {
@@ -61,5 +63,15 @@ describe("personal action server mutations", () => {
     expect(body.items[1]).toEqual(
       expect.objectContaining({ label: "新增报名表", due_on: "2026-09-10" }),
     );
+  });
+
+  it("rejects a backslash-based external profile return target", async () => {
+    mockedPersonalFetch.mockResolvedValue({} as never);
+    const formData = new FormData();
+    formData.set("return_to", "/\\attacker.example");
+
+    await saveProfileAction(formData);
+
+    expect(mockedRedirect).toHaveBeenCalledWith("/me/opportunities");
   });
 });

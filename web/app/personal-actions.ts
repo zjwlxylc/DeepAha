@@ -28,7 +28,9 @@ function todayInShanghai(): string {
 }
 
 function safeReturnTo(value: string): string {
-  return value.startsWith("/") && !value.startsWith("//") ? value : "/me/opportunities";
+  return /^\/me\/opportunities(?:\/opp_[0-9a-f]{32})?$/.test(value)
+    ? value
+    : "/me/opportunities";
 }
 
 function uuid7(): string {
