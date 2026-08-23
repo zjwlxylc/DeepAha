@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "recipes": [
+    {
+      "recipe_id": "019c0000-0000-7000-8000-000000000301",
+      "source_id": "0198d239-4b00-7000-8000-000000000201",
+      "endpoint_id": "0198d239-4b00-7000-8000-000000000202",
+      "endpoint_policy_version": "2026-08-21.1",
+      "recipe_version": "2026-08-23.1",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["notices.example.gov"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": [
+        "/notice/*",
+        "/detail/*",
+        "/files/*",
+        "/d/*",
+        "/a/*",
+        "/list/*"
+      ],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": ["CONTENT_CHALLENGE", "UNEXPECTED_CONTENT", "SELECTOR_DRIFT"]
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 20,
+        "maximum_bytes": 1000000,
+        "required_markers": ["official notice"],
+        "forbidden_markers": ["cookie challenge"],
+        "required_selectors": ["main", "a.notice"],
+        "minimum_discovered_count": 1,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "HTML_LINKS",
+        "item_selector": "main",
+        "detail_link_selector": "a.notice",
+        "attachment_link_selector": "a.attachment",
+        "pagination_link_selector": "a.next",
+        "structured_items_path": [],
+        "detail_limit": 20,
+        "attachment_limit": 10,
+        "pagination_limit": 2
+      },
+      "maximum_requests": 25,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 3,
+        "selector_drift_grace_runs": 0
+      },
+      "active": true,
+      "verified_at": "2026-08-23T10:00:00Z",
+      "contract_version": "1.0.0"
+    }
+  ]
+}

@@ -240,11 +240,11 @@ optional Playwright Chromium only after A5, pytest, Ruff, mypy, PowerShell, Dock
 expectations, discovery kind/selectors, pagination/detail/attachment limits, allowed URL patterns,
 health thresholds, active/verified timestamps. No credentials or arbitrary code/plugin path.
 
-- [ ] Write RED tests for strict schema, duplicate identities, version replay/conflict, endpoint
+- [x] Write RED tests for strict schema, duplicate identities, version replay/conflict, endpoint
   ownership, source/endpoint active state, host/media/browser-policy compatibility, finite budgets,
   authority/usage separation and secret/executable-key rejection.
-- [ ] Implement deterministic UTF-8 JSON loader and `validate_recipe_against_endpoint`.
-- [ ] Run focused GREEN and registry-manifest regression.
+- [x] Implement deterministic UTF-8 JSON loader and `validate_recipe_against_endpoint`.
+- [x] Run focused GREEN and registry-manifest regression.
 
 ### Task 7: Implement generic discovery and URL policy
 
@@ -262,10 +262,10 @@ health thresholds, active/verified timestamps. No credentials or arbitrary code/
   retaining first-seen order.
 - Thin plugins, if later necessary, implement only a typed discovery/canonicalization protocol.
 
-- [ ] Write RED tests for relative/absolute/detail/attachment links, pagination caps, duplicate
+- [x] Write RED tests for relative/absolute/detail/attachment links, pagination caps, duplicate
   links, off-host and private/local URLs, malformed content and selector drift.
-- [ ] Implement generic discovery without a source-name/host conditional.
-- [ ] Run focused GREEN and security-focused collector tests.
+- [x] Implement generic discovery without a source-name/host conditional.
+- [x] Run focused GREEN and security-focused collector tests.
 
 ### Task 8: Implement the bounded Acquisition Orchestrator
 
@@ -280,14 +280,14 @@ attempt/request/elapsed budget; persist observation/artifact/evaluation; stop on
 bounded child requests; parse only VALID; degrade/stop on explicit statuses; record a stable
 summary. A fallback cannot weaken endpoint policy.
 
-- [ ] Write RED unit tests with fake Fetchers for success, deterministic fallback, exhausted plan,
+- [x] Write RED unit tests with fake Fetchers for success, deterministic fallback, exhausted plan,
   CAPTCHA/auth/access-denied stop, challenge fallback only when allowed, total-budget enforcement,
   invalid dynamic URL rejection and stable repeated summary.
-- [ ] Write RED PostgreSQL/S3 integration tests for atomic common persistence, RawArtifact dedup,
+- [x] Write RED PostgreSQL/S3 integration tests for atomic common persistence, RawArtifact dedup,
   evaluation idempotency, VALID-only parsing and no duplicate child request.
-- [ ] Implement the minimum orchestrator with injected clock/fetcher registry; no queue/scheduler.
-- [ ] Run focused GREEN, all A1 tests, Phase 2 collection/document regressions, Ruff and mypy.
-- [ ] Inspect that `acquisition` contains no source host/name branch; local commit
+- [x] Implement the minimum orchestrator with injected clock/fetcher registry; no queue/scheduler.
+- [x] Run focused GREEN, all A1 tests, Phase 2 collection/document regressions, Ruff and mypy.
+- [x] Inspect that `acquisition` contains no source host/name branch; local commit
   `feat: orchestrate recipe-driven source acquisition`.
 
 ---

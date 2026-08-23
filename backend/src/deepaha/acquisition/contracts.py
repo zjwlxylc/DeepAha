@@ -3,7 +3,15 @@ from hashlib import sha256
 from typing import Annotated, Literal, Self
 from urllib.parse import urlsplit
 
-from pydantic import ConfigDict, Field, HttpUrl, StringConstraints, field_validator, model_validator
+from pydantic import (
+    ConfigDict,
+    Field,
+    HttpUrl,
+    StringConstraints,
+    ValidationInfo,
+    field_validator,
+    model_validator,
+)
 
 from deepaha.contracts.common import EntityId, HttpStatus, Instant, NonEmptyString, Sha256
 from deepaha.contracts.phase1 import ContractModel
@@ -50,6 +58,20 @@ class SourceUsageRole(StrEnum):
     OFFICIAL_DISCOVERY = "OFFICIAL_DISCOVERY"
     TRUSTED_LEAD = "TRUSTED_LEAD"
     GENERAL_LEAD = "GENERAL_LEAD"
+
+
+class DiscoveryKind(StrEnum):
+    NONE = "NONE"
+    HTML_LINKS = "HTML_LINKS"
+    JSON_ITEMS = "JSON_ITEMS"
+    XML_ITEMS = "XML_ITEMS"
+
+
+class ExpectedChangeFrequency(StrEnum):
+    HOURLY = "HOURLY"
+    DAILY = "DAILY"
+    WEEKLY = "WEEKLY"
+    IRREGULAR = "IRREGULAR"
 
 
 def _normalize_unique(values: object, *, label: str) -> object:
@@ -312,15 +334,193 @@ class AcquisitionEvaluationSchema(AcquisitionContract):
         return self
 
 
+class FetchPlanStep(AcquisitionContract):
+    strategy: FetchStrategy
+    fallback_on: tuple[ValidationStatus, ...] = Field(max_length=8)
+
+    @field_validator("fallback_on")
+    @classmethod
+    def require_safe_fallback_statuses(
+        cls, value: tuple[ValidationStatus, ...]
+    ) -> tuple[ValidationStatus, ...]:
+        if len(value) != len(set(value)):
+            raise ValueError("fallback_on contains duplicates")
+        allowed = {
+            ValidationStatus.CONTENT_CHALLENGE,
+            ValidationStatus.UNEXPECTED_CONTENT,
+            ValidationStatus.ZERO_DISCOVERY_SUSPECT,
+            ValidationStatus.SELECTOR_DRIFT,
+        }
+        if set(value) - allowed:
+            raise ValueError("fallback_on contains a non-permitted status")
+        return value
+
+
+class HealthThresholds(AcquisitionContract):
+    expected_change_frequency: ExpectedChangeFrequency
+    zero_discovery_grace_runs: int = Field(ge=0, le=10)
+    consecutive_failure_limit: int = Field(ge=1, le=20)
+    selector_drift_grace_runs: int = Field(ge=0, le=10)
+
+
+class DiscoverySpec(AcquisitionContract):
+    kind: DiscoveryKind
+    item_selector: NonEmptyString | None
+    detail_link_selector: NonEmptyString | None
+    attachment_link_selector: NonEmptyString | None
+    pagination_link_selector: NonEmptyString | None
+    structured_items_path: tuple[NonEmptyString, ...] = Field(max_length=16)
+    structured_detail_url_field: NonEmptyString | None = None
+    structured_attachment_url_field: NonEmptyString | None = None
+    detail_limit: int = Field(ge=0, le=100)
+    attachment_limit: int = Field(ge=0, le=50)
+    pagination_limit: int = Field(ge=0, le=10)
+
+    @model_validator(mode="after")
+    def require_discovery_shape(self) -> Self:
+        selectors = (
+            self.item_selector,
+            self.detail_link_selector,
+            self.attachment_link_selector,
+            self.pagination_link_selector,
+        )
+        structured_fields = (
+            self.structured_detail_url_field,
+            self.structured_attachment_url_field,
+        )
+        if self.kind is DiscoveryKind.NONE:
+            if (
+                any(value is not None for value in selectors)
+                or any(value is not None for value in structured_fields)
+                or self.structured_items_path
+                or any((self.detail_limit, self.attachment_limit, self.pagination_limit))
+            ):
+                raise ValueError("NONE discovery forbids selectors, paths and nonzero limits")
+            return self
+        if self.kind is DiscoveryKind.HTML_LINKS:
+            if self.item_selector is None or self.detail_link_selector is None:
+                raise ValueError("HTML_LINKS requires item and detail selectors")
+            if self.structured_items_path:
+                raise ValueError("HTML_LINKS forbids structured_items_path")
+            if any(value is not None for value in structured_fields):
+                raise ValueError("HTML_LINKS forbids structured URL fields")
+        elif not self.structured_items_path or self.structured_detail_url_field is None:
+            raise ValueError("structured discovery requires an item path and detail URL field")
+        elif any(value is not None for value in selectors):
+            raise ValueError("structured discovery forbids HTML selectors")
+        return self
+
+
+class SourceRecipe(AcquisitionContract):
+    recipe_id: EntityId
+    source_id: EntityId
+    endpoint_id: EntityId
+    endpoint_policy_version: NonEmptyString
+    recipe_version: NonEmptyString
+    usage_role: SourceUsageRole
+    allowed_hosts: tuple[NonEmptyString, ...] = Field(min_length=1, max_length=16)
+    expected_media_types: tuple[NonEmptyString, ...] = Field(min_length=1, max_length=16)
+    allowed_url_patterns: tuple[NonEmptyString, ...] = Field(min_length=1, max_length=16)
+    fetch_plan: tuple[FetchPlanStep, ...] = Field(min_length=1, max_length=5)
+    expectations: ContentExpectations
+    discovery: DiscoverySpec
+    maximum_requests: int = Field(ge=1, le=25)
+    maximum_elapsed_seconds: int = Field(ge=1, le=300)
+    health: HealthThresholds
+    active: bool
+    verified_at: Instant
+    contract_version: ContractVersion
+
+    @field_validator("allowed_hosts", "expected_media_types", mode="before")
+    @classmethod
+    def normalize_policy_lists(cls, value: object, info: ValidationInfo) -> object:
+        return _normalize_unique(value, label=info.field_name or "policy list")
+
+    @field_validator("allowed_url_patterns")
+    @classmethod
+    def require_path_patterns(cls, value: tuple[str, ...]) -> tuple[str, ...]:
+        if len(value) != len(set(value)):
+            raise ValueError("allowed_url_patterns contains duplicates")
+        if any(not item.startswith("/") or "://" in item for item in value):
+            raise ValueError("allowed_url_patterns must contain path-only glob patterns")
+        return value
+
+    @model_validator(mode="after")
+    def require_bounded_coherent_plan(self) -> Self:
+        strategies = tuple(step.strategy for step in self.fetch_plan)
+        if len(strategies) != len(set(strategies)):
+            raise ValueError("fetch_plan contains duplicate strategies")
+        if self.maximum_requests < len(self.fetch_plan):
+            raise ValueError("maximum_requests cannot be less than fetch_plan length")
+        if self.discovery.kind is DiscoveryKind.JSON_ITEMS and (
+            self.expectations.structured_kind != "JSON"
+        ):
+            raise ValueError("JSON_ITEMS requires JSON content expectations")
+        if self.discovery.kind is DiscoveryKind.XML_ITEMS and (
+            self.expectations.structured_kind != "XML"
+        ):
+            raise ValueError("XML_ITEMS requires XML content expectations")
+        if self.discovery.kind is DiscoveryKind.HTML_LINKS and (
+            self.expectations.structured_kind is not None
+        ):
+            raise ValueError("HTML_LINKS forbids structured content expectations")
+        normalized_media_types = {
+            value.partition(";")[0].strip().lower() for value in self.expected_media_types
+        }
+        if self.expectations.structured_kind == "JSON" and not any(
+            value == "application/json" or value.endswith("+json")
+            for value in normalized_media_types
+        ):
+            raise ValueError("JSON expectations require a matching expected media type")
+        if self.expectations.structured_kind == "XML" and not any(
+            value in {"application/xml", "text/xml"} or value.endswith("+xml")
+            for value in normalized_media_types
+        ):
+            raise ValueError("XML expectations require a matching expected media type")
+        if self.discovery.kind is DiscoveryKind.HTML_LINKS and not (
+            normalized_media_types & {"application/xhtml+xml", "text/html"}
+        ):
+            raise ValueError("HTML discovery requires a matching expected media type")
+        return self
+
+
+class SourceRecipeManifest(AcquisitionContract):
+    schema_version: ContractVersion
+    recipes: tuple[SourceRecipe, ...]
+
+    @model_validator(mode="after")
+    def reject_duplicate_recipes(self) -> Self:
+        recipe_ids: set[object] = set()
+        endpoint_versions: set[tuple[object, object, str]] = set()
+        for recipe in self.recipes:
+            endpoint_version = (
+                recipe.source_id,
+                recipe.endpoint_id,
+                recipe.recipe_version,
+            )
+            if recipe.recipe_id in recipe_ids or endpoint_version in endpoint_versions:
+                raise ValueError("duplicate Recipe identity or endpoint version")
+            recipe_ids.add(recipe.recipe_id)
+            endpoint_versions.add(endpoint_version)
+        return self
+
+
 __all__ = [
     "AcquisitionEvaluationSchema",
     "AcquisitionContract",
     "ChallengeType",
     "ContentExpectations",
+    "DiscoveryKind",
+    "DiscoverySpec",
+    "ExpectedChangeFrequency",
+    "FetchPlanStep",
     "FetchRequest",
     "FetchResult",
     "FetchStrategy",
+    "HealthThresholds",
     "SourceUsageRole",
+    "SourceRecipe",
+    "SourceRecipeManifest",
     "ValidationResult",
     "ValidationStatus",
 ]
