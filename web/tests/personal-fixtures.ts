@@ -47,7 +47,7 @@ export const personalPriorityPage: PersonalPriorityPage = {
   ],
 };
 
-export const personalDetail: PersonalOpportunityDetail = {
+export const personalDetail = {
   opportunity: publicDetail,
   eligibility: {
     snapshot_id: matchSnapshotId,
@@ -88,4 +88,18 @@ export const personalDetail: PersonalOpportunityDetail = {
     created_at: "2026-08-22T09:00:00Z",
   },
   action: null,
-};
+} satisfies PersonalOpportunityDetail;
+
+export const ruleSetUnavailableDetail = {
+  opportunity: publicDetail,
+  eligibility: {
+    status: "UNCERTAIN",
+    reason_code: "RULE_SET_UNAVAILABLE",
+    opportunity_id: opportunityId,
+    opportunity_version: 2,
+    profile_snapshot_id: "019b0000-0000-7000-8000-000000000617",
+    profile_version: 1,
+    scenario_clock: "2026-08-22",
+  },
+  action: null,
+} satisfies PersonalOpportunityDetail;

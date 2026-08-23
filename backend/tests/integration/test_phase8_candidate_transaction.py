@@ -23,6 +23,7 @@ from deepaha.notifications.models import (
 from deepaha.opportunities.models import Opportunity, OpportunityEvent, OpportunityVersion
 from deepaha.opportunities.service import OpportunityResolutionService
 from deepaha.opportunities.types import OpportunityPatch, ResolutionDocument
+from deepaha.personal.auth import Principal
 from deepaha.personal.models import (
     PersonalActionSnapshotModel,
     PersonalRankingItemModel,
@@ -30,6 +31,7 @@ from deepaha.personal.models import (
     PersonalUserModel,
     UserStateSnapshotModel,
 )
+from deepaha.personal.profile import ProfileService
 from deepaha.profiles.models import ProfileSnapshotModel
 from deepaha.rules.models import RuleEvidenceModel, RuleModel, RuleSetModel
 from tests.integration.test_opportunity_resolution_service import (
@@ -338,7 +340,18 @@ def _seed_audience(
             version=1,
             synthetic=True,
             persona_family_id=None,
-            attributes={"education_level": "BACHELOR"},
+            attributes={
+                "education_level": "BACHELOR",
+                "major_name": None,
+                "major_code": None,
+                "graduation_year": None,
+                "student_status": None,
+                "birth_date": None,
+                "hukou_region": None,
+                "residence_region": None,
+                "target_regions": None,
+                "certificates": None,
+            },
             scenario_clock=SCENARIO_DAY,
             profile_schema_version="0.4.0",
             created_at=PRE_EVENT_TIME,
@@ -457,6 +470,34 @@ def _seed_audience(
 
 def _factory(engine: Engine) -> sessionmaker[Session]:
     return sessionmaker(bind=engine, expire_on_commit=False)
+
+
+def test_seeded_eligible_audience_profile_satisfies_current_personal_contract(
+    migrated_engine: Engine,
+) -> None:
+    factory = _factory(migrated_engine)
+    _service, opportunity = _prepare_pre_deadline_service(factory)
+    _seed_audience(factory, opportunity)
+
+    state = ProfileService(
+        session_factory=factory,
+        now_factory=lambda: CLOCK_TIME,
+        allow_synthetic_fixture_profile=True,
+    ).get_current(Principal(user_id=USER_IDS["eligible"]))
+
+    assert state is not None
+    assert state.attributes.model_dump(mode="json") == {
+        "education_level": "BACHELOR",
+        "major_name": None,
+        "major_code": None,
+        "graduation_year": None,
+        "student_status": None,
+        "birth_date": None,
+        "hukou_region": None,
+        "residence_region": None,
+        "target_regions": None,
+        "certificates": None,
+    }
 
 
 def test_only_saved_enabled_authorized_user_gets_event_time_candidate(

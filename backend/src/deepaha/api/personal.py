@@ -375,7 +375,7 @@ def get_personal_opportunity(
     session: Annotated[Session, Depends(get_write_session)],
 ) -> PersonalOpportunityDetail:
     opportunity = PublicCatalogService(session).get_opportunity(public_id)
-    eligibility = match_service.get_match(principal, public_id)
+    eligibility = match_service.get_eligibility(principal, public_id)
     if opportunity is None or eligibility is None:
         raise _not_found()
     result = PersonalOpportunityDetail(

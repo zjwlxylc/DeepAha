@@ -39,4 +39,22 @@ describe("personal action panel", () => {
     expect(screen.getByRole("combobox", { name: "行动状态" })).toHaveValue("PREPARING");
     expect(screen.getByRole("textbox", { name: "新增材料项" })).toHaveValue("");
   });
+
+  it("shows the saved due date in the material checklist", () => {
+    const action = actionSnapshot(3, "PREPARING");
+    action.material_items = [
+      {
+        material_item_id: "019b0000-0000-7000-8000-000000000921",
+        label: "合成报名材料",
+        completed: false,
+        due_on: "2026-09-10",
+      },
+    ];
+
+    render(<ActionPanel publicId={publicId} action={action} />);
+
+    expect(
+      screen.getByText("待准备 · 合成报名材料 · 计划日期 2026-09-10"),
+    ).toBeVisible();
+  });
 });

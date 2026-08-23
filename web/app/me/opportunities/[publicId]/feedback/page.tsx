@@ -21,10 +21,14 @@ export default async function FeedbackPage({
     getPersonalPriorities(),
     getPersonalProfile(),
   ]);
+  if (!("eligibility_result" in detail.eligibility)) {
+    throw new Error("feedback context unavailable");
+  }
+  const matchSnapshotId = detail.eligibility.snapshot_id;
   const item = priorities.items.find(
     (candidate) =>
       candidate.opportunity.public_id === publicId &&
-      candidate.ranking.match_snapshot_id === detail.eligibility.snapshot_id,
+      candidate.ranking.match_snapshot_id === matchSnapshotId,
   );
   if (!item) throw new Error("feedback context unavailable");
   return (

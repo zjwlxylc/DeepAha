@@ -61,7 +61,10 @@ export default function ActionPanel({ publicId, action }: { publicId: string; ac
       {action?.material_items.length ? (
         <ul className="material-list" aria-label="材料计划">
           {action.material_items.map((item) => (
-            <li key={item.material_item_id}>{item.completed ? "已完成" : "待准备"} · {item.label}</li>
+            <li key={item.material_item_id}>
+              {item.completed ? "已完成" : "待准备"} · {item.label}
+              {item.due_on ? ` · 计划日期 ${item.due_on}` : null}
+            </li>
           ))}
         </ul>
       ) : null}

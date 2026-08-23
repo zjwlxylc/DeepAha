@@ -53,6 +53,16 @@ export interface MatchSnapshot {
   created_at: string;
 }
 
+export interface RuleSetUnavailableEligibility {
+  status: "UNCERTAIN";
+  reason_code: "RULE_SET_UNAVAILABLE";
+  opportunity_id: string;
+  opportunity_version: number;
+  profile_snapshot_id: string;
+  profile_version: number;
+  scenario_clock: string;
+}
+
 export interface UserStateSnapshot {
   user_state_snapshot_id: string;
   user_state_id: string;
@@ -128,7 +138,7 @@ export interface PersonalActionSnapshot {
 
 export interface PersonalOpportunityDetail {
   opportunity: PublicOpportunityDetail;
-  eligibility: MatchSnapshot;
+  eligibility: MatchSnapshot | RuleSetUnavailableEligibility;
   action: PersonalActionSnapshot | null;
 }
 

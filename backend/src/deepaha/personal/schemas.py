@@ -3,9 +3,9 @@ from typing import Literal, Self
 
 from pydantic import ConfigDict, Field, HttpUrl, field_validator, model_validator
 
-from deepaha.contracts.common import EntityId
+from deepaha.contracts.common import EntityId, VersionNumber
 from deepaha.contracts.phase2 import OpportunityTypeV02
-from deepaha.contracts.phase4 import MatchSnapshotSchemaV04
+from deepaha.contracts.phase4 import EligibilityStatus, MatchSnapshotSchemaV04
 from deepaha.contracts.phase6 import (
     ActionState,
     GoalType,
@@ -128,9 +128,19 @@ class PersonalPriorityPage(PersonalInputModel):
     omitted_rule_set_count: int = Field(ge=0)
 
 
+class RuleSetUnavailableEligibility(PersonalInputModel):
+    status: Literal[EligibilityStatus.UNCERTAIN] = EligibilityStatus.UNCERTAIN
+    reason_code: Literal["RULE_SET_UNAVAILABLE"] = "RULE_SET_UNAVAILABLE"
+    opportunity_id: EntityId
+    opportunity_version: VersionNumber
+    profile_snapshot_id: EntityId
+    profile_version: VersionNumber
+    scenario_clock: date
+
+
 class PersonalOpportunityDetail(PersonalInputModel):
     opportunity: PublicOpportunityDetail
-    eligibility: MatchSnapshotSchemaV04
+    eligibility: MatchSnapshotSchemaV04 | RuleSetUnavailableEligibility
     action: PersonalActionSnapshotSchemaV05 | None
 
 
@@ -143,5 +153,6 @@ __all__ = [
     "PersonalPriorityItem",
     "PersonalPriorityPage",
     "ProfileWrite",
+    "RuleSetUnavailableEligibility",
     "SavedWrite",
 ]

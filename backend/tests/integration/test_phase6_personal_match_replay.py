@@ -17,6 +17,7 @@ from deepaha.personal.models import (
     PersonalRankingSnapshotModel,
 )
 from deepaha.personal.profile import ProfileService
+from deepaha.personal.schemas import RuleSetUnavailableEligibility
 from deepaha.rules.major import load_approved_major_mapping, load_major_catalog
 from deepaha.rules.models import RuleEvidenceModel, RuleModel, RuleSetModel
 from tests.integration.test_phase4_persistence_contract import persist_phase4_inputs
@@ -324,5 +325,13 @@ def test_public_candidate_without_exact_ruleset_is_explicitly_omitted(
 
     assert ranking.items == ()
     assert ranking.omitted_rule_set_count == 2
+    with Session(migrated_engine) as session:
+        public_id = session.scalar(select(Opportunity.public_id).order_by(Opportunity.public_id))
+    assert public_id is not None
+    eligibility = service.get_eligibility(principal, public_id)
+    assert eligibility is not None
+    assert isinstance(eligibility, RuleSetUnavailableEligibility)
+    assert eligibility.status is EligibilityStatus.UNCERTAIN
+    assert eligibility.reason_code == "RULE_SET_UNAVAILABLE"
     with Session(migrated_engine) as session:
         assert session.scalar(select(func.count()).select_from(MatchSnapshotModel)) == 0

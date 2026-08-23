@@ -44,9 +44,11 @@ export default async function PersonalOpportunityPage({ params }: { params: Prom
           <Link className="button button-secondary" href={`/opportunities/${publicId}`}>
             返回公开证据与变化历史
           </Link>
-          <Link className="button button-secondary" href={`/me/opportunities/${publicId}/feedback`}>
-            纠正这条判断
-          </Link>
+          {"eligibility_result" in detail.eligibility ? (
+            <Link className="button button-secondary" href={`/me/opportunities/${publicId}/feedback`}>
+              纠正这条判断
+            </Link>
+          ) : null}
         </div>
       </section>
     </main>

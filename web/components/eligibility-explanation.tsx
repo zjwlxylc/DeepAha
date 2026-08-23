@@ -1,6 +1,7 @@
 import type {
   MatchSnapshot,
   PublicEvidence,
+  RuleSetUnavailableEligibility,
 } from "../lib/personal-opportunities";
 
 const statusLabels = {
@@ -23,11 +24,43 @@ const fieldLabels: Record<string, string> = {
 };
 
 interface EligibilityExplanationProps {
-  eligibility: MatchSnapshot;
+  eligibility: MatchSnapshot | RuleSetUnavailableEligibility;
   evidence: PublicEvidence[];
 }
 
 export default function EligibilityExplanation({ eligibility, evidence }: EligibilityExplanationProps) {
+  if ("reason_code" in eligibility) {
+    return (
+      <section className="eligibility-panel eligibility-uncertain" aria-labelledby="eligibility-title">
+        <p className="section-kicker">资格判断 · 四态</p>
+        <h2 id="eligibility-title">仍需确认</h2>
+        <p>
+          判断固定绑定机会 v{eligibility.opportunity_version}、画像 v
+          {eligibility.profile_version} 和场景日期 {eligibility.scenario_clock}。
+        </p>
+        <div className="explanation-grid">
+          <section aria-labelledby="unavailable-title">
+            <h3 id="unavailable-title">规则状态</h3>
+            <p>当前机会版本尚无已批准的精确规则集，不能作出确定资格结论。</p>
+          </section>
+          <section aria-labelledby="unavailable-next-title">
+            <h3 id="unavailable-next-title">风险与下一步</h3>
+            <p>请直接核对官方公告、附件与最新变化；系统不会把缺少规则误写为符合条件。</p>
+          </section>
+        </div>
+        <ul className="evidence-links" aria-label="机会官方证据">
+          {evidence.map((item) => (
+            <li key={`${item.evidence_ref_id}:${item.field_path}`}>
+              <a href={item.official_url} target="_blank" rel="noreferrer">
+                查看官方证据
+              </a>
+              <span> · {item.field_path}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  }
   const result = eligibility.eligibility_result;
   const evidenceIds = new Set(
     result.rule_evaluations.flatMap((evaluation) => evaluation.evidence_ref_ids),

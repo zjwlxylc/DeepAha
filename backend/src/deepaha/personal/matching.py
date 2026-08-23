@@ -29,6 +29,7 @@ from deepaha.personal.models import (
     UserStateSnapshotModel,
 )
 from deepaha.personal.profile import ProfileService
+from deepaha.personal.schemas import RuleSetUnavailableEligibility
 from deepaha.public_catalog.models import PublicCatalogEntry
 from deepaha.rules.major import ApprovedMajorMapping, MajorCatalog
 from deepaha.rules.models import RuleSetModel
@@ -334,6 +335,59 @@ class PersonalMatchService:
             )
         return None if snapshot_id is None else self._eligibility_service.replay(snapshot_id)
 
+    def get_eligibility(
+        self,
+        principal: Principal,
+        public_id: str,
+    ) -> MatchSnapshotSchemaV04 | RuleSetUnavailableEligibility | None:
+        existing = self.get_match(principal, public_id)
+        if existing is not None:
+            return existing
+        state = self._ranking_state(principal)
+        if state is None:
+            return None
+        with self._session_factory() as session:
+            opportunity = session.scalar(
+                select(Opportunity)
+                .join(
+                    PublicCatalogEntry,
+                    PublicCatalogEntry.opportunity_id == Opportunity.opportunity_id,
+                )
+                .where(
+                    Opportunity.public_id == public_id,
+                    Opportunity.publication_status == "PUBLISHED",
+                    Opportunity.current_version == PublicCatalogEntry.opportunity_version,
+                )
+            )
+        if opportunity is None or opportunity.current_version is None:
+            return None
+        rule_set = self._rule_set_for_version(
+            opportunity.opportunity_id,
+            opportunity.current_version,
+        )
+        if rule_set is None:
+            return RuleSetUnavailableEligibility(
+                opportunity_id=opportunity.opportunity_id,
+                opportunity_version=opportunity.current_version,
+                profile_snapshot_id=state.qualification_profile_snapshot_id,
+                profile_version=state.qualification_profile_version,
+                scenario_clock=state.scenario_clock,
+            )
+        created_at = self._now_factory()
+        return self._eligibility_service.evaluate_personal_and_save(
+            MatchInput(
+                opportunity_id=opportunity.opportunity_id,
+                opportunity_version=opportunity.current_version,
+                rule_set_id=rule_set.rule_set_id,
+                rule_set_version=rule_set.version,
+                profile_snapshot_id=state.qualification_profile_snapshot_id,
+                major_catalog=self._major_catalog,
+                major_mapping=self._major_mapping,
+                evaluated_at=created_at,
+                created_at=created_at,
+            )
+        )
+
     def _ranking_state(
         self,
         principal: Principal,
@@ -407,12 +461,22 @@ class PersonalMatchService:
         return tuple(candidates)
 
     def _rule_set_for(self, candidate: _PublicCandidate) -> RuleSetModel | None:
+        return self._rule_set_for_version(
+            candidate.opportunity_id,
+            candidate.opportunity_version,
+        )
+
+    def _rule_set_for_version(
+        self,
+        opportunity_id: UUID,
+        opportunity_version: int,
+    ) -> RuleSetModel | None:
         with self._session_factory() as session:
             return session.scalar(
                 select(RuleSetModel)
                 .where(
-                    RuleSetModel.opportunity_id == candidate.opportunity_id,
-                    RuleSetModel.opportunity_version == candidate.opportunity_version,
+                    RuleSetModel.opportunity_id == opportunity_id,
+                    RuleSetModel.opportunity_version == opportunity_version,
                     RuleSetModel.review_status == "APPROVED",
                 )
                 .order_by(RuleSetModel.version.desc(), RuleSetModel.rule_set_id)

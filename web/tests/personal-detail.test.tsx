@@ -7,7 +7,11 @@ import {
   getPersonalOpportunity,
   type EligibilityStatus,
 } from "../lib/personal-opportunities";
-import { personalDetail, publicId } from "./personal-fixtures";
+import {
+  personalDetail,
+  publicId,
+  ruleSetUnavailableDetail,
+} from "./personal-fixtures";
 
 vi.mock("../lib/personal-opportunities", async () => {
   const actual = await vi.importActual<typeof import("../lib/personal-opportunities")>(
@@ -80,5 +84,22 @@ describe("personal opportunity detail", () => {
 
     expect(consoleError.mock.calls.flat().join(" ")).not.toMatch(/same key|unique key/i);
     consoleError.mockRestore();
+  });
+
+  it("shows governed uncertainty when the current opportunity has no exact approved rules", async () => {
+    mockedDetail.mockResolvedValue(ruleSetUnavailableDetail);
+
+    render(
+      await PersonalOpportunityPage({ params: Promise.resolve({ publicId }) }),
+    );
+
+    expect(screen.getByRole("heading", { name: "仍需确认" })).toBeVisible();
+    expect(screen.getByText(/当前机会版本尚无已批准的精确规则集/)).toBeVisible();
+    expect(screen.getByRole("link", { name: "查看官方证据" })).toHaveAttribute(
+      "href",
+      ruleSetUnavailableDetail.opportunity.key_evidence[0].official_url,
+    );
+    expect(screen.queryByRole("link", { name: "纠正这条判断" })).not.toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/匹配度|置信度|\d+%/);
   });
 });
