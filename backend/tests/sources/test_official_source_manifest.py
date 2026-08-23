@@ -154,10 +154,10 @@ throw "unexpected fake CLI command: $command"
     result = json.loads(output.read_text(encoding="utf-8"))
     assert result["requested_rounds"] == 1
     assert result["interval_seconds"] == 21600
-    assert result["endpoint_count"] == 10
+    assert result["endpoint_count"] == 26
     assert len(result["rounds"]) == 1
-    assert len(result["rounds"][0]["results"]) == 10
-    assert result["counts"] == {"results": 10, "valid": 10, "failed": 0}
+    assert len(result["rounds"][0]["results"]) == 26
+    assert result["counts"] == {"results": 26, "valid": 26, "failed": 0}
     serialized = output.read_text(encoding="utf-8")
     assert "must-not-appear" not in serialized
     assert "response_body" not in serialized
@@ -174,7 +174,7 @@ throw "unexpected fake CLI command: $command"
     assert resumed.returncode == 0, resumed.stderr
     resumed_result = json.loads(output.read_text(encoding="utf-8"))
     assert len(resumed_result["rounds"]) == 1
-    assert resumed_result["counts"] == {"results": 10, "valid": 10, "failed": 0}
+    assert resumed_result["counts"] == {"results": 26, "valid": 26, "failed": 0}
 
 
 def test_live_runner_rejects_interval_below_registry_policy(

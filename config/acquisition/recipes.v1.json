@@ -1,4 +1,1034 @@
 {
   "schema_version": "1.0.0",
-  "recipes": []
+  "recipes": [
+    {
+      "recipe_id": "01a02f3c-49d1-715f-9173-a40b388d6747",
+      "source_id": "0198d239-4b00-7000-8000-000000000212",
+      "endpoint_id": "0198d239-4b00-7000-8000-000000000213",
+      "endpoint_policy_version": "2026-08-21.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["www.mohrss.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/SYrlzyhshbzb/fwyd/SYkaoshizhaopin/zyhgjjgsydwgkzp/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 500,
+        "maximum_bytes": 5000000,
+        "required_markers": [],
+        "forbidden_markers": [],
+        "required_selectors": ["li", "a[href]"],
+        "minimum_discovered_count": 1,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "HTML_LINKS",
+        "item_selector": "li",
+        "detail_link_selector": "a[href]",
+        "attachment_link_selector": "a[href$='.pdf'], a[href$='.doc'], a[href$='.docx'], a[href$='.xls'], a[href$='.xlsx']",
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 20,
+        "attachment_limit": 10,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 30,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T08:51:42.313586Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f4a-fe20-7211-b2f7-ca172e51b26c",
+      "source_id": "0198d239-4b00-7000-8000-000000000212",
+      "endpoint_id": "01a02f4b-1cdf-73fd-bd11-bbaf5cf0cd34",
+      "endpoint_policy_version": "2026-08-23.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "OFFICIAL_DISCOVERY",
+      "allowed_hosts": ["search.mohrss.gov.cn", "www.mohrss.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": [
+        "/was5/web/search*",
+        "/SYrlzyhshbzb/fwyd/SYkaoshizhaopin/zyhgjjgsydwgkzp/*",
+        "/xxgk2020/fdzdgknr/rcrs_4225/sydwrsgl/*",
+        "/wap/fw/klzp/zgsygkzp/*"
+      ],
+      "fetch_plan": [
+        {
+          "strategy": "OFFICIAL_ALTERNATIVE",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 5000000,
+        "required_markers": [],
+        "forbidden_markers": [],
+        "required_selectors": [],
+        "minimum_discovered_count": 1,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "HTML_LINKS",
+        "item_selector": "body",
+        "detail_link_selector": "a[href*='/SYrlzyhshbzb/fwyd/SYkaoshizhaopin/zyhgjjgsydwgkzp/'], a[href*='/xxgk2020/fdzdgknr/rcrs_4225/sydwrsgl/'], a[href*='/wap/fw/klzp/zgsygkzp/']",
+        "attachment_link_selector": "a[href$='.pdf'], a[href$='.doc'], a[href$='.docx'], a[href$='.xls'], a[href$='.xlsx']",
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 3,
+        "attachment_limit": 2,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 6,
+      "maximum_elapsed_seconds": 300,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T15:25:48Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f4a-fe20-7211-b2f7-ca18747a1b9a",
+      "source_id": "0198d239-4b00-7000-8000-000000000222",
+      "endpoint_id": "01a02f51-a7d6-7477-895d-fc9844e2827f",
+      "endpoint_policy_version": "2026-08-23.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["rlsbt.zj.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": [
+        "/col/col1229743683/*",
+        "/art/*",
+        "/module/download/*"
+      ],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": [],
+        "forbidden_markers": [],
+        "required_selectors": [],
+        "minimum_discovered_count": 1,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "HTML_LINKS",
+        "item_selector": "body",
+        "detail_link_selector": "a[href*='/art/']",
+        "attachment_link_selector": "a[href*='/module/download/'], a[href$='.pdf'], a[href$='.xls'], a[href$='.xlsx']",
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 3,
+        "attachment_limit": 2,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 6,
+      "maximum_elapsed_seconds": 300,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T15:45:35Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f4a-fe20-7211-b2f7-ca198b5f38f6",
+      "source_id": "0198d239-4b00-7000-8000-000000000214",
+      "endpoint_id": "0198d239-4b00-7000-8000-000000000215",
+      "endpoint_policy_version": "2026-08-21.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["www.sasac.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": [],
+        "forbidden_markers": [],
+        "required_selectors": [],
+        "minimum_discovered_count": 1,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "HTML_LINKS",
+        "item_selector": "body",
+        "detail_link_selector": "a[href$='/content.html']",
+        "attachment_link_selector": "a[href$='.pdf'], a[href$='.doc'], a[href$='.docx'], a[href$='.xls'], a[href$='.xlsx']",
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 3,
+        "attachment_limit": 2,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 6,
+      "maximum_elapsed_seconds": 300,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T15:45:35Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f5a-44f4-72b8-9001-a05b9f6671eb",
+      "source_id": "0198d239-4b00-7000-8000-000000000214",
+      "endpoint_id": "01a02f5a-44f4-72b8-9001-a05a7a63f379",
+      "endpoint_policy_version": "2026-08-24.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["wap.sasac.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/*"],
+      "fetch_plan": [
+        {
+          "strategy": "OFFICIAL_ALTERNATIVE",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": [],
+        "forbidden_markers": [],
+        "required_selectors": [],
+        "minimum_discovered_count": 1,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "HTML_LINKS",
+        "item_selector": "body",
+        "detail_link_selector": "a[href$='/content.html']",
+        "attachment_link_selector": "a[href$='.pdf'], a[href$='.doc'], a[href$='.docx'], a[href$='.xls'], a[href$='.xlsx']",
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 3,
+        "attachment_limit": 2,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 6,
+      "maximum_elapsed_seconds": 300,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T16:00:40Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f5c-2a51-779c-97b9-8c5ad75da8ea",
+      "source_id": "0198d239-4b00-7000-8000-000000000214",
+      "endpoint_id": "01a02f5c-2a51-779c-97b9-8c5946cb3f9e",
+      "endpoint_policy_version": "2026-08-24.2",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["wap.sasac.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/*"],
+      "fetch_plan": [
+        {
+          "strategy": "OFFICIAL_ALTERNATIVE",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": [],
+        "forbidden_markers": [],
+        "required_selectors": [],
+        "minimum_discovered_count": 1,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "HTML_LINKS",
+        "item_selector": "body",
+        "detail_link_selector": "a[href$='/content.html']",
+        "attachment_link_selector": "a[href$='.pdf'], a[href$='.doc'], a[href$='.docx'], a[href$='.xls'], a[href$='.xlsx']",
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 3,
+        "attachment_limit": 2,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 6,
+      "maximum_elapsed_seconds": 300,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T16:02:44Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f4a-fe20-7211-b2f7-ca1a07ad8673",
+      "source_id": "01a02f47-3cfe-7430-b621-95ef66b404e5",
+      "endpoint_id": "01a02f47-3cfe-7430-b621-95f013704a0e",
+      "endpoint_policy_version": "2026-08-23.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["www.crrcgc.cc", "crrc.hotjob.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/eportal/ui*", "/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": [],
+        "forbidden_markers": [],
+        "required_selectors": [],
+        "minimum_discovered_count": 1,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "HTML_LINKS",
+        "item_selector": "body",
+        "detail_link_selector": "a[href*='crrc.hotjob.cn']",
+        "attachment_link_selector": null,
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 1,
+        "attachment_limit": 0,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 2,
+      "maximum_elapsed_seconds": 300,
+      "health": {
+        "expected_change_frequency": "WEEKLY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": true,
+      "verified_at": "2026-08-23T15:45:35Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f5e-1277-7551-afb0-aa554c102f1e",
+      "source_id": "01a02f47-3cfe-7430-b621-95ef66b404e5",
+      "endpoint_id": "01a02f5e-1277-7551-afb0-aa54af4182f9",
+      "endpoint_policy_version": "2026-08-24.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["crrc.hotjob.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": [],
+        "forbidden_markers": [],
+        "required_selectors": [],
+        "minimum_discovered_count": null,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "NONE",
+        "item_selector": null,
+        "detail_link_selector": null,
+        "attachment_link_selector": null,
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 0,
+        "attachment_limit": 0,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "WEEKLY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T16:04:49Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f6c-b97e-74ae-a789-d99517a1d94f",
+      "source_id": "0198d239-4b00-7000-8000-000000000220",
+      "endpoint_id": "0198d239-4b00-7000-8000-000000000221",
+      "endpoint_policy_version": "2026-08-21.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["www.gqt.org.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/notice/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": ["通知"],
+        "forbidden_markers": [],
+        "required_selectors": ["a"],
+        "minimum_discovered_count": 1,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "HTML_LINKS",
+        "item_selector": "body",
+        "detail_link_selector": "a[href*='/notice/']",
+        "attachment_link_selector": "a[href$='.pdf'], a[href$='.doc'], a[href$='.docx'], a[href$='.xls'], a[href$='.xlsx']",
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 3,
+        "attachment_limit": 2,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "WEEKLY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": true,
+      "verified_at": "2026-08-23T16:18:00Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f6c-b97e-74ae-a789-d996d459de76",
+      "source_id": "0198d239-4b00-7000-8000-000000000216",
+      "endpoint_id": "0198d239-4b00-7000-8000-000000000217",
+      "endpoint_policy_version": "2026-08-21.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "OFFICIAL_DISCOVERY",
+      "allowed_hosts": ["www.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/zhengce/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": ["政策"],
+        "forbidden_markers": [],
+        "required_selectors": ["a"],
+        "minimum_discovered_count": 1,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "HTML_LINKS",
+        "item_selector": "body",
+        "detail_link_selector": "a[href*='/zhengce/content/']",
+        "attachment_link_selector": "a[href$='.pdf'], a[href$='.doc'], a[href$='.docx'], a[href$='.xls'], a[href$='.xlsx']",
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 3,
+        "attachment_limit": 2,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T16:26:00Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f6c-b97e-74ae-a789-d99877f67f1f",
+      "source_id": "0198d239-4b00-7000-8000-000000000222",
+      "endpoint_id": "01a02f6c-b97e-74ae-a789-d997785c92c5",
+      "endpoint_policy_version": "2026-08-24.2",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["rlsbt.zj.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/col/col1229743683/art/2026/*", "/api-gateway/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": ["公开招聘"],
+        "forbidden_markers": [],
+        "required_selectors": ["body"],
+        "minimum_discovered_count": null,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "HTML_LINKS",
+        "item_selector": "body",
+        "detail_link_selector": "a[href='__no_recursive_detail__']",
+        "attachment_link_selector": "a[href$='.pdf'], a[href$='.doc'], a[href$='.docx'], a[href$='.xls'], a[href$='.xlsx'], a[href*='/module/download/']",
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 0,
+        "attachment_limit": 5,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": true,
+      "verified_at": "2026-08-23T16:30:00Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f6c-b97e-74ae-a789-d99ac55e09ed",
+      "source_id": "0198d239-4b00-7000-8000-000000000222",
+      "endpoint_id": "01a02f6c-b97e-74ae-a789-d9990e386db7",
+      "endpoint_policy_version": "2026-08-24.3",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["rlsbt.zj.gov.cn"],
+      "expected_media_types": ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
+      "allowed_url_patterns": ["/api-gateway/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": [],
+        "forbidden_markers": [],
+        "required_selectors": [],
+        "minimum_discovered_count": null,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "NONE",
+        "item_selector": null,
+        "detail_link_selector": null,
+        "attachment_link_selector": null,
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 0,
+        "attachment_limit": 0,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "IRREGULAR",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T16:33:00Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f79-27f3-7411-8d3d-7c0b5d92e210",
+      "source_id": "0198d239-4b00-7000-8000-000000000212",
+      "endpoint_id": "01a02f79-27f3-7411-8d3d-7c0a718060dd",
+      "endpoint_policy_version": "2026-08-24.2",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["www.mohrss.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/SYrlzyhshbzb/fwyd/SYkaoshizhaopin/zyhgjjgsydwgkzp/zpgg/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": ["招聘"],
+        "forbidden_markers": [],
+        "required_selectors": ["body"],
+        "minimum_discovered_count": null,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "NONE",
+        "item_selector": null,
+        "detail_link_selector": null,
+        "attachment_link_selector": null,
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 0,
+        "attachment_limit": 0,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T16:37:00Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f79-27f3-7411-8d3d-7c0d35d4a120",
+      "source_id": "0198d239-4b00-7000-8000-000000000216",
+      "endpoint_id": "01a02f79-27f3-7411-8d3d-7c0c8611670b",
+      "endpoint_policy_version": "2026-08-24.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "OFFICIAL_DISCOVERY",
+      "allowed_hosts": ["www.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/zhengce/zhengceku/202601/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": ["招聘"],
+        "forbidden_markers": [],
+        "required_selectors": ["body"],
+        "minimum_discovered_count": null,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "NONE",
+        "item_selector": null,
+        "detail_link_selector": null,
+        "attachment_link_selector": null,
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 0,
+        "attachment_limit": 0,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "IRREGULAR",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": true,
+      "verified_at": "2026-08-23T16:38:00Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f79-27f3-7411-8d3d-7c0f8d6fdd8a",
+      "source_id": "0198d239-4b00-7000-8000-000000000220",
+      "endpoint_id": "01a02f79-27f3-7411-8d3d-7c0e9a6420ef",
+      "endpoint_policy_version": "2026-08-24.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "OFFICIAL_DISCOVERY",
+      "allowed_hosts": ["www.gqt.org.cn"],
+      "expected_media_types": ["application/pdf"],
+      "allowed_url_patterns": ["/notice/202608/*.pdf"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": [],
+        "forbidden_markers": [],
+        "required_selectors": [],
+        "minimum_discovered_count": null,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "NONE",
+        "item_selector": null,
+        "detail_link_selector": null,
+        "attachment_link_selector": null,
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 0,
+        "attachment_limit": 0,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "IRREGULAR",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": true,
+      "verified_at": "2026-08-23T16:39:00Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f79-27f3-7411-8d3d-7c11706b68fe",
+      "source_id": "01a02f47-3cfe-7430-b621-95f1eb871d02",
+      "endpoint_id": "01a02f79-27f3-7411-8d3d-7c10c92c185b",
+      "endpoint_policy_version": "2026-08-24.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["job.10086.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/personal/notice/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": ["公告"],
+        "forbidden_markers": [],
+        "required_selectors": ["body"],
+        "minimum_discovered_count": null,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "NONE",
+        "item_selector": null,
+        "detail_link_selector": null,
+        "attachment_link_selector": null,
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 0,
+        "attachment_limit": 0,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T16:40:00Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f79-27f3-7411-8d3d-7c13501dc01e",
+      "source_id": "0198d239-4b00-7000-8000-000000000212",
+      "endpoint_id": "01a02f79-27f3-7411-8d3d-7c12e3164be2",
+      "endpoint_policy_version": "2026-08-24.3",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["search.mohrss.gov.cn", "www.mohrss.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/was5/web/search*", "/SYrlzyhshbzb/*"],
+      "fetch_plan": [
+        {
+          "strategy": "OFFICIAL_ALTERNATIVE",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": [],
+        "forbidden_markers": [],
+        "required_selectors": ["body"],
+        "minimum_discovered_count": null,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "NONE",
+        "item_selector": null,
+        "detail_link_selector": null,
+        "attachment_link_selector": null,
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 0,
+        "attachment_limit": 0,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": true,
+      "verified_at": "2026-08-23T16:43:00Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f87-1f6d-7070-9356-6cf5fabd059f",
+      "source_id": "0198d239-4b00-7000-8000-000000000212",
+      "endpoint_id": "01a02f87-1f6d-7070-9356-6cf4d548f052",
+      "endpoint_policy_version": "2026-08-24.4",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["www.mohrss.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/SYrlzyhshbzb/fwyd/SYkaoshizhaopin/zyhgjjgsydwgkzp/gxbyszpzl/202603/t20260305_567916.html"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": ["招聘"],
+        "forbidden_markers": [],
+        "required_selectors": ["body"],
+        "minimum_discovered_count": null,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "NONE",
+        "item_selector": null,
+        "detail_link_selector": null,
+        "attachment_link_selector": null,
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 0,
+        "attachment_limit": 0,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "IRREGULAR",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": false,
+      "verified_at": "2026-08-23T16:49:51Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f8b-1a12-730e-8b66-c7828d6e0912",
+      "source_id": "0198d239-4b00-7000-8000-000000000212",
+      "endpoint_id": "01a02f8b-1a12-730e-8b66-c781b6c941a1",
+      "endpoint_policy_version": "2026-08-24.5",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["search.mohrss.gov.cn", "www.mohrss.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/was5/web/search*", "/SYrlzyhshbzb/*"],
+      "fetch_plan": [
+        {
+          "strategy": "OFFICIAL_ALTERNATIVE",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": ["招聘公告"],
+        "forbidden_markers": [],
+        "required_selectors": ["body"],
+        "minimum_discovered_count": null,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "NONE",
+        "item_selector": null,
+        "detail_link_selector": null,
+        "attachment_link_selector": null,
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 0,
+        "attachment_limit": 0,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "DAILY",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": true,
+      "verified_at": "2026-08-23T16:56:00Z",
+      "contract_version": "1.0.0"
+    },
+    {
+      "recipe_id": "01a02f7d-5f7d-7223-a06b-4d65c5d5a48e",
+      "source_id": "0198d239-4b00-7000-8000-000000000218",
+      "endpoint_id": "0198d239-4b00-7000-8000-000000000219",
+      "endpoint_policy_version": "2026-08-21.1",
+      "recipe_version": "1.0.0",
+      "usage_role": "PRIMARY_EVIDENCE",
+      "allowed_hosts": ["www.moe.gov.cn"],
+      "expected_media_types": ["text/html"],
+      "allowed_url_patterns": ["/jyb_xxgk/xxgk/neirong/fenlei/sxml_cwysj/cwysj_xszz/xszz_zzbg/*"],
+      "fetch_plan": [
+        {
+          "strategy": "STATIC_HTTP",
+          "fallback_on": []
+        }
+      ],
+      "expectations": {
+        "minimum_bytes": 1000,
+        "maximum_bytes": 10000000,
+        "required_markers": ["学生资助"],
+        "forbidden_markers": [],
+        "required_selectors": ["body"],
+        "minimum_discovered_count": null,
+        "structured_kind": null,
+        "contract_version": "1.0.0"
+      },
+      "discovery": {
+        "kind": "NONE",
+        "item_selector": null,
+        "detail_link_selector": null,
+        "attachment_link_selector": null,
+        "pagination_link_selector": null,
+        "structured_items_path": [],
+        "structured_detail_url_field": null,
+        "structured_attachment_url_field": null,
+        "detail_limit": 0,
+        "attachment_limit": 0,
+        "pagination_limit": 0
+      },
+      "maximum_requests": 1,
+      "maximum_elapsed_seconds": 120,
+      "health": {
+        "expected_change_frequency": "IRREGULAR",
+        "zero_discovery_grace_runs": 1,
+        "consecutive_failure_limit": 2,
+        "selector_drift_grace_runs": 1
+      },
+      "active": true,
+      "verified_at": "2026-08-23T16:43:00Z",
+      "contract_version": "1.0.0"
+    }
+  ]
 }

@@ -225,6 +225,30 @@ def test_valid_root_and_discovered_detail_are_parsed_once() -> None:
     ]
 
 
+def test_detail_page_can_discover_a_bounded_attachment_without_recursive_details() -> None:
+    detail = (
+        b'<main>official notice detail<a class="notice" href="/detail/2">other</a>'
+        b'<a class="attachment" href="/files/roles.xlsx">roles</a></main>'
+    )
+    attachment = b'<main>official notice attachment<a class="notice" href="/detail/3">x</a></main>'
+    static = FakeFetcher([LIST_BODY, detail, attachment])
+    value, _, _ = orchestrator(
+        configured_recipe=recipe(),
+        fetchers={FetchStrategy.STATIC_HTTP: static},
+    )
+
+    summary = value.run(recipe().recipe_id)
+
+    assert summary.terminal_code is RunTerminalCode.COMPLETE
+    assert summary.request_count == 3
+    assert summary.attachment_count == 1
+    assert [str(item.requested_url) for item in static.requests] == [
+        "https://notices.example.gov/list/",
+        "https://notices.example.gov/detail/1",
+        "https://notices.example.gov/files/roles.xlsx",
+    ]
+
+
 def test_declared_content_challenge_falls_back_deterministically() -> None:
     static = FakeFetcher(
         [

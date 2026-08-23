@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "source_acquisition_entry_id": "01a02f8c-0317-76ca-bf86-e7ab4f01f7e0",
+  "document": {
+    "artifact_id": "01a02f8c-02e1-73de-ba38-77a5e01aaf96",
+    "document_id": "01a02f8c-034f-76d8-8b81-b6e1537707d0",
+    "requested_url": "http://search.mohrss.gov.cn/was5/web/search?channelid=202079&doctitle=%E6%8B%9B%E8%81%98%E5%85%AC%E5%91%8A&orderby=-docreltime&page=1",
+    "retrieved_at": "2026-08-23T16:55:00.025521+00:00",
+    "document_created_at": "2026-08-23T16:55:00.175829+00:00",
+    "content_sha256": "1b12bb32943fff5869d411ef74ca205d60a118cb66f0925017a1c9f3c3659641",
+    "normalized_text_sha256": "a518c753b038da2ba4d256f0ebf3e36aa90d02eebc67a22e3b787afa99025b42",
+    "object_key": "raw/sha256/1b/1b12bb32943fff5869d411ef74ca205d60a118cb66f0925017a1c9f3c3659641",
+    "byte_size": 6042,
+    "title": "公开招聘服务平台搜索结果",
+    "extracted_text_uri": "s3://deepaha-raw/derived/documents/1b12bb32943fff5869d411ef74ca205d60a118cb66f0925017a1c9f3c3659641/html_lxml/0.2.0/text.txt",
+    "evidence_locator": {
+      "schema_version": "0.2.0",
+      "kind": "html_selector",
+      "selector": "html:nth-of-type(1) > body:nth-of-type(1) > div:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1)",
+      "text_sha256": "03b97ac7941f608ccafe21b93cb19ad95d4f5b84886328e3fdea73e1a310c784"
+    }
+  },
+  "resolution_input": {
+    "source_id": "0198d239-4b00-7000-8000-000000000212",
+    "source_tier": "OFFICIAL_PRIMARY",
+    "evidence_ref_id": "01a02f8c-0353-747a-8473-4e5561c38567",
+    "role": "PRIMARY_NOTICE",
+    "canonical_url": "http://www.mohrss.gov.cn/SYrlzyhshbzb/fwyd/SYkaoshizhaopin/zyhgjjgsydwgkzp/zpgg/202608/t20260810_581810.html",
+    "external_id": "t20260810_581810",
+    "effective_at": "2026-08-10T00:00:00+00:00",
+    "facts": {
+      "canonical_title": "国家广播电视总局直属事业单位2026年度公开招聘公告（第二批）",
+      "type": "PUBLIC_INSTITUTION_JOB",
+      "issuer_name": "国家广播电视总局",
+      "jurisdiction": "全国",
+      "status": "UNKNOWN",
+      "published_at": "2026-08-10T00:00:00+00:00",
+      "application_url": "http://www.mohrss.gov.cn/SYrlzyhshbzb/fwyd/SYkaoshizhaopin/zyhgjjgsydwgkzp/zpgg/202608/t20260810_581810.html"
+    }
+  },
+  "expected": {
+    "public_id": "opp_2a13fa0b74328df54066f2104f712c55",
+    "resolution_key": "external:0198d239-4b00-7000-8000-000000000212:t20260810_581810",
+    "version": 1,
+    "resolved_at": "2026-08-23T17:00:00+00:00"
+  }
+}

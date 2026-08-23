@@ -177,11 +177,11 @@ def test_invalid_fixture_is_rejected() -> None:
         load_registry_manifest(FIXTURES / "registry-invalid.json")
 
 
-def test_official_registry_has_exactly_ten_bounded_link_only_candidates() -> None:
+def test_official_registry_has_bounded_link_only_platform_candidates() -> None:
     manifest = load_registry_manifest(OFFICIAL)
     entries = manifest.sources
 
-    assert len(entries) == 10
+    assert len(entries) == 12
     assert {entry.source.authority_name for entry in entries} == {
         "中华人民共和国国家公务员局",
         "中华人民共和国人力资源和社会保障部",
@@ -193,6 +193,8 @@ def test_official_registry_has_exactly_ten_bounded_link_only_candidates() -> Non
         "浙江省人事考试院",
         "浙江省科学技术厅",
         "浙江省教育厅",
+        "中国中车集团有限公司",
+        "中国移动通信集团有限公司",
     }
     assert {
         (urlsplit(str(entry.endpoints[0].url)).hostname or "").removeprefix("www.")
@@ -208,13 +210,15 @@ def test_official_registry_has_exactly_ten_bounded_link_only_candidates() -> Non
         "zjks.com",
         "kjt.zj.gov.cn",
         "jyt.zj.gov.cn",
+        "crrcgc.cc",
+        "job.10086.cn",
     }
     endpoints = [endpoint for entry in entries for endpoint in entry.endpoints]
-    assert len(endpoints) == 10
-    assert all(
-        entry.source.active and endpoint.active for entry, endpoint in zip(entries, endpoints)
-    )
+    assert len(endpoints) == 26
+    assert all(entry.source.active for entry in entries)
+    assert all(endpoint.active for endpoint in endpoints)
     assert all(endpoint.minimum_interval_seconds == 21600 for endpoint in endpoints)
-    assert all(endpoint.browser_policy == "NEVER" for endpoint in endpoints)
+    assert sum(endpoint.browser_policy == "FALLBACK" for endpoint in endpoints) == 3
+    assert sum(endpoint.browser_policy == "NEVER" for endpoint in endpoints) == 23
     assert all(endpoint.content_use_basis == "LINK_ONLY" for endpoint in endpoints)
     assert all(not endpoint.fixture_storage_allowed for endpoint in endpoints)

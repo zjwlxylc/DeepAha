@@ -419,9 +419,9 @@ class AcquisitionOrchestrator:
         if integrity_error is not None or body is None:
             return _validation_error(integrity_error or "BODY_UNAVAILABLE"), ()
         inline = _inline_result(fetched, body)
-        discovery_enabled = pending.kind in {None, DiscoveredLinkKind.PAGINATION}
+        discovery_enabled = pending.kind is not DiscoveredLinkKind.ATTACHMENT
         expectations = recipe.expectations
-        if not discovery_enabled:
+        if pending.kind is not None:
             expectations = expectations.model_copy(update={"minimum_discovered_count": None})
         preliminary = self._validator.evaluate(inline, expectations)
         if not discovery_enabled or preliminary.status not in {
@@ -437,6 +437,12 @@ class AcquisitionOrchestrator:
                 allowed_hosts=policy.allowed_hosts,
                 recipe=recipe,
             )
+            if pending.kind is DiscoveredLinkKind.DETAIL:
+                discovered = tuple(
+                    link
+                    for link in discovered
+                    if link.kind is DiscoveredLinkKind.ATTACHMENT
+                )
         except DiscoveryError as error:
             status = (
                 ValidationStatus.SELECTOR_DRIFT

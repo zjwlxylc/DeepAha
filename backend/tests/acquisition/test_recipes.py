@@ -52,9 +52,14 @@ def test_load_recipe_manifest_accepts_strict_versioned_json() -> None:
     assert recipe.health.zero_discovery_grace_runs == 1
 
 
-def test_empty_production_manifest_is_valid_until_real_qualification() -> None:
+def test_production_manifest_tracks_only_qualified_platform_candidates() -> None:
     manifest = load_recipe_manifest(PRODUCTION)
-    assert manifest.recipes == ()
+    assert len(manifest.recipes) == 20
+    assert sum(recipe.active for recipe in manifest.recipes) == 8
+    assert {step.strategy.value for recipe in manifest.recipes for step in recipe.fetch_plan} == {
+        "STATIC_HTTP",
+        "OFFICIAL_ALTERNATIVE",
+    }
 
 
 def test_recipe_loader_rejects_utf8_bom_and_secrets_or_executable_keys(tmp_path: Path) -> None:

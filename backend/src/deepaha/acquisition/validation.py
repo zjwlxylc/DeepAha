@@ -1,4 +1,5 @@
 import json
+import re
 from collections.abc import Mapping
 
 from lxml import etree, html
@@ -15,6 +16,15 @@ from deepaha.acquisition.contracts import (
 VALIDATOR_NAME = "deepaha-content-validator"
 VALIDATOR_VERSION = "1.0.0"
 METRICS_SCHEMA_VERSION = "1.0.0"
+_CHARSET_PATTERN = re.compile(rb"charset\s*=\s*['\"]?\s*([a-z0-9._-]+)", re.IGNORECASE)
+_SUPPORTED_CHARSETS = {
+    "ascii": "ascii",
+    "gb18030": "gb18030",
+    "gb2312": "gb2312",
+    "gbk": "gbk",
+    "utf-8": "utf-8",
+    "utf8": "utf-8",
+}
 
 
 class ContentValidator:
@@ -38,7 +48,7 @@ class ContentValidator:
         if discovered_count is not None:
             metrics["discovered_count"] = discovered_count
 
-        content = body.decode("utf-8", errors="replace")
+        content = self._decode_content(body, result.media_type)
         folded = content.casefold()
         challenge = self._challenge(folded)
         if challenge is not None:
@@ -147,6 +157,20 @@ class ContentValidator:
         )
 
     @staticmethod
+    def _decode_content(body: bytes, media_type: str | None) -> str:
+        declared = None
+        if media_type is not None:
+            match = _CHARSET_PATTERN.search(media_type.encode("ascii", errors="ignore"))
+            if match is not None:
+                declared = match.group(1).decode("ascii").lower()
+        if declared is None:
+            match = _CHARSET_PATTERN.search(body[:2048])
+            if match is not None:
+                declared = match.group(1).decode("ascii").lower()
+        codec = _SUPPORTED_CHARSETS.get(declared or "", "utf-8")
+        return body.decode(codec, errors="replace")
+
+    @staticmethod
     def _challenge(
         folded: str,
     ) -> tuple[ValidationStatus, ChallengeType, str] | None:
@@ -168,7 +192,15 @@ class ContentValidator:
                 ChallengeType.CAPTCHA,
                 "CAPTCHA_MARKER",
             )
-        if "__jsl_clearance" in folded or "document.cookie" in folded:
+        if any(
+            marker in folded
+            for marker in (
+                "__jsl_clearance",
+                "__tst_status",
+                "document.cookie",
+                "eo_bot_ssid",
+            )
+        ):
             return (
                 ValidationStatus.CONTENT_CHALLENGE,
                 ChallengeType.JAVASCRIPT_COOKIE,

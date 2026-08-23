@@ -84,6 +84,23 @@ def test_valid_html_passes_all_deterministic_checks() -> None:
     }
 
 
+def test_html_marker_validation_honors_a_declared_legacy_charset() -> None:
+    content = (
+        '<html><head><meta http-equiv="Content-Type" '
+        'content="text/html; charset=gb2312"></head>'
+        '<body><main><a class="notice">通知 公告</a></main></body></html>'
+    ).encode("gb2312")
+
+    result = ContentValidator().evaluate(
+        fetch_result(content),
+        expectations(required_markers=["通知"], minimum_discovered_count=0),
+        discovered_count=0,
+    )
+
+    assert result.status is ValidationStatus.VALID
+    assert result.metrics["required_marker_matches"] == 1
+
+
 @pytest.mark.parametrize(
     ("fixture_name", "status", "challenge_type", "diagnostic"),
     [
@@ -126,6 +143,18 @@ def test_generic_challenge_markers_fail_closed_before_structure_checks(
     assert (result.status, result.challenge_type) == (status, challenge_type)
     assert result.diagnostic_codes == (diagnostic,)
     assert all("html" not in str(value).lower() for value in result.metrics.values())
+
+
+@pytest.mark.parametrize("marker", [b"__tst_status", b"EO_Bot_Ssid"])
+def test_generic_bot_cookie_challenge_markers_are_detected(marker: bytes) -> None:
+    result = ContentValidator().evaluate(
+        fetch_result(b"<script>" + marker + b"</script>"),
+        expectations(minimum_bytes=1),
+    )
+
+    assert result.status is ValidationStatus.CONTENT_CHALLENGE
+    assert result.challenge_type is ChallengeType.JAVASCRIPT_COOKIE
+    assert result.diagnostic_codes == ("JAVASCRIPT_COOKIE_CHALLENGE",)
 
 
 @pytest.mark.parametrize(
