@@ -1,6 +1,6 @@
 # Acquisition Health and Integration Cost
 
-Status: `IMPLEMENTED`; first-five convergence result: `INSUFFICIENT_INTEGRATION_EVIDENCE` until A7.
+Status: `IMPLEMENTED`; first-five convergence result: `PASS` at A7.
 
 ## Semantic health
 
@@ -34,5 +34,15 @@ requires all of the following:
 - at least 3/5 use Recipe-only or Recipe plus a thin plugin;
 - none changes the core product schema.
 
-No first-five evidence has been recorded yet. Synthetic tests prove the formulas and failure
-boundary only; they are not A7 convergence evidence and are not reported as a real Gate PASS.
+The versioned A7 manifest records five distinct sources:
+
+- `4/5` (80%) reuse an existing generic Fetcher;
+- `3/5` (60%) are Recipe-only;
+- source-specific production LOC: `0`;
+- core product schema changes: `0`;
+- measured onboarding time: `185` minutes;
+- bounded qualification requests: `13`, including `6` explicit failed attempts;
+- persisted-evidence browser/manual requests: `0/0`.
+
+These figures prove only early architectural convergence. They do not satisfy the separate
+100-source/14-day maintenance target.
