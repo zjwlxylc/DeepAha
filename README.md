@@ -2,7 +2,7 @@
 
 DeepAha 青年机会智能系统：把分散、变化、复杂的机会信息转化为可理解、可判断、可行动的路径。
 
-> 当前状态：Phase 1 历史 Gate 已 `CLOSED`。Phase 2 来源采集与文档证据已 `IMPLEMENTED`，Engineering Gate 已 `CLOSED`；[Phase 2 Release Qualification](docs/gates/phase-2/README.md) 因 24 小时 live 观察、新鲜副本和最终候选验证尚未完成而保持 `IN_PROGRESS`，领域契约 v0.2 为 `IMPLEMENTED`、不得标记 `STABLE`。Phase 3 机会归并、版本与变化已 `IMPLEMENTED`，自身 [Engineering Gate](docs/gates/phase-3/README.md) 已 `CLOSED`；Release Qualification 为 `NOT_STARTED`，领域契约 v0.3 为 `IMPLEMENTED`、不得标记 `STABLE`。本分支仍不提供面向用户的业务功能，Phase 3 未合并或发布。
+> 当前状态：`main` 已集成 Phase 1–8 的真实工程系统。Phase 1 历史 Gate 已 `CLOSED`；Phase 2–8 实现均为 `IMPLEMENTED`、Engineering Gate 均为 `CLOSED`。Phase 2 Release Qualification 因 live 重启窗口仅完成 1/5 轮且未完成新鲜副本/最终候选验证而记为 `FAILED`；Phase 3–8 Release Qualification 均未形成生产资格，v0.2–v0.7 只能标记 `IMPLEMENTED`、不得标记 `STABLE`。Phase 6/7 真人参与者仍为 `0`，Phase 8 只投递到合成 `TEST_INBOX`；当前发布决定保持 `HOLD_MISSING_HUMAN_EVIDENCE`，不代表生产发布或部署已获批。
 
 开发路线与架构见 `docs/development/README.md`。
 
@@ -47,4 +47,11 @@ Phase 3 候选验证使用完全独立的 PostgreSQL/Moto 端口与 compose proj
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/verify-phase3.ps1
+```
+
+当前 `main` 的完整 Phase 1–8 工程矩阵使用隔离 PostgreSQL/Moto、迁移往返、后端/Web 与
+Chromium 验证：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/verify-phase8.ps1
 ```

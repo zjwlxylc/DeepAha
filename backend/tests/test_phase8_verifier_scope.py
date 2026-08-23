@@ -22,6 +22,12 @@ def _phase8_verifier() -> str:
     return (REPOSITORY_ROOT / "scripts" / "verify-phase8.ps1").read_text("utf-8")
 
 
+def test_phase8_hashed_fixture_enforces_lf_checkout_bytes() -> None:
+    attributes = (REPOSITORY_ROOT / ".gitattributes").read_text("utf-8").splitlines()
+
+    assert "backend/tests/fixtures/reminders/*.json text eol=lf" in attributes
+
+
 def test_phase8_verifier_uses_only_exact_isolated_project_and_ports() -> None:
     verifier = _phase8_verifier()
     compose = (REPOSITORY_ROOT / "infra" / "compose.phase8.yaml").read_text("utf-8")

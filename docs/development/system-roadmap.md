@@ -115,6 +115,11 @@ Release Qualification。每个阶段的实现状态、Engineering Gate、Release
 - 未达到这些真实环境条件前不得宣称 Phase 2 真实环境验收完成，v0.2 不得标记 `STABLE`；
   但该状态不阻塞 Phase 3 正常工程开发和独立 Engineering Gate 判断。
 
+当前判定（2026-08-23）：有效重启窗口仅完成 1/5 轮、10/10 个有效结果，旧 4/5 轮窗口因
+机器重启后丢失配对的临时数据库/S3 证据而作废；新鲜副本和最终候选验证未运行。当前 Release
+Qualification 为 `FAILED`，失败原因是 `TERMINATED_WITH_INSUFFICIENT_EVIDENCE`；Engineering
+Gate 保持 `CLOSED`，v0.2 保持 `IMPLEMENTED`。
+
 Model Gateway、Playwright、Docling 和 OCR 不是 Phase 2 默认范围；只有固定失败样本证明确定性路径不足时，才通过独立 spec 评估。Opportunity Resolver、版本和变化仍严格属于 Phase 3。
 
 ### Phase 3：Opportunity 归并、版本与变化
