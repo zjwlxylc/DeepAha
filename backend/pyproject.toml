@@ -6,10 +6,15 @@ requires-python = ">=3.14,<3.15"
 dependencies = [
   "alembic>=1.16,<2",
   "boto3>=1.40,<2",
+  "defusedxml>=0.7,<1",
   "fastapi>=0.115,<1",
+  "httpx2>=2.12,<3",
+  "lxml[cssselect]>=6.1,<7",
+  "openpyxl>=3.1.5,<4",
   "psycopg[binary]>=3.2,<4",
   "pydantic>=2.11,<3",
   "pydantic-settings>=2.10,<3",
+  "pypdf>=6.16,<7",
   "sqlalchemy>=2.0,<3",
   "uvicorn[standard]>=0.35,<1",
 ]
@@ -17,17 +22,21 @@ dependencies = [
 [dependency-groups]
 dev = [
   "boto3-stubs[s3]>=1.40,<2",
-  "httpx2>=2,<3",
   "jsonschema>=4.25,<5",
+  "lxml-stubs>=0.5.1,<0.6",
   "mypy>=1.17,<2",
   "pytest>=8.4,<10",
   "ruff>=0.12,<1",
   "types-jsonschema>=4.25,<5",
+  "types-openpyxl>=3.1.5,<4",
 ]
 
 [tool.pytest.ini_options]
-addopts = "-q -m 'not integration'"
-markers = ["integration: requires PostgreSQL 18 and the local S3 endpoint"]
+addopts = "-q -m 'not integration and not live_source'"
+markers = [
+  "integration: requires PostgreSQL 18 and the local S3 endpoint",
+  "live_source: requires explicitly enabled network access to approved official endpoints",
+]
 pythonpath = ["src"]
 testpaths = ["tests"]
 

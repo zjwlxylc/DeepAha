@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     contract_version: str = "0.1.0"
     environment: str = "development"
     log_level: str = "INFO"
+    allow_live_source_check: bool = False
     database_url: str | None = None
     object_store_endpoint: AnyHttpUrl = AnyHttpUrl("http://127.0.0.1:55000")
     object_store_region: str = "us-east-1"

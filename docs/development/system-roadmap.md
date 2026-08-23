@@ -41,6 +41,12 @@ Phase 9 稳定性、Beta 与商业 Gate
 
 横向能力“安全与隐私、可观测性、数据质量、评估可复现”从 Phase 0 开始贯穿，不作为上线前补丁。
 
+阶段箭头表达真实的代码、迁移与契约依赖顺序，不表示下一 Phase 必须等待上一 Phase 的真实环境
+Release Qualification。每个阶段的实现状态、Engineering Gate、Release Qualification 和契约成熟度
+独立记录：Engineering Gate `CLOSED` 后允许下一 Phase 正常开发；Release Qualification 未完成只
+阻塞对应正式发布、真实环境完成声明和契约 `STABLE`。下游仍须基于实际依赖提交完成兼容验证，
+但不得形成 `BLOCKED_BY_PHASE2` 或 `IMPLEMENTED_PENDING_*` 级联状态。
+
 ## 3. 阶段定义
 
 ### Phase 0：工程基础
@@ -81,21 +87,40 @@ Phase 9 稳定性、Beta 与商业 Gate
 
 ### Phase 2：采集与文档理解
 
-**目的：** 从注册官方源稳定获得 HTML、PDF 和 Excel，并生成带证据的结构化文档。
+**目的：** 从登记官方入口获得可审计的 HTML、PDF 和 Excel 观察，并生成带结构化定位的可回放 Document。
 
 **范围：**
 
-- Source Registry、采集策略、限速、重试和源健康。
-- HTML/PDF/Excel 解析器及统一 Document 输出。
-- Model Gateway 和 JSON Schema 校验；仅在确定性解析不足时使用 LLM。
-- 低置信度与冲突字段进入人工审核队列。
+- 领域契约 v0.2：`SourceEndpoint`、`CaptureObservation`、`ParseAttempt`、机会类型扩展和 Evidence Locator v0.2。
+- Source Registry、来源使用边界、限速、有界重试、条件请求和观察记录派生的源健康。
+- 同步 HTTP 采集应用服务和显式 CLI；本阶段不增加调度器、队列、Redis 或浏览器默认路径。
+- HTML、文本型 PDF、XLSX 确定性解析器及统一 Document/派生文本输出。
+- 低置信度、格式不支持与永久失败保存稳定状态和原因码；不提前建设完整审核系统。
+- 十个代表性官方入口的显式 live 观察窗口；默认测试只使用固定夹具。
 
-**退出条件：**
+**Engineering Gate 退出条件：**
 
-- 10 个代表性官方源连续运行并有源健康记录。
-- 关键字段能定位回 HTML 片段、PDF 页或 Excel 单元格范围。
-- 网络失败可重试，永久解析失败可审计且不会丢失原始证据。
-- 固定样本回放得到确定性相同结果；LLM 响应由录制夹具隔离。
+- 相同内容的两次抓取保留两条 CaptureObservation，只复用一个 RawArtifact。
+- 固定 HTML、PDF、XLSX 能定位回 DOM 文本、PDF 页内文本或 Excel 单元格范围并校验片段哈希。
+- 网络失败可重试，永久采集/解析失败可审计且不会丢失或覆盖原始证据。
+- v0.1 与 v0.2 Schema、迁移、ORM 和契约测试一致；固定样本回放得到确定性相同结果。
+- 默认 CI 不访问实时来源、浏览器或模型；live 观察必须显式开启。
+- 代码审查、安全扫描和 Phase 2 scope 检查不存在未解决的工程 blocker。
+
+**Release Qualification：**
+
+- 10 个代表性官方入口完成至少 24 小时、五轮策略间隔、至少 50 个最终结果的显式观察，
+  `SUCCEEDED + NOT_MODIFIED` 有效率达到 `>=98%`，并有源健康和维护成本记录。
+- 精确最终候选在新鲜副本完成统一验证，最终候选远程 CI 成功。
+- 未达到这些真实环境条件前不得宣称 Phase 2 真实环境验收完成，v0.2 不得标记 `STABLE`；
+  但该状态不阻塞 Phase 3 正常工程开发和独立 Engineering Gate 判断。
+
+当前判定（2026-08-23）：有效重启窗口仅完成 1/5 轮、10/10 个有效结果，旧 4/5 轮窗口因
+机器重启后丢失配对的临时数据库/S3 证据而作废；新鲜副本和最终候选验证未运行。当前 Release
+Qualification 为 `FAILED`，失败原因是 `TERMINATED_WITH_INSUFFICIENT_EVIDENCE`；Engineering
+Gate 保持 `CLOSED`，v0.2 保持 `IMPLEMENTED`。
+
+Model Gateway、Playwright、Docling 和 OCR 不是 Phase 2 默认范围；只有固定失败样本证明确定性路径不足时，才通过独立 spec 评估。Opportunity Resolver、版本和变化仍严格属于 Phase 3。
 
 ### Phase 3：Opportunity 归并、版本与变化
 
@@ -107,7 +132,7 @@ Phase 9 稳定性、Beta 与商业 Gate
 - OpportunityVersion、OpportunityEvent 和字段级差异。
 - 更正优先级、附件替换、延期、取消和状态机。
 
-**退出条件：**
+**Engineering Gate 退出条件：**
 
 - 公告正文、岗位表和更正通知可归并为一个 Opportunity。
 - 历史版本、旧链接、收藏引用和证据关系不因合并丢失。
@@ -125,12 +150,15 @@ Phase 9 稳定性、Beta 与商业 Gate
 - Golden Dataset、100 个版本化模拟画像和批量回放。
 - MatchSnapshot、组件版本和证据链。
 
-**退出条件：**
+**Engineering Gate 退出条件：**
 
 - LLM 语义推断不能单独产生 `INELIGIBLE`。
-- 所有硬结论证据可追溯率达到计划目标 `100%`。
-- `INELIGIBLE` 误杀率达到计划门槛 `<=0.5%`，严重错误逐例复盘。
 - 同一数据集与版本重复评估得到相同输出。
+
+**Release Qualification：**
+
+- 在版本固定、人工标注的适用 Golden Dataset 上，所有硬结论证据可追溯率达到计划目标 `100%`。
+- `INELIGIBLE` 误杀率达到计划门槛 `<=0.5%`，严重错误逐例复盘；合成画像结果不能替代该结论。
 
 ### Phase 5：公开可信层
 
@@ -143,12 +171,16 @@ Phase 9 稳定性、Beta 与商业 Gate
 - 移动响应式 Web/PWA 壳、搜索与筛选的最小实现。
 - 从公开机会进入“判断我是否适合”的入口。
 
-**退出条件：**
+**Engineering Gate 退出条件：**
 
-- 公开可信字段完整率达到计划要求 `100%`。
 - 页面不显示未经画像计算的个人资格或虚构匹配百分比。
 - 用户能从任何硬信息回到官方证据。
 - 公开索引仅服务 Gold 样本，不扩成无限公告流。
+
+**Release Qualification：**
+
+- 200 个真实 Gold 机会的公开可信字段完整率达到计划要求 `100%`，官方回链、核验时间和变化
+  历史在真实候选环境可复现。
 
 ### Phase 6：画像、匹配与个人行动
 
@@ -211,6 +243,7 @@ Phase 9 稳定性、Beta 与商业 Gate
 - 100–300 高价值源、性能、备份恢复、安全和隐私请求演练。
 - 200–500 人封闭 Beta、分层指标和版本冻结。
 - 价格实验、高校小规模渠道实验；自然排序与商业展示隔离。
+- Gate F 合规扩张核验：招聘服务边界、AI 内容标识、数据保护、内容使用和机构责任。
 
 **退出条件：**
 
@@ -218,10 +251,11 @@ Phase 9 稳定性、Beta 与商业 Gate
 - 浙江源 SLO 连续达标后才规划第二个深覆盖区域。
 - 真实付费来自持续判断、变化监控和行动支持，不来自公告付费墙。
 - 未过 Gate 时明确继续打磨或 No-Go，不用营销扩大失败。
+- 面向公众或机构扩大前完成与实际功能相符的合规核验；Blueprint 和内部检查不得替代法律意见。
 
 ## 4. 十四天验证切片
 
-十四天不是完成全平台，而是建立第一个可评估闭环：
+十四天不是完成全平台，而是 Blueprint 的经营验证节奏参考；仓库当前已经按独立 Gate 完成 Phase 0–1，后续不得据此表跨阶段并行实现：
 
 | 时间 | 重点 | 计划产出 | 验收方式 |
 | --- | --- | --- | --- |
@@ -236,8 +270,9 @@ Phase 9 稳定性、Beta 与商业 Gate
 
 ## 5. 文档生成节奏
 
-- 当前只生成 Phase 0 的详细 spec 与 implementation plan。
-- Phase 1–9 在启动前分别生成独立 spec 和 plan，引用本路线与领域契约。
+- Phase 0、Phase 1 已有详细 spec、plan 和关闭证据。
+- Phase 2 已生成独立设计与实施计划，引用 Blueprint v1.2、基线协调记录和领域契约 v0.2。
+- Phase 3–9 在启动前分别生成独立 spec 和 plan，引用本路线与当时稳定的领域契约。
 - 任一阶段发现隐藏复杂度时，拆成可独立验收的子阶段；不得扩大一个计划直到所有系统都包含在内。
 - 每个阶段验收后更新本文状态和证据链接，不重写历史结果。
 

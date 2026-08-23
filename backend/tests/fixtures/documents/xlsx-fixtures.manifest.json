@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "generator": "tests/fixtures/documents/generate_fixtures.py",
+  "fixtures": [
+    {
+      "path": "minimal-table.xlsx",
+      "byte_size": 5552,
+      "content_sha256": "eace0d5c0bd4d5cd36cbadc8657928040e1fe7a42ffa3ddefeb0ea8c00e4b4e7",
+      "synthetic": true,
+      "business_facts": false,
+      "contains_macros": false,
+      "external_links": false
+    }
+  ]
+}

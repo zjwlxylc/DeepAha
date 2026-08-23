@@ -1,0 +1,405 @@
+{
+  "schema_version": "0.2.0",
+  "sources": [
+    {
+      "source": {
+        "source_id": "0198d239-4b00-7000-8000-000000000210",
+        "public_id": "src_00000000000000000000000000000210",
+        "canonical_url": "http://bm.scs.gov.cn/",
+        "authority_name": "中华人民共和国国家公务员局",
+        "tier": "OFFICIAL_PRIMARY",
+        "jurisdiction": "全国",
+        "active": true,
+        "created_at": "2026-08-21T15:26:28Z",
+        "updated_at": "2026-08-21T15:26:28Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "0198d239-4b00-7000-8000-000000000211",
+          "source_id": "0198d239-4b00-7000-8000-000000000210",
+          "url": "http://bm.scs.gov.cn/pp/gkweb/core/web/ui/business/home/gkhome.html",
+          "allowed_hosts": ["bm.scs.gov.cn"],
+          "expected_media_types": ["text/html"],
+          "browser_policy": "NEVER",
+          "minimum_interval_seconds": 21600,
+          "timeout_seconds": 30,
+          "max_attempts": 3,
+          "robots_url": "http://bm.scs.gov.cn/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-08-21T15:26:28Z",
+          "content_use_basis": "LINK_ONLY",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "国家公务员局",
+          "fixture_storage_allowed": false,
+          "usage_note": "Official 2026 civil-service examination topic; robots returned HTTP 403 and is unavailable under RFC 9309; collect bounded evidence locally and publish links only.",
+          "policy_version": "2026-08-21.1",
+          "active": true,
+          "verified_at": "2026-08-21T15:26:28Z",
+          "created_at": "2026-08-21T15:26:28Z",
+          "updated_at": "2026-08-21T15:26:28Z"
+        }
+      ]
+    },
+    {
+      "source": {
+        "source_id": "0198d239-4b00-7000-8000-000000000212",
+        "public_id": "src_00000000000000000000000000000212",
+        "canonical_url": "https://www.mohrss.gov.cn/",
+        "authority_name": "中华人民共和国人力资源和社会保障部",
+        "tier": "OFFICIAL_PRIMARY",
+        "jurisdiction": "全国",
+        "active": true,
+        "created_at": "2026-08-21T15:26:28Z",
+        "updated_at": "2026-08-21T15:26:28Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "0198d239-4b00-7000-8000-000000000213",
+          "source_id": "0198d239-4b00-7000-8000-000000000212",
+          "url": "https://www.mohrss.gov.cn/SYrlzyhshbzb/fwyd/SYkaoshizhaopin/zyhgjjgsydwgkzp/",
+          "allowed_hosts": ["www.mohrss.gov.cn"],
+          "expected_media_types": ["text/html"],
+          "browser_policy": "NEVER",
+          "minimum_interval_seconds": 21600,
+          "timeout_seconds": 30,
+          "max_attempts": 3,
+          "robots_url": "https://www.mohrss.gov.cn/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-08-21T15:26:28Z",
+          "content_use_basis": "LINK_ONLY",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "人力资源和社会保障部",
+          "fixture_storage_allowed": false,
+          "usage_note": "Official central public-institution recruitment list; robots returned HTTP 404; collect bounded evidence locally and publish links only.",
+          "policy_version": "2026-08-21.1",
+          "active": true,
+          "verified_at": "2026-08-21T15:26:28Z",
+          "created_at": "2026-08-21T15:26:28Z",
+          "updated_at": "2026-08-21T15:26:28Z"
+        }
+      ]
+    },
+    {
+      "source": {
+        "source_id": "0198d239-4b00-7000-8000-000000000214",
+        "public_id": "src_00000000000000000000000000000214",
+        "canonical_url": "http://www.sasac.gov.cn/",
+        "authority_name": "国务院国有资产监督管理委员会",
+        "tier": "OFFICIAL_PRIMARY",
+        "jurisdiction": "全国",
+        "active": true,
+        "created_at": "2026-08-21T15:26:28Z",
+        "updated_at": "2026-08-21T15:26:28Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "0198d239-4b00-7000-8000-000000000215",
+          "source_id": "0198d239-4b00-7000-8000-000000000214",
+          "url": "http://www.sasac.gov.cn/n2588035/n2588325/n2588350/index.html",
+          "allowed_hosts": ["www.sasac.gov.cn"],
+          "expected_media_types": ["text/html"],
+          "browser_policy": "NEVER",
+          "minimum_interval_seconds": 21600,
+          "timeout_seconds": 30,
+          "max_attempts": 3,
+          "robots_url": "http://www.sasac.gov.cn/robots.txt",
+          "robots_decision": "ALLOWED",
+          "robots_checked_at": "2026-08-21T15:26:28Z",
+          "content_use_basis": "LINK_ONLY",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "国务院国有资产监督管理委员会",
+          "fixture_storage_allowed": false,
+          "usage_note": "Official central state-owned-enterprise recruitment list; robots disallows only /sd and permits this path; collect bounded evidence locally and publish links only.",
+          "policy_version": "2026-08-21.1",
+          "active": true,
+          "verified_at": "2026-08-21T15:26:28Z",
+          "created_at": "2026-08-21T15:26:28Z",
+          "updated_at": "2026-08-21T15:26:28Z"
+        }
+      ]
+    },
+    {
+      "source": {
+        "source_id": "0198d239-4b00-7000-8000-000000000216",
+        "public_id": "src_00000000000000000000000000000216",
+        "canonical_url": "https://www.gov.cn/",
+        "authority_name": "中华人民共和国中央人民政府",
+        "tier": "OFFICIAL_AGGREGATOR",
+        "jurisdiction": "全国",
+        "active": true,
+        "created_at": "2026-08-21T15:26:28Z",
+        "updated_at": "2026-08-21T15:26:28Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "0198d239-4b00-7000-8000-000000000217",
+          "source_id": "0198d239-4b00-7000-8000-000000000216",
+          "url": "https://www.gov.cn/zhengce/zhengceku/bmwj/home.htm",
+          "allowed_hosts": ["www.gov.cn"],
+          "expected_media_types": ["text/html"],
+          "browser_policy": "NEVER",
+          "minimum_interval_seconds": 21600,
+          "timeout_seconds": 30,
+          "max_attempts": 3,
+          "robots_url": "https://www.gov.cn/robots.txt",
+          "robots_decision": "ALLOWED",
+          "robots_checked_at": "2026-08-21T15:26:28Z",
+          "content_use_basis": "LINK_ONLY",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "中国政府网",
+          "fixture_storage_allowed": false,
+          "usage_note": "Official State Council department policy-file list; current robots rules do not disallow this path; collect bounded evidence locally and publish links only.",
+          "policy_version": "2026-08-21.1",
+          "active": true,
+          "verified_at": "2026-08-21T15:26:28Z",
+          "created_at": "2026-08-21T15:26:28Z",
+          "updated_at": "2026-08-21T15:26:28Z"
+        }
+      ]
+    },
+    {
+      "source": {
+        "source_id": "0198d239-4b00-7000-8000-000000000218",
+        "public_id": "src_00000000000000000000000000000218",
+        "canonical_url": "http://www.moe.gov.cn/",
+        "authority_name": "中华人民共和国教育部",
+        "tier": "OFFICIAL_PRIMARY",
+        "jurisdiction": "全国",
+        "active": true,
+        "created_at": "2026-08-21T15:26:28Z",
+        "updated_at": "2026-08-21T15:26:28Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "0198d239-4b00-7000-8000-000000000219",
+          "source_id": "0198d239-4b00-7000-8000-000000000218",
+          "url": "http://www.moe.gov.cn/jyb_xxgk/xxgk/neirong/fenlei/sxml_cwysj/cwysj_xszz/xszz_zzbg/",
+          "allowed_hosts": ["www.moe.gov.cn"],
+          "expected_media_types": ["text/html"],
+          "browser_policy": "NEVER",
+          "minimum_interval_seconds": 21600,
+          "timeout_seconds": 30,
+          "max_attempts": 3,
+          "robots_url": "http://www.moe.gov.cn/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-08-21T15:26:28Z",
+          "content_use_basis": "LINK_ONLY",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "教育部",
+          "fixture_storage_allowed": false,
+          "usage_note": "Official student-aid report list; robots returned HTTP 404; collect bounded evidence locally and publish links only.",
+          "policy_version": "2026-08-21.1",
+          "active": true,
+          "verified_at": "2026-08-21T15:26:28Z",
+          "created_at": "2026-08-21T15:26:28Z",
+          "updated_at": "2026-08-21T15:26:28Z"
+        }
+      ]
+    },
+    {
+      "source": {
+        "source_id": "0198d239-4b00-7000-8000-000000000220",
+        "public_id": "src_00000000000000000000000000000220",
+        "canonical_url": "https://www.gqt.org.cn/",
+        "authority_name": "中国共产主义青年团中央委员会",
+        "tier": "OFFICIAL_PRIMARY",
+        "jurisdiction": "全国",
+        "active": true,
+        "created_at": "2026-08-21T15:26:28Z",
+        "updated_at": "2026-08-21T15:26:28Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "0198d239-4b00-7000-8000-000000000221",
+          "source_id": "0198d239-4b00-7000-8000-000000000220",
+          "url": "https://www.gqt.org.cn/notice/index.htm",
+          "allowed_hosts": ["www.gqt.org.cn"],
+          "expected_media_types": ["text/html"],
+          "browser_policy": "NEVER",
+          "minimum_interval_seconds": 21600,
+          "timeout_seconds": 30,
+          "max_attempts": 3,
+          "robots_url": "https://www.gqt.org.cn/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-08-21T15:26:28Z",
+          "content_use_basis": "LINK_ONLY",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "共青团中央",
+          "fixture_storage_allowed": false,
+          "usage_note": "Official notice list including youth-development programs; robots returned HTTP 404; collect bounded evidence locally and publish links only.",
+          "policy_version": "2026-08-21.1",
+          "active": true,
+          "verified_at": "2026-08-21T15:26:28Z",
+          "created_at": "2026-08-21T15:26:28Z",
+          "updated_at": "2026-08-21T15:26:28Z"
+        }
+      ]
+    },
+    {
+      "source": {
+        "source_id": "0198d239-4b00-7000-8000-000000000222",
+        "public_id": "src_00000000000000000000000000000222",
+        "canonical_url": "https://rlsbt.zj.gov.cn/",
+        "authority_name": "浙江省人力资源和社会保障厅",
+        "tier": "OFFICIAL_PRIMARY",
+        "jurisdiction": "浙江省",
+        "active": true,
+        "created_at": "2026-08-21T15:26:28Z",
+        "updated_at": "2026-08-21T15:26:28Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "0198d239-4b00-7000-8000-000000000223",
+          "source_id": "0198d239-4b00-7000-8000-000000000222",
+          "url": "https://rlsbt.zj.gov.cn/col/col1229743683/index.html",
+          "allowed_hosts": ["rlsbt.zj.gov.cn"],
+          "expected_media_types": ["text/html"],
+          "browser_policy": "NEVER",
+          "minimum_interval_seconds": 21600,
+          "timeout_seconds": 30,
+          "max_attempts": 3,
+          "robots_url": "https://rlsbt.zj.gov.cn/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-08-21T15:26:28Z",
+          "content_use_basis": "LINK_ONLY",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "浙江省人力资源和社会保障厅",
+          "fixture_storage_allowed": false,
+          "usage_note": "Official Zhejiang public-institution recruitment list; robots returned HTTP 404; collect bounded evidence locally and publish links only.",
+          "policy_version": "2026-08-21.1",
+          "active": true,
+          "verified_at": "2026-08-21T15:26:28Z",
+          "created_at": "2026-08-21T15:26:28Z",
+          "updated_at": "2026-08-21T15:26:28Z"
+        }
+      ]
+    },
+    {
+      "source": {
+        "source_id": "0198d239-4b00-7000-8000-000000000224",
+        "public_id": "src_00000000000000000000000000000224",
+        "canonical_url": "http://www.zjks.com/",
+        "authority_name": "浙江省人事考试院",
+        "tier": "OFFICIAL_PRIMARY",
+        "jurisdiction": "浙江省",
+        "active": true,
+        "created_at": "2026-08-21T15:26:28Z",
+        "updated_at": "2026-08-21T15:26:28Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "0198d239-4b00-7000-8000-000000000225",
+          "source_id": "0198d239-4b00-7000-8000-000000000224",
+          "url": "http://www.zjks.com/",
+          "allowed_hosts": ["www.zjks.com"],
+          "expected_media_types": ["text/html"],
+          "browser_policy": "NEVER",
+          "minimum_interval_seconds": 21600,
+          "timeout_seconds": 30,
+          "max_attempts": 3,
+          "robots_url": "http://www.zjks.com/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-08-21T15:26:28Z",
+          "content_use_basis": "LINK_ONLY",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "浙江省人事考试院",
+          "fixture_storage_allowed": false,
+          "usage_note": "Official Zhejiang personnel examination list; robots returned HTTP 404; collect bounded evidence locally and publish links only.",
+          "policy_version": "2026-08-21.1",
+          "active": true,
+          "verified_at": "2026-08-21T15:26:28Z",
+          "created_at": "2026-08-21T15:26:28Z",
+          "updated_at": "2026-08-21T15:26:28Z"
+        }
+      ]
+    },
+    {
+      "source": {
+        "source_id": "0198d239-4b00-7000-8000-000000000226",
+        "public_id": "src_00000000000000000000000000000226",
+        "canonical_url": "https://kjt.zj.gov.cn/",
+        "authority_name": "浙江省科学技术厅",
+        "tier": "OFFICIAL_PRIMARY",
+        "jurisdiction": "浙江省",
+        "active": true,
+        "created_at": "2026-08-21T15:26:28Z",
+        "updated_at": "2026-08-21T15:26:28Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "0198d239-4b00-7000-8000-000000000227",
+          "source_id": "0198d239-4b00-7000-8000-000000000226",
+          "url": "https://kjt.zj.gov.cn/col/col1229225203/index.html",
+          "allowed_hosts": ["kjt.zj.gov.cn"],
+          "expected_media_types": ["text/html"],
+          "browser_policy": "NEVER",
+          "minimum_interval_seconds": 21600,
+          "timeout_seconds": 30,
+          "max_attempts": 3,
+          "robots_url": "https://kjt.zj.gov.cn/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-08-21T15:26:28Z",
+          "content_use_basis": "LINK_ONLY",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "浙江省科学技术厅",
+          "fixture_storage_allowed": false,
+          "usage_note": "Official Zhejiang science and technology notice list; robots returned HTTP 404; collect bounded evidence locally and publish links only.",
+          "policy_version": "2026-08-21.1",
+          "active": true,
+          "verified_at": "2026-08-21T15:26:28Z",
+          "created_at": "2026-08-21T15:26:28Z",
+          "updated_at": "2026-08-21T15:26:28Z"
+        }
+      ]
+    },
+    {
+      "source": {
+        "source_id": "0198d239-4b00-7000-8000-000000000228",
+        "public_id": "src_00000000000000000000000000000228",
+        "canonical_url": "https://jyt.zj.gov.cn/",
+        "authority_name": "浙江省教育厅",
+        "tier": "OFFICIAL_PRIMARY",
+        "jurisdiction": "浙江省",
+        "active": true,
+        "created_at": "2026-08-21T15:26:28Z",
+        "updated_at": "2026-08-21T15:26:28Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "0198d239-4b00-7000-8000-000000000229",
+          "source_id": "0198d239-4b00-7000-8000-000000000228",
+          "url": "https://jyt.zj.gov.cn/col/col1229266336/index.html",
+          "allowed_hosts": ["jyt.zj.gov.cn"],
+          "expected_media_types": ["text/html"],
+          "browser_policy": "NEVER",
+          "minimum_interval_seconds": 21600,
+          "timeout_seconds": 30,
+          "max_attempts": 3,
+          "robots_url": "https://jyt.zj.gov.cn/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-08-21T15:26:28Z",
+          "content_use_basis": "LINK_ONLY",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "浙江省教育厅",
+          "fixture_storage_allowed": false,
+          "usage_note": "Official Zhejiang education announcement list; robots returned HTTP 404; collect bounded evidence locally and publish links only.",
+          "policy_version": "2026-08-21.1",
+          "active": true,
+          "verified_at": "2026-08-21T15:26:28Z",
+          "created_at": "2026-08-21T15:26:28Z",
+          "updated_at": "2026-08-21T15:26:28Z"
+        }
+      ]
+    }
+  ]
+}

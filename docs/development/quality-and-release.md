@@ -113,6 +113,54 @@ E2E 只覆盖最重要用户路径：查看机会、核验证据、获得四态�
 
 阈值是阶段 Gate 的最低进入标准，不等同于商业发布承诺。实际 Gate 可以提高阈值，但降低阈值必须有风险说明和书面决策。
 
+### 4.4 Phase 2 Release Qualification 观察、证据与维护成本
+
+| 指标 | 定义 | Phase 2 Release Qualification 计划目标 |
+|---|---|---:|
+| 观察保留完整率 | 已保存 CaptureObservation 的实际 HTTP attempt / 全部实际 attempt | `100%` |
+| RawArtifact 内容去重正确率 | 相同来源相同字节复用同一 RawArtifact 的验证次数 / 应复用次数 | `100%`（固定样本） |
+| Evidence locator 回放率 | 能从原始 fixture 重新定位并验证片段哈希的 locator / 全部测试 locator | `100%` |
+| 解析确定性 | 同一字节和 parser 版本得到相同规范文本 SHA 与 locator 的重放 / 全部重放 | `100%` |
+| 官方入口观察有效率 | 五轮 live 窗口中 `SUCCEEDED + NOT_MODIFIED` 的最终运行 / 全部最终运行 | `>=98%` |
+| 来源维护工时 | 十个来源在观察窗口内的登记、排障和策略调整人工分钟数 | 记录实测值，不预设商业结论 |
+| 高风险解析审核候选率 | `NEEDS_REVIEW` ParseAttempt / 全部 ParseAttempt | 记录并分类，不用模型压低数字 |
+
+Live 来源受外部状态影响，不进入默认 CI。Release Qualification 必须同时保存固定离线回放证据和显式 live 观察证据，不能用其中一种冒充另一种。
+
+### 4.5 Gate F 合规扩张
+
+Gate F 在公开服务、机构试点、招聘信息规模化发布或商业扩张前执行，至少核验：
+
+- 产品实际功能是否触及人力资源服务、招聘信息发布或其他许可/备案边界；
+- AI 生成/合成内容的标识、日志和人工责任；
+- 来源内容的访问、缓存、引用、展示、许可和投诉处理边界；
+- 用户画像、行为、反馈的目的限定、最小化、删除和机构隔离；
+- 自然资格/排序与商业展示、机构合作、付费入口严格分离；
+- 合格法律顾问针对实际主体、地区、规模和上线功能形成书面意见。
+
+Blueprint、内部清单、测试或技术实现都不能替代法律意见。Phase 2 只保存来源使用判断和审计字段，不宣称 Gate F 已通过。
+
+### 4.6 Engineering Gate 与 Release Qualification
+
+每个 Phase 分别记录四个独立维度：
+
+| 维度 | 状态 | 判定作用 |
+|---|---|---|
+| 实现状态 | `PLANNED` / `IN_PROGRESS` / `IMPLEMENTED` | 描述实现是否存在，不代表验收或发布 |
+| Engineering Gate | `OPEN` / `CLOSED` | 判断实现、契约、迁移、测试、安全、评审和 scope 是否允许下一 Phase 开发 |
+| Release Qualification | `NOT_STARTED` / `IN_PROGRESS` / `QUALIFIED` / `FAILED` / `BLOCKED` | 承载真实时间、真实环境、Gold Dataset、真人验证、新鲜副本和最终候选 CI 中本 Phase 适用的项目 |
+| 契约成熟度 | `PROPOSED` / `IMPLEMENTED` / `STABLE` | `STABLE` 只允许在对应 Release Qualification 为 `QUALIFIED` 后使用 |
+
+Engineering Gate `CLOSED` 后，下一 Phase 正常工程开发、评审和自身 Gate 判定不再等待上游
+Release Qualification。Release Qualification 未完成仍禁止正式生产发布、真实环境验收完成声明和
+契约 `STABLE`。若 Release Qualification 暴露真实工程缺陷，必须重新评估受影响的 Engineering
+Gate；单纯等待时长、外部环境或最终发布候选证据不构成工程缺陷。
+
+各 Phase 的 spec 必须明确哪些证据属于 Engineering Gate、哪些属于 Release Qualification。
+Gold Dataset、真人和 live 项目按 Phase 适用，不能把全局候选清单全部强加给每个阶段。阶段间
+真实的代码、迁移和契约依赖仍须兼容验证；禁止使用 `BLOCKED_BY_PHASE2`、
+`IMPLEMENTED_PENDING_*` 等跨阶段组合状态。
+
 ## 5. CI 验证矩阵
 
 | 作业 | 触发 | 必须通过的检查 |
@@ -120,6 +168,8 @@ E2E 只覆盖最重要用户路径：查看机会、核验证据、获得四态�
 | `backend-quality` | 每个提交和合并请求 | 格式、Lint、类型、单元与契约测试 |
 | `web-quality` | 每个提交和合并请求 | Lint、类型、组件测试、生产构建 |
 | `integration` | 影响迁移或服务边界时 | PostgreSQL 迁移和集成测试 |
+| `phase2-contract-and-parser` | Phase 2 契约、采集或解析变更时 | v0.1/v0.2 契约、观察语义、固定 HTML/PDF/XLSX、locator 回放 |
+| `source-live` | 人工触发；Phase 2 Release Qualification 观察窗口 | 十个登记官方 Endpoint 的策略化 live 观察；不作为每次提交必跑作业 |
 | `golden-evaluation` | 数据管线、规则、匹配或模型变更时 | 固定数据集回归和差异报告 |
 | `security` | 每个合并请求及定时任务 | 依赖漏洞、秘密扫描、最低权限检查 |
 | `release-evidence` | 版本候选 | 全矩阵、构建产物、迁移与回滚证据 |
@@ -131,11 +181,13 @@ CI 固定运行时大版本；依赖锁文件必须纳入版本控制。依赖�
 1. **变更准备**：需求或缺陷关联到阶段目标，明确影响的契约与风险。
 2. **本地验证**：执行统一验证脚本；开发者确认没有无关改动。
 3. **CI 验证**：全部必需作业通过，生成机器可读报告。
-4. **Gate 审核**：按阶段出口条件核查功能、数据、评估、运维和安全证据。
-5. **版本候选**：生成不可变构建产物，记录源代码提交、依赖锁和配置模式版本。
+4. **Engineering Gate 审核**：核查实现、契约、迁移、测试、安全、评审和 scope；关闭后允许下一阶段开发。
+5. **Release Qualification / 版本候选**：完成本阶段适用的真实环境证据，生成不可变构建产物并记录源代码提交、依赖锁和配置模式版本。
 6. **受控发布**：先部署非生产环境；生产采用可观测、可回滚的分步发布。
 7. **发布后验证**：检查健康、错误率、延迟、关键业务指标和数据新鲜度。
 8. **关闭或回滚**：达到观察窗口后关闭发布；指标越界时按预案回滚。
+
+任何面向公众或机构的规模扩张在 Gate E 之后还必须通过 Gate F；通过商业验证不自动等于合规可扩张。
 
 ## 7. 回滚要求
 
@@ -147,7 +199,7 @@ CI 固定运行时大版本；依赖锁文件必须纳入版本控制。依赖�
 
 ## 8. Gate 证据包
 
-每个阶段关闭时在 `docs/gates/phase-N/` 保存：
+每个阶段关闭 Engineering Gate 或更新 Release Qualification 时在 `docs/gates/phase-N/` 保存：
 
 ```text
 docs/gates/phase-N/
@@ -160,7 +212,9 @@ docs/gates/phase-N/
 └── deferred-decisions.md     # 明确延期且有负责阶段的事项
 ```
 
-文件名可以按阶段删减，但 `README.md`、验收结果、测试摘要和延期决策不可缺失。证据必须来自实际执行，不能用计划文本冒充完成证明。
+文件名可以按阶段删减，但 `README.md`、验收结果、测试摘要和延期决策不可缺失。`README.md`
+必须分别显示实现状态、Engineering Gate、Release Qualification 和契约成熟度；证据必须来自
+实际执行，不能用计划文本冒充完成证明。
 
 ## 9. 完成定义（Definition of Done, DoD）
 

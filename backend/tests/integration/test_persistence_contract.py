@@ -106,10 +106,15 @@ def test_schema_fields_map_explicitly_to_persistence_columns(migrated_engine: En
         "storage_bucket",
         "object_key",
     }
-    assert columns["evidence_refs"] == (set(EvidenceRefSchema.model_fields) - {"locator"}) | {
+    legacy_evidence_columns = (set(EvidenceRefSchema.model_fields) - {"locator"}) | {
         "evidence_ref_id",
         "locator_kind",
         "locator_value",
+    }
+    assert legacy_evidence_columns <= columns["evidence_refs"]
+    assert columns["evidence_refs"] == legacy_evidence_columns | {
+        "locator_schema_version",
+        "locator_payload",
     }
 
 

@@ -1,0 +1,39 @@
+{
+  "requested_url": "https://www.gov.uk/government/news/civil-service-fast-stream-named-uks-top-graduate-employer",
+  "resolved_url": "https://www.gov.uk/government/news/civil-service-fast-stream-named-uks-top-graduate-employer",
+  "retrieved_at": "2026-08-21T16:39:17.809Z",
+  "http_status": 200,
+  "media_type": "text/html; charset=utf-8",
+  "byte_size": 69317,
+  "content_sha256": "b7b92f5e24f496bf462aeb6669cd117fbc83d2f691d6bf2a42024085a58d3468",
+  "collector_version": "curl/8.21.0",
+  "metadata_schema_version": "0.2.0",
+  "license": {
+    "name": "Open Government Licence v3.0",
+    "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+    "terms_url": "https://www.gov.uk/help/terms-conditions",
+    "attribution": "Contains public sector information licensed under the Open Government Licence v3.0.",
+    "page_statement": "All content is available under the Open Government Licence v3.0, except where otherwise stated",
+    "verified_at": "2026-08-21T16:39:17.809Z"
+  },
+  "capture": {
+    "response_body_only": true,
+    "headers_stored": false,
+    "cookies_stored": false,
+    "external_assets_stored": false,
+    "redirect_count": 0,
+    "tls_verified": true
+  },
+  "restrictions": {
+    "attribution_required": true,
+    "third_party_rights_not_granted": true,
+    "no_endorsement": true,
+    "as_is_no_warranty": true,
+    "linked_image_response_excluded": true
+  },
+  "limitations": {
+    "gold_business_sample": false,
+    "china_launch_coverage": false,
+    "current_application_status_proven": false
+  }
+}

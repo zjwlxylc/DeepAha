@@ -33,6 +33,13 @@ class ImportRawArtifactResult:
     created: bool
 
 
+@dataclass(frozen=True, slots=True)
+class _PreparedRawArtifact:
+    candidate: dict[str, object]
+    source_id: UUID
+    content_sha256: str
+
+
 class RawArtifactProvenanceConflict(RuntimeError):
     def __init__(self) -> None:
         self.code = "RAW_ARTIFACT_PROVENANCE_CONFLICT"
@@ -62,6 +69,23 @@ def import_raw_artifact(
     object_store: ObjectStore,
     command: ImportRawArtifactCommand,
 ) -> ImportRawArtifactResult:
+    prepared = _prepare_raw_artifact(
+        object_store=object_store,
+        command=command,
+        require_matching_media_type=True,
+    )
+    result = _insert_or_load_raw_artifact(session, prepared)
+    if not result.created and not _same_capture(result.artifact, prepared.candidate):
+        raise RawArtifactProvenanceConflict
+    return result
+
+
+def _prepare_raw_artifact(
+    *,
+    object_store: ObjectStore,
+    command: ImportRawArtifactCommand,
+    require_matching_media_type: bool,
+) -> _PreparedRawArtifact:
     if not command.content:
         raise ValueError("raw artifact content must not be empty")
 
@@ -85,7 +109,13 @@ def import_raw_artifact(
         media_type=validated.media_type,
         sha256=digest,
     )
-    _verify_stored_object(stored, object_key, command.content, digest, validated.media_type)
+    _verify_stored_object(
+        stored,
+        object_key,
+        command.content,
+        digest,
+        validated.media_type if require_matching_media_type else None,
+    )
 
     artifact_id = uuid7()
     contract = RawArtifactSchema.model_validate(
@@ -119,9 +149,19 @@ def import_raw_artifact(
         "collector_version": contract.collector_version,
         "metadata_schema_version": contract.metadata_schema_version,
     }
+    return _PreparedRawArtifact(
+        candidate=candidate,
+        source_id=contract.source_id,
+        content_sha256=contract.content_sha256,
+    )
+
+
+def _insert_or_load_raw_artifact(
+    session: Session, prepared: _PreparedRawArtifact
+) -> ImportRawArtifactResult:
     statement = (
         insert(RawArtifact)
-        .values(candidate)
+        .values(prepared.candidate)
         .on_conflict_do_nothing(index_elements=[RawArtifact.source_id, RawArtifact.content_sha256])
         .returning(RawArtifact.artifact_id)
     )
@@ -134,14 +174,12 @@ def import_raw_artifact(
 
     existing = session.scalar(
         select(RawArtifact).where(
-            RawArtifact.source_id == contract.source_id,
-            RawArtifact.content_sha256 == contract.content_sha256,
+            RawArtifact.source_id == prepared.source_id,
+            RawArtifact.content_sha256 == prepared.content_sha256,
         )
     )
     if existing is None:
         raise RuntimeError("conflicting RawArtifact could not be loaded")
-    if not _same_capture(existing, candidate):
-        raise RawArtifactProvenanceConflict
     return ImportRawArtifactResult(artifact=existing, created=False)
 
 
