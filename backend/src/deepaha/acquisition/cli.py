@@ -7,7 +7,7 @@ from uuid import UUID
 
 from deepaha.acquisition.contracts import FetchStrategy, SourceRecipe
 from deepaha.acquisition.evaluations import EvaluationService
-from deepaha.acquisition.fetchers import StaticHttpFetcher
+from deepaha.acquisition.fetchers import OfficialAlternativeFetcher, StaticHttpFetcher
 from deepaha.acquisition.health_evidence import AcquisitionEvidenceService
 from deepaha.acquisition.orchestrator import (
     AcquisitionOrchestrator,
@@ -130,7 +130,11 @@ def _run_live_qualification(
         FetchStrategy.STATIC_HTTP: StaticHttpFetcher(
             session_factory=factory,
             collection_runner=collection_runner,
-        )
+        ),
+        FetchStrategy.OFFICIAL_ALTERNATIVE: OfficialAlternativeFetcher(
+            session_factory=factory,
+            collection_runner=collection_runner,
+        ),
     }
     missing = {step.strategy for step in recipe.fetch_plan} - set(fetchers)
     if missing:

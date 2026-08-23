@@ -120,3 +120,11 @@ def test_challenge_summary_is_safe_and_returns_nonzero() -> None:
     assert result.returncode == 1
     assert json.loads(result.stdout)["terminal_code"] == "CAPTCHA_REQUIRED"
     assert "super-secret-value" not in result.stdout
+
+
+def test_live_runner_registers_official_alternative_strategy() -> None:
+    source = (BACKEND / "src" / "deepaha" / "acquisition" / "cli.py").read_text(
+        encoding="utf-8"
+    )
+
+    assert "FetchStrategy.OFFICIAL_ALTERNATIVE: OfficialAlternativeFetcher(" in source

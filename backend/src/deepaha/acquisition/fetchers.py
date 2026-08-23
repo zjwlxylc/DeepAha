@@ -22,11 +22,13 @@ class StaticHttpFetcher:
         collection_runner: CollectionRunner,
         fetcher_name: str = "deepaha-static-http",
         fetcher_version: str = "1.0.0",
+        required_strategy: FetchStrategy = FetchStrategy.STATIC_HTTP,
     ) -> None:
         self._session_factory = session_factory
         self._collection_runner = collection_runner
         self._fetcher_name = fetcher_name
         self._fetcher_version = fetcher_version
+        self._required_strategy = required_strategy
 
     def fetch(self, request: FetchRequest) -> FetchResult:
         self._require_endpoint_policy(request)
@@ -87,7 +89,7 @@ class StaticHttpFetcher:
             if endpoint is None:
                 raise LookupError(f"SourceEndpoint not found: {request.endpoint_id}")
             consistent = (
-                request.strategy is FetchStrategy.STATIC_HTTP
+                request.strategy is self._required_strategy
                 and request.source_id == endpoint.source_id
                 and request.allowed_hosts == tuple(endpoint.allowed_hosts)
                 and request.expected_media_types == tuple(endpoint.expected_media_types)
@@ -108,4 +110,22 @@ class StaticHttpFetcher:
             return artifact
 
 
-__all__ = ["FetchPolicyMismatch", "StaticHttpFetcher"]
+class OfficialAlternativeFetcher(StaticHttpFetcher):
+    def __init__(
+        self,
+        *,
+        session_factory: sessionmaker[Session],
+        collection_runner: CollectionRunner,
+        fetcher_name: str = "deepaha-official-alternative",
+        fetcher_version: str = "1.0.0",
+    ) -> None:
+        super().__init__(
+            session_factory=session_factory,
+            collection_runner=collection_runner,
+            fetcher_name=fetcher_name,
+            fetcher_version=fetcher_version,
+            required_strategy=FetchStrategy.OFFICIAL_ALTERNATIVE,
+        )
+
+
+__all__ = ["FetchPolicyMismatch", "OfficialAlternativeFetcher", "StaticHttpFetcher"]

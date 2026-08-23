@@ -6,7 +6,11 @@ from sqlalchemy import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from deepaha.acquisition.contracts import FetchRequest
-from deepaha.acquisition.fetchers import FetchPolicyMismatch, StaticHttpFetcher
+from deepaha.acquisition.fetchers import (
+    FetchPolicyMismatch,
+    OfficialAlternativeFetcher,
+    StaticHttpFetcher,
+)
 from deepaha.artifacts.s3 import S3ObjectStore
 from deepaha.core.settings import Settings
 from deepaha.sources.collector import CollectionRunner
@@ -68,6 +72,22 @@ def fetcher(
         sleeper=FakeSleeper(),
     )
     return StaticHttpFetcher(session_factory=factory, collection_runner=runner)
+
+
+def official_alternative_fetcher(
+    factory: sessionmaker[Session],
+    object_store: S3ObjectStore,
+    transport: ScriptedTransport,
+) -> OfficialAlternativeFetcher:
+    runner = CollectionRunner(
+        session_factory=factory,
+        object_store=object_store,
+        transport=transport,
+        resolver=PublicResolver(),
+        clock=AdvancingClock(),
+        sleeper=FakeSleeper(),
+    )
+    return OfficialAlternativeFetcher(session_factory=factory, collection_runner=runner)
 
 
 def test_static_fetcher_reuses_collector_and_returns_object_reference(
@@ -166,3 +186,49 @@ def test_static_fetcher_uses_fetch_time_from_injected_collector_clock(
     ).fetch(request(endpoint.endpoint_id, endpoint.source_id))
 
     assert result.fetched_at == datetime(2026, 8, 21, 9, 0, tzinfo=UTC)
+
+
+def test_official_alternative_reuses_the_same_policy_bound_http_collection(
+    factory: sessionmaker[Session], object_store: S3ObjectStore
+) -> None:
+    endpoint = create_endpoint(factory)
+    body = b"official alternative discovery"
+    transport = ScriptedTransport([response(200, body)])
+
+    result = official_alternative_fetcher(factory, object_store, transport).fetch(
+        request(
+            endpoint.endpoint_id,
+            endpoint.source_id,
+            strategy="OFFICIAL_ALTERNATIVE",
+        )
+    )
+
+    assert result.strategy == "OFFICIAL_ALTERNATIVE"
+    assert result.fetcher_name == "deepaha-official-alternative"
+    assert result.fetcher_version == "1.0.0"
+    assert result.content_sha256 == sha256(body).hexdigest()
+    assert len(transport.requests) == 1
+
+
+@pytest.mark.parametrize(
+    ("selected_fetcher", "strategy"),
+    [("STATIC", "OFFICIAL_ALTERNATIVE"), ("ALTERNATIVE", "STATIC_HTTP")],
+)
+def test_policy_bound_http_fetchers_reject_a_different_declared_strategy(
+    factory: sessionmaker[Session],
+    object_store: S3ObjectStore,
+    selected_fetcher: str,
+    strategy: str,
+) -> None:
+    endpoint = create_endpoint(factory)
+    transport = ScriptedTransport([])
+    selected = (
+        fetcher(factory, object_store, transport)
+        if selected_fetcher == "STATIC"
+        else official_alternative_fetcher(factory, object_store, transport)
+    )
+
+    with pytest.raises(FetchPolicyMismatch, match="FETCH_POLICY_MISMATCH"):
+        selected.fetch(request(endpoint.endpoint_id, endpoint.source_id, strategy=strategy))
+
+    assert transport.requests == []
