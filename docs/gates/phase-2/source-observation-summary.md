@@ -1,50 +1,54 @@
 # Phase 2 来源观察摘要
 
-> Release Qualification：`IN_PROGRESS`
+> Release Qualification：`FAILED`
 >
-> Activity：`LIVE_OBSERVATION_IN_PROGRESS`
+> Activity：`TERMINATED_WITH_INSUFFICIENT_EVIDENCE`
+>
+> 收口日期：2026-08-23
 
-## 当前实际计数
+## 最终可计入窗口
 
-| 指标 | 当前值 |
+| 指标 | 实际值 |
 | --- | ---: |
 | 已完成轮次 | 1 / 5 |
-| 已完成 Endpoint 最终结果 | 10 |
+| 已完成 Endpoint 最终结果 | 10 / 50 最低要求 |
 | 有效结果 | 10（全部 `SUCCEEDED`） |
 | 无效结果 | 0 |
-| 当前有效率 | 100%（窗口未完成，不能作为 Release Qualification 最终值） |
-| 窗口开始 | 2026-08-22T01:12:27.8049656+08:00 |
-| 第 1 轮完成 | 2026-08-22T01:13:02.3311266+08:00 |
-| 下一轮到期 | 2026-08-22T07:13:02.3311266+08:00 |
-| 人工维护分钟数 | 0（截至第 1 轮，无用户/人工介入） |
+| 暂态有效率 | 100%（样本和时长不足，不能作为最终 Release Qualification 有效率） |
+| 窗口开始 | 2026-08-22T23:36:05.8610526+08:00 |
+| 第 1 轮完成 | 2026-08-22T23:36:57.1447429+08:00 |
+| 实际观察跨度 | 约 51 秒，未达到至少 24 小时 |
+| 原计划下一轮到期 | 2026-08-23T05:36:57.1447429+08:00（未运行） |
 
-Registry 已登记 10 个 active 官方 Endpoint；每个最小间隔 21,600 秒、最多三次尝试、
-30 秒单次超时、浏览器策略 `NEVER`，内容使用边界为 `LINK_ONLY`。这些是配置事实，不是
-live 可用性证据。
+该仓库外 observation JSON 为 22,243 bytes，SHA-256
+`6e6427e750a21abf77303221be5720061e4cbb11670f303c14cfcd24ec4e71d9`。
 
-live runner 已由无网络 mock 测试证明会拒绝低于策略的间隔、逐 Endpoint checkpoint 外部
-JSON、隐藏响应正文与秘密，并可用同一路径续跑。数据库事务与 JSON checkpoint 不是跨系统
-原子提交，当前由唯一 heartbeat 写入，禁止并发手动续跑。第 1 轮的十个 Endpoint 均一次
-尝试成功；轮次完成时外部
-observation JSON 为 22,243 bytes，SHA-256
-`9086e3181cf04bd6d50924e5d8398a46ba68f3cc1800c79794df4c9514f842c7`。该文件会在后续轮次
-原子更新，因此此 hash 只是当前有效窗口第 1 轮快照身份。轮后 CLI source health 实际退出 0，
-对应 Endpoint 为 1 次 attempt、1 次 success、0 次 failure，且返回同一 Artifact digest/object key。
+Registry 登记了 10 个 active 官方 Endpoint；每个最小间隔 21,600 秒、最多三次尝试、30 秒
+单次超时、浏览器策略 `NEVER`，内容使用边界为 `LINK_ONLY`。这些是配置事实，不是完整 live
+可用性证据。第一轮 10 个 Endpoint 均形成有效最终结果，但单轮结果不能证明五轮稳定性、至少
+24 小时连续性、最终维护成本或至少 50 个结果上的 `>=98%` 有效率。
 
-首次执行在任何 Endpoint GET 前暴露并修复了 Windows PowerShell UTF-8 Registry 读取问题；
-第二次前置导入因 disposable 数据库尚未迁移而拒绝，应用 `alembic upgrade head` 后用同一外部
-状态续跑成功。这两次前置失败没有伪造为 Endpoint 结果。
+## 已作废的机器重启前窗口
 
-此前 `01:05:22+08:00` 开始的一轮虽然产生 10 个成功外部摘要，但为运行 verifier 临时停止
-compose 后，PostgreSQL `tmpfs` 被清空，数据库 observation/health 证据不再存在。该窗口已明确
-作废，不计入上述任何 Release Qualification 计数；当前有效窗口从空数据库重新迁移后于 `01:12:27+08:00`
-开始，窗口完成前禁止停止 live compose。计划阈值 `5 轮 / >=24 小时 / >=50 结果 /
->=98% 有效` 仍未满足。该窗口继续作为 Phase 2 Release Qualification，不阻塞下游 Phase 的
-Engineering Gate。
+另一仓库外 JSON 从 2026-08-22T01:12:27.8049656+08:00 开始，完成 4/5 轮、40 个最终结果，
+其中 40 个有效、0 个失败；最后一轮于 2026-08-22T20:02:36.4178889+08:00 完成。文件为
+78,559 bytes，SHA-256
+`bc6ee17b310e746d2d90e843a4154e1813224e2393b26144069905e32bff51e4`。
 
-实际完成后只能从仓库外 observation JSON 导出聚合值；不得提交中国官方网页响应、对象内容、
-cookie、凭据或数据库。
+机器死机重启后，承载该窗口的 PostgreSQL `tmpfs` 与 S3 运行证据不再可用，无法继续核对 JSON
+与数据库 observation/health、RawArtifact 和对象存储之间的审计关系。因此该窗口已作废；其
+40 个结果只作为事故审计记录，不能计入 Release Qualification，也不能与重启后的 10 个结果
+拼成 50 个结果。两个 JSON 均保持仓库外，不提交官方网页响应、对象内容、cookie、凭据或数据库。
 
-等待期间完成的代码审查、安全扫描、离线测试和文档工作没有停止/重启 live 容器，也没有写入
-observation JSON，因此不计为来源策略维护分钟。修复只影响后续代码候选；当前窗口仍按原
-Registry SHA、轮次间隔和结果计数继续。
+## 终止与清理
+
+2026-08-23 用户明确要求直接收口并停止自动化。自动化
+`deepaha-phase-2-live-gate-heartbeat` 已删除；Docker Desktop 恢复后确认
+`deepaha-phase2-live-gate-postgres-1` 和 `deepaha-phase2-live-gate-s3-1` 均为
+`Exited (255)`，随后按精确 compose project 执行 `down --volumes --remove-orphans`，删除两个
+专用容器及专用网络。未删除仓库外 observation JSON，也未触碰其他 compose project。
+
+当前没有 writer、下一轮或自动化任务。新鲜副本、live 后统一验证和最终候选远程 CI 均未运行。
+因此本次 Release Qualification 以 `TERMINATED_WITH_INSUFFICIENT_EVIDENCE` 记为 `FAILED`；
+Engineering Gate 保持 `CLOSED`，v0.2 保持 `IMPLEMENTED`、不得标记 `STABLE`。未来若重新申请，
+必须取得新的明确授权，并从新的空环境、独立证据文件和完整门槛开始。

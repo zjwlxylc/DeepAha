@@ -4,9 +4,9 @@
 >
 > Engineering Gate：`CLOSED`
 >
-> Release Qualification：`IN_PROGRESS`
+> Release Qualification：`FAILED`
 >
-> Release Qualification Activity：`LIVE_OBSERVATION_IN_PROGRESS`
+> Release Qualification Activity：`TERMINATED_WITH_INSUFFICIENT_EVIDENCE`
 >
 > 领域契约 v0.2：`IMPLEMENTED`（不得标记 `STABLE`）
 
@@ -27,17 +27,18 @@
 
 | # | 发布资格条件 | 当前状态 | 已有证据或缺口 |
 | --- | --- | --- | --- |
-| 1 | 十个官方 Endpoint 完成 live 窗口及健康/维护证据 | `IN_PROGRESS` | 当前文档证据为 1/5 轮、10/10 有效；尚无五轮、至少 24 小时、至少 50 个最终结果，不得写成通过。 |
-| 2 | live 最终有效率达到 `>=98%` 且策略合规 | `NOT_STARTED` | 只有窗口完成后才能从仓库外 observation JSON 导出最终聚合值；不得删除失败结果或降低标准。 |
-| 3 | 精确最终候选的新鲜副本复现 | `NOT_STARTED` | 尚未运行；不得用既有工作树或计划值替代。 |
-| 4 | live 后最终候选统一验证和远程 CI 成功 | `NOT_STARTED` | 只能在不破坏 live 窗口的时点执行；当前工程基线 CI 不替代最终 Release Qualification 候选。 |
+| 1 | 十个官方 Endpoint 完成 live 窗口及健康/维护证据 | `FAIL` | 有效重启窗口只完成 1/5 轮、10/10 有效；未达到五轮、至少 24 小时或至少 50 个最终结果。旧 4/5 轮窗口因临时数据库/S3 证据随机器重启丢失而作废，不能合并。 |
+| 2 | live 最终有效率达到 `>=98%` 且策略合规 | `NOT_COMPLETED` | 10/10 只能形成未完成窗口的 100% 暂态值，不能充当至少 50 个结果上的最终有效率或完整策略结论。 |
+| 3 | 精确最终候选的新鲜副本复现 | `NOT_RUN` | 当前尝试在此步骤前终止；不得用既有工作树或计划值替代。 |
+| 4 | live 后最终候选统一验证和远程 CI 成功 | `NOT_RUN` | 当前工程基线 CI 不替代未形成的最终 Release Qualification 候选。 |
 
 ## 判定
 
 Phase 2 Engineering Gate 的实现、契约、迁移、测试、安全、代码审查和 scope 证据已经满足，
-判定为 `CLOSED`。Release Qualification 仍为 `IN_PROGRESS`，因此领域契约 v0.2 只能标记
+判定为 `CLOSED`。当前 Release Qualification 按
+`TERMINATED_WITH_INSUFFICIENT_EVIDENCE` 记为 `FAILED`，因此领域契约 v0.2 只能标记
 `IMPLEMENTED`，不得标记 `STABLE`，也不得正式生产发布或声称真实环境验收完成。
 
-Release Qualification 尚未完成不阻塞 Phase 3/4/5 正常工程开发或各自的 Engineering Gate；
+Release Qualification 失败不阻塞 Phase 3/4/5 正常工程开发或各自的 Engineering Gate；
 若后续 live 或新鲜副本发现可复现的真实工程缺陷，再据缺陷影响重新评估 Phase 2 Engineering
 Gate，而不是因等待时长本身形成下游级联阻塞。

@@ -2,10 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` task-by-task. Do not create sub-agents. Use `superpowers:test-driven-development` for behavior changes and `superpowers:verification-before-completion` before commits or completion claims.
 >
-> **Governance update (2026-08-22):** 本计划的工程实现已完成，Phase 2 Engineering Gate 已
-> `CLOSED`；五轮 live、新鲜副本和最终候选 CI 继续作为 Release Qualification `IN_PROGRESS`。
-> 下文历史步骤中的单一 “Gate OPEN/CLOSED” 应按此拆分解释，不得用于阻塞下游正常工程开发，
-> 也不得据此把 v0.2 提前标记 `STABLE`。
+> **Governance update (2026-08-23):** 本计划的工程实现已完成，Phase 2 Engineering Gate 已
+> `CLOSED`；当前尝试未完成五轮 live、新鲜副本和最终候选 CI，已按
+> `TERMINATED_WITH_INSUFFICIENT_EVIDENCE` 记为 Release Qualification `FAILED`。下文历史
+> 步骤中的单一 “Gate OPEN/CLOSED” 应按此拆分解释，不得用于阻塞下游正常工程开发，也不得
+> 据此把 v0.2 标记 `STABLE`。
 
 **Goal:** Build a reproducible Phase 2 slice in which registered official endpoints produce auditable capture observations, immutable/deduplicated RawArtifacts, deterministic HTML/PDF/XLSX Documents, and replayable Evidence Locator v0.2 records.
 
@@ -755,9 +756,10 @@ Extend existing integration or add `phase2-contract-and-parser` with Python 3.14
 
 - [ ] **Step 5: Create truthful split Gate evidence**
 
-Record implementation, Engineering Gate, Release Qualification and contract maturity separately. Before
-live/fresh/final-remote success, Release Qualification remains `IN_PROGRESS` and v0.2 remains not
-`STABLE`. Populate only actual commands, versions, counts, hashes and failures; never planned values.
+Record implementation, Engineering Gate, Release Qualification and contract maturity separately. While an
+approved attempt is active, Release Qualification remains `IN_PROGRESS`; if it terminates or misses an
+approved threshold, record `FAILED` or `BLOCKED` with the exact reason. v0.2 remains not `STABLE` until
+`QUALIFIED`. Populate only actual commands, versions, counts, hashes and failures; never planned values.
 
 - [ ] **Step 6: Run the five-round live window**
 

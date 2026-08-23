@@ -9,8 +9,8 @@
 > 上位基线：Blueprint v1.2、D8–D12
 >
 > v0.2 的 Pydantic、JSON Schema、PostgreSQL 迁移、ORM 和契约测试已经实现并支持 Phase 2
-> Engineering Gate `CLOSED`；live 观察、新鲜副本和最终候选验证仍在 Release Qualification，
-> 因此本文当前只能标记 `IMPLEMENTED`，不能转为 `STABLE`。
+> Engineering Gate `CLOSED`；当前 live 观察、新鲜副本和最终候选验证没有完成，Release
+> Qualification 已记为 `FAILED`，因此本文只能标记 `IMPLEMENTED`，不能转为 `STABLE`。
 
 ## 1. 演进目的
 

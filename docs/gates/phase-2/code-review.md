@@ -6,7 +6,7 @@
 >
 > Engineering Gate：`CLOSED`
 >
-> Release Qualification：`IN_PROGRESS`
+> Release Qualification（2026-08-23 收口）：`FAILED`
 
 本次审查覆盖 v0.2 契约与生成 Schema、`20260821_0002` 迁移/ORM、Source Registry、
 CaptureObservation、同步 HTTP 采集、源健康/CLI、解析持久化、HTML/PDF/XLSX 解析器、
@@ -30,8 +30,8 @@ Evidence Locator、live runner 及其测试。审查以 Phase 2 spec、Task 1–
 ## 受控剩余风险
 
 - live runner 没有跨进程 single-writer lock。数据库事务与仓库外 JSON checkpoint 也不是
-  跨系统原子提交；当前由唯一 heartbeat 写入，禁止并发手动续跑。中断发生在采集命令与
-  checkpoint 之间时，必须先核对数据库与 JSON，不能盲目续跑。
+  跨系统原子提交。当前 live 尝试和 heartbeat 已终止；若未来另行获准重新执行，中断发生在
+  采集命令与 checkpoint 之间时，必须先核对数据库与 JSON，不能盲目续跑。
 - collector 在请求前解析并检查 DNS/IP，但实际 HTTP 客户端会再次解析，仍存在 DNS
   TOCTOU/rebinding 窗口。当前 Registry 是受版本控制、人工核验的固定官方 host；若未来接收
   不受信任 URL 或进入生产云，需要更强的解析固定/网络出口隔离。
@@ -44,4 +44,5 @@ Evidence Locator、live runner 及其测试。审查以 Phase 2 spec、Task 1–
 
 本次审查没有未解决的 `Critical` 或 `Important`，与迁移、契约、测试、安全及 scope 证据共同
 支持 Phase 2 Engineering Gate `CLOSED`。该判定不把 v0.2 标记为 `STABLE`；五轮 live、
-新鲜副本、最终统一验证及精确候选提交远程 CI 仍属于 Release Qualification，必须实际成功。
+新鲜副本、最终统一验证及精确候选提交远程 CI 没有完成，当前 Release Qualification 已按
+`TERMINATED_WITH_INSUFFICIENT_EVIDENCE` 记为 `FAILED`。

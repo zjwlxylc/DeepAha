@@ -37,20 +37,23 @@ powershell -ExecutionPolicy Bypass -File scripts/run-phase2-source-observation.p
 Phase 1/2 集成 verifier；应在第五轮安全导出聚合证据后再清理。一次因停止容器丢失数据库
 证据的早期轮次已经作废并从零重启，未计入 Release Qualification。
 
-当前 heartbeat `DeepAha Phase 2 live Gate heartbeat` 每 6 小时唤醒本任务，继续执行 Phase 2
-Release Qualification，并检查
-`next_due_at` 后才续跑；失败时通知，Release Qualification 结束后停用。heartbeat 不改变 Registry、间隔、
-阈值或访问边界。
+2026-08-23 当前尝试已按用户指令终止。自动化
+`deepaha-phase-2-live-gate-heartbeat` 已删除，compose project
+`deepaha-phase2-live-gate` 的两个专用容器和专用网络已删除；没有计划中的下一轮。未经新的明确
+授权，不得用上述命令续接现有 JSON，也不得创建新的 heartbeat、cron 或其他自动化任务。
 
 ## 恢复与停止
 
 - 外部 JSON 使用临时文件替换，并在每个 Endpoint 后 checkpoint；重跑跳过 JSON 中已经
   checkpoint 的 Endpoint 结果。
-- collector 的数据库事务与外部 JSON 不构成跨系统原子提交。runner 目前没有跨进程锁，
-  同一 observation path/数据库必须只有一个 writer；heartbeat 活跃时不得并发手动续跑。
+- collector 的数据库事务与外部 JSON 不构成跨系统原子提交。runner 目前没有跨进程锁；未来
+  若获准启动新窗口，同一 observation path/数据库必须只有一个 writer。
 - 若进程在 collector 已提交、JSON 尚未 checkpoint 的窗口中中断，先比较数据库 observation、
   health 与外部 JSON，再决定恢复方式；不得盲目重跑并把额外观察删除或伪装成原结果。
 - 配置、轮数、间隔或 Registry SHA 不一致时拒绝复用旧 observation 文件。
 - 任一策略违规、需要特例绕过或有效率不达标时保留证据，并把 Release Qualification 记为
   `FAILED` 或 `BLOCKED`；只有发现可复现的代码、契约、迁移或安全缺陷时才重新评估
   Engineering Gate。
+- 本次两个窗口均不得恢复：机器重启前 4/5 轮窗口已丢失配对运行证据，重启后窗口仅 1/5 轮。
+  当前 Release Qualification 已按 `TERMINATED_WITH_INSUFFICIENT_EVIDENCE` 记为 `FAILED`。
+  未来的新尝试必须使用新的空数据库/S3、独立 output path，并重新满足全部门槛。

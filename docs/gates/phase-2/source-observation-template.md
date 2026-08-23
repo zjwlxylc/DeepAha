@@ -4,9 +4,10 @@ Status: **TEMPLATE ONLY — NOT VALIDATED EVIDENCE**
 
 This template defines the evidence shape for the Phase 2 live source window. Its
 presence does not qualify the Phase 2 release. Release Qualification remains
-`IN_PROGRESS` until a real run, fresh-copy verification, unified verification,
-and final-candidate remote CI all succeed. This does not reopen or block the
-Phase 2 Engineering Gate by itself.
+`IN_PROGRESS` only while an approved run is active; a run stopped before the approved
+conditions is `FAILED` or `BLOCKED` with the exact reason. Only a real run, fresh-copy
+verification, unified verification, and final-candidate remote CI can produce
+`QUALIFIED`. None of these states reopens the Phase 2 Engineering Gate by itself.
 
 ## Safe execution
 

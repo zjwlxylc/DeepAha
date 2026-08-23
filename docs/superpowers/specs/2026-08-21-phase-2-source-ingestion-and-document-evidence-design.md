@@ -1,6 +1,6 @@
 # DeepAha Phase 2 采集观察与文档证据设计
 
-> 状态：`IMPLEMENTED`；Phase 2 Engineering Gate `CLOSED`，Release Qualification `IN_PROGRESS`
+> 状态：`IMPLEMENTED`；Phase 2 Engineering Gate `CLOSED`，Release Qualification `FAILED`
 >
 > 日期：2026-08-21
 >
@@ -10,9 +10,10 @@
 >
 > 当前 `STABLE` 契约：`0.1.0`；`0.2.0` 已 `IMPLEMENTED`、尚未 `STABLE`
 >
-> 本文保存设计基线；实际实现与验收状态以 `docs/gates/phase-2/` 为准。五轮 live、新鲜副本和
-> 最终候选 CI 属于 Release Qualification，未完成前不得标记 v0.2 `STABLE`，但不阻塞下游
-> Phase 的正常工程开发。
+> 本文保存设计基线；实际实现与验收状态以 `docs/gates/phase-2/` 为准。当前尝试未完成五轮
+> live、新鲜副本和最终候选 CI，已按 `TERMINATED_WITH_INSUFFICIENT_EVIDENCE` 记为
+> Release Qualification `FAILED`。v0.2 不得标记 `STABLE`，但该结论不阻塞下游 Phase 的正常
+> 工程开发。
 
 ## 1. 目的
 
@@ -379,7 +380,8 @@ Phase 2 Release Qualification 保存：
    `SUCCEEDED + NOT_MODIFIED` 有效率达到 `>=98%`，并保存源健康和维护证据。
 2. 精确最终候选在新鲜副本完成统一验证，最终候选远程 CI 成功。
 3. 上述实际证据完成后才能把 Release Qualification 标记 `QUALIFIED` 并把 v0.2 标记
-   `STABLE`；此前保持 `IN_PROGRESS`，但不阻塞下游正常工程开发。
+   `STABLE`；获准运行期间保持 `IN_PROGRESS`，提前终止或不满足门槛时记为 `FAILED` 或
+   `BLOCKED` 并保存精确原因。非 `QUALIFIED` 状态不阻塞下游正常工程开发。
 
 ### 15.3 Gate 证据包
 
