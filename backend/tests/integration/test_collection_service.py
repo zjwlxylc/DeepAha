@@ -278,3 +278,28 @@ def test_rate_limit_failure_is_persisted_without_transport_call(
         None,
         "RATE_LIMIT_NOT_ELAPSED",
     ]
+
+
+def test_policy_bound_dynamic_url_is_preserved_in_observation(
+    owned_session_factory: sessionmaker[Session], object_store: S3ObjectStore
+) -> None:
+    endpoint = create_endpoint(owned_session_factory)
+    requested_url = "https://official.example/detail/notice-1"
+    runner = runner_for(
+        factory=owned_session_factory,
+        object_store=object_store,
+        transport=ScriptedTransport([response(200, b"official detail", media_type="text/html")]),
+        clock=AdvancingClock(),
+    )
+
+    result = runner.collect(endpoint.endpoint_id, requested_url=requested_url)
+
+    with owned_session_factory() as session:
+        observation = session.get(CaptureObservation, result.attempts[0].observation_id)
+        assert observation is not None
+        assert observation.requested_url == requested_url
+        assert observation.resolved_url == "https://official.example/list"
+    assert result.attempts[0].redirect_chain == (
+        requested_url,
+        "https://official.example/list",
+    )

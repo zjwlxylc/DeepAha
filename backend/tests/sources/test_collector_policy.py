@@ -379,6 +379,10 @@ def test_each_redirect_host_is_resolved_before_following() -> None:
     assert outcomes(result) == ["SUCCEEDED"]
     assert resolver.hosts == ["official.example", "cdn.official.example"]
     assert len(result.requests) == 2
+    assert getattr(result.attempts[0], "redirect_chain") == (
+        "https://official.example/list",
+        "https://cdn.official.example/file",
+    )
 
 
 def test_attempt_iterator_is_lazy_so_persistence_can_happen_before_sleep() -> None:

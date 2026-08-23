@@ -162,6 +162,13 @@ class CaptureObservation(Base):
             ["raw_artifacts.artifact_id", "raw_artifacts.source_id"],
             ondelete="RESTRICT",
         ),
+        UniqueConstraint(
+            "observation_id",
+            "endpoint_id",
+            "source_id",
+            "artifact_id",
+            name="uq_capture_observations_acquisition_binding",
+        ),
         UniqueConstraint("collection_run_id", "attempt_number"),
     )
 

@@ -114,13 +114,13 @@ optional Playwright Chromium only after A5, pytest, Ruff, mypy, PowerShell, Dock
 - `FetchResult` contains normalized request/final URLs, ordered redirect chain, bounded safe
   headers, body bytes or object reference (exactly one), SHA-256, fetch time and stable versions.
 
-- [ ] Write RED tests for closed enums, UUIDv7 identifiers, credentials in URLs, duplicate hosts,
+- [x] Write RED tests for closed enums, UUIDv7 identifiers, credentials in URLs, duplicate hosts,
   body/reference exclusivity, hash/body agreement, redirect ordering, status/diagnostic coherence,
   bounded headers/metrics and challenge-field coherence.
-- [ ] Run `uv run pytest tests/acquisition/test_contracts.py -q` from `backend`; inspect the missing
+- [x] Run `uv run pytest tests/acquisition/test_contracts.py -q` from `backend`; inspect the missing
   module failure.
-- [ ] Implement only the four enums and four frozen Pydantic values needed by those tests.
-- [ ] Run focused GREEN, `ruff format --check`, `ruff check` and `mypy` on the new files.
+- [x] Implement only the four enums and four frozen Pydantic values needed by those tests.
+- [x] Run focused GREEN, `ruff format --check`, `ruff check` and `mypy` on the new files.
 
 ### Task 2: Implement deterministic ContentValidator
 
@@ -140,13 +140,13 @@ optional Playwright Chromium only after A5, pytest, Ruff, mypy, PowerShell, Dock
 - `expires` or wall-clock behavior does not exist; validation uses only FetchResult and Recipe
   inputs.
 
-- [ ] Write RED table tests for VALID, cookie/JavaScript challenge, CAPTCHA, login, access denied,
+- [x] Write RED table tests for VALID, cookie/JavaScript challenge, CAPTCHA, login, access denied,
   unexpected MIME, empty/short response, malformed JSON/XML, missing selector, forbidden marker,
   zero discovery and deterministic repeated evaluation.
-- [ ] Run focused RED and verify failures are missing behavior, not malformed fixtures.
-- [ ] Implement `ContentValidator.evaluate(result, expectations) -> ValidationResult` with no LLM,
+- [x] Run focused RED and verify failures are missing behavior, not malformed fixtures.
+- [x] Implement `ContentValidator.evaluate(result, expectations) -> ValidationResult` with no LLM,
   network or source-specific branches.
-- [ ] Run focused GREEN and all existing source/document unit tests.
+- [x] Run focused GREEN and all existing source/document unit tests.
 
 ### Task 3: Add AcquisitionEvaluation contract, model and migration 0009
 
@@ -167,12 +167,12 @@ optional Playwright Chromium only after A5, pytest, Ruff, mypy, PowerShell, Dock
 - Evaluation rows are immutable. Downgrade refuses while any evaluation exists.
 - CaptureObservation remains unchanged and historical migration checks remain byte-compatible.
 
-- [ ] Write RED contract/database tests for all invariants, cross-source rejection, one evaluation
+- [x] Write RED contract/database tests for all invariants, cross-source rejection, one evaluation
   per observation, immutability, non-empty downgrade refusal and empty downgrade/re-upgrade/drift.
-- [ ] Start only the existing isolated Phase 8/P9-compatible PostgreSQL fixture on a free local
+- [x] Start only the existing isolated Phase 8/P9-compatible PostgreSQL fixture on a free local
   port; run the exact integration RED and inspect the missing revision/table failure.
-- [ ] Implement model/import and additive 0009 migration without modifying old migration files.
-- [ ] Run `alembic upgrade head`, focused integration GREEN, empty downgrade to 0008,
+- [x] Implement model/import and additive 0009 migration without modifying old migration files.
+- [x] Run `alembic upgrade head`, focused integration GREEN, empty downgrade to 0008,
   re-upgrade, `alembic check`, Ruff and mypy; clean up only the exact Compose project.
 
 ### Task 4: Persist evaluations idempotently and adapt static HTTP results
@@ -194,12 +194,12 @@ optional Playwright Chromium only after A5, pytest, Ruff, mypy, PowerShell, Dock
 - Extend `CollectionRunner.collect` only enough to accept an optional policy-bound requested URL
   and expose its ordered redirect chain; the default endpoint behavior remains identical.
 
-- [ ] Write RED tests proving exact replay, conflicting replay, no evaluation for transport
+- [x] Write RED tests proving exact replay, conflicting replay, no evaluation for transport
   failure, redirect-chain preservation, dynamic same-host acceptance and credential/private-host/
   unapproved-host rejection.
-- [ ] Run RED and inspect intended assertion/missing-interface failures.
-- [ ] Implement the service and adapter without copying collector policy code.
-- [ ] Run focused GREEN plus all Phase 2 collector/collection/persistence tests.
+- [x] Run RED and inspect intended assertion/missing-interface failures.
+- [x] Implement the service and adapter without copying collector policy code.
+- [x] Run focused GREEN plus all Phase 2 collector/collection/persistence tests.
 
 ### Task 5: Enforce the VALID-only Document transition
 
@@ -214,11 +214,11 @@ optional Playwright Chromium only after A5, pytest, Ruff, mypy, PowerShell, Dock
   loads the immutable evaluation and RawArtifact, refuses any status other than VALID, and invokes
   the existing `DocumentService`; it does not create Opportunity facts.
 
-- [ ] Write RED integration tests proving VALID parses, challenge/unexpected/zero-discovery do not
+- [x] Write RED integration tests proving VALID parses, challenge/unexpected/zero-discovery do not
   create ParseAttempt or Document, retained RawArtifact remains readable, and exact replay does not
   duplicate Document.
-- [ ] Run RED, implement the smallest gate, and run focused GREEN plus document service regression.
-- [ ] Run the A1 focused verifier set, `git diff --check`, exact staged scope review and local commit
+- [x] Run RED, implement the smallest gate, and run focused GREEN plus document service regression.
+- [x] Run the A1 focused verifier set, `git diff --check`, exact staged scope review and local commit
   `feat: add source acquisition contracts and validation`.
 
 ---

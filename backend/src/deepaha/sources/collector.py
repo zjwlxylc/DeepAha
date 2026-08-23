@@ -17,6 +17,7 @@ from deepaha.artifacts.service import ImportRawArtifactCommand
 from deepaha.contracts.phase2 import SourceEndpointSchema
 from deepaha.sources.models import CaptureObservation, Source, SourceEndpoint
 from deepaha.sources.transport import (
+    MAX_RESPONSE_BYTES,
     HostResolver,
     HttpRequest,
     HttpResponse,
@@ -62,6 +63,7 @@ class SocketHostResolver:
 
 @dataclass(frozen=True, slots=True)
 class CollectionAttempt:
+    observation_id: UUID
     attempt_number: int
     outcome: str
     http_status: int | None
@@ -69,6 +71,12 @@ class CollectionAttempt:
     error_code: str | None
     started_at: datetime
     completed_at: datetime
+    requested_url: str
+    resolved_url: str | None
+    redirect_chain: tuple[str, ...]
+    media_type: str | None
+    response_etag: str | None
+    response_last_modified: str | None
 
 
 @dataclass(frozen=True, slots=True)
@@ -97,7 +105,14 @@ class _AttemptDecision:
     error_code: str | None
     media_type: str | None
     body: bytes | None
+    redirect_chain: tuple[str, ...]
     retryable: bool = False
+
+
+@dataclass(frozen=True, slots=True)
+class _RedirectedResponse:
+    response: HttpResponse
+    redirect_chain: tuple[str, ...]
 
 
 class _HostPolicyError(RuntimeError):
@@ -118,6 +133,8 @@ def collect_http_attempts(
     resolver: HostResolver,
     clock: Clock,
     sleeper: Sleeper,
+    max_bytes: int = MAX_RESPONSE_BYTES,
+    capture_unexpected_content: bool = False,
 ) -> Iterator[_AttemptDecision]:
     policy_error = _preflight_error(endpoint, source_active, rate_limit_elapsed)
     if policy_error is not None:
@@ -139,14 +156,17 @@ def collect_http_attempts(
                 headers=headers,
                 transport=transport,
                 resolver=resolver,
+                max_bytes=max_bytes,
             )
             decision = _classify_response(
                 attempt_number=attempt_number,
                 started_at=started_at,
                 completed_at=clock.now(),
-                response=response,
+                response=response.response,
+                redirect_chain=response.redirect_chain,
                 expected_media_types=endpoint.expected_media_types,
                 previous_artifact_id=previous_artifact_id,
+                capture_unexpected_content=capture_unexpected_content,
             )
         except _HostPolicyError as error:
             decision = _failed_decision(
@@ -211,8 +231,23 @@ class CollectionRunner:
         self._collector_name = collector_name
         self._collector_version = collector_version
 
-    def collect(self, endpoint_id: UUID) -> CollectionRunResult:
+    def collect(
+        self,
+        endpoint_id: UUID,
+        *,
+        requested_url: str | None = None,
+        max_attempts: int | None = None,
+        timeout_seconds: int | None = None,
+        max_bytes: int = MAX_RESPONSE_BYTES,
+        capture_unexpected_content: bool = False,
+    ) -> CollectionRunResult:
         endpoint, source_active, rate_elapsed, previous = self._load_context(endpoint_id)
+        endpoint = _bounded_endpoint(
+            endpoint,
+            requested_url=requested_url,
+            max_attempts=max_attempts,
+            timeout_seconds=timeout_seconds,
+        )
         collection_run_id = uuid7()
         attempts: list[CollectionAttempt] = []
         for decision in collect_http_attempts(
@@ -226,6 +261,8 @@ class CollectionRunner:
             resolver=self._resolver,
             clock=self._clock,
             sleeper=self._sleeper,
+            max_bytes=max_bytes,
+            capture_unexpected_content=capture_unexpected_content,
         ):
             attempts.append(
                 self._persist_decision(
@@ -309,8 +346,9 @@ class CollectionRunner:
                 )
                 artifact_id = imported.artifact.artifact_id
 
+            observation_id = uuid7()
             observation = CaptureObservation(
-                observation_id=uuid7(),
+                observation_id=observation_id,
                 collection_run_id=collection_run_id,
                 attempt_number=decision.attempt_number,
                 endpoint_id=endpoint.endpoint_id,
@@ -332,6 +370,7 @@ class CollectionRunner:
             session.add(observation)
 
         return CollectionAttempt(
+            observation_id=observation_id,
             attempt_number=decision.attempt_number,
             outcome=decision.outcome,
             http_status=decision.http_status,
@@ -339,6 +378,12 @@ class CollectionRunner:
             error_code=decision.error_code,
             started_at=decision.started_at,
             completed_at=decision.completed_at,
+            requested_url=str(endpoint.url),
+            resolved_url=decision.resolved_url,
+            redirect_chain=decision.redirect_chain,
+            media_type=decision.media_type,
+            response_etag=decision.response_etag,
+            response_last_modified=decision.response_last_modified,
         )
 
 
@@ -371,8 +416,10 @@ def _get_with_redirects(
     headers: dict[str, str],
     transport: HttpTransport,
     resolver: HostResolver,
-) -> HttpResponse:
+    max_bytes: int,
+) -> _RedirectedResponse:
     current_url = str(endpoint.url)
+    redirect_chain = [current_url]
     is_redirect = False
     for redirect_count in range(MAX_REDIRECTS + 1):
         _require_public_allowed_url(
@@ -386,13 +433,19 @@ def _get_with_redirects(
                 url=current_url,
                 headers=headers,
                 timeout_seconds=endpoint.timeout_seconds,
+                max_bytes=max_bytes,
             )
         )
         if response.status_code not in REDIRECT_STATUSES:
-            return response
+            if redirect_chain[-1] != response.url:
+                redirect_chain.append(response.url)
+            return _RedirectedResponse(response=response, redirect_chain=tuple(redirect_chain))
         if response.location is None or redirect_count == MAX_REDIRECTS:
-            return response
+            if redirect_chain[-1] != response.url:
+                redirect_chain.append(response.url)
+            return _RedirectedResponse(response=response, redirect_chain=tuple(redirect_chain))
         current_url = urljoin(current_url, response.location)
+        redirect_chain.append(current_url)
         is_redirect = True
     raise RuntimeError("redirect loop exceeded bounded iteration")
 
@@ -452,8 +505,10 @@ def _classify_response(
     started_at: datetime,
     completed_at: datetime,
     response: HttpResponse,
+    redirect_chain: tuple[str, ...],
     expected_media_types: tuple[str, ...],
     previous_artifact_id: UUID | None,
+    capture_unexpected_content: bool,
 ) -> _AttemptDecision:
     if 200 <= response.status_code < 300:
         if not response.body:
@@ -472,13 +527,14 @@ def _classify_response(
         expected = {
             value.split(";", maxsplit=1)[0].strip().lower() for value in expected_media_types
         }
-        if actual_media_type not in expected:
+        if actual_media_type not in expected and not capture_unexpected_content:
             return _failed_decision(
                 attempt_number,
                 started_at,
                 completed_at,
                 "MEDIA_TYPE_NOT_ALLOWED",
                 response=response,
+                redirect_chain=redirect_chain,
             )
         return _AttemptDecision(
             attempt_number=attempt_number,
@@ -493,6 +549,7 @@ def _classify_response(
             error_code=None,
             media_type=response.media_type,
             body=response.body,
+            redirect_chain=redirect_chain,
         )
 
     if response.status_code == 304:
@@ -503,6 +560,7 @@ def _classify_response(
                 completed_at,
                 "NOT_MODIFIED_WITHOUT_ARTIFACT",
                 response=response,
+                redirect_chain=redirect_chain,
             )
         return _AttemptDecision(
             attempt_number=attempt_number,
@@ -517,6 +575,7 @@ def _classify_response(
             error_code=None,
             media_type=None,
             body=None,
+            redirect_chain=redirect_chain,
         )
 
     if response.status_code in RETRYABLE_HTTP_STATUSES:
@@ -526,6 +585,7 @@ def _classify_response(
             completed_at,
             "HTTP_RETRYABLE_EXHAUSTED",
             response=response,
+            redirect_chain=redirect_chain,
             retryable=True,
         )
 
@@ -535,6 +595,7 @@ def _classify_response(
         completed_at,
         "HTTP_PERMANENT",
         response=response,
+        redirect_chain=redirect_chain,
     )
 
 
@@ -545,6 +606,7 @@ def _failed_decision(
     error_code: str,
     *,
     response: HttpResponse | None = None,
+    redirect_chain: tuple[str, ...] = (),
     retryable: bool = False,
 ) -> _AttemptDecision:
     return _AttemptDecision(
@@ -560,8 +622,31 @@ def _failed_decision(
         error_code=error_code,
         media_type=response.media_type if response is not None else None,
         body=None,
+        redirect_chain=redirect_chain,
         retryable=retryable,
     )
+
+
+def _bounded_endpoint(
+    endpoint: SourceEndpointSchema,
+    *,
+    requested_url: str | None,
+    max_attempts: int | None,
+    timeout_seconds: int | None,
+) -> SourceEndpointSchema:
+    attempts = endpoint.max_attempts if max_attempts is None else max_attempts
+    timeout = endpoint.timeout_seconds if timeout_seconds is None else timeout_seconds
+    if attempts > endpoint.max_attempts:
+        raise ValueError("requested max_attempts exceeds endpoint policy")
+    if timeout > endpoint.timeout_seconds:
+        raise ValueError("requested timeout_seconds exceeds endpoint policy")
+    values = endpoint.model_dump(mode="python")
+    values.update(
+        url=requested_url or str(endpoint.url),
+        max_attempts=attempts,
+        timeout_seconds=timeout,
+    )
+    return SourceEndpointSchema.model_validate(values)
 
 
 def _endpoint_contract(row: SourceEndpoint) -> SourceEndpointSchema:
