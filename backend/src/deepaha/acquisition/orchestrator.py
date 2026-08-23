@@ -133,10 +133,7 @@ class DatabaseEndpointPolicyLoader:
                 and tuple(endpoint.allowed_hosts) == recipe.allowed_hosts
                 and tuple(endpoint.expected_media_types) == recipe.expected_media_types
                 and recipe_allows_url(recipe, endpoint.url)
-                and (
-                    recipe.usage_role != "PRIMARY_EVIDENCE"
-                    or source.tier == "OFFICIAL_PRIMARY"
-                )
+                and (recipe.usage_role != "PRIMARY_EVIDENCE" or source.tier == "OFFICIAL_PRIMARY")
                 and (
                     all(step.strategy is not FetchStrategy.BROWSER for step in recipe.fetch_plan)
                     or endpoint.browser_policy == "FALLBACK"
@@ -273,17 +270,13 @@ class AcquisitionOrchestrator:
         for index, step in enumerate(recipe.fetch_plan):
             if used >= remaining_requests:
                 return (
-                    _UrlResult(
-                        RunTerminalCode.REQUEST_BUDGET_EXHAUSTED, (), False, False, 0
-                    ),
+                    _UrlResult(RunTerminalCode.REQUEST_BUDGET_EXHAUSTED, (), False, False, 0),
                     used,
                     last_request_at,
                 )
             if (self._clock() - started_at).total_seconds() >= recipe.maximum_elapsed_seconds:
                 return (
-                    _UrlResult(
-                        RunTerminalCode.ELAPSED_BUDGET_EXHAUSTED, (), False, False, 0
-                    ),
+                    _UrlResult(RunTerminalCode.ELAPSED_BUDGET_EXHAUSTED, (), False, False, 0),
                     used,
                     last_request_at,
                 )
@@ -293,9 +286,7 @@ class AcquisitionOrchestrator:
             last_request_at = self._wait_for_policy_interval(policy, last_request_at)
             if (self._clock() - started_at).total_seconds() >= recipe.maximum_elapsed_seconds:
                 return (
-                    _UrlResult(
-                        RunTerminalCode.ELAPSED_BUDGET_EXHAUSTED, (), False, False, 0
-                    ),
+                    _UrlResult(RunTerminalCode.ELAPSED_BUDGET_EXHAUSTED, (), False, False, 0),
                     used,
                     last_request_at,
                 )
@@ -350,9 +341,7 @@ class AcquisitionOrchestrator:
                         "strategy": step.strategy,
                         "validation_status": validation.status,
                         "error_code": (
-                            validation.diagnostic_codes[0]
-                            if validation.diagnostic_codes
-                            else None
+                            validation.diagnostic_codes[0] if validation.diagnostic_codes else None
                         ),
                     }
                 )
@@ -364,8 +353,7 @@ class AcquisitionOrchestrator:
             if validation.status is ValidationStatus.VALID:
                 advanced = self._advance_valid_artifact(evaluation.acquisition_evaluation_id)
                 parsed = (
-                    advanced is None
-                    or getattr(advanced, "outcome", "SUCCEEDED") == "SUCCEEDED"
+                    advanced is None or getattr(advanced, "outcome", "SUCCEEDED") == "SUCCEEDED"
                 )
                 evidence_count = len(getattr(advanced, "evidence_ref_ids", ()))
                 return (
@@ -439,9 +427,7 @@ class AcquisitionOrchestrator:
             )
             if pending.kind is DiscoveredLinkKind.DETAIL:
                 discovered = tuple(
-                    link
-                    for link in discovered
-                    if link.kind is DiscoveredLinkKind.ATTACHMENT
+                    link for link in discovered if link.kind is DiscoveredLinkKind.ATTACHMENT
                 )
         except DiscoveryError as error:
             status = (

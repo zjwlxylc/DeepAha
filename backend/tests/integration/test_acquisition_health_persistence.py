@@ -123,9 +123,7 @@ def test_conflicting_replay_fails_closed(factory: sessionmaker[Session]) -> None
         observation = seed_observation(session)
     service = AcquisitionEvidenceService(factory)
     service.record_run(run_command(observation.source_id, observation.endpoint_id))
-    service.record_integration(
-        integration_command(observation.source_id, observation.endpoint_id)
-    )
+    service.record_integration(integration_command(observation.source_id, observation.endpoint_id))
 
     with pytest.raises(AcquisitionEvidenceConflict, match="ACQUISITION_EVIDENCE_CONFLICT"):
         service.record_run(
@@ -162,10 +160,7 @@ def test_cross_source_binding_and_insert_only_guards(
     )
     with pytest.raises(DBAPIError, match="immutable"), migrated_engine.begin() as connection:
         connection.execute(
-            text(
-                "update acquisition_runs set parsed_count = 0 "
-                "where acquisition_run_id = :run_id"
-            ),
+            text("update acquisition_runs set parsed_count = 0 where acquisition_run_id = :run_id"),
             {"run_id": row.acquisition_run_id},
         )
 

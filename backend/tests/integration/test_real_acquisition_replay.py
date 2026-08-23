@@ -6,6 +6,7 @@ import pytest
 from deepaha.acquisition.recipes import load_recipe_manifest
 from deepaha.acquisition.replay import (
     ControlledDirectoryStore,
+    ControlledObjectReader,
     ReplayBinding,
     ReplayRunner,
     ReplayStatus,
@@ -30,7 +31,7 @@ def test_controlled_real_corpus_replays_or_reports_explicit_blocked(tmp_path: Pa
     configured_root = os.environ.get("DEEPAHA_REAL_SOURCE_CORPUS_ROOT")
     configured_backend = os.environ.get("DEEPAHA_REAL_SOURCE_CORPUS_BACKEND")
     if configured_backend == "s3":
-        object_store = S3ObjectStore(Settings())
+        object_store: ControlledObjectReader = S3ObjectStore(Settings())
     else:
         corpus_root = Path(configured_root) if configured_root else tmp_path / "corpus-not-mounted"
         object_store = ControlledDirectoryStore(corpus_root)

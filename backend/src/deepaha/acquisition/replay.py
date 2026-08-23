@@ -209,7 +209,7 @@ class ReplayRunner:
             return _empty_result(ReplayStatus.FAILED, preflight_error)
         try:
             body = self._object_store.get_bytes(key=entry.object_key)
-        except (FileNotFoundError, KeyError):
+        except FileNotFoundError, KeyError:
             return _empty_result(ReplayStatus.BLOCKED, "REPLAY_OBJECT_MISSING")
         if len(body) != entry.byte_size:
             return _empty_result(ReplayStatus.FAILED, "REPLAY_OBJECT_SIZE_MISMATCH")
@@ -243,9 +243,7 @@ class ReplayRunner:
             }
         )
         validation, discovered_urls = self._evaluate_and_discover(fetched, recipe)
-        parse_outcome, parse_error, text_hash, locator_count = self._parse(
-            entry, body, validation
-        )
+        parse_outcome, parse_error, text_hash, locator_count = self._parse(entry, body, validation)
         result_hash = _result_hash(
             entry=entry,
             validation=validation,

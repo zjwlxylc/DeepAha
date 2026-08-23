@@ -10,9 +10,7 @@ from sqlalchemy.engine import make_url
 pytestmark = pytest.mark.integration
 
 
-def test_health_migration_round_trip(
-    database_url: str, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_health_migration_round_trip(database_url: str, monkeypatch: pytest.MonkeyPatch) -> None:
     database_name = f"deepaha_acquisition_health_{uuid4().hex}"
     assert re.fullmatch(r"deepaha_acquisition_health_[0-9a-f]{32}", database_name)
     url = make_url(database_url)
@@ -97,8 +95,8 @@ def test_health_migration_downgrade_refuses_run_evidence(
                 "'019c0000-0000-7000-8000-000000000704', "
                 "'019c0000-0000-7000-8000-000000000701', "
                 "'019c0000-0000-7000-8000-000000000702', 'v1', 'r1', now(), now(), "
-                "'COMPLETE', 1, '[{\"strategy\":\"STATIC_HTTP\","
-                "\"validation_status\":\"VALID\",\"error_code\":null}]'::jsonb, 1, 1, 1, "
+                '\'COMPLETE\', 1, \'[{"strategy":"STATIC_HTTP",'
+                '"validation_status":"VALID","error_code":null}]\'::jsonb, 1, 1, 1, '
                 "0, 1, false, false, false, null, '1.0.0')"
             )
 

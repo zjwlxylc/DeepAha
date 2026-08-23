@@ -88,6 +88,8 @@ def _seed_real_document(
     source_id = UUID(str(resolution["source_id"]))
     artifact_id = UUID(str(document["artifact_id"]))
     document_id = UUID(str(document["document_id"]))
+    byte_size = document["byte_size"]
+    assert isinstance(byte_size, int)
     with factory.begin() as session:
         session.add(
             Source(
@@ -115,7 +117,7 @@ def _seed_real_document(
                 content_sha256=str(document["content_sha256"]),
                 storage_bucket="deepaha-raw",
                 object_key=str(document["object_key"]),
-                byte_size=int(document["byte_size"]),
+                byte_size=byte_size,
                 collector_version="0.2.0",
                 metadata_schema_version="0.2.0",
             )

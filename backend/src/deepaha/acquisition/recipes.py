@@ -56,9 +56,7 @@ def recipe_allows_url(recipe: SourceRecipe, url: str) -> bool:
         and parsed.username is None
         and parsed.password is None
         and host in recipe.allowed_hosts
-        and any(
-            fnmatchcase(parsed.path or "/", pattern) for pattern in recipe.allowed_url_patterns
-        )
+        and any(fnmatchcase(parsed.path or "/", pattern) for pattern in recipe.allowed_url_patterns)
     )
 
 

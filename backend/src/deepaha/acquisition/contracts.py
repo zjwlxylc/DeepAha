@@ -560,9 +560,7 @@ class AcquisitionRunSchema(AcquisitionContract):
         if self.attachment_count > self.discovered_count:
             raise ValueError("attachment_count cannot exceed discovered_count")
         statuses = tuple(attempt.validation_status for attempt in self.strategy_attempts)
-        if self.zero_discovery_flag != (
-            ValidationStatus.ZERO_DISCOVERY_SUSPECT in statuses
-        ):
+        if self.zero_discovery_flag != (ValidationStatus.ZERO_DISCOVERY_SUSPECT in statuses):
             raise ValueError("zero_discovery_flag must match strategy attempts")
         if self.selector_drift_flag != (ValidationStatus.SELECTOR_DRIFT in statuses):
             raise ValueError("selector_drift_flag must match strategy attempts")

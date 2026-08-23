@@ -160,8 +160,7 @@ def derive_acquisition_health(
     )
     drift = (
         HealthState.DEGRADED
-        if zero_count > zero_discovery_grace_runs
-        or selector_count > selector_drift_grace_runs
+        if zero_count > zero_discovery_grace_runs or selector_count > selector_drift_grace_runs
         else HealthState.HEALTHY
     )
     return AcquisitionHealthSummary.model_validate(
@@ -222,9 +221,7 @@ def compute_integration_cost_gate(
     )
     schema_count = sum(item.core_schema_changed for item in sample)
     status: Literal["PASS", "FAIL"] = (
-        "PASS"
-        if reuse_count >= 3 and recipe_or_thin_count >= 3 and schema_count == 0
-        else "FAIL"
+        "PASS" if reuse_count >= 3 and recipe_or_thin_count >= 3 and schema_count == 0 else "FAIL"
     )
     return IntegrationCostGate(
         sample_count=5,

@@ -20,16 +20,14 @@ PRIOR_PORTS = (
 
 
 def _verifier() -> str:
-    return (
-        REPOSITORY_ROOT / "scripts" / "verify-source-acquisition-platform.ps1"
-    ).read_text("utf-8")
+    return (REPOSITORY_ROOT / "scripts" / "verify-source-acquisition-platform.ps1").read_text(
+        "utf-8"
+    )
 
 
 def test_verifier_uses_an_exact_isolated_project_and_cleans_it() -> None:
     verifier = _verifier()
-    compose = (
-        REPOSITORY_ROOT / "infra" / "compose.source-acquisition.yaml"
-    ).read_text("utf-8")
+    compose = (REPOSITORY_ROOT / "infra" / "compose.source-acquisition.yaml").read_text("utf-8")
     normalized = verifier.replace("\\", "/").lower()
 
     assert "55439" in compose and "55007" in compose

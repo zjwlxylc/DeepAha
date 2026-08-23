@@ -230,9 +230,7 @@ def test_challenge_is_evaluated_but_cannot_create_document(
         factory=factory,
         object_store=object_store,
         recipe=recipe,
-        transport=ScriptedTransport(
-            [http_response("https://official.example/list", challenge)]
-        ),
+        transport=ScriptedTransport([http_response("https://official.example/list", challenge)]),
         clock=SharedClock(),
     ).run(recipe.recipe_id)
 

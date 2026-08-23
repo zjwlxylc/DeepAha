@@ -123,8 +123,6 @@ def test_challenge_summary_is_safe_and_returns_nonzero() -> None:
 
 
 def test_live_runner_registers_official_alternative_strategy() -> None:
-    source = (BACKEND / "src" / "deepaha" / "acquisition" / "cli.py").read_text(
-        encoding="utf-8"
-    )
+    source = (BACKEND / "src" / "deepaha" / "acquisition" / "cli.py").read_text(encoding="utf-8")
 
     assert "FetchStrategy.OFFICIAL_ALTERNATIVE: OfficialAlternativeFetcher(" in source
