@@ -6,6 +6,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 
+from deepaha.api.personal import get_current_time
 from deepaha.core.settings import get_settings
 from deepaha.main import create_app
 from deepaha.personal.auth import token_digest
@@ -51,6 +52,7 @@ def test_personal_api_vertical_flow_is_private_and_owner_scoped(
     monkeypatch.setenv("DEEPAHA_OBJECT_STORE_ENDPOINT", "http://127.0.0.1:55004")
     get_settings.cache_clear()
     application = create_app()
+    application.dependency_overrides[get_current_time] = lambda: NOW
     auth_a = {"Authorization": f"Bearer {TOKEN_A}"}
     auth_b = {"Authorization": f"Bearer {token_b}"}
 
