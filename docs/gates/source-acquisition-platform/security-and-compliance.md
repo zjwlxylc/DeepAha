@@ -13,8 +13,10 @@ qualification.
   URLs, private/non-global literal IPs and unapproved hosts fail closed.
 - Content validation distinguishes HTTP success from usable content and stops on CAPTCHA, login,
   access-denied and JavaScript Cookie challenges.
-- Only `VALID` evaluations may advance into Document. Raw bytes can remain immutable evidence but
-  cannot become semantic truth after a challenge or validation failure.
+- The production `DocumentService` checks every Artifact that has AcquisitionEvaluation rows and
+  rejects it unless all persisted statuses are `VALID`; the Orchestrator transition also remains
+  VALID-only. Raw bytes can remain immutable evidence but cannot become semantic truth after a
+  challenge or validation failure.
 - XML parsing disables network access and entity resolution. Replay object keys are relative,
   resolved under an explicit controlled root and protected against traversal.
 - Live qualification requires two explicit opt-ins, accepts at most 25 requests, emits an

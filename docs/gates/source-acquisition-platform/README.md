@@ -17,10 +17,11 @@ policy-bound Fetch contracts, immutable RawArtifact provenance, semantic content
 versioned Source Recipes, bounded orchestration, VALID-only Document advancement, offline replay,
 semantic health/drift evidence and measured integration cost.
 
-The Engineering Gate is closed because all ten Gate 0 criteria have reproducible evidence and the
-isolated verifier completed with exit code `0`. This does not mean every official site is currently
-accessible. Challenge, zero-discovery, parse failure and disallowed redirect outcomes are explicit
-health evidence rather than silent success.
+The two P1 findings from the first independent acceptance were repaired and the isolated repair
+verifier completed with exit code `0`, satisfying the Engineering Gate checks. A new independent
+read-only acceptance has been requested for the repair candidate. This does not mean every official
+site is currently accessible. Challenge, zero-discovery, parse failure and disallowed redirect
+outcomes are explicit health evidence rather than silent success.
 
 ## Boundaries
 

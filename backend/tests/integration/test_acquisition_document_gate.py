@@ -10,6 +10,7 @@ from deepaha.artifacts.models import RawArtifact
 from deepaha.artifacts.s3 import S3ObjectStore
 from deepaha.core.settings import Settings
 from deepaha.documents.models import Document, ParseAttempt
+from deepaha.documents.service import ParseDocumentCommand
 from tests.integration.test_acquisition_evaluation_service import command, validation_result
 from tests.integration.test_acquisition_fetchers import fetcher, request
 from tests.integration.test_collection_service import ScriptedTransport, create_endpoint, response
@@ -82,6 +83,23 @@ def test_invalid_evaluation_retains_raw_artifact_but_creates_no_document(
         artifact = session.get(RawArtifact, artifact_id)
         assert artifact is not None
         assert object_store.get_bytes(key=artifact.object_key) == RAW_CONTENT
+        assert session.scalar(select(func.count()).select_from(Document)) == 0
+        assert session.scalar(select(func.count()).select_from(ParseAttempt)) == 0
+
+
+def test_invalid_evaluation_cannot_bypass_gate_through_document_service(
+    factory: sessionmaker[Session], object_store: S3ObjectStore
+) -> None:
+    observation_id, artifact_id = fetch_observation(factory, object_store)
+    EvaluationService(factory).record(
+        command(observation_id, validation_result=validation_result(status="CAPTCHA_REQUIRED"))
+    )
+    document_service = service_for(factory, object_store, FakeParser())
+
+    with pytest.raises(RuntimeError, match="ACQUISITION_DOCUMENT_BLOCKED"):
+        document_service.parse(ParseDocumentCommand(artifact_id=artifact_id))
+
+    with factory() as session:
         assert session.scalar(select(func.count()).select_from(Document)) == 0
         assert session.scalar(select(func.count()).select_from(ParseAttempt)) == 0
 

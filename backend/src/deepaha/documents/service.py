@@ -9,6 +9,7 @@ from pydantic import TypeAdapter
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
+from deepaha.acquisition.models import AcquisitionEvaluation
 from deepaha.artifacts.models import RawArtifact
 from deepaha.artifacts.object_store import ObjectIntegrityError, ObjectStore
 from deepaha.contracts.phase2 import (
@@ -84,6 +85,15 @@ class DocumentService:
             artifact = session.get(RawArtifact, command.artifact_id)
             if artifact is None:
                 raise LookupError(f"RawArtifact not found: {command.artifact_id}")
+            acquisition_statuses = tuple(
+                session.scalars(
+                    select(AcquisitionEvaluation.validation_status).where(
+                        AcquisitionEvaluation.artifact_id == artifact.artifact_id
+                    )
+                )
+            )
+            if acquisition_statuses and set(acquisition_statuses) != {"VALID"}:
+                raise RuntimeError("ACQUISITION_DOCUMENT_BLOCKED")
 
             parser = self._select_parser(artifact.media_type)
             build_derived_text_key(artifact.content_sha256, parser.name, parser.version)
