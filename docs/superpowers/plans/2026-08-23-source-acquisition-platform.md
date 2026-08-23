@@ -307,8 +307,8 @@ summary. A fallback cannot weaken endpoint policy.
 minimum interval; safe JSON summary only; no response body/header/cookie dump; network off in tests;
 nonzero exit on policy/challenge/budget failure.
 
-- [ ] Write RED subprocess tests with fake fetchers proving opt-in, budget and secret/body redaction.
-- [ ] Implement command and PowerShell wrapper, then run network-free GREEN.
+- [x] Write RED subprocess tests with fake fetchers proving opt-in, budget and secret/body redaction.
+- [x] Implement command and PowerShell wrapper, then run network-free GREEN.
 
 ### Task 10: Refresh S02 policy and execute L0/L1/L2-feasibility/L3 checks
 
