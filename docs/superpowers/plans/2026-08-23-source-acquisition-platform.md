@@ -386,9 +386,9 @@ counts, zero-discovery/drift/manual flags, stable stop reason, start/end time. I
 Recipe lines, source-specific production LOC, generic capability changes, core schema changes,
 onboarding minutes, browser/manual ratios and evidence time.
 
-- [ ] Write RED constraints, immutability/idempotency, cross-source and downgrade tests.
-- [ ] Implement additive persistence and migration; never modify an old migration.
-- [ ] Run migration round trip, drift, Ruff, mypy and historical migration regression.
+- [x] Write RED constraints, immutability/idempotency, cross-source and downgrade tests.
+- [x] Implement additive persistence and migration; never modify an old migration.
+- [x] Run migration round trip, drift, Ruff, mypy and historical migration regression.
 
 ### Task 13: Derive semantic health and convergence metrics
 
@@ -399,13 +399,13 @@ onboarding minutes, browser/manual ratios and evidence time.
 - Create: `backend/tests/integration/test_acquisition_health.py`
 - Create: `docs/gates/source-acquisition-platform/health-and-cost.md`
 
-- [ ] Write RED fixed-clock tests for accessibility, discovery, fetch integrity, parseability,
+- [x] Write RED fixed-clock tests for accessibility, discovery, fetch integrity, parseability,
   evidenceability, drift, last VALID success, consecutive semantic failures, selector drift,
   zero-discovery and manual/browser ratios.
-- [ ] Implement pure derived health values over common observations/evaluations/runs.
-- [ ] Add integration-cost computation for first-five reuse ratio and Recipe/thin-plugin ratio; it
+- [x] Implement pure derived health values over common observations/evaluations/runs.
+- [x] Add integration-cost computation for first-five reuse ratio and Recipe/thin-plugin ratio; it
   must fail rather than report PASS when evidence is missing.
-- [ ] Run focused GREEN plus legacy source-health regression and local commit
+- [x] Run focused GREEN plus legacy source-health regression and local commit
   `feat: add acquisition health and integration evidence`.
 
 ---

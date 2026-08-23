@@ -132,4 +132,139 @@ class AcquisitionEvaluation(Base):
     contract_version: Mapped[str] = mapped_column(String(16))
 
 
-__all__ = ["AcquisitionEvaluation"]
+class AcquisitionRun(Base):
+    __tablename__ = "acquisition_runs"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(acquisition_run_id) = 7", name="run_id_uuid7"),
+        CheckConstraint("uuid_extract_version(recipe_id) = 7", name="recipe_id_uuid7"),
+        CheckConstraint("completed_at >= started_at", name="timestamp_order"),
+        CheckConstraint("request_count between 0 and 25", name="request_count_range"),
+        CheckConstraint(
+            "jsonb_typeof(strategy_attempts) = 'array' and "
+            "jsonb_array_length(strategy_attempts) = request_count",
+            name="strategy_attempts_shape",
+        ),
+        CheckConstraint(
+            "discovered_count between 0 and 10000 and "
+            "validated_count between 0 and request_count and "
+            "parsed_count between 0 and validated_count and "
+            "attachment_count between 0 and discovered_count and "
+            "evidence_count between 0 and 10000",
+            name="count_coherence",
+        ),
+        CheckConstraint(
+            "terminal_code ~ '^[A-Z][A-Z0-9_]{0,127}$' and "
+            "(stable_stop_reason is null or stable_stop_reason ~ '^[A-Z][A-Z0-9_]{0,127}$')",
+            name="terminal_code_shape",
+        ),
+        CheckConstraint(
+            "(terminal_code = 'COMPLETE') = (stable_stop_reason is null)",
+            name="stable_stop_reason_state",
+        ),
+        CheckConstraint("contract_version = '1.0.0'", name="contract_version_value"),
+        ForeignKeyConstraint(
+            ["endpoint_id", "source_id"],
+            ["source_endpoints.endpoint_id", "source_endpoints.source_id"],
+            ondelete="RESTRICT",
+        ),
+        Index(
+            "ix_acquisition_runs_endpoint_completed",
+            "endpoint_id",
+            text("completed_at DESC"),
+            text("acquisition_run_id DESC"),
+        ),
+    )
+
+    acquisition_run_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    recipe_id: Mapped[UUID] = mapped_column(Uuid)
+    source_id: Mapped[UUID] = mapped_column(Uuid)
+    endpoint_id: Mapped[UUID] = mapped_column(Uuid)
+    endpoint_policy_version: Mapped[str] = mapped_column(String(64))
+    recipe_version: Mapped[str] = mapped_column(String(64))
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    terminal_code: Mapped[str] = mapped_column(String(128))
+    request_count: Mapped[int] = mapped_column(Integer)
+    strategy_attempts: Mapped[list[dict[str, object]]] = mapped_column(JSONB)
+    discovered_count: Mapped[int] = mapped_column(Integer)
+    validated_count: Mapped[int] = mapped_column(Integer)
+    parsed_count: Mapped[int] = mapped_column(Integer)
+    attachment_count: Mapped[int] = mapped_column(Integer)
+    evidence_count: Mapped[int] = mapped_column(Integer)
+    zero_discovery_flag: Mapped[bool] = mapped_column(Boolean)
+    selector_drift_flag: Mapped[bool] = mapped_column(Boolean)
+    manual_intervention: Mapped[bool] = mapped_column(Boolean)
+    stable_stop_reason: Mapped[str | None] = mapped_column(String(128))
+    contract_version: Mapped[str] = mapped_column(String(16))
+
+
+class SourceIntegrationEvidence(Base):
+    __tablename__ = "source_integration_evidence"
+    __table_args__ = (
+        CheckConstraint(
+            "uuid_extract_version(source_integration_evidence_id) = 7",
+            name="evidence_id_uuid7",
+        ),
+        CheckConstraint("uuid_extract_version(recipe_id) = 7", name="recipe_id_uuid7"),
+        CheckConstraint(
+            "onboarding_mode in "
+            "('RECIPE_ONLY', 'THIN_PLUGIN', 'GENERIC_CAPABILITY', 'NEW_FETCHER')",
+            name="onboarding_mode_values",
+        ),
+        CheckConstraint(
+            "recipe_line_count between 1 and 10000 and "
+            "source_specific_production_loc between 0 and 100000 and "
+            "generic_capability_changes between 0 and 100 and "
+            "onboarding_minutes between 0 and 100000 and "
+            "total_request_count between 0 and 100000 and "
+            "browser_request_count between 0 and total_request_count and "
+            "manual_request_count between 0 and total_request_count and "
+            "run_failure_count between 0 and total_request_count and "
+            "maintenance_minutes between 0 and 100000",
+            name="cost_count_coherence",
+        ),
+        CheckConstraint(
+            "onboarding_mode <> 'RECIPE_ONLY' or "
+            "(source_specific_production_loc = 0 and generic_capability_changes = 0)",
+            name="recipe_only_shape",
+        ),
+        CheckConstraint(
+            "onboarding_mode <> 'THIN_PLUGIN' or source_specific_production_loc > 0",
+            name="thin_plugin_shape",
+        ),
+        CheckConstraint(
+            "onboarding_mode <> 'NEW_FETCHER' or not reused_existing_fetcher",
+            name="new_fetcher_shape",
+        ),
+        CheckConstraint("contract_version = '1.0.0'", name="contract_version_value"),
+        ForeignKeyConstraint(
+            ["endpoint_id", "source_id"],
+            ["source_endpoints.endpoint_id", "source_endpoints.source_id"],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint("source_id", "endpoint_id", "recipe_version"),
+    )
+
+    source_integration_evidence_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    recipe_id: Mapped[UUID] = mapped_column(Uuid)
+    source_id: Mapped[UUID] = mapped_column(Uuid)
+    endpoint_id: Mapped[UUID] = mapped_column(Uuid)
+    recipe_version: Mapped[str] = mapped_column(String(64))
+    primary_fetcher: Mapped[str] = mapped_column(String(128))
+    onboarding_mode: Mapped[str] = mapped_column(String(32))
+    reused_existing_fetcher: Mapped[bool] = mapped_column(Boolean)
+    recipe_line_count: Mapped[int] = mapped_column(Integer)
+    source_specific_production_loc: Mapped[int] = mapped_column(Integer)
+    generic_capability_changes: Mapped[int] = mapped_column(Integer)
+    core_schema_changed: Mapped[bool] = mapped_column(Boolean)
+    onboarding_minutes: Mapped[int] = mapped_column(Integer)
+    total_request_count: Mapped[int] = mapped_column(Integer)
+    browser_request_count: Mapped[int] = mapped_column(Integer)
+    manual_request_count: Mapped[int] = mapped_column(Integer)
+    run_failure_count: Mapped[int] = mapped_column(Integer)
+    maintenance_minutes: Mapped[int] = mapped_column(Integer)
+    recorded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    contract_version: Mapped[str] = mapped_column(String(16))
+
+
+__all__ = ["AcquisitionEvaluation", "AcquisitionRun", "SourceIntegrationEvidence"]

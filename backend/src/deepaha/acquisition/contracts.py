@@ -74,6 +74,13 @@ class ExpectedChangeFrequency(StrEnum):
     IRREGULAR = "IRREGULAR"
 
 
+class OnboardingMode(StrEnum):
+    RECIPE_ONLY = "RECIPE_ONLY"
+    THIN_PLUGIN = "THIN_PLUGIN"
+    GENERIC_CAPABILITY = "GENERIC_CAPABILITY"
+    NEW_FETCHER = "NEW_FETCHER"
+
+
 def _normalize_unique(values: object, *, label: str) -> object:
     if not isinstance(values, (list, tuple)):
         return values
@@ -505,8 +512,115 @@ class SourceRecipeManifest(AcquisitionContract):
         return self
 
 
+class RunStrategyAttempt(AcquisitionContract):
+    strategy: FetchStrategy
+    validation_status: ValidationStatus | None
+    error_code: DiagnosticCode | None
+
+    @model_validator(mode="after")
+    def require_attempt_outcome(self) -> Self:
+        if self.validation_status is None and self.error_code is None:
+            raise ValueError("transport attempt without validation requires error_code")
+        if self.validation_status is ValidationStatus.VALID and self.error_code is not None:
+            raise ValueError("VALID attempt forbids error_code")
+        return self
+
+
+class AcquisitionRunSchema(AcquisitionContract):
+    acquisition_run_id: EntityId
+    recipe_id: EntityId
+    source_id: EntityId
+    endpoint_id: EntityId
+    endpoint_policy_version: NonEmptyString
+    recipe_version: NonEmptyString
+    started_at: Instant
+    completed_at: Instant
+    terminal_code: DiagnosticCode
+    request_count: int = Field(ge=0, le=25)
+    strategy_attempts: tuple[RunStrategyAttempt, ...] = Field(max_length=25)
+    discovered_count: int = Field(ge=0, le=10_000)
+    validated_count: int = Field(ge=0, le=25)
+    parsed_count: int = Field(ge=0, le=25)
+    attachment_count: int = Field(ge=0, le=50)
+    evidence_count: int = Field(ge=0, le=10_000)
+    zero_discovery_flag: bool
+    selector_drift_flag: bool
+    manual_intervention: bool
+    stable_stop_reason: DiagnosticCode | None
+    contract_version: ContractVersion
+
+    @model_validator(mode="after")
+    def require_coherent_run_facts(self) -> Self:
+        if self.completed_at < self.started_at:
+            raise ValueError("completed_at must not precede started_at")
+        if self.request_count != len(self.strategy_attempts):
+            raise ValueError("request_count must equal strategy_attempts length")
+        if self.parsed_count > self.validated_count or self.validated_count > self.request_count:
+            raise ValueError("parsed/validated/request counts are incoherent")
+        if self.attachment_count > self.discovered_count:
+            raise ValueError("attachment_count cannot exceed discovered_count")
+        statuses = tuple(attempt.validation_status for attempt in self.strategy_attempts)
+        if self.zero_discovery_flag != (
+            ValidationStatus.ZERO_DISCOVERY_SUSPECT in statuses
+        ):
+            raise ValueError("zero_discovery_flag must match strategy attempts")
+        if self.selector_drift_flag != (ValidationStatus.SELECTOR_DRIFT in statuses):
+            raise ValueError("selector_drift_flag must match strategy attempts")
+        if self.manual_intervention != any(
+            attempt.strategy is FetchStrategy.MANUAL for attempt in self.strategy_attempts
+        ):
+            raise ValueError("manual_intervention must match strategy attempts")
+        if (self.terminal_code == "COMPLETE") != (self.stable_stop_reason is None):
+            raise ValueError("stable_stop_reason must be absent only for COMPLETE")
+        return self
+
+
+class SourceIntegrationEvidenceSchema(AcquisitionContract):
+    source_integration_evidence_id: EntityId
+    recipe_id: EntityId
+    source_id: EntityId
+    endpoint_id: EntityId
+    recipe_version: NonEmptyString
+    primary_fetcher: NonEmptyString
+    onboarding_mode: OnboardingMode
+    reused_existing_fetcher: bool
+    recipe_line_count: int = Field(ge=1, le=10_000)
+    source_specific_production_loc: int = Field(ge=0, le=100_000)
+    generic_capability_changes: int = Field(ge=0, le=100)
+    core_schema_changed: bool
+    onboarding_minutes: int = Field(ge=0, le=100_000)
+    total_request_count: int = Field(ge=0, le=100_000)
+    browser_request_count: int = Field(ge=0, le=100_000)
+    manual_request_count: int = Field(ge=0, le=100_000)
+    run_failure_count: int = Field(ge=0, le=100_000)
+    maintenance_minutes: int = Field(ge=0, le=100_000)
+    recorded_at: Instant
+    contract_version: ContractVersion
+
+    @model_validator(mode="after")
+    def require_coherent_integration_facts(self) -> Self:
+        if (
+            self.browser_request_count > self.total_request_count
+            or self.manual_request_count > self.total_request_count
+            or self.run_failure_count > self.total_request_count
+        ):
+            raise ValueError("request-derived integration counts exceed total_request_count")
+        if self.onboarding_mode is OnboardingMode.RECIPE_ONLY and (
+            self.source_specific_production_loc != 0 or self.generic_capability_changes != 0
+        ):
+            raise ValueError("RECIPE_ONLY forbids source code and generic capability changes")
+        if self.onboarding_mode is OnboardingMode.THIN_PLUGIN and (
+            self.source_specific_production_loc == 0
+        ):
+            raise ValueError("THIN_PLUGIN requires source-specific production code")
+        if self.onboarding_mode is OnboardingMode.NEW_FETCHER and self.reused_existing_fetcher:
+            raise ValueError("NEW_FETCHER cannot claim existing Fetcher reuse")
+        return self
+
+
 __all__ = [
     "AcquisitionEvaluationSchema",
+    "AcquisitionRunSchema",
     "AcquisitionContract",
     "ChallengeType",
     "ContentExpectations",
@@ -518,6 +632,9 @@ __all__ = [
     "FetchResult",
     "FetchStrategy",
     "HealthThresholds",
+    "OnboardingMode",
+    "RunStrategyAttempt",
+    "SourceIntegrationEvidenceSchema",
     "SourceUsageRole",
     "SourceRecipe",
     "SourceRecipeManifest",

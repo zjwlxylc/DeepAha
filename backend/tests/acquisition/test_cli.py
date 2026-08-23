@@ -102,6 +102,8 @@ def test_safe_json_summary_excludes_body_headers_cookies_and_secrets() -> None:
         "valid_count",
         "parsed_count",
         "discovered_count",
+        "attachment_count",
+        "evidence_count",
         "attempts",
     }
     assert set(output["attempts"][0]) == {

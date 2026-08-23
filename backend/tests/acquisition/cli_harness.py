@@ -29,6 +29,8 @@ def fake_qualifier(
             "valid_count": 0 if scenario == "challenge" else 1,
             "parsed_count": 0 if scenario == "challenge" else 1,
             "discovered_count": 0,
+            "attachment_count": 0,
+            "evidence_count": 0,
             "attempts": [
                 {
                     "requested_url": "https://official.example/list",

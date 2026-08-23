@@ -1,4 +1,8 @@
-from deepaha.acquisition.models import AcquisitionEvaluation
+from deepaha.acquisition.models import (
+    AcquisitionEvaluation,
+    AcquisitionRun,
+    SourceIntegrationEvidence,
+)
 from deepaha.artifacts.models import RawArtifact
 from deepaha.db.base import Base
 from deepaha.documents.models import Document, EvidenceRef, ParseAttempt
@@ -60,6 +64,7 @@ from deepaha.validation.models import (
 
 __all__ = [
     "AcquisitionEvaluation",
+    "AcquisitionRun",
     "Base",
     "CaptureObservation",
     "Document",
@@ -108,6 +113,7 @@ __all__ = [
     "RuleSetModel",
     "Source",
     "SourceEndpoint",
+    "SourceIntegrationEvidence",
     "TestInboxEntryModel",
     "ShadowTestCandidateModel",
     "UserStateSnapshotModel",

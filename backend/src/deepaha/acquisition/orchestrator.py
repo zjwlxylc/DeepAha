@@ -30,6 +30,7 @@ from deepaha.acquisition.discovery import (
     discover_links,
 )
 from deepaha.acquisition.evaluations import RecordEvaluationCommand
+from deepaha.acquisition.health_evidence import RecordRunCommand
 from deepaha.acquisition.recipes import recipe_allows_url
 from deepaha.acquisition.validation import ContentValidator
 from deepaha.sources.models import Source, SourceEndpoint
@@ -64,6 +65,8 @@ class AcquisitionRunSummary(AcquisitionContract):
     valid_count: int = Field(ge=0)
     parsed_count: int = Field(ge=0)
     discovered_count: int = Field(ge=0)
+    attachment_count: int = Field(ge=0)
+    evidence_count: int = Field(ge=0)
     attempts: tuple[AcquisitionRunAttempt, ...]
 
 
@@ -88,6 +91,10 @@ class EvaluationRecorder(Protocol):
     def record(self, command: RecordEvaluationCommand) -> AcquisitionEvaluationSchema: ...
 
 
+class RunRecorder(Protocol):
+    def record_run(self, command: RecordRunCommand) -> object: ...
+
+
 class ObjectReader(Protocol):
     def get_bytes(self, *, key: str) -> bytes: ...
 
@@ -104,6 +111,7 @@ class _UrlResult:
     discovered: tuple[DiscoveredLink, ...]
     valid: bool
     parsed: bool
+    evidence_count: int
 
 
 class DatabaseEndpointPolicyLoader:
@@ -159,6 +167,7 @@ class AcquisitionOrchestrator:
         object_store: ObjectReader,
         evaluation_recorder: EvaluationRecorder,
         advance_valid_artifact: Callable[[UUID], object | None],
+        run_recorder: RunRecorder | None = None,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
         sleeper: Callable[[float], None] = sleep,
         validator: ContentValidator | None = None,
@@ -169,6 +178,7 @@ class AcquisitionOrchestrator:
         self._object_store = object_store
         self._evaluation_recorder = evaluation_recorder
         self._advance_valid_artifact = advance_valid_artifact
+        self._run_recorder = run_recorder
         self._clock = clock
         self._sleeper = sleeper
         self._validator = validator or ContentValidator()
@@ -184,6 +194,8 @@ class AcquisitionOrchestrator:
         valid_count = 0
         parsed_count = 0
         discovered_count = 0
+        attachment_count = 0
+        evidence_count = 0
         terminal_code = RunTerminalCode.COMPLETE
         last_request_at: datetime | None = None
 
@@ -209,7 +221,11 @@ class AcquisitionOrchestrator:
                 valid_count += 1
             if result.parsed:
                 parsed_count += 1
+            evidence_count += result.evidence_count
             discovered_count += len(result.discovered)
+            attachment_count += sum(
+                link.kind is DiscoveredLinkKind.ATTACHMENT for link in result.discovered
+            )
             if result.terminal_code is not None:
                 terminal_code = result.terminal_code
                 break
@@ -219,7 +235,7 @@ class AcquisitionOrchestrator:
                     seen.add(url)
                     queue.append(_PendingUrl(url, link.kind))
 
-        return AcquisitionRunSummary(
+        summary = AcquisitionRunSummary(
             recipe_id=recipe.recipe_id,
             recipe_version=recipe.recipe_version,
             source_id=recipe.source_id,
@@ -229,8 +245,18 @@ class AcquisitionOrchestrator:
             valid_count=valid_count,
             parsed_count=parsed_count,
             discovered_count=discovered_count,
+            attachment_count=attachment_count,
+            evidence_count=evidence_count,
             attempts=tuple(attempts),
         )
+        if self._run_recorder is not None:
+            self._record_run(
+                summary=summary,
+                policy=policy,
+                started_at=started_at,
+                completed_at=self._clock(),
+            )
+        return summary
 
     def _run_url(
         self,
@@ -247,13 +273,17 @@ class AcquisitionOrchestrator:
         for index, step in enumerate(recipe.fetch_plan):
             if used >= remaining_requests:
                 return (
-                    _UrlResult(RunTerminalCode.REQUEST_BUDGET_EXHAUSTED, (), False, False),
+                    _UrlResult(
+                        RunTerminalCode.REQUEST_BUDGET_EXHAUSTED, (), False, False, 0
+                    ),
                     used,
                     last_request_at,
                 )
             if (self._clock() - started_at).total_seconds() >= recipe.maximum_elapsed_seconds:
                 return (
-                    _UrlResult(RunTerminalCode.ELAPSED_BUDGET_EXHAUSTED, (), False, False),
+                    _UrlResult(
+                        RunTerminalCode.ELAPSED_BUDGET_EXHAUSTED, (), False, False, 0
+                    ),
                     used,
                     last_request_at,
                 )
@@ -263,7 +293,9 @@ class AcquisitionOrchestrator:
             last_request_at = self._wait_for_policy_interval(policy, last_request_at)
             if (self._clock() - started_at).total_seconds() >= recipe.maximum_elapsed_seconds:
                 return (
-                    _UrlResult(RunTerminalCode.ELAPSED_BUDGET_EXHAUSTED, (), False, False),
+                    _UrlResult(
+                        RunTerminalCode.ELAPSED_BUDGET_EXHAUSTED, (), False, False, 0
+                    ),
                     used,
                     last_request_at,
                 )
@@ -297,7 +329,7 @@ class AcquisitionOrchestrator:
                     )
                 )
                 return (
-                    _UrlResult(RunTerminalCode.FETCH_FAILED, (), False, False),
+                    _UrlResult(RunTerminalCode.FETCH_FAILED, (), False, False, 0),
                     used,
                     last_request_at,
                 )
@@ -328,30 +360,35 @@ class AcquisitionOrchestrator:
             evaluation = self._record_evaluation(fetched, validation)
             hard_stop = _hard_stop(validation.status)
             if hard_stop is not None:
-                return _UrlResult(hard_stop, (), False, False), used, last_request_at
+                return _UrlResult(hard_stop, (), False, False, 0), used, last_request_at
             if validation.status is ValidationStatus.VALID:
                 advanced = self._advance_valid_artifact(evaluation.acquisition_evaluation_id)
                 parsed = (
                     advanced is None
                     or getattr(advanced, "outcome", "SUCCEEDED") == "SUCCEEDED"
                 )
-                return _UrlResult(None, discovered, True, parsed), used, last_request_at
+                evidence_count = len(getattr(advanced, "evidence_ref_ids", ()))
+                return (
+                    _UrlResult(None, discovered, True, parsed, evidence_count),
+                    used,
+                    last_request_at,
+                )
             has_next = index + 1 < len(recipe.fetch_plan)
             if validation.status in step.fallback_on and has_next:
                 continue
             if validation.status is ValidationStatus.CONTENT_CHALLENGE:
                 return (
-                    _UrlResult(RunTerminalCode.CONTENT_CHALLENGE, (), False, False),
+                    _UrlResult(RunTerminalCode.CONTENT_CHALLENGE, (), False, False, 0),
                     used,
                     last_request_at,
                 )
             return (
-                _UrlResult(RunTerminalCode.PLAN_EXHAUSTED, (), False, False),
+                _UrlResult(RunTerminalCode.PLAN_EXHAUSTED, (), False, False, 0),
                 used,
                 last_request_at,
             )
         return (
-            _UrlResult(RunTerminalCode.PLAN_EXHAUSTED, (), False, False),
+            _UrlResult(RunTerminalCode.PLAN_EXHAUSTED, (), False, False, 0),
             used,
             last_request_at,
         )
@@ -448,6 +485,63 @@ class AcquisitionOrchestrator:
         if len(matches) != 1 or not matches[0].active:
             raise LookupError(f"Active Recipe not found: {recipe_id}")
         return matches[0]
+
+    def _record_run(
+        self,
+        *,
+        summary: AcquisitionRunSummary,
+        policy: EndpointPolicy,
+        started_at: datetime,
+        completed_at: datetime,
+    ) -> None:
+        if self._run_recorder is None:
+            return
+        self._run_recorder.record_run(
+            RecordRunCommand.model_validate(
+                {
+                    "acquisition_run_id": uuid7(),
+                    "recipe_id": summary.recipe_id,
+                    "source_id": summary.source_id,
+                    "endpoint_id": summary.endpoint_id,
+                    "endpoint_policy_version": policy.policy_version,
+                    "recipe_version": summary.recipe_version,
+                    "started_at": started_at,
+                    "completed_at": completed_at,
+                    "terminal_code": summary.terminal_code.value,
+                    "request_count": summary.request_count,
+                    "strategy_attempts": [
+                        {
+                            "strategy": attempt.strategy,
+                            "validation_status": attempt.validation_status,
+                            "error_code": attempt.error_code,
+                        }
+                        for attempt in summary.attempts
+                    ],
+                    "discovered_count": summary.discovered_count,
+                    "validated_count": summary.valid_count,
+                    "parsed_count": summary.parsed_count,
+                    "attachment_count": summary.attachment_count,
+                    "evidence_count": summary.evidence_count,
+                    "zero_discovery_flag": any(
+                        attempt.validation_status is ValidationStatus.ZERO_DISCOVERY_SUSPECT
+                        for attempt in summary.attempts
+                    ),
+                    "selector_drift_flag": any(
+                        attempt.validation_status is ValidationStatus.SELECTOR_DRIFT
+                        for attempt in summary.attempts
+                    ),
+                    "manual_intervention": any(
+                        attempt.strategy is FetchStrategy.MANUAL for attempt in summary.attempts
+                    ),
+                    "stable_stop_reason": (
+                        None
+                        if summary.terminal_code is RunTerminalCode.COMPLETE
+                        else summary.terminal_code.value
+                    ),
+                    "contract_version": "1.0.0",
+                }
+            )
+        )
 
 
 def _inline_result(fetched: FetchResult, body: bytes) -> FetchResult:

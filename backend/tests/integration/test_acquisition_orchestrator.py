@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from deepaha.acquisition.contracts import SourceRecipe
 from deepaha.acquisition.evaluations import EvaluationService
-from deepaha.acquisition.models import AcquisitionEvaluation
+from deepaha.acquisition.health_evidence import AcquisitionEvidenceService
+from deepaha.acquisition.models import AcquisitionEvaluation, AcquisitionRun
 from deepaha.acquisition.orchestrator import (
     AcquisitionOrchestrator,
     DatabaseEndpointPolicyLoader,
@@ -166,6 +167,7 @@ def build_orchestrator(
         fetchers={recipe.fetch_plan[0].strategy: fetcher},
         object_store=object_store,
         evaluation_recorder=EvaluationService(factory),
+        run_recorder=AcquisitionEvidenceService(factory),
         advance_valid_artifact=advance,
         clock=clock,
         sleeper=clock.sleep,
@@ -214,6 +216,7 @@ def test_orchestrator_persists_common_evidence_deduplicates_and_parses_valid_onl
         assert session.scalar(select(func.count()).select_from(CaptureObservation)) == 2
         assert session.scalar(select(func.count()).select_from(RawArtifact)) == 1
         assert session.scalar(select(func.count()).select_from(AcquisitionEvaluation)) == 2
+        assert session.scalar(select(func.count()).select_from(AcquisitionRun)) == 1
         assert session.scalar(select(func.count()).select_from(Document)) == 1
 
 
@@ -239,4 +242,5 @@ def test_challenge_is_evaluated_but_cannot_create_document(
         assert evaluation is not None
         assert evaluation.validation_status == "CAPTCHA_REQUIRED"
         assert session.scalar(select(func.count()).select_from(RawArtifact)) == 1
+        assert session.scalar(select(func.count()).select_from(AcquisitionRun)) == 1
         assert session.scalar(select(func.count()).select_from(Document)) == 0

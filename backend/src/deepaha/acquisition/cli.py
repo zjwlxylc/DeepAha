@@ -8,6 +8,7 @@ from uuid import UUID
 from deepaha.acquisition.contracts import FetchStrategy, SourceRecipe
 from deepaha.acquisition.evaluations import EvaluationService
 from deepaha.acquisition.fetchers import StaticHttpFetcher
+from deepaha.acquisition.health_evidence import AcquisitionEvidenceService
 from deepaha.acquisition.orchestrator import (
     AcquisitionOrchestrator,
     AcquisitionRunSummary,
@@ -155,6 +156,7 @@ def _run_live_qualification(
         object_store=store,
         evaluation_recorder=EvaluationService(factory),
         advance_valid_artifact=advance,
+        run_recorder=AcquisitionEvidenceService(factory),
         clock=clock.now,
     )
     return QualificationOutcome(summary=orchestrator.run(recipe.recipe_id))
@@ -190,6 +192,8 @@ def _safe_summary(summary: AcquisitionRunSummary) -> dict[str, object]:
         "valid_count": summary.valid_count,
         "parsed_count": summary.parsed_count,
         "discovered_count": summary.discovered_count,
+        "attachment_count": summary.attachment_count,
+        "evidence_count": summary.evidence_count,
         "attempts": [
             {
                 "requested_url": str(attempt.requested_url),
