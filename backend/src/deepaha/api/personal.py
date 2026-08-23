@@ -151,6 +151,10 @@ def _allow_synthetic_fixture_profile(settings: Settings) -> bool:
     }
 
 
+def get_current_time() -> datetime:
+    return datetime.now(UTC)
+
+
 def get_profile_service(
     session: Annotated[Session, Depends(get_write_session)],
     settings: Annotated[Settings, Depends(get_settings)],
@@ -206,6 +210,7 @@ def get_action_service(
 def require_principal(
     request: Request,
     settings: Annotated[Settings, Depends(get_settings)],
+    current_time: Annotated[datetime, Depends(get_current_time)],
 ) -> Principal:
     values = request.headers.getlist("authorization")
     try:
@@ -216,7 +221,7 @@ def require_principal(
         engine = get_engine(settings)
         try:
             with Session(engine) as session:
-                return resolve_principal(values[0], session, settings)
+                return resolve_principal(values[0], session, settings, now=current_time)
         finally:
             engine.dispose()
     except AuthenticationError as error:
@@ -501,6 +506,7 @@ def post_official_link(
 __all__ = [
     "PersonalApiProblem",
     "get_action_service",
+    "get_current_time",
     "get_personal_match_service",
     "get_profile_service",
     "personal_invalid_request_response",

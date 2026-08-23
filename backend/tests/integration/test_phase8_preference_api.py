@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from threading import Barrier
 from uuid import uuid7
 
@@ -9,7 +9,7 @@ from sqlalchemy import Engine, func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
-from deepaha.api.personal import require_principal
+from deepaha.api.personal import get_current_time, require_principal
 from deepaha.contracts.phase8 import ReminderPreferenceSnapshotSchemaV07
 from deepaha.core.settings import get_settings
 from deepaha.main import create_app
@@ -27,6 +27,9 @@ from deepaha.personal.auth import Principal
 from deepaha.personal.models import PersonalActionSnapshotModel, PersonalUserModel
 from tests.integration.test_phase4_persistence_contract import persist_complete_phase4_graph
 from tests.integration.test_phase6_profile_persistence import (
+    NOW as USER_FIXTURE_NOW,
+)
+from tests.integration.test_phase6_profile_persistence import (
     TOKEN_A,
     USER_A_ID,
     USER_A_STATE_ID,
@@ -36,6 +39,7 @@ from tests.integration.test_phase6_profile_persistence import (
 
 pytestmark = pytest.mark.integration
 NOW = datetime(2026, 8, 22, 13, 0, tzinfo=UTC)
+USER_SESSION_EXPIRES_AT = USER_FIXTURE_NOW + timedelta(days=1)
 
 
 def test_database_rejects_parallel_preference_streams_for_one_user(
@@ -259,6 +263,7 @@ def test_preference_api_derives_owner_and_fails_closed(
     monkeypatch.setenv("DEEPAHA_DATABASE_URL", database_url)
     get_settings.cache_clear()
     application = create_app()
+    application.dependency_overrides[get_current_time] = lambda: USER_FIXTURE_NOW
     auth = {"Authorization": f"Bearer {TOKEN_A}"}
     path = "/api/v1/me/reminder-preferences/deadline-change"
 
@@ -317,3 +322,38 @@ def test_preference_api_derives_owner_and_fails_closed(
         other_owner,
     ):
         assert response.headers["cache-control"] == "private, no-store"
+
+
+@pytest.mark.parametrize(
+    ("current_time", "expected_status"),
+    [
+        pytest.param(USER_SESSION_EXPIRES_AT - timedelta(seconds=1), 200, id="expires-after-now"),
+        pytest.param(USER_SESSION_EXPIRES_AT, 401, id="expires-at-now"),
+        pytest.param(USER_SESSION_EXPIRES_AT + timedelta(seconds=1), 401, id="expires-before-now"),
+    ],
+)
+def test_preference_api_uses_scenario_time_for_session_expiry_boundary(
+    migrated_engine: Engine,
+    database_url: str,
+    monkeypatch: pytest.MonkeyPatch,
+    current_time: datetime,
+    expected_status: int,
+) -> None:
+    seed_users(migrated_engine)
+    monkeypatch.setenv("DEEPAHA_ENVIRONMENT", "test")
+    monkeypatch.setenv("DEEPAHA_PERSONAL_AUTH_MODE", "fixture")
+    monkeypatch.setenv("DEEPAHA_DATABASE_URL", database_url)
+    get_settings.cache_clear()
+    application = create_app()
+    application.dependency_overrides[get_current_time] = lambda: current_time
+
+    try:
+        with TestClient(application) as client:
+            response = client.get(
+                "/api/v1/me/reminder-preferences/deadline-change",
+                headers={"Authorization": f"Bearer {TOKEN_A}"},
+            )
+    finally:
+        get_settings.cache_clear()
+
+    assert response.status_code == expected_status
