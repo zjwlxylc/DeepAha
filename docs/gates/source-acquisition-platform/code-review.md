@@ -1,14 +1,26 @@
-# P9-A Final Code Review
+# P9-A Final Code Review and Independent Revalidation
 
-Evidence date: 2026-08-24. The original review is superseded by the first independent acceptance.
+Evidence date: 2026-08-24.
 
-Result: `REPAIR_VERIFIED`; independent confirmation pending.
+Result: `PASS`
+
+Findings: `P0=0 / P1=0 / P2=0`
+
+Audit base: `cedce6f229dc341bf20107200b61e1f197b0d3d7`
+
+Candidate: `94741c19a3a8471866930a46f7e70d85b7e79a68`
+
+Audit range: `cedce6f229dc341bf20107200b61e1f197b0d3d7..94741c19a3a8471866930a46f7e70d85b7e79a68`
+
+Repair delta: `53d34b95a736a15d44077e7393a01304cd8cd221..94741c19a3a8471866930a46f7e70d85b7e79a68`
+
+Final isolated verifier: exit code `0`
 
 The first independent acceptance found two P1 issues: the S02 Opportunity test manually seeded
 Document/Evidence instead of consuming replay output, and the VALID-only rule could be bypassed by
 calling `DocumentService.parse` directly. The repair candidate removes both conditions and passes
-the complete isolated verifier. A fresh independent read-only acceptance has been requested for
-the exact repair candidate.
+the complete isolated verifier. The final independent read-only revalidation reviewed the complete
+base-to-candidate range and accepted the exact candidate with no remaining P0, P1 or P2 finding.
 
 ## Review scope and conclusions
 
@@ -30,6 +42,6 @@ the exact repair candidate.
   access and tears down only its exact Compose project.
 - Secret/bypass/domain scans and `git diff --check` returned no finding.
 
-The new independent review must still assess the complete base-to-candidate range. It does not
-assess future scheduler, production deployment, legal approval or the 100-source/14-day Release
-Qualification.
+The final independent revalidation does not assess future scheduler, production deployment, legal
+approval or the 100-source/14-day Release Qualification. Release Qualification remains
+`NOT_STARTED`, and the 100-source/14-day target remains `NOT_RUN`.

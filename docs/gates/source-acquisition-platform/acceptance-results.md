@@ -2,6 +2,14 @@
 
 Evidence date: 2026-08-24.
 
+Final independent revalidation: `PASS` (`P0=0 / P1=0 / P2=0`)
+
+Audit base: `cedce6f229dc341bf20107200b61e1f197b0d3d7`
+
+Candidate: `94741c19a3a8471866930a46f7e70d85b7e79a68`
+
+Audit range: `cedce6f229dc341bf20107200b61e1f197b0d3d7..94741c19a3a8471866930a46f7e70d85b7e79a68`
+
 | Gate 0 criterion | Result | Reproducible evidence |
 | --- | --- | --- |
 | S02 complete approved path | PASS | one test consumes the exact corpus entry with socket/DNS disabled, then persists RawArtifact -> VALID evaluation -> production Document/10 locators -> persisted EvidenceRef -> stable Opportunity v1 |
@@ -20,6 +28,7 @@ Additional acceptance facts:
 - controlled corpus: 16 entries, 7 source groups, 1,487,105 bytes;
 - validation: 9 VALID, 5 CONTENT_CHALLENGE, 2 ZERO_DISCOVERY_SUSPECT;
 - repair P9-A verifier: exit `0`, including root, Phase 2, Phase 8, migrations and replay;
-- implementation `IMPLEMENTED`; Engineering Gate `CLOSED`; a new independent repair acceptance is pending;
+- final independent read-only revalidation: `PASS`, with `P0=0 / P1=0 / P2=0`;
+- implementation `IMPLEMENTED`; Engineering Gate `CLOSED`;
 - Release Qualification `NOT_STARTED`; 100-source/14-day target `NOT_RUN`;
 - contract maturity `IMPLEMENTED`, not `STABLE`.

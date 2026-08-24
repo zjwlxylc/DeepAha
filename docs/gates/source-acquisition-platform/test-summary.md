@@ -1,6 +1,14 @@
 # P9-A Source Acquisition Platform Test Summary
 
-Evidence date: 2026-08-24. Status: repair verifier complete; independent re-acceptance pending.
+Evidence date: 2026-08-24. Status: final independent revalidation `PASS`.
+
+Audit base: `cedce6f229dc341bf20107200b61e1f197b0d3d7`
+
+Candidate: `94741c19a3a8471866930a46f7e70d85b7e79a68`
+
+Audit range: `cedce6f229dc341bf20107200b61e1f197b0d3d7..94741c19a3a8471866930a46f7e70d85b7e79a68`
+
+Independent revalidation result: `PASS` (`P0=0 / P1=0 / P2=0`)
 
 ## Full isolated verifier
 

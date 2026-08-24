@@ -6,9 +6,19 @@ Implementation: `IMPLEMENTED`
 
 Engineering Gate: `CLOSED`
 
+Independent Revalidation: `PASS` (`P0=0 / P1=0 / P2=0`)
+
 Release Qualification: `NOT_STARTED`
 
 Contract maturity: `IMPLEMENTED` (not `STABLE`)
+
+Audit base: `cedce6f229dc341bf20107200b61e1f197b0d3d7`
+
+Candidate: `94741c19a3a8471866930a46f7e70d85b7e79a68`
+
+Audit range: `cedce6f229dc341bf20107200b61e1f197b0d3d7..94741c19a3a8471866930a46f7e70d85b7e79a68`
+
+Final isolated verifier: exit code `0`
 
 ## Outcome
 
@@ -17,11 +27,11 @@ policy-bound Fetch contracts, immutable RawArtifact provenance, semantic content
 versioned Source Recipes, bounded orchestration, VALID-only Document advancement, offline replay,
 semantic health/drift evidence and measured integration cost.
 
-The two P1 findings from the first independent acceptance were repaired and the isolated repair
-verifier completed with exit code `0`, satisfying the Engineering Gate checks. A new independent
-read-only acceptance has been requested for the repair candidate. This does not mean every official
-site is currently accessible. Challenge, zero-discovery, parse failure and disallowed redirect
-outcomes are explicit health evidence rather than silent success.
+The two P1 findings from the first independent acceptance were repaired. The isolated repair
+verifier completed with exit code `0`, and the final independent read-only revalidation of the full
+base-to-candidate audit range returned `PASS` with `P0=0 / P1=0 / P2=0`. This does not mean every
+official site is currently accessible. Challenge, zero-discovery, parse failure and disallowed
+redirect outcomes are explicit health evidence rather than silent success.
 
 ## Boundaries
 
