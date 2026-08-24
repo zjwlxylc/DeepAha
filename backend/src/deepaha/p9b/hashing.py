@@ -26,7 +26,11 @@ def canonical_json_bytes(payload: object) -> bytes:
 
 
 def canonical_hash(domain: HashDomain, payload: object) -> str:
-    separator = f"deepaha:p9b:{domain.value}:{HASH_CONTRACT_VERSION}\0".encode()
+    return _canonical_hash_domain(domain.value, payload)
+
+
+def _canonical_hash_domain(domain: str, payload: object) -> str:
+    separator = f"deepaha:p9b:{domain}:{HASH_CONTRACT_VERSION}\0".encode()
     return sha256(separator + canonical_json_bytes(payload)).hexdigest()
 
 
@@ -71,6 +75,14 @@ def member_provenance_hash(payload: object) -> str:
     return canonical_hash(HashDomain.MEMBER_PROVENANCE_HASH, payload)
 
 
+def document_block_hash(payload: object) -> str:
+    return _canonical_hash_domain("document_block_hash", payload)
+
+
+def evidence_binding_hash(payload: object) -> str:
+    return _canonical_hash_domain("evidence_binding_hash", payload)
+
+
 __all__ = [
     "HASH_CONTRACT_VERSION",
     "HashDomain",
@@ -78,6 +90,8 @@ __all__ = [
     "canonical_hash",
     "canonical_json_bytes",
     "document_parse_key",
+    "document_block_hash",
+    "evidence_binding_hash",
     "member_provenance_hash",
     "split_manifest_hash",
 ]

@@ -5,7 +5,7 @@ from deepaha.acquisition.models import (
 )
 from deepaha.artifacts.models import RawArtifact
 from deepaha.db.base import Base
-from deepaha.documents.models import Document, EvidenceRef, ParseAttempt
+from deepaha.documents.models import Document, DocumentBlock, EvidenceRef, ParseAttempt
 from deepaha.eligibility.models import EligibilityResultModel
 from deepaha.evaluation.models import EvaluationCaseResultModel, EvaluationRunModel
 from deepaha.feedback.models import (
@@ -82,6 +82,7 @@ __all__ = [
     "Base",
     "CaptureObservation",
     "Document",
+    "DocumentBlock",
     "DocumentOpportunityLink",
     "DatasetManifest",
     "DatasetManifestEntry",

@@ -80,6 +80,7 @@ def test_xlsx_parser_supports_only_xlsx_media_type() -> None:
 
     assert parser.name == "xlsx_openpyxl"
     assert parser.version == "0.2.0"
+    assert parser.parse_contract_version == "phase2-locator-contract-v0.2.0"
     assert parser.supports("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     assert not parser.supports("application/vnd.ms-excel.sheet.macroEnabled.12")
     assert not parser.supports("application/vnd.ms-excel")

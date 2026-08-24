@@ -213,6 +213,18 @@ deepaha:p9b:<domain>:p9b-canonical-json-sha256-v1\0
   `member_provenance_hash`.
 - Checked golden vectors cover field order, null, Unicode, array order and domain separation.
 
+### 8.1 Additive DocumentBlock hash domains
+
+The DocumentBlock Slice adds `document_block_hash` and `evidence_binding_hash` without changing the
+B0 enum or any B0 golden vector. Both use the same frozen algorithm, serialization, null handling,
+domain separator and hash-contract version. Their checked golden vectors bind ordered block content,
+the exact Document parse key, structural locator and immutable block ID.
+
+Historical P9-A replay continues to select the `0.2.0` parser/version/contract. P9-B block-capable
+parsers are explicit parallel implementations with version `0.8.0` and parse contract
+`p9b-document-block-contract-v0.8.0`; selecting one creates a new immutable Document identity.
+Legacy parse identities cannot persist DocumentBlock rows.
+
 ## 9. Stage 1 Read-path and Trust Boundaries
 
 - Document remains distinct from Opportunity and OpportunityUnit.

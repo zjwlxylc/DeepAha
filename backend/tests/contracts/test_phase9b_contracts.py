@@ -13,6 +13,7 @@ from deepaha.contracts.phase9b import (
     DatasetManifestEntrySchemaV08,
     DatasetManifestSchemaV08,
     DatasetPartition,
+    DocumentBlockSchemaV08,
     DocumentParseIdentitySchemaV08,
     OpportunityUnitKind,
     OpportunityUnitSchemaV08,
@@ -25,6 +26,9 @@ from deepaha.p9b.hashing import document_parse_key
 REPOSITORY_ROOT = Path(__file__).parents[3]
 SCHEMA_ROOT = REPOSITORY_ROOT / "contracts" / "schemas" / "v0.8.0"
 EXAMPLE_PATH = REPOSITORY_ROOT / "contracts" / "examples" / "v0.8.0" / "p9-b0-example.json"
+BLOCK_EXAMPLE_PATH = (
+    REPOSITORY_ROOT / "contracts" / "examples" / "v0.8.0" / "p9-b2-document-block-example.json"
+)
 
 
 def uuid7(index: int) -> UUID:
@@ -92,6 +96,39 @@ def test_document_parse_identity_binds_contract_and_rejects_wrong_key() -> None:
         DocumentParseIdentitySchemaV08.model_validate(
             parse_identity_values(document_parse_key="b" * 64)
         )
+
+
+def test_document_block_contract_binds_field_locator_and_parse_identity() -> None:
+    values = {
+        "block_id": uuid7(60),
+        "document_id": uuid7(61),
+        "artifact_id": uuid7(62),
+        "document_parse_key": "1" * 64,
+        "ordinal": 1,
+        "block_type": "HTML_ELEMENT",
+        "canonical_text_or_value": "Official field value",
+        "structural_locator": {
+            "kind": "html_element_span",
+            "selector": "main:nth-of-type(1) > p:nth-of-type(1)",
+            "text_start": 0,
+            "text_end": 20,
+        },
+        "block_hash": "2" * 64,
+        "evidence_binding_hash": "3" * 64,
+        "evidence_ref_id": uuid7(63),
+        "parent_block_id": None,
+        "parser_name": "html_lxml",
+        "parser_version": "0.8.0",
+        "parse_contract_version": "p9b-document-block-contract-v0.8.0",
+        "created_at": datetime(2026, 8, 24, tzinfo=UTC),
+    }
+
+    block = DocumentBlockSchemaV08.model_validate(values)
+    assert block.structural_locator.kind == "html_element_span"
+
+    invalid = {**values, "block_type": "PDF_TEXT_SPAN"}
+    with pytest.raises(ValidationError, match="locator kind"):
+        DocumentBlockSchemaV08.model_validate(invalid)
 
 
 def test_opportunity_unit_uses_real_composite_parent_version_identity() -> None:
@@ -274,3 +311,10 @@ def test_v08_example_uses_composite_opportunity_version_and_valid_parse_identity
     assert parse_identity.document_parse_key == (
         "76a7a2cd02753d93e0d459a02ff26e73f0d775ad97c28c781ead845b7dd0125d"
     )
+
+
+def test_v08_document_block_example_is_contract_valid() -> None:
+    block = DocumentBlockSchemaV08.model_validate(json.loads(BLOCK_EXAMPLE_PATH.read_text("utf-8")))
+
+    assert block.block_type == "HTML_ELEMENT"
+    assert block.structural_locator.kind == "html_element_span"

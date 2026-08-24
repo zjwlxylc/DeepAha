@@ -44,6 +44,7 @@ def test_html_parser_supports_only_html_media_type() -> None:
 
     assert parser.name == "html_lxml"
     assert parser.version == "0.2.0"
+    assert parser.parse_contract_version == "phase2-locator-contract-v0.2.0"
     assert parser.supports("text/html") is True
     assert parser.supports("text/html; charset=utf-8") is True
     assert parser.supports("application/pdf") is False

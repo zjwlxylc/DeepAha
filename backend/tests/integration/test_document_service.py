@@ -18,6 +18,7 @@ from deepaha.contracts.phase2 import (
     LegacyEvidenceLocator,
 )
 from deepaha.core.settings import Settings
+from deepaha.documents.blocks import ParsedBlock
 from deepaha.documents.models import Document, EvidenceRef, ParseAttempt
 from deepaha.documents.normalization import build_derived_text_key
 from deepaha.documents.parser import ExpectedParseError, ParsedDocument
@@ -53,7 +54,25 @@ class FakeParser:
     ) -> None:
         self.version = version
         self.parse_contract_version = parse_contract_version
-        self.parsed = parsed or make_parsed_document()
+        self.parsed = parsed or make_parsed_document(
+            blocks=(
+                (
+                    ParsedBlock(
+                        block_type="HTML_ELEMENT",
+                        canonical_text_or_value="Official notice",
+                        structural_locator={
+                            "kind": "html_element_span",
+                            "selector": "main > p:nth-of-type(1)",
+                            "text_start": 0,
+                            "text_end": len("Official notice"),
+                        },
+                        parent_ordinal=None,
+                    ),
+                )
+                if parse_contract_version == "p9b-document-block-contract-v0.8.0"
+                else ()
+            )
+        )
         self.error = error
         self.calls = 0
 
@@ -73,6 +92,7 @@ def make_parsed_document(
     *,
     needs_review_reasons: tuple[str, ...] = (),
     locators: tuple[EvidenceLocatorV02, ...] | None = None,
+    blocks: tuple[ParsedBlock, ...] = (),
 ) -> ParsedDocument:
     locator = HtmlSelectorLocator(
         schema_version="0.2.0",
@@ -87,6 +107,7 @@ def make_parsed_document(
         normalized_text=NORMALIZED_TEXT,
         locators=locators if locators is not None else (locator,),
         needs_review_reasons=needs_review_reasons,
+        blocks=blocks,
     )
 
 
@@ -263,6 +284,38 @@ def test_new_parse_contract_version_creates_new_immutable_document(
             "p9b-document-block-contract-v0.8.0",
         }
         assert len({item.document_parse_key for item in documents}) == 2
+
+
+def test_legacy_parse_contract_cannot_persist_document_blocks(
+    owned_session_factory: sessionmaker[Session], object_store: S3ObjectStore
+) -> None:
+    artifact_id, _, _ = create_artifact(owned_session_factory, object_store)
+    parsed = make_parsed_document(
+        blocks=(
+            ParsedBlock(
+                block_type="HTML_ELEMENT",
+                canonical_text_or_value="Official notice",
+                structural_locator={
+                    "kind": "html_element_span",
+                    "selector": "main > p:nth-of-type(1)",
+                    "text_start": 0,
+                    "text_end": len("Official notice"),
+                },
+                parent_ordinal=None,
+            ),
+        )
+    )
+
+    with pytest.raises(ValueError, match="requires the P9-B parse contract"):
+        service_for(
+            owned_session_factory,
+            object_store,
+            FakeParser(parsed=parsed),
+        ).parse(ParseDocumentCommand(artifact_id=artifact_id))
+
+    with owned_session_factory() as session:
+        assert session.scalar(select(func.count()).select_from(Document)) == 0
+        assert session.scalar(select(func.count()).select_from(ParseAttempt)) == 0
 
 
 def test_expected_failure_persists_failed_attempt_without_document(

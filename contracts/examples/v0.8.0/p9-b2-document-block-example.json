@@ -1,0 +1,23 @@
+{
+  "artifact_id": "019c0000-0000-7000-8000-000000000062",
+  "block_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+  "block_id": "019c0000-0000-7000-8000-000000000060",
+  "block_type": "HTML_ELEMENT",
+  "canonical_text_or_value": "Official field value",
+  "created_at": "2026-08-24T00:00:00Z",
+  "document_id": "019c0000-0000-7000-8000-000000000061",
+  "document_parse_key": "1111111111111111111111111111111111111111111111111111111111111111",
+  "evidence_binding_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+  "evidence_ref_id": "019c0000-0000-7000-8000-000000000063",
+  "ordinal": 1,
+  "parent_block_id": null,
+  "parse_contract_version": "p9b-document-block-contract-v0.8.0",
+  "parser_name": "html_lxml",
+  "parser_version": "0.8.0",
+  "structural_locator": {
+    "kind": "html_element_span",
+    "selector": "main:nth-of-type(1) > p:nth-of-type(1)",
+    "text_end": 20,
+    "text_start": 0
+  }
+}

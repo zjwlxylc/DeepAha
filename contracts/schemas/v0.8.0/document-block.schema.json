@@ -1,0 +1,403 @@
+{
+  "$defs": {
+    "DocumentBlockType": {
+      "enum": [
+        "HTML_SECTION",
+        "HTML_ELEMENT",
+        "PDF_TEXT_SPAN",
+        "PDF_TABLE_CELL",
+        "SPREADSHEET_CELL",
+        "SPREADSHEET_RANGE",
+        "DOCX_PARAGRAPH",
+        "DOCX_TABLE_CELL",
+        "OCR_TEXT_SPAN"
+      ],
+      "title": "DocumentBlockType",
+      "type": "string"
+    },
+    "DocxParagraphLocatorSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "body_index": {
+          "minimum": 1,
+          "title": "Body Index",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "docx_paragraph",
+          "title": "Kind",
+          "type": "string"
+        },
+        "paragraph_index": {
+          "minimum": 1,
+          "title": "Paragraph Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "body_index",
+        "paragraph_index"
+      ],
+      "title": "DocxParagraphLocatorSchemaV08",
+      "type": "object"
+    },
+    "DocxTableCellLocatorSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "body_index": {
+          "minimum": 1,
+          "title": "Body Index",
+          "type": "integer"
+        },
+        "column_index": {
+          "minimum": 1,
+          "title": "Column Index",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "docx_table_cell",
+          "title": "Kind",
+          "type": "string"
+        },
+        "row_index": {
+          "minimum": 1,
+          "title": "Row Index",
+          "type": "integer"
+        },
+        "table_index": {
+          "minimum": 1,
+          "title": "Table Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "body_index",
+        "table_index",
+        "row_index",
+        "column_index"
+      ],
+      "title": "DocxTableCellLocatorSchemaV08",
+      "type": "object"
+    },
+    "HtmlElementSpanLocatorSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "html_element_span",
+          "title": "Kind",
+          "type": "string"
+        },
+        "selector": {
+          "minLength": 1,
+          "title": "Selector",
+          "type": "string"
+        },
+        "text_end": {
+          "exclusiveMinimum": 0,
+          "title": "Text End",
+          "type": "integer"
+        },
+        "text_start": {
+          "minimum": 0,
+          "title": "Text Start",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "selector",
+        "text_start",
+        "text_end"
+      ],
+      "title": "HtmlElementSpanLocatorSchemaV08",
+      "type": "object"
+    },
+    "PdfTableCellLocatorSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "column_index": {
+          "minimum": 1,
+          "title": "Column Index",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "pdf_table_cell",
+          "title": "Kind",
+          "type": "string"
+        },
+        "page_number": {
+          "minimum": 1,
+          "title": "Page Number",
+          "type": "integer"
+        },
+        "row_index": {
+          "minimum": 1,
+          "title": "Row Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "page_number",
+        "row_index",
+        "column_index"
+      ],
+      "title": "PdfTableCellLocatorSchemaV08",
+      "type": "object"
+    },
+    "PdfTextSpanLocatorSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "pdf_text_span",
+          "title": "Kind",
+          "type": "string"
+        },
+        "page_number": {
+          "minimum": 1,
+          "title": "Page Number",
+          "type": "integer"
+        },
+        "text_end": {
+          "exclusiveMinimum": 0,
+          "title": "Text End",
+          "type": "integer"
+        },
+        "text_start": {
+          "minimum": 0,
+          "title": "Text Start",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "page_number",
+        "text_start",
+        "text_end"
+      ],
+      "title": "PdfTextSpanLocatorSchemaV08",
+      "type": "object"
+    },
+    "SpreadsheetCellLocatorSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "minimum": 1,
+          "title": "Column",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "spreadsheet_cell",
+          "title": "Kind",
+          "type": "string"
+        },
+        "row": {
+          "minimum": 1,
+          "title": "Row",
+          "type": "integer"
+        },
+        "sheet_name": {
+          "minLength": 1,
+          "title": "Sheet Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "sheet_name",
+        "row",
+        "column"
+      ],
+      "title": "SpreadsheetCellLocatorSchemaV08",
+      "type": "object"
+    },
+    "SpreadsheetRangeBlockLocatorSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "end_column": {
+          "minimum": 1,
+          "title": "End Column",
+          "type": "integer"
+        },
+        "end_row": {
+          "minimum": 1,
+          "title": "End Row",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "spreadsheet_range",
+          "title": "Kind",
+          "type": "string"
+        },
+        "sheet_name": {
+          "minLength": 1,
+          "title": "Sheet Name",
+          "type": "string"
+        },
+        "start_column": {
+          "minimum": 1,
+          "title": "Start Column",
+          "type": "integer"
+        },
+        "start_row": {
+          "minimum": 1,
+          "title": "Start Row",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "sheet_name",
+        "start_row",
+        "end_row",
+        "start_column",
+        "end_column"
+      ],
+      "title": "SpreadsheetRangeBlockLocatorSchemaV08",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_id": {
+      "format": "uuid",
+      "title": "Artifact Id",
+      "type": "string"
+    },
+    "block_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Block Hash",
+      "type": "string"
+    },
+    "block_id": {
+      "format": "uuid",
+      "title": "Block Id",
+      "type": "string"
+    },
+    "block_type": {
+      "$ref": "#/$defs/DocumentBlockType"
+    },
+    "canonical_text_or_value": {
+      "minLength": 1,
+      "title": "Canonical Text Or Value",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "document_id": {
+      "format": "uuid",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "document_parse_key": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Document Parse Key",
+      "type": "string"
+    },
+    "evidence_binding_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Evidence Binding Hash",
+      "type": "string"
+    },
+    "evidence_ref_id": {
+      "format": "uuid",
+      "title": "Evidence Ref Id",
+      "type": "string"
+    },
+    "ordinal": {
+      "minimum": 1,
+      "title": "Ordinal",
+      "type": "integer"
+    },
+    "parent_block_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Parent Block Id"
+    },
+    "parse_contract_version": {
+      "minLength": 1,
+      "title": "Parse Contract Version",
+      "type": "string"
+    },
+    "parser_name": {
+      "minLength": 1,
+      "title": "Parser Name",
+      "type": "string"
+    },
+    "parser_version": {
+      "minLength": 1,
+      "title": "Parser Version",
+      "type": "string"
+    },
+    "structural_locator": {
+      "discriminator": {
+        "mapping": {
+          "docx_paragraph": "#/$defs/DocxParagraphLocatorSchemaV08",
+          "docx_table_cell": "#/$defs/DocxTableCellLocatorSchemaV08",
+          "html_element_span": "#/$defs/HtmlElementSpanLocatorSchemaV08",
+          "pdf_table_cell": "#/$defs/PdfTableCellLocatorSchemaV08",
+          "pdf_text_span": "#/$defs/PdfTextSpanLocatorSchemaV08",
+          "spreadsheet_cell": "#/$defs/SpreadsheetCellLocatorSchemaV08",
+          "spreadsheet_range": "#/$defs/SpreadsheetRangeBlockLocatorSchemaV08"
+        },
+        "propertyName": "kind"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/HtmlElementSpanLocatorSchemaV08"
+        },
+        {
+          "$ref": "#/$defs/PdfTextSpanLocatorSchemaV08"
+        },
+        {
+          "$ref": "#/$defs/PdfTableCellLocatorSchemaV08"
+        },
+        {
+          "$ref": "#/$defs/SpreadsheetCellLocatorSchemaV08"
+        },
+        {
+          "$ref": "#/$defs/SpreadsheetRangeBlockLocatorSchemaV08"
+        },
+        {
+          "$ref": "#/$defs/DocxParagraphLocatorSchemaV08"
+        },
+        {
+          "$ref": "#/$defs/DocxTableCellLocatorSchemaV08"
+        }
+      ],
+      "title": "Structural Locator"
+    }
+  },
+  "required": [
+    "block_id",
+    "document_id",
+    "artifact_id",
+    "document_parse_key",
+    "ordinal",
+    "block_type",
+    "canonical_text_or_value",
+    "structural_locator",
+    "block_hash",
+    "evidence_binding_hash",
+    "evidence_ref_id",
+    "parent_block_id",
+    "parser_name",
+    "parser_version",
+    "parse_contract_version",
+    "created_at"
+  ],
+  "title": "DocumentBlockSchemaV08",
+  "type": "object"
+}

@@ -15,8 +15,13 @@ from openpyxl.workbook.workbook import Workbook
 from openpyxl.worksheet._read_only import ReadOnlyWorksheet
 
 from deepaha.contracts.phase2 import EvidenceLocatorV02, SpreadsheetRangeLocator
+from deepaha.documents.blocks import ParsedBlock, validate_parsed_blocks
 from deepaha.documents.normalization import normalize_text
-from deepaha.documents.parser import ExpectedParseError, ParsedDocument
+from deepaha.documents.parser import (
+    P9B_BLOCK_PARSE_CONTRACT_VERSION,
+    ExpectedParseError,
+    ParsedDocument,
+)
 
 XLSX_MEDIA_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 MAX_ARCHIVE_ENTRIES = 10_000
@@ -34,6 +39,7 @@ class OpenpyxlSpreadsheetParser:
     name = "xlsx_openpyxl"
     version = "0.2.0"
     parse_contract_version = "phase2-locator-contract-v0.2.0"
+    emit_document_blocks = False
 
     def supports(self, media_type: str) -> bool:
         return media_type.partition(";")[0].strip().lower() == XLSX_MEDIA_TYPE
@@ -46,6 +52,7 @@ class OpenpyxlSpreadsheetParser:
         try:
             text_lines: list[str] = []
             locators: list[EvidenceLocatorV02] = []
+            parsed_blocks: list[ParsedBlock] = []
             for worksheet in workbook.worksheets:
                 _ignore_declared_dimensions(worksheet)
                 sheet_lines: list[str] = []
@@ -80,11 +87,43 @@ class OpenpyxlSpreadsheetParser:
                             cells_sha256=hash_normalized_cells(cells),
                         )
                     )
-                    sheet_lines.extend(
+                    row_lines = [
                         f"{get_column_letter(column)}{row_number}\t{value}"
                         for column, value in enumerate(normalized_values, start=1)
                         if value != ""
+                    ]
+                    parsed_blocks.append(
+                        ParsedBlock(
+                            block_type="SPREADSHEET_RANGE",
+                            canonical_text_or_value="\n".join(row_lines),
+                            structural_locator={
+                                "kind": "spreadsheet_range",
+                                "sheet_name": worksheet.title,
+                                "start_row": row_number,
+                                "end_row": row_number,
+                                "start_column": start_column,
+                                "end_column": end_column,
+                            },
+                            parent_ordinal=None,
+                        )
                     )
+                    range_ordinal = len(parsed_blocks)
+                    parsed_blocks.extend(
+                        ParsedBlock(
+                            block_type="SPREADSHEET_CELL",
+                            canonical_text_or_value=value,
+                            structural_locator={
+                                "kind": "spreadsheet_cell",
+                                "sheet_name": worksheet.title,
+                                "row": row_number,
+                                "column": column,
+                            },
+                            parent_ordinal=range_ordinal,
+                        )
+                        for column, value in enumerate(normalized_values, start=1)
+                        if value != ""
+                    )
+                    sheet_lines.extend(row_lines)
                 if sheet_lines:
                     if text_lines:
                         text_lines.append("")
@@ -99,6 +138,11 @@ class OpenpyxlSpreadsheetParser:
                 normalized_text=normalize_text("\n".join(text_lines) + "\n"),
                 locators=tuple(locators),
                 needs_review_reasons=(),
+                blocks=(
+                    validate_parsed_blocks(tuple(parsed_blocks))
+                    if self.emit_document_blocks
+                    else ()
+                ),
             )
         finally:
             workbook.close()
@@ -190,6 +234,12 @@ def _normalize_cell_value(value: object) -> str:
     if isinstance(value, timedelta):
         return str(value.total_seconds())
     raise ExpectedParseError("XLSX_CELL_TYPE_UNSUPPORTED")
+
+
+class P9BSpreadsheetDocumentParser(OpenpyxlSpreadsheetParser):
+    version = "0.8.0"
+    parse_contract_version = P9B_BLOCK_PARSE_CONTRACT_VERSION
+    emit_document_blocks = True
 
 
 def _cells_for_range(

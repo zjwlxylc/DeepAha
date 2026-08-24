@@ -5,8 +5,13 @@ from typing import cast
 from lxml import etree
 
 from deepaha.contracts.phase2 import EvidenceLocatorV02, HtmlSelectorLocator
+from deepaha.documents.blocks import ParsedBlock, validate_parsed_blocks
 from deepaha.documents.normalization import normalize_text
-from deepaha.documents.parser import ExpectedParseError, ParsedDocument
+from deepaha.documents.parser import (
+    P9B_BLOCK_PARSE_CONTRACT_VERSION,
+    ExpectedParseError,
+    ParsedDocument,
+)
 
 _LANGUAGE_PATTERN = re.compile(r"[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*")
 _EXCLUDED_TAGS = frozenset({"script", "style", "noscript", "template"})
@@ -66,6 +71,7 @@ class LxmlHtmlParser:
     name = "html_lxml"
     version = "0.2.0"
     parse_contract_version = "phase2-locator-contract-v0.2.0"
+    emit_document_blocks = False
 
     def supports(self, media_type: str) -> bool:
         return media_type.partition(";")[0].strip().lower() == "text/html"
@@ -83,13 +89,28 @@ class LxmlHtmlParser:
             raise ExpectedParseError("HTML_TEXT_EMPTY")
 
         locators: list[EvidenceLocatorV02] = []
+        parsed_blocks: list[ParsedBlock] = []
         for node, text in zip(blocks, block_texts, strict=True):
+            selector = _stable_selector(node)
             locators.append(
                 HtmlSelectorLocator(
                     schema_version="0.2.0",
                     kind="html_selector",
-                    selector=_stable_selector(node),
+                    selector=selector,
                     text_sha256=sha256(text.encode()).hexdigest(),
+                )
+            )
+            parsed_blocks.append(
+                ParsedBlock(
+                    block_type="HTML_ELEMENT",
+                    canonical_text_or_value=text,
+                    structural_locator={
+                        "kind": "html_element_span",
+                        "selector": selector,
+                        "text_start": 0,
+                        "text_end": len(text),
+                    },
+                    parent_ordinal=None,
                 )
             )
 
@@ -106,7 +127,16 @@ class LxmlHtmlParser:
             normalized_text=normalize_text("\n\n".join(block_texts) + "\n"),
             locators=tuple(locators),
             needs_review_reasons=(),
+            blocks=(
+                validate_parsed_blocks(tuple(parsed_blocks)) if self.emit_document_blocks else ()
+            ),
         )
+
+
+class P9BHtmlDocumentParser(LxmlHtmlParser):
+    version = "0.8.0"
+    parse_contract_version = P9B_BLOCK_PARSE_CONTRACT_VERSION
+    emit_document_blocks = True
 
 
 def _parse_html_tree(content: bytes) -> etree._Element:

@@ -1,5 +1,5 @@
 from enum import StrEnum
-from typing import Annotated, Self
+from typing import Annotated, Literal, Self
 
 from pydantic import ConfigDict, Field, StringConstraints, model_validator
 
@@ -93,6 +93,134 @@ class AnswerAccessClass(StrEnum):
     DEVELOPMENT_VISIBLE = "DEVELOPMENT_VISIBLE"
     VALIDATION_BLIND = "VALIDATION_BLIND"
     LOCKED_BLIND = "LOCKED_BLIND"
+
+
+class DocumentBlockType(StrEnum):
+    HTML_SECTION = "HTML_SECTION"
+    HTML_ELEMENT = "HTML_ELEMENT"
+    PDF_TEXT_SPAN = "PDF_TEXT_SPAN"
+    PDF_TABLE_CELL = "PDF_TABLE_CELL"
+    SPREADSHEET_CELL = "SPREADSHEET_CELL"
+    SPREADSHEET_RANGE = "SPREADSHEET_RANGE"
+    DOCX_PARAGRAPH = "DOCX_PARAGRAPH"
+    DOCX_TABLE_CELL = "DOCX_TABLE_CELL"
+    OCR_TEXT_SPAN = "OCR_TEXT_SPAN"
+
+
+class HtmlElementSpanLocatorSchemaV08(Phase9BContractModel):
+    kind: Literal["html_element_span"]
+    selector: NonEmptyString
+    text_start: Annotated[int, Field(ge=0)]
+    text_end: Annotated[int, Field(gt=0)]
+
+    @model_validator(mode="after")
+    def require_span(self) -> Self:
+        if self.text_end <= self.text_start:
+            raise ValueError("text_end must be after text_start")
+        return self
+
+
+class PdfTextSpanLocatorSchemaV08(Phase9BContractModel):
+    kind: Literal["pdf_text_span"]
+    page_number: Annotated[int, Field(ge=1)]
+    text_start: Annotated[int, Field(ge=0)]
+    text_end: Annotated[int, Field(gt=0)]
+
+    @model_validator(mode="after")
+    def require_span(self) -> Self:
+        if self.text_end <= self.text_start:
+            raise ValueError("text_end must be after text_start")
+        return self
+
+
+class PdfTableCellLocatorSchemaV08(Phase9BContractModel):
+    kind: Literal["pdf_table_cell"]
+    page_number: Annotated[int, Field(ge=1)]
+    row_index: Annotated[int, Field(ge=1)]
+    column_index: Annotated[int, Field(ge=1)]
+
+
+class SpreadsheetCellLocatorSchemaV08(Phase9BContractModel):
+    kind: Literal["spreadsheet_cell"]
+    sheet_name: NonEmptyString
+    row: Annotated[int, Field(ge=1)]
+    column: Annotated[int, Field(ge=1)]
+
+
+class SpreadsheetRangeBlockLocatorSchemaV08(Phase9BContractModel):
+    kind: Literal["spreadsheet_range"]
+    sheet_name: NonEmptyString
+    start_row: Annotated[int, Field(ge=1)]
+    end_row: Annotated[int, Field(ge=1)]
+    start_column: Annotated[int, Field(ge=1)]
+    end_column: Annotated[int, Field(ge=1)]
+
+    @model_validator(mode="after")
+    def require_range(self) -> Self:
+        if self.end_row < self.start_row or self.end_column < self.start_column:
+            raise ValueError("range end must not precede start")
+        return self
+
+
+class DocxParagraphLocatorSchemaV08(Phase9BContractModel):
+    kind: Literal["docx_paragraph"]
+    body_index: Annotated[int, Field(ge=1)]
+    paragraph_index: Annotated[int, Field(ge=1)]
+
+
+class DocxTableCellLocatorSchemaV08(Phase9BContractModel):
+    kind: Literal["docx_table_cell"]
+    body_index: Annotated[int, Field(ge=1)]
+    table_index: Annotated[int, Field(ge=1)]
+    row_index: Annotated[int, Field(ge=1)]
+    column_index: Annotated[int, Field(ge=1)]
+
+
+DocumentBlockLocatorSchemaV08 = Annotated[
+    HtmlElementSpanLocatorSchemaV08
+    | PdfTextSpanLocatorSchemaV08
+    | PdfTableCellLocatorSchemaV08
+    | SpreadsheetCellLocatorSchemaV08
+    | SpreadsheetRangeBlockLocatorSchemaV08
+    | DocxParagraphLocatorSchemaV08
+    | DocxTableCellLocatorSchemaV08,
+    Field(discriminator="kind"),
+]
+
+
+class DocumentBlockSchemaV08(Phase9BContractModel):
+    block_id: EntityId
+    document_id: EntityId
+    artifact_id: EntityId
+    document_parse_key: Sha256
+    ordinal: Annotated[int, Field(ge=1)]
+    block_type: DocumentBlockType
+    canonical_text_or_value: NonEmptyString
+    structural_locator: DocumentBlockLocatorSchemaV08
+    block_hash: Sha256
+    evidence_binding_hash: Sha256
+    evidence_ref_id: EntityId
+    parent_block_id: EntityId | None
+    parser_name: NonEmptyString
+    parser_version: NonEmptyString
+    parse_contract_version: NonEmptyString
+    created_at: Instant
+
+    @model_validator(mode="after")
+    def require_locator_matches_block_type(self) -> Self:
+        expected = {
+            DocumentBlockType.HTML_SECTION: "html_element_span",
+            DocumentBlockType.HTML_ELEMENT: "html_element_span",
+            DocumentBlockType.PDF_TEXT_SPAN: "pdf_text_span",
+            DocumentBlockType.PDF_TABLE_CELL: "pdf_table_cell",
+            DocumentBlockType.SPREADSHEET_CELL: "spreadsheet_cell",
+            DocumentBlockType.SPREADSHEET_RANGE: "spreadsheet_range",
+            DocumentBlockType.DOCX_PARAGRAPH: "docx_paragraph",
+            DocumentBlockType.DOCX_TABLE_CELL: "docx_table_cell",
+        }.get(self.block_type)
+        if expected is None or self.structural_locator.kind != expected:
+            raise ValueError("DocumentBlock locator kind does not match block type")
+        return self
 
 
 UnitPublicId = Annotated[str, StringConstraints(pattern=r"^unit_[0-9a-f]{32}$")]
@@ -373,6 +501,9 @@ __all__ = [
     "DatasetManifestEntrySchemaV08",
     "DatasetManifestSchemaV08",
     "DatasetPartition",
+    "DocumentBlockLocatorSchemaV08",
+    "DocumentBlockSchemaV08",
+    "DocumentBlockType",
     "DocumentParseIdentitySchemaV08",
     "OpportunityUnitAliasKind",
     "OpportunityUnitAliasSchemaV08",

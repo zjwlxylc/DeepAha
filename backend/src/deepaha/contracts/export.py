@@ -62,6 +62,7 @@ from deepaha.contracts.phase8 import (
 )
 from deepaha.contracts.phase9b import (
     DatasetManifestSchemaV08,
+    DocumentBlockSchemaV08,
     DocumentParseIdentitySchemaV08,
     OpportunityUnitAliasSchemaV08,
     OpportunityUnitLineageEventSchemaV08,
@@ -147,6 +148,7 @@ PHASE8_SCHEMAS: dict[str, type[BaseModel]] = {
 }
 
 PHASE9B_SCHEMAS: dict[str, type[BaseModel]] = {
+    "document-block.schema.json": DocumentBlockSchemaV08,
     "opportunity-unit.schema.json": OpportunityUnitSchemaV08,
     "opportunity-unit-version.schema.json": OpportunityUnitVersionSchemaV08,
     "opportunity-unit-alias.schema.json": OpportunityUnitAliasSchemaV08,

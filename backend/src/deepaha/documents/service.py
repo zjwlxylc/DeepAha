@@ -16,9 +16,20 @@ from deepaha.contracts.phase2 import (
     EvidenceLocatorV02,
     LegacyEvidenceLocator,
 )
-from deepaha.documents.models import Document, EvidenceRef, ParseAttempt
+from deepaha.documents.blocks import (
+    ParsedBlock,
+    validate_parsed_blocks,
+)
+from deepaha.documents.blocks import (
+    block_hash as calculate_block_hash,
+)
+from deepaha.documents.blocks import (
+    evidence_binding_hash as calculate_evidence_binding_hash,
+)
+from deepaha.documents.models import Document, DocumentBlock, EvidenceRef, ParseAttempt
 from deepaha.documents.normalization import build_derived_text_key, normalize_text
 from deepaha.documents.parser import (
+    P9B_BLOCK_PARSE_CONTRACT_VERSION,
     DocumentParser,
     ExpectedParseError,
     ParsedDocument,
@@ -56,6 +67,7 @@ class ParseDocumentResult:
     error_code: str | None
     extracted_text_uri: str | None
     evidence_ref_ids: tuple[UUID, ...]
+    document_block_ids: tuple[UUID, ...]
     created: bool
 
 
@@ -153,6 +165,11 @@ class DocumentService:
                 )
 
             locators = self._validate_parsed(parsed)
+            blocks = validate_parsed_blocks(parsed.blocks) if parsed.blocks else ()
+            if blocks and parser.parse_contract_version != P9B_BLOCK_PARSE_CONTRACT_VERSION:
+                raise ValueError("DocumentBlock output requires the P9-B parse contract")
+            if parser.parse_contract_version == P9B_BLOCK_PARSE_CONTRACT_VERSION and not blocks:
+                raise ValueError("P9-B parse contract requires DocumentBlock output")
             text_bytes = parsed.normalized_text.encode("utf-8")
             derived_key = build_derived_text_key(
                 artifact.content_sha256,
@@ -200,6 +217,15 @@ class DocumentService:
                 for locator in locators
             ]
             session.add_all(evidence_refs)
+            block_evidence_refs, document_blocks = self._build_document_blocks(
+                document=document,
+                artifact=artifact,
+                blocks=blocks,
+                created_at=created_at,
+            )
+            session.add_all(block_evidence_refs)
+            session.flush()
+            session.add_all(document_blocks)
             outcome = "NEEDS_REVIEW" if parsed.needs_review_reasons else "SUCCEEDED"
             error_code = "|".join(parsed.needs_review_reasons) or None
             attempt = ParseAttempt(
@@ -221,7 +247,12 @@ class DocumentService:
             return self._result(
                 attempt=attempt,
                 document=document,
-                evidence_ref_ids=tuple(value.evidence_ref_id for value in evidence_refs),
+                evidence_ref_ids=tuple(
+                    sorted(
+                        value.evidence_ref_id for value in (*evidence_refs, *block_evidence_refs)
+                    )
+                ),
+                document_block_ids=tuple(value.block_id for value in document_blocks),
                 created=True,
             )
 
@@ -257,8 +288,8 @@ class DocumentService:
             raise ValueError("parser returned published_at without timezone")
         for reason in parsed.needs_review_reasons:
             validate_review_reason(reason)
-        if not parsed.locators:
-            raise ValueError("parser returned no evidence locator")
+        if not parsed.locators and not parsed.blocks:
+            raise ValueError("parser returned no evidence locator or DocumentBlock")
 
         result: list[EvidenceLocatorV02] = []
         for locator in parsed.locators:
@@ -290,6 +321,78 @@ class DocumentService:
             quote_sha256=quote_sha256,
         )
 
+    @staticmethod
+    def _build_document_blocks(
+        *,
+        document: Document,
+        artifact: RawArtifact,
+        blocks: tuple[ParsedBlock, ...],
+        created_at: datetime,
+    ) -> tuple[list[EvidenceRef], list[DocumentBlock]]:
+        block_ids = [uuid7() for _ in blocks]
+        evidence_refs: list[EvidenceRef] = []
+        rows: list[DocumentBlock] = []
+        for ordinal, (block_id, block) in enumerate(zip(block_ids, blocks, strict=True), start=1):
+            block_hash_value = calculate_block_hash(
+                document_parse_key=document.document_parse_key,
+                ordinal=ordinal,
+                block=block,
+            )
+            binding_hash = calculate_evidence_binding_hash(
+                block_id=str(block_id),
+                document_parse_key=document.document_parse_key,
+                structural_locator=block.structural_locator,
+                block_hash_value=block_hash_value,
+            )
+            value_hash = sha256(block.canonical_text_or_value.encode("utf-8")).hexdigest()
+            kind = block.structural_locator.get("kind")
+            if not isinstance(kind, str):
+                raise ValueError("DocumentBlock locator kind is missing")
+            evidence_ref = EvidenceRef(
+                evidence_ref_id=uuid7(),
+                document_id=document.document_id,
+                artifact_id=artifact.artifact_id,
+                locator_kind=kind,
+                locator_value=None,
+                locator_schema_version="0.8.0",
+                locator_payload={
+                    "schema_version": "0.8.0",
+                    "kind": kind,
+                    "block_id": str(block_id),
+                    "document_parse_key": document.document_parse_key,
+                    "block_type": block.block_type,
+                    "structural_locator": block.structural_locator,
+                    "value_sha256": value_hash,
+                },
+                quote_sha256=value_hash,
+            )
+            evidence_refs.append(evidence_ref)
+            rows.append(
+                DocumentBlock(
+                    block_id=block_id,
+                    document_id=document.document_id,
+                    artifact_id=artifact.artifact_id,
+                    document_parse_key=document.document_parse_key,
+                    ordinal=ordinal,
+                    block_type=block.block_type,
+                    canonical_text_or_value=block.canonical_text_or_value,
+                    structural_locator=block.structural_locator,
+                    block_hash=block_hash_value,
+                    evidence_binding_hash=binding_hash,
+                    evidence_ref_id=evidence_ref.evidence_ref_id,
+                    parent_block_id=(
+                        block_ids[block.parent_ordinal - 1]
+                        if block.parent_ordinal is not None
+                        else None
+                    ),
+                    parser_name=document.parser_name,
+                    parser_version=document.parser_version,
+                    parse_contract_version=document.parse_contract_version,
+                    created_at=created_at,
+                )
+            )
+        return evidence_refs, rows
+
     def _existing_result(self, session: Session, attempt: ParseAttempt) -> ParseDocumentResult:
         document = (
             session.get(Document, attempt.document_id) if attempt.document_id is not None else None
@@ -305,10 +408,22 @@ class DocumentService:
             if attempt.document_id is not None
             else ()
         )
+        document_block_ids = (
+            tuple(
+                session.scalars(
+                    select(DocumentBlock.block_id)
+                    .where(DocumentBlock.document_id == attempt.document_id)
+                    .order_by(DocumentBlock.ordinal)
+                )
+            )
+            if attempt.document_id is not None
+            else ()
+        )
         return self._result(
             attempt=attempt,
             document=document,
             evidence_ref_ids=evidence_ref_ids,
+            document_block_ids=document_block_ids,
             created=False,
         )
 
@@ -318,6 +433,7 @@ class DocumentService:
         attempt: ParseAttempt,
         document: Document | None,
         evidence_ref_ids: tuple[UUID, ...],
+        document_block_ids: tuple[UUID, ...] = (),
         created: bool,
     ) -> ParseDocumentResult:
         return ParseDocumentResult(
@@ -332,6 +448,7 @@ class DocumentService:
             error_code=attempt.error_code,
             extracted_text_uri=document.extracted_text_uri if document is not None else None,
             evidence_ref_ids=evidence_ref_ids,
+            document_block_ids=document_block_ids,
             created=created,
         )
 

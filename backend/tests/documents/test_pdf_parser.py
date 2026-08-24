@@ -55,6 +55,7 @@ def test_pdf_parser_supports_only_pdf_media_type() -> None:
 
     assert parser.name == "pdf_pypdf"
     assert parser.version == "0.2.0"
+    assert parser.parse_contract_version == "phase2-locator-contract-v0.2.0"
     assert parser.supports("application/pdf") is True
     assert parser.supports("application/pdf; version=1.4") is True
     assert parser.supports("text/html") is False

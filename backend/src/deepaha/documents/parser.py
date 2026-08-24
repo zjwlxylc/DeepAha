@@ -4,9 +4,11 @@ from datetime import datetime
 from typing import Protocol
 
 from deepaha.contracts.phase2 import EvidenceLocatorV02
+from deepaha.documents.blocks import ParsedBlock
 
 _STABLE_CODE_PATTERN = re.compile(r"[A-Z][A-Z0-9_]*")
 LEGACY_PARSE_CONTRACT_VERSION = "phase2-locator-contract-v0.2.0"
+P9B_BLOCK_PARSE_CONTRACT_VERSION = "p9b-document-block-contract-v0.8.0"
 
 
 @dataclass(frozen=True, slots=True)
@@ -17,6 +19,7 @@ class ParsedDocument:
     normalized_text: str
     locators: tuple[EvidenceLocatorV02, ...]
     needs_review_reasons: tuple[str, ...]
+    blocks: tuple[ParsedBlock, ...] = ()
 
 
 class DocumentParser(Protocol):

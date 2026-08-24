@@ -5,8 +5,13 @@ from pypdf import PdfReader
 from pypdf.errors import PyPdfError
 
 from deepaha.contracts.phase2 import EvidenceLocatorV02, PdfPageTextLocator
+from deepaha.documents.blocks import build_pdf_blocks
 from deepaha.documents.normalization import normalize_text
-from deepaha.documents.parser import ExpectedParseError, ParsedDocument
+from deepaha.documents.parser import (
+    P9B_BLOCK_PARSE_CONTRACT_VERSION,
+    ExpectedParseError,
+    ParsedDocument,
+)
 
 MAX_PDF_PAGES = 500
 
@@ -15,6 +20,7 @@ class PypdfDocumentParser:
     name = "pdf_pypdf"
     version = "0.2.0"
     parse_contract_version = "phase2-locator-contract-v0.2.0"
+    emit_document_blocks = False
 
     def supports(self, media_type: str) -> bool:
         return media_type.partition(";")[0].strip().lower() == "application/pdf"
@@ -49,7 +55,14 @@ class PypdfDocumentParser:
             normalized_text=normalize_text("\n\f\n".join(page_texts)),
             locators=tuple(locators),
             needs_review_reasons=needs_review,
+            blocks=build_pdf_blocks(page_texts) if self.emit_document_blocks else (),
         )
+
+
+class P9BPdfDocumentParser(PypdfDocumentParser):
+    version = "0.8.0"
+    parse_contract_version = P9B_BLOCK_PARSE_CONTRACT_VERSION
+    emit_document_blocks = True
 
 
 def _read_pdf(content: bytes) -> PdfReader:
