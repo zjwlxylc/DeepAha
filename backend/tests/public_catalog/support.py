@@ -12,7 +12,9 @@ from sqlalchemy.orm import Session
 
 from deepaha.artifacts.models import RawArtifact
 from deepaha.documents.models import Document, EvidenceRef
+from deepaha.documents.parser import LEGACY_PARSE_CONTRACT_VERSION
 from deepaha.opportunities.models import Opportunity, OpportunityEvent, OpportunityVersion
+from deepaha.p9b.hashing import document_parse_key
 from deepaha.public_catalog.models import PublicCatalogEntry
 from deepaha.sources.models import Source
 
@@ -236,6 +238,14 @@ def persist_phase5_fixture(session: Session) -> tuple[str, ...]:
                 extracted_text_uri=None,
                 parser_name="phase5_fixture",
                 parser_version="1",
+                parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+                document_parse_key=document_parse_key(
+                    artifact_id=artifact_id,
+                    artifact_sha256=content_sha256,
+                    parser_name="phase5_fixture",
+                    parser_version="1",
+                    parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+                ),
                 parse_confidence=None,
                 created_at=version_fixture.effective_at,
             )

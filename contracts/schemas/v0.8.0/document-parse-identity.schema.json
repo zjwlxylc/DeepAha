@@ -1,0 +1,45 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "artifact_id": {
+      "format": "uuid",
+      "title": "Artifact Id",
+      "type": "string"
+    },
+    "artifact_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Artifact Sha256",
+      "type": "string"
+    },
+    "document_parse_key": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Document Parse Key",
+      "type": "string"
+    },
+    "parse_contract_version": {
+      "minLength": 1,
+      "title": "Parse Contract Version",
+      "type": "string"
+    },
+    "parser_name": {
+      "minLength": 1,
+      "title": "Parser Name",
+      "type": "string"
+    },
+    "parser_version": {
+      "minLength": 1,
+      "title": "Parser Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "artifact_id",
+    "artifact_sha256",
+    "parser_name",
+    "parser_version",
+    "parse_contract_version",
+    "document_parse_key"
+  ],
+  "title": "DocumentParseIdentitySchemaV08",
+  "type": "object"
+}

@@ -33,6 +33,7 @@ class NormalizedCell:
 class OpenpyxlSpreadsheetParser:
     name = "xlsx_openpyxl"
     version = "0.2.0"
+    parse_contract_version = "phase2-locator-contract-v0.2.0"
 
     def supports(self, media_type: str) -> bool:
         return media_type.partition(";")[0].strip().lower() == XLSX_MEDIA_TYPE

@@ -60,6 +60,16 @@ from deepaha.contracts.phase8 import (
     ReminderPreferenceSnapshotSchemaV07,
     TestInboxEntrySchemaV07,
 )
+from deepaha.contracts.phase9b import (
+    DatasetManifestSchemaV08,
+    DocumentParseIdentitySchemaV08,
+    OpportunityUnitAliasSchemaV08,
+    OpportunityUnitLineageEventSchemaV08,
+    OpportunityUnitSchemaV08,
+    OpportunityUnitVersionSchemaV08,
+    SourceBundleMemberProvenanceSchemaV08,
+    SourceBundleRevisionSchemaV08,
+)
 
 PHASE1_SCHEMAS: dict[str, type[BaseModel]] = {
     "source.schema.json": SourceSchema,
@@ -134,6 +144,17 @@ PHASE8_SCHEMAS: dict[str, type[BaseModel]] = {
     "deadline-change-reminder-intent.schema.json": DeadlineChangeReminderIntentSchemaV07,
     "notification-delivery-attempt.schema.json": NotificationDeliveryAttemptSchemaV07,
     "test-inbox-entry.schema.json": TestInboxEntrySchemaV07,
+}
+
+PHASE9B_SCHEMAS: dict[str, type[BaseModel]] = {
+    "opportunity-unit.schema.json": OpportunityUnitSchemaV08,
+    "opportunity-unit-version.schema.json": OpportunityUnitVersionSchemaV08,
+    "opportunity-unit-alias.schema.json": OpportunityUnitAliasSchemaV08,
+    "opportunity-unit-lineage-event.schema.json": OpportunityUnitLineageEventSchemaV08,
+    "document-parse-identity.schema.json": DocumentParseIdentitySchemaV08,
+    "source-bundle-member-provenance.schema.json": SourceBundleMemberProvenanceSchemaV08,
+    "source-bundle-revision.schema.json": SourceBundleRevisionSchemaV08,
+    "dataset-manifest.schema.json": DatasetManifestSchemaV08,
 }
 
 
@@ -284,16 +305,48 @@ def write_phase8_schemas(repository_root: Path) -> dict[str, Path]:
     return written
 
 
+def render_phase9b_schemas() -> dict[str, bytes]:
+    return {
+        name: (
+            json.dumps(model.model_json_schema(), ensure_ascii=False, indent=2, sort_keys=True)
+            + "\n"
+        ).encode("utf-8")
+        for name, model in PHASE9B_SCHEMAS.items()
+    }
+
+
+def write_phase9b_schemas(repository_root: Path) -> dict[str, Path]:
+    target_directory = repository_root.resolve() / "contracts" / "schemas" / "v0.8.0"
+    target_directory.mkdir(parents=True, exist_ok=True)
+    written: dict[str, Path] = {}
+    for name, content in render_phase9b_schemas().items():
+        target = target_directory / name
+        target.write_bytes(content)
+        written[name] = target
+    return written
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export versioned DeepAha JSON Schemas")
     parser.add_argument("repository_root", type=Path)
     parser.add_argument(
         "--version",
-        choices=("0.1.0", "0.2.0", "0.3.0", "0.4.0", "0.5.0", "0.6.0", "0.7.0"),
+        choices=(
+            "0.1.0",
+            "0.2.0",
+            "0.3.0",
+            "0.4.0",
+            "0.5.0",
+            "0.6.0",
+            "0.7.0",
+            "0.8.0",
+        ),
         default="0.1.0",
     )
     arguments = parser.parse_args()
-    if arguments.version == "0.7.0":
+    if arguments.version == "0.8.0":
+        write_phase9b_schemas(arguments.repository_root)
+    elif arguments.version == "0.7.0":
         write_phase8_schemas(arguments.repository_root)
     elif arguments.version == "0.6.0":
         write_phase7_schemas(arguments.repository_root)

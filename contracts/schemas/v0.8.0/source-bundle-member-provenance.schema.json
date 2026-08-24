@@ -1,0 +1,276 @@
+{
+  "$defs": {
+    "DocumentParseIdentitySchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "format": "uuid",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Artifact Sha256",
+          "type": "string"
+        },
+        "document_parse_key": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Document Parse Key",
+          "type": "string"
+        },
+        "parse_contract_version": {
+          "minLength": 1,
+          "title": "Parse Contract Version",
+          "type": "string"
+        },
+        "parser_name": {
+          "minLength": 1,
+          "title": "Parser Name",
+          "type": "string"
+        },
+        "parser_version": {
+          "minLength": 1,
+          "title": "Parser Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "artifact_sha256",
+        "parser_name",
+        "parser_version",
+        "parse_contract_version",
+        "document_parse_key"
+      ],
+      "title": "DocumentParseIdentitySchemaV08",
+      "type": "object"
+    },
+    "SourceBundleMemberRole": {
+      "enum": [
+        "PRIMARY_NOTICE",
+        "ATTACHMENT",
+        "CORRECTION",
+        "SUPPLEMENT",
+        "FAQ",
+        "CANCELLATION",
+        "RESULT_NOTICE"
+      ],
+      "title": "SourceBundleMemberRole",
+      "type": "string"
+    },
+    "SourceBundleRelationType": {
+      "enum": [
+        "PRIMARY",
+        "ATTACHES_TO",
+        "AMENDS",
+        "SUPERSEDES",
+        "CANCELS",
+        "CLARIFIES"
+      ],
+      "title": "SourceBundleRelationType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "acquisition_evaluation_id": {
+      "format": "uuid",
+      "title": "Acquisition Evaluation Id",
+      "type": "string"
+    },
+    "acquisition_run_id": {
+      "format": "uuid",
+      "title": "Acquisition Run Id",
+      "type": "string"
+    },
+    "acquisition_validation_status": {
+      "title": "Acquisition Validation Status",
+      "type": "string"
+    },
+    "capture_observation_id": {
+      "format": "uuid",
+      "title": "Capture Observation Id",
+      "type": "string"
+    },
+    "document_id": {
+      "format": "uuid",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "document_parse_identity": {
+      "$ref": "#/$defs/DocumentParseIdentitySchemaV08"
+    },
+    "effective_from": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Effective From"
+    },
+    "effective_to": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Effective To"
+    },
+    "endpoint_id": {
+      "format": "uuid",
+      "title": "Endpoint Id",
+      "type": "string"
+    },
+    "fetch_strategy": {
+      "minLength": 1,
+      "title": "Fetch Strategy",
+      "type": "string"
+    },
+    "fetcher_name": {
+      "minLength": 1,
+      "title": "Fetcher Name",
+      "type": "string"
+    },
+    "fetcher_version": {
+      "minLength": 1,
+      "title": "Fetcher Version",
+      "type": "string"
+    },
+    "member_provenance_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Member Provenance Hash",
+      "type": "string"
+    },
+    "member_role": {
+      "$ref": "#/$defs/SourceBundleMemberRole"
+    },
+    "object_key": {
+      "minLength": 1,
+      "title": "Object Key",
+      "type": "string"
+    },
+    "policy_version": {
+      "minLength": 1,
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "precedence": {
+      "maximum": 1000,
+      "minimum": 0,
+      "title": "Precedence",
+      "type": "integer"
+    },
+    "raw_artifact_id": {
+      "format": "uuid",
+      "title": "Raw Artifact Id",
+      "type": "string"
+    },
+    "raw_artifact_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Raw Artifact Sha256",
+      "type": "string"
+    },
+    "raw_artifact_size": {
+      "exclusiveMinimum": 0,
+      "title": "Raw Artifact Size",
+      "type": "integer"
+    },
+    "recipe_id": {
+      "format": "uuid",
+      "title": "Recipe Id",
+      "type": "string"
+    },
+    "recipe_version": {
+      "minLength": 1,
+      "title": "Recipe Version",
+      "type": "string"
+    },
+    "related_member_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Related Member Id"
+    },
+    "relation_type": {
+      "$ref": "#/$defs/SourceBundleRelationType"
+    },
+    "source_bundle_member_id": {
+      "format": "uuid",
+      "title": "Source Bundle Member Id",
+      "type": "string"
+    },
+    "source_bundle_revision_id": {
+      "format": "uuid",
+      "title": "Source Bundle Revision Id",
+      "type": "string"
+    },
+    "source_id": {
+      "format": "uuid",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "storage_bucket": {
+      "minLength": 1,
+      "title": "Storage Bucket",
+      "type": "string"
+    },
+    "validator_name": {
+      "minLength": 1,
+      "title": "Validator Name",
+      "type": "string"
+    },
+    "validator_version": {
+      "minLength": 1,
+      "title": "Validator Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_bundle_member_id",
+    "source_bundle_revision_id",
+    "source_id",
+    "endpoint_id",
+    "capture_observation_id",
+    "acquisition_evaluation_id",
+    "acquisition_validation_status",
+    "acquisition_run_id",
+    "recipe_id",
+    "recipe_version",
+    "policy_version",
+    "fetch_strategy",
+    "fetcher_name",
+    "fetcher_version",
+    "validator_name",
+    "validator_version",
+    "raw_artifact_id",
+    "raw_artifact_sha256",
+    "raw_artifact_size",
+    "storage_bucket",
+    "object_key",
+    "document_id",
+    "document_parse_identity",
+    "member_role",
+    "relation_type",
+    "precedence",
+    "related_member_id",
+    "effective_from",
+    "effective_to",
+    "member_provenance_hash"
+  ],
+  "title": "SourceBundleMemberProvenanceSchemaV08",
+  "type": "object"
+}

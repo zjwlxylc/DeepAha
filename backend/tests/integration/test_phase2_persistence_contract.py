@@ -8,7 +8,9 @@ from sqlalchemy.orm import Session
 
 from deepaha.artifacts.models import RawArtifact
 from deepaha.documents.models import Document, EvidenceRef, ParseAttempt
+from deepaha.documents.parser import LEGACY_PARSE_CONTRACT_VERSION
 from deepaha.opportunities.models import Opportunity
+from deepaha.p9b.hashing import document_parse_key
 from deepaha.sources.models import CaptureObservation, Source, SourceEndpoint
 
 pytestmark = pytest.mark.integration
@@ -132,6 +134,14 @@ def make_document(artifact: RawArtifact, *, version: str = "0.2.0") -> Document:
         extracted_text_uri=None,
         parser_name="html_lxml",
         parser_version=version,
+        parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+        document_parse_key=document_parse_key(
+            artifact_id=artifact.artifact_id,
+            artifact_sha256=artifact.content_sha256,
+            parser_name="html_lxml",
+            parser_version=version,
+            parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+        ),
         parse_confidence=None,
         created_at=NOW,
     )
@@ -249,6 +259,14 @@ def test_parse_attempt_document_artifact_mismatch_is_rejected(session: Session) 
             artifact_id=second_artifact.artifact_id,
             parser_name="html_lxml",
             parser_version="0.2.0",
+            parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+            document_parse_key=document_parse_key(
+                artifact_id=second_artifact.artifact_id,
+                artifact_sha256=second_artifact.content_sha256,
+                parser_name="html_lxml",
+                parser_version="0.2.0",
+                parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+            ),
             started_at=NOW,
             completed_at=NOW,
             outcome="SUCCEEDED",
@@ -278,6 +296,14 @@ def test_failed_parse_attempt_rejects_document(session: Session) -> None:
             artifact_id=artifact.artifact_id,
             parser_name="html_lxml",
             parser_version="0.2.0",
+            parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+            document_parse_key=document_parse_key(
+                artifact_id=artifact.artifact_id,
+                artifact_sha256=artifact.content_sha256,
+                parser_name="html_lxml",
+                parser_version="0.2.0",
+                parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+            ),
             started_at=NOW,
             completed_at=NOW,
             outcome="FAILED",

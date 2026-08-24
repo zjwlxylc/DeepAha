@@ -46,7 +46,7 @@ verifiers remain required at the applicable Slice gates.
 | Slice | Base | Head | Verification | Review | Commit |
 | --- | --- | --- | --- | --- | --- |
 | Planning | `f27f096db1d7028305d4e5989360fde68b578678` | planning worktree | placeholder scan clean; `git diff --check` exit `0` | spec coverage/type/identity self-review complete | recorded by planning commit |
-| P9-B0 Identity & Provenance Architecture Closure | pending | pending | not run | not run | not committed |
+| P9-B0 Identity & Provenance Architecture Closure | `a5ca543c961c2077df5688d29e888021fe655821` | dedicated B0 commit (this tree) | B0 verifier exit `0`: backend `661`, deterministic `90`, B0 PostgreSQL `29`, full PostgreSQL `288`; P9-A verifier exit `0` | `B0_DIFF_REVIEW_PASS`; P0/P1/P2=`0/0/0` | dedicated local commit |
 | DocumentBlock & Field Locators | pending | pending | not run | not run | not committed |
 | Fact Promotion & Dormant Unit Rules | pending | pending | not run | not run | not committed |
 | Gold Governance & Benchmark | pending | pending | not run | not run | not committed |

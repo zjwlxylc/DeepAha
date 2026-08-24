@@ -24,6 +24,7 @@ from deepaha.documents.parser import (
     ParsedDocument,
     validate_review_reason,
 )
+from deepaha.p9b.hashing import document_parse_key
 
 _LOCATOR_ADAPTER: TypeAdapter[EvidenceLocatorV02] = TypeAdapter(EvidenceLocatorV02)
 
@@ -48,6 +49,8 @@ class ParseDocumentResult:
     artifact_id: UUID
     parser_name: str
     parser_version: str
+    parse_contract_version: str
+    document_parse_key: str
     outcome: str
     document_id: UUID | None
     error_code: str | None
@@ -96,12 +99,25 @@ class DocumentService:
                 raise RuntimeError("ACQUISITION_DOCUMENT_BLOCKED")
 
             parser = self._select_parser(artifact.media_type)
-            build_derived_text_key(artifact.content_sha256, parser.name, parser.version)
+            parse_key = document_parse_key(
+                artifact_id=artifact.artifact_id,
+                artifact_sha256=artifact.content_sha256,
+                parser_name=parser.name,
+                parser_version=parser.version,
+                parse_contract_version=parser.parse_contract_version,
+            )
+            build_derived_text_key(
+                artifact.content_sha256,
+                parser.name,
+                parser.version,
+                parser.parse_contract_version,
+            )
             existing = session.scalar(
                 select(ParseAttempt).where(
                     ParseAttempt.artifact_id == artifact.artifact_id,
                     ParseAttempt.parser_name == parser.name,
                     ParseAttempt.parser_version == parser.version,
+                    ParseAttempt.parse_contract_version == parser.parse_contract_version,
                 )
             )
             if existing is not None:
@@ -118,6 +134,8 @@ class DocumentService:
                     artifact_id=artifact.artifact_id,
                     parser_name=parser.name,
                     parser_version=parser.version,
+                    parse_contract_version=parser.parse_contract_version,
+                    document_parse_key=parse_key,
                     started_at=started_at,
                     completed_at=self._clock.now(),
                     outcome="FAILED",
@@ -140,6 +158,7 @@ class DocumentService:
                 artifact.content_sha256,
                 parser.name,
                 parser.version,
+                parser.parse_contract_version,
             )
             digest = sha256(text_bytes).hexdigest()
             try:
@@ -168,6 +187,8 @@ class DocumentService:
                 extracted_text_uri=f"s3://{stored.bucket}/{stored.key}",
                 parser_name=parser.name,
                 parser_version=parser.version,
+                parse_contract_version=parser.parse_contract_version,
+                document_parse_key=parse_key,
                 parse_confidence=None,
                 created_at=created_at,
             )
@@ -186,6 +207,8 @@ class DocumentService:
                 artifact_id=artifact.artifact_id,
                 parser_name=parser.name,
                 parser_version=parser.version,
+                parse_contract_version=parser.parse_contract_version,
+                document_parse_key=parse_key,
                 started_at=started_at,
                 completed_at=self._clock.now(),
                 outcome=outcome,
@@ -302,6 +325,8 @@ class DocumentService:
             artifact_id=attempt.artifact_id,
             parser_name=attempt.parser_name,
             parser_version=attempt.parser_version,
+            parse_contract_version=attempt.parse_contract_version,
+            document_parse_key=attempt.document_parse_key,
             outcome=attempt.outcome,
             document_id=attempt.document_id,
             error_code=attempt.error_code,

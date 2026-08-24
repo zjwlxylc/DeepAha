@@ -11,10 +11,12 @@ from sqlalchemy.orm import Session
 
 from deepaha.artifacts.models import RawArtifact
 from deepaha.documents.models import Document, EvidenceRef
+from deepaha.documents.parser import LEGACY_PARSE_CONTRACT_VERSION
 from deepaha.eligibility.models import EligibilityResultModel
 from deepaha.evaluation.models import EvaluationCaseResultModel, EvaluationRunModel
 from deepaha.matching.models import MatchSnapshotModel
 from deepaha.opportunities.models import Opportunity, OpportunityVersion
+from deepaha.p9b.hashing import document_parse_key
 from deepaha.profiles.models import ProfileSnapshotModel
 from deepaha.rules.models import RuleEvidenceModel, RuleModel, RuleSetModel
 from deepaha.sources.models import Source
@@ -76,6 +78,14 @@ def persist_phase3_inputs(
         extracted_text_uri=None,
         parser_name="phase4_synthetic",
         parser_version="0.4.0",
+        parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+        document_parse_key=document_parse_key(
+            artifact_id=artifact.artifact_id,
+            artifact_sha256=artifact.content_sha256,
+            parser_name="phase4_synthetic",
+            parser_version="0.4.0",
+            parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+        ),
         parse_confidence=None,
         created_at=NOW,
     )

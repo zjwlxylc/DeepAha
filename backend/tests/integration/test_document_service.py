@@ -47,10 +47,12 @@ class FakeParser:
         self,
         *,
         version: str = "0.2.0",
+        parse_contract_version: str = "phase2-locator-contract-v0.2.0",
         parsed: ParsedDocument | None = None,
         error: ExpectedParseError | None = None,
     ) -> None:
         self.version = version
+        self.parse_contract_version = parse_contract_version
         self.parsed = parsed or make_parsed_document()
         self.error = error
         self.calls = 0
@@ -166,7 +168,12 @@ def test_success_persists_derived_text_document_evidence_and_attempt(
     assert result.outcome == "SUCCEEDED"
     assert result.document_id is not None
     assert result.error_code is None
-    derived_key = build_derived_text_key(raw_sha, parser.name, parser.version)
+    derived_key = build_derived_text_key(
+        raw_sha,
+        parser.name,
+        parser.version,
+        parser.parse_contract_version,
+    )
     assert result.extracted_text_uri == f"s3://deepaha-raw/{derived_key}"
     assert object_store.get_bytes(key=derived_key) == NORMALIZED_TEXT.encode()
     assert object_store.get_bytes(key=raw_key) == RAW_CONTENT
@@ -177,6 +184,10 @@ def test_success_persists_derived_text_document_evidence_and_attempt(
         assert session.scalar(select(func.count()).select_from(Document)) == 1
         assert session.scalar(select(func.count()).select_from(EvidenceRef)) == 1
         assert session.scalar(select(func.count()).select_from(ParseAttempt)) == 1
+        document = session.get(Document, result.document_id)
+        assert document is not None
+        assert document.parse_contract_version == parser.parse_contract_version
+        assert document.document_parse_key is not None
         evidence = session.scalar(select(EvidenceRef))
         assert evidence is not None
         assert evidence.locator_schema_version == "0.2.0"
@@ -224,6 +235,36 @@ def test_new_parser_version_creates_new_document(
         assert session.scalar(select(func.count()).select_from(ParseAttempt)) == 2
 
 
+def test_new_parse_contract_version_creates_new_immutable_document(
+    owned_session_factory: sessionmaker[Session], object_store: S3ObjectStore
+) -> None:
+    artifact_id, _, _ = create_artifact(owned_session_factory, object_store)
+
+    first = service_for(
+        owned_session_factory,
+        object_store,
+        FakeParser(parse_contract_version="phase2-locator-contract-v0.2.0"),
+    ).parse(ParseDocumentCommand(artifact_id=artifact_id))
+    second = service_for(
+        owned_session_factory,
+        object_store,
+        FakeParser(parse_contract_version="p9b-document-block-contract-v0.8.0"),
+    ).parse(ParseDocumentCommand(artifact_id=artifact_id))
+
+    assert first.document_id != second.document_id
+    with owned_session_factory() as session:
+        documents = tuple(session.scalars(select(Document).order_by(Document.document_id)))
+        attempts = tuple(
+            session.scalars(select(ParseAttempt).order_by(ParseAttempt.parse_attempt_id))
+        )
+        assert len(documents) == len(attempts) == 2
+        assert {item.parse_contract_version for item in documents} == {
+            "phase2-locator-contract-v0.2.0",
+            "p9b-document-block-contract-v0.8.0",
+        }
+        assert len({item.document_parse_key for item in documents}) == 2
+
+
 def test_expected_failure_persists_failed_attempt_without_document(
     owned_session_factory: sessionmaker[Session], object_store: S3ObjectStore
 ) -> None:
@@ -264,7 +305,12 @@ def test_conflicting_derived_bytes_never_overwrite(
 ) -> None:
     artifact_id, _, raw_sha = create_artifact(owned_session_factory, object_store)
     parser = FakeParser(version="0.2.conflict")
-    derived_key = build_derived_text_key(raw_sha, parser.name, parser.version)
+    derived_key = build_derived_text_key(
+        raw_sha,
+        parser.name,
+        parser.version,
+        parser.parse_contract_version,
+    )
     conflicting = b"different derived bytes"
     object_store.put_bytes_if_absent(
         key=derived_key,

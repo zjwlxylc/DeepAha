@@ -34,6 +34,15 @@ class RawArtifact(Base):
         ),
         UniqueConstraint("source_id", "content_sha256"),
         UniqueConstraint("artifact_id", "source_id"),
+        UniqueConstraint(
+            "artifact_id",
+            "source_id",
+            "content_sha256",
+            "byte_size",
+            "storage_bucket",
+            "object_key",
+            name="uq_raw_artifacts_p9b_provenance_binding",
+        ),
     )
 
     artifact_id: Mapped[UUID] = mapped_column(

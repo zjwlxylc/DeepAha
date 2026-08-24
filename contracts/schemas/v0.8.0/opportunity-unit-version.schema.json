@@ -1,0 +1,113 @@
+{
+  "$defs": {
+    "OpportunityUnitVersionStatus": {
+      "enum": [
+        "ACTIVE",
+        "SUPERSEDED",
+        "SUPERSEDED_BY_SEGMENTATION",
+        "MERGED",
+        "CANCELLED",
+        "WITHDRAWN"
+      ],
+      "title": "OpportunityUnitVersionStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "canonical_label": {
+      "minLength": 1,
+      "title": "Canonical Label",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "effective_from": {
+      "format": "date-time",
+      "title": "Effective From",
+      "type": "string"
+    },
+    "effective_to": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Effective To"
+    },
+    "identity_fingerprint": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Identity Fingerprint",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_unit_id": {
+      "format": "uuid",
+      "title": "Opportunity Unit Id",
+      "type": "string"
+    },
+    "opportunity_unit_version_id": {
+      "format": "uuid",
+      "title": "Opportunity Unit Version Id",
+      "type": "string"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "source_bundle_revision_id": {
+      "format": "uuid",
+      "title": "Source Bundle Revision Id",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/OpportunityUnitVersionStatus"
+    },
+    "supersedes_version_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Supersedes Version Id"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "opportunity_unit_version_id",
+    "opportunity_unit_id",
+    "opportunity_id",
+    "opportunity_version",
+    "version",
+    "source_bundle_revision_id",
+    "effective_from",
+    "effective_to",
+    "status",
+    "canonical_label",
+    "identity_fingerprint",
+    "supersedes_version_id",
+    "created_at"
+  ],
+  "title": "OpportunityUnitVersionSchemaV08",
+  "type": "object"
+}

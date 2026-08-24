@@ -1,0 +1,83 @@
+import json
+import re
+from enum import StrEnum
+from hashlib import sha256
+from uuid import UUID
+
+HASH_CONTRACT_VERSION = "p9b-canonical-json-sha256-v1"
+_SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
+
+
+class HashDomain(StrEnum):
+    DOCUMENT_PARSE_KEY = "document_parse_key"
+    CANONICAL_BUNDLE_HASH = "canonical_bundle_hash"
+    SPLIT_MANIFEST_HASH = "split_manifest_hash"
+    MEMBER_PROVENANCE_HASH = "member_provenance_hash"
+
+
+def canonical_json_bytes(payload: object) -> bytes:
+    return json.dumps(
+        payload,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode("utf-8")
+
+
+def canonical_hash(domain: HashDomain, payload: object) -> str:
+    separator = f"deepaha:p9b:{domain.value}:{HASH_CONTRACT_VERSION}\0".encode()
+    return sha256(separator + canonical_json_bytes(payload)).hexdigest()
+
+
+def document_parse_key(
+    *,
+    artifact_id: UUID,
+    artifact_sha256: str,
+    parser_name: str,
+    parser_version: str,
+    parse_contract_version: str,
+) -> str:
+    if not _SHA256_PATTERN.fullmatch(artifact_sha256):
+        raise ValueError("artifact_sha256 must be lowercase SHA-256")
+    for label, value in (
+        ("parser_name", parser_name),
+        ("parser_version", parser_version),
+        ("parse_contract_version", parse_contract_version),
+    ):
+        if not value.strip():
+            raise ValueError(f"{label} must not be empty")
+    return canonical_hash(
+        HashDomain.DOCUMENT_PARSE_KEY,
+        {
+            "artifact_id": str(artifact_id),
+            "artifact_sha256": artifact_sha256,
+            "parse_contract_version": parse_contract_version,
+            "parser_name": parser_name,
+            "parser_version": parser_version,
+        },
+    )
+
+
+def canonical_bundle_hash(payload: object) -> str:
+    return canonical_hash(HashDomain.CANONICAL_BUNDLE_HASH, payload)
+
+
+def split_manifest_hash(payload: object) -> str:
+    return canonical_hash(HashDomain.SPLIT_MANIFEST_HASH, payload)
+
+
+def member_provenance_hash(payload: object) -> str:
+    return canonical_hash(HashDomain.MEMBER_PROVENANCE_HASH, payload)
+
+
+__all__ = [
+    "HASH_CONTRACT_VERSION",
+    "HashDomain",
+    "canonical_bundle_hash",
+    "canonical_hash",
+    "canonical_json_bytes",
+    "document_parse_key",
+    "member_provenance_hash",
+    "split_manifest_hash",
+]

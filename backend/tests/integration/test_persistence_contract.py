@@ -17,7 +17,9 @@ from deepaha.contracts.phase1 import (
 from deepaha.core.settings import Settings
 from deepaha.db.session import get_engine
 from deepaha.documents.models import Document, EvidenceRef
+from deepaha.documents.parser import LEGACY_PARSE_CONTRACT_VERSION
 from deepaha.opportunities.models import Opportunity
+from deepaha.p9b.hashing import document_parse_key
 from deepaha.sources.models import Source
 
 pytestmark = pytest.mark.integration
@@ -100,7 +102,10 @@ def test_schema_fields_map_explicitly_to_persistence_columns(migrated_engine: En
     }
 
     assert columns["sources"] == set(SourceSchema.model_fields)
-    assert columns["documents"] == set(DocumentSchema.model_fields)
+    assert columns["documents"] == set(DocumentSchema.model_fields) | {
+        "parse_contract_version",
+        "document_parse_key",
+    }
     assert columns["opportunities"] == set(OpportunitySchema.model_fields)
     assert columns["raw_artifacts"] == (set(RawArtifactSchema.model_fields) - {"storage_uri"}) | {
         "storage_bucket",
@@ -192,6 +197,14 @@ def test_evidence_ref_rejects_document_artifact_mismatch(session: Session) -> No
         extracted_text_uri=None,
         parser_name="phase1_fixture_manifest",
         parser_version="0.1.0",
+        parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+        document_parse_key=document_parse_key(
+            artifact_id=first_artifact.artifact_id,
+            artifact_sha256=first_artifact.content_sha256,
+            parser_name="phase1_fixture_manifest",
+            parser_version="0.1.0",
+            parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+        ),
         parse_confidence=None,
         created_at=datetime(2026, 8, 21, 10, 0, tzinfo=UTC),
     )

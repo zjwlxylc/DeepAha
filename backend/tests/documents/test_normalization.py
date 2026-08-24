@@ -20,18 +20,46 @@ def test_normalize_text_uses_unicode_nfc_without_rewriting_words() -> None:
 def test_derived_key_never_uses_raw_namespace() -> None:
     digest = "a" * 64
 
-    key = build_derived_text_key(digest, "html_lxml", "0.2.0")
+    key = build_derived_text_key(
+        digest,
+        "html_lxml",
+        "0.2.0",
+        "phase2-locator-contract-v0.2.0",
+    )
 
-    assert key == f"derived/documents/{digest}/html_lxml/0.2.0/text.txt"
+    assert key == (
+        f"derived/documents/{digest}/html_lxml/0.2.0/phase2-locator-contract-v0.2.0/text.txt"
+    )
     assert not key.startswith("raw/")
 
 
 @pytest.mark.parametrize("component", ["HTML", "html/lxml", "../html", "html lxml", ""])
 def test_derived_key_rejects_unsafe_parser_components(component: str) -> None:
     with pytest.raises(ValueError, match="parser name and version"):
-        build_derived_text_key(sha256(b"raw").hexdigest(), component, "0.2.0")
+        build_derived_text_key(
+            sha256(b"raw").hexdigest(),
+            component,
+            "0.2.0",
+            "phase2-locator-contract-v0.2.0",
+        )
+
+
+@pytest.mark.parametrize("contract", ["Phase 2", "../contract", "", "合同"])
+def test_derived_key_rejects_unsafe_parse_contract_component(contract: str) -> None:
+    with pytest.raises(ValueError, match="parser and contract components"):
+        build_derived_text_key(
+            sha256(b"raw").hexdigest(),
+            "html_lxml",
+            "0.2.0",
+            contract,
+        )
 
 
 def test_derived_key_requires_sha256() -> None:
     with pytest.raises(ValueError, match="artifact SHA-256"):
-        build_derived_text_key("not-a-digest", "html_lxml", "0.2.0")
+        build_derived_text_key(
+            "not-a-digest",
+            "html_lxml",
+            "0.2.0",
+            "phase2-locator-contract-v0.2.0",
+        )

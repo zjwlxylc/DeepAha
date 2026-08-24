@@ -14,6 +14,7 @@ from deepaha.contracts.phase1 import OpportunityStatus, SourceTier
 from deepaha.contracts.phase2 import OpportunityTypeV02
 from deepaha.contracts.phase3 import ApplicationWindowSchema, OpportunityDocumentRole
 from deepaha.documents.models import Document, EvidenceRef
+from deepaha.documents.parser import LEGACY_PARSE_CONTRACT_VERSION
 from deepaha.opportunities.models import (
     DocumentOpportunityLink,
     Opportunity,
@@ -24,6 +25,7 @@ from deepaha.opportunities.models import (
 )
 from deepaha.opportunities.service import OpportunityResolutionService, ResolutionResult
 from deepaha.opportunities.types import OpportunityPatch, ResolutionDocument
+from deepaha.p9b.hashing import document_parse_key
 from deepaha.sources.models import Source
 
 pytestmark = pytest.mark.integration
@@ -130,6 +132,14 @@ def seed_fixture_documents(session_factory: sessionmaker[Session]) -> None:
                 extracted_text_uri=None,
                 parser_name="phase3_synthetic",
                 parser_version="0.3.0",
+                parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+                document_parse_key=document_parse_key(
+                    artifact_id=artifact_id,
+                    artifact_sha256=content_hash,
+                    parser_name="phase3_synthetic",
+                    parser_version="0.3.0",
+                    parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+                ),
                 parse_confidence=None,
                 created_at=CLOCK_TIME,
             )

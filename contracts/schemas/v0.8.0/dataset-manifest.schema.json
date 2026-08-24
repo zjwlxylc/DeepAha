@@ -1,0 +1,230 @@
+{
+  "$defs": {
+    "AnswerAccessClass": {
+      "enum": [
+        "ASSISTED_CALIBRATION",
+        "DEVELOPMENT_VISIBLE",
+        "VALIDATION_BLIND",
+        "LOCKED_BLIND"
+      ],
+      "title": "AnswerAccessClass",
+      "type": "string"
+    },
+    "DatasetManifestEntrySchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "answer_access_class": {
+          "$ref": "#/$defs/AnswerAccessClass"
+        },
+        "atomic_group_id": {
+          "minLength": 1,
+          "title": "Atomic Group Id",
+          "type": "string"
+        },
+        "canonical_bundle_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Canonical Bundle Hash",
+          "type": "string"
+        },
+        "entry_id": {
+          "minLength": 1,
+          "title": "Entry Id",
+          "type": "string"
+        },
+        "evaluation_as_of": {
+          "format": "date-time",
+          "title": "Evaluation As Of",
+          "type": "string"
+        },
+        "near_duplicate_cluster_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Near Duplicate Cluster Ids",
+          "type": "array"
+        },
+        "opportunity_id": {
+          "format": "uuid",
+          "title": "Opportunity Id",
+          "type": "string"
+        },
+        "opportunity_unit_id": {
+          "format": "uuid",
+          "title": "Opportunity Unit Id",
+          "type": "string"
+        },
+        "opportunity_unit_version_id": {
+          "format": "uuid",
+          "title": "Opportunity Unit Version Id",
+          "type": "string"
+        },
+        "opportunity_version": {
+          "minimum": 1,
+          "title": "Opportunity Version",
+          "type": "integer"
+        },
+        "partition": {
+          "$ref": "#/$defs/DatasetPartition"
+        },
+        "source_bundle_id": {
+          "format": "uuid",
+          "title": "Source Bundle Id",
+          "type": "string"
+        },
+        "source_bundle_revision_id": {
+          "format": "uuid",
+          "title": "Source Bundle Revision Id",
+          "type": "string"
+        },
+        "unit_lineage_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unit Lineage Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "entry_id",
+        "partition",
+        "opportunity_id",
+        "opportunity_version",
+        "opportunity_unit_id",
+        "opportunity_unit_version_id",
+        "source_bundle_id",
+        "source_bundle_revision_id",
+        "canonical_bundle_hash",
+        "atomic_group_id",
+        "near_duplicate_cluster_ids",
+        "unit_lineage_ids",
+        "evaluation_as_of",
+        "answer_access_class"
+      ],
+      "title": "DatasetManifestEntrySchemaV08",
+      "type": "object"
+    },
+    "DatasetPartition": {
+      "enum": [
+        "CALIBRATION",
+        "DEVELOPMENT",
+        "VALIDATION",
+        "LOCKED_ACCEPTANCE"
+      ],
+      "title": "DatasetPartition",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actual_entry_count": {
+      "exclusiveMinimum": 0,
+      "title": "Actual Entry Count",
+      "type": "integer"
+    },
+    "answer_access_class": {
+      "$ref": "#/$defs/AnswerAccessClass"
+    },
+    "atomic_group_count": {
+      "exclusiveMinimum": 0,
+      "title": "Atomic Group Count",
+      "type": "integer"
+    },
+    "entries": {
+      "items": {
+        "$ref": "#/$defs/DatasetManifestEntrySchemaV08"
+      },
+      "minItems": 1,
+      "title": "Entries",
+      "type": "array"
+    },
+    "evaluation_cutoff": {
+      "format": "date-time",
+      "title": "Evaluation Cutoff",
+      "type": "string"
+    },
+    "expected_entry_count": {
+      "exclusiveMinimum": 0,
+      "title": "Expected Entry Count",
+      "type": "integer"
+    },
+    "frozen_at": {
+      "format": "date-time",
+      "title": "Frozen At",
+      "type": "string"
+    },
+    "frozen_by": {
+      "minLength": 1,
+      "title": "Frozen By",
+      "type": "string"
+    },
+    "invalidated_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Invalidated At"
+    },
+    "invalidation_reason": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Invalidation Reason"
+    },
+    "manifest_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Manifest Hash",
+      "type": "string"
+    },
+    "partition": {
+      "$ref": "#/$defs/DatasetPartition"
+    },
+    "split_manifest_version": {
+      "minLength": 1,
+      "title": "Split Manifest Version",
+      "type": "string"
+    },
+    "successor_manifest_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Successor Manifest Hash"
+    }
+  },
+  "required": [
+    "split_manifest_version",
+    "partition",
+    "expected_entry_count",
+    "actual_entry_count",
+    "atomic_group_count",
+    "entries",
+    "evaluation_cutoff",
+    "answer_access_class",
+    "frozen_by",
+    "frozen_at",
+    "invalidated_at",
+    "invalidation_reason",
+    "successor_manifest_hash",
+    "manifest_hash"
+  ],
+  "title": "DatasetManifestSchemaV08",
+  "type": "object"
+}

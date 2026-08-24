@@ -65,6 +65,7 @@ class _RejectExternalResolver(etree.Resolver):
 class LxmlHtmlParser:
     name = "html_lxml"
     version = "0.2.0"
+    parse_contract_version = "phase2-locator-contract-v0.2.0"
 
     def supports(self, media_type: str) -> bool:
         return media_type.partition(";")[0].strip().lower() == "text/html"

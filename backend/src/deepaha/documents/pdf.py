@@ -14,6 +14,7 @@ MAX_PDF_PAGES = 500
 class PypdfDocumentParser:
     name = "pdf_pypdf"
     version = "0.2.0"
+    parse_contract_version = "phase2-locator-contract-v0.2.0"
 
     def supports(self, media_type: str) -> bool:
         return media_type.partition(";")[0].strip().lower() == "application/pdf"

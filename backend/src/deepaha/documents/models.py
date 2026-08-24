@@ -28,8 +28,27 @@ class Document(Base):
             "parse_confidence is null or parse_confidence between 0 and 1",
             name="parse_confidence_range",
         ),
-        UniqueConstraint("artifact_id", "parser_name", "parser_version"),
+        CheckConstraint(
+            "document_parse_key ~ '^[0-9a-f]{64}$'",
+            name="document_parse_key_format",
+        ),
+        UniqueConstraint(
+            "artifact_id",
+            "parser_name",
+            "parser_version",
+            "parse_contract_version",
+            name="uq_documents_parse_identity",
+        ),
         UniqueConstraint("document_id", "artifact_id"),
+        UniqueConstraint(
+            "document_id",
+            "artifact_id",
+            "document_parse_key",
+            "parser_name",
+            "parser_version",
+            "parse_contract_version",
+            name="uq_documents_p9b_parse_binding",
+        ),
     )
 
     document_id: Mapped[UUID] = mapped_column(
@@ -47,6 +66,8 @@ class Document(Base):
     extracted_text_uri: Mapped[str | None] = mapped_column(Text)
     parser_name: Mapped[str] = mapped_column(String(128))
     parser_version: Mapped[str] = mapped_column(String(64))
+    parse_contract_version: Mapped[str] = mapped_column(String(64))
+    document_parse_key: Mapped[str] = mapped_column(String(64))
     parse_confidence: Mapped[Decimal | None] = mapped_column(Numeric(6, 5))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
@@ -157,12 +178,22 @@ class ParseAttempt(Base):
             "(outcome = 'FAILED' and document_id is null and error_code is not null)",
             name="outcome_state",
         ),
+        CheckConstraint(
+            "document_parse_key ~ '^[0-9a-f]{64}$'",
+            name="document_parse_key_format",
+        ),
         ForeignKeyConstraint(
             ["document_id", "artifact_id"],
             ["documents.document_id", "documents.artifact_id"],
             ondelete="RESTRICT",
         ),
-        UniqueConstraint("artifact_id", "parser_name", "parser_version"),
+        UniqueConstraint(
+            "artifact_id",
+            "parser_name",
+            "parser_version",
+            "parse_contract_version",
+            name="uq_parse_attempts_parse_identity",
+        ),
     )
 
     parse_attempt_id: Mapped[UUID] = mapped_column(
@@ -176,6 +207,8 @@ class ParseAttempt(Base):
     )
     parser_name: Mapped[str] = mapped_column(String(128))
     parser_version: Mapped[str] = mapped_column(String(64))
+    parse_contract_version: Mapped[str] = mapped_column(String(64))
+    document_parse_key: Mapped[str] = mapped_column(String(64))
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     outcome: Mapped[str] = mapped_column(String(16))

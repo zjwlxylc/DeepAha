@@ -1,0 +1,92 @@
+{
+  "$defs": {
+    "OpportunityUnitAliasKind": {
+      "enum": [
+        "CURRENT",
+        "HISTORICAL",
+        "OFFICIAL_CODE",
+        "CANONICAL_DERIVED"
+      ],
+      "title": "OpportunityUnitAliasKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "alias_id": {
+      "format": "uuid",
+      "title": "Alias Id",
+      "type": "string"
+    },
+    "alias_kind": {
+      "$ref": "#/$defs/OpportunityUnitAliasKind"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "display_alias_key": {
+      "minLength": 1,
+      "title": "Display Alias Key",
+      "type": "string"
+    },
+    "evidence_ref_id": {
+      "format": "uuid",
+      "title": "Evidence Ref Id",
+      "type": "string"
+    },
+    "normalized_alias_key": {
+      "minLength": 1,
+      "title": "Normalized Alias Key",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_unit_id": {
+      "format": "uuid",
+      "title": "Opportunity Unit Id",
+      "type": "string"
+    },
+    "source_bundle_revision_id": {
+      "format": "uuid",
+      "title": "Source Bundle Revision Id",
+      "type": "string"
+    },
+    "valid_from": {
+      "format": "date-time",
+      "title": "Valid From",
+      "type": "string"
+    },
+    "valid_to": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Valid To"
+    }
+  },
+  "required": [
+    "alias_id",
+    "opportunity_id",
+    "opportunity_unit_id",
+    "normalized_alias_key",
+    "display_alias_key",
+    "alias_kind",
+    "valid_from",
+    "valid_to",
+    "evidence_ref_id",
+    "source_bundle_revision_id",
+    "created_at"
+  ],
+  "title": "OpportunityUnitAliasSchemaV08",
+  "type": "object"
+}

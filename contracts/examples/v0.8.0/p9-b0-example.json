@@ -1,0 +1,23 @@
+{
+  "document_parse_identity": {
+    "artifact_id": "019c0000-0000-7000-8000-000000000111",
+    "artifact_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "document_parse_key": "76a7a2cd02753d93e0d459a02ff26e73f0d775ad97c28c781ead845b7dd0125d",
+    "parse_contract_version": "phase2-locator-contract-v0.2.0",
+    "parser_name": "deepaha-html",
+    "parser_version": "1.0.0"
+  },
+  "opportunity_unit": {
+    "created_at": "2026-08-24T00:00:00Z",
+    "current_unit_key": "A001",
+    "current_version_id": "019c0000-0000-7000-8000-000000000114",
+    "lifecycle_status": "ACTIVE",
+    "normalized_current_unit_key": "a001",
+    "opportunity_id": "019c0000-0000-7000-8000-000000000113",
+    "opportunity_unit_id": "019c0000-0000-7000-8000-000000000112",
+    "opportunity_version": 4,
+    "public_id": "unit_00000000000000000000000000000002",
+    "retired_at": null,
+    "unit_kind": "POSITION"
+  }
+}

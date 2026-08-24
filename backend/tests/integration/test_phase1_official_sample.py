@@ -15,7 +15,9 @@ from deepaha.artifacts.s3 import S3ObjectStore
 from deepaha.artifacts.service import ImportRawArtifactCommand, import_raw_artifact
 from deepaha.core.settings import Settings
 from deepaha.documents.models import Document, EvidenceRef
+from deepaha.documents.parser import LEGACY_PARSE_CONTRACT_VERSION
 from deepaha.opportunities.models import Opportunity
+from deepaha.p9b.hashing import document_parse_key
 from deepaha.sources.models import Source
 
 FIXTURES = Path(__file__).parents[1] / "fixtures" / "official"
@@ -128,6 +130,14 @@ def test_official_sample_round_trips_raw_bytes_and_separates_domain_entities(
         extracted_text_uri=None,
         parser_name="phase1_fixture_manifest",
         parser_version="0.1.0",
+        parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+        document_parse_key=document_parse_key(
+            artifact_id=first.artifact.artifact_id,
+            artifact_sha256=manifest.content_sha256,
+            parser_name="phase1_fixture_manifest",
+            parser_version="0.1.0",
+            parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+        ),
         parse_confidence=None,
         created_at=manifest.retrieved_at,
     )

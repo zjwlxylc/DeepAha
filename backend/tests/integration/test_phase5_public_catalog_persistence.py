@@ -11,7 +11,9 @@ from sqlalchemy.orm import Session
 
 from deepaha.artifacts.models import RawArtifact
 from deepaha.documents.models import Document, EvidenceRef
+from deepaha.documents.parser import LEGACY_PARSE_CONTRACT_VERSION
 from deepaha.opportunities.models import Opportunity, OpportunityVersion
+from deepaha.p9b.hashing import document_parse_key
 from deepaha.sources.models import Source
 
 pytestmark = pytest.mark.integration
@@ -58,6 +60,14 @@ def persist_public_opportunity(session: Session) -> Opportunity:
         extracted_text_uri=None,
         parser_name="phase5_synthetic",
         parser_version="0.5.0",
+        parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+        document_parse_key=document_parse_key(
+            artifact_id=artifact.artifact_id,
+            artifact_sha256=artifact.content_sha256,
+            parser_name="phase5_synthetic",
+            parser_version="0.5.0",
+            parse_contract_version=LEGACY_PARSE_CONTRACT_VERSION,
+        ),
         parse_confidence=None,
         created_at=NOW,
     )

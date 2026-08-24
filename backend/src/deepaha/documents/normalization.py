@@ -24,6 +24,7 @@ def build_derived_text_key(
     artifact_sha256: str,
     parser_name: str,
     parser_version: str,
+    parse_contract_version: str,
 ) -> str:
     if _SHA256_PATTERN.fullmatch(artifact_sha256) is None:
         raise ValueError("artifact SHA-256 must be 64 lowercase hexadecimal characters")
@@ -32,4 +33,9 @@ def build_derived_text_key(
         for component in (parser_name, parser_version)
     ):
         raise ValueError("parser name and version must contain only [a-z0-9._-]")
-    return f"derived/documents/{artifact_sha256}/{parser_name}/{parser_version}/text.txt"
+    if _PARSER_COMPONENT_PATTERN.fullmatch(parse_contract_version) is None:
+        raise ValueError("parser and contract components must contain only [a-z0-9._-]")
+    return (
+        f"derived/documents/{artifact_sha256}/{parser_name}/{parser_version}/"
+        f"{parse_contract_version}/text.txt"
+    )

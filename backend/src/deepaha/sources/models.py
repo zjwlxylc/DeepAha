@@ -169,6 +169,16 @@ class CaptureObservation(Base):
             "artifact_id",
             name="uq_capture_observations_acquisition_binding",
         ),
+        UniqueConstraint(
+            "observation_id",
+            "endpoint_id",
+            "source_id",
+            "artifact_id",
+            "policy_version",
+            "collector_name",
+            "collector_version",
+            name="uq_capture_observations_p9b_provenance_binding",
+        ),
         UniqueConstraint("collection_run_id", "attempt_number"),
     )
 

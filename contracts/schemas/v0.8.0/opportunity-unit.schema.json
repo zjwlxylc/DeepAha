@@ -1,0 +1,107 @@
+{
+  "$defs": {
+    "OpportunityUnitKind": {
+      "enum": [
+        "POSITION",
+        "TRACK",
+        "PROGRAM_TIER",
+        "REGION_VARIANT",
+        "DEFAULT_SINGLETON"
+      ],
+      "title": "OpportunityUnitKind",
+      "type": "string"
+    },
+    "OpportunityUnitLifecycleStatus": {
+      "enum": [
+        "ACTIVE",
+        "RETIRED",
+        "IDENTITY_COLLISION"
+      ],
+      "title": "OpportunityUnitLifecycleStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "current_unit_key": {
+      "minLength": 1,
+      "title": "Current Unit Key",
+      "type": "string"
+    },
+    "current_version_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Current Version Id"
+    },
+    "lifecycle_status": {
+      "$ref": "#/$defs/OpportunityUnitLifecycleStatus"
+    },
+    "normalized_current_unit_key": {
+      "minLength": 1,
+      "title": "Normalized Current Unit Key",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_unit_id": {
+      "format": "uuid",
+      "title": "Opportunity Unit Id",
+      "type": "string"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "public_id": {
+      "pattern": "^unit_[0-9a-f]{32}$",
+      "title": "Public Id",
+      "type": "string"
+    },
+    "retired_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Retired At"
+    },
+    "unit_kind": {
+      "$ref": "#/$defs/OpportunityUnitKind"
+    }
+  },
+  "required": [
+    "opportunity_unit_id",
+    "public_id",
+    "opportunity_id",
+    "opportunity_version",
+    "current_unit_key",
+    "normalized_current_unit_key",
+    "unit_kind",
+    "lifecycle_status",
+    "current_version_id",
+    "created_at",
+    "retired_at"
+  ],
+  "title": "OpportunityUnitSchemaV08",
+  "type": "object"
+}

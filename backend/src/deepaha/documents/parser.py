@@ -6,6 +6,7 @@ from typing import Protocol
 from deepaha.contracts.phase2 import EvidenceLocatorV02
 
 _STABLE_CODE_PATTERN = re.compile(r"[A-Z][A-Z0-9_]*")
+LEGACY_PARSE_CONTRACT_VERSION = "phase2-locator-contract-v0.2.0"
 
 
 @dataclass(frozen=True, slots=True)
@@ -21,6 +22,7 @@ class ParsedDocument:
 class DocumentParser(Protocol):
     name: str
     version: str
+    parse_contract_version: str
 
     def supports(self, media_type: str) -> bool: ...
 

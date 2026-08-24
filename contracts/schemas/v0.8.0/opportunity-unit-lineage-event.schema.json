@@ -1,0 +1,128 @@
+{
+  "$defs": {
+    "OpportunityUnitLineageEventType": {
+      "enum": [
+        "REKEY",
+        "SPLIT",
+        "MERGE",
+        "REVERSAL",
+        "CANCEL",
+        "REACTIVATE"
+      ],
+      "title": "OpportunityUnitLineageEventType",
+      "type": "string"
+    },
+    "OpportunityUnitLineageMemberRole": {
+      "enum": [
+        "SOURCE",
+        "TARGET"
+      ],
+      "title": "OpportunityUnitLineageMemberRole",
+      "type": "string"
+    },
+    "OpportunityUnitLineageMemberSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "member_role": {
+          "$ref": "#/$defs/OpportunityUnitLineageMemberRole"
+        },
+        "opportunity_unit_id": {
+          "format": "uuid",
+          "title": "Opportunity Unit Id",
+          "type": "string"
+        },
+        "opportunity_unit_version_id": {
+          "format": "uuid",
+          "title": "Opportunity Unit Version Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "member_role",
+        "opportunity_unit_id",
+        "opportunity_unit_version_id"
+      ],
+      "title": "OpportunityUnitLineageMemberSchemaV08",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actor_identity": {
+      "minLength": 1,
+      "title": "Actor Identity",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "event_type": {
+      "$ref": "#/$defs/OpportunityUnitLineageEventType"
+    },
+    "evidence_ref_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Evidence Ref Ids",
+      "type": "array"
+    },
+    "lineage_event_id": {
+      "format": "uuid",
+      "title": "Lineage Event Id",
+      "type": "string"
+    },
+    "members": {
+      "items": {
+        "$ref": "#/$defs/OpportunityUnitLineageMemberSchemaV08"
+      },
+      "minItems": 2,
+      "title": "Members",
+      "type": "array"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "reason_code": {
+      "minLength": 1,
+      "title": "Reason Code",
+      "type": "string"
+    },
+    "reverses_event_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Reverses Event Id"
+    },
+    "source_bundle_revision_id": {
+      "format": "uuid",
+      "title": "Source Bundle Revision Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "lineage_event_id",
+    "opportunity_id",
+    "event_type",
+    "reverses_event_id",
+    "source_bundle_revision_id",
+    "evidence_ref_ids",
+    "reason_code",
+    "actor_identity",
+    "members",
+    "created_at"
+  ],
+  "title": "OpportunityUnitLineageEventSchemaV08",
+  "type": "object"
+}
