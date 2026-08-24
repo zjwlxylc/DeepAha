@@ -1,0 +1,225 @@
+{
+  "$defs": {
+    "ExtractionTargetScope": {
+      "enum": [
+        "OPPORTUNITY",
+        "UNIT"
+      ],
+      "title": "ExtractionTargetScope",
+      "type": "string"
+    },
+    "JsonValue": {},
+    "ProposedRulePayloadSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "field": {
+          "$ref": "#/$defs/RuleField"
+        },
+        "operator": {
+          "$ref": "#/$defs/RuleOperator"
+        },
+        "reason_template": {
+          "minLength": 1,
+          "title": "Reason Template",
+          "type": "string"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value_type": {
+          "$ref": "#/$defs/RuleValueType"
+        }
+      },
+      "required": [
+        "code",
+        "operator",
+        "field",
+        "value_type",
+        "value",
+        "required",
+        "reason_template"
+      ],
+      "title": "ProposedRulePayloadSchemaV08",
+      "type": "object"
+    },
+    "RuleCandidateStatus": {
+      "enum": [
+        "PROPOSED",
+        "APPROVED",
+        "REJECTED",
+        "SUPERSEDED"
+      ],
+      "title": "RuleCandidateStatus",
+      "type": "string"
+    },
+    "RuleField": {
+      "enum": [
+        "education_level",
+        "major_code",
+        "graduation_year",
+        "student_status",
+        "birth_date",
+        "hukou_region",
+        "residence_region",
+        "target_regions",
+        "certificates"
+      ],
+      "title": "RuleField",
+      "type": "string"
+    },
+    "RuleOperator": {
+      "enum": [
+        "EQ",
+        "NE",
+        "IN",
+        "NOT_IN",
+        "GTE",
+        "LTE",
+        "BETWEEN",
+        "CONTAINS_ANY",
+        "CONTAINS_ALL",
+        "EXISTS",
+        "NOT_EXISTS",
+        "AND",
+        "OR",
+        "NOT"
+      ],
+      "title": "RuleOperator",
+      "type": "string"
+    },
+    "RuleValueType": {
+      "enum": [
+        "STRING",
+        "INTEGER",
+        "DATE",
+        "STRING_SET",
+        "BOOLEAN"
+      ],
+      "title": "RuleValueType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "compiler_version": {
+      "minLength": 1,
+      "title": "Compiler Version",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "evidence_ref_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Evidence Ref Ids",
+      "type": "array"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_unit_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Id"
+    },
+    "opportunity_unit_version_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Version Id"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "producer_identity": {
+      "minLength": 1,
+      "title": "Producer Identity",
+      "type": "string"
+    },
+    "proposed_rule_payload": {
+      "$ref": "#/$defs/ProposedRulePayloadSchemaV08"
+    },
+    "rule_candidate_id": {
+      "format": "uuid",
+      "title": "Rule Candidate Id",
+      "type": "string"
+    },
+    "rule_type": {
+      "const": "ATOMIC_QUALIFICATION",
+      "title": "Rule Type",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/RuleCandidateStatus"
+    },
+    "target_scope": {
+      "$ref": "#/$defs/ExtractionTargetScope"
+    },
+    "verified_fact_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Verified Fact Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "rule_candidate_id",
+    "target_scope",
+    "opportunity_id",
+    "opportunity_version",
+    "opportunity_unit_id",
+    "opportunity_unit_version_id",
+    "verified_fact_ids",
+    "rule_type",
+    "proposed_rule_payload",
+    "evidence_ref_ids",
+    "compiler_version",
+    "producer_identity",
+    "status",
+    "created_at"
+  ],
+  "title": "RuleCandidateSchemaV08",
+  "type": "object"
+}

@@ -1,11 +1,19 @@
 from enum import StrEnum
 from typing import Annotated, Literal, Self
 
-from pydantic import ConfigDict, Field, StringConstraints, model_validator
+from pydantic import (
+    ConfigDict,
+    Field,
+    JsonValue,
+    StringConstraints,
+    field_validator,
+    model_validator,
+)
 
 from deepaha.contracts.common import EntityId, Instant, NonEmptyString, Sha256, VersionNumber
 from deepaha.contracts.phase1 import ContractModel
-from deepaha.p9b.hashing import document_parse_key
+from deepaha.contracts.phase4 import RuleField, RuleOperator, RuleValueType
+from deepaha.p9b.hashing import document_parse_key, extraction_input_block_set_hash
 
 
 class Phase9BContractModel(ContractModel):
@@ -105,6 +113,329 @@ class DocumentBlockType(StrEnum):
     DOCX_PARAGRAPH = "DOCX_PARAGRAPH"
     DOCX_TABLE_CELL = "DOCX_TABLE_CELL"
     OCR_TEXT_SPAN = "OCR_TEXT_SPAN"
+
+
+class ExtractionTargetScope(StrEnum):
+    OPPORTUNITY = "OPPORTUNITY"
+    UNIT = "UNIT"
+
+
+class ExtractorKind(StrEnum):
+    DETERMINISTIC = "DETERMINISTIC"
+    MODEL = "MODEL"
+    HYBRID = "HYBRID"
+
+
+class ExtractionRunStatus(StrEnum):
+    SUCCEEDED = "SUCCEEDED"
+    ABSTAINED = "ABSTAINED"
+    FAILED = "FAILED"
+
+
+class FactVerificationDecision(StrEnum):
+    APPROVE = "APPROVE"
+    REJECT = "REJECT"
+    UNKNOWN = "UNKNOWN"
+    NEEDS_ADJUDICATION = "NEEDS_ADJUDICATION"
+
+
+class VerificationMethod(StrEnum):
+    DETERMINISTIC = "DETERMINISTIC"
+    HUMAN = "HUMAN"
+    APPROVED_MAPPING = "APPROVED_MAPPING"
+
+
+class EvidenceSupportResult(StrEnum):
+    SUPPORTED = "SUPPORTED"
+    UNSUPPORTED = "UNSUPPORTED"
+    UNKNOWN = "UNKNOWN"
+
+
+class PrecedenceCheckResult(StrEnum):
+    PASSED = "PASSED"
+    FAILED = "FAILED"
+    UNKNOWN = "UNKNOWN"
+
+
+class VerifiedFactState(StrEnum):
+    KNOWN = "KNOWN"
+    UNKNOWN = "UNKNOWN"
+
+
+class VerifiedFactSetStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    SUPERSEDED = "SUPERSEDED"
+    STALE = "STALE"
+    WITHDRAWN = "WITHDRAWN"
+
+
+class RuleCandidateStatus(StrEnum):
+    PROPOSED = "PROPOSED"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    SUPERSEDED = "SUPERSEDED"
+
+
+class RuleApprovalDecisionValue(StrEnum):
+    APPROVE = "APPROVE"
+    REJECT = "REJECT"
+    NEEDS_ADJUDICATION = "NEEDS_ADJUDICATION"
+
+
+class RuleApprovalMethod(StrEnum):
+    HUMAN = "HUMAN"
+    DETERMINISTIC_POLICY = "DETERMINISTIC_POLICY"
+
+
+def _require_target_shape(
+    *,
+    target_scope: ExtractionTargetScope,
+    opportunity_unit_id: EntityId | None,
+    opportunity_unit_version_id: EntityId | None,
+    unit_segmentation_version: str | None = None,
+) -> None:
+    unit_fields_present = (
+        opportunity_unit_id is not None and opportunity_unit_version_id is not None
+    )
+    if target_scope == ExtractionTargetScope.UNIT:
+        if not unit_fields_present:
+            raise ValueError("UNIT target requires exact unit and unit-version identity")
+        if unit_segmentation_version is not None and not unit_segmentation_version.strip():
+            raise ValueError("UNIT segmentation version must not be blank")
+        return
+    if opportunity_unit_id is not None or opportunity_unit_version_id is not None:
+        raise ValueError("OPPORTUNITY target forbids unit identity")
+    if unit_segmentation_version is not None:
+        raise ValueError("OPPORTUNITY target forbids unit segmentation version")
+
+
+class ExtractionRunSchemaV08(Phase9BContractModel):
+    extraction_run_id: EntityId
+    source_bundle_revision_id: EntityId
+    target_scope: ExtractionTargetScope
+    opportunity_id: EntityId
+    opportunity_version: VersionNumber
+    opportunity_unit_id: EntityId | None
+    opportunity_unit_version_id: EntityId | None
+    unit_segmentation_version: NonEmptyString | None
+    task_spec_version: NonEmptyString
+    extractor_kind: ExtractorKind
+    component_version: NonEmptyString
+    producer_identity: NonEmptyString
+    producer_response_id: NonEmptyString | None
+    ordered_input_block_ids: list[EntityId] = Field(min_length=1)
+    input_block_set_hash: Sha256
+    evidence_binding_hash: Sha256
+    started_at: Instant
+    completed_at: Instant
+    status: ExtractionRunStatus
+
+    @model_validator(mode="after")
+    def require_exact_bindings(self) -> Self:
+        _require_target_shape(
+            target_scope=self.target_scope,
+            opportunity_unit_id=self.opportunity_unit_id,
+            opportunity_unit_version_id=self.opportunity_unit_version_id,
+            unit_segmentation_version=self.unit_segmentation_version,
+        )
+        if self.completed_at < self.started_at:
+            raise ValueError("completed_at must not precede started_at")
+        expected = extraction_input_block_set_hash(self.ordered_input_block_ids)
+        if self.input_block_set_hash != expected:
+            raise ValueError("input_block_set_hash does not match ordered input blocks")
+        if self.extractor_kind == ExtractorKind.MODEL and self.producer_response_id is None:
+            raise ValueError("MODEL extraction requires producer_response_id")
+        return self
+
+
+class ExtractionCandidateSchemaV08(Phase9BContractModel):
+    candidate_id: EntityId
+    extraction_run_id: EntityId
+    target_scope: ExtractionTargetScope
+    opportunity_id: EntityId
+    opportunity_version: VersionNumber
+    opportunity_unit_id: EntityId | None
+    opportunity_unit_version_id: EntityId | None
+    field_name: NonEmptyString
+    raw_value: JsonValue | None
+    normalized_value_candidate: JsonValue | None
+    evidence_block_ids: list[EntityId] = Field(min_length=1)
+    evidence_ref_ids: list[EntityId] = Field(min_length=1)
+    confidence: Annotated[float, Field(ge=0, le=1)] | None
+    abstained: bool
+    candidate_reason_code: NonEmptyString
+    schema_version: Literal["0.8.0"]
+    created_at: Instant
+
+    @field_validator("evidence_block_ids", "evidence_ref_ids")
+    @classmethod
+    def require_unique_evidence(cls, value: list[EntityId]) -> list[EntityId]:
+        if len(value) != len(set(value)):
+            raise ValueError("candidate evidence identities must be unique")
+        return value
+
+    @model_validator(mode="after")
+    def require_candidate_shape(self) -> Self:
+        _require_target_shape(
+            target_scope=self.target_scope,
+            opportunity_unit_id=self.opportunity_unit_id,
+            opportunity_unit_version_id=self.opportunity_unit_version_id,
+        )
+        if self.abstained:
+            if self.normalized_value_candidate is not None:
+                raise ValueError("abstained candidate forbids normalized_value_candidate")
+            if not self.candidate_reason_code.startswith("UNKNOWN_"):
+                raise ValueError("abstained candidate reason must use UNKNOWN_ prefix")
+        elif self.normalized_value_candidate is None:
+            raise ValueError("non-abstained candidate requires normalized_value_candidate")
+        if len(self.evidence_block_ids) != len(self.evidence_ref_ids):
+            raise ValueError("candidate block and EvidenceRef counts must match")
+        return self
+
+
+class FactVerificationDecisionSchemaV08(Phase9BContractModel):
+    decision_id: EntityId
+    candidate_id: EntityId
+    decision: FactVerificationDecision
+    verification_method: VerificationMethod
+    verifier_identity: NonEmptyString
+    verifier_response_id: NonEmptyString | None
+    reason_code: NonEmptyString
+    evidence_support_result: EvidenceSupportResult
+    precedence_check_result: PrecedenceCheckResult
+    decided_at: Instant
+
+    @model_validator(mode="after")
+    def require_approval_support(self) -> Self:
+        if self.decision == FactVerificationDecision.APPROVE and (
+            self.evidence_support_result != EvidenceSupportResult.SUPPORTED
+            or self.precedence_check_result != PrecedenceCheckResult.PASSED
+        ):
+            raise ValueError("APPROVE requires supported evidence and passed precedence")
+        return self
+
+
+class VerifiedFactSchemaV08(Phase9BContractModel):
+    verified_fact_id: EntityId
+    verified_fact_set_id: EntityId
+    field_name: NonEmptyString
+    fact_state: VerifiedFactState
+    normalized_value: JsonValue | None
+    raw_value: JsonValue | None
+    evidence_ref_ids: list[EntityId] = Field(min_length=1)
+    verification_decision_id: EntityId
+    dependency_fingerprint: Sha256
+
+    @model_validator(mode="after")
+    def require_fact_shape(self) -> Self:
+        if (self.fact_state == VerifiedFactState.UNKNOWN) != (self.normalized_value is None):
+            raise ValueError("UNKNOWN fact is the only fact state without normalized value")
+        return self
+
+
+class VersionedVerifiedFactSetSchemaV08(Phase9BContractModel):
+    verified_fact_set_id: EntityId
+    target_scope: ExtractionTargetScope
+    opportunity_id: EntityId
+    opportunity_version: VersionNumber
+    opportunity_unit_id: EntityId | None
+    opportunity_unit_version_id: EntityId | None
+    source_bundle_revision_id: EntityId
+    version: VersionNumber
+    relation_graph_version: NonEmptyString
+    precedence_graph_version: NonEmptyString
+    reference_dataset_versions: dict[str, NonEmptyString]
+    fact_schema_version: Literal["0.8.0"]
+    status: VerifiedFactSetStatus
+    supersedes_id: EntityId | None
+    facts: list[VerifiedFactSchemaV08] = Field(min_length=1)
+    created_at: Instant
+
+    @model_validator(mode="after")
+    def require_fact_set_shape(self) -> Self:
+        _require_target_shape(
+            target_scope=self.target_scope,
+            opportunity_unit_id=self.opportunity_unit_id,
+            opportunity_unit_version_id=self.opportunity_unit_version_id,
+        )
+        if any(fact.verified_fact_set_id != self.verified_fact_set_id for fact in self.facts):
+            raise ValueError("all facts must belong to the fact set")
+        return self
+
+
+class ProposedRulePayloadSchemaV08(Phase9BContractModel):
+    code: NonEmptyString
+    operator: RuleOperator
+    field: RuleField
+    value_type: RuleValueType
+    value: JsonValue | None
+    required: bool
+    reason_template: NonEmptyString
+
+    @model_validator(mode="after")
+    def require_value_shape(self) -> Self:
+        if self.operator in {RuleOperator.EXISTS, RuleOperator.NOT_EXISTS}:
+            if self.value is not None:
+                raise ValueError("existence operator forbids value")
+        elif self.value is None:
+            raise ValueError("atomic rule requires value")
+        return self
+
+
+class RuleCandidateSchemaV08(Phase9BContractModel):
+    rule_candidate_id: EntityId
+    target_scope: ExtractionTargetScope
+    opportunity_id: EntityId
+    opportunity_version: VersionNumber
+    opportunity_unit_id: EntityId | None
+    opportunity_unit_version_id: EntityId | None
+    verified_fact_ids: list[EntityId] = Field(min_length=1)
+    rule_type: Literal["ATOMIC_QUALIFICATION"]
+    proposed_rule_payload: ProposedRulePayloadSchemaV08
+    evidence_ref_ids: list[EntityId] = Field(min_length=1)
+    compiler_version: NonEmptyString
+    producer_identity: NonEmptyString
+    status: RuleCandidateStatus
+    created_at: Instant
+
+    @model_validator(mode="after")
+    def require_rule_target(self) -> Self:
+        _require_target_shape(
+            target_scope=self.target_scope,
+            opportunity_unit_id=self.opportunity_unit_id,
+            opportunity_unit_version_id=self.opportunity_unit_version_id,
+        )
+        if len(self.verified_fact_ids) != len(set(self.verified_fact_ids)):
+            raise ValueError("verified_fact_ids must be unique")
+        if len(self.evidence_ref_ids) != len(set(self.evidence_ref_ids)):
+            raise ValueError("evidence_ref_ids must be unique")
+        return self
+
+
+class RuleApprovalDecisionSchemaV08(Phase9BContractModel):
+    rule_approval_decision_id: EntityId
+    rule_candidate_id: EntityId
+    decision: RuleApprovalDecisionValue
+    approver_identity: NonEmptyString
+    approval_method: RuleApprovalMethod
+    reason_code: NonEmptyString
+    decided_at: Instant
+    policy_version: NonEmptyString
+
+
+class UnitRuleSetSchemaV08(Phase9BContractModel):
+    unit_rule_set_id: EntityId
+    opportunity_id: EntityId
+    opportunity_version: VersionNumber
+    opportunity_unit_id: EntityId
+    opportunity_unit_version_id: EntityId
+    rule_candidate_id: EntityId
+    rule_schema_version: Literal["0.8.0"]
+    payload: ProposedRulePayloadSchemaV08
+    review_status: Literal["APPROVED"]
+    activation_status: Literal["DORMANT"]
+    rule_approval_decision_id: EntityId
+    created_at: Instant
 
 
 class HtmlElementSpanLocatorSchemaV08(Phase9BContractModel):
@@ -505,6 +836,14 @@ __all__ = [
     "DocumentBlockSchemaV08",
     "DocumentBlockType",
     "DocumentParseIdentitySchemaV08",
+    "EvidenceSupportResult",
+    "ExtractionCandidateSchemaV08",
+    "ExtractionRunSchemaV08",
+    "ExtractionRunStatus",
+    "ExtractionTargetScope",
+    "ExtractorKind",
+    "FactVerificationDecision",
+    "FactVerificationDecisionSchemaV08",
     "OpportunityUnitAliasKind",
     "OpportunityUnitAliasSchemaV08",
     "OpportunityUnitKind",
@@ -512,6 +851,19 @@ __all__ = [
     "OpportunityUnitLineageEventSchemaV08",
     "OpportunityUnitVersionSchemaV08",
     "OpportunityUnitSchemaV08",
+    "PrecedenceCheckResult",
+    "ProposedRulePayloadSchemaV08",
+    "RuleApprovalDecisionSchemaV08",
+    "RuleApprovalDecisionValue",
+    "RuleApprovalMethod",
+    "RuleCandidateSchemaV08",
+    "RuleCandidateStatus",
     "SourceBundleMemberProvenanceSchemaV08",
     "SourceBundleRevisionSchemaV08",
+    "UnitRuleSetSchemaV08",
+    "VerificationMethod",
+    "VerifiedFactSchemaV08",
+    "VerifiedFactSetStatus",
+    "VerifiedFactState",
+    "VersionedVerifiedFactSetSchemaV08",
 ]

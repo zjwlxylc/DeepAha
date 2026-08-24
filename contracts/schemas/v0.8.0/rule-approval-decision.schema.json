@@ -1,0 +1,72 @@
+{
+  "$defs": {
+    "RuleApprovalDecisionValue": {
+      "enum": [
+        "APPROVE",
+        "REJECT",
+        "NEEDS_ADJUDICATION"
+      ],
+      "title": "RuleApprovalDecisionValue",
+      "type": "string"
+    },
+    "RuleApprovalMethod": {
+      "enum": [
+        "HUMAN",
+        "DETERMINISTIC_POLICY"
+      ],
+      "title": "RuleApprovalMethod",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "approval_method": {
+      "$ref": "#/$defs/RuleApprovalMethod"
+    },
+    "approver_identity": {
+      "minLength": 1,
+      "title": "Approver Identity",
+      "type": "string"
+    },
+    "decided_at": {
+      "format": "date-time",
+      "title": "Decided At",
+      "type": "string"
+    },
+    "decision": {
+      "$ref": "#/$defs/RuleApprovalDecisionValue"
+    },
+    "policy_version": {
+      "minLength": 1,
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "reason_code": {
+      "minLength": 1,
+      "title": "Reason Code",
+      "type": "string"
+    },
+    "rule_approval_decision_id": {
+      "format": "uuid",
+      "title": "Rule Approval Decision Id",
+      "type": "string"
+    },
+    "rule_candidate_id": {
+      "format": "uuid",
+      "title": "Rule Candidate Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "rule_approval_decision_id",
+    "rule_candidate_id",
+    "decision",
+    "approver_identity",
+    "approval_method",
+    "reason_code",
+    "decided_at",
+    "policy_version"
+  ],
+  "title": "RuleApprovalDecisionSchemaV08",
+  "type": "object"
+}

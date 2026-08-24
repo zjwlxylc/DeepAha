@@ -225,6 +225,41 @@ parsers are explicit parallel implementations with version `0.8.0` and parse con
 `p9b-document-block-contract-v0.8.0`; selecting one creates a new immutable Document identity.
 Legacy parse identities cannot persist DocumentBlock rows.
 
+### 8.2 Fact promotion and dormant Unit rule persistence
+
+Migration `20260824_0013` adds an audited production write chain without changing a Phase 4–8
+reader:
+
+```text
+ExtractionRun + ordered ExtractionRunInputBlock
+  -> ExtractionCandidate + exact block/EvidenceRef bindings
+  -> immutable FactVerificationDecision
+  -> VersionedVerifiedFactSet + immutable VerifiedFact + dependency fingerprints
+  -> RuleCandidate + immutable RuleApprovalDecision
+  -> dormant UnitRuleSet (UNIT only)
+```
+
+- Every target retains `opportunity_id + opportunity_version:int`. A `UNIT` target additionally
+  requires the exact `opportunity_unit_id + opportunity_unit_version_id`; an Opportunity target
+  forbids those fields.
+- An ExtractionRun accepts only blocks whose Documents are members of its exact frozen
+  SourceBundleRevision. The ordered block set and Evidence bindings are hash-bound and persisted as
+  relational rows.
+- Candidate producers cannot act as their verifier, and a producer response cannot be reused as a
+  verification response. A known fact requires `APPROVE + SUPPORTED + PASSED`; an explicit
+  abstention becomes fact state `UNKNOWN`, never a fifth eligibility status.
+- VerifiedFact content and Evidence links are insert-only. A FactSet may leave `ACTIVE` only through
+  an immutable transition record; supersession is atomic and dependency invalidation records both
+  expected and observed fingerprints.
+- RuleCandidate Evidence must be reachable from its selected VerifiedFacts. Approval is a separate
+  immutable record whose approver identity differs from the candidate producer.
+- `UnitRuleSet.activation_status` is database-constrained to `DORMANT`. No legacy RuleSet,
+  Eligibility, Public Catalog, Personal Action, Ranking, Notification or Feedback reader imports
+  the new Unit tables.
+
+All Slice fixtures are synthetic engineering inputs. They are not Gold, independent human evidence
+or Release Qualification evidence.
+
 ## 9. Stage 1 Read-path and Trust Boundaries
 
 - Document remains distinct from Opportunity and OpportunityUnit.

@@ -1,0 +1,177 @@
+{
+  "$defs": {
+    "JsonValue": {},
+    "ProposedRulePayloadSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "field": {
+          "$ref": "#/$defs/RuleField"
+        },
+        "operator": {
+          "$ref": "#/$defs/RuleOperator"
+        },
+        "reason_template": {
+          "minLength": 1,
+          "title": "Reason Template",
+          "type": "string"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value_type": {
+          "$ref": "#/$defs/RuleValueType"
+        }
+      },
+      "required": [
+        "code",
+        "operator",
+        "field",
+        "value_type",
+        "value",
+        "required",
+        "reason_template"
+      ],
+      "title": "ProposedRulePayloadSchemaV08",
+      "type": "object"
+    },
+    "RuleField": {
+      "enum": [
+        "education_level",
+        "major_code",
+        "graduation_year",
+        "student_status",
+        "birth_date",
+        "hukou_region",
+        "residence_region",
+        "target_regions",
+        "certificates"
+      ],
+      "title": "RuleField",
+      "type": "string"
+    },
+    "RuleOperator": {
+      "enum": [
+        "EQ",
+        "NE",
+        "IN",
+        "NOT_IN",
+        "GTE",
+        "LTE",
+        "BETWEEN",
+        "CONTAINS_ANY",
+        "CONTAINS_ALL",
+        "EXISTS",
+        "NOT_EXISTS",
+        "AND",
+        "OR",
+        "NOT"
+      ],
+      "title": "RuleOperator",
+      "type": "string"
+    },
+    "RuleValueType": {
+      "enum": [
+        "STRING",
+        "INTEGER",
+        "DATE",
+        "STRING_SET",
+        "BOOLEAN"
+      ],
+      "title": "RuleValueType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "activation_status": {
+      "const": "DORMANT",
+      "title": "Activation Status",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_unit_id": {
+      "format": "uuid",
+      "title": "Opportunity Unit Id",
+      "type": "string"
+    },
+    "opportunity_unit_version_id": {
+      "format": "uuid",
+      "title": "Opportunity Unit Version Id",
+      "type": "string"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "payload": {
+      "$ref": "#/$defs/ProposedRulePayloadSchemaV08"
+    },
+    "review_status": {
+      "const": "APPROVED",
+      "title": "Review Status",
+      "type": "string"
+    },
+    "rule_approval_decision_id": {
+      "format": "uuid",
+      "title": "Rule Approval Decision Id",
+      "type": "string"
+    },
+    "rule_candidate_id": {
+      "format": "uuid",
+      "title": "Rule Candidate Id",
+      "type": "string"
+    },
+    "rule_schema_version": {
+      "const": "0.8.0",
+      "title": "Rule Schema Version",
+      "type": "string"
+    },
+    "unit_rule_set_id": {
+      "format": "uuid",
+      "title": "Unit Rule Set Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "unit_rule_set_id",
+    "opportunity_id",
+    "opportunity_version",
+    "opportunity_unit_id",
+    "opportunity_unit_version_id",
+    "rule_candidate_id",
+    "rule_schema_version",
+    "payload",
+    "review_status",
+    "activation_status",
+    "rule_approval_decision_id",
+    "created_at"
+  ],
+  "title": "UnitRuleSetSchemaV08",
+  "type": "object"
+}

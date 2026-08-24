@@ -291,6 +291,12 @@ class DocumentBlock(Base):
         ),
         UniqueConstraint("document_id", "ordinal", name="uq_document_blocks_document_ordinal"),
         UniqueConstraint("document_id", "block_id", name="uq_document_blocks_document_block"),
+        UniqueConstraint(
+            "block_id",
+            "evidence_ref_id",
+            "document_id",
+            name="uq_document_blocks_candidate_evidence_binding",
+        ),
         UniqueConstraint("evidence_ref_id", name="uq_document_blocks_evidence_ref"),
     )
 

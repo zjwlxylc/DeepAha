@@ -83,6 +83,40 @@ def evidence_binding_hash(payload: object) -> str:
     return _canonical_hash_domain("evidence_binding_hash", payload)
 
 
+def extraction_input_block_set_hash(block_ids: list[UUID] | tuple[UUID, ...]) -> str:
+    if not block_ids:
+        raise ValueError("ordered input block IDs must not be empty")
+    if len(block_ids) != len(set(block_ids)):
+        raise ValueError("ordered input block IDs must be unique")
+    return _canonical_hash_domain(
+        "extraction_input_block_set_hash",
+        {"ordered_input_block_ids": [str(block_id) for block_id in block_ids]},
+    )
+
+
+def extraction_evidence_binding_hash(
+    bindings: list[tuple[UUID, str]] | tuple[tuple[UUID, str], ...],
+) -> str:
+    if not bindings:
+        raise ValueError("extraction evidence bindings must not be empty")
+    for _, binding_hash in bindings:
+        if not _SHA256_PATTERN.fullmatch(binding_hash):
+            raise ValueError("evidence binding hash must be lowercase SHA-256")
+    return _canonical_hash_domain(
+        "extraction_evidence_binding_hash",
+        {
+            "ordered_block_bindings": [
+                {"block_id": str(block_id), "evidence_binding_hash": binding_hash}
+                for block_id, binding_hash in bindings
+            ]
+        },
+    )
+
+
+def fact_dependency_fingerprint(payload: object) -> str:
+    return _canonical_hash_domain("fact_dependency_fingerprint", payload)
+
+
 __all__ = [
     "HASH_CONTRACT_VERSION",
     "HashDomain",
@@ -92,6 +126,9 @@ __all__ = [
     "document_parse_key",
     "document_block_hash",
     "evidence_binding_hash",
+    "extraction_evidence_binding_hash",
+    "extraction_input_block_set_hash",
+    "fact_dependency_fingerprint",
     "member_provenance_hash",
     "split_manifest_hash",
 ]

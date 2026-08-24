@@ -1,0 +1,177 @@
+{
+  "$defs": {
+    "ExtractionRunStatus": {
+      "enum": [
+        "SUCCEEDED",
+        "ABSTAINED",
+        "FAILED"
+      ],
+      "title": "ExtractionRunStatus",
+      "type": "string"
+    },
+    "ExtractionTargetScope": {
+      "enum": [
+        "OPPORTUNITY",
+        "UNIT"
+      ],
+      "title": "ExtractionTargetScope",
+      "type": "string"
+    },
+    "ExtractorKind": {
+      "enum": [
+        "DETERMINISTIC",
+        "MODEL",
+        "HYBRID"
+      ],
+      "title": "ExtractorKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "completed_at": {
+      "format": "date-time",
+      "title": "Completed At",
+      "type": "string"
+    },
+    "component_version": {
+      "minLength": 1,
+      "title": "Component Version",
+      "type": "string"
+    },
+    "evidence_binding_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Evidence Binding Hash",
+      "type": "string"
+    },
+    "extraction_run_id": {
+      "format": "uuid",
+      "title": "Extraction Run Id",
+      "type": "string"
+    },
+    "extractor_kind": {
+      "$ref": "#/$defs/ExtractorKind"
+    },
+    "input_block_set_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Block Set Hash",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_unit_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Id"
+    },
+    "opportunity_unit_version_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Version Id"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "ordered_input_block_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Ordered Input Block Ids",
+      "type": "array"
+    },
+    "producer_identity": {
+      "minLength": 1,
+      "title": "Producer Identity",
+      "type": "string"
+    },
+    "producer_response_id": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Producer Response Id"
+    },
+    "source_bundle_revision_id": {
+      "format": "uuid",
+      "title": "Source Bundle Revision Id",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/ExtractionRunStatus"
+    },
+    "target_scope": {
+      "$ref": "#/$defs/ExtractionTargetScope"
+    },
+    "task_spec_version": {
+      "minLength": 1,
+      "title": "Task Spec Version",
+      "type": "string"
+    },
+    "unit_segmentation_version": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Unit Segmentation Version"
+    }
+  },
+  "required": [
+    "extraction_run_id",
+    "source_bundle_revision_id",
+    "target_scope",
+    "opportunity_id",
+    "opportunity_version",
+    "opportunity_unit_id",
+    "opportunity_unit_version_id",
+    "unit_segmentation_version",
+    "task_spec_version",
+    "extractor_kind",
+    "component_version",
+    "producer_identity",
+    "producer_response_id",
+    "ordered_input_block_ids",
+    "input_block_set_hash",
+    "evidence_binding_hash",
+    "started_at",
+    "completed_at",
+    "status"
+  ],
+  "title": "ExtractionRunSchemaV08",
+  "type": "object"
+}

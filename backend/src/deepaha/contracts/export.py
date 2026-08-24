@@ -64,12 +64,20 @@ from deepaha.contracts.phase9b import (
     DatasetManifestSchemaV08,
     DocumentBlockSchemaV08,
     DocumentParseIdentitySchemaV08,
+    ExtractionCandidateSchemaV08,
+    ExtractionRunSchemaV08,
+    FactVerificationDecisionSchemaV08,
     OpportunityUnitAliasSchemaV08,
     OpportunityUnitLineageEventSchemaV08,
     OpportunityUnitSchemaV08,
     OpportunityUnitVersionSchemaV08,
+    RuleApprovalDecisionSchemaV08,
+    RuleCandidateSchemaV08,
     SourceBundleMemberProvenanceSchemaV08,
     SourceBundleRevisionSchemaV08,
+    UnitRuleSetSchemaV08,
+    VerifiedFactSchemaV08,
+    VersionedVerifiedFactSetSchemaV08,
 )
 
 PHASE1_SCHEMAS: dict[str, type[BaseModel]] = {
@@ -149,6 +157,14 @@ PHASE8_SCHEMAS: dict[str, type[BaseModel]] = {
 
 PHASE9B_SCHEMAS: dict[str, type[BaseModel]] = {
     "document-block.schema.json": DocumentBlockSchemaV08,
+    "extraction-run.schema.json": ExtractionRunSchemaV08,
+    "extraction-candidate.schema.json": ExtractionCandidateSchemaV08,
+    "fact-verification-decision.schema.json": FactVerificationDecisionSchemaV08,
+    "verified-fact.schema.json": VerifiedFactSchemaV08,
+    "versioned-verified-fact-set.schema.json": VersionedVerifiedFactSetSchemaV08,
+    "rule-candidate.schema.json": RuleCandidateSchemaV08,
+    "rule-approval-decision.schema.json": RuleApprovalDecisionSchemaV08,
+    "unit-rule-set.schema.json": UnitRuleSetSchemaV08,
     "opportunity-unit.schema.json": OpportunityUnitSchemaV08,
     "opportunity-unit-version.schema.json": OpportunityUnitVersionSchemaV08,
     "opportunity-unit-alias.schema.json": OpportunityUnitAliasSchemaV08,

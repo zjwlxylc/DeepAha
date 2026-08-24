@@ -1,0 +1,86 @@
+{
+  "$defs": {
+    "JsonValue": {},
+    "VerifiedFactState": {
+      "enum": [
+        "KNOWN",
+        "UNKNOWN"
+      ],
+      "title": "VerifiedFactState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "dependency_fingerprint": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Dependency Fingerprint",
+      "type": "string"
+    },
+    "evidence_ref_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Evidence Ref Ids",
+      "type": "array"
+    },
+    "fact_state": {
+      "$ref": "#/$defs/VerifiedFactState"
+    },
+    "field_name": {
+      "minLength": 1,
+      "title": "Field Name",
+      "type": "string"
+    },
+    "normalized_value": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JsonValue"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "raw_value": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JsonValue"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "verification_decision_id": {
+      "format": "uuid",
+      "title": "Verification Decision Id",
+      "type": "string"
+    },
+    "verified_fact_id": {
+      "format": "uuid",
+      "title": "Verified Fact Id",
+      "type": "string"
+    },
+    "verified_fact_set_id": {
+      "format": "uuid",
+      "title": "Verified Fact Set Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "verified_fact_id",
+    "verified_fact_set_id",
+    "field_name",
+    "fact_state",
+    "normalized_value",
+    "raw_value",
+    "evidence_ref_ids",
+    "verification_decision_id",
+    "dependency_fingerprint"
+  ],
+  "title": "VerifiedFactSchemaV08",
+  "type": "object"
+}

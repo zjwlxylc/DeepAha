@@ -35,17 +35,17 @@
 - Consumes: Git baseline facts and the user-approved Slice order.
 - Produces: append-only human-readable ledger entries containing Slice, base/head, exact commands, outcomes, review findings and commit SHA.
 
-- [ ] **Step 1: Record the pre-change evidence**
+- [x] **Step 1: Record the pre-change evidence**
 
   Record exact HEAD/parent/detached/worktree/status and the observed baseline `uv run pytest` result (`627 passed, 274 deselected`).
 
-- [ ] **Step 2: Validate the plan and ledger prose**
+- [x] **Step 2: Validate the plan and ledger prose**
 
   Run: `$patterns = @([string]::Concat('T','BD'), [string]::Concat('T','ODO'), [string]::Concat('IMPLEMENTED_','PENDING')); Select-String -Pattern $patterns -Path docs/superpowers/plans/2026-08-24-p9-b-real-opportunity-understanding-qualification-trust.md,docs/gates/p9-b/P9B_IMPLEMENTATION_LEDGER.md`
 
   Expected: no match. Separately scan `opportunity_version_id`; every match must explicitly prohibit or reject that nonexistent identity.
 
-- [ ] **Step 3: Commit the planning baseline**
+- [x] **Step 3: Commit the planning baseline**
 
   Run: `git add docs/superpowers/plans/2026-08-24-p9-b-real-opportunity-understanding-qualification-trust.md docs/gates/p9-b/P9B_IMPLEMENTATION_LEDGER.md && git commit -m "docs: plan P9-B qualification trust"`
 
@@ -67,39 +67,39 @@
 - Consumes: external Gold/Benchmark v1.2 SHA-256 `8D4ECE8B2638768358D43F37F70762B6E5F85E1360F5F7E9DE19C67FDFBDB6CC`, ADR v1.1 SHA-256 `CB9FECEDF5AA8AB2C0199C11266E20F4343C492135543E4361E5FB4099E64552`, current v0.3 OpportunityVersion and v0.4 RuleSet contracts.
 - Produces: `canonical_hash(domain: HashDomain, payload: object) -> str`, `document_parse_key(...) -> str`, `canonical_bundle_hash(...) -> str`, `split_manifest_hash(...) -> str`, plus strict v0.8 Pydantic/JSON schemas.
 
-- [ ] **Step 1: Write RED canonical-hash golden-vector tests**
+- [x] **Step 1: Write RED canonical-hash golden-vector tests**
 
   Tests must hand-specify UTF-8 bytes and expected SHA-256 for domain-separated canonical JSON with lexicographically sorted object fields, array-order preservation, explicit JSON `null`, no NaN/Infinity, and hash-contract version `p9b-canonical-json-sha256-v1`.
 
-- [ ] **Step 2: Run RED tests**
+- [x] **Step 2: Run RED tests**
 
   Run: `uv run pytest tests/p9b/test_hashing.py -q`
 
   Expected: FAIL because `deepaha.p9b.hashing` does not exist.
 
-- [ ] **Step 3: Implement the minimal canonical serializer and hash functions**
+- [x] **Step 3: Implement the minimal canonical serializer and hash functions**
 
   Use `json.dumps(..., ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False)` encoded as UTF-8 and prepend `deepaha:p9b:<domain>:p9b-canonical-json-sha256-v1\0`. Hash inputs are explicit mappings; UUID/datetime conversion occurs before hashing in typed contract methods, never through implicit `default=str`.
 
-- [ ] **Step 4: Write RED contract tests**
+- [x] **Step 4: Write RED contract tests**
 
   Cover the real composite OpportunityVersion identity, strict enums, Unit/Bundle/Member/Parse/Dataset manifest shapes, exact expected entry counts `30/70/30/200`, separate `atomic_group_count`, answer access, cutoff, invalidation/successor and rejection of extra fields or `opportunity_version_id`.
 
-- [ ] **Step 5: Run RED contract tests**
+- [x] **Step 5: Run RED contract tests**
 
   Run: `uv run pytest tests/contracts/test_phase9b_contracts.py -q`
 
   Expected: FAIL because v0.8 contracts/export do not exist.
 
-- [ ] **Step 6: Implement and export v0.8 contracts**
+- [x] **Step 6: Implement and export v0.8 contracts**
 
   Add the smallest strict Pydantic models and checked-in JSON schemas needed by B0. Existing version directories remain byte-for-byte unchanged.
 
-- [ ] **Step 7: Write the unique Architecture Closure**
+- [x] **Step 7: Write the unique Architecture Closure**
 
   Record external version/path/hash, current repository precedence, the composite OpportunityVersion correction, Unit transition rules, member-level provenance, parse contract identity, exact partitions, canonicalization, B0 scope, failure modes and `B0_IMPLEMENTATION_AUTHORIZED=YES` from this task authorization. Do not copy the external documents into Git.
 
-- [ ] **Step 8: Verify Task 1**
+- [x] **Step 8: Verify Task 1**
 
   Run: `uv run pytest tests/p9b/test_hashing.py tests/contracts/test_phase9b_contracts.py -q`
 
@@ -135,37 +135,37 @@
 - Consumes: B0 v0.8 contracts and canonical hashing functions.
 - Produces: immutable `OpportunityUnitVersion`, single `OpportunityUnit.current_version_id`, alias/lineage services with CAS, immutable `SourceBundleRevision`/members/edges, parse-contract-aware Document/ParseAttempt identity, and manifest freeze validation.
 
-- [ ] **Step 1: Write RED DocumentParseIdentity tests**
+- [x] **Step 1: Write RED DocumentParseIdentity tests**
 
   Prove legacy rows map to the single frozen value `phase2-locator-contract-v0.2.0`, same parser+contract is idempotent, contract change creates a new Document/ParseAttempt/derived object key, and existing `document_id` remains unchanged.
 
-- [ ] **Step 2: Write RED Unit behavior and PostgreSQL constraint tests**
+- [x] **Step 2: Write RED Unit behavior and PostgreSQL constraint tests**
 
   Cover natural Singleton idempotency, version uniqueness/immutability/ownership, one current pointer, CAS conflict, alias effective-window overlap, re-key collision, official-code reuse fail-closed, Singleton→Multi SPLIT, evidence-supported reversal back to the original Singleton identity, and non-reversal Multi→Singleton creating a new Unit.
 
-- [ ] **Step 3: Write RED bundle/member provenance tests**
+- [x] **Step 3: Write RED bundle/member provenance tests**
 
   Persist at least two attachments whose members independently bind Source, Endpoint, CaptureObservation, VALID AcquisitionEvaluation, AcquisitionRun/Recipe, policy/fetcher/validator versions, RawArtifact hash/size/object reference, Document/parse identity, role/relation/precedence and member provenance hash. Reject non-VALID evaluation, cross-run lineage, cross-revision edge, duplicate revision number and freeze when canonical hash cannot be recomputed.
 
-- [ ] **Step 4: Write RED dataset validator tests**
+- [x] **Step 4: Write RED dataset validator tests**
 
   Use hand-built manifests to reject any entry-count mismatch, cross-partition atomic group, SourceBundle/revision/near-duplicate/Unit-lineage leakage, contamination of Locked by any earlier identity/lineage, answer-access mismatch, invalid cutoff and bad successor/hash.
 
-- [ ] **Step 5: Run all B0 RED tests**
+- [x] **Step 5: Run all B0 RED tests**
 
   Run: `uv run pytest tests/p9b tests/integration/test_p9b_b0_persistence.py tests/integration/test_p9b_b0_migration.py tests/integration/test_document_service.py -q`
 
   Expected: FAIL only for missing B0 implementation/schema behavior.
 
-- [ ] **Step 6: Implement migration, ORM and services minimally**
+- [x] **Step 6: Implement migration, ORM and services minimally**
 
   Add columns/tables/constraints/triggers without modifying historical migrations. Historical provenance is not synthesized; only exact existing Document IDs are preserved while parse contract gets the frozen legacy value. Unit and member history reject update/delete; current-pointer updates use explicit expected version CAS.
 
-- [ ] **Step 7: Run GREEN unit and PostgreSQL tests**
+- [x] **Step 7: Run GREEN unit and PostgreSQL tests**
 
   Run the command from Step 5 with the isolated P9-B Compose environment and confirm zero failures.
 
-- [ ] **Step 8: Verify Phase 3–8 read-path invariance**
+- [x] **Step 8: Verify Phase 3–8 read-path invariance**
 
   Run focused Phase 3 identity/version, Phase 4 eligibility/rule, Phase 5 public catalog, Phase 6 personal, Phase 7 feedback and Phase 8 notification tests. Assert no production query imports or reads `UnitRuleSet` or Unit tables.
 
@@ -183,25 +183,25 @@
 - Consumes: Tasks 1–2.
 - Produces: reproducible B0 verifier and the only B0 commit.
 
-- [ ] **Step 1: Write RED verifier-scope tests**
+- [x] **Step 1: Write RED verifier-scope tests**
 
   Require exact isolated compose project/ports, B0 contract/hash/unit/bundle/parse/dataset suites, migration upgrade/downgrade/refusal/re-upgrade/drift, Phase 3–8 regression, P9-A verifier, secret/bypass scans, `git diff --check`, and exact B0 status output.
 
-- [ ] **Step 2: Run RED scope test, then implement verifier**
+- [x] **Step 2: Run RED scope test, then implement verifier**
 
   Run: `uv run pytest tests/test_p9b_b0_verifier_scope.py -q`; expect missing verifier failure, implement minimal PowerShell verifier, then rerun to GREEN.
 
-- [ ] **Step 3: Run the complete B0 verifier**
+- [x] **Step 3: Run the complete B0 verifier**
 
   Run: `powershell -ExecutionPolicy Bypass -File scripts/verify-p9b-b0.ps1 -ComposeProjectName deepaha-p9b-b0-$PID`
 
   Expected: exit `0`, B0 tests and regression pass, migrations have no drift, P9-A statuses unchanged.
 
-- [ ] **Step 4: Perform code review**
+- [x] **Step 4: Perform code review**
 
   Review `planning-commit..working-tree` against Tasks 1–3 in passes: contracts/hashes, migration/constraints, services/concurrency, tests/verifier, backward compatibility/security. Record Critical/Important/Minor findings; fix every Critical/Important with a new RED test and rerun the complete verifier.
 
-- [ ] **Step 5: Commit B0 only after fresh verification**
+- [x] **Step 5: Commit B0 only after fresh verification**
 
   Run: `git add <only B0 paths> && git commit -m "feat: close P9-B0 identity and provenance architecture"`
 
@@ -227,11 +227,11 @@
 - Consumes: exact DocumentParseIdentity and canonical hash contract.
 - Produces: immutable ordered `DocumentBlock` rows and HTML element/span, PDF text-span/table-cell, XLSX cell/range and DOCX paragraph/table-cell locators. OCR remains disabled without real controlled evidence.
 
-- [ ] **Step 1: Write RED parser/block tests with controlled fixtures**
-- [ ] **Step 2: Run RED and confirm failures name missing block/locator behavior**
-- [ ] **Step 3: Implement deterministic block emission and persistence**
-- [ ] **Step 4: Run focused unit/integration tests and Phase 2 document regression**
-- [ ] **Step 5: Review, update ledger and commit `feat: add canonical P9-B document blocks`**
+- [x] **Step 1: Write RED parser/block tests with controlled fixtures**
+- [x] **Step 2: Run RED and confirm failures name missing block/locator behavior**
+- [x] **Step 3: Implement deterministic block emission and persistence**
+- [x] **Step 4: Run focused unit/integration tests and Phase 2 document regression**
+- [x] **Step 5: Review, update ledger and commit `feat: add canonical P9-B document blocks`**
 
 ### Task 5: Candidate → Verification → Versioned Fact → Rule Candidate Chain
 
@@ -249,11 +249,11 @@
 - Consumes: Bundle revision, target composite identity, DocumentBlocks and EvidenceRefs.
 - Produces: immutable ExtractionRun/Candidate/VerificationDecision/VerifiedFactSet/VerifiedFact/RuleCandidate/RuleApprovalDecision/UnitRuleSet, atomic promotion and dependency invalidation.
 
-- [ ] **Step 1: Write RED lifecycle and producer-independence tests**
-- [ ] **Step 2: Write RED rule-boundary tests proving Unit RuleCandidate cannot enter parent RuleSet and UnitRuleSet remains dormant**
-- [ ] **Step 3: Run RED, implement minimal services/constraints, then run GREEN**
-- [ ] **Step 4: Run Phase 4–8 regression and query/import boundary scan**
-- [ ] **Step 5: Review, update ledger and commit `feat: add audited P9-B fact promotion chain`**
+- [x] **Step 1: Write RED lifecycle and producer-independence tests**
+- [x] **Step 2: Write RED rule-boundary tests proving Unit RuleCandidate cannot enter parent RuleSet and UnitRuleSet remains dormant**
+- [x] **Step 3: Run RED, implement minimal services/constraints, then run GREEN**
+- [x] **Step 4: Run Phase 4–8 regression and query/import boundary scan**
+- [x] **Step 5: Review, update ledger and commit `feat: add audited P9-B fact promotion chain`**
 
 ### Task 6: Gold Annotation Governance, Frozen Manifests and Executable Benchmark
 

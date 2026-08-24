@@ -2,8 +2,10 @@ from datetime import datetime
 from uuid import UUID
 
 from sqlalchemy import (
+    Boolean,
     CheckConstraint,
     DateTime,
+    Float,
     ForeignKey,
     ForeignKeyConstraint,
     Index,
@@ -102,6 +104,12 @@ class SourceBundleRevision(Base):
             "opportunity_version",
             "canonical_bundle_hash",
             name="uq_source_bundle_revisions_dataset_binding",
+        ),
+        UniqueConstraint(
+            "source_bundle_revision_id",
+            "opportunity_id",
+            "opportunity_version",
+            name="uq_source_bundle_revisions_fact_binding",
         ),
     )
 
@@ -842,9 +850,768 @@ class DatasetManifestEntry(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class ExtractionRun(Base):
+    __tablename__ = "extraction_runs"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(extraction_run_id) = 7", name="run_id_uuid7"),
+        CheckConstraint("opportunity_version >= 1", name="positive_opportunity_version"),
+        CheckConstraint("target_scope in ('OPPORTUNITY', 'UNIT')", name="target_scope_values"),
+        CheckConstraint(
+            "(target_scope = 'OPPORTUNITY' and opportunity_unit_id is null and "
+            "opportunity_unit_version_id is null and unit_segmentation_version is null) or "
+            "(target_scope = 'UNIT' and opportunity_unit_id is not null and "
+            "opportunity_unit_version_id is not null and "
+            "length(btrim(unit_segmentation_version)) >= 1)",
+            name="target_shape",
+        ),
+        CheckConstraint(
+            "extractor_kind in ('DETERMINISTIC', 'MODEL', 'HYBRID')",
+            name="extractor_kind_values",
+        ),
+        CheckConstraint(
+            "status in ('SUCCEEDED', 'ABSTAINED', 'FAILED')",
+            name="status_values",
+        ),
+        CheckConstraint("completed_at >= started_at", name="timestamp_order"),
+        CheckConstraint(
+            "jsonb_typeof(ordered_input_block_ids) = 'array' and "
+            "jsonb_array_length(ordered_input_block_ids) >= 1",
+            name="input_blocks_nonempty",
+        ),
+        CheckConstraint(
+            "input_block_set_hash ~ '^[0-9a-f]{64}$' and evidence_binding_hash ~ '^[0-9a-f]{64}$'",
+            name="hash_formats",
+        ),
+        CheckConstraint(
+            "extractor_kind <> 'MODEL' or producer_response_id is not null",
+            name="model_response_required",
+        ),
+        ForeignKeyConstraint(
+            ["source_bundle_revision_id", "opportunity_id", "opportunity_version"],
+            [
+                "source_bundle_revisions.source_bundle_revision_id",
+                "source_bundle_revisions.opportunity_id",
+                "source_bundle_revisions.opportunity_version",
+            ],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            [
+                "opportunity_unit_id",
+                "opportunity_unit_version_id",
+                "opportunity_id",
+                "opportunity_version",
+            ],
+            [
+                "opportunity_unit_versions.opportunity_unit_id",
+                "opportunity_unit_versions.opportunity_unit_version_id",
+                "opportunity_unit_versions.opportunity_id",
+                "opportunity_unit_versions.opportunity_version",
+            ],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint(
+            "extraction_run_id",
+            "target_scope",
+            "opportunity_id",
+            "opportunity_version",
+            "opportunity_unit_id",
+            "opportunity_unit_version_id",
+            name="uq_extraction_runs_candidate_binding",
+        ),
+    )
+
+    extraction_run_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    source_bundle_revision_id: Mapped[UUID] = mapped_column(Uuid)
+    target_scope: Mapped[str] = mapped_column(String(16))
+    opportunity_id: Mapped[UUID] = mapped_column(Uuid)
+    opportunity_version: Mapped[int] = mapped_column(Integer)
+    opportunity_unit_id: Mapped[UUID | None] = mapped_column(Uuid)
+    opportunity_unit_version_id: Mapped[UUID | None] = mapped_column(Uuid)
+    unit_segmentation_version: Mapped[str | None] = mapped_column(String(64))
+    task_spec_version: Mapped[str] = mapped_column(String(64))
+    extractor_kind: Mapped[str] = mapped_column(String(16))
+    component_version: Mapped[str] = mapped_column(String(128))
+    producer_identity: Mapped[str] = mapped_column(Text)
+    producer_response_id: Mapped[str | None] = mapped_column(Text)
+    ordered_input_block_ids: Mapped[list[str]] = mapped_column(JSONB)
+    input_block_set_hash: Mapped[str] = mapped_column(String(64))
+    evidence_binding_hash: Mapped[str] = mapped_column(String(64))
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    status: Mapped[str] = mapped_column(String(16))
+
+
+class ExtractionRunInputBlock(Base):
+    __tablename__ = "extraction_run_input_blocks"
+    __table_args__ = (
+        CheckConstraint("input_ordinal >= 1", name="positive_ordinal"),
+        ForeignKeyConstraint(
+            ["extraction_run_id"],
+            ["extraction_runs.extraction_run_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["block_id", "evidence_ref_id", "document_id"],
+            [
+                "document_blocks.block_id",
+                "document_blocks.evidence_ref_id",
+                "document_blocks.document_id",
+            ],
+            ondelete="RESTRICT",
+        ),
+        PrimaryKeyConstraint("extraction_run_id", "input_ordinal"),
+        UniqueConstraint(
+            "extraction_run_id",
+            "block_id",
+            name="uq_extraction_run_input_blocks_run_block",
+        ),
+    )
+
+    extraction_run_id: Mapped[UUID] = mapped_column(Uuid)
+    input_ordinal: Mapped[int] = mapped_column(Integer)
+    block_id: Mapped[UUID] = mapped_column(Uuid)
+    evidence_ref_id: Mapped[UUID] = mapped_column(Uuid)
+    document_id: Mapped[UUID] = mapped_column(Uuid)
+
+
+class ExtractionCandidate(Base):
+    __tablename__ = "extraction_candidates"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(candidate_id) = 7", name="candidate_id_uuid7"),
+        CheckConstraint("opportunity_version >= 1", name="positive_opportunity_version"),
+        CheckConstraint("target_scope in ('OPPORTUNITY', 'UNIT')", name="target_scope_values"),
+        CheckConstraint("length(btrim(field_name)) >= 1", name="field_name_nonempty"),
+        CheckConstraint(
+            "confidence is null or confidence between 0 and 1", name="confidence_range"
+        ),
+        CheckConstraint(
+            "(abstained and normalized_value_candidate is null and "
+            "candidate_reason_code like 'UNKNOWN_%') or "
+            "(not abstained and normalized_value_candidate is not null)",
+            name="abstention_shape",
+        ),
+        CheckConstraint("schema_version = '0.8.0'", name="schema_version_v08"),
+        ForeignKeyConstraint(
+            ["extraction_run_id"],
+            ["extraction_runs.extraction_run_id"],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint(
+            "candidate_id",
+            "extraction_run_id",
+            name="uq_extraction_candidates_run_binding",
+        ),
+    )
+
+    candidate_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    extraction_run_id: Mapped[UUID] = mapped_column(Uuid)
+    target_scope: Mapped[str] = mapped_column(String(16))
+    opportunity_id: Mapped[UUID] = mapped_column(Uuid)
+    opportunity_version: Mapped[int] = mapped_column(Integer)
+    opportunity_unit_id: Mapped[UUID | None] = mapped_column(Uuid)
+    opportunity_unit_version_id: Mapped[UUID | None] = mapped_column(Uuid)
+    field_name: Mapped[str] = mapped_column(String(128))
+    raw_value: Mapped[object | None] = mapped_column(JSONB(none_as_null=True))
+    normalized_value_candidate: Mapped[object | None] = mapped_column(JSONB(none_as_null=True))
+    confidence: Mapped[float | None] = mapped_column(Float)
+    abstained: Mapped[bool] = mapped_column(Boolean)
+    candidate_reason_code: Mapped[str] = mapped_column(String(128))
+    schema_version: Mapped[str] = mapped_column(String(16))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class ExtractionCandidateEvidence(Base):
+    __tablename__ = "extraction_candidate_evidence"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["candidate_id", "extraction_run_id"],
+            ["extraction_candidates.candidate_id", "extraction_candidates.extraction_run_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["extraction_run_id", "block_id"],
+            [
+                "extraction_run_input_blocks.extraction_run_id",
+                "extraction_run_input_blocks.block_id",
+            ],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["block_id", "evidence_ref_id", "document_id"],
+            [
+                "document_blocks.block_id",
+                "document_blocks.evidence_ref_id",
+                "document_blocks.document_id",
+            ],
+            ondelete="RESTRICT",
+        ),
+        PrimaryKeyConstraint("candidate_id", "block_id"),
+        UniqueConstraint(
+            "candidate_id",
+            "block_id",
+            "evidence_ref_id",
+            name="uq_extraction_candidate_evidence_fact_binding",
+        ),
+    )
+
+    candidate_id: Mapped[UUID] = mapped_column(Uuid)
+    extraction_run_id: Mapped[UUID] = mapped_column(Uuid)
+    block_id: Mapped[UUID] = mapped_column(Uuid)
+    evidence_ref_id: Mapped[UUID] = mapped_column(Uuid)
+    document_id: Mapped[UUID] = mapped_column(Uuid)
+
+
+class FactVerificationDecisionModel(Base):
+    __tablename__ = "fact_verification_decisions"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(decision_id) = 7", name="decision_id_uuid7"),
+        CheckConstraint(
+            "decision in ('APPROVE', 'REJECT', 'UNKNOWN', 'NEEDS_ADJUDICATION')",
+            name="decision_values",
+        ),
+        CheckConstraint(
+            "verification_method in ('DETERMINISTIC', 'HUMAN', 'APPROVED_MAPPING')",
+            name="method_values",
+        ),
+        CheckConstraint(
+            "evidence_support_result in ('SUPPORTED', 'UNSUPPORTED', 'UNKNOWN')",
+            name="evidence_support_values",
+        ),
+        CheckConstraint(
+            "precedence_check_result in ('PASSED', 'FAILED', 'UNKNOWN')",
+            name="precedence_values",
+        ),
+        CheckConstraint(
+            "decision <> 'APPROVE' or (evidence_support_result = 'SUPPORTED' and "
+            "precedence_check_result = 'PASSED')",
+            name="approval_support",
+        ),
+        ForeignKeyConstraint(
+            ["candidate_id"],
+            ["extraction_candidates.candidate_id"],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint(
+            "decision_id",
+            "candidate_id",
+            name="uq_fact_verification_decisions_candidate_binding",
+        ),
+    )
+
+    decision_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    candidate_id: Mapped[UUID] = mapped_column(Uuid)
+    decision: Mapped[str] = mapped_column(String(24))
+    verification_method: Mapped[str] = mapped_column(String(24))
+    verifier_identity: Mapped[str] = mapped_column(Text)
+    verifier_response_id: Mapped[str | None] = mapped_column(Text)
+    reason_code: Mapped[str] = mapped_column(String(128))
+    evidence_support_result: Mapped[str] = mapped_column(String(16))
+    precedence_check_result: Mapped[str] = mapped_column(String(16))
+    decided_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class VersionedVerifiedFactSet(Base):
+    __tablename__ = "versioned_verified_fact_sets"
+    __table_args__ = (
+        CheckConstraint(
+            "uuid_extract_version(verified_fact_set_id) = 7",
+            name="fact_set_id_uuid7",
+        ),
+        CheckConstraint("version >= 1 and opportunity_version >= 1", name="positive_versions"),
+        CheckConstraint("target_scope in ('OPPORTUNITY', 'UNIT')", name="target_scope_values"),
+        CheckConstraint(
+            "(target_scope = 'OPPORTUNITY' and opportunity_unit_id is null and "
+            "opportunity_unit_version_id is null) or (target_scope = 'UNIT' and "
+            "opportunity_unit_id is not null and opportunity_unit_version_id is not null)",
+            name="target_shape",
+        ),
+        CheckConstraint(
+            "status in ('ACTIVE', 'SUPERSEDED', 'STALE', 'WITHDRAWN')",
+            name="status_values",
+        ),
+        CheckConstraint("fact_schema_version = '0.8.0'", name="schema_version_v08"),
+        CheckConstraint(
+            "jsonb_typeof(reference_dataset_versions) = 'object'",
+            name="reference_versions_object",
+        ),
+        ForeignKeyConstraint(
+            ["source_bundle_revision_id", "opportunity_id", "opportunity_version"],
+            [
+                "source_bundle_revisions.source_bundle_revision_id",
+                "source_bundle_revisions.opportunity_id",
+                "source_bundle_revisions.opportunity_version",
+            ],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            [
+                "opportunity_unit_id",
+                "opportunity_unit_version_id",
+                "opportunity_id",
+                "opportunity_version",
+            ],
+            [
+                "opportunity_unit_versions.opportunity_unit_id",
+                "opportunity_unit_versions.opportunity_unit_version_id",
+                "opportunity_unit_versions.opportunity_id",
+                "opportunity_unit_versions.opportunity_version",
+            ],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["supersedes_id"],
+            ["versioned_verified_fact_sets.verified_fact_set_id"],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint(
+            "verified_fact_set_id",
+            "target_scope",
+            "opportunity_id",
+            "opportunity_version",
+            "opportunity_unit_id",
+            "opportunity_unit_version_id",
+            name="uq_versioned_verified_fact_sets_target_binding",
+        ),
+        Index(
+            "uq_versioned_verified_fact_sets_opportunity_version",
+            "opportunity_id",
+            "opportunity_version",
+            "version",
+            unique=True,
+            postgresql_where=text("target_scope = 'OPPORTUNITY'"),
+        ),
+        Index(
+            "uq_versioned_verified_fact_sets_unit_version",
+            "opportunity_unit_id",
+            "opportunity_unit_version_id",
+            "version",
+            unique=True,
+            postgresql_where=text("target_scope = 'UNIT'"),
+        ),
+        Index(
+            "uq_versioned_verified_fact_sets_active_opportunity",
+            "opportunity_id",
+            "opportunity_version",
+            unique=True,
+            postgresql_where=text("target_scope = 'OPPORTUNITY' and status = 'ACTIVE'"),
+        ),
+        Index(
+            "uq_versioned_verified_fact_sets_active_unit",
+            "opportunity_unit_id",
+            "opportunity_unit_version_id",
+            unique=True,
+            postgresql_where=text("target_scope = 'UNIT' and status = 'ACTIVE'"),
+        ),
+    )
+
+    verified_fact_set_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    target_scope: Mapped[str] = mapped_column(String(16))
+    opportunity_id: Mapped[UUID] = mapped_column(Uuid)
+    opportunity_version: Mapped[int] = mapped_column(Integer)
+    opportunity_unit_id: Mapped[UUID | None] = mapped_column(Uuid)
+    opportunity_unit_version_id: Mapped[UUID | None] = mapped_column(Uuid)
+    source_bundle_revision_id: Mapped[UUID] = mapped_column(Uuid)
+    version: Mapped[int] = mapped_column(Integer)
+    relation_graph_version: Mapped[str] = mapped_column(String(64))
+    precedence_graph_version: Mapped[str] = mapped_column(String(64))
+    reference_dataset_versions: Mapped[dict[str, str]] = mapped_column(JSONB)
+    fact_schema_version: Mapped[str] = mapped_column(String(16))
+    status: Mapped[str] = mapped_column(String(16))
+    supersedes_id: Mapped[UUID | None] = mapped_column(Uuid)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class VerifiedFactSetTransition(Base):
+    __tablename__ = "verified_fact_set_transitions"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(transition_id) = 7", name="transition_id_uuid7"),
+        CheckConstraint("from_status = 'ACTIVE'", name="from_status_active"),
+        CheckConstraint(
+            "to_status in ('SUPERSEDED', 'STALE', 'WITHDRAWN')",
+            name="to_status_values",
+        ),
+        CheckConstraint(
+            "(to_status = 'SUPERSEDED' and successor_fact_set_id is not null) or "
+            "(to_status <> 'SUPERSEDED' and successor_fact_set_id is null)",
+            name="successor_shape",
+        ),
+        CheckConstraint(
+            "(to_status = 'STALE' and dependency_id is not null and "
+            "expected_dependency_fingerprint ~ '^[0-9a-f]{64}$' and "
+            "observed_dependency_fingerprint ~ '^[0-9a-f]{64}$' and "
+            "expected_dependency_fingerprint <> observed_dependency_fingerprint) or "
+            "(to_status <> 'STALE' and dependency_id is null and "
+            "expected_dependency_fingerprint is null and "
+            "observed_dependency_fingerprint is null)",
+            name="dependency_invalidation_shape",
+        ),
+        ForeignKeyConstraint(
+            ["verified_fact_set_id"],
+            ["versioned_verified_fact_sets.verified_fact_set_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["successor_fact_set_id"],
+            ["versioned_verified_fact_sets.verified_fact_set_id"],
+            ondelete="RESTRICT",
+            deferrable=True,
+            initially="DEFERRED",
+        ),
+        ForeignKeyConstraint(
+            ["dependency_id"],
+            ["verified_fact_set_dependencies.dependency_id"],
+            name="fk_p9b_fact_transition_dependency",
+            ondelete="RESTRICT",
+            use_alter=True,
+        ),
+        UniqueConstraint("verified_fact_set_id", name="uq_verified_fact_set_transitions_terminal"),
+    )
+
+    transition_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    verified_fact_set_id: Mapped[UUID] = mapped_column(Uuid)
+    from_status: Mapped[str] = mapped_column(String(16))
+    to_status: Mapped[str] = mapped_column(String(16))
+    successor_fact_set_id: Mapped[UUID | None] = mapped_column(Uuid)
+    dependency_id: Mapped[UUID | None] = mapped_column(Uuid)
+    expected_dependency_fingerprint: Mapped[str | None] = mapped_column(String(64))
+    observed_dependency_fingerprint: Mapped[str | None] = mapped_column(String(64))
+    reason_code: Mapped[str] = mapped_column(String(128))
+    actor_identity: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class VerifiedFact(Base):
+    __tablename__ = "verified_facts"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(verified_fact_id) = 7", name="fact_id_uuid7"),
+        CheckConstraint("fact_state in ('KNOWN', 'UNKNOWN')", name="fact_state_values"),
+        CheckConstraint(
+            "(fact_state = 'UNKNOWN' and normalized_value is null) or "
+            "(fact_state = 'KNOWN' and normalized_value is not null)",
+            name="fact_state_shape",
+        ),
+        CheckConstraint(
+            "dependency_fingerprint ~ '^[0-9a-f]{64}$'",
+            name="dependency_fingerprint_format",
+        ),
+        ForeignKeyConstraint(
+            ["verified_fact_set_id"],
+            ["versioned_verified_fact_sets.verified_fact_set_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["verification_decision_id", "candidate_id"],
+            ["fact_verification_decisions.decision_id", "fact_verification_decisions.candidate_id"],
+            ondelete="RESTRICT",
+        ),
+        PrimaryKeyConstraint("verified_fact_id"),
+        UniqueConstraint(
+            "verified_fact_set_id",
+            "field_name",
+            name="uq_verified_facts_fact_set_field",
+        ),
+        UniqueConstraint(
+            "verified_fact_set_id",
+            "verified_fact_id",
+            name="uq_verified_facts_fact_set_fact",
+        ),
+    )
+
+    verified_fact_id: Mapped[UUID] = mapped_column(Uuid)
+    verified_fact_set_id: Mapped[UUID] = mapped_column(Uuid)
+    candidate_id: Mapped[UUID] = mapped_column(Uuid)
+    field_name: Mapped[str] = mapped_column(String(128))
+    fact_state: Mapped[str] = mapped_column(String(16))
+    normalized_value: Mapped[object | None] = mapped_column(JSONB(none_as_null=True))
+    raw_value: Mapped[object | None] = mapped_column(JSONB(none_as_null=True))
+    verification_decision_id: Mapped[UUID] = mapped_column(Uuid)
+    dependency_fingerprint: Mapped[str] = mapped_column(String(64))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class VerifiedFactEvidence(Base):
+    __tablename__ = "verified_fact_evidence"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["verified_fact_set_id", "verified_fact_id"],
+            ["verified_facts.verified_fact_set_id", "verified_facts.verified_fact_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["candidate_id", "block_id", "evidence_ref_id"],
+            [
+                "extraction_candidate_evidence.candidate_id",
+                "extraction_candidate_evidence.block_id",
+                "extraction_candidate_evidence.evidence_ref_id",
+            ],
+            ondelete="RESTRICT",
+        ),
+        PrimaryKeyConstraint("verified_fact_id", "block_id"),
+        UniqueConstraint(
+            "verified_fact_id",
+            "evidence_ref_id",
+            name="uq_verified_fact_evidence_fact_ref",
+        ),
+    )
+
+    verified_fact_id: Mapped[UUID] = mapped_column(Uuid)
+    verified_fact_set_id: Mapped[UUID] = mapped_column(Uuid)
+    candidate_id: Mapped[UUID] = mapped_column(Uuid)
+    block_id: Mapped[UUID] = mapped_column(Uuid)
+    evidence_ref_id: Mapped[UUID] = mapped_column(Uuid)
+
+
+class VerifiedFactSetDependency(Base):
+    __tablename__ = "verified_fact_set_dependencies"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(dependency_id) = 7", name="dependency_id_uuid7"),
+        CheckConstraint(
+            "dependency_type in ('SOURCE_BUNDLE_REVISION', 'DOCUMENT_BLOCK')",
+            name="dependency_type_values",
+        ),
+        CheckConstraint(
+            "(dependency_type = 'SOURCE_BUNDLE_REVISION' and "
+            "source_bundle_revision_id is not null and block_id is null) or "
+            "(dependency_type = 'DOCUMENT_BLOCK' and source_bundle_revision_id is null and "
+            "block_id is not null)",
+            name="dependency_shape",
+        ),
+        CheckConstraint(
+            "dependency_fingerprint ~ '^[0-9a-f]{64}$'",
+            name="dependency_fingerprint_format",
+        ),
+        ForeignKeyConstraint(
+            ["verified_fact_set_id"],
+            ["versioned_verified_fact_sets.verified_fact_set_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["source_bundle_revision_id"],
+            ["source_bundle_revisions.source_bundle_revision_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["block_id"],
+            ["document_blocks.block_id"],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint(
+            "verified_fact_set_id",
+            "dependency_type",
+            "source_bundle_revision_id",
+            "block_id",
+            name="uq_verified_fact_set_dependencies_identity",
+        ),
+    )
+
+    dependency_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    verified_fact_set_id: Mapped[UUID] = mapped_column(Uuid)
+    dependency_type: Mapped[str] = mapped_column(String(32))
+    source_bundle_revision_id: Mapped[UUID | None] = mapped_column(Uuid)
+    block_id: Mapped[UUID | None] = mapped_column(Uuid)
+    dependency_fingerprint: Mapped[str] = mapped_column(String(64))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class RuleCandidateModel(Base):
+    __tablename__ = "p9b_rule_candidates"
+    __table_args__ = (
+        CheckConstraint(
+            "uuid_extract_version(rule_candidate_id) = 7",
+            name="rule_candidate_id_uuid7",
+        ),
+        CheckConstraint("target_scope in ('OPPORTUNITY', 'UNIT')", name="target_scope_values"),
+        CheckConstraint(
+            "(target_scope = 'OPPORTUNITY' and opportunity_unit_id is null and "
+            "opportunity_unit_version_id is null) or (target_scope = 'UNIT' and "
+            "opportunity_unit_id is not null and opportunity_unit_version_id is not null)",
+            name="target_shape",
+        ),
+        CheckConstraint("rule_type = 'ATOMIC_QUALIFICATION'", name="rule_type_values"),
+        CheckConstraint("status = 'PROPOSED'", name="initial_status_proposed"),
+        CheckConstraint(
+            "jsonb_typeof(proposed_rule_payload) = 'object'",
+            name="payload_object",
+        ),
+        ForeignKeyConstraint(
+            ["verified_fact_set_id"],
+            ["versioned_verified_fact_sets.verified_fact_set_id"],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint(
+            "rule_candidate_id",
+            "target_scope",
+            "opportunity_id",
+            "opportunity_version",
+            "opportunity_unit_id",
+            "opportunity_unit_version_id",
+            name="uq_p9b_rule_candidates_target_binding",
+        ),
+    )
+
+    rule_candidate_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    target_scope: Mapped[str] = mapped_column(String(16))
+    opportunity_id: Mapped[UUID] = mapped_column(Uuid)
+    opportunity_version: Mapped[int] = mapped_column(Integer)
+    opportunity_unit_id: Mapped[UUID | None] = mapped_column(Uuid)
+    opportunity_unit_version_id: Mapped[UUID | None] = mapped_column(Uuid)
+    verified_fact_set_id: Mapped[UUID] = mapped_column(Uuid)
+    rule_type: Mapped[str] = mapped_column(String(32))
+    proposed_rule_payload: Mapped[dict[str, object]] = mapped_column(JSONB)
+    compiler_version: Mapped[str] = mapped_column(String(64))
+    producer_identity: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(String(16))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class RuleCandidateFact(Base):
+    __tablename__ = "p9b_rule_candidate_facts"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["rule_candidate_id"],
+            ["p9b_rule_candidates.rule_candidate_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["verified_fact_set_id", "verified_fact_id"],
+            ["verified_facts.verified_fact_set_id", "verified_facts.verified_fact_id"],
+            ondelete="RESTRICT",
+        ),
+        PrimaryKeyConstraint("rule_candidate_id", "verified_fact_id"),
+    )
+
+    rule_candidate_id: Mapped[UUID] = mapped_column(Uuid)
+    verified_fact_set_id: Mapped[UUID] = mapped_column(Uuid)
+    verified_fact_id: Mapped[UUID] = mapped_column(Uuid)
+
+
+class RuleCandidateEvidence(Base):
+    __tablename__ = "p9b_rule_candidate_evidence"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["rule_candidate_id"],
+            ["p9b_rule_candidates.rule_candidate_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["evidence_ref_id"],
+            ["evidence_refs.evidence_ref_id"],
+            ondelete="RESTRICT",
+        ),
+        PrimaryKeyConstraint("rule_candidate_id", "evidence_ref_id"),
+    )
+
+    rule_candidate_id: Mapped[UUID] = mapped_column(Uuid)
+    evidence_ref_id: Mapped[UUID] = mapped_column(Uuid)
+
+
+class RuleApprovalDecisionModel(Base):
+    __tablename__ = "p9b_rule_approval_decisions"
+    __table_args__ = (
+        CheckConstraint(
+            "uuid_extract_version(rule_approval_decision_id) = 7",
+            name="decision_id_uuid7",
+        ),
+        CheckConstraint(
+            "decision in ('APPROVE', 'REJECT', 'NEEDS_ADJUDICATION')",
+            name="decision_values",
+        ),
+        CheckConstraint(
+            "approval_method in ('HUMAN', 'DETERMINISTIC_POLICY')",
+            name="approval_method_values",
+        ),
+        ForeignKeyConstraint(
+            ["rule_candidate_id"],
+            ["p9b_rule_candidates.rule_candidate_id"],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint(
+            "rule_approval_decision_id",
+            "rule_candidate_id",
+            name="uq_p9b_rule_approval_decisions_candidate_binding",
+        ),
+    )
+
+    rule_approval_decision_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    rule_candidate_id: Mapped[UUID] = mapped_column(Uuid)
+    decision: Mapped[str] = mapped_column(String(24))
+    approver_identity: Mapped[str] = mapped_column(Text)
+    approval_method: Mapped[str] = mapped_column(String(32))
+    reason_code: Mapped[str] = mapped_column(String(128))
+    decided_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    policy_version: Mapped[str] = mapped_column(String(64))
+
+
+class UnitRuleSet(Base):
+    __tablename__ = "unit_rule_sets"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(unit_rule_set_id) = 7", name="rule_set_id_uuid7"),
+        CheckConstraint("opportunity_version >= 1", name="positive_opportunity_version"),
+        CheckConstraint("rule_schema_version = '0.8.0'", name="schema_version_v08"),
+        CheckConstraint("review_status = 'APPROVED'", name="review_status_approved"),
+        CheckConstraint("activation_status = 'DORMANT'", name="activation_status_dormant"),
+        CheckConstraint("jsonb_typeof(payload) = 'object'", name="payload_object"),
+        ForeignKeyConstraint(
+            [
+                "opportunity_unit_id",
+                "opportunity_unit_version_id",
+                "opportunity_id",
+                "opportunity_version",
+            ],
+            [
+                "opportunity_unit_versions.opportunity_unit_id",
+                "opportunity_unit_versions.opportunity_unit_version_id",
+                "opportunity_unit_versions.opportunity_id",
+                "opportunity_unit_versions.opportunity_version",
+            ],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["rule_candidate_id"],
+            ["p9b_rule_candidates.rule_candidate_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["rule_approval_decision_id", "rule_candidate_id"],
+            [
+                "p9b_rule_approval_decisions.rule_approval_decision_id",
+                "p9b_rule_approval_decisions.rule_candidate_id",
+            ],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint("rule_approval_decision_id"),
+        UniqueConstraint(
+            "opportunity_unit_id",
+            "opportunity_unit_version_id",
+            "rule_candidate_id",
+            name="uq_unit_rule_sets_candidate_target",
+        ),
+    )
+
+    unit_rule_set_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    opportunity_id: Mapped[UUID] = mapped_column(Uuid)
+    opportunity_version: Mapped[int] = mapped_column(Integer)
+    opportunity_unit_id: Mapped[UUID] = mapped_column(Uuid)
+    opportunity_unit_version_id: Mapped[UUID] = mapped_column(Uuid)
+    rule_candidate_id: Mapped[UUID] = mapped_column(Uuid)
+    rule_schema_version: Mapped[str] = mapped_column(String(16))
+    payload: Mapped[dict[str, object]] = mapped_column(JSONB)
+    review_status: Mapped[str] = mapped_column(String(16))
+    activation_status: Mapped[str] = mapped_column(String(16))
+    rule_approval_decision_id: Mapped[UUID] = mapped_column(Uuid)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 __all__ = [
     "DatasetManifest",
     "DatasetManifestEntry",
+    "ExtractionCandidate",
+    "ExtractionCandidateEvidence",
+    "ExtractionRun",
+    "ExtractionRunInputBlock",
+    "FactVerificationDecisionModel",
     "OpportunityUnit",
     "OpportunityUnitAlias",
     "OpportunityUnitLineageEvent",
@@ -855,4 +1622,14 @@ __all__ = [
     "SourceBundleMember",
     "SourceBundleMemberRelation",
     "SourceBundleRevision",
+    "RuleApprovalDecisionModel",
+    "RuleCandidateEvidence",
+    "RuleCandidateFact",
+    "RuleCandidateModel",
+    "UnitRuleSet",
+    "VerifiedFact",
+    "VerifiedFactEvidence",
+    "VerifiedFactSetDependency",
+    "VerifiedFactSetTransition",
+    "VersionedVerifiedFactSet",
 ]

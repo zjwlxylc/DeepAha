@@ -1,0 +1,232 @@
+{
+  "$defs": {
+    "ExtractionTargetScope": {
+      "enum": [
+        "OPPORTUNITY",
+        "UNIT"
+      ],
+      "title": "ExtractionTargetScope",
+      "type": "string"
+    },
+    "JsonValue": {},
+    "VerifiedFactSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "dependency_fingerprint": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Dependency Fingerprint",
+          "type": "string"
+        },
+        "evidence_ref_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ref Ids",
+          "type": "array"
+        },
+        "fact_state": {
+          "$ref": "#/$defs/VerifiedFactState"
+        },
+        "field_name": {
+          "minLength": 1,
+          "title": "Field Name",
+          "type": "string"
+        },
+        "normalized_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verification_decision_id": {
+          "format": "uuid",
+          "title": "Verification Decision Id",
+          "type": "string"
+        },
+        "verified_fact_id": {
+          "format": "uuid",
+          "title": "Verified Fact Id",
+          "type": "string"
+        },
+        "verified_fact_set_id": {
+          "format": "uuid",
+          "title": "Verified Fact Set Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "verified_fact_id",
+        "verified_fact_set_id",
+        "field_name",
+        "fact_state",
+        "normalized_value",
+        "raw_value",
+        "evidence_ref_ids",
+        "verification_decision_id",
+        "dependency_fingerprint"
+      ],
+      "title": "VerifiedFactSchemaV08",
+      "type": "object"
+    },
+    "VerifiedFactSetStatus": {
+      "enum": [
+        "ACTIVE",
+        "SUPERSEDED",
+        "STALE",
+        "WITHDRAWN"
+      ],
+      "title": "VerifiedFactSetStatus",
+      "type": "string"
+    },
+    "VerifiedFactState": {
+      "enum": [
+        "KNOWN",
+        "UNKNOWN"
+      ],
+      "title": "VerifiedFactState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "fact_schema_version": {
+      "const": "0.8.0",
+      "title": "Fact Schema Version",
+      "type": "string"
+    },
+    "facts": {
+      "items": {
+        "$ref": "#/$defs/VerifiedFactSchemaV08"
+      },
+      "minItems": 1,
+      "title": "Facts",
+      "type": "array"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_unit_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Id"
+    },
+    "opportunity_unit_version_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Version Id"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "precedence_graph_version": {
+      "minLength": 1,
+      "title": "Precedence Graph Version",
+      "type": "string"
+    },
+    "reference_dataset_versions": {
+      "additionalProperties": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Reference Dataset Versions",
+      "type": "object"
+    },
+    "relation_graph_version": {
+      "minLength": 1,
+      "title": "Relation Graph Version",
+      "type": "string"
+    },
+    "source_bundle_revision_id": {
+      "format": "uuid",
+      "title": "Source Bundle Revision Id",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/VerifiedFactSetStatus"
+    },
+    "supersedes_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Supersedes Id"
+    },
+    "target_scope": {
+      "$ref": "#/$defs/ExtractionTargetScope"
+    },
+    "verified_fact_set_id": {
+      "format": "uuid",
+      "title": "Verified Fact Set Id",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "verified_fact_set_id",
+    "target_scope",
+    "opportunity_id",
+    "opportunity_version",
+    "opportunity_unit_id",
+    "opportunity_unit_version_id",
+    "source_bundle_revision_id",
+    "version",
+    "relation_graph_version",
+    "precedence_graph_version",
+    "reference_dataset_versions",
+    "fact_schema_version",
+    "status",
+    "supersedes_id",
+    "facts",
+    "created_at"
+  ],
+  "title": "VersionedVerifiedFactSetSchemaV08",
+  "type": "object"
+}

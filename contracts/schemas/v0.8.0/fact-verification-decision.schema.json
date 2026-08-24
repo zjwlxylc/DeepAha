@@ -1,0 +1,107 @@
+{
+  "$defs": {
+    "EvidenceSupportResult": {
+      "enum": [
+        "SUPPORTED",
+        "UNSUPPORTED",
+        "UNKNOWN"
+      ],
+      "title": "EvidenceSupportResult",
+      "type": "string"
+    },
+    "FactVerificationDecision": {
+      "enum": [
+        "APPROVE",
+        "REJECT",
+        "UNKNOWN",
+        "NEEDS_ADJUDICATION"
+      ],
+      "title": "FactVerificationDecision",
+      "type": "string"
+    },
+    "PrecedenceCheckResult": {
+      "enum": [
+        "PASSED",
+        "FAILED",
+        "UNKNOWN"
+      ],
+      "title": "PrecedenceCheckResult",
+      "type": "string"
+    },
+    "VerificationMethod": {
+      "enum": [
+        "DETERMINISTIC",
+        "HUMAN",
+        "APPROVED_MAPPING"
+      ],
+      "title": "VerificationMethod",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "candidate_id": {
+      "format": "uuid",
+      "title": "Candidate Id",
+      "type": "string"
+    },
+    "decided_at": {
+      "format": "date-time",
+      "title": "Decided At",
+      "type": "string"
+    },
+    "decision": {
+      "$ref": "#/$defs/FactVerificationDecision"
+    },
+    "decision_id": {
+      "format": "uuid",
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "evidence_support_result": {
+      "$ref": "#/$defs/EvidenceSupportResult"
+    },
+    "precedence_check_result": {
+      "$ref": "#/$defs/PrecedenceCheckResult"
+    },
+    "reason_code": {
+      "minLength": 1,
+      "title": "Reason Code",
+      "type": "string"
+    },
+    "verification_method": {
+      "$ref": "#/$defs/VerificationMethod"
+    },
+    "verifier_identity": {
+      "minLength": 1,
+      "title": "Verifier Identity",
+      "type": "string"
+    },
+    "verifier_response_id": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Verifier Response Id"
+    }
+  },
+  "required": [
+    "decision_id",
+    "candidate_id",
+    "decision",
+    "verification_method",
+    "verifier_identity",
+    "verifier_response_id",
+    "reason_code",
+    "evidence_support_result",
+    "precedence_check_result",
+    "decided_at"
+  ],
+  "title": "FactVerificationDecisionSchemaV08",
+  "type": "object"
+}
