@@ -1,0 +1,69 @@
+{
+  "contract_version": "p9b-benchmark-metrics-v1",
+  "matching": {
+    "fact_key": ["target_identity", "field_name"],
+    "value_match": "canonical_exact",
+    "evidence_requirement": "official_locator_supports_value",
+    "future_evidence": "count_as_unsupported_and_time_violation"
+  },
+  "zero_support_status": "NOT_OBSERVED",
+  "insufficient_support_status": "INSUFFICIENT_SUPPORT",
+  "confidence_intervals": {
+    "binary_proportion": "wilson_95",
+    "macro": "atomic_leakage_group_bootstrap_95"
+  },
+  "metrics": {
+    "strict_fact_precision": {
+      "numerator": "timely evidence-supported exact VALUE predictions",
+      "denominator": "all VALUE predictions",
+      "direction": "higher",
+      "locked_gate": 0.99
+    },
+    "strict_fact_recall": {
+      "numerator": "timely evidence-supported exact VALUE predictions for KNOWN_SUPPORTED Gold",
+      "denominator": "all KNOWN_SUPPORTED Gold facts",
+      "direction": "higher",
+      "locked_gate": 0.97
+    },
+    "critical_silent_omission_rate": {
+      "numerator": "high-impact KNOWN_SUPPORTED Gold facts with no prediction field or OMITTED",
+      "denominator": "all high-impact KNOWN_SUPPORTED Gold facts",
+      "direction": "lower",
+      "locked_gate": 0.01
+    },
+    "unsupported_assertion_rate": {
+      "numerator": "VALUE predictions without allowed timely supporting evidence or overclaims",
+      "denominator": "all VALUE predictions",
+      "direction": "lower",
+      "locked_high_impact_gate": 0.0
+    },
+    "evidence_support_precision": {
+      "numerator": "VALUE predictions supported by official locator content visible at cutoff",
+      "denominator": "all VALUE predictions",
+      "direction": "higher",
+      "locked_gate": 0.99
+    },
+    "precedence_accuracy": {
+      "numerator": "timely exact facts resolved against the frozen effective precedence snapshot",
+      "denominator": "all precedence-sensitive KNOWN_SUPPORTED Gold facts",
+      "direction": "higher",
+      "locked_gate": 0.98
+    },
+    "unit_identity_f1": {
+      "numerator": "exact versioned Unit identity intersections",
+      "denominator": "precision and recall harmonic mean over expected and predicted Unit identities",
+      "direction": "higher",
+      "locked_gate": 0.98
+    }
+  },
+  "required_slices": [
+    "fact_micro",
+    "opportunity_unit_macro",
+    "field_type_macro",
+    "opportunity_category_macro",
+    "complexity_c1_c2_c3_c4",
+    "source_template_group",
+    "high_impact_only"
+  ],
+  "minimum_support_policy": "freeze_per_field_after_calibration; never lower to manufacture a pass"
+}

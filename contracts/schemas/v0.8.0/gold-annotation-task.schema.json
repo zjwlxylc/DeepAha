@@ -1,0 +1,145 @@
+{
+  "$defs": {
+    "AnswerAccessClass": {
+      "enum": [
+        "ASSISTED_CALIBRATION",
+        "DEVELOPMENT_VISIBLE",
+        "VALIDATION_BLIND",
+        "LOCKED_BLIND"
+      ],
+      "title": "AnswerAccessClass",
+      "type": "string"
+    },
+    "DatasetPartition": {
+      "enum": [
+        "CALIBRATION",
+        "DEVELOPMENT",
+        "VALIDATION",
+        "LOCKED_ACCEPTANCE"
+      ],
+      "title": "DatasetPartition",
+      "type": "string"
+    },
+    "GoldReviewRole": {
+      "enum": [
+        "ANNOTATOR",
+        "VERIFIER",
+        "ADJUDICATOR",
+        "CURATOR"
+      ],
+      "title": "GoldReviewRole",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "adjudicator_identity": {
+      "minLength": 1,
+      "title": "Adjudicator Identity",
+      "type": "string"
+    },
+    "annotator_identity": {
+      "minLength": 1,
+      "title": "Annotator Identity",
+      "type": "string"
+    },
+    "answer_access_class": {
+      "$ref": "#/$defs/AnswerAccessClass"
+    },
+    "blind_ended_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Blind Ended At"
+    },
+    "blind_started_at": {
+      "format": "date-time",
+      "title": "Blind Started At",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "curator_identity": {
+      "minLength": 1,
+      "title": "Curator Identity",
+      "type": "string"
+    },
+    "dataset_manifest_id": {
+      "format": "uuid",
+      "title": "Dataset Manifest Id",
+      "type": "string"
+    },
+    "entry_id": {
+      "minLength": 1,
+      "title": "Entry Id",
+      "type": "string"
+    },
+    "gold_annotation_task_id": {
+      "format": "uuid",
+      "title": "Gold Annotation Task Id",
+      "type": "string"
+    },
+    "partition": {
+      "$ref": "#/$defs/DatasetPartition"
+    },
+    "role_attestation_references": {
+      "additionalProperties": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "propertyNames": {
+        "$ref": "#/$defs/GoldReviewRole"
+      },
+      "title": "Role Attestation References",
+      "type": "object"
+    },
+    "split_seed_reference": {
+      "minLength": 1,
+      "title": "Split Seed Reference",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "BLIND_REVIEW",
+        "READY_FOR_ADJUDICATION",
+        "FROZEN",
+        "INVALIDATED"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "verifier_identity": {
+      "minLength": 1,
+      "title": "Verifier Identity",
+      "type": "string"
+    }
+  },
+  "required": [
+    "gold_annotation_task_id",
+    "dataset_manifest_id",
+    "entry_id",
+    "partition",
+    "answer_access_class",
+    "annotator_identity",
+    "verifier_identity",
+    "adjudicator_identity",
+    "curator_identity",
+    "role_attestation_references",
+    "blind_started_at",
+    "blind_ended_at",
+    "split_seed_reference",
+    "status",
+    "created_at"
+  ],
+  "title": "GoldAnnotationTaskSchemaV08",
+  "type": "object"
+}

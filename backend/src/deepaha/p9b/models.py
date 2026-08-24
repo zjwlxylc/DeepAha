@@ -1604,6 +1604,271 @@ class UnitRuleSet(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class GoldAnnotationTask(Base):
+    __tablename__ = "gold_annotation_tasks"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(gold_annotation_task_id) = 7", name="task_id_uuid7"),
+        CheckConstraint(
+            "partition in ('CALIBRATION', 'DEVELOPMENT', 'VALIDATION', 'LOCKED_ACCEPTANCE')",
+            name="partition_values",
+        ),
+        CheckConstraint(
+            "status in ('BLIND_REVIEW', 'READY_FOR_ADJUDICATION', 'FROZEN', 'INVALIDATED')",
+            name="status_values",
+        ),
+        CheckConstraint(
+            "annotator_identity like 'human:%' and verifier_identity like 'human:%' and "
+            "adjudicator_identity like 'human:%' and curator_identity like 'human:%'",
+            name="human_responsibility_identities",
+        ),
+        CheckConstraint(
+            "annotator_identity <> verifier_identity and "
+            "annotator_identity <> adjudicator_identity and "
+            "annotator_identity <> curator_identity and "
+            "verifier_identity <> adjudicator_identity and "
+            "verifier_identity <> curator_identity and "
+            "adjudicator_identity <> curator_identity",
+            name="role_identity_separation",
+        ),
+        CheckConstraint(
+            "jsonb_typeof(role_attestation_references) = 'object' and "
+            "role_attestation_references ?& array['ANNOTATOR', 'VERIFIER', "
+            "'ADJUDICATOR', 'CURATOR']",
+            name="role_attestations_complete",
+        ),
+        CheckConstraint(
+            "(status = 'BLIND_REVIEW' and blind_ended_at is null) or "
+            "(status <> 'BLIND_REVIEW' and blind_ended_at is not null)",
+            name="blind_state",
+        ),
+        ForeignKeyConstraint(
+            ["dataset_manifest_id", "entry_id"],
+            ["dataset_manifest_entries.dataset_manifest_id", "dataset_manifest_entries.entry_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["dataset_manifest_id", "partition", "answer_access_class"],
+            [
+                "dataset_manifests.dataset_manifest_id",
+                "dataset_manifests.partition",
+                "dataset_manifests.answer_access_class",
+            ],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint("dataset_manifest_id", "entry_id"),
+    )
+
+    gold_annotation_task_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    dataset_manifest_id: Mapped[UUID] = mapped_column(Uuid)
+    entry_id: Mapped[str] = mapped_column(String(128))
+    partition: Mapped[str] = mapped_column(String(32))
+    answer_access_class: Mapped[str] = mapped_column(String(32))
+    annotator_identity: Mapped[str] = mapped_column(Text)
+    verifier_identity: Mapped[str] = mapped_column(Text)
+    adjudicator_identity: Mapped[str] = mapped_column(Text)
+    curator_identity: Mapped[str] = mapped_column(Text)
+    role_attestation_references: Mapped[dict[str, str]] = mapped_column(JSONB)
+    blind_started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    blind_ended_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    split_seed_reference: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(String(32))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class GoldAnnotationSubmission(Base):
+    __tablename__ = "gold_annotation_submissions"
+    __table_args__ = (
+        CheckConstraint(
+            "uuid_extract_version(gold_annotation_submission_id) = 7",
+            name="submission_id_uuid7",
+        ),
+        CheckConstraint("review_role in ('ANNOTATOR', 'VERIFIER')", name="review_role_values"),
+        CheckConstraint(
+            "jsonb_typeof(judgments) = 'array' and jsonb_array_length(judgments) >= 1",
+            name="judgments_nonempty",
+        ),
+        ForeignKeyConstraint(
+            ["gold_annotation_task_id"],
+            ["gold_annotation_tasks.gold_annotation_task_id"],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint("gold_annotation_task_id", "review_role"),
+        UniqueConstraint(
+            "gold_annotation_submission_id",
+            "gold_annotation_task_id",
+            name="uq_gold_submissions_task_binding",
+        ),
+    )
+
+    gold_annotation_submission_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    gold_annotation_task_id: Mapped[UUID] = mapped_column(Uuid)
+    review_role: Mapped[str] = mapped_column(String(16))
+    actor_identity: Mapped[str] = mapped_column(Text)
+    assisted_calibration: Mapped[bool] = mapped_column(Boolean)
+    judgments: Mapped[list[dict[str, object]]] = mapped_column(JSONB)
+    submitted_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class GoldAdjudicationDecision(Base):
+    __tablename__ = "gold_adjudication_decisions"
+    __table_args__ = (
+        CheckConstraint(
+            "uuid_extract_version(gold_adjudication_decision_id) = 7",
+            name="decision_id_uuid7",
+        ),
+        CheckConstraint(
+            "annotation_submission_id <> verification_submission_id",
+            name="distinct_submissions",
+        ),
+        CheckConstraint(
+            "jsonb_typeof(judgments) = 'array' and jsonb_array_length(judgments) >= 1",
+            name="judgments_nonempty",
+        ),
+        ForeignKeyConstraint(
+            ["gold_annotation_task_id"],
+            ["gold_annotation_tasks.gold_annotation_task_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["annotation_submission_id", "gold_annotation_task_id"],
+            [
+                "gold_annotation_submissions.gold_annotation_submission_id",
+                "gold_annotation_submissions.gold_annotation_task_id",
+            ],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["verification_submission_id", "gold_annotation_task_id"],
+            [
+                "gold_annotation_submissions.gold_annotation_submission_id",
+                "gold_annotation_submissions.gold_annotation_task_id",
+            ],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint("gold_annotation_task_id"),
+        UniqueConstraint(
+            "gold_adjudication_decision_id",
+            "gold_annotation_task_id",
+            name="uq_gold_adjudication_task_binding",
+        ),
+    )
+
+    gold_adjudication_decision_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    gold_annotation_task_id: Mapped[UUID] = mapped_column(Uuid)
+    annotation_submission_id: Mapped[UUID] = mapped_column(Uuid)
+    verification_submission_id: Mapped[UUID] = mapped_column(Uuid)
+    adjudicator_identity: Mapped[str] = mapped_column(Text)
+    judgments: Mapped[list[dict[str, object]]] = mapped_column(JSONB)
+    reason_code: Mapped[str] = mapped_column(String(128))
+    decided_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class GoldTruthVersion(Base):
+    __tablename__ = "gold_truth_versions"
+    __table_args__ = (
+        CheckConstraint(
+            "uuid_extract_version(gold_truth_version_id) = 7", name="truth_version_id_uuid7"
+        ),
+        CheckConstraint("version >= 1", name="positive_version"),
+        CheckConstraint(
+            "(version = 1 and supersedes_truth_version_id is null) or "
+            "(version > 1 and supersedes_truth_version_id is not null)",
+            name="version_chain_shape",
+        ),
+        CheckConstraint(
+            "annotation_submission_id <> verification_submission_id", name="distinct_submissions"
+        ),
+        CheckConstraint("truth_hash ~ '^[0-9a-f]{64}$'", name="truth_hash_format"),
+        CheckConstraint(
+            "jsonb_typeof(judgments) = 'array' and jsonb_array_length(judgments) >= 1",
+            name="judgments_nonempty",
+        ),
+        ForeignKeyConstraint(
+            ["gold_annotation_task_id"],
+            ["gold_annotation_tasks.gold_annotation_task_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["annotation_submission_id", "gold_annotation_task_id"],
+            [
+                "gold_annotation_submissions.gold_annotation_submission_id",
+                "gold_annotation_submissions.gold_annotation_task_id",
+            ],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["verification_submission_id", "gold_annotation_task_id"],
+            [
+                "gold_annotation_submissions.gold_annotation_submission_id",
+                "gold_annotation_submissions.gold_annotation_task_id",
+            ],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["adjudication_decision_id", "gold_annotation_task_id"],
+            [
+                "gold_adjudication_decisions.gold_adjudication_decision_id",
+                "gold_adjudication_decisions.gold_annotation_task_id",
+            ],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["supersedes_truth_version_id"],
+            ["gold_truth_versions.gold_truth_version_id"],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint("gold_annotation_task_id"),
+        UniqueConstraint("truth_hash"),
+    )
+
+    gold_truth_version_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    gold_annotation_task_id: Mapped[UUID] = mapped_column(Uuid)
+    version: Mapped[int] = mapped_column(Integer)
+    supersedes_truth_version_id: Mapped[UUID | None] = mapped_column(Uuid)
+    revision_reason_code: Mapped[str] = mapped_column(String(128))
+    annotation_submission_id: Mapped[UUID] = mapped_column(Uuid)
+    verification_submission_id: Mapped[UUID] = mapped_column(Uuid)
+    adjudication_decision_id: Mapped[UUID | None] = mapped_column(Uuid)
+    curator_identity: Mapped[str] = mapped_column(Text)
+    judgments: Mapped[list[dict[str, object]]] = mapped_column(JSONB)
+    truth_hash: Mapped[str] = mapped_column(String(64))
+    frozen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class GoldAnswerAccessEvent(Base):
+    __tablename__ = "gold_answer_access_events"
+    __table_args__ = (
+        CheckConstraint(
+            "uuid_extract_version(gold_answer_access_event_id) = 7",
+            name="access_event_id_uuid7",
+        ),
+        CheckConstraint(
+            "requester_role in ('ANNOTATOR', 'VERIFIER', 'ADJUDICATOR', 'CURATOR', "
+            "'AI_ENGINEER', 'EVALUATOR')",
+            name="requester_role_values",
+        ),
+        CheckConstraint(
+            "access_kind in ('GOLD_ANSWER', 'ADJUDICATION_REASON', 'MODEL_COMPARISON')",
+            name="access_kind_values",
+        ),
+        CheckConstraint("decision in ('GRANTED', 'DENIED')", name="decision_values"),
+        ForeignKeyConstraint(
+            ["gold_annotation_task_id"],
+            ["gold_annotation_tasks.gold_annotation_task_id"],
+            ondelete="RESTRICT",
+        ),
+    )
+
+    gold_answer_access_event_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    gold_annotation_task_id: Mapped[UUID] = mapped_column(Uuid)
+    requester_identity: Mapped[str] = mapped_column(Text)
+    requester_role: Mapped[str] = mapped_column(String(24))
+    access_kind: Mapped[str] = mapped_column(String(32))
+    decision: Mapped[str] = mapped_column(String(16))
+    reason_code: Mapped[str] = mapped_column(String(128))
+    occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 __all__ = [
     "DatasetManifest",
     "DatasetManifestEntry",
@@ -1612,6 +1877,11 @@ __all__ = [
     "ExtractionRun",
     "ExtractionRunInputBlock",
     "FactVerificationDecisionModel",
+    "GoldAdjudicationDecision",
+    "GoldAnnotationSubmission",
+    "GoldAnnotationTask",
+    "GoldAnswerAccessEvent",
+    "GoldTruthVersion",
     "OpportunityUnit",
     "OpportunityUnitAlias",
     "OpportunityUnitLineageEvent",

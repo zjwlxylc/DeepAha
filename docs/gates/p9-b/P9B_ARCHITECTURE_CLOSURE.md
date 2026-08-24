@@ -260,6 +260,38 @@ ExtractionRun + ordered ExtractionRunInputBlock
 All Slice fixtures are synthetic engineering inputs. They are not Gold, independent human evidence
 or Release Qualification evidence.
 
+### 8.3 Governed Gold and executable benchmark
+
+Migration `20260824_0014` creates an isolated `gold_*` write model. Production facts never refer
+to Gold tables. Each annotation task binds one exact frozen manifest entry and four distinct
+`human:*` responsibility identities: Annotator, Verifier, Adjudicator and Curator. Every role also
+requires an external responsibility attestation reference; a bare display name is insufficient.
+
+- Locked Annotators never receive candidate model output. A Verifier cannot view the Annotator's
+  answer until the Verifier has submitted independently. An Adjudicator unlocks only after both
+  immutable submissions exist.
+- Conflicting submissions require an immutable, exact-submission-bound AdjudicationDecision.
+  Curator freeze records the blind-end answer-access event and canonical Gold truth hash.
+- Every Gold truth revision requires a new independent annotation task and predecessor truth; one
+  task cannot issue a second truth version. History is insert-only and populated migration history
+  refuses downgrade.
+- The import command defaults to read-only validation, replays the entire review chain and refuses
+  `synthetic:*`/`synthetic-fixture:*` attestations as real Gold. Evidence summaries exclude such
+  fixtures even if low-level constraint tests persist them temporarily.
+- `GoldFieldState` is exactly `KNOWN_SUPPORTED / KNOWN_NOT_APPLICABLE / AMBIGUOUS /
+  NOT_OBSERVED`; prediction state is exactly `VALUE / UNKNOWN / NOT_APPLICABLE / OMITTED`.
+- The executable benchmark reports numerator, denominator, support, Wilson 95% interval and
+  `NOT_OBSERVED` at zero support. It separately reports strict precision/recall, critical silent
+  omission, unsupported assertion, Evidence support, Unit segmentation, precedence, abstention
+  and future-Evidence cutoff violations.
+- Required Unit/field/category/complexity/source/high-impact slices are emitted. Macro estimates use
+  deterministic bootstrap over atomic leakage groups. Split counts, answer access, no-promotion and
+  temporal cutoff remain frozen in the versioned JSON contracts and the B0 manifest validator.
+
+No identity-bearing human Gold import exists in the repository at this Slice close. Actual real
+Gold and independent human evidence are therefore `0 / NOT_OBSERVED`; Calibration, Validation and
+Locked benchmark results remain `NOT_RUN`.
+
 ## 9. Stage 1 Read-path and Trust Boundaries
 
 - Document remains distinct from Opportunity and OpportunityUnit.

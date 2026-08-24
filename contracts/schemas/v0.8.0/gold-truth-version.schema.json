@@ -1,0 +1,159 @@
+{
+  "$defs": {
+    "GoldFieldJudgmentSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_block_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Evidence Block Ids",
+          "type": "array"
+        },
+        "field_name": {
+          "minLength": 1,
+          "title": "Field Name",
+          "type": "string"
+        },
+        "gold_state": {
+          "$ref": "#/$defs/GoldFieldState"
+        },
+        "high_impact": {
+          "title": "High Impact",
+          "type": "boolean"
+        },
+        "normalized_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "precedence_sensitive": {
+          "title": "Precedence Sensitive",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "field_name",
+        "gold_state",
+        "normalized_value",
+        "evidence_block_ids",
+        "high_impact",
+        "precedence_sensitive"
+      ],
+      "title": "GoldFieldJudgmentSchemaV08",
+      "type": "object"
+    },
+    "GoldFieldState": {
+      "enum": [
+        "KNOWN_SUPPORTED",
+        "KNOWN_NOT_APPLICABLE",
+        "AMBIGUOUS",
+        "NOT_OBSERVED"
+      ],
+      "title": "GoldFieldState",
+      "type": "string"
+    },
+    "JsonValue": {}
+  },
+  "additionalProperties": false,
+  "properties": {
+    "adjudication_decision_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Adjudication Decision Id"
+    },
+    "curator_identity": {
+      "minLength": 1,
+      "title": "Curator Identity",
+      "type": "string"
+    },
+    "frozen_at": {
+      "format": "date-time",
+      "title": "Frozen At",
+      "type": "string"
+    },
+    "gold_annotation_task_id": {
+      "format": "uuid",
+      "title": "Gold Annotation Task Id",
+      "type": "string"
+    },
+    "gold_truth_version_id": {
+      "format": "uuid",
+      "title": "Gold Truth Version Id",
+      "type": "string"
+    },
+    "judgments": {
+      "items": {
+        "$ref": "#/$defs/GoldFieldJudgmentSchemaV08"
+      },
+      "minItems": 1,
+      "title": "Judgments",
+      "type": "array"
+    },
+    "revision_reason_code": {
+      "default": "INITIAL_FREEZE",
+      "minLength": 1,
+      "title": "Revision Reason Code",
+      "type": "string"
+    },
+    "source_submission_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "title": "Source Submission Ids",
+      "type": "array"
+    },
+    "supersedes_truth_version_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Supersedes Truth Version Id"
+    },
+    "truth_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Truth Hash",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "gold_truth_version_id",
+    "gold_annotation_task_id",
+    "version",
+    "source_submission_ids",
+    "adjudication_decision_id",
+    "curator_identity",
+    "judgments",
+    "truth_hash",
+    "frozen_at"
+  ],
+  "title": "GoldTruthVersionSchemaV08",
+  "type": "object"
+}

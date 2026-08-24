@@ -262,9 +262,11 @@
 - Create: `backend/src/deepaha/p9b/gold.py`
 - Create: `backend/src/deepaha/p9b/benchmark.py`
 - Create: `backend/src/deepaha/p9b/annotation.py`
+- Create: `backend/src/deepaha/p9b/gold_import.py`
+- Create: `backend/src/deepaha/p9b/benchmark_cli.py`
 - Create: `backend/tests/p9b/test_gold_governance.py`
 - Create: `backend/tests/p9b/test_benchmark.py`
-- Create: `backend/tests/integration/test_p9b_gold_isolation.py`
+- Create: `backend/tests/integration/test_p9b_gold_migration.py`
 - Create: `config/p9b/benchmark-metric-contract.v1.json`
 - Create: `config/p9b/benchmark-split-contract.v1.json`
 
@@ -272,11 +274,11 @@
 - Consumes: exact target/bundle/parse/block identities.
 - Produces: role-separated blind annotation/import/adjudication/freeze tools, production/Gold physical isolation, manifest freeze/invalidation and executable metrics with explicit numerator/denominator/support/matching/split/leakage/cutoff.
 
-- [ ] **Step 1: Write RED authorization/blind-state tests**
-- [ ] **Step 2: Write RED benchmark tests for precision, recall, silent omission, unsupported assertion, Evidence support, segmentation, precedence and abstention**
-- [ ] **Step 3: Run RED, implement minimal governance/metrics, then run GREEN**
-- [ ] **Step 4: Import only identity-bearing real human labels if present; otherwise record actual counts `0` and `NOT_OBSERVED` without fabricating Gold**
-- [ ] **Step 5: Review, update ledger and commit `feat: add governed P9-B gold benchmark tooling`**
+- [x] **Step 1: Write RED authorization/blind-state tests**
+- [x] **Step 2: Write RED benchmark tests for precision, recall, silent omission, unsupported assertion, Evidence support, segmentation, precedence and abstention**
+- [x] **Step 3: Run RED, implement minimal governance/metrics, then run GREEN**
+- [x] **Step 4: Import only identity-bearing real human labels if present; otherwise record actual counts `0` and `NOT_OBSERVED` without fabricating Gold**
+- [x] **Step 5: Review, update ledger and commit `feat: add governed P9-B gold benchmark tooling`**
 
 ### Task 7: Data/Content Egress Gate and Recorded-Response-First Minimal Model Gateway
 

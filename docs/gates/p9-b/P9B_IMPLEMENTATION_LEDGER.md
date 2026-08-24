@@ -49,7 +49,7 @@ verifiers remain required at the applicable Slice gates.
 | P9-B0 Identity & Provenance Architecture Closure | `a5ca543c961c2077df5688d29e888021fe655821` | `3b5da45e6a19899f4c477aa3cf32fc1445254a95` | B0 verifier exit `0`: backend `661`, deterministic `90`, B0 PostgreSQL `29`, full PostgreSQL `288`; P9-A verifier exit `0` | `B0_DIFF_REVIEW_PASS`; P0/P1/P2=`0/0/0` | `3b5da45e6a19899f4c477aa3cf32fc1445254a95` |
 | DocumentBlock & Field Locators | `3b5da45e6a19899f4c477aa3cf32fc1445254a95` | dedicated DocumentBlock commit (this tree) | final verifier exit `0`: backend `674`, directed `23`, PostgreSQL directed `17`, full PostgreSQL `293`, Web `61`; downgrade/re-upgrade/drift passed | `DOCUMENT_BLOCK_DIFF_REVIEW_PASS`; P0/P1/P2=`0/0/0` | dedicated local commit |
 | Fact Promotion & Dormant Unit Rules | `10a7103a5d080d1ee9d1b114b3963aaaab4b053c` | dedicated fact-chain commit (this tree) | final verifier exit `0`: backend `684`, directed `22`, PostgreSQL directed `5`, full PostgreSQL `298`, Web `61`; downgrade/re-upgrade/drift passed | `FACT_PROMOTION_DIFF_REVIEW_PASS`; P0/P1/P2=`0/0/0` | dedicated local commit |
-| Gold Governance & Benchmark | pending | pending | not run | not run | not committed |
+| Gold Governance & Benchmark | `a7bd286037c2c04f851c61828b0b7a7340c62619` | dedicated Gold/Benchmark commit (this tree) | final verifier exit `0`: backend `701`, directed `29`, PostgreSQL directed `4`, full PostgreSQL `302`, Web `61`; downgrade/re-upgrade/drift passed | `GOLD_BENCHMARK_DIFF_REVIEW_PASS`; P0/P1/P2=`0/0/0` | dedicated local commit |
 | Egress & Minimal Model Gateway | pending | pending | not run | not run | not committed |
 | Qualification, Replay & Final Report | pending | pending | not run | not run | not committed |
 

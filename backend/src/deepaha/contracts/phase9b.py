@@ -103,6 +103,27 @@ class AnswerAccessClass(StrEnum):
     LOCKED_BLIND = "LOCKED_BLIND"
 
 
+class GoldReviewRole(StrEnum):
+    ANNOTATOR = "ANNOTATOR"
+    VERIFIER = "VERIFIER"
+    ADJUDICATOR = "ADJUDICATOR"
+    CURATOR = "CURATOR"
+
+
+class GoldFieldState(StrEnum):
+    KNOWN_SUPPORTED = "KNOWN_SUPPORTED"
+    KNOWN_NOT_APPLICABLE = "KNOWN_NOT_APPLICABLE"
+    AMBIGUOUS = "AMBIGUOUS"
+    NOT_OBSERVED = "NOT_OBSERVED"
+
+
+class PredictionFieldState(StrEnum):
+    VALUE = "VALUE"
+    UNKNOWN = "UNKNOWN"
+    NOT_APPLICABLE = "NOT_APPLICABLE"
+    OMITTED = "OMITTED"
+
+
 class DocumentBlockType(StrEnum):
     HTML_SECTION = "HTML_SECTION"
     HTML_ELEMENT = "HTML_ELEMENT"
@@ -827,6 +848,129 @@ class DatasetManifestSchemaV08(Phase9BContractModel):
         return self
 
 
+class GoldFieldJudgmentSchemaV08(Phase9BContractModel):
+    field_name: NonEmptyString
+    gold_state: GoldFieldState
+    normalized_value: JsonValue | None
+    evidence_block_ids: list[EntityId]
+    high_impact: bool
+    precedence_sensitive: bool
+
+    @model_validator(mode="after")
+    def require_state_shape(self) -> Self:
+        if (self.gold_state == GoldFieldState.KNOWN_SUPPORTED) != (
+            self.normalized_value is not None
+        ):
+            raise ValueError("normalized_value is required only for KNOWN_SUPPORTED")
+        if self.gold_state == GoldFieldState.KNOWN_SUPPORTED and not self.evidence_block_ids:
+            raise ValueError("KNOWN_SUPPORTED requires field-level evidence")
+        return self
+
+
+class GoldAnnotationTaskSchemaV08(Phase9BContractModel):
+    gold_annotation_task_id: EntityId
+    dataset_manifest_id: EntityId
+    entry_id: NonEmptyString
+    partition: DatasetPartition
+    answer_access_class: AnswerAccessClass
+    annotator_identity: NonEmptyString
+    verifier_identity: NonEmptyString
+    adjudicator_identity: NonEmptyString
+    curator_identity: NonEmptyString
+    role_attestation_references: dict[GoldReviewRole, NonEmptyString]
+    blind_started_at: Instant
+    blind_ended_at: Instant | None
+    split_seed_reference: NonEmptyString
+    status: Literal["BLIND_REVIEW", "READY_FOR_ADJUDICATION", "FROZEN", "INVALIDATED"]
+    created_at: Instant
+
+    @model_validator(mode="after")
+    def require_independent_human_roles(self) -> Self:
+        identities = {
+            self.annotator_identity,
+            self.verifier_identity,
+            self.adjudicator_identity,
+            self.curator_identity,
+        }
+        if len(identities) != 4:
+            raise ValueError("Gold responsibility identities must be distinct")
+        if any(not identity.startswith("human:") for identity in identities):
+            raise ValueError("each Gold role requires an explicit human responsibility identity")
+        if set(self.role_attestation_references) != set(GoldReviewRole):
+            raise ValueError("each Gold role requires an identity attestation reference")
+        expected_access = _PARTITION_ACCESS[self.partition]
+        if self.answer_access_class != expected_access:
+            raise ValueError("answer access must match the partition")
+        if (self.blind_ended_at is None) != (self.status == "BLIND_REVIEW"):
+            raise ValueError("blind_ended_at is absent exactly during BLIND_REVIEW")
+        return self
+
+
+class GoldAnnotationSubmissionSchemaV08(Phase9BContractModel):
+    gold_annotation_submission_id: EntityId
+    gold_annotation_task_id: EntityId
+    review_role: GoldReviewRole
+    actor_identity: NonEmptyString
+    assisted_calibration: bool
+    judgments: list[GoldFieldJudgmentSchemaV08] = Field(min_length=1)
+    submitted_at: Instant
+
+    @field_validator("review_role")
+    @classmethod
+    def require_submission_role(cls, value: GoldReviewRole) -> GoldReviewRole:
+        if value not in {GoldReviewRole.ANNOTATOR, GoldReviewRole.VERIFIER}:
+            raise ValueError("only ANNOTATOR and VERIFIER submit independent reviews")
+        return value
+
+    @field_validator("judgments")
+    @classmethod
+    def require_unique_fields(
+        cls, value: list[GoldFieldJudgmentSchemaV08]
+    ) -> list[GoldFieldJudgmentSchemaV08]:
+        fields = [item.field_name for item in value]
+        if len(fields) != len(set(fields)):
+            raise ValueError("each submission may judge a field only once")
+        return value
+
+
+class GoldAdjudicationDecisionSchemaV08(Phase9BContractModel):
+    gold_adjudication_decision_id: EntityId
+    gold_annotation_task_id: EntityId
+    annotation_submission_id: EntityId
+    verification_submission_id: EntityId
+    adjudicator_identity: NonEmptyString
+    judgments: list[GoldFieldJudgmentSchemaV08] = Field(min_length=1)
+    reason_code: NonEmptyString
+    decided_at: Instant
+
+
+class GoldTruthVersionSchemaV08(Phase9BContractModel):
+    gold_truth_version_id: EntityId
+    gold_annotation_task_id: EntityId
+    version: VersionNumber
+    supersedes_truth_version_id: EntityId | None = None
+    revision_reason_code: NonEmptyString = "INITIAL_FREEZE"
+    source_submission_ids: list[EntityId] = Field(min_length=2, max_length=2)
+    adjudication_decision_id: EntityId | None
+    curator_identity: NonEmptyString
+    judgments: list[GoldFieldJudgmentSchemaV08] = Field(min_length=1)
+    truth_hash: Sha256
+    frozen_at: Instant
+
+    @field_validator("source_submission_ids")
+    @classmethod
+    def require_distinct_submissions(cls, value: list[EntityId]) -> list[EntityId]:
+        if len(set(value)) != 2:
+            raise ValueError("Gold truth requires two distinct independent submissions")
+        return value
+
+    @model_validator(mode="after")
+    def require_version_chain(self) -> Self:
+        if (self.version == 1) != (self.supersedes_truth_version_id is None):
+            raise ValueError("only Gold truth version 1 has no predecessor")
+        return self
+
+
 __all__ = [
     "AnswerAccessClass",
     "DatasetManifestEntrySchemaV08",
@@ -844,6 +988,13 @@ __all__ = [
     "ExtractorKind",
     "FactVerificationDecision",
     "FactVerificationDecisionSchemaV08",
+    "GoldAnnotationSubmissionSchemaV08",
+    "GoldAnnotationTaskSchemaV08",
+    "GoldAdjudicationDecisionSchemaV08",
+    "GoldFieldJudgmentSchemaV08",
+    "GoldFieldState",
+    "GoldReviewRole",
+    "GoldTruthVersionSchemaV08",
     "OpportunityUnitAliasKind",
     "OpportunityUnitAliasSchemaV08",
     "OpportunityUnitKind",
@@ -852,6 +1003,7 @@ __all__ = [
     "OpportunityUnitVersionSchemaV08",
     "OpportunityUnitSchemaV08",
     "PrecedenceCheckResult",
+    "PredictionFieldState",
     "ProposedRulePayloadSchemaV08",
     "RuleApprovalDecisionSchemaV08",
     "RuleApprovalDecisionValue",

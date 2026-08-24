@@ -117,6 +117,10 @@ def fact_dependency_fingerprint(payload: object) -> str:
     return _canonical_hash_domain("fact_dependency_fingerprint", payload)
 
 
+def gold_truth_hash(payload: object) -> str:
+    return _canonical_hash_domain("gold_truth_hash", payload)
+
+
 __all__ = [
     "HASH_CONTRACT_VERSION",
     "HashDomain",
@@ -129,6 +133,7 @@ __all__ = [
     "extraction_evidence_binding_hash",
     "extraction_input_block_set_hash",
     "fact_dependency_fingerprint",
+    "gold_truth_hash",
     "member_provenance_hash",
     "split_manifest_hash",
 ]
