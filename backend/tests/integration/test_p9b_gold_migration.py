@@ -112,7 +112,13 @@ def _seed_frozen_calibration_manifest(connection: Connection) -> tuple[UUID, str
     return manifest_id, "calibration-000"
 
 
-def _insert_task(connection: Connection, manifest_id: UUID, entry_id: str) -> UUID:
+def _insert_task(
+    connection: Connection,
+    manifest_id: UUID,
+    entry_id: str,
+    *,
+    attestation_references: dict[str, str] | None = None,
+) -> UUID:
     task_id = uuid7()
     connection.execute(
         text(
@@ -130,7 +136,8 @@ def _insert_task(connection: Connection, manifest_id: UUID, entry_id: str) -> UU
             "manifest": manifest_id,
             "entry": entry_id,
             "attestations": json.dumps(
-                {
+                attestation_references
+                or {
                     "ANNOTATOR": "synthetic-fixture:annotator-a",
                     "VERIFIER": "synthetic-fixture:verifier-b",
                     "ADJUDICATOR": "synthetic-fixture:adjudicator-c",
@@ -226,7 +233,42 @@ def test_postgresql_enforces_gold_role_separation_and_conflict_adjudication(
     transaction = connection.begin()
     try:
         manifest_id, entry_id = _seed_frozen_calibration_manifest(connection)
-        task_id = _insert_task(connection, manifest_id, entry_id)
+        attestation_ids = {
+            role: uuid7() for role in ("ANNOTATOR", "VERIFIER", "ADJUDICATOR", "CURATOR")
+        }
+        task_id = _insert_task(
+            connection,
+            manifest_id,
+            entry_id,
+            attestation_references={
+                role: f"gold-role-attestation:{attestation_id}"
+                for role, attestation_id in attestation_ids.items()
+            },
+        )
+        for role, subject in {
+            "ANNOTATOR": "human:annotator-a",
+            "VERIFIER": "human:verifier-b",
+            "ADJUDICATOR": "human:adjudicator-c",
+            "CURATOR": "human:curator-d",
+        }.items():
+            connection.execute(
+                text(
+                    "insert into gold_role_attestations (gold_role_attestation_id, "
+                    "review_role, subject_identity, attestation_authority_identity, "
+                    "verification_method, external_evidence_reference, "
+                    "external_evidence_sha256, verified_at, expires_at, created_at) values "
+                    "(:id, :role, :subject, 'human:untrusted-authority', "
+                    "'SIGNED_ACCOUNT_ASSERTION', 'unverified:arbitrary-string', :hash, "
+                    ":now, null, :now)"
+                ),
+                {
+                    "id": attestation_ids[role],
+                    "role": role,
+                    "subject": subject,
+                    "hash": sha256(f"{role}:arbitrary".encode()).hexdigest(),
+                    "now": NOW,
+                },
+            )
         annotation_id = uuid7()
         verifier_id = uuid7()
 

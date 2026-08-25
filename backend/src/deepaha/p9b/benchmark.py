@@ -100,6 +100,12 @@ def evaluate_benchmark(
     segmentation_cases: list[UnitSegmentationCase] | None = None,
     _include_slices: bool = True,
 ) -> BenchmarkReport:
+    gold_keys = [(item.target_identity, item.field_name) for item in gold_facts]
+    if len(gold_keys) != len(set(gold_keys)):
+        raise ValueError("duplicate Gold fact key")
+    prediction_keys = [(item.target_identity, item.field_name) for item in predictions]
+    if len(prediction_keys) != len(set(prediction_keys)):
+        raise ValueError("duplicate prediction fact key")
     gold = {(item.target_identity, item.field_name): item for item in gold_facts}
     predicted = {(item.target_identity, item.field_name): item for item in predictions}
     values = [item for item in predictions if item.state == PredictionFieldState.VALUE]

@@ -15,6 +15,7 @@ from deepaha.p9b.models import (
     OpportunityUnitLineageEvidence,
     OpportunityUnitLineageMember,
     OpportunityUnitVersion,
+    SourceBundleMember,
     SourceBundleRevision,
 )
 
@@ -136,6 +137,22 @@ class OpportunityUnitService:
             supersedes_version_id=None,
         )
         unit.current_version_id = version.opportunity_unit_version_id
+        evidence_ref_id = self._require_bundle_evidence(source_bundle_revision_id)
+        self._session.add(
+            OpportunityUnitAlias(
+                alias_id=uuid7(),
+                opportunity_id=unit.opportunity_id,
+                opportunity_unit_id=unit.opportunity_unit_id,
+                normalized_alias_key=unit.normalized_current_unit_key,
+                display_alias_key=unit.current_unit_key,
+                alias_kind="CURRENT",
+                valid_from=effective_from,
+                valid_to=None,
+                evidence_ref_id=evidence_ref_id,
+                source_bundle_revision_id=source_bundle_revision_id,
+                created_at=effective_from,
+            )
+        )
         self._session.flush()
         return unit
 
@@ -177,7 +194,10 @@ class OpportunityUnitService:
                 OpportunityUnit.opportunity_unit_id == opportunity_unit_id,
                 OpportunityUnit.current_version_id == expected_current_version_id,
             )
-            .values(current_version_id=version.opportunity_unit_version_id)
+            .values(
+                current_version_id=version.opportunity_unit_version_id,
+                opportunity_version=opportunity_version,
+            )
             .returning(OpportunityUnit.opportunity_unit_id)
             .execution_options(synchronize_session=False)
         )
@@ -208,7 +228,7 @@ class OpportunityUnitService:
             raise UnitIdentityError("split requires at least two target units")
         if not reason_code.strip() or not actor_identity.strip():
             raise UnitIdentityError("split requires reason and accountable actor")
-        self._require_evidence(evidence_ref_ids)
+        self._require_evidence(evidence_ref_ids, source_bundle_revision_id)
         normalized_children = [self._validate_seed(seed) for seed in units]
         if len(set(normalized_children)) != len(normalized_children):
             raise UnitIdentityCollision("duplicate split child key")
@@ -278,7 +298,7 @@ class OpportunityUnitService:
             raise UnitIdentityError("merge requires at least two distinct source units")
         if not reason_code.strip() or not actor_identity.strip():
             raise UnitIdentityError("merge requires reason and accountable actor")
-        self._require_evidence(evidence_ref_ids)
+        self._require_evidence(evidence_ref_ids, source_bundle_revision_id)
         sources = [self._require_unit(unit_id) for unit_id in opportunity_unit_ids]
         opportunity_ids = {unit.opportunity_id for unit in sources}
         opportunity_versions = {unit.opportunity_version for unit in sources}
@@ -395,7 +415,9 @@ class OpportunityUnitService:
     ) -> OpportunityUnitLineageEvent:
         if confidence != "DETERMINISTIC":
             raise UnitIdentityCollision("UNCERTAIN re-key is fail closed")
-        self._require_evidence(evidence_ref_ids)
+        if not reason_code.strip() or not actor_identity.strip():
+            raise UnitIdentityError("re-key requires reason and accountable actor")
+        self._require_evidence(evidence_ref_ids, source_bundle_revision_id)
         unit = self._require_unit(opportunity_unit_id)
         normalized = normalize_unit_key(new_key)
         collision = self._session.scalar(
@@ -411,25 +433,11 @@ class OpportunityUnitService:
         prior_version_id = self._require_pointer(unit)
         prior = self._session.get(OpportunityUnitVersion, prior_version_id)
         assert prior is not None
-        self._session.add(
-            OpportunityUnitAlias(
-                alias_id=uuid7(),
-                opportunity_id=unit.opportunity_id,
-                opportunity_unit_id=unit.opportunity_unit_id,
-                normalized_alias_key=unit.normalized_current_unit_key,
-                display_alias_key=unit.current_unit_key,
-                alias_kind="HISTORICAL",
-                valid_from=unit.created_at,
-                valid_to=effective_at,
-                evidence_ref_id=evidence_ref_ids[0],
-                source_bundle_revision_id=source_bundle_revision_id,
-                created_at=effective_at,
-            )
-        )
+        self._close_current_alias(unit, effective_at=effective_at)
         appended = self.append_version_cas(
             opportunity_unit_id=unit.opportunity_unit_id,
             expected_current_version_id=prior_version_id,
-            opportunity_version=unit.opportunity_version,
+            opportunity_version=prior.opportunity_version,
             source_bundle_revision_id=source_bundle_revision_id,
             effective_from=effective_at,
             canonical_label=prior.canonical_label,
@@ -439,6 +447,22 @@ class OpportunityUnitService:
         )
         unit.current_unit_key = new_key.strip()
         unit.normalized_current_unit_key = normalized
+        self._session.flush()
+        self._session.add(
+            OpportunityUnitAlias(
+                alias_id=uuid7(),
+                opportunity_id=unit.opportunity_id,
+                opportunity_unit_id=unit.opportunity_unit_id,
+                normalized_alias_key=normalized,
+                display_alias_key=new_key.strip(),
+                alias_kind="CURRENT",
+                valid_from=effective_at,
+                valid_to=None,
+                evidence_ref_id=evidence_ref_ids[0],
+                source_bundle_revision_id=source_bundle_revision_id,
+                created_at=effective_at,
+            )
+        )
         self._session.flush()
         return self._lineage_event(
             opportunity_id=unit.opportunity_id,
@@ -470,11 +494,11 @@ class OpportunityUnitService:
         self._require_frozen_revision(
             source_bundle_revision_id,
             opportunity_id=unit.opportunity_id,
-            opportunity_version=unit.opportunity_version,
+            opportunity_version=prior.opportunity_version,
         )
         terminal = self._new_version(
             unit=unit,
-            opportunity_version=unit.opportunity_version,
+            opportunity_version=prior.opportunity_version,
             source_bundle_revision_id=source_bundle_revision_id,
             effective_from=prior.effective_from,
             effective_to=effective_at,
@@ -487,6 +511,7 @@ class OpportunityUnitService:
             ),
             supersedes_version_id=expected_current_version_id,
         )
+        self._close_current_alias(unit, effective_at=effective_at)
         updated_id = self._session.scalar(
             update(OpportunityUnit)
             .where(
@@ -495,6 +520,7 @@ class OpportunityUnitService:
             )
             .values(
                 current_version_id=terminal.opportunity_unit_version_id,
+                opportunity_version=prior.opportunity_version,
                 lifecycle_status="RETIRED",
                 retired_at=effective_at,
             )
@@ -535,6 +561,22 @@ class OpportunityUnitService:
         unit.lifecycle_status = "ACTIVE"
         unit.retired_at = None
         unit.current_version_id = version.opportunity_unit_version_id
+        self._session.flush()
+        self._session.add(
+            OpportunityUnitAlias(
+                alias_id=uuid7(),
+                opportunity_id=unit.opportunity_id,
+                opportunity_unit_id=unit.opportunity_unit_id,
+                normalized_alias_key=unit.normalized_current_unit_key,
+                display_alias_key=unit.current_unit_key,
+                alias_kind="CURRENT",
+                valid_from=effective_at,
+                valid_to=None,
+                evidence_ref_id=self._require_bundle_evidence(source_bundle_revision_id),
+                source_bundle_revision_id=source_bundle_revision_id,
+                created_at=effective_at,
+            )
+        )
         self._session.flush()
         return unit
 
@@ -650,16 +692,66 @@ class OpportunityUnitService:
             raise UnitIdentityError("OpportunityUnit does not exist")
         return unit
 
-    def _require_evidence(self, evidence_ref_ids: list[UUID]) -> None:
+    def _require_evidence(
+        self,
+        evidence_ref_ids: list[UUID],
+        source_bundle_revision_id: UUID,
+    ) -> None:
         if not evidence_ref_ids:
             raise UnitIdentityError("lineage requires Evidence")
         count = self._session.scalar(
-            select(func.count())
+            select(func.count(func.distinct(EvidenceRef.evidence_ref_id)))
             .select_from(EvidenceRef)
-            .where(EvidenceRef.evidence_ref_id.in_(evidence_ref_ids))
+            .join(
+                SourceBundleMember,
+                SourceBundleMember.document_id == EvidenceRef.document_id,
+            )
+            .where(
+                EvidenceRef.evidence_ref_id.in_(evidence_ref_ids),
+                SourceBundleMember.source_bundle_revision_id == source_bundle_revision_id,
+            )
         )
         if count != len(set(evidence_ref_ids)):
-            raise UnitIdentityError("lineage Evidence identity does not exist")
+            raise UnitIdentityError("lineage Evidence must belong to the exact SourceBundle")
+
+    def _close_current_alias(
+        self,
+        unit: OpportunityUnit,
+        *,
+        effective_at: datetime,
+    ) -> None:
+        current_aliases = tuple(
+            self._session.scalars(
+                select(OpportunityUnitAlias).where(
+                    OpportunityUnitAlias.opportunity_unit_id == unit.opportunity_unit_id,
+                    OpportunityUnitAlias.alias_kind == "CURRENT",
+                    OpportunityUnitAlias.valid_to.is_(None),
+                )
+            )
+        )
+        if len(current_aliases) != 1:
+            raise UnitIdentityError("OpportunityUnit must have exactly one CURRENT alias")
+        current_alias = current_aliases[0]
+        if effective_at <= current_alias.valid_from:
+            raise UnitIdentityError("identity transition must advance the alias window")
+        current_alias.alias_kind = "HISTORICAL"
+        current_alias.valid_to = effective_at
+        self._session.flush()
+
+    def _require_bundle_evidence(self, revision_id: UUID) -> UUID:
+        evidence_ref_id = self._session.scalar(
+            select(EvidenceRef.evidence_ref_id)
+            .join(
+                SourceBundleMember,
+                SourceBundleMember.document_id == EvidenceRef.document_id,
+            )
+            .where(SourceBundleMember.source_bundle_revision_id == revision_id)
+            .order_by(EvidenceRef.evidence_ref_id)
+            .limit(1)
+        )
+        if evidence_ref_id is None:
+            raise UnitIdentityError("Unit alias requires bundle-member Evidence")
+        return evidence_ref_id
 
     @staticmethod
     def _require_pointer(unit: OpportunityUnit) -> UUID:

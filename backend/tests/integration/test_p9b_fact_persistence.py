@@ -176,7 +176,15 @@ def seed_fact_graph(engine: Engine, object_store: S3ObjectStore) -> FactGraph:
                     completed_at=NOW,
                     terminal_code="COMPLETE",
                     request_count=1,
-                    strategy_attempts=[{"strategy": "STATIC_HTTP", "outcome": "VALID"}],
+                    strategy_attempts=[
+                        {
+                            "strategy": "STATIC_HTTP",
+                            "outcome": "VALID",
+                            "capture_observation_id": str(observation_id),
+                            "acquisition_evaluation_id": str(evaluation_id),
+                            "raw_artifact_id": str(artifact_id),
+                        }
+                    ],
                     discovered_count=1,
                     validated_count=1,
                     parsed_count=1,

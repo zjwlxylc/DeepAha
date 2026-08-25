@@ -394,10 +394,17 @@ class OpportunityUnit(Base):
             ondelete="RESTRICT",
         ),
         ForeignKeyConstraint(
-            ["opportunity_unit_id", "current_version_id"],
+            [
+                "opportunity_unit_id",
+                "current_version_id",
+                "opportunity_id",
+                "opportunity_version",
+            ],
             [
                 "opportunity_unit_versions.opportunity_unit_id",
                 "opportunity_unit_versions.opportunity_unit_version_id",
+                "opportunity_unit_versions.opportunity_id",
+                "opportunity_unit_versions.opportunity_version",
             ],
             name="fk_opportunity_units_current_version",
             ondelete="RESTRICT",
@@ -551,6 +558,12 @@ class OpportunityUnitAlias(Base):
             ["opportunity_unit_id", "opportunity_id"],
             ["opportunity_units.opportunity_unit_id", "opportunity_units.opportunity_id"],
             ondelete="RESTRICT",
+        ),
+        Index(
+            "uq_opportunity_unit_aliases_current",
+            "opportunity_unit_id",
+            unique=True,
+            postgresql_where=text("alias_kind = 'CURRENT' and valid_to is null"),
         ),
     )
 
@@ -1675,6 +1688,60 @@ class GoldAnnotationTask(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class GoldRoleAttestation(Base):
+    __tablename__ = "gold_role_attestations"
+    __table_args__ = (
+        CheckConstraint(
+            "uuid_extract_version(gold_role_attestation_id) = 7",
+            name="attestation_id_uuid7",
+        ),
+        CheckConstraint(
+            "review_role in ('ANNOTATOR', 'VERIFIER', 'ADJUDICATOR', 'CURATOR')",
+            name="review_role_values",
+        ),
+        CheckConstraint(
+            "subject_identity like 'human:%' and "
+            "attestation_authority_identity <> subject_identity",
+            name="independent_human_subject",
+        ),
+        CheckConstraint(
+            "verification_method in ('EXTERNAL_HUMAN_DIRECTORY', "
+            "'SIGNED_ACCOUNT_ASSERTION', 'IN_PERSON_ACCOUNTABILITY_RECORD')",
+            name="verification_method_values",
+        ),
+        CheckConstraint(
+            "external_evidence_sha256 ~ '^[0-9a-f]{64}$'",
+            name="evidence_hash_format",
+        ),
+        CheckConstraint(
+            "external_evidence_reference not like 'synthetic:%' and "
+            "external_evidence_reference not like 'synthetic-fixture:%' and "
+            "external_evidence_reference not like 'claimed-human:%'",
+            name="external_evidence_required",
+        ),
+        CheckConstraint(
+            "expires_at is null or expires_at > verified_at",
+            name="attestation_window",
+        ),
+        UniqueConstraint(
+            "review_role",
+            "subject_identity",
+            "external_evidence_sha256",
+        ),
+    )
+
+    gold_role_attestation_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    review_role: Mapped[str] = mapped_column(String(16))
+    subject_identity: Mapped[str] = mapped_column(Text)
+    attestation_authority_identity: Mapped[str] = mapped_column(Text)
+    verification_method: Mapped[str] = mapped_column(String(40))
+    external_evidence_reference: Mapped[str] = mapped_column(Text)
+    external_evidence_sha256: Mapped[str] = mapped_column(String(64))
+    verified_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 class GoldAnnotationSubmission(Base):
     __tablename__ = "gold_annotation_submissions"
     __table_args__ = (
@@ -1881,6 +1948,7 @@ __all__ = [
     "GoldAnnotationSubmission",
     "GoldAnnotationTask",
     "GoldAnswerAccessEvent",
+    "GoldRoleAttestation",
     "GoldTruthVersion",
     "OpportunityUnit",
     "OpportunityUnitAlias",

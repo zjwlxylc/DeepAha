@@ -516,6 +516,9 @@ class RunStrategyAttempt(AcquisitionContract):
     strategy: FetchStrategy
     validation_status: ValidationStatus | None
     error_code: DiagnosticCode | None
+    capture_observation_id: EntityId | None = None
+    acquisition_evaluation_id: EntityId | None = None
+    raw_artifact_id: EntityId | None = None
 
     @model_validator(mode="after")
     def require_attempt_outcome(self) -> Self:
@@ -523,6 +526,15 @@ class RunStrategyAttempt(AcquisitionContract):
             raise ValueError("transport attempt without validation requires error_code")
         if self.validation_status is ValidationStatus.VALID and self.error_code is not None:
             raise ValueError("VALID attempt forbids error_code")
+        lineage = (
+            self.capture_observation_id,
+            self.acquisition_evaluation_id,
+            self.raw_artifact_id,
+        )
+        if any(item is not None for item in lineage) and not all(
+            item is not None for item in lineage
+        ):
+            raise ValueError("attempt lineage must bind Observation, Evaluation, and Artifact")
         return self
 
 

@@ -906,6 +906,37 @@ class GoldAnnotationTaskSchemaV08(Phase9BContractModel):
         return self
 
 
+class GoldRoleAttestationSchemaV08(Phase9BContractModel):
+    gold_role_attestation_id: EntityId
+    review_role: GoldReviewRole
+    subject_identity: NonEmptyString
+    attestation_authority_identity: NonEmptyString
+    verification_method: Literal[
+        "EXTERNAL_HUMAN_DIRECTORY",
+        "SIGNED_ACCOUNT_ASSERTION",
+        "IN_PERSON_ACCOUNTABILITY_RECORD",
+    ]
+    external_evidence_reference: NonEmptyString
+    external_evidence_sha256: Sha256
+    verified_at: Instant
+    expires_at: Instant | None
+    created_at: Instant
+
+    @model_validator(mode="after")
+    def require_external_human_attestation(self) -> Self:
+        if not self.subject_identity.startswith("human:"):
+            raise ValueError("Gold attestation subject must be a human responsibility identity")
+        if self.attestation_authority_identity == self.subject_identity:
+            raise ValueError("Gold attestation authority must be independent from its subject")
+        if self.external_evidence_reference.startswith(
+            ("synthetic:", "synthetic-fixture:", "claimed-human:")
+        ):
+            raise ValueError("Gold human attestation requires external evidence")
+        if self.expires_at is not None and self.expires_at <= self.verified_at:
+            raise ValueError("Gold human attestation expiry must follow verification")
+        return self
+
+
 class GoldAnnotationSubmissionSchemaV08(Phase9BContractModel):
     gold_annotation_submission_id: EntityId
     gold_annotation_task_id: EntityId
@@ -994,6 +1025,7 @@ __all__ = [
     "GoldFieldJudgmentSchemaV08",
     "GoldFieldState",
     "GoldReviewRole",
+    "GoldRoleAttestationSchemaV08",
     "GoldTruthVersionSchemaV08",
     "OpportunityUnitAliasKind",
     "OpportunityUnitAliasSchemaV08",

@@ -1,0 +1,90 @@
+{
+  "$defs": {
+    "GoldReviewRole": {
+      "enum": [
+        "ANNOTATOR",
+        "VERIFIER",
+        "ADJUDICATOR",
+        "CURATOR"
+      ],
+      "title": "GoldReviewRole",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "attestation_authority_identity": {
+      "minLength": 1,
+      "title": "Attestation Authority Identity",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Expires At"
+    },
+    "external_evidence_reference": {
+      "minLength": 1,
+      "title": "External Evidence Reference",
+      "type": "string"
+    },
+    "external_evidence_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "External Evidence Sha256",
+      "type": "string"
+    },
+    "gold_role_attestation_id": {
+      "format": "uuid",
+      "title": "Gold Role Attestation Id",
+      "type": "string"
+    },
+    "review_role": {
+      "$ref": "#/$defs/GoldReviewRole"
+    },
+    "subject_identity": {
+      "minLength": 1,
+      "title": "Subject Identity",
+      "type": "string"
+    },
+    "verification_method": {
+      "enum": [
+        "EXTERNAL_HUMAN_DIRECTORY",
+        "SIGNED_ACCOUNT_ASSERTION",
+        "IN_PERSON_ACCOUNTABILITY_RECORD"
+      ],
+      "title": "Verification Method",
+      "type": "string"
+    },
+    "verified_at": {
+      "format": "date-time",
+      "title": "Verified At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "gold_role_attestation_id",
+    "review_role",
+    "subject_identity",
+    "attestation_authority_identity",
+    "verification_method",
+    "external_evidence_reference",
+    "external_evidence_sha256",
+    "verified_at",
+    "expires_at",
+    "created_at"
+  ],
+  "title": "GoldRoleAttestationSchemaV08",
+  "type": "object"
+}

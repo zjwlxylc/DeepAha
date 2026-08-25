@@ -55,6 +55,13 @@ class AcquisitionRunAttempt(AcquisitionContract):
     error_code: str | None
 
 
+@dataclass(frozen=True, slots=True)
+class _AttemptLineage:
+    capture_observation_id: UUID | None
+    acquisition_evaluation_id: UUID | None
+    raw_artifact_id: UUID | None
+
+
 class AcquisitionRunSummary(AcquisitionContract):
     recipe_id: UUID
     recipe_version: str
@@ -187,6 +194,7 @@ class AcquisitionOrchestrator:
         seen = {policy.url}
         started_at = self._clock()
         attempts: list[AcquisitionRunAttempt] = []
+        attempt_lineage: list[_AttemptLineage] = []
         request_count = 0
         valid_count = 0
         parsed_count = 0
@@ -210,6 +218,7 @@ class AcquisitionOrchestrator:
                 pending=pending,
                 remaining_requests=recipe.maximum_requests - request_count,
                 attempts=attempts,
+                attempt_lineage=attempt_lineage,
                 started_at=started_at,
                 last_request_at=last_request_at,
             )
@@ -252,6 +261,7 @@ class AcquisitionOrchestrator:
                 policy=policy,
                 started_at=started_at,
                 completed_at=self._clock(),
+                attempt_lineage=attempt_lineage,
             )
         return summary
 
@@ -263,6 +273,7 @@ class AcquisitionOrchestrator:
         pending: _PendingUrl,
         remaining_requests: int,
         attempts: list[AcquisitionRunAttempt],
+        attempt_lineage: list[_AttemptLineage],
         started_at: datetime,
         last_request_at: datetime | None,
     ) -> tuple[_UrlResult, int, datetime | None]:
@@ -319,6 +330,7 @@ class AcquisitionOrchestrator:
                         }
                     )
                 )
+                attempt_lineage.append(_AttemptLineage(None, None, None))
                 return (
                     _UrlResult(RunTerminalCode.FETCH_FAILED, (), False, False, 0),
                     used,
@@ -334,6 +346,7 @@ class AcquisitionOrchestrator:
                 policy=policy,
                 pending=pending,
             )
+            evaluation = self._record_evaluation(fetched, validation)
             attempts.append(
                 AcquisitionRunAttempt.model_validate(
                     {
@@ -346,7 +359,13 @@ class AcquisitionOrchestrator:
                     }
                 )
             )
-            evaluation = self._record_evaluation(fetched, validation)
+            attempt_lineage.append(
+                _AttemptLineage(
+                    capture_observation_id=fetched.observation_id,
+                    acquisition_evaluation_id=evaluation.acquisition_evaluation_id,
+                    raw_artifact_id=fetched.artifact_id,
+                )
+            )
             hard_stop = _hard_stop(validation.status)
             if hard_stop is not None:
                 return _UrlResult(hard_stop, (), False, False, 0), used, last_request_at
@@ -485,6 +504,7 @@ class AcquisitionOrchestrator:
         policy: EndpointPolicy,
         started_at: datetime,
         completed_at: datetime,
+        attempt_lineage: list[_AttemptLineage],
     ) -> None:
         if self._run_recorder is None:
             return
@@ -506,8 +526,15 @@ class AcquisitionOrchestrator:
                             "strategy": attempt.strategy,
                             "validation_status": attempt.validation_status,
                             "error_code": attempt.error_code,
+                            "capture_observation_id": lineage.capture_observation_id,
+                            "acquisition_evaluation_id": lineage.acquisition_evaluation_id,
+                            "raw_artifact_id": lineage.raw_artifact_id,
                         }
-                        for attempt in summary.attempts
+                        for attempt, lineage in zip(
+                            summary.attempts,
+                            attempt_lineage,
+                            strict=True,
+                        )
                     ],
                     "discovered_count": summary.discovered_count,
                     "validated_count": summary.valid_count,

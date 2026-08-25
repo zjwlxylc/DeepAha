@@ -1,6 +1,7 @@
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Protocol
 from uuid import UUID, uuid7
 
 from sqlalchemy import select
@@ -11,6 +12,7 @@ from deepaha.contracts.phase9b import (
     GoldAnnotationSubmissionSchemaV08,
     GoldAnnotationTaskSchemaV08,
     GoldFieldJudgmentSchemaV08,
+    GoldRoleAttestationSchemaV08,
     GoldTruthVersionSchemaV08,
 )
 from deepaha.p9b.hashing import gold_truth_hash
@@ -19,6 +21,7 @@ from deepaha.p9b.models import (
     GoldAnnotationSubmission,
     GoldAnnotationTask,
     GoldAnswerAccessEvent,
+    GoldRoleAttestation,
     GoldTruthVersion,
 )
 
@@ -32,6 +35,15 @@ class GoldEvidenceSummary:
     frozen_truth_count: int
     distinct_human_identity_count: int
     status: str
+
+
+class GoldRoleAttestationVerifier(Protocol):
+    def verify(
+        self,
+        attestation: GoldRoleAttestation,
+        *,
+        observed_at: datetime,
+    ) -> bool: ...
 
 
 def _judgments(
@@ -61,8 +73,14 @@ def _truth_hash_payload(truth: GoldTruthVersionSchemaV08) -> dict[str, object]:
 
 
 class GoldRepository:
-    def __init__(self, session: Session) -> None:
+    def __init__(
+        self,
+        session: Session,
+        *,
+        role_attestation_verifier: GoldRoleAttestationVerifier | None = None,
+    ) -> None:
         self._session = session
+        self._role_attestation_verifier = role_attestation_verifier
 
     def persist_task(self, task: GoldAnnotationTaskSchemaV08) -> GoldAnnotationTask:
         row = GoldAnnotationTask(
@@ -84,6 +102,25 @@ class GoldRepository:
             split_seed_reference=task.split_seed_reference,
             status=task.status,
             created_at=task.created_at,
+        )
+        self._session.add(row)
+        self._session.flush()
+        return row
+
+    def persist_role_attestation(
+        self, attestation: GoldRoleAttestationSchemaV08
+    ) -> GoldRoleAttestation:
+        row = GoldRoleAttestation(
+            gold_role_attestation_id=attestation.gold_role_attestation_id,
+            review_role=attestation.review_role.value,
+            subject_identity=attestation.subject_identity,
+            attestation_authority_identity=attestation.attestation_authority_identity,
+            verification_method=attestation.verification_method,
+            external_evidence_reference=attestation.external_evidence_reference,
+            external_evidence_sha256=attestation.external_evidence_sha256,
+            verified_at=attestation.verified_at,
+            expires_at=attestation.expires_at,
+            created_at=attestation.created_at,
         )
         self._session.add(row)
         self._session.flush()
@@ -179,15 +216,20 @@ class GoldRepository:
 
     def evidence_summary(self) -> GoldEvidenceSummary:
         identities: set[str] = set()
-        real_task_ids: set[UUID] = set()
-        for task in self._session.scalars(select(GoldAnnotationTask)):
-            references = task.role_attestation_references.values()
-            if any(
-                reference.startswith(("synthetic:", "synthetic-fixture:"))
-                for reference in references
+        attestations = {
+            f"gold-role-attestation:{row.gold_role_attestation_id}": row
+            for row in self._session.scalars(select(GoldRoleAttestation))
+        }
+        truth_count = 0
+        for truth in self._session.scalars(select(GoldTruthVersion)):
+            task = self._session.get(GoldAnnotationTask, truth.gold_annotation_task_id)
+            if task is None or not self._has_exact_human_attestations(
+                task=task,
+                attestations=attestations,
+                observed_at=truth.frozen_at,
             ):
                 continue
-            real_task_ids.add(task.gold_annotation_task_id)
+            truth_count += 1
             identities.update(
                 {
                     task.annotator_identity,
@@ -196,19 +238,49 @@ class GoldRepository:
                     task.curator_identity,
                 }
             )
-        truth_count = sum(
-            truth.gold_annotation_task_id in real_task_ids
-            for truth in self._session.scalars(select(GoldTruthVersion))
-        )
         return GoldEvidenceSummary(
             frozen_truth_count=truth_count,
             distinct_human_identity_count=len(identities),
             status="OBSERVED" if truth_count else "NOT_OBSERVED",
         )
 
+    def _has_exact_human_attestations(
+        self,
+        *,
+        task: GoldAnnotationTask,
+        attestations: dict[str, GoldRoleAttestation],
+        observed_at: datetime,
+    ) -> bool:
+        assignments = {
+            "ANNOTATOR": task.annotator_identity,
+            "VERIFIER": task.verifier_identity,
+            "ADJUDICATOR": task.adjudicator_identity,
+            "CURATOR": task.curator_identity,
+        }
+        role_identities = set(assignments.values())
+        for role, subject_identity in assignments.items():
+            reference = task.role_attestation_references.get(role)
+            attestation = attestations.get(reference or "")
+            if (
+                attestation is None
+                or attestation.review_role != role
+                or attestation.subject_identity != subject_identity
+                or attestation.attestation_authority_identity in role_identities
+                or attestation.verified_at > task.blind_started_at
+                or (attestation.expires_at is not None and attestation.expires_at <= observed_at)
+                or self._role_attestation_verifier is None
+                or not self._role_attestation_verifier.verify(
+                    attestation,
+                    observed_at=observed_at,
+                )
+            ):
+                return False
+        return True
+
 
 __all__ = [
     "GoldEvidenceSummary",
     "GoldPersistenceError",
     "GoldRepository",
+    "GoldRoleAttestationVerifier",
 ]

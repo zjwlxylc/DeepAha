@@ -218,6 +218,25 @@ def test_orchestrator_persists_common_evidence_deduplicates_and_parses_valid_onl
         assert session.scalar(select(func.count()).select_from(AcquisitionEvaluation)) == 2
         assert session.scalar(select(func.count()).select_from(AcquisitionRun)) == 1
         assert session.scalar(select(func.count()).select_from(Document)) == 1
+        run = session.scalar(select(AcquisitionRun))
+        assert run is not None
+        persisted_lineage = {
+            (
+                item.get("capture_observation_id"),
+                item.get("acquisition_evaluation_id"),
+                item.get("raw_artifact_id"),
+            )
+            for item in run.strategy_attempts
+        }
+        expected_lineage = {
+            (
+                str(evaluation.observation_id),
+                str(evaluation.acquisition_evaluation_id),
+                str(evaluation.artifact_id),
+            )
+            for evaluation in session.scalars(select(AcquisitionEvaluation))
+        }
+        assert persisted_lineage == expected_lineage
 
 
 def test_challenge_is_evaluated_but_cannot_create_document(

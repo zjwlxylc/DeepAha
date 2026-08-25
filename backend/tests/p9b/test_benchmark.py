@@ -1,5 +1,7 @@
 from datetime import UTC, datetime, timedelta
 
+import pytest
+
 from deepaha.contracts.phase9b import GoldFieldState, PredictionFieldState
 from deepaha.p9b.benchmark import (
     GoldBenchmarkFact,
@@ -90,6 +92,28 @@ def test_zero_support_is_not_observed_not_a_pass() -> None:
 
     assert all(metric.status == "NOT_OBSERVED" for metric in report.metrics.values())
     assert all(metric.value is None for metric in report.metrics.values())
+
+
+def test_duplicate_fact_keys_are_rejected_instead_of_last_write_wins() -> None:
+    duplicate_gold = [
+        GoldBenchmarkFact(
+            "u1", "deadline", GoldFieldState.KNOWN_SUPPORTED, "first", True, False, "g1"
+        ),
+        GoldBenchmarkFact(
+            "u1", "deadline", GoldFieldState.KNOWN_SUPPORTED, "second", True, False, "g1"
+        ),
+    ]
+    duplicate_predictions = [
+        PredictedBenchmarkFact("u1", "deadline", PredictionFieldState.VALUE, "first", True, CUTOFF),
+        PredictedBenchmarkFact(
+            "u1", "deadline", PredictionFieldState.VALUE, "second", True, CUTOFF
+        ),
+    ]
+
+    with pytest.raises(ValueError, match="duplicate Gold fact key"):
+        evaluate_benchmark(duplicate_gold, [], evaluation_as_of=CUTOFF)
+    with pytest.raises(ValueError, match="duplicate prediction fact key"):
+        evaluate_benchmark([], duplicate_predictions, evaluation_as_of=CUTOFF)
 
 
 def test_report_includes_required_slices_and_atomic_group_bootstrap() -> None:

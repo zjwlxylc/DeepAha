@@ -307,13 +307,20 @@ class BundleService:
             run.source_id == observation.source_id
             and run.endpoint_id == observation.endpoint_id
             and run.endpoint_policy_version == observation.policy_version
+            and any(
+                attempt.get("capture_observation_id") == str(observation.observation_id)
+                and attempt.get("acquisition_evaluation_id")
+                == str(evaluation.acquisition_evaluation_id)
+                and attempt.get("raw_artifact_id") == str(artifact.artifact_id)
+                for attempt in run.strategy_attempts
+            )
         )
         if not exact_observation:
             raise BundleProvenanceError("CaptureObservation provenance binding mismatch")
         if not exact_evaluation:
             raise BundleProvenanceError("AcquisitionEvaluation must be exact and VALID")
         if not exact_run:
-            raise BundleProvenanceError("AcquisitionRun provenance binding mismatch")
+            raise BundleProvenanceError("AcquisitionRun must contain exact Observation lineage")
         return SourceBundleMember(
             source_bundle_member_id=uuid7(),
             source_bundle_revision_id=revision_id,

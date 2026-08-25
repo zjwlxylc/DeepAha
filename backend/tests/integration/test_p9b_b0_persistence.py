@@ -1,11 +1,12 @@
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime, timedelta
 from hashlib import sha256
+from threading import Event, Thread
 from uuid import UUID, uuid7
 
 import pytest
 from sqlalchemy import Engine, func, select, text
-from sqlalchemy.exc import DBAPIError, IntegrityError
+from sqlalchemy.exc import DBAPIError
 from sqlalchemy.orm import Session
 
 from deepaha.acquisition.models import AcquisitionEvaluation, AcquisitionRun
@@ -180,7 +181,16 @@ def seed_graph(session: Session, *, suffix: str = "one") -> Graph:
         completed_at=NOW,
         terminal_code="COMPLETE",
         request_count=1,
-        strategy_attempts=[{"strategy": "STATIC_HTTP", "outcome": "VALID"}],
+        strategy_attempts=[
+            {
+                "strategy": "STATIC_HTTP",
+                "validation_status": "VALID",
+                "error_code": None,
+                "capture_observation_id": str(observation_id),
+                "acquisition_evaluation_id": str(evaluation_id),
+                "raw_artifact_id": str(artifact_id),
+            }
+        ],
         discovered_count=1,
         validated_count=1,
         parsed_count=1,
@@ -418,6 +428,198 @@ def test_bundle_creation_rejects_cross_bound_run_before_persistence(session: Ses
         )
 
 
+def test_bundle_creation_rejects_same_endpoint_run_without_exact_observation_lineage(
+    session: Session,
+) -> None:
+    graph = seed_graph(session, suffix="same-endpoint")
+    original = session.get(AcquisitionRun, graph.run_id)
+    assert original is not None
+    unrelated_run_id = uuid7()
+    session.add(
+        AcquisitionRun(
+            acquisition_run_id=unrelated_run_id,
+            recipe_id=uuid7(),
+            source_id=original.source_id,
+            endpoint_id=original.endpoint_id,
+            endpoint_policy_version=original.endpoint_policy_version,
+            recipe_version="2026-08-24.unrelated",
+            started_at=NOW,
+            completed_at=NOW,
+            terminal_code="COMPLETE",
+            request_count=1,
+            strategy_attempts=[
+                {
+                    "strategy": "STATIC_HTTP",
+                    "validation_status": "VALID",
+                    "error_code": None,
+                    "capture_observation_id": str(uuid7()),
+                    "acquisition_evaluation_id": str(uuid7()),
+                    "raw_artifact_id": str(uuid7()),
+                }
+            ],
+            discovered_count=1,
+            validated_count=1,
+            parsed_count=1,
+            attachment_count=0,
+            evidence_count=1,
+            zero_discovery_flag=False,
+            selector_drift_flag=False,
+            manual_intervention=False,
+            stable_stop_reason=None,
+            contract_version="1.0.0",
+        )
+    )
+    session.flush()
+
+    with pytest.raises(BundleProvenanceError, match="exact Observation lineage"):
+        BundleService(session).create_revision(
+            opportunity_id=graph.opportunity_id,
+            opportunity_version=graph.opportunity_version,
+            effective_as_of=NOW,
+            members=[replace(member_spec(graph), acquisition_run_id=unrelated_run_id)],
+        )
+
+
+def test_database_rejects_forged_direct_revision_freeze(session: Session) -> None:
+    graph = seed_graph(session, suffix="direct-freeze")
+    revision = BundleService(session).create_revision(
+        opportunity_id=graph.opportunity_id,
+        opportunity_version=graph.opportunity_version,
+        effective_as_of=NOW,
+        members=[member_spec(graph)],
+    )
+    session.flush()
+
+    with pytest.raises(DBAPIError, match="P9B_BUNDLE_FREEZE_PROOF_MISMATCH"):
+        session.execute(
+            text(
+                "update source_bundle_revisions "
+                "set canonical_bundle_hash = :forged_hash, status = 'FROZEN', frozen_at = :now "
+                "where source_bundle_revision_id = :revision_id"
+            ),
+            {
+                "forged_hash": "f" * 64,
+                "now": NOW,
+                "revision_id": revision.source_bundle_revision_id,
+            },
+        )
+
+
+@pytest.mark.parametrize("initial_status", ["FROZEN", "INVALIDATED"])
+def test_database_rejects_direct_non_draft_revision_insert_without_provenance(
+    session: Session,
+    initial_status: str,
+) -> None:
+    graph = seed_graph(session, suffix=f"direct-{initial_status.lower()}-insert")
+    draft = BundleService(session).create_revision(
+        opportunity_id=graph.opportunity_id,
+        opportunity_version=graph.opportunity_version,
+        effective_as_of=NOW,
+        members=[member_spec(graph)],
+    )
+    session.flush()
+
+    with pytest.raises(DBAPIError, match="P9B_BUNDLE_INITIAL_STATE_MISMATCH"):
+        session.execute(
+            text(
+                "insert into source_bundle_revisions "
+                "(source_bundle_revision_id, source_bundle_id, opportunity_id, "
+                "opportunity_version, revision_number, canonical_bundle_hash, "
+                "relation_graph_version, precedence_graph_version, effective_as_of, "
+                "status, created_at, frozen_at) values "
+                "(:revision_id, :bundle_id, :opportunity_id, :opportunity_version, 2, "
+                ":forged_hash, 'p9b-relation-graph-v1', 'p9b-precedence-graph-v1', :now, "
+                ":status, :now, :now)"
+            ),
+            {
+                "revision_id": uuid7(),
+                "bundle_id": draft.source_bundle_id,
+                "opportunity_id": graph.opportunity_id,
+                "opportunity_version": graph.opportunity_version,
+                "forged_hash": "f" * 64,
+                "status": initial_status,
+                "now": NOW,
+            },
+        )
+
+
+def test_member_relation_insert_and_revision_freeze_serialize_on_parent_row(
+    migrated_engine: Engine,
+) -> None:
+    with Session(migrated_engine) as setup:
+        primary = seed_graph(setup, suffix="freeze-lock-primary")
+        attachment = seed_graph(setup, suffix="freeze-lock-attachment")
+        revision = BundleService(setup).create_revision(
+            opportunity_id=primary.opportunity_id,
+            opportunity_version=primary.opportunity_version,
+            effective_as_of=NOW,
+            members=[
+                member_spec(primary),
+                replace(member_spec(attachment), member_role="ATTACHMENT", precedence=500),
+            ],
+        )
+        revision_id = revision.source_bundle_revision_id
+        member_ids = tuple(
+            setup.scalars(
+                select(SourceBundleMember.source_bundle_member_id)
+                .where(SourceBundleMember.source_bundle_revision_id == revision_id)
+                .order_by(SourceBundleMember.source_bundle_member_id)
+            )
+        )
+        setup.commit()
+
+    insert_connection = migrated_engine.connect()
+    insert_transaction = insert_connection.begin()
+    started = Event()
+    outcome: dict[str, object] = {}
+    try:
+        insert_connection.execute(
+            text(
+                "insert into source_bundle_member_relations "
+                "(source_bundle_revision_id, source_member_id, target_member_id, "
+                "relation_type, created_at) values "
+                "(:revision_id, :source_id, :target_id, 'ATTACHES_TO', :created_at)"
+            ),
+            {
+                "revision_id": revision_id,
+                "source_id": member_ids[1],
+                "target_id": member_ids[0],
+                "created_at": NOW,
+            },
+        )
+
+        def freeze_in_second_transaction() -> None:
+            with Session(migrated_engine) as freezer:
+                started.set()
+                try:
+                    BundleService(freezer).freeze_revision(revision_id, frozen_at=NOW)
+                    freezer.commit()
+                    outcome["status"] = "COMMITTED"
+                except Exception as error:  # noqa: BLE001 - assertion captures DB outcome
+                    freezer.rollback()
+                    outcome["error"] = error
+
+        thread = Thread(target=freeze_in_second_transaction, daemon=True)
+        thread.start()
+        assert started.wait(timeout=2)
+        thread.join(timeout=0.25)
+        assert thread.is_alive(), "freeze did not wait for the in-flight member graph mutation"
+        insert_transaction.commit()
+        thread.join(timeout=3)
+        assert not thread.is_alive()
+        assert isinstance(outcome.get("error"), DBAPIError)
+        assert "P9B_BUNDLE_FREEZE_PROOF_MISMATCH" in str(outcome["error"])
+    finally:
+        if insert_transaction.is_active:
+            insert_transaction.rollback()
+        insert_connection.close()
+
+    with Session(migrated_engine) as verification:
+        persisted = verification.get(SourceBundleRevision, revision_id)
+        assert persisted is not None
+        assert persisted.status == "DRAFT"
+
+
 def test_multi_member_bundle_keeps_each_attachment_provenance_and_relation(
     session: Session,
 ) -> None:
@@ -601,6 +803,190 @@ def test_unit_version_append_uses_compare_and_swap(session: Session) -> None:
     )
 
 
+def test_unit_current_pointer_and_parent_version_advance_atomically(session: Session) -> None:
+    graph = seed_graph(session, suffix="unit-parent-version")
+    first_revision = frozen_bundle(session, graph)
+    opportunity = session.get(Opportunity, graph.opportunity_id)
+    assert opportunity is not None
+    session.add(
+        OpportunityVersion(
+            opportunity_id=graph.opportunity_id,
+            version=2,
+            effective_from=NOW + timedelta(minutes=1),
+            source_document_id=graph.document_id,
+            source_evidence_ref_id=graph.evidence_ref_id,
+            snapshot={"canonical_title": opportunity.canonical_title},
+            field_evidence=[
+                {
+                    "field_path": "canonical_title",
+                    "precedence": 600,
+                    "evidence_ref_id": str(graph.evidence_ref_id),
+                    "effective_at": (NOW + timedelta(minutes=1)).isoformat(),
+                }
+            ],
+            changes=[
+                {
+                    "field_path": "canonical_title",
+                    "before": opportunity.canonical_title,
+                    "after": opportunity.canonical_title,
+                    "evidence_ref_id": str(graph.evidence_ref_id),
+                }
+            ],
+            content_sha256="8" * 64,
+            review_status="NOT_REQUIRED",
+            created_at=NOW + timedelta(minutes=1),
+        )
+    )
+    session.flush()
+    opportunity.current_version = 2
+    session.flush()
+    second_revision = BundleService(session).create_revision(
+        opportunity_id=graph.opportunity_id,
+        opportunity_version=2,
+        effective_as_of=NOW + timedelta(minutes=1),
+        members=[member_spec(graph)],
+    )
+    BundleService(session).freeze_revision(
+        second_revision.source_bundle_revision_id,
+        frozen_at=NOW + timedelta(minutes=1),
+    )
+    service = OpportunityUnitService(session)
+    unit = service.create_unit(
+        opportunity_id=graph.opportunity_id,
+        opportunity_version=1,
+        source_bundle_revision_id=first_revision.source_bundle_revision_id,
+        seed=UnitSeed("A001", "POSITION", "Position A", "a" * 64),
+        effective_from=NOW,
+    )
+    prior_pointer = unit.current_version_id
+    current = service.append_version_cas(
+        opportunity_unit_id=unit.opportunity_unit_id,
+        expected_current_version_id=prior_pointer,
+        opportunity_version=2,
+        source_bundle_revision_id=second_revision.source_bundle_revision_id,
+        effective_from=NOW + timedelta(minutes=1),
+        canonical_label="Position A v2",
+        identity_fingerprint="b" * 64,
+    )
+
+    assert unit.opportunity_version == 2
+    assert unit.current_version_id == current.opportunity_unit_version_id
+    with pytest.raises(DBAPIError, match="P9B_UNIT_CURRENT_VERSION_MISMATCH"):
+        session.execute(
+            text(
+                "update opportunity_units set opportunity_version = 1 "
+                "where opportunity_unit_id = :unit_id"
+            ),
+            {"unit_id": unit.opportunity_unit_id},
+        )
+
+
+def test_rekey_closes_current_alias_and_opens_new_current_window(session: Session) -> None:
+    graph = seed_graph(session, suffix="rekey-window")
+    revision = frozen_bundle(session, graph)
+    service = OpportunityUnitService(session)
+    unit = service.create_unit(
+        opportunity_id=graph.opportunity_id,
+        opportunity_version=1,
+        source_bundle_revision_id=revision.source_bundle_revision_id,
+        seed=UnitSeed("A001", "POSITION", "Position A", "a" * 64),
+        effective_from=NOW,
+    )
+    initial_alias = session.scalar(
+        select(OpportunityUnitAlias).where(
+            OpportunityUnitAlias.opportunity_unit_id == unit.opportunity_unit_id,
+            OpportunityUnitAlias.alias_kind == "CURRENT",
+        )
+    )
+    assert initial_alias is not None
+    assert initial_alias.normalized_alias_key == "a001"
+    assert initial_alias.valid_from == NOW
+    assert initial_alias.valid_to is None
+
+    effective_at = NOW + timedelta(hours=1)
+    service.rekey_unit(
+        opportunity_unit_id=unit.opportunity_unit_id,
+        new_key="A002",
+        source_bundle_revision_id=revision.source_bundle_revision_id,
+        evidence_ref_ids=[graph.evidence_ref_id],
+        confidence="DETERMINISTIC",
+        effective_at=effective_at,
+        reason_code="OFFICIAL_CODE_CORRECTION",
+        actor_identity="human:reviewer-01",
+    )
+    aliases = tuple(
+        session.scalars(
+            select(OpportunityUnitAlias)
+            .where(OpportunityUnitAlias.opportunity_unit_id == unit.opportunity_unit_id)
+            .order_by(OpportunityUnitAlias.valid_from, OpportunityUnitAlias.alias_id)
+        )
+    )
+    assert [(item.alias_kind, item.normalized_alias_key) for item in aliases] == [
+        ("HISTORICAL", "a001"),
+        ("CURRENT", "a002"),
+    ]
+    assert aliases[0].valid_from == NOW
+    assert aliases[0].valid_to == effective_at
+    assert aliases[1].valid_from == effective_at
+    assert aliases[1].valid_to is None
+    with pytest.raises(DBAPIError, match="alias history mutation rejected"):
+        session.execute(
+            text(
+                "update opportunity_unit_aliases set display_alias_key = 'tampered' "
+                "where alias_id = :alias_id"
+            ),
+            {"alias_id": aliases[0].alias_id},
+        )
+
+
+def test_rekey_requires_reason_and_accountable_actor(session: Session) -> None:
+    graph = seed_graph(session, suffix="rekey-accountability")
+    revision = frozen_bundle(session, graph)
+    unit = OpportunityUnitService(session).create_unit(
+        opportunity_id=graph.opportunity_id,
+        opportunity_version=1,
+        source_bundle_revision_id=revision.source_bundle_revision_id,
+        seed=UnitSeed("A001", "POSITION", "Position A", "a" * 64),
+        effective_from=NOW,
+    )
+
+    with pytest.raises(UnitIdentityError, match="reason and accountable actor"):
+        OpportunityUnitService(session).rekey_unit(
+            opportunity_unit_id=unit.opportunity_unit_id,
+            new_key="A002",
+            source_bundle_revision_id=revision.source_bundle_revision_id,
+            evidence_ref_ids=[graph.evidence_ref_id],
+            confidence="DETERMINISTIC",
+            effective_at=NOW + timedelta(hours=1),
+            reason_code=" ",
+            actor_identity=" ",
+        )
+
+
+def test_active_unit_cannot_commit_without_exact_current_alias(session: Session) -> None:
+    graph = seed_graph(session, suffix="active-current-alias")
+    revision = frozen_bundle(session, graph)
+    unit = OpportunityUnitService(session).create_unit(
+        opportunity_id=graph.opportunity_id,
+        opportunity_version=1,
+        source_bundle_revision_id=revision.source_bundle_revision_id,
+        seed=UnitSeed("A001", "POSITION", "Position A", "a" * 64),
+        effective_from=NOW,
+    )
+
+    session.execute(
+        text(
+            "update opportunity_unit_aliases set alias_kind = 'HISTORICAL', valid_to = :now "
+            "where opportunity_unit_id = :unit_id and alias_kind = 'CURRENT'"
+        ),
+        {"now": NOW + timedelta(hours=1), "unit_id": unit.opportunity_unit_id},
+    )
+    with pytest.raises(DBAPIError, match="P9B_ACTIVE_UNIT_CURRENT_ALIAS_MISMATCH"):
+        session.execute(
+            text("set constraints opportunity_unit_current_alias_exactly_one immediate")
+        )
+
+
 def test_singleton_split_preserves_identity_and_records_lineage(session: Session) -> None:
     graph = seed_graph(session)
     revision = frozen_bundle(session, graph)
@@ -632,6 +1018,16 @@ def test_singleton_split_preserves_identity_and_records_lineage(session: Session
     assert singleton.opportunity_unit_id not in {item.opportunity_unit_id for item in children}
     assert len(children) == 2
     assert event.event_type == "SPLIT"
+    singleton_aliases = tuple(
+        session.scalars(
+            select(OpportunityUnitAlias).where(
+                OpportunityUnitAlias.opportunity_unit_id == singleton.opportunity_unit_id
+            )
+        )
+    )
+    assert len(singleton_aliases) == 1
+    assert singleton_aliases[0].alias_kind == "HISTORICAL"
+    assert singleton_aliases[0].valid_to == NOW + timedelta(hours=1)
     assert session.scalar(select(func.count()).select_from(OpportunityUnitLineageEvent)) == 1
 
 
@@ -676,6 +1072,15 @@ def test_regular_merge_creates_new_unit_but_explicit_split_reversal_reuses_singl
 
     assert reversal.event_type == "REVERSAL"
     assert reused.opportunity_unit_id == singleton.opportunity_unit_id
+    current_alias = session.scalar(
+        select(OpportunityUnitAlias).where(
+            OpportunityUnitAlias.opportunity_unit_id == reused.opportunity_unit_id,
+            OpportunityUnitAlias.alias_kind == "CURRENT",
+            OpportunityUnitAlias.valid_to.is_(None),
+        )
+    )
+    assert current_alias is not None
+    assert current_alias.normalized_alias_key == "default"
 
     second_graph = seed_graph(session, suffix="ordinary")
     second_revision = frozen_bundle(session, second_graph)
@@ -862,18 +1267,17 @@ def test_unit_version_history_and_current_pointer_ownership_are_database_enforce
         identity_fingerprint="c" * 64,
     )
 
-    session.execute(
-        text(
-            "update opportunity_units set current_version_id = :foreign_pointer "
-            "where opportunity_unit_id = :unit_id"
-        ),
-        {
-            "foreign_pointer": first_pointer,
-            "unit_id": second.opportunity_unit_id,
-        },
-    )
-    with pytest.raises(IntegrityError):
-        session.execute(text("set constraints fk_opportunity_units_current_version immediate"))
+    with pytest.raises(DBAPIError, match="P9B_UNIT_CURRENT_VERSION_MISMATCH"):
+        session.execute(
+            text(
+                "update opportunity_units set current_version_id = :foreign_pointer "
+                "where opportunity_unit_id = :unit_id"
+            ),
+            {
+                "foreign_pointer": first_pointer,
+                "unit_id": second.opportunity_unit_id,
+            },
+        )
 
 
 def test_official_alias_reuse_overlapping_window_fails_closed(session: Session) -> None:
