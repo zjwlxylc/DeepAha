@@ -1,0 +1,107 @@
+{
+  "$defs": {
+    "RetentionClass": {
+      "enum": [
+        "ZERO_RETENTION",
+        "PROVIDER_TRANSIENT_RETENTION",
+        "INTERNAL_ENCRYPTED_AUDIT"
+      ],
+      "title": "RetentionClass",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "active": {
+      "title": "Active",
+      "type": "boolean"
+    },
+    "allowed_classifications": {
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Allowed Classifications",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "provider": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Provider",
+      "type": "string"
+    },
+    "recorded_by": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Recorded By",
+      "type": "string"
+    },
+    "region": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Region",
+      "type": "string"
+    },
+    "retention_class": {
+      "$ref": "#/$defs/RetentionClass"
+    },
+    "snapshot_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Hash",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "supports_idempotency": {
+      "title": "Supports Idempotency",
+      "type": "boolean"
+    },
+    "training_use": {
+      "title": "Training Use",
+      "type": "boolean"
+    },
+    "valid_from": {
+      "format": "date-time",
+      "title": "Valid From",
+      "type": "string"
+    },
+    "valid_until": {
+      "format": "date-time",
+      "title": "Valid Until",
+      "type": "string"
+    },
+    "zero_retention": {
+      "title": "Zero Retention",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "snapshot_hash",
+    "provider",
+    "region",
+    "active",
+    "zero_retention",
+    "training_use",
+    "supports_idempotency",
+    "allowed_classifications",
+    "retention_class",
+    "valid_from",
+    "valid_until",
+    "recorded_by",
+    "created_at"
+  ],
+  "title": "ProviderEgressPolicySnapshotSchemaV08",
+  "type": "object"
+}

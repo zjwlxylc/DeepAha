@@ -1,0 +1,624 @@
+{
+  "$defs": {
+    "ExtractionTargetScope": {
+      "enum": [
+        "OPPORTUNITY",
+        "UNIT"
+      ],
+      "title": "ExtractionTargetScope",
+      "type": "string"
+    },
+    "ModelAttemptOutcome": {
+      "enum": [
+        "AUTHORITY_REJECTED",
+        "SUCCEEDED",
+        "RETRYABLE_PROVIDER_ERROR",
+        "TERMINAL_PROVIDER_ERROR",
+        "PROVIDER_OUTCOME_UNKNOWN",
+        "RESPONSE_METADATA_REJECTED",
+        "OUTPUT_LIMIT_EXCEEDED",
+        "INVALID_JSON_RESPONSE",
+        "INVALID_CANDIDATE_SHAPE",
+        "OUTPUT_SCHEMA_VALIDATION_FAILED"
+      ],
+      "title": "ModelAttemptOutcome",
+      "type": "string"
+    },
+    "ModelCallAttemptLedgerSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "attempt": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Attempt",
+          "type": "integer"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "authorization_checked_at": {
+          "format": "date-time",
+          "title": "Authorization Checked At",
+          "type": "string"
+        },
+        "authorization_decision": {
+          "enum": [
+            "AUTHORIZED",
+            "AUTHORITY_REJECTED"
+          ],
+          "title": "Authorization Decision",
+          "type": "string"
+        },
+        "authorization_reason_code": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Authorization Reason Code",
+          "type": "string"
+        },
+        "completed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Completed At"
+        },
+        "dispatch_deadline": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Dispatch Deadline"
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Error Code"
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelAttemptOutcome"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "provider_http_status": {
+          "anyOf": [
+            {
+              "maximum": 599,
+              "minimum": 100,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Provider Http Status"
+        },
+        "provider_invocation_allowed": {
+          "title": "Provider Invocation Allowed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "attempt",
+        "attempt_id",
+        "authorization_decision",
+        "authorization_reason_code",
+        "authorization_checked_at",
+        "dispatch_deadline",
+        "provider_invocation_allowed",
+        "outcome",
+        "error_code",
+        "provider_http_status",
+        "completed_at"
+      ],
+      "title": "ModelCallAttemptLedgerSchemaV08",
+      "type": "object"
+    },
+    "ModelCallLedgerStatus": {
+      "enum": [
+        "IN_PROGRESS",
+        "SUCCEEDED",
+        "TERMINAL_FAILED"
+      ],
+      "title": "ModelCallLedgerStatus",
+      "type": "string"
+    },
+    "ModelTerminalDisposition": {
+      "enum": [
+        "COMPLETED",
+        "AUTHORITY_REJECTED",
+        "PROVIDER_TERMINAL",
+        "PROVIDER_OUTCOME_UNKNOWN",
+        "RESPONSE_METADATA_REJECTED",
+        "ATTEMPTS_EXHAUSTED",
+        "REVISION_INVALIDATED_AFTER_DISPATCH"
+      ],
+      "title": "ModelTerminalDisposition",
+      "type": "string"
+    },
+    "RawResponseReferenceKind": {
+      "enum": [
+        "INTERNAL_OBJECT",
+        "PROVIDER_RESPONSE_ID"
+      ],
+      "title": "RawResponseReferenceKind",
+      "type": "string"
+    },
+    "RetentionClass": {
+      "enum": [
+        "ZERO_RETENTION",
+        "PROVIDER_TRANSIENT_RETENTION",
+        "INTERNAL_ENCRYPTED_AUDIT"
+      ],
+      "title": "RetentionClass",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "adapter_name": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Adapter Name",
+      "type": "string"
+    },
+    "adapter_version": {
+      "maxLength": 32,
+      "minLength": 1,
+      "title": "Adapter Version",
+      "type": "string"
+    },
+    "attempt_count": {
+      "maximum": 3,
+      "minimum": 0,
+      "title": "Attempt Count",
+      "type": "integer"
+    },
+    "attempts": {
+      "items": {
+        "$ref": "#/$defs/ModelCallAttemptLedgerSchemaV08"
+      },
+      "title": "Attempts",
+      "type": "array"
+    },
+    "cache_read_tokens": {
+      "minimum": 0,
+      "title": "Cache Read Tokens",
+      "type": "integer"
+    },
+    "cache_write_tokens": {
+      "minimum": 0,
+      "title": "Cache Write Tokens",
+      "type": "integer"
+    },
+    "canonical_message_hashes": {
+      "items": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Canonical Message Hashes",
+      "type": "array"
+    },
+    "canonical_request_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Canonical Request Hash",
+      "type": "string"
+    },
+    "contract_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "egress_decision_id": {
+      "format": "uuid",
+      "title": "Egress Decision Id",
+      "type": "string"
+    },
+    "fallback_count": {
+      "const": 0,
+      "title": "Fallback Count",
+      "type": "integer"
+    },
+    "finalized_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Finalized At"
+    },
+    "input_block_hashes": {
+      "items": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Input Block Hashes",
+      "type": "array"
+    },
+    "input_block_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Input Block Ids",
+      "type": "array"
+    },
+    "input_tokens": {
+      "minimum": 0,
+      "title": "Input Tokens",
+      "type": "integer"
+    },
+    "latency_ms": {
+      "minimum": 0,
+      "title": "Latency Ms",
+      "type": "integer"
+    },
+    "model_call_id": {
+      "format": "uuid",
+      "title": "Model Call Id",
+      "type": "string"
+    },
+    "model_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Model Id",
+      "type": "string"
+    },
+    "model_snapshot": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Model Snapshot",
+      "type": "string"
+    },
+    "monetary_cost": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "title": "Monetary Cost"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_unit_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Id"
+    },
+    "opportunity_unit_version_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Version Id"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "output_schema_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Output Schema Version",
+      "type": "string"
+    },
+    "output_tokens": {
+      "minimum": 0,
+      "title": "Output Tokens",
+      "type": "integer"
+    },
+    "parsed_result_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Parsed Result Hash"
+    },
+    "parser_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Parser Version",
+      "type": "string"
+    },
+    "prompt_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Prompt Version",
+      "type": "string"
+    },
+    "provider": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Provider",
+      "type": "string"
+    },
+    "provider_response_id": {
+      "anyOf": [
+        {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Provider Response Id"
+    },
+    "raw_response_object_key": {
+      "anyOf": [
+        {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Raw Response Object Key"
+    },
+    "raw_response_reference_kind": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RawResponseReferenceKind"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "raw_response_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Raw Response Sha256"
+    },
+    "raw_response_storage_bucket": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Raw Response Storage Bucket"
+    },
+    "registered_at": {
+      "format": "date-time",
+      "title": "Registered At",
+      "type": "string"
+    },
+    "response_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Response Hash"
+    },
+    "retention_class": {
+      "$ref": "#/$defs/RetentionClass"
+    },
+    "retry_count": {
+      "maximum": 2,
+      "minimum": 0,
+      "title": "Retry Count",
+      "type": "integer"
+    },
+    "runtime_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Runtime Version",
+      "type": "string"
+    },
+    "seed": {
+      "title": "Seed",
+      "type": "integer"
+    },
+    "source_bundle_revision_id": {
+      "format": "uuid",
+      "title": "Source Bundle Revision Id",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/ModelCallLedgerStatus"
+    },
+    "target_scope": {
+      "$ref": "#/$defs/ExtractionTargetScope"
+    },
+    "task_spec_name": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Task Spec Name",
+      "type": "string"
+    },
+    "task_spec_version": {
+      "maxLength": 32,
+      "minLength": 1,
+      "title": "Task Spec Version",
+      "type": "string"
+    },
+    "temperature": {
+      "maximum": 2,
+      "minimum": 0,
+      "title": "Temperature",
+      "type": "number"
+    },
+    "terminal_disposition": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ModelTerminalDisposition"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "terminal_reason_code": {
+      "anyOf": [
+        {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Terminal Reason Code"
+    },
+    "top_p": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Top P",
+      "type": "number"
+    },
+    "unit_segmentation_version": {
+      "anyOf": [
+        {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Unit Segmentation Version"
+    },
+    "validation_pipeline_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Validation Pipeline Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "model_call_id",
+    "task_spec_name",
+    "task_spec_version",
+    "provider",
+    "model_id",
+    "model_snapshot",
+    "adapter_name",
+    "adapter_version",
+    "runtime_version",
+    "canonical_request_hash",
+    "canonical_message_hashes",
+    "input_block_ids",
+    "input_block_hashes",
+    "source_bundle_revision_id",
+    "target_scope",
+    "opportunity_id",
+    "opportunity_version",
+    "opportunity_unit_id",
+    "opportunity_unit_version_id",
+    "unit_segmentation_version",
+    "prompt_version",
+    "output_schema_version",
+    "parser_version",
+    "contract_version",
+    "temperature",
+    "top_p",
+    "seed",
+    "egress_decision_id",
+    "validation_pipeline_version",
+    "retention_class",
+    "registered_at",
+    "status",
+    "terminal_disposition",
+    "terminal_reason_code",
+    "finalized_at",
+    "attempt_count",
+    "retry_count",
+    "fallback_count",
+    "attempts",
+    "provider_response_id",
+    "raw_response_reference_kind",
+    "raw_response_storage_bucket",
+    "raw_response_object_key",
+    "raw_response_sha256",
+    "response_hash",
+    "parsed_result_hash",
+    "input_tokens",
+    "output_tokens",
+    "cache_read_tokens",
+    "cache_write_tokens",
+    "monetary_cost",
+    "latency_ms"
+  ],
+  "title": "ModelCallLedgerViewSchemaV08",
+  "type": "object"
+}

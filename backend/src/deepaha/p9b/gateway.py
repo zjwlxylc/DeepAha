@@ -7,7 +7,11 @@ from sqlalchemy import RowMapping, select, text
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session, sessionmaker
 
-from deepaha.contracts.phase9b import ModelAttemptOutcome, ModelCallIntentSchemaV08
+from deepaha.contracts.phase9b import (
+    ModelAttemptOutcome,
+    ModelCallIntentSchemaV08,
+    ModelCallLedgerViewSchemaV08,
+)
 from deepaha.p9b.models import ModelCall, ModelTaskSpec, ProviderEgressPolicySnapshot
 from deepaha.p9b.provider import (
     ProviderAdapter,
@@ -281,7 +285,9 @@ class GatewayExecutor:
                 ),
                 {"model_call_id": model_call_id},
             ).mappings().one()
-            return dict(row)
+            return ModelCallLedgerViewSchemaV08.model_validate(dict(row)).model_dump(
+                mode="python"
+            )
 
 
 __all__ = ["GatewayExecutionError", "GatewayExecutor"]

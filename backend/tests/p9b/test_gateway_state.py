@@ -152,6 +152,13 @@ def test_task_spec_and_egress_decision_are_strict_bounded_contracts() -> None:
         created_at=NOW,
     )
     assert task.max_attempts == 2
+    with pytest.raises(ValidationError):
+        ModelTaskSpecSchemaV08.model_validate(
+            {
+                **task.model_dump(),
+                "provider_capabilities": ["sk-proj-abcdefghijklmnopqrstuv"],
+            }
+        )
 
     decision = {
         "egress_decision_id": uuid7(),
@@ -184,6 +191,10 @@ def test_task_spec_and_egress_decision_are_strict_bounded_contracts() -> None:
         "expires_at": datetime(2026, 8, 25, 7, 5, tzinfo=UTC),
     }
     assert EgressDecisionSchemaV08.model_validate(decision).decision == "ALLOW"
+    with pytest.raises(ValidationError):
+        EgressDecisionSchemaV08.model_validate(
+            {**decision, "provider": "xoxb-123456789012-abcdefghijklmnopqrstuv"}
+        )
     with pytest.raises(ValidationError):
         EgressDecisionSchemaV08.model_validate(
             {**decision, "input_block_hashes": ["a" * 64, "b" * 64]}

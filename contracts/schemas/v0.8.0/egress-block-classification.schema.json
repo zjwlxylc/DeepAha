@@ -1,0 +1,63 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "block_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Block Hash",
+      "type": "string"
+    },
+    "block_id": {
+      "format": "uuid",
+      "title": "Block Id",
+      "type": "string"
+    },
+    "classification_id": {
+      "format": "uuid",
+      "title": "Classification Id",
+      "type": "string"
+    },
+    "classification_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Classification Version",
+      "type": "string"
+    },
+    "classifications": {
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Classifications",
+      "type": "array"
+    },
+    "classifier_identity": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Classifier Identity",
+      "type": "string"
+    },
+    "contains_user_data": {
+      "title": "Contains User Data",
+      "type": "boolean"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "classification_id",
+    "block_id",
+    "block_hash",
+    "classification_version",
+    "classifications",
+    "contains_user_data",
+    "classifier_identity",
+    "created_at"
+  ],
+  "title": "EgressBlockClassificationSchemaV08",
+  "type": "object"
+}

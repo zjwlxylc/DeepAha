@@ -1,7 +1,9 @@
+from decimal import Decimal
 from enum import StrEnum
 from typing import Annotated, Literal, Self
 
 from pydantic import (
+    AfterValidator,
     ConfigDict,
     Field,
     JsonValue,
@@ -14,6 +16,49 @@ from deepaha.contracts.common import EntityId, Instant, NonEmptyString, Sha256, 
 from deepaha.contracts.phase1 import ContractModel
 from deepaha.contracts.phase4 import RuleField, RuleOperator, RuleValueType
 from deepaha.p9b.hashing import document_parse_key, extraction_input_block_set_hash
+from deepaha.p9b.ledger_values import (
+    require_error_code,
+    require_identifier,
+    require_object_key,
+    require_provider_response_id,
+    require_storage_bucket,
+)
+
+LedgerIdentifier32 = Annotated[
+    str,
+    StringConstraints(min_length=1, max_length=32),
+    AfterValidator(require_identifier),
+]
+LedgerIdentifier64 = Annotated[
+    str,
+    StringConstraints(min_length=1, max_length=64),
+    AfterValidator(require_identifier),
+]
+LedgerIdentifier128 = Annotated[
+    str,
+    StringConstraints(min_length=1, max_length=128),
+    AfterValidator(require_identifier),
+]
+LedgerProviderResponseId = Annotated[
+    str,
+    StringConstraints(min_length=1, max_length=256),
+    AfterValidator(require_provider_response_id),
+]
+LedgerStorageBucket = Annotated[
+    str,
+    StringConstraints(min_length=1, max_length=128),
+    AfterValidator(require_storage_bucket),
+]
+LedgerObjectKey = Annotated[
+    str,
+    StringConstraints(min_length=1, max_length=512),
+    AfterValidator(require_object_key),
+]
+LedgerErrorCode = Annotated[
+    str,
+    StringConstraints(min_length=1, max_length=64),
+    AfterValidator(require_error_code),
+]
 
 
 class Phase9BContractModel(ContractModel):
@@ -162,6 +207,12 @@ class ModelAttemptOutcome(StrEnum):
 
 
 class ModelCallFinalStatus(StrEnum):
+    SUCCEEDED = "SUCCEEDED"
+    TERMINAL_FAILED = "TERMINAL_FAILED"
+
+
+class ModelCallLedgerStatus(StrEnum):
+    IN_PROGRESS = "IN_PROGRESS"
     SUCCEEDED = "SUCCEEDED"
     TERMINAL_FAILED = "TERMINAL_FAILED"
 
@@ -1056,10 +1107,10 @@ class GoldTruthVersionSchemaV08(Phase9BContractModel):
 
 class RawResponseReferenceSchemaV08(Phase9BContractModel):
     kind: RawResponseReferenceKind
-    storage_bucket: NonEmptyString | None
-    object_key: NonEmptyString | None
+    storage_bucket: LedgerStorageBucket | None
+    object_key: LedgerObjectKey | None
     content_sha256: Sha256 | None
-    provider_response_id: NonEmptyString | None
+    provider_response_id: LedgerProviderResponseId | None
 
     @model_validator(mode="after")
     def require_exact_reference_shape(self) -> Self:
@@ -1081,14 +1132,14 @@ class RawResponseReferenceSchemaV08(Phase9BContractModel):
 
 class ModelCallIntentSchemaV08(Phase9BContractModel):
     model_call_id: EntityId
-    task_spec_name: NonEmptyString
-    task_spec_version: NonEmptyString
-    provider: NonEmptyString
-    model_id: NonEmptyString
-    model_snapshot: NonEmptyString
-    adapter_name: NonEmptyString
-    adapter_version: NonEmptyString
-    runtime_version: NonEmptyString
+    task_spec_name: LedgerIdentifier64
+    task_spec_version: LedgerIdentifier32
+    provider: LedgerIdentifier64
+    model_id: LedgerIdentifier128
+    model_snapshot: LedgerIdentifier128
+    adapter_name: LedgerIdentifier64
+    adapter_version: LedgerIdentifier32
+    runtime_version: LedgerIdentifier64
     canonical_request_hash: Sha256
     canonical_message_hashes: list[Sha256] = Field(min_length=1)
     input_block_ids: list[EntityId] = Field(min_length=1)
@@ -1099,16 +1150,16 @@ class ModelCallIntentSchemaV08(Phase9BContractModel):
     opportunity_version: VersionNumber
     opportunity_unit_id: EntityId | None
     opportunity_unit_version_id: EntityId | None
-    unit_segmentation_version: NonEmptyString | None
-    prompt_version: NonEmptyString
-    output_schema_version: NonEmptyString
-    parser_version: NonEmptyString
-    contract_version: NonEmptyString
+    unit_segmentation_version: LedgerIdentifier64 | None
+    prompt_version: LedgerIdentifier64
+    output_schema_version: LedgerIdentifier64
+    parser_version: LedgerIdentifier64
+    contract_version: LedgerIdentifier64
     temperature: Annotated[float, Field(strict=True, ge=0, le=2)]
     top_p: Annotated[float, Field(strict=True, ge=0, le=1)]
     seed: int
     egress_decision_id: EntityId
-    validation_pipeline_version: NonEmptyString
+    validation_pipeline_version: LedgerIdentifier64
     retention_class: RetentionClass
     registered_at: Instant
 
@@ -1131,18 +1182,18 @@ class ModelCallIntentSchemaV08(Phase9BContractModel):
 
 class ModelTaskSpecSchemaV08(Phase9BContractModel):
     model_task_spec_id: EntityId
-    task_name: NonEmptyString
-    task_version: NonEmptyString
+    task_name: LedgerIdentifier64
+    task_version: LedgerIdentifier32
     route_class: ModelRouteClass
     allowed_input_block_types: list[DocumentBlockType] = Field(min_length=1)
-    output_schema_version: NonEmptyString
+    output_schema_version: LedgerIdentifier64
     max_input_tokens: Annotated[int, Field(ge=1)]
     max_output_tokens: Annotated[int, Field(ge=1)]
     evidence_required: bool
     abstention_allowed: bool
-    risk_class: NonEmptyString
-    provider_capabilities: list[NonEmptyString] = Field(min_length=1)
-    egress_policy_id: NonEmptyString
+    risk_class: LedgerIdentifier32
+    provider_capabilities: list[LedgerIdentifier128] = Field(min_length=1)
+    egress_policy_id: LedgerIdentifier64
     timeout_ms: Annotated[int, Field(ge=100, le=120000)]
     max_attempts: Annotated[int, Field(ge=1, le=3)]
     initial_backoff_ms: Annotated[int, Field(ge=0, le=10000)]
@@ -1165,10 +1216,73 @@ class ModelTaskSpecSchemaV08(Phase9BContractModel):
         return self
 
 
+class EgressBlockClassificationSchemaV08(Phase9BContractModel):
+    classification_id: EntityId
+    block_id: EntityId
+    block_hash: Sha256
+    classification_version: LedgerIdentifier64
+    classifications: list[LedgerIdentifier128] = Field(min_length=1)
+    contains_user_data: bool
+    classifier_identity: LedgerIdentifier128
+    created_at: Instant
+
+    @field_validator("classifications")
+    @classmethod
+    def require_unique_classifications(
+        cls,
+        value: list[LedgerIdentifier128],
+    ) -> list[LedgerIdentifier128]:
+        if len(set(value)) != len(value):
+            raise ValueError("egress classifications must be unique")
+        return value
+
+
+class SourceEgressPolicySnapshotSchemaV08(Phase9BContractModel):
+    snapshot_id: LedgerIdentifier64
+    snapshot_hash: Sha256
+    source_bundle_revision_id: EntityId
+    allows_egress: bool
+    valid_from: Instant
+    valid_until: Instant
+    recorded_by: LedgerIdentifier128
+    created_at: Instant
+
+    @model_validator(mode="after")
+    def require_valid_window(self) -> Self:
+        if self.valid_until <= self.valid_from:
+            raise ValueError("source egress policy window must be positive")
+        return self
+
+
+class ProviderEgressPolicySnapshotSchemaV08(Phase9BContractModel):
+    snapshot_id: LedgerIdentifier64
+    snapshot_hash: Sha256
+    provider: LedgerIdentifier64
+    region: LedgerIdentifier64
+    active: bool
+    zero_retention: bool
+    training_use: bool
+    supports_idempotency: bool
+    allowed_classifications: list[LedgerIdentifier128] = Field(min_length=1)
+    retention_class: RetentionClass
+    valid_from: Instant
+    valid_until: Instant
+    recorded_by: LedgerIdentifier128
+    created_at: Instant
+
+    @model_validator(mode="after")
+    def require_provider_policy_shape(self) -> Self:
+        if self.valid_until <= self.valid_from:
+            raise ValueError("Provider egress policy window must be positive")
+        if len(set(self.allowed_classifications)) != len(self.allowed_classifications):
+            raise ValueError("allowed egress classifications must be unique")
+        return self
+
+
 class EgressDecisionSchemaV08(Phase9BContractModel):
     egress_decision_id: EntityId
-    task_spec_name: NonEmptyString
-    task_spec_version: NonEmptyString
+    task_spec_name: LedgerIdentifier64
+    task_spec_version: LedgerIdentifier32
     source_bundle_revision_id: EntityId
     target_scope: ExtractionTargetScope
     opportunity_id: EntityId
@@ -1177,21 +1291,21 @@ class EgressDecisionSchemaV08(Phase9BContractModel):
     opportunity_unit_version_id: EntityId | None
     input_block_ids: list[EntityId] = Field(min_length=1)
     input_block_hashes: list[Sha256] = Field(min_length=1)
-    data_classification_version: NonEmptyString
-    minimizer_version: NonEmptyString
-    redactor_version: NonEmptyString
-    source_policy_snapshot_id: NonEmptyString
+    data_classification_version: LedgerIdentifier64
+    minimizer_version: LedgerIdentifier64
+    redactor_version: LedgerIdentifier64
+    source_policy_snapshot_id: LedgerIdentifier64
     source_policy_snapshot_hash: Sha256
-    provider_policy_snapshot_id: NonEmptyString
+    provider_policy_snapshot_id: LedgerIdentifier64
     provider_policy_snapshot_hash: Sha256
-    provider: NonEmptyString
-    provider_region: NonEmptyString
+    provider: LedgerIdentifier64
+    provider_region: LedgerIdentifier64
     original_input_hash: Sha256
     actual_payload_hash: Sha256 | None
     decision: EgressDecisionValue
     actor_type: Literal["SYSTEM", "HUMAN"]
-    actor_identity: NonEmptyString | None
-    reason_codes: list[NonEmptyString] = Field(min_length=1)
+    actor_identity: LedgerIdentifier128 | None
+    reason_codes: list[LedgerErrorCode] = Field(min_length=1)
     created_at: Instant
     expires_at: Instant | None
 
@@ -1227,7 +1341,7 @@ class EgressDecisionSchemaV08(Phase9BContractModel):
 class ModelAttemptResultSchemaV08(Phase9BContractModel):
     outcome: ModelAttemptOutcome
     provider_http_status: Annotated[int, Field(ge=100, le=599)] | None
-    error_code: NonEmptyString | None
+    error_code: LedgerErrorCode | None
     raw_response_reference: RawResponseReferenceSchemaV08 | None
     response_hash: Sha256 | None
     parsed_result_hash: Sha256 | None
@@ -1260,6 +1374,95 @@ class ModelAttemptResultSchemaV08(Phase9BContractModel):
         return self
 
 
+class ModelCallAttemptLedgerSchemaV08(Phase9BContractModel):
+    attempt: Annotated[int, Field(ge=1, le=3)]
+    attempt_id: EntityId
+    authorization_decision: Literal["AUTHORIZED", "AUTHORITY_REJECTED"]
+    authorization_reason_code: LedgerErrorCode
+    authorization_checked_at: Instant
+    dispatch_deadline: Instant | None
+    provider_invocation_allowed: bool
+    outcome: ModelAttemptOutcome | None
+    error_code: LedgerErrorCode | None
+    provider_http_status: Annotated[int, Field(ge=100, le=599)] | None
+    completed_at: Instant | None
+
+
+class ModelCallLedgerViewSchemaV08(ModelCallIntentSchemaV08):
+    status: ModelCallLedgerStatus
+    terminal_disposition: ModelTerminalDisposition | None
+    terminal_reason_code: LedgerErrorCode | None
+    finalized_at: Instant | None
+    attempt_count: Annotated[int, Field(ge=0, le=3)]
+    retry_count: Annotated[int, Field(ge=0, le=2)]
+    fallback_count: Literal[0]
+    attempts: list[ModelCallAttemptLedgerSchemaV08]
+    provider_response_id: LedgerProviderResponseId | None
+    raw_response_reference_kind: RawResponseReferenceKind | None
+    raw_response_storage_bucket: LedgerStorageBucket | None
+    raw_response_object_key: LedgerObjectKey | None
+    raw_response_sha256: Sha256 | None
+    response_hash: Sha256 | None
+    parsed_result_hash: Sha256 | None
+    input_tokens: Annotated[int, Field(ge=0)]
+    output_tokens: Annotated[int, Field(ge=0)]
+    cache_read_tokens: Annotated[int, Field(ge=0)]
+    cache_write_tokens: Annotated[int, Field(ge=0)]
+    monetary_cost: Annotated[Decimal, Field(ge=0)]
+    latency_ms: Annotated[int, Field(ge=0)]
+
+    @model_validator(mode="after")
+    def require_derived_ledger_shape(self) -> Self:
+        if self.attempt_count != len(self.attempts):
+            raise ValueError("attempt_count must be derived from the attempt ledger")
+        if self.retry_count != max(self.attempt_count - 1, 0):
+            raise ValueError("retry_count must be derived from attempt_count")
+        in_progress = self.status is ModelCallLedgerStatus.IN_PROGRESS
+        if in_progress != (
+            self.terminal_disposition is None
+            and self.terminal_reason_code is None
+            and self.finalized_at is None
+        ):
+            raise ValueError("terminal fields must be derived from finalization")
+        if self.attempts and any(
+            attempt.attempt != index
+            for index, attempt in enumerate(self.attempts, start=1)
+        ):
+            raise ValueError("attempt ledger must be contiguous and ordered")
+        reference = self.raw_response_reference_kind
+        if reference is None:
+            if any(
+                value is not None
+                for value in (
+                    self.provider_response_id,
+                    self.raw_response_storage_bucket,
+                    self.raw_response_object_key,
+                    self.raw_response_sha256,
+                )
+            ):
+                raise ValueError("flattened response reference is incomplete")
+        elif reference is RawResponseReferenceKind.PROVIDER_RESPONSE_ID:
+            if self.provider_response_id is None or any(
+                value is not None
+                for value in (
+                    self.raw_response_storage_bucket,
+                    self.raw_response_object_key,
+                    self.raw_response_sha256,
+                )
+            ):
+                raise ValueError("Provider response reference is incomplete")
+        elif self.provider_response_id is not None or any(
+            value is None
+            for value in (
+                self.raw_response_storage_bucket,
+                self.raw_response_object_key,
+                self.raw_response_sha256,
+            )
+        ):
+            raise ValueError("internal response reference is incomplete")
+        return self
+
+
 __all__ = [
     "AnswerAccessClass",
     "DatasetManifestEntrySchemaV08",
@@ -1269,6 +1472,7 @@ __all__ = [
     "DocumentBlockSchemaV08",
     "DocumentBlockType",
     "DocumentParseIdentitySchemaV08",
+    "EgressBlockClassificationSchemaV08",
     "EgressDecisionSchemaV08",
     "EgressDecisionValue",
     "EvidenceSupportResult",
@@ -1290,7 +1494,10 @@ __all__ = [
     "ModelAttemptOutcome",
     "ModelAttemptResultSchemaV08",
     "ModelCallFinalStatus",
+    "ModelCallAttemptLedgerSchemaV08",
     "ModelCallIntentSchemaV08",
+    "ModelCallLedgerStatus",
+    "ModelCallLedgerViewSchemaV08",
     "ModelRouteClass",
     "ModelTaskSpecSchemaV08",
     "ModelTerminalDisposition",
@@ -1302,6 +1509,7 @@ __all__ = [
     "OpportunityUnitVersionSchemaV08",
     "OpportunityUnitSchemaV08",
     "PrecedenceCheckResult",
+    "ProviderEgressPolicySnapshotSchemaV08",
     "PredictionFieldState",
     "RawResponseReferenceKind",
     "RawResponseReferenceSchemaV08",
@@ -1314,6 +1522,7 @@ __all__ = [
     "RuleCandidateStatus",
     "SourceBundleMemberProvenanceSchemaV08",
     "SourceBundleRevisionSchemaV08",
+    "SourceEgressPolicySnapshotSchemaV08",
     "UnitRuleSetSchemaV08",
     "VerificationMethod",
     "VerifiedFactSchemaV08",

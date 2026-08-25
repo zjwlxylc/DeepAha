@@ -21,11 +21,13 @@
   "additionalProperties": false,
   "properties": {
     "adapter_name": {
+      "maxLength": 64,
       "minLength": 1,
       "title": "Adapter Name",
       "type": "string"
     },
     "adapter_version": {
+      "maxLength": 32,
       "minLength": 1,
       "title": "Adapter Version",
       "type": "string"
@@ -45,6 +47,7 @@
       "type": "string"
     },
     "contract_version": {
+      "maxLength": 64,
       "minLength": 1,
       "title": "Contract Version",
       "type": "string"
@@ -78,11 +81,13 @@
       "type": "string"
     },
     "model_id": {
+      "maxLength": 128,
       "minLength": 1,
       "title": "Model Id",
       "type": "string"
     },
     "model_snapshot": {
+      "maxLength": 128,
       "minLength": 1,
       "title": "Model Snapshot",
       "type": "string"
@@ -122,21 +127,25 @@
       "type": "integer"
     },
     "output_schema_version": {
+      "maxLength": 64,
       "minLength": 1,
       "title": "Output Schema Version",
       "type": "string"
     },
     "parser_version": {
+      "maxLength": 64,
       "minLength": 1,
       "title": "Parser Version",
       "type": "string"
     },
     "prompt_version": {
+      "maxLength": 64,
       "minLength": 1,
       "title": "Prompt Version",
       "type": "string"
     },
     "provider": {
+      "maxLength": 64,
       "minLength": 1,
       "title": "Provider",
       "type": "string"
@@ -150,6 +159,7 @@
       "$ref": "#/$defs/RetentionClass"
     },
     "runtime_version": {
+      "maxLength": 64,
       "minLength": 1,
       "title": "Runtime Version",
       "type": "string"
@@ -167,11 +177,13 @@
       "$ref": "#/$defs/ExtractionTargetScope"
     },
     "task_spec_name": {
+      "maxLength": 64,
       "minLength": 1,
       "title": "Task Spec Name",
       "type": "string"
     },
     "task_spec_version": {
+      "maxLength": 32,
       "minLength": 1,
       "title": "Task Spec Version",
       "type": "string"
@@ -191,6 +203,7 @@
     "unit_segmentation_version": {
       "anyOf": [
         {
+          "maxLength": 64,
           "minLength": 1,
           "type": "string"
         },
@@ -201,6 +214,7 @@
       "title": "Unit Segmentation Version"
     },
     "validation_pipeline_version": {
+      "maxLength": 64,
       "minLength": 1,
       "title": "Validation Pipeline Version",
       "type": "string"

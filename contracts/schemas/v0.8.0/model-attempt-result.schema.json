@@ -45,6 +45,7 @@
         "object_key": {
           "anyOf": [
             {
+              "maxLength": 512,
               "minLength": 1,
               "type": "string"
             },
@@ -57,6 +58,7 @@
         "provider_response_id": {
           "anyOf": [
             {
+              "maxLength": 256,
               "minLength": 1,
               "type": "string"
             },
@@ -69,6 +71,7 @@
         "storage_bucket": {
           "anyOf": [
             {
+              "maxLength": 128,
               "minLength": 1,
               "type": "string"
             },
@@ -118,6 +121,7 @@
     "error_code": {
       "anyOf": [
         {
+          "maxLength": 64,
           "minLength": 1,
           "type": "string"
         },

@@ -1,0 +1,58 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "allows_egress": {
+      "title": "Allows Egress",
+      "type": "boolean"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "recorded_by": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Recorded By",
+      "type": "string"
+    },
+    "snapshot_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Hash",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "source_bundle_revision_id": {
+      "format": "uuid",
+      "title": "Source Bundle Revision Id",
+      "type": "string"
+    },
+    "valid_from": {
+      "format": "date-time",
+      "title": "Valid From",
+      "type": "string"
+    },
+    "valid_until": {
+      "format": "date-time",
+      "title": "Valid Until",
+      "type": "string"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "snapshot_hash",
+    "source_bundle_revision_id",
+    "allows_egress",
+    "valid_from",
+    "valid_until",
+    "recorded_by",
+    "created_at"
+  ],
+  "title": "SourceEgressPolicySnapshotSchemaV08",
+  "type": "object"
+}

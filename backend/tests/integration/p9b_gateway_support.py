@@ -8,20 +8,18 @@ from sqlalchemy.orm import Session
 
 from deepaha.artifacts.models import RawArtifact
 from deepaha.contracts.phase9b import (
+    EgressBlockClassificationSchemaV08,
     EgressDecisionSchemaV08,
     ModelCallIntentSchemaV08,
     ModelTaskSpecSchemaV08,
+    ProviderEgressPolicySnapshotSchemaV08,
+    SourceEgressPolicySnapshotSchemaV08,
 )
 from deepaha.documents.blocks import ParsedBlock, block_hash, evidence_binding_hash
 from deepaha.documents.models import Document, DocumentBlock, EvidenceRef
 from deepaha.p9b.egress import EgressRepository
 from deepaha.p9b.hashing import document_parse_key
-from deepaha.p9b.models import (
-    EgressBlockClassification,
-    ModelCall,
-    ProviderEgressPolicySnapshot,
-    SourceEgressPolicySnapshot,
-)
+from deepaha.p9b.models import ModelCall
 from tests.integration.test_p9b_b0_persistence import NOW, frozen_bundle, seed_graph
 
 P9B_PARSER_NAME = "deepaha-html-p9b"
@@ -185,48 +183,50 @@ def seed_gateway_authority(
             created_at=database_now,
         )
     )
-    session.add_all(
-        [
-            EgressBlockClassification(
-                classification_id=uuid7(),
-                block_id=block_id,
-                block_hash=block_hash_value,
-                classification_version="classification-v1",
-                classifications=["PUBLIC_OFFICIAL_GENERAL"],
-                contains_user_data=False,
-                classifier_identity="system:classification-v1",
-                created_at=database_now,
-            ),
-            SourceEgressPolicySnapshot(
-                snapshot_id=source_snapshot_id,
-                snapshot_hash=source_snapshot_hash,
-                source_bundle_revision_id=revision.source_bundle_revision_id,
-                allows_egress=True,
-                valid_from=database_now - timedelta(hours=1),
-                valid_until=valid_until,
-                recorded_by="human:security-reviewer",
-                created_at=database_now,
-            ),
-            ProviderEgressPolicySnapshot(
-                snapshot_id=provider_snapshot_id,
-                snapshot_hash=provider_snapshot_hash,
-                provider=provider,
-                region="local-test",
-                active=True,
-                zero_retention=True,
-                training_use=False,
-                supports_idempotency=supports_idempotency,
-                allowed_classifications=["PUBLIC_OFFICIAL_GENERAL"],
-                retention_class="ZERO_RETENTION",
-                valid_from=database_now - timedelta(hours=1),
-                valid_until=valid_until,
-                recorded_by="human:security-reviewer",
-                created_at=database_now,
-            ),
-        ]
+    repository = EgressRepository(session)
+    repository.persist_block_classification(
+        EgressBlockClassificationSchemaV08(
+            classification_id=uuid7(),
+            block_id=block_id,
+            block_hash=block_hash_value,
+            classification_version="classification-v1",
+            classifications=["PUBLIC_OFFICIAL_GENERAL"],
+            contains_user_data=False,
+            classifier_identity="system:classification-v1",
+            created_at=database_now,
+        )
     )
-    session.flush()
-    EgressRepository(session).persist_decision(
+    repository.persist_source_policy(
+        SourceEgressPolicySnapshotSchemaV08(
+            snapshot_id=source_snapshot_id,
+            snapshot_hash=source_snapshot_hash,
+            source_bundle_revision_id=revision.source_bundle_revision_id,
+            allows_egress=True,
+            valid_from=database_now - timedelta(hours=1),
+            valid_until=valid_until,
+            recorded_by="human:security-reviewer",
+            created_at=database_now,
+        )
+    )
+    repository.persist_provider_policy(
+        ProviderEgressPolicySnapshotSchemaV08(
+            snapshot_id=provider_snapshot_id,
+            snapshot_hash=provider_snapshot_hash,
+            provider=provider,
+            region="local-test",
+            active=True,
+            zero_retention=True,
+            training_use=False,
+            supports_idempotency=supports_idempotency,
+            allowed_classifications=["PUBLIC_OFFICIAL_GENERAL"],
+            retention_class="ZERO_RETENTION",
+            valid_from=database_now - timedelta(hours=1),
+            valid_until=valid_until,
+            recorded_by="human:security-reviewer",
+            created_at=database_now,
+        )
+    )
+    repository.persist_decision(
         EgressDecisionSchemaV08(
             egress_decision_id=egress_decision_id,
             task_spec_name=task_name,
