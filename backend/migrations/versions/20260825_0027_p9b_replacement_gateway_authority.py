@@ -27,13 +27,10 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.execute(
-        "DROP TRIGGER p9b_model_call_attempts_z_complete_authority "
-        "ON p9b_model_call_attempts"
+        "DROP TRIGGER p9b_model_call_attempts_z_complete_authority ON p9b_model_call_attempts"
     )
     op.execute("DROP TRIGGER p9b_model_calls_guard_insert ON p9b_model_calls")
-    op.execute(
-        "DROP TRIGGER p9b_egress_decisions_validate_insert ON p9b_egress_decisions"
-    )
+    op.execute("DROP TRIGGER p9b_egress_decisions_validate_insert ON p9b_egress_decisions")
     op.execute("DROP TRIGGER p9b_egress_decisions_stamp_insert ON p9b_egress_decisions")
     op.execute("DROP FUNCTION p9b_guard_complete_attempt_authority()")
     op.execute("DROP FUNCTION p9b_guard_model_call_insert()")

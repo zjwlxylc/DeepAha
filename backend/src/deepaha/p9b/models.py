@@ -1943,8 +1943,10 @@ class ModelTaskSpec(Base):
     __tablename__ = "p9b_model_task_specs"
     __table_args__ = (
         CheckConstraint("uuid_extract_version(model_task_spec_id) = 7", name="id_uuid7"),
-        CheckConstraint("route_class in ('R1_LOW_COST_EXTRACT', 'R2_BALANCED_REASON', "
-                        "'R3_STRONG_CANDIDATE')", name="route_class_values"),
+        CheckConstraint(
+            "route_class in ('R1_LOW_COST_EXTRACT', 'R2_BALANCED_REASON', 'R3_STRONG_CANDIDATE')",
+            name="route_class_values",
+        ),
         CheckConstraint("max_input_tokens >= 1 and max_output_tokens >= 1", name="token_bounds"),
         CheckConstraint("timeout_ms between 100 and 120000", name="timeout_bounds"),
         CheckConstraint("max_attempts between 1 and 3", name="attempt_bounds"),
@@ -2069,8 +2071,10 @@ class EgressDecision(Base):
             "opportunity_unit_version_id is not null)",
             name="unit_target_shape",
         ),
-        CheckConstraint("decision in ('ALLOW', 'REDACT_AND_ALLOW', 'DENY', "
-                        "'LOCAL_NO_EGRESS')", name="decision_values"),
+        CheckConstraint(
+            "decision in ('ALLOW', 'REDACT_AND_ALLOW', 'DENY', 'LOCAL_NO_EGRESS')",
+            name="decision_values",
+        ),
         CheckConstraint(
             "original_input_hash ~ '^[0-9a-f]{64}$' and "
             "(actual_payload_hash is null or actual_payload_hash ~ '^[0-9a-f]{64}$')",

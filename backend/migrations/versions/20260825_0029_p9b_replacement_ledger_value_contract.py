@@ -26,10 +26,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.execute(
-        "DROP TRIGGER p9b_model_call_attempts_string_values "
-        "ON p9b_model_call_attempts"
-    )
+    op.execute("DROP TRIGGER p9b_model_call_attempts_string_values ON p9b_model_call_attempts")
     for table_name in (
         "p9b_model_calls",
         "p9b_egress_decisions",

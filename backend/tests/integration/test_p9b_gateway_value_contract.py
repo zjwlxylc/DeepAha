@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import cast
 from uuid import UUID, uuid7
 
 import pytest
@@ -21,7 +22,9 @@ CORPUS = (
 
 
 def _cases() -> list[dict[str, object]]:
-    return json.loads(CORPUS.read_text(encoding="utf-8"))["cases"]
+    payload: object = json.loads(CORPUS.read_text(encoding="utf-8"))
+    assert isinstance(payload, dict)
+    return cast(list[dict[str, object]], payload["cases"])
 
 
 def _begin_attempt(session: Session, call_id: UUID) -> UUID:
@@ -71,7 +74,9 @@ def _finish_success(
             "raw_hash": (
                 raw_response_sha256
                 if internal and raw_response_sha256 is not None
-                else "7" * 64 if internal else None
+                else "7" * 64
+                if internal
+                else None
             ),
             "response_hash": "8" * 64,
             "parsed_hash": "9" * 64,

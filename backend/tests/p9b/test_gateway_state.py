@@ -5,10 +5,12 @@ import pytest
 from pydantic import ValidationError
 
 from deepaha.contracts.phase9b import (
+    DocumentBlockType,
     EgressDecisionSchemaV08,
     ModelAttemptOutcome,
     ModelAttemptResultSchemaV08,
     ModelCallIntentSchemaV08,
+    ModelRouteClass,
     ModelTaskSpecSchemaV08,
     RawResponseReferenceKind,
     RawResponseReferenceSchemaV08,
@@ -120,9 +122,7 @@ def test_attempt_result_requires_terminal_outcome_shape() -> None:
     assert result.outcome is ModelAttemptOutcome.SUCCEEDED
 
     with pytest.raises(ValidationError):
-        ModelAttemptResultSchemaV08.model_validate(
-            {**result.model_dump(), "response_hash": None}
-        )
+        ModelAttemptResultSchemaV08.model_validate({**result.model_dump(), "response_hash": None})
 
 
 def test_task_spec_and_egress_decision_are_strict_bounded_contracts() -> None:
@@ -130,8 +130,8 @@ def test_task_spec_and_egress_decision_are_strict_bounded_contracts() -> None:
         model_task_spec_id=uuid7(),
         task_name="extract-opportunity",
         task_version="v1",
-        route_class="R2_BALANCED_REASON",
-        allowed_input_block_types=["HTML_ELEMENT"],
+        route_class=ModelRouteClass.R2_BALANCED_REASON,
+        allowed_input_block_types=[DocumentBlockType.HTML_ELEMENT],
         output_schema_version="schema-v1",
         max_input_tokens=2048,
         max_output_tokens=256,

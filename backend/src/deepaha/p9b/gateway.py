@@ -169,35 +169,43 @@ class GatewayExecutor:
 
     def _read_progress(self, model_call_id: UUID) -> RowMapping:
         with self._session_factory() as session:
-            return session.execute(
-                text(
-                    "select exists(select 1 from p9b_model_call_finalizations "
-                    "where model_call_id = :model_call_id) as finalized, "
-                    "count(*)::integer as attempt_count, "
-                    "(array_agg(outcome order by attempt_number desc))[1] as latest_outcome "
-                    "from p9b_model_call_attempts where model_call_id = :model_call_id"
-                ),
-                {"model_call_id": model_call_id},
-            ).mappings().one()
+            return (
+                session.execute(
+                    text(
+                        "select exists(select 1 from p9b_model_call_finalizations "
+                        "where model_call_id = :model_call_id) as finalized, "
+                        "count(*)::integer as attempt_count, "
+                        "(array_agg(outcome order by attempt_number desc))[1] as latest_outcome "
+                        "from p9b_model_call_attempts where model_call_id = :model_call_id"
+                    ),
+                    {"model_call_id": model_call_id},
+                )
+                .mappings()
+                .one()
+            )
 
     def _begin_attempt(self, model_call_id: UUID, attempt_number: int) -> RowMapping:
         with self._session_factory.begin() as session:
-            row = session.execute(
-                text(
-                    "insert into p9b_model_call_attempts "
-                    "(model_call_id, attempt_number, attempt_id, authorization_decision, "
-                    "authorization_reason_code, authorization_checked_at, "
-                    "provider_invocation_allowed, created_at) values "
-                    "(:model_call_id, :attempt_number, :attempt_id, 'AUTHORITY_REJECTED', "
-                    "'PENDING_DATABASE_AUTHORIZATION', clock_timestamp(), false, "
-                    "clock_timestamp()) returning *"
-                ),
-                {
-                    "model_call_id": model_call_id,
-                    "attempt_number": attempt_number,
-                    "attempt_id": uuid7(),
-                },
-            ).mappings().one()
+            row = (
+                session.execute(
+                    text(
+                        "insert into p9b_model_call_attempts "
+                        "(model_call_id, attempt_number, attempt_id, authorization_decision, "
+                        "authorization_reason_code, authorization_checked_at, "
+                        "provider_invocation_allowed, created_at) values "
+                        "(:model_call_id, :attempt_number, :attempt_id, 'AUTHORITY_REJECTED', "
+                        "'PENDING_DATABASE_AUTHORIZATION', clock_timestamp(), false, "
+                        "clock_timestamp()) returning *"
+                    ),
+                    {
+                        "model_call_id": model_call_id,
+                        "attempt_number": attempt_number,
+                        "attempt_id": uuid7(),
+                    },
+                )
+                .mappings()
+                .one()
+            )
             return row
 
     def _invoke_provider(self, invocation: ProviderInvocation) -> ProviderAttemptResult:
@@ -278,16 +286,18 @@ class GatewayExecutor:
 
     def _read_ledger(self, model_call_id: UUID) -> dict[str, object]:
         with self._session_factory() as session:
-            row = session.execute(
-                text(
-                    "select * from p9b_model_call_ledger_view "
-                    "where model_call_id = :model_call_id"
-                ),
-                {"model_call_id": model_call_id},
-            ).mappings().one()
-            return ModelCallLedgerViewSchemaV08.model_validate(dict(row)).model_dump(
-                mode="python"
+            row = (
+                session.execute(
+                    text(
+                        "select * from p9b_model_call_ledger_view "
+                        "where model_call_id = :model_call_id"
+                    ),
+                    {"model_call_id": model_call_id},
+                )
+                .mappings()
+                .one()
             )
+            return ModelCallLedgerViewSchemaV08.model_validate(dict(row)).model_dump(mode="python")
 
 
 __all__ = ["GatewayExecutionError", "GatewayExecutor"]

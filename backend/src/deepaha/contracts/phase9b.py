@@ -1171,8 +1171,7 @@ class ModelCallIntentSchemaV08(Phase9BContractModel):
             raise ValueError("call input block IDs must be unique")
         unit_target = self.target_scope is ExtractionTargetScope.UNIT
         if unit_target != (
-            self.opportunity_unit_id is not None
-            and self.opportunity_unit_version_id is not None
+            self.opportunity_unit_id is not None and self.opportunity_unit_version_id is not None
         ):
             raise ValueError("UNIT alone requires exact Unit identity")
         if unit_target != (self.unit_segmentation_version is not None):
@@ -1319,17 +1318,14 @@ class EgressDecisionSchemaV08(Phase9BContractModel):
             raise ValueError("egress reason codes must be unique")
         unit_target = self.target_scope is ExtractionTargetScope.UNIT
         if unit_target != (
-            self.opportunity_unit_id is not None
-            and self.opportunity_unit_version_id is not None
+            self.opportunity_unit_id is not None and self.opportunity_unit_version_id is not None
         ):
             raise ValueError("UNIT alone requires exact Unit identity")
         allowed = self.decision in {
             EgressDecisionValue.ALLOW,
             EgressDecisionValue.REDACT_AND_ALLOW,
         }
-        if allowed != (
-            self.actual_payload_hash is not None and self.expires_at is not None
-        ):
+        if allowed != (self.actual_payload_hash is not None and self.expires_at is not None):
             raise ValueError("allowed egress requires an exact payload hash and expiry")
         if self.expires_at is not None and self.expires_at <= self.created_at:
             raise ValueError("egress expiry must follow creation")
@@ -1425,8 +1421,7 @@ class ModelCallLedgerViewSchemaV08(ModelCallIntentSchemaV08):
         ):
             raise ValueError("terminal fields must be derived from finalization")
         if self.attempts and any(
-            attempt.attempt != index
-            for index, attempt in enumerate(self.attempts, start=1)
+            attempt.attempt != index for index, attempt in enumerate(self.attempts, start=1)
         ):
             raise ValueError("attempt ledger must be contiguous and ordered")
         reference = self.raw_response_reference_kind

@@ -3,6 +3,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from decimal import Decimal
 from threading import Event, Thread
+from typing import TypedDict, cast
 
 import pytest
 from sqlalchemy import Engine, text
@@ -19,6 +20,19 @@ from deepaha.p9b.provider import (
 from tests.integration.p9b_gateway_support import persist_model_call, seed_gateway_authority
 
 pytestmark = pytest.mark.integration
+
+
+class LedgerAttempt(TypedDict):
+    outcome: str
+    error_code: str | None
+
+
+class LedgerView(TypedDict):
+    status: str
+    terminal_disposition: str
+    attempt_count: int
+    retry_count: int
+    attempts: list[LedgerAttempt]
 
 
 @dataclass
@@ -76,15 +90,18 @@ def _execute(
     intent: ModelCallIntentSchemaV08,
     *,
     sleeper: Callable[[float], None] = time.sleep,
-) -> dict[str, object]:
+) -> LedgerView:
     executor = GatewayExecutor(
         session_factory=factory,
         adapter=adapter,
         sleeper=sleeper,
     )
-    return executor.execute(
-        intent=intent,
-        messages=(ProviderMessage(role="user", content="minimized official block"),),
+    return cast(
+        LedgerView,
+        executor.execute(
+            intent=intent,
+            messages=(ProviderMessage(role="user", content="minimized official block"),),
+        ),
     )
 
 
@@ -338,9 +355,7 @@ def test_same_call_id_with_different_request_hash_is_an_idempotency_conflict(
         results=[_result(ModelAttemptOutcome.SUCCEEDED)],
     )
     _execute(owned_session_factory, adapter, authority.intent)
-    conflicting = authority.intent.model_copy(
-        update={"canonical_request_hash": "a" * 64}
-    )
+    conflicting = authority.intent.model_copy(update={"canonical_request_hash": "a" * 64})
 
     with pytest.raises(GatewayExecutionError, match="idempotency conflict"):
         _execute(owned_session_factory, adapter, conflicting)
@@ -448,8 +463,7 @@ def test_stale_dispatched_attempt_is_atomically_reconciled_to_unknown(
     with owned_session_factory() as session:
         finalization_count = session.scalar(
             text(
-                "select count(*) from p9b_model_call_finalizations "
-                "where model_call_id = :call_id"
+                "select count(*) from p9b_model_call_finalizations where model_call_id = :call_id"
             ),
             {"call_id": authority.intent.model_call_id},
         )
@@ -498,4 +512,5 @@ def test_concurrent_reentry_never_duplicates_an_inflight_provider_attempt(
 
     assert not thread.is_alive()
     assert "error" not in outcome
-    assert outcome["ledger"]["status"] == "SUCCEEDED"
+    completed = cast(LedgerView, outcome["ledger"])
+    assert completed["status"] == "SUCCEEDED"

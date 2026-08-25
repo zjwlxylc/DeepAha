@@ -85,7 +85,9 @@ def _finish_historical_success(
             "raw_hash": (
                 raw_response_sha256
                 if internal and raw_response_sha256 is not None
-                else "7" * 64 if internal else None
+                else "7" * 64
+                if internal
+                else None
             ),
             "response_hash": "8" * 64,
             "parsed_hash": "9" * 64,
@@ -122,15 +124,21 @@ def test_compliant_history_round_trips_through_value_contract_migration(
         command.upgrade(config, "20260825_0029")
         command.downgrade(config, "20260825_0028")
         with engine.connect() as connection:
-            assert connection.scalar(
-                text("select to_regprocedure('p9b_gateway_string_value_allowed(text,text)')")
-            ) is None
-            assert connection.scalar(
-                text(
-                    "select p9b_gateway_contains_credential_material("
-                    "'xoxb-123456789012-abcdefghijklmnopqrstuv')"
+            assert (
+                connection.scalar(
+                    text("select to_regprocedure('p9b_gateway_string_value_allowed(text,text)')")
                 )
-            ) is False
+                is None
+            )
+            assert (
+                connection.scalar(
+                    text(
+                        "select p9b_gateway_contains_credential_material("
+                        "'xoxb-123456789012-abcdefghijklmnopqrstuv')"
+                    )
+                )
+                is False
+            )
         command.upgrade(config, "20260825_0029")
         with engine.connect() as connection:
             assert connection.scalar(text("select version_num from alembic_version")) == (

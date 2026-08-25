@@ -121,6 +121,10 @@ def gold_truth_hash(payload: object) -> str:
     return _canonical_hash_domain("gold_truth_hash", payload)
 
 
+def model_request_hash(payload: object) -> str:
+    return _canonical_hash_domain("model_request_hash", payload)
+
+
 __all__ = [
     "HASH_CONTRACT_VERSION",
     "HashDomain",
@@ -135,5 +139,6 @@ __all__ = [
     "fact_dependency_fingerprint",
     "gold_truth_hash",
     "member_provenance_hash",
+    "model_request_hash",
     "split_manifest_hash",
 ]

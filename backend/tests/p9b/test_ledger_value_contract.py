@@ -1,6 +1,7 @@
 import json
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import cast
 from uuid import uuid7
 
 import pytest
@@ -8,10 +9,12 @@ from pydantic import ValidationError
 
 from deepaha.contracts.phase9b import (
     EgressBlockClassificationSchemaV08,
+    ModelAttemptOutcome,
     ModelCallIntentSchemaV08,
     ProviderEgressPolicySnapshotSchemaV08,
     RawResponseReferenceKind,
     RawResponseReferenceSchemaV08,
+    RetentionClass,
     SourceEgressPolicySnapshotSchemaV08,
 )
 from deepaha.p9b.ledger_values import is_gateway_string_value_allowed
@@ -64,15 +67,20 @@ def _call_intent() -> dict[str, object]:
 
 
 def _cases() -> list[dict[str, object]]:
-    return json.loads(CORPUS.read_text(encoding="utf-8"))["cases"]
+    payload: object = json.loads(CORPUS.read_text(encoding="utf-8"))
+    assert isinstance(payload, dict)
+    return cast(list[dict[str, object]], payload["cases"])
 
 
 @pytest.mark.parametrize("case", _cases())
 def test_python_value_rules_match_the_shared_corpus(case: dict[str, object]) -> None:
-    assert is_gateway_string_value_allowed(
-        str(case["value"]),
-        str(case["kind"]),
-    ) is case["allowed"]
+    assert (
+        is_gateway_string_value_allowed(
+            str(case["value"]),
+            str(case["kind"]),
+        )
+        is case["allowed"]
+    )
 
 
 def test_nested_and_top_level_ledger_contracts_reject_credential_material() -> None:
@@ -101,7 +109,7 @@ def test_nested_and_top_level_ledger_contracts_reject_credential_material() -> N
 def test_provider_result_rejects_unsafe_flattened_response_metadata() -> None:
     with pytest.raises(ValueError, match="provider_response_id"):
         ProviderAttemptResult(
-            outcome="SUCCEEDED",
+            outcome=ModelAttemptOutcome.SUCCEEDED,
             provider_http_status=200,
             error_code=None,
             provider_response_id="https://provider.example/result?api_key=secret",
@@ -174,7 +182,7 @@ def test_all_authority_configuration_contracts_reject_unsafe_identifiers() -> No
             training_use=False,
             supports_idempotency=True,
             allowed_classifications=["PUBLIC_OFFICIAL_GENERAL"],
-            retention_class="ZERO_RETENTION",
+            retention_class=RetentionClass.ZERO_RETENTION,
             valid_from=NOW,
             valid_until=datetime(2026, 8, 25, 8, 0, tzinfo=UTC),
             recorded_by="human:security-reviewer",

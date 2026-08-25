@@ -8,11 +8,16 @@ from sqlalchemy.orm import Session
 
 from deepaha.artifacts.models import RawArtifact
 from deepaha.contracts.phase9b import (
+    DocumentBlockType,
     EgressBlockClassificationSchemaV08,
     EgressDecisionSchemaV08,
+    EgressDecisionValue,
+    ExtractionTargetScope,
     ModelCallIntentSchemaV08,
+    ModelRouteClass,
     ModelTaskSpecSchemaV08,
     ProviderEgressPolicySnapshotSchemaV08,
+    RetentionClass,
     SourceEgressPolicySnapshotSchemaV08,
 )
 from deepaha.documents.blocks import ParsedBlock, block_hash, evidence_binding_hash
@@ -161,8 +166,8 @@ def seed_gateway_authority(
             model_task_spec_id=uuid7(),
             task_name=task_name,
             task_version=task_version,
-            route_class="R2_BALANCED_REASON",
-            allowed_input_block_types=["HTML_ELEMENT"],
+            route_class=ModelRouteClass.R2_BALANCED_REASON,
+            allowed_input_block_types=[DocumentBlockType.HTML_ELEMENT],
             output_schema_version="schema-v1",
             max_input_tokens=2048,
             max_output_tokens=256,
@@ -219,7 +224,7 @@ def seed_gateway_authority(
             training_use=False,
             supports_idempotency=supports_idempotency,
             allowed_classifications=["PUBLIC_OFFICIAL_GENERAL"],
-            retention_class="ZERO_RETENTION",
+            retention_class=RetentionClass.ZERO_RETENTION,
             valid_from=database_now - timedelta(hours=1),
             valid_until=valid_until,
             recorded_by="human:security-reviewer",
@@ -232,7 +237,7 @@ def seed_gateway_authority(
             task_spec_name=task_name,
             task_spec_version=task_version,
             source_bundle_revision_id=revision.source_bundle_revision_id,
-            target_scope="OPPORTUNITY",
+            target_scope=ExtractionTargetScope.OPPORTUNITY,
             opportunity_id=graph.opportunity_id,
             opportunity_version=graph.opportunity_version,
             opportunity_unit_id=None,
@@ -250,7 +255,7 @@ def seed_gateway_authority(
             provider_region="local-test",
             original_input_hash="6" * 64,
             actual_payload_hash="7" * 64,
-            decision="ALLOW",
+            decision=EgressDecisionValue.ALLOW,
             actor_type="SYSTEM",
             actor_identity=None,
             reason_codes=["POLICY_ALLOW"],
@@ -274,7 +279,7 @@ def seed_gateway_authority(
         input_block_ids=[block_id],
         input_block_hashes=[block_hash_value],
         source_bundle_revision_id=revision.source_bundle_revision_id,
-        target_scope="OPPORTUNITY",
+        target_scope=ExtractionTargetScope.OPPORTUNITY,
         opportunity_id=graph.opportunity_id,
         opportunity_version=graph.opportunity_version,
         opportunity_unit_id=None,
@@ -289,7 +294,7 @@ def seed_gateway_authority(
         seed=42,
         egress_decision_id=egress_decision_id,
         validation_pipeline_version="validation-v1",
-        retention_class="ZERO_RETENTION",
+        retention_class=RetentionClass.ZERO_RETENTION,
         registered_at=database_now,
     )
     return GatewayAuthoritySeed(intent, revision.source_bundle_revision_id, decision_expiry)

@@ -53,7 +53,9 @@ def downgrade() -> None:
 
     op.execute("DROP VIEW p9b_model_call_ledger_view")
     op.execute("DROP TRIGGER p9b_model_call_finalizations_derive ON p9b_model_call_finalizations")
-    op.execute("DROP TRIGGER p9b_model_call_finalizations_immutable ON p9b_model_call_finalizations")
+    op.execute(
+        "DROP TRIGGER p9b_model_call_finalizations_immutable ON p9b_model_call_finalizations"
+    )
     op.execute("DROP TRIGGER p9b_model_call_attempts_guard ON p9b_model_call_attempts")
     op.execute("DROP TRIGGER p9b_model_calls_immutable ON p9b_model_calls")
     for table_name in (
@@ -103,19 +105,51 @@ def _create_egress_authority_tables() -> None:
         sa.Column("fallback_policy", sa.String(length=32), nullable=False),
         sa.Column("max_fallbacks", sa.Integer(), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
-        sa.CheckConstraint("uuid_extract_version(model_task_spec_id) = 7", name=op.f("ck_p9b_model_task_specs_id_uuid7")),
-        sa.CheckConstraint("route_class in ('R1_LOW_COST_EXTRACT', 'R2_BALANCED_REASON', 'R3_STRONG_CANDIDATE')", name=op.f("ck_p9b_model_task_specs_route_class_values")),
-        sa.CheckConstraint("max_input_tokens >= 1 and max_output_tokens >= 1", name=op.f("ck_p9b_model_task_specs_token_bounds")),
-        sa.CheckConstraint("timeout_ms between 100 and 120000", name=op.f("ck_p9b_model_task_specs_timeout_bounds")),
-        sa.CheckConstraint("max_attempts between 1 and 3", name=op.f("ck_p9b_model_task_specs_attempt_bounds")),
-        sa.CheckConstraint("initial_backoff_ms between 0 and 10000", name=op.f("ck_p9b_model_task_specs_initial_backoff_bounds")),
-        sa.CheckConstraint("backoff_multiplier between 1 and 4", name=op.f("ck_p9b_model_task_specs_backoff_multiplier_bounds")),
-        sa.CheckConstraint("max_backoff_ms between initial_backoff_ms and 30000", name=op.f("ck_p9b_model_task_specs_max_backoff_bounds")),
-        sa.CheckConstraint("max_concurrency between 1 and 8", name=op.f("ck_p9b_model_task_specs_concurrency_bounds")),
-        sa.CheckConstraint("max_batch_size between 1 and 16", name=op.f("ck_p9b_model_task_specs_batch_bounds")),
-        sa.CheckConstraint("fallback_policy = 'DISABLED' and max_fallbacks = 0", name=op.f("ck_p9b_model_task_specs_fallback_disabled")),
+        sa.CheckConstraint(
+            "uuid_extract_version(model_task_spec_id) = 7",
+            name=op.f("ck_p9b_model_task_specs_id_uuid7"),
+        ),
+        sa.CheckConstraint(
+            "route_class in ('R1_LOW_COST_EXTRACT', 'R2_BALANCED_REASON', 'R3_STRONG_CANDIDATE')",
+            name=op.f("ck_p9b_model_task_specs_route_class_values"),
+        ),
+        sa.CheckConstraint(
+            "max_input_tokens >= 1 and max_output_tokens >= 1",
+            name=op.f("ck_p9b_model_task_specs_token_bounds"),
+        ),
+        sa.CheckConstraint(
+            "timeout_ms between 100 and 120000", name=op.f("ck_p9b_model_task_specs_timeout_bounds")
+        ),
+        sa.CheckConstraint(
+            "max_attempts between 1 and 3", name=op.f("ck_p9b_model_task_specs_attempt_bounds")
+        ),
+        sa.CheckConstraint(
+            "initial_backoff_ms between 0 and 10000",
+            name=op.f("ck_p9b_model_task_specs_initial_backoff_bounds"),
+        ),
+        sa.CheckConstraint(
+            "backoff_multiplier between 1 and 4",
+            name=op.f("ck_p9b_model_task_specs_backoff_multiplier_bounds"),
+        ),
+        sa.CheckConstraint(
+            "max_backoff_ms between initial_backoff_ms and 30000",
+            name=op.f("ck_p9b_model_task_specs_max_backoff_bounds"),
+        ),
+        sa.CheckConstraint(
+            "max_concurrency between 1 and 8",
+            name=op.f("ck_p9b_model_task_specs_concurrency_bounds"),
+        ),
+        sa.CheckConstraint(
+            "max_batch_size between 1 and 16", name=op.f("ck_p9b_model_task_specs_batch_bounds")
+        ),
+        sa.CheckConstraint(
+            "fallback_policy = 'DISABLED' and max_fallbacks = 0",
+            name=op.f("ck_p9b_model_task_specs_fallback_disabled"),
+        ),
         sa.PrimaryKeyConstraint("model_task_spec_id", name=op.f("pk_p9b_model_task_specs")),
-        sa.UniqueConstraint("task_name", "task_version", name=op.f("uq_p9b_model_task_specs_task_name")),
+        sa.UniqueConstraint(
+            "task_name", "task_version", name=op.f("uq_p9b_model_task_specs_task_name")
+        ),
     )
     op.create_table(
         "p9b_egress_block_classifications",
@@ -127,11 +161,24 @@ def _create_egress_authority_tables() -> None:
         sa.Column("contains_user_data", sa.Boolean(), nullable=False),
         sa.Column("classifier_identity", sa.String(length=128), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
-        sa.CheckConstraint("uuid_extract_version(classification_id) = 7", name=op.f("ck_p9b_egress_block_classifications_id_uuid7")),
-        sa.CheckConstraint("block_hash ~ '^[0-9a-f]{64}$'", name=op.f("ck_p9b_egress_block_classifications_block_hash_format")),
+        sa.CheckConstraint(
+            "uuid_extract_version(classification_id) = 7",
+            name=op.f("ck_p9b_egress_block_classifications_id_uuid7"),
+        ),
+        sa.CheckConstraint(
+            "block_hash ~ '^[0-9a-f]{64}$'",
+            name=op.f("ck_p9b_egress_block_classifications_block_hash_format"),
+        ),
         sa.ForeignKeyConstraint(["block_id"], ["document_blocks.block_id"], ondelete="RESTRICT"),
-        sa.PrimaryKeyConstraint("classification_id", name=op.f("pk_p9b_egress_block_classifications")),
-        sa.UniqueConstraint("block_id", "block_hash", "classification_version", name=op.f("uq_p9b_egress_block_classifications_block_id")),
+        sa.PrimaryKeyConstraint(
+            "classification_id", name=op.f("pk_p9b_egress_block_classifications")
+        ),
+        sa.UniqueConstraint(
+            "block_id",
+            "block_hash",
+            "classification_version",
+            name=op.f("uq_p9b_egress_block_classifications_block_id"),
+        ),
     )
     op.create_table(
         "p9b_source_egress_policy_snapshots",
@@ -143,11 +190,23 @@ def _create_egress_authority_tables() -> None:
         sa.Column("valid_until", sa.DateTime(timezone=True), nullable=False),
         sa.Column("recorded_by", sa.String(length=128), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
-        sa.CheckConstraint("snapshot_hash ~ '^[0-9a-f]{64}$'", name=op.f("ck_p9b_source_egress_policy_snapshots_snapshot_hash_format")),
-        sa.CheckConstraint("valid_until > valid_from", name=op.f("ck_p9b_source_egress_policy_snapshots_valid_window")),
-        sa.ForeignKeyConstraint(["source_bundle_revision_id"], ["source_bundle_revisions.source_bundle_revision_id"], ondelete="RESTRICT"),
+        sa.CheckConstraint(
+            "snapshot_hash ~ '^[0-9a-f]{64}$'",
+            name=op.f("ck_p9b_source_egress_policy_snapshots_snapshot_hash_format"),
+        ),
+        sa.CheckConstraint(
+            "valid_until > valid_from",
+            name=op.f("ck_p9b_source_egress_policy_snapshots_valid_window"),
+        ),
+        sa.ForeignKeyConstraint(
+            ["source_bundle_revision_id"],
+            ["source_bundle_revisions.source_bundle_revision_id"],
+            ondelete="RESTRICT",
+        ),
         sa.PrimaryKeyConstraint("snapshot_id", name=op.f("pk_p9b_source_egress_policy_snapshots")),
-        sa.UniqueConstraint("snapshot_hash", name=op.f("uq_p9b_source_egress_policy_snapshots_snapshot_hash")),
+        sa.UniqueConstraint(
+            "snapshot_hash", name=op.f("uq_p9b_source_egress_policy_snapshots_snapshot_hash")
+        ),
     )
     op.create_table(
         "p9b_provider_egress_policy_snapshots",
@@ -165,11 +224,24 @@ def _create_egress_authority_tables() -> None:
         sa.Column("valid_until", sa.DateTime(timezone=True), nullable=False),
         sa.Column("recorded_by", sa.String(length=128), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
-        sa.CheckConstraint("snapshot_hash ~ '^[0-9a-f]{64}$'", name=op.f("ck_p9b_provider_egress_policy_snapshots_snapshot_hash_format")),
-        sa.CheckConstraint("valid_until > valid_from", name=op.f("ck_p9b_provider_egress_policy_snapshots_valid_window")),
-        sa.CheckConstraint("retention_class in ('ZERO_RETENTION', 'PROVIDER_TRANSIENT_RETENTION', 'INTERNAL_ENCRYPTED_AUDIT')", name=op.f("ck_p9b_provider_egress_policy_snapshots_retention_class_values")),
-        sa.PrimaryKeyConstraint("snapshot_id", name=op.f("pk_p9b_provider_egress_policy_snapshots")),
-        sa.UniqueConstraint("snapshot_hash", name=op.f("uq_p9b_provider_egress_policy_snapshots_snapshot_hash")),
+        sa.CheckConstraint(
+            "snapshot_hash ~ '^[0-9a-f]{64}$'",
+            name=op.f("ck_p9b_provider_egress_policy_snapshots_snapshot_hash_format"),
+        ),
+        sa.CheckConstraint(
+            "valid_until > valid_from",
+            name=op.f("ck_p9b_provider_egress_policy_snapshots_valid_window"),
+        ),
+        sa.CheckConstraint(
+            "retention_class in ('ZERO_RETENTION', 'PROVIDER_TRANSIENT_RETENTION', 'INTERNAL_ENCRYPTED_AUDIT')",
+            name=op.f("ck_p9b_provider_egress_policy_snapshots_retention_class_values"),
+        ),
+        sa.PrimaryKeyConstraint(
+            "snapshot_id", name=op.f("pk_p9b_provider_egress_policy_snapshots")
+        ),
+        sa.UniqueConstraint(
+            "snapshot_hash", name=op.f("uq_p9b_provider_egress_policy_snapshots_snapshot_hash")
+        ),
     )
     op.create_table(
         "p9b_egress_decisions",
@@ -201,16 +273,64 @@ def _create_egress_authority_tables() -> None:
         sa.Column("reason_codes", postgresql.ARRAY(sa.String(length=64)), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("expires_at", sa.DateTime(timezone=True), nullable=True),
-        sa.CheckConstraint("uuid_extract_version(egress_decision_id) = 7", name=op.f("ck_p9b_egress_decisions_id_uuid7")),
-        sa.CheckConstraint("target_scope in ('OPPORTUNITY', 'UNIT')", name=op.f("ck_p9b_egress_decisions_target_scope_values")),
-        sa.CheckConstraint("(target_scope = 'UNIT') = (opportunity_unit_id is not null and opportunity_unit_version_id is not null)", name=op.f("ck_p9b_egress_decisions_unit_target_shape")),
-        sa.CheckConstraint("decision in ('ALLOW', 'REDACT_AND_ALLOW', 'DENY', 'LOCAL_NO_EGRESS')", name=op.f("ck_p9b_egress_decisions_decision_values")),
-        sa.CheckConstraint("original_input_hash ~ '^[0-9a-f]{64}$' and (actual_payload_hash is null or actual_payload_hash ~ '^[0-9a-f]{64}$')", name=op.f("ck_p9b_egress_decisions_hash_formats")),
-        sa.CheckConstraint("(decision in ('ALLOW', 'REDACT_AND_ALLOW')) = (actual_payload_hash is not null and expires_at is not null)", name=op.f("ck_p9b_egress_decisions_allowed_payload_shape")),
-        sa.ForeignKeyConstraint(["task_spec_name", "task_spec_version"], ["p9b_model_task_specs.task_name", "p9b_model_task_specs.task_version"], ondelete="RESTRICT"),
-        sa.ForeignKeyConstraint(["source_bundle_revision_id", "opportunity_id", "opportunity_version"], ["source_bundle_revisions.source_bundle_revision_id", "source_bundle_revisions.opportunity_id", "source_bundle_revisions.opportunity_version"], ondelete="RESTRICT"),
-        sa.ForeignKeyConstraint(["opportunity_id", "opportunity_version"], ["opportunity_versions.opportunity_id", "opportunity_versions.version"], ondelete="RESTRICT"),
-        sa.ForeignKeyConstraint(["opportunity_unit_id", "opportunity_unit_version_id", "opportunity_id", "opportunity_version"], ["opportunity_unit_versions.opportunity_unit_id", "opportunity_unit_versions.opportunity_unit_version_id", "opportunity_unit_versions.opportunity_id", "opportunity_unit_versions.opportunity_version"], ondelete="RESTRICT"),
+        sa.CheckConstraint(
+            "uuid_extract_version(egress_decision_id) = 7",
+            name=op.f("ck_p9b_egress_decisions_id_uuid7"),
+        ),
+        sa.CheckConstraint(
+            "target_scope in ('OPPORTUNITY', 'UNIT')",
+            name=op.f("ck_p9b_egress_decisions_target_scope_values"),
+        ),
+        sa.CheckConstraint(
+            "(target_scope = 'UNIT') = (opportunity_unit_id is not null and opportunity_unit_version_id is not null)",
+            name=op.f("ck_p9b_egress_decisions_unit_target_shape"),
+        ),
+        sa.CheckConstraint(
+            "decision in ('ALLOW', 'REDACT_AND_ALLOW', 'DENY', 'LOCAL_NO_EGRESS')",
+            name=op.f("ck_p9b_egress_decisions_decision_values"),
+        ),
+        sa.CheckConstraint(
+            "original_input_hash ~ '^[0-9a-f]{64}$' and (actual_payload_hash is null or actual_payload_hash ~ '^[0-9a-f]{64}$')",
+            name=op.f("ck_p9b_egress_decisions_hash_formats"),
+        ),
+        sa.CheckConstraint(
+            "(decision in ('ALLOW', 'REDACT_AND_ALLOW')) = (actual_payload_hash is not null and expires_at is not null)",
+            name=op.f("ck_p9b_egress_decisions_allowed_payload_shape"),
+        ),
+        sa.ForeignKeyConstraint(
+            ["task_spec_name", "task_spec_version"],
+            ["p9b_model_task_specs.task_name", "p9b_model_task_specs.task_version"],
+            ondelete="RESTRICT",
+        ),
+        sa.ForeignKeyConstraint(
+            ["source_bundle_revision_id", "opportunity_id", "opportunity_version"],
+            [
+                "source_bundle_revisions.source_bundle_revision_id",
+                "source_bundle_revisions.opportunity_id",
+                "source_bundle_revisions.opportunity_version",
+            ],
+            ondelete="RESTRICT",
+        ),
+        sa.ForeignKeyConstraint(
+            ["opportunity_id", "opportunity_version"],
+            ["opportunity_versions.opportunity_id", "opportunity_versions.version"],
+            ondelete="RESTRICT",
+        ),
+        sa.ForeignKeyConstraint(
+            [
+                "opportunity_unit_id",
+                "opportunity_unit_version_id",
+                "opportunity_id",
+                "opportunity_version",
+            ],
+            [
+                "opportunity_unit_versions.opportunity_unit_id",
+                "opportunity_unit_versions.opportunity_unit_version_id",
+                "opportunity_unit_versions.opportunity_id",
+                "opportunity_unit_versions.opportunity_version",
+            ],
+            ondelete="RESTRICT",
+        ),
         sa.PrimaryKeyConstraint("egress_decision_id", name=op.f("pk_p9b_egress_decisions")),
     )
 
@@ -228,7 +348,9 @@ def _create_model_call_tables() -> None:
         sa.Column("adapter_version", sa.String(length=32), nullable=False),
         sa.Column("runtime_version", sa.String(length=64), nullable=False),
         sa.Column("canonical_request_hash", sa.String(length=64), nullable=False),
-        sa.Column("canonical_message_hashes", postgresql.ARRAY(sa.String(length=64)), nullable=False),
+        sa.Column(
+            "canonical_message_hashes", postgresql.ARRAY(sa.String(length=64)), nullable=False
+        ),
         sa.Column("input_block_ids", postgresql.ARRAY(sa.Uuid()), nullable=False),
         sa.Column("input_block_hashes", postgresql.ARRAY(sa.String(length=64)), nullable=False),
         sa.Column("source_bundle_revision_id", sa.Uuid(), nullable=False),
@@ -249,14 +371,37 @@ def _create_model_call_tables() -> None:
         sa.Column("validation_pipeline_version", sa.String(length=64), nullable=False),
         sa.Column("retention_class", sa.String(length=40), nullable=False),
         sa.Column("registered_at", sa.DateTime(timezone=True), nullable=False),
-        sa.CheckConstraint("uuid_extract_version(model_call_id) = 7", name=op.f("ck_p9b_model_calls_id_uuid7")),
-        sa.CheckConstraint("canonical_request_hash ~ '^[0-9a-f]{64}$'", name=op.f("ck_p9b_model_calls_request_hash_format")),
-        sa.CheckConstraint("target_scope in ('OPPORTUNITY', 'UNIT')", name=op.f("ck_p9b_model_calls_target_scope_values")),
-        sa.CheckConstraint("temperature between 0 and 2", name=op.f("ck_p9b_model_calls_temperature_bounds")),
+        sa.CheckConstraint(
+            "uuid_extract_version(model_call_id) = 7", name=op.f("ck_p9b_model_calls_id_uuid7")
+        ),
+        sa.CheckConstraint(
+            "canonical_request_hash ~ '^[0-9a-f]{64}$'",
+            name=op.f("ck_p9b_model_calls_request_hash_format"),
+        ),
+        sa.CheckConstraint(
+            "target_scope in ('OPPORTUNITY', 'UNIT')",
+            name=op.f("ck_p9b_model_calls_target_scope_values"),
+        ),
+        sa.CheckConstraint(
+            "temperature between 0 and 2", name=op.f("ck_p9b_model_calls_temperature_bounds")
+        ),
         sa.CheckConstraint("top_p between 0 and 1", name=op.f("ck_p9b_model_calls_top_p_bounds")),
-        sa.CheckConstraint("retention_class in ('ZERO_RETENTION', 'PROVIDER_TRANSIENT_RETENTION', 'INTERNAL_ENCRYPTED_AUDIT')", name=op.f("ck_p9b_model_calls_retention_class_values")),
-        sa.ForeignKeyConstraint(["egress_decision_id"], ["p9b_egress_decisions.egress_decision_id"], ondelete="RESTRICT"),
-        sa.ForeignKeyConstraint(["source_bundle_revision_id", "opportunity_id", "opportunity_version"], ["source_bundle_revisions.source_bundle_revision_id", "source_bundle_revisions.opportunity_id", "source_bundle_revisions.opportunity_version"], ondelete="RESTRICT"),
+        sa.CheckConstraint(
+            "retention_class in ('ZERO_RETENTION', 'PROVIDER_TRANSIENT_RETENTION', 'INTERNAL_ENCRYPTED_AUDIT')",
+            name=op.f("ck_p9b_model_calls_retention_class_values"),
+        ),
+        sa.ForeignKeyConstraint(
+            ["egress_decision_id"], ["p9b_egress_decisions.egress_decision_id"], ondelete="RESTRICT"
+        ),
+        sa.ForeignKeyConstraint(
+            ["source_bundle_revision_id", "opportunity_id", "opportunity_version"],
+            [
+                "source_bundle_revisions.source_bundle_revision_id",
+                "source_bundle_revisions.opportunity_id",
+                "source_bundle_revisions.opportunity_version",
+            ],
+            ondelete="RESTRICT",
+        ),
         sa.PrimaryKeyConstraint("model_call_id", name=op.f("pk_p9b_model_calls")),
     )
     op.create_table(
@@ -294,17 +439,47 @@ def _create_model_call_tables() -> None:
         sa.Column("latency_ms", sa.Integer(), nullable=True),
         sa.Column("completed_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
-        sa.CheckConstraint("uuid_extract_version(attempt_id) = 7", name=op.f("ck_p9b_model_call_attempts_attempt_id_uuid7")),
-        sa.CheckConstraint("attempt_number between 1 and 3", name=op.f("ck_p9b_model_call_attempts_attempt_number_bounds")),
-        sa.CheckConstraint("authorization_decision in ('AUTHORIZED', 'AUTHORITY_REJECTED')", name=op.f("ck_p9b_model_call_attempts_authorization_values")),
-        sa.CheckConstraint("outcome is null or outcome in ('AUTHORITY_REJECTED', 'SUCCEEDED', 'RETRYABLE_PROVIDER_ERROR', 'TERMINAL_PROVIDER_ERROR', 'PROVIDER_OUTCOME_UNKNOWN', 'RESPONSE_METADATA_REJECTED', 'OUTPUT_LIMIT_EXCEEDED', 'INVALID_JSON_RESPONSE', 'INVALID_CANDIDATE_SHAPE', 'OUTPUT_SCHEMA_VALIDATION_FAILED')", name=op.f("ck_p9b_model_call_attempts_outcome_values")),
-        sa.CheckConstraint("(authorization_decision = 'AUTHORIZED') = provider_invocation_allowed", name=op.f("ck_p9b_model_call_attempts_authorization_dispatch_shape")),
-        sa.CheckConstraint("(outcome is null) = (completed_at is null)", name=op.f("ck_p9b_model_call_attempts_completion_shape")),
-        sa.CheckConstraint("response_hash is null or response_hash ~ '^[0-9a-f]{64}$'", name=op.f("ck_p9b_model_call_attempts_response_hash_format")),
-        sa.CheckConstraint("parsed_result_hash is null or parsed_result_hash ~ '^[0-9a-f]{64}$'", name=op.f("ck_p9b_model_call_attempts_parsed_hash_format")),
-        sa.ForeignKeyConstraint(["model_call_id"], ["p9b_model_calls.model_call_id"], ondelete="RESTRICT"),
-        sa.ForeignKeyConstraint(["egress_decision_id"], ["p9b_egress_decisions.egress_decision_id"], ondelete="RESTRICT"),
-        sa.PrimaryKeyConstraint("model_call_id", "attempt_number", name=op.f("pk_p9b_model_call_attempts")),
+        sa.CheckConstraint(
+            "uuid_extract_version(attempt_id) = 7",
+            name=op.f("ck_p9b_model_call_attempts_attempt_id_uuid7"),
+        ),
+        sa.CheckConstraint(
+            "attempt_number between 1 and 3",
+            name=op.f("ck_p9b_model_call_attempts_attempt_number_bounds"),
+        ),
+        sa.CheckConstraint(
+            "authorization_decision in ('AUTHORIZED', 'AUTHORITY_REJECTED')",
+            name=op.f("ck_p9b_model_call_attempts_authorization_values"),
+        ),
+        sa.CheckConstraint(
+            "outcome is null or outcome in ('AUTHORITY_REJECTED', 'SUCCEEDED', 'RETRYABLE_PROVIDER_ERROR', 'TERMINAL_PROVIDER_ERROR', 'PROVIDER_OUTCOME_UNKNOWN', 'RESPONSE_METADATA_REJECTED', 'OUTPUT_LIMIT_EXCEEDED', 'INVALID_JSON_RESPONSE', 'INVALID_CANDIDATE_SHAPE', 'OUTPUT_SCHEMA_VALIDATION_FAILED')",
+            name=op.f("ck_p9b_model_call_attempts_outcome_values"),
+        ),
+        sa.CheckConstraint(
+            "(authorization_decision = 'AUTHORIZED') = provider_invocation_allowed",
+            name=op.f("ck_p9b_model_call_attempts_authorization_dispatch_shape"),
+        ),
+        sa.CheckConstraint(
+            "(outcome is null) = (completed_at is null)",
+            name=op.f("ck_p9b_model_call_attempts_completion_shape"),
+        ),
+        sa.CheckConstraint(
+            "response_hash is null or response_hash ~ '^[0-9a-f]{64}$'",
+            name=op.f("ck_p9b_model_call_attempts_response_hash_format"),
+        ),
+        sa.CheckConstraint(
+            "parsed_result_hash is null or parsed_result_hash ~ '^[0-9a-f]{64}$'",
+            name=op.f("ck_p9b_model_call_attempts_parsed_hash_format"),
+        ),
+        sa.ForeignKeyConstraint(
+            ["model_call_id"], ["p9b_model_calls.model_call_id"], ondelete="RESTRICT"
+        ),
+        sa.ForeignKeyConstraint(
+            ["egress_decision_id"], ["p9b_egress_decisions.egress_decision_id"], ondelete="RESTRICT"
+        ),
+        sa.PrimaryKeyConstraint(
+            "model_call_id", "attempt_number", name=op.f("pk_p9b_model_call_attempts")
+        ),
         sa.UniqueConstraint("attempt_id", name=op.f("uq_p9b_model_call_attempts_attempt_id")),
     )
     op.create_table(
@@ -314,9 +489,17 @@ def _create_model_call_tables() -> None:
         sa.Column("disposition", sa.String(length=48), nullable=False),
         sa.Column("reason_code", sa.String(length=64), nullable=False),
         sa.Column("finalized_at", sa.DateTime(timezone=True), nullable=False),
-        sa.CheckConstraint("status in ('SUCCEEDED', 'TERMINAL_FAILED')", name=op.f("ck_p9b_model_call_finalizations_status_values")),
-        sa.CheckConstraint("disposition in ('COMPLETED', 'AUTHORITY_REJECTED', 'PROVIDER_TERMINAL', 'PROVIDER_OUTCOME_UNKNOWN', 'RESPONSE_METADATA_REJECTED', 'ATTEMPTS_EXHAUSTED', 'REVISION_INVALIDATED_AFTER_DISPATCH')", name=op.f("ck_p9b_model_call_finalizations_disposition_values")),
-        sa.ForeignKeyConstraint(["model_call_id"], ["p9b_model_calls.model_call_id"], ondelete="RESTRICT"),
+        sa.CheckConstraint(
+            "status in ('SUCCEEDED', 'TERMINAL_FAILED')",
+            name=op.f("ck_p9b_model_call_finalizations_status_values"),
+        ),
+        sa.CheckConstraint(
+            "disposition in ('COMPLETED', 'AUTHORITY_REJECTED', 'PROVIDER_TERMINAL', 'PROVIDER_OUTCOME_UNKNOWN', 'RESPONSE_METADATA_REJECTED', 'ATTEMPTS_EXHAUSTED', 'REVISION_INVALIDATED_AFTER_DISPATCH')",
+            name=op.f("ck_p9b_model_call_finalizations_disposition_values"),
+        ),
+        sa.ForeignKeyConstraint(
+            ["model_call_id"], ["p9b_model_calls.model_call_id"], ondelete="RESTRICT"
+        ),
         sa.PrimaryKeyConstraint("model_call_id", name=op.f("pk_p9b_model_call_finalizations")),
     )
 
