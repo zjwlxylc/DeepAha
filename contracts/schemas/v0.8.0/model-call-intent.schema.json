@@ -1,0 +1,244 @@
+{
+  "$defs": {
+    "ExtractionTargetScope": {
+      "enum": [
+        "OPPORTUNITY",
+        "UNIT"
+      ],
+      "title": "ExtractionTargetScope",
+      "type": "string"
+    },
+    "RetentionClass": {
+      "enum": [
+        "ZERO_RETENTION",
+        "PROVIDER_TRANSIENT_RETENTION",
+        "INTERNAL_ENCRYPTED_AUDIT"
+      ],
+      "title": "RetentionClass",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "adapter_name": {
+      "minLength": 1,
+      "title": "Adapter Name",
+      "type": "string"
+    },
+    "adapter_version": {
+      "minLength": 1,
+      "title": "Adapter Version",
+      "type": "string"
+    },
+    "canonical_message_hashes": {
+      "items": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Canonical Message Hashes",
+      "type": "array"
+    },
+    "canonical_request_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Canonical Request Hash",
+      "type": "string"
+    },
+    "contract_version": {
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "egress_decision_id": {
+      "format": "uuid",
+      "title": "Egress Decision Id",
+      "type": "string"
+    },
+    "input_block_hashes": {
+      "items": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Input Block Hashes",
+      "type": "array"
+    },
+    "input_block_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Input Block Ids",
+      "type": "array"
+    },
+    "model_call_id": {
+      "format": "uuid",
+      "title": "Model Call Id",
+      "type": "string"
+    },
+    "model_id": {
+      "minLength": 1,
+      "title": "Model Id",
+      "type": "string"
+    },
+    "model_snapshot": {
+      "minLength": 1,
+      "title": "Model Snapshot",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_unit_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Id"
+    },
+    "opportunity_unit_version_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Version Id"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "output_schema_version": {
+      "minLength": 1,
+      "title": "Output Schema Version",
+      "type": "string"
+    },
+    "parser_version": {
+      "minLength": 1,
+      "title": "Parser Version",
+      "type": "string"
+    },
+    "prompt_version": {
+      "minLength": 1,
+      "title": "Prompt Version",
+      "type": "string"
+    },
+    "provider": {
+      "minLength": 1,
+      "title": "Provider",
+      "type": "string"
+    },
+    "registered_at": {
+      "format": "date-time",
+      "title": "Registered At",
+      "type": "string"
+    },
+    "retention_class": {
+      "$ref": "#/$defs/RetentionClass"
+    },
+    "runtime_version": {
+      "minLength": 1,
+      "title": "Runtime Version",
+      "type": "string"
+    },
+    "seed": {
+      "title": "Seed",
+      "type": "integer"
+    },
+    "source_bundle_revision_id": {
+      "format": "uuid",
+      "title": "Source Bundle Revision Id",
+      "type": "string"
+    },
+    "target_scope": {
+      "$ref": "#/$defs/ExtractionTargetScope"
+    },
+    "task_spec_name": {
+      "minLength": 1,
+      "title": "Task Spec Name",
+      "type": "string"
+    },
+    "task_spec_version": {
+      "minLength": 1,
+      "title": "Task Spec Version",
+      "type": "string"
+    },
+    "temperature": {
+      "maximum": 2,
+      "minimum": 0,
+      "title": "Temperature",
+      "type": "number"
+    },
+    "top_p": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Top P",
+      "type": "number"
+    },
+    "unit_segmentation_version": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Unit Segmentation Version"
+    },
+    "validation_pipeline_version": {
+      "minLength": 1,
+      "title": "Validation Pipeline Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "model_call_id",
+    "task_spec_name",
+    "task_spec_version",
+    "provider",
+    "model_id",
+    "model_snapshot",
+    "adapter_name",
+    "adapter_version",
+    "runtime_version",
+    "canonical_request_hash",
+    "canonical_message_hashes",
+    "input_block_ids",
+    "input_block_hashes",
+    "source_bundle_revision_id",
+    "target_scope",
+    "opportunity_id",
+    "opportunity_version",
+    "opportunity_unit_id",
+    "opportunity_unit_version_id",
+    "unit_segmentation_version",
+    "prompt_version",
+    "output_schema_version",
+    "parser_version",
+    "contract_version",
+    "temperature",
+    "top_p",
+    "seed",
+    "egress_decision_id",
+    "validation_pipeline_version",
+    "retention_class",
+    "registered_at"
+  ],
+  "title": "ModelCallIntentSchemaV08",
+  "type": "object"
+}

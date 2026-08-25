@@ -124,6 +124,45 @@ class PredictionFieldState(StrEnum):
     OMITTED = "OMITTED"
 
 
+class RetentionClass(StrEnum):
+    ZERO_RETENTION = "ZERO_RETENTION"
+    PROVIDER_TRANSIENT_RETENTION = "PROVIDER_TRANSIENT_RETENTION"
+    INTERNAL_ENCRYPTED_AUDIT = "INTERNAL_ENCRYPTED_AUDIT"
+
+
+class RawResponseReferenceKind(StrEnum):
+    INTERNAL_OBJECT = "INTERNAL_OBJECT"
+    PROVIDER_RESPONSE_ID = "PROVIDER_RESPONSE_ID"
+
+
+class ModelAttemptOutcome(StrEnum):
+    AUTHORITY_REJECTED = "AUTHORITY_REJECTED"
+    SUCCEEDED = "SUCCEEDED"
+    RETRYABLE_PROVIDER_ERROR = "RETRYABLE_PROVIDER_ERROR"
+    TERMINAL_PROVIDER_ERROR = "TERMINAL_PROVIDER_ERROR"
+    PROVIDER_OUTCOME_UNKNOWN = "PROVIDER_OUTCOME_UNKNOWN"
+    RESPONSE_METADATA_REJECTED = "RESPONSE_METADATA_REJECTED"
+    OUTPUT_LIMIT_EXCEEDED = "OUTPUT_LIMIT_EXCEEDED"
+    INVALID_JSON_RESPONSE = "INVALID_JSON_RESPONSE"
+    INVALID_CANDIDATE_SHAPE = "INVALID_CANDIDATE_SHAPE"
+    OUTPUT_SCHEMA_VALIDATION_FAILED = "OUTPUT_SCHEMA_VALIDATION_FAILED"
+
+
+class ModelCallFinalStatus(StrEnum):
+    SUCCEEDED = "SUCCEEDED"
+    TERMINAL_FAILED = "TERMINAL_FAILED"
+
+
+class ModelTerminalDisposition(StrEnum):
+    COMPLETED = "COMPLETED"
+    AUTHORITY_REJECTED = "AUTHORITY_REJECTED"
+    PROVIDER_TERMINAL = "PROVIDER_TERMINAL"
+    PROVIDER_OUTCOME_UNKNOWN = "PROVIDER_OUTCOME_UNKNOWN"
+    RESPONSE_METADATA_REJECTED = "RESPONSE_METADATA_REJECTED"
+    ATTEMPTS_EXHAUSTED = "ATTEMPTS_EXHAUSTED"
+    REVISION_INVALIDATED_AFTER_DISPATCH = "REVISION_INVALIDATED_AFTER_DISPATCH"
+
+
 class DocumentBlockType(StrEnum):
     HTML_SECTION = "HTML_SECTION"
     HTML_ELEMENT = "HTML_ELEMENT"
@@ -1002,6 +1041,117 @@ class GoldTruthVersionSchemaV08(Phase9BContractModel):
         return self
 
 
+class RawResponseReferenceSchemaV08(Phase9BContractModel):
+    kind: RawResponseReferenceKind
+    storage_bucket: NonEmptyString | None
+    object_key: NonEmptyString | None
+    content_sha256: Sha256 | None
+    provider_response_id: NonEmptyString | None
+
+    @model_validator(mode="after")
+    def require_exact_reference_shape(self) -> Self:
+        internal = self.kind is RawResponseReferenceKind.INTERNAL_OBJECT
+        if internal != (
+            self.storage_bucket is not None
+            and self.object_key is not None
+            and self.content_sha256 is not None
+        ):
+            raise ValueError("internal response references require bucket, object key and hash")
+        if internal == (self.provider_response_id is not None):
+            raise ValueError("response reference kind and provider response ID disagree")
+        if self.object_key is not None and (
+            "://" in self.object_key or self.object_key.startswith(("/", "\\"))
+        ):
+            raise ValueError("raw response object key must be an internal relative object key")
+        return self
+
+
+class ModelCallIntentSchemaV08(Phase9BContractModel):
+    model_call_id: EntityId
+    task_spec_name: NonEmptyString
+    task_spec_version: NonEmptyString
+    provider: NonEmptyString
+    model_id: NonEmptyString
+    model_snapshot: NonEmptyString
+    adapter_name: NonEmptyString
+    adapter_version: NonEmptyString
+    runtime_version: NonEmptyString
+    canonical_request_hash: Sha256
+    canonical_message_hashes: list[Sha256] = Field(min_length=1)
+    input_block_ids: list[EntityId] = Field(min_length=1)
+    input_block_hashes: list[Sha256] = Field(min_length=1)
+    source_bundle_revision_id: EntityId
+    target_scope: ExtractionTargetScope
+    opportunity_id: EntityId
+    opportunity_version: VersionNumber
+    opportunity_unit_id: EntityId | None
+    opportunity_unit_version_id: EntityId | None
+    unit_segmentation_version: NonEmptyString | None
+    prompt_version: NonEmptyString
+    output_schema_version: NonEmptyString
+    parser_version: NonEmptyString
+    contract_version: NonEmptyString
+    temperature: Annotated[float, Field(strict=True, ge=0, le=2)]
+    top_p: Annotated[float, Field(strict=True, ge=0, le=1)]
+    seed: int
+    egress_decision_id: EntityId
+    validation_pipeline_version: NonEmptyString
+    retention_class: RetentionClass
+    registered_at: Instant
+
+    @model_validator(mode="after")
+    def require_intent_bindings(self) -> Self:
+        if len(self.input_block_ids) != len(self.input_block_hashes):
+            raise ValueError("call input block IDs and hashes must align")
+        if len(set(self.input_block_ids)) != len(self.input_block_ids):
+            raise ValueError("call input block IDs must be unique")
+        unit_target = self.target_scope is ExtractionTargetScope.UNIT
+        if unit_target != (
+            self.opportunity_unit_id is not None
+            and self.opportunity_unit_version_id is not None
+        ):
+            raise ValueError("UNIT alone requires exact Unit identity")
+        if unit_target != (self.unit_segmentation_version is not None):
+            raise ValueError("UNIT alone requires a segmentation version")
+        return self
+
+
+class ModelAttemptResultSchemaV08(Phase9BContractModel):
+    outcome: ModelAttemptOutcome
+    provider_http_status: Annotated[int, Field(ge=100, le=599)] | None
+    error_code: NonEmptyString | None
+    raw_response_reference: RawResponseReferenceSchemaV08 | None
+    response_hash: Sha256 | None
+    parsed_result_hash: Sha256 | None
+    input_tokens: Annotated[int, Field(ge=0)]
+    output_tokens: Annotated[int, Field(ge=0)]
+    cache_read_tokens: Annotated[int, Field(ge=0)]
+    cache_write_tokens: Annotated[int, Field(ge=0)]
+    cost_status: Literal["REPORTED", "COST_NOT_REPORTED"]
+    monetary_cost: Annotated[float, Field(strict=True, ge=0)] | None
+    latency_ms: Annotated[int, Field(ge=0)]
+    completed_at: Instant
+
+    @model_validator(mode="after")
+    def require_terminal_result_shape(self) -> Self:
+        if self.outcome is ModelAttemptOutcome.AUTHORITY_REJECTED:
+            raise ValueError("authorization rejection is database-derived, not a Provider result")
+        reported = self.cost_status == "REPORTED"
+        if reported != (self.monetary_cost is not None):
+            raise ValueError("cost status and monetary cost must agree")
+        succeeded = self.outcome is ModelAttemptOutcome.SUCCEEDED
+        if succeeded != (
+            self.raw_response_reference is not None
+            and self.response_hash is not None
+            and self.parsed_result_hash is not None
+            and self.error_code is None
+        ):
+            raise ValueError("attempt success provenance shape is invalid")
+        if not succeeded and self.parsed_result_hash is not None:
+            raise ValueError("failed attempt cannot bind a parsed result hash")
+        return self
+
+
 __all__ = [
     "AnswerAccessClass",
     "DatasetManifestEntrySchemaV08",
@@ -1027,6 +1177,11 @@ __all__ = [
     "GoldReviewRole",
     "GoldRoleAttestationSchemaV08",
     "GoldTruthVersionSchemaV08",
+    "ModelAttemptOutcome",
+    "ModelAttemptResultSchemaV08",
+    "ModelCallFinalStatus",
+    "ModelCallIntentSchemaV08",
+    "ModelTerminalDisposition",
     "OpportunityUnitAliasKind",
     "OpportunityUnitAliasSchemaV08",
     "OpportunityUnitKind",
@@ -1036,6 +1191,9 @@ __all__ = [
     "OpportunityUnitSchemaV08",
     "PrecedenceCheckResult",
     "PredictionFieldState",
+    "RawResponseReferenceKind",
+    "RawResponseReferenceSchemaV08",
+    "RetentionClass",
     "ProposedRulePayloadSchemaV08",
     "RuleApprovalDecisionSchemaV08",
     "RuleApprovalDecisionValue",

@@ -1,0 +1,226 @@
+{
+  "$defs": {
+    "ModelAttemptOutcome": {
+      "enum": [
+        "AUTHORITY_REJECTED",
+        "SUCCEEDED",
+        "RETRYABLE_PROVIDER_ERROR",
+        "TERMINAL_PROVIDER_ERROR",
+        "PROVIDER_OUTCOME_UNKNOWN",
+        "RESPONSE_METADATA_REJECTED",
+        "OUTPUT_LIMIT_EXCEEDED",
+        "INVALID_JSON_RESPONSE",
+        "INVALID_CANDIDATE_SHAPE",
+        "OUTPUT_SCHEMA_VALIDATION_FAILED"
+      ],
+      "title": "ModelAttemptOutcome",
+      "type": "string"
+    },
+    "RawResponseReferenceKind": {
+      "enum": [
+        "INTERNAL_OBJECT",
+        "PROVIDER_RESPONSE_ID"
+      ],
+      "title": "RawResponseReferenceKind",
+      "type": "string"
+    },
+    "RawResponseReferenceSchemaV08": {
+      "additionalProperties": false,
+      "properties": {
+        "content_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Content Sha256"
+        },
+        "kind": {
+          "$ref": "#/$defs/RawResponseReferenceKind"
+        },
+        "object_key": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Object Key"
+        },
+        "provider_response_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Provider Response Id"
+        },
+        "storage_bucket": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Storage Bucket"
+        }
+      },
+      "required": [
+        "kind",
+        "storage_bucket",
+        "object_key",
+        "content_sha256",
+        "provider_response_id"
+      ],
+      "title": "RawResponseReferenceSchemaV08",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cache_read_tokens": {
+      "minimum": 0,
+      "title": "Cache Read Tokens",
+      "type": "integer"
+    },
+    "cache_write_tokens": {
+      "minimum": 0,
+      "title": "Cache Write Tokens",
+      "type": "integer"
+    },
+    "completed_at": {
+      "format": "date-time",
+      "title": "Completed At",
+      "type": "string"
+    },
+    "cost_status": {
+      "enum": [
+        "REPORTED",
+        "COST_NOT_REPORTED"
+      ],
+      "title": "Cost Status",
+      "type": "string"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Error Code"
+    },
+    "input_tokens": {
+      "minimum": 0,
+      "title": "Input Tokens",
+      "type": "integer"
+    },
+    "latency_ms": {
+      "minimum": 0,
+      "title": "Latency Ms",
+      "type": "integer"
+    },
+    "monetary_cost": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Monetary Cost"
+    },
+    "outcome": {
+      "$ref": "#/$defs/ModelAttemptOutcome"
+    },
+    "output_tokens": {
+      "minimum": 0,
+      "title": "Output Tokens",
+      "type": "integer"
+    },
+    "parsed_result_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Parsed Result Hash"
+    },
+    "provider_http_status": {
+      "anyOf": [
+        {
+          "maximum": 599,
+          "minimum": 100,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Provider Http Status"
+    },
+    "raw_response_reference": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RawResponseReferenceSchemaV08"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "response_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Response Hash"
+    }
+  },
+  "required": [
+    "outcome",
+    "provider_http_status",
+    "error_code",
+    "raw_response_reference",
+    "response_hash",
+    "parsed_result_hash",
+    "input_tokens",
+    "output_tokens",
+    "cache_read_tokens",
+    "cache_write_tokens",
+    "cost_status",
+    "monetary_cost",
+    "latency_ms",
+    "completed_at"
+  ],
+  "title": "ModelAttemptResultSchemaV08",
+  "type": "object"
+}

@@ -1,7 +1,9 @@
 from datetime import datetime
+from decimal import Decimal
 from uuid import UUID
 
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     CheckConstraint,
     DateTime,
@@ -10,6 +12,7 @@ from sqlalchemy import (
     ForeignKeyConstraint,
     Index,
     Integer,
+    Numeric,
     PrimaryKeyConstraint,
     String,
     Text,
@@ -17,7 +20,7 @@ from sqlalchemy import (
     Uuid,
     text,
 )
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from deepaha.db.base import Base
@@ -1936,6 +1939,382 @@ class GoldAnswerAccessEvent(Base):
     occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class ModelTaskSpec(Base):
+    __tablename__ = "p9b_model_task_specs"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(model_task_spec_id) = 7", name="id_uuid7"),
+        CheckConstraint("route_class in ('R1_LOW_COST_EXTRACT', 'R2_BALANCED_REASON', "
+                        "'R3_STRONG_CANDIDATE')", name="route_class_values"),
+        CheckConstraint("max_input_tokens >= 1 and max_output_tokens >= 1", name="token_bounds"),
+        CheckConstraint("timeout_ms between 100 and 120000", name="timeout_bounds"),
+        CheckConstraint("max_attempts between 1 and 3", name="attempt_bounds"),
+        CheckConstraint("initial_backoff_ms between 0 and 10000", name="initial_backoff_bounds"),
+        CheckConstraint("backoff_multiplier between 1 and 4", name="backoff_multiplier_bounds"),
+        CheckConstraint(
+            "max_backoff_ms between initial_backoff_ms and 30000",
+            name="max_backoff_bounds",
+        ),
+        CheckConstraint("max_concurrency between 1 and 8", name="concurrency_bounds"),
+        CheckConstraint("max_batch_size between 1 and 16", name="batch_bounds"),
+        CheckConstraint(
+            "fallback_policy = 'DISABLED' and max_fallbacks = 0",
+            name="fallback_disabled",
+        ),
+        UniqueConstraint("task_name", "task_version"),
+    )
+
+    model_task_spec_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    task_name: Mapped[str] = mapped_column(String(64))
+    task_version: Mapped[str] = mapped_column(String(32))
+    route_class: Mapped[str] = mapped_column(String(32))
+    allowed_input_block_types: Mapped[list[str]] = mapped_column(ARRAY(Text))
+    output_schema_version: Mapped[str] = mapped_column(String(64))
+    max_input_tokens: Mapped[int] = mapped_column(Integer)
+    max_output_tokens: Mapped[int] = mapped_column(Integer)
+    evidence_required: Mapped[bool] = mapped_column(Boolean)
+    abstention_allowed: Mapped[bool] = mapped_column(Boolean)
+    risk_class: Mapped[str] = mapped_column(String(32))
+    provider_capabilities: Mapped[list[str]] = mapped_column(ARRAY(Text))
+    egress_policy_id: Mapped[str] = mapped_column(String(64))
+    timeout_ms: Mapped[int] = mapped_column(Integer)
+    max_attempts: Mapped[int] = mapped_column(Integer)
+    initial_backoff_ms: Mapped[int] = mapped_column(Integer)
+    backoff_multiplier: Mapped[float] = mapped_column(Float)
+    max_backoff_ms: Mapped[int] = mapped_column(Integer)
+    max_concurrency: Mapped[int] = mapped_column(Integer)
+    max_batch_size: Mapped[int] = mapped_column(Integer)
+    fallback_policy: Mapped[str] = mapped_column(String(32))
+    max_fallbacks: Mapped[int] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class EgressBlockClassification(Base):
+    __tablename__ = "p9b_egress_block_classifications"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(classification_id) = 7", name="id_uuid7"),
+        CheckConstraint("block_hash ~ '^[0-9a-f]{64}$'", name="block_hash_format"),
+        ForeignKeyConstraint(["block_id"], ["document_blocks.block_id"], ondelete="RESTRICT"),
+        UniqueConstraint("block_id", "block_hash", "classification_version"),
+    )
+
+    classification_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    block_id: Mapped[UUID] = mapped_column(Uuid)
+    block_hash: Mapped[str] = mapped_column(String(64))
+    classification_version: Mapped[str] = mapped_column(String(64))
+    classifications: Mapped[list[str]] = mapped_column(ARRAY(Text))
+    contains_user_data: Mapped[bool] = mapped_column(Boolean)
+    classifier_identity: Mapped[str] = mapped_column(String(128))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class SourceEgressPolicySnapshot(Base):
+    __tablename__ = "p9b_source_egress_policy_snapshots"
+    __table_args__ = (
+        CheckConstraint("snapshot_hash ~ '^[0-9a-f]{64}$'", name="snapshot_hash_format"),
+        CheckConstraint("valid_until > valid_from", name="valid_window"),
+        ForeignKeyConstraint(
+            ["source_bundle_revision_id"],
+            ["source_bundle_revisions.source_bundle_revision_id"],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint("snapshot_hash"),
+    )
+
+    snapshot_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    snapshot_hash: Mapped[str] = mapped_column(String(64))
+    source_bundle_revision_id: Mapped[UUID] = mapped_column(Uuid)
+    allows_egress: Mapped[bool] = mapped_column(Boolean)
+    valid_from: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    valid_until: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    recorded_by: Mapped[str] = mapped_column(String(128))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class ProviderEgressPolicySnapshot(Base):
+    __tablename__ = "p9b_provider_egress_policy_snapshots"
+    __table_args__ = (
+        CheckConstraint("snapshot_hash ~ '^[0-9a-f]{64}$'", name="snapshot_hash_format"),
+        CheckConstraint("valid_until > valid_from", name="valid_window"),
+        CheckConstraint(
+            "retention_class in ('ZERO_RETENTION', 'PROVIDER_TRANSIENT_RETENTION', "
+            "'INTERNAL_ENCRYPTED_AUDIT')",
+            name="retention_class_values",
+        ),
+        UniqueConstraint("snapshot_hash"),
+    )
+
+    snapshot_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    snapshot_hash: Mapped[str] = mapped_column(String(64))
+    provider: Mapped[str] = mapped_column(String(64))
+    region: Mapped[str] = mapped_column(String(64))
+    active: Mapped[bool] = mapped_column(Boolean)
+    zero_retention: Mapped[bool] = mapped_column(Boolean)
+    training_use: Mapped[bool] = mapped_column(Boolean)
+    supports_idempotency: Mapped[bool] = mapped_column(Boolean)
+    allowed_classifications: Mapped[list[str]] = mapped_column(ARRAY(Text))
+    retention_class: Mapped[str] = mapped_column(String(40))
+    valid_from: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    valid_until: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    recorded_by: Mapped[str] = mapped_column(String(128))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class EgressDecision(Base):
+    __tablename__ = "p9b_egress_decisions"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(egress_decision_id) = 7", name="id_uuid7"),
+        CheckConstraint("target_scope in ('OPPORTUNITY', 'UNIT')", name="target_scope_values"),
+        CheckConstraint(
+            "(target_scope = 'UNIT') = (opportunity_unit_id is not null and "
+            "opportunity_unit_version_id is not null)",
+            name="unit_target_shape",
+        ),
+        CheckConstraint("decision in ('ALLOW', 'REDACT_AND_ALLOW', 'DENY', "
+                        "'LOCAL_NO_EGRESS')", name="decision_values"),
+        CheckConstraint(
+            "original_input_hash ~ '^[0-9a-f]{64}$' and "
+            "(actual_payload_hash is null or actual_payload_hash ~ '^[0-9a-f]{64}$')",
+            name="hash_formats",
+        ),
+        CheckConstraint(
+            "(decision in ('ALLOW', 'REDACT_AND_ALLOW')) = "
+            "(actual_payload_hash is not null and expires_at is not null)",
+            name="allowed_payload_shape",
+        ),
+        ForeignKeyConstraint(
+            ["task_spec_name", "task_spec_version"],
+            ["p9b_model_task_specs.task_name", "p9b_model_task_specs.task_version"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["source_bundle_revision_id", "opportunity_id", "opportunity_version"],
+            [
+                "source_bundle_revisions.source_bundle_revision_id",
+                "source_bundle_revisions.opportunity_id",
+                "source_bundle_revisions.opportunity_version",
+            ],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["opportunity_id", "opportunity_version"],
+            ["opportunity_versions.opportunity_id", "opportunity_versions.version"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            [
+                "opportunity_unit_id",
+                "opportunity_unit_version_id",
+                "opportunity_id",
+                "opportunity_version",
+            ],
+            [
+                "opportunity_unit_versions.opportunity_unit_id",
+                "opportunity_unit_versions.opportunity_unit_version_id",
+                "opportunity_unit_versions.opportunity_id",
+                "opportunity_unit_versions.opportunity_version",
+            ],
+            ondelete="RESTRICT",
+        ),
+    )
+
+    egress_decision_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    task_spec_name: Mapped[str] = mapped_column(String(64))
+    task_spec_version: Mapped[str] = mapped_column(String(32))
+    source_bundle_revision_id: Mapped[UUID] = mapped_column(Uuid)
+    target_scope: Mapped[str] = mapped_column(String(16))
+    opportunity_id: Mapped[UUID] = mapped_column(Uuid)
+    opportunity_version: Mapped[int] = mapped_column(Integer)
+    opportunity_unit_id: Mapped[UUID | None] = mapped_column(Uuid)
+    opportunity_unit_version_id: Mapped[UUID | None] = mapped_column(Uuid)
+    input_block_ids: Mapped[list[UUID]] = mapped_column(ARRAY(Uuid))
+    input_block_hashes: Mapped[list[str]] = mapped_column(ARRAY(String(64)))
+    data_classification_version: Mapped[str] = mapped_column(String(64))
+    minimizer_version: Mapped[str] = mapped_column(String(64))
+    redactor_version: Mapped[str] = mapped_column(String(64))
+    source_policy_snapshot_id: Mapped[str] = mapped_column(String(64))
+    source_policy_snapshot_hash: Mapped[str] = mapped_column(String(64))
+    provider_policy_snapshot_id: Mapped[str] = mapped_column(String(64))
+    provider_policy_snapshot_hash: Mapped[str] = mapped_column(String(64))
+    provider: Mapped[str] = mapped_column(String(64))
+    provider_region: Mapped[str] = mapped_column(String(64))
+    original_input_hash: Mapped[str] = mapped_column(String(64))
+    actual_payload_hash: Mapped[str | None] = mapped_column(String(64))
+    decision: Mapped[str] = mapped_column(String(24))
+    actor_type: Mapped[str] = mapped_column(String(16))
+    actor_identity: Mapped[str | None] = mapped_column(String(128))
+    reason_codes: Mapped[list[str]] = mapped_column(ARRAY(String(64)))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class ModelCall(Base):
+    __tablename__ = "p9b_model_calls"
+    __table_args__ = (
+        CheckConstraint("uuid_extract_version(model_call_id) = 7", name="id_uuid7"),
+        CheckConstraint("canonical_request_hash ~ '^[0-9a-f]{64}$'", name="request_hash_format"),
+        CheckConstraint("target_scope in ('OPPORTUNITY', 'UNIT')", name="target_scope_values"),
+        CheckConstraint("temperature between 0 and 2", name="temperature_bounds"),
+        CheckConstraint("top_p between 0 and 1", name="top_p_bounds"),
+        CheckConstraint(
+            "retention_class in ('ZERO_RETENTION', 'PROVIDER_TRANSIENT_RETENTION', "
+            "'INTERNAL_ENCRYPTED_AUDIT')",
+            name="retention_class_values",
+        ),
+        ForeignKeyConstraint(
+            ["egress_decision_id"],
+            ["p9b_egress_decisions.egress_decision_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["source_bundle_revision_id", "opportunity_id", "opportunity_version"],
+            [
+                "source_bundle_revisions.source_bundle_revision_id",
+                "source_bundle_revisions.opportunity_id",
+                "source_bundle_revisions.opportunity_version",
+            ],
+            ondelete="RESTRICT",
+        ),
+    )
+
+    model_call_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    task_spec_name: Mapped[str] = mapped_column(String(64))
+    task_spec_version: Mapped[str] = mapped_column(String(32))
+    provider: Mapped[str] = mapped_column(String(64))
+    model_id: Mapped[str] = mapped_column(String(128))
+    model_snapshot: Mapped[str] = mapped_column(String(128))
+    adapter_name: Mapped[str] = mapped_column(String(64))
+    adapter_version: Mapped[str] = mapped_column(String(32))
+    runtime_version: Mapped[str] = mapped_column(String(64))
+    canonical_request_hash: Mapped[str] = mapped_column(String(64))
+    canonical_message_hashes: Mapped[list[str]] = mapped_column(ARRAY(String(64)))
+    input_block_ids: Mapped[list[UUID]] = mapped_column(ARRAY(Uuid))
+    input_block_hashes: Mapped[list[str]] = mapped_column(ARRAY(String(64)))
+    source_bundle_revision_id: Mapped[UUID] = mapped_column(Uuid)
+    target_scope: Mapped[str] = mapped_column(String(16))
+    opportunity_id: Mapped[UUID] = mapped_column(Uuid)
+    opportunity_version: Mapped[int] = mapped_column(Integer)
+    opportunity_unit_id: Mapped[UUID | None] = mapped_column(Uuid)
+    opportunity_unit_version_id: Mapped[UUID | None] = mapped_column(Uuid)
+    unit_segmentation_version: Mapped[str | None] = mapped_column(String(64))
+    prompt_version: Mapped[str] = mapped_column(String(64))
+    output_schema_version: Mapped[str] = mapped_column(String(64))
+    parser_version: Mapped[str] = mapped_column(String(64))
+    contract_version: Mapped[str] = mapped_column(String(64))
+    temperature: Mapped[float] = mapped_column(Float)
+    top_p: Mapped[float] = mapped_column(Float)
+    seed: Mapped[int] = mapped_column(BigInteger)
+    egress_decision_id: Mapped[UUID] = mapped_column(Uuid)
+    validation_pipeline_version: Mapped[str] = mapped_column(String(64))
+    retention_class: Mapped[str] = mapped_column(String(40))
+    registered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class ModelCallAttempt(Base):
+    __tablename__ = "p9b_model_call_attempts"
+    __table_args__ = (
+        PrimaryKeyConstraint("model_call_id", "attempt_number"),
+        CheckConstraint("uuid_extract_version(attempt_id) = 7", name="attempt_id_uuid7"),
+        CheckConstraint("attempt_number between 1 and 3", name="attempt_number_bounds"),
+        CheckConstraint(
+            "authorization_decision in ('AUTHORIZED', 'AUTHORITY_REJECTED')",
+            name="authorization_values",
+        ),
+        CheckConstraint(
+            "outcome is null or outcome in ('AUTHORITY_REJECTED', 'SUCCEEDED', "
+            "'RETRYABLE_PROVIDER_ERROR', 'TERMINAL_PROVIDER_ERROR', "
+            "'PROVIDER_OUTCOME_UNKNOWN', 'RESPONSE_METADATA_REJECTED', "
+            "'OUTPUT_LIMIT_EXCEEDED', 'INVALID_JSON_RESPONSE', "
+            "'INVALID_CANDIDATE_SHAPE', 'OUTPUT_SCHEMA_VALIDATION_FAILED')",
+            name="outcome_values",
+        ),
+        CheckConstraint(
+            "(authorization_decision = 'AUTHORIZED') = provider_invocation_allowed",
+            name="authorization_dispatch_shape",
+        ),
+        CheckConstraint(
+            "(outcome is null) = (completed_at is null)",
+            name="completion_shape",
+        ),
+        CheckConstraint(
+            "response_hash is null or response_hash ~ '^[0-9a-f]{64}$'",
+            name="response_hash_format",
+        ),
+        CheckConstraint(
+            "parsed_result_hash is null or parsed_result_hash ~ '^[0-9a-f]{64}$'",
+            name="parsed_hash_format",
+        ),
+        ForeignKeyConstraint(
+            ["model_call_id"],
+            ["p9b_model_calls.model_call_id"],
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["egress_decision_id"],
+            ["p9b_egress_decisions.egress_decision_id"],
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint("attempt_id"),
+    )
+
+    model_call_id: Mapped[UUID] = mapped_column(Uuid)
+    attempt_number: Mapped[int] = mapped_column(Integer)
+    attempt_id: Mapped[UUID] = mapped_column(Uuid)
+    egress_decision_id: Mapped[UUID] = mapped_column(Uuid)
+    source_bundle_revision_id: Mapped[UUID] = mapped_column(Uuid)
+    source_policy_snapshot_id: Mapped[str] = mapped_column(String(64))
+    source_policy_snapshot_hash: Mapped[str] = mapped_column(String(64))
+    provider_policy_snapshot_id: Mapped[str] = mapped_column(String(64))
+    provider_policy_snapshot_hash: Mapped[str] = mapped_column(String(64))
+    authorization_decision: Mapped[str] = mapped_column(String(24))
+    authorization_reason_code: Mapped[str] = mapped_column(String(64))
+    authorization_checked_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    dispatch_deadline: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    provider_invocation_allowed: Mapped[bool] = mapped_column(Boolean)
+    outcome: Mapped[str | None] = mapped_column(String(40))
+    provider_http_status: Mapped[int | None] = mapped_column(Integer)
+    error_code: Mapped[str | None] = mapped_column(String(64))
+    provider_response_id: Mapped[str | None] = mapped_column(String(256))
+    raw_response_reference_kind: Mapped[str | None] = mapped_column(String(32))
+    raw_response_storage_bucket: Mapped[str | None] = mapped_column(String(128))
+    raw_response_object_key: Mapped[str | None] = mapped_column(String(512))
+    raw_response_sha256: Mapped[str | None] = mapped_column(String(64))
+    response_hash: Mapped[str | None] = mapped_column(String(64))
+    parsed_result_hash: Mapped[str | None] = mapped_column(String(64))
+    input_tokens: Mapped[int | None] = mapped_column(Integer)
+    output_tokens: Mapped[int | None] = mapped_column(Integer)
+    cache_read_tokens: Mapped[int | None] = mapped_column(Integer)
+    cache_write_tokens: Mapped[int | None] = mapped_column(Integer)
+    cost_status: Mapped[str | None] = mapped_column(String(24))
+    monetary_cost: Mapped[Decimal | None] = mapped_column(Numeric(18, 6))
+    latency_ms: Mapped[int | None] = mapped_column(Integer)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class ModelCallFinalization(Base):
+    __tablename__ = "p9b_model_call_finalizations"
+    __table_args__ = (
+        CheckConstraint("status in ('SUCCEEDED', 'TERMINAL_FAILED')", name="status_values"),
+        CheckConstraint(
+            "disposition in ('COMPLETED', 'AUTHORITY_REJECTED', 'PROVIDER_TERMINAL', "
+            "'PROVIDER_OUTCOME_UNKNOWN', 'RESPONSE_METADATA_REJECTED', "
+            "'ATTEMPTS_EXHAUSTED', 'REVISION_INVALIDATED_AFTER_DISPATCH')",
+            name="disposition_values",
+        ),
+        ForeignKeyConstraint(
+            ["model_call_id"],
+            ["p9b_model_calls.model_call_id"],
+            ondelete="RESTRICT",
+        ),
+    )
+
+    model_call_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    status: Mapped[str] = mapped_column(String(24))
+    disposition: Mapped[str] = mapped_column(String(48))
+    reason_code: Mapped[str] = mapped_column(String(64))
+    finalized_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 __all__ = [
     "DatasetManifest",
     "DatasetManifestEntry",
@@ -1950,6 +2329,12 @@ __all__ = [
     "GoldAnswerAccessEvent",
     "GoldRoleAttestation",
     "GoldTruthVersion",
+    "EgressBlockClassification",
+    "EgressDecision",
+    "ModelCall",
+    "ModelCallAttempt",
+    "ModelCallFinalization",
+    "ModelTaskSpec",
     "OpportunityUnit",
     "OpportunityUnitAlias",
     "OpportunityUnitLineageEvent",
@@ -1960,6 +2345,8 @@ __all__ = [
     "SourceBundleMember",
     "SourceBundleMemberRelation",
     "SourceBundleRevision",
+    "SourceEgressPolicySnapshot",
+    "ProviderEgressPolicySnapshot",
     "RuleApprovalDecisionModel",
     "RuleCandidateEvidence",
     "RuleCandidateFact",
