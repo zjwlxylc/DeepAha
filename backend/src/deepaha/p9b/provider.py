@@ -6,6 +6,10 @@ from uuid import UUID
 from deepaha.contracts.phase9b import ModelAttemptOutcome
 
 
+class ProviderOutcomeUnknownError(RuntimeError):
+    """The request may have reached the Provider but no outcome was observed."""
+
+
 @dataclass(frozen=True, slots=True)
 class ProviderMessage:
     role: Literal["system", "user", "assistant"]
@@ -86,5 +90,6 @@ __all__ = [
     "ProviderAttemptResult",
     "ProviderInvocation",
     "ProviderMessage",
+    "ProviderOutcomeUnknownError",
     "RecordedResponseAdapter",
 ]

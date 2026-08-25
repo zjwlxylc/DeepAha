@@ -41,6 +41,7 @@ def seed_gateway_authority(
     *,
     expiry_seconds: float = 300,
     max_attempts: int = 2,
+    timeout_ms: int = 5000,
     supports_idempotency: bool = False,
 ) -> GatewayAuthoritySeed:
     graph = seed_graph(session, suffix=f"gateway-{uuid7()}")
@@ -172,7 +173,7 @@ def seed_gateway_authority(
             risk_class="HIGH_IMPACT_CANDIDATE",
             provider_capabilities=["ZERO_RETENTION"],
             egress_policy_id="p9b-egress-v1",
-            timeout_ms=5000,
+            timeout_ms=timeout_ms,
             max_attempts=max_attempts,
             initial_backoff_ms=10,
             backoff_multiplier=2.0,

@@ -9,11 +9,12 @@ from sqlalchemy import Engine, text
 from sqlalchemy.orm import Session, sessionmaker
 
 from deepaha.contracts.phase9b import ModelAttemptOutcome, ModelCallIntentSchemaV08
-from deepaha.p9b.gateway import GatewayExecutor
+from deepaha.p9b.gateway import GatewayExecutionError, GatewayExecutor
 from deepaha.p9b.provider import (
     ProviderAttemptResult,
     ProviderInvocation,
     ProviderMessage,
+    ProviderOutcomeUnknownError,
 )
 from tests.integration.p9b_gateway_support import persist_model_call, seed_gateway_authority
 
@@ -27,11 +28,17 @@ class StubProviderAdapter:
     on_invoke: Callable[[ProviderInvocation], None] | None = None
     supports_idempotency: bool = False
     call_count: int = 0
+    requests: list[ProviderInvocation] | None = None
+    error: Exception | None = None
 
     def invoke(self, request: ProviderInvocation) -> ProviderAttemptResult:
         self.call_count += 1
+        if self.requests is not None:
+            self.requests.append(request)
         if self.on_invoke is not None:
             self.on_invoke(request)
+        if self.error is not None:
+            raise self.error
         return self.results.pop(0)
 
 
@@ -302,3 +309,193 @@ def test_no_second_provider_entry_point_exists_in_gateway_execution(
 
     assert first["status"] == "SUCCEEDED"
     assert adapter.call_count == 1
+
+
+def test_same_call_id_and_request_hash_are_idempotent(
+    owned_session_factory: sessionmaker[Session],
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(session, expiry_seconds=5)
+    adapter = StubProviderAdapter(
+        provider=authority.intent.provider,
+        results=[_result(ModelAttemptOutcome.SUCCEEDED)],
+    )
+
+    first = _execute(owned_session_factory, adapter, authority.intent)
+    second = _execute(owned_session_factory, adapter, authority.intent)
+
+    assert first == second
+    assert adapter.call_count == 1
+
+
+def test_same_call_id_with_different_request_hash_is_an_idempotency_conflict(
+    owned_session_factory: sessionmaker[Session],
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(session, expiry_seconds=5)
+    adapter = StubProviderAdapter(
+        provider=authority.intent.provider,
+        results=[_result(ModelAttemptOutcome.SUCCEEDED)],
+    )
+    _execute(owned_session_factory, adapter, authority.intent)
+    conflicting = authority.intent.model_copy(
+        update={"canonical_request_hash": "a" * 64}
+    )
+
+    with pytest.raises(GatewayExecutionError, match="idempotency conflict"):
+        _execute(owned_session_factory, adapter, conflicting)
+
+    assert adapter.call_count == 1
+
+
+def test_provider_idempotency_key_is_the_database_attempt_id_only_when_supported(
+    owned_session_factory: sessionmaker[Session],
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(
+            session,
+            expiry_seconds=5,
+            supports_idempotency=True,
+        )
+    requests: list[ProviderInvocation] = []
+    adapter = StubProviderAdapter(
+        provider=authority.intent.provider,
+        results=[_result(ModelAttemptOutcome.SUCCEEDED)],
+        supports_idempotency=True,
+        requests=requests,
+    )
+
+    ledger = _execute(owned_session_factory, adapter, authority.intent)
+
+    assert ledger["status"] == "SUCCEEDED"
+    assert len(requests) == 1
+    assert requests[0].idempotency_key == str(requests[0].attempt_id)
+
+    with owned_session_factory.begin() as session:
+        unsupported = seed_gateway_authority(
+            session,
+            expiry_seconds=5,
+            supports_idempotency=False,
+        )
+    unsupported_requests: list[ProviderInvocation] = []
+    adapter = StubProviderAdapter(
+        provider=unsupported.intent.provider,
+        results=[_result(ModelAttemptOutcome.SUCCEEDED)],
+        supports_idempotency=True,
+        requests=unsupported_requests,
+    )
+
+    _execute(owned_session_factory, adapter, unsupported.intent)
+
+    assert unsupported_requests[0].idempotency_key is None
+
+
+def test_ambiguous_transport_without_idempotency_is_unknown_and_never_retried(
+    owned_session_factory: sessionmaker[Session],
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(session, expiry_seconds=5, max_attempts=2)
+    adapter = StubProviderAdapter(
+        provider=authority.intent.provider,
+        results=[],
+        error=ProviderOutcomeUnknownError("connection lost after dispatch"),
+    )
+
+    ledger = _execute(owned_session_factory, adapter, authority.intent)
+
+    assert adapter.call_count == 1
+    assert ledger["status"] == "TERMINAL_FAILED"
+    assert ledger["terminal_disposition"] == "PROVIDER_OUTCOME_UNKNOWN"
+    assert ledger["attempt_count"] == 1
+    assert ledger["attempts"][0]["outcome"] == "PROVIDER_OUTCOME_UNKNOWN"
+
+
+def test_stale_dispatched_attempt_is_atomically_reconciled_to_unknown(
+    owned_session_factory: sessionmaker[Session],
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(
+            session,
+            expiry_seconds=5,
+            max_attempts=2,
+            timeout_ms=100,
+        )
+    crashed = StubProviderAdapter(
+        provider=authority.intent.provider,
+        results=[],
+        error=RuntimeError("worker process terminated"),
+    )
+    with pytest.raises(RuntimeError, match="worker process terminated"):
+        _execute(owned_session_factory, crashed, authority.intent)
+    time.sleep(0.15)
+    replacement = StubProviderAdapter(
+        provider=authority.intent.provider,
+        results=[],
+    )
+
+    ledger = _execute(owned_session_factory, replacement, authority.intent)
+
+    assert crashed.call_count == 1
+    assert replacement.call_count == 0
+    assert ledger["status"] == "TERMINAL_FAILED"
+    assert ledger["terminal_disposition"] == "PROVIDER_OUTCOME_UNKNOWN"
+    assert ledger["attempts"][0]["error_code"] == "DISPATCH_DEADLINE_EXCEEDED"
+    reconciler = GatewayExecutor(
+        session_factory=owned_session_factory,
+        adapter=replacement,
+    )
+    assert reconciler.reconcile_stale_attempts(authority.intent.model_call_id) == ()
+    with owned_session_factory() as session:
+        finalization_count = session.scalar(
+            text(
+                "select count(*) from p9b_model_call_finalizations "
+                "where model_call_id = :call_id"
+            ),
+            {"call_id": authority.intent.model_call_id},
+        )
+    assert finalization_count == 1
+
+
+def test_concurrent_reentry_never_duplicates_an_inflight_provider_attempt(
+    owned_session_factory: sessionmaker[Session],
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(session, expiry_seconds=5)
+    entered = Event()
+    release = Event()
+    outcome: dict[str, object] = {}
+
+    def block_provider(_: ProviderInvocation) -> None:
+        entered.set()
+        assert release.wait(timeout=3)
+
+    adapter = StubProviderAdapter(
+        provider=authority.intent.provider,
+        results=[_result(ModelAttemptOutcome.SUCCEEDED)],
+        on_invoke=block_provider,
+    )
+
+    def first_execution() -> None:
+        try:
+            outcome["ledger"] = _execute(
+                owned_session_factory,
+                adapter,
+                authority.intent,
+            )
+        except Exception as error:  # noqa: BLE001 - test records thread outcome
+            outcome["error"] = error
+
+    thread = Thread(target=first_execution, daemon=True)
+    thread.start()
+    assert entered.wait(timeout=3)
+    try:
+        with pytest.raises(GatewayExecutionError, match="already in progress"):
+            _execute(owned_session_factory, adapter, authority.intent)
+        assert adapter.call_count == 1
+    finally:
+        release.set()
+        thread.join(timeout=3)
+
+    assert not thread.is_alive()
+    assert "error" not in outcome
+    assert outcome["ledger"]["status"] == "SUCCEEDED"
