@@ -1,0 +1,183 @@
+{
+  "$defs": {
+    "DocumentBlockType": {
+      "enum": [
+        "HTML_SECTION",
+        "HTML_ELEMENT",
+        "PDF_TEXT_SPAN",
+        "PDF_TABLE_CELL",
+        "SPREADSHEET_CELL",
+        "SPREADSHEET_RANGE",
+        "DOCX_PARAGRAPH",
+        "DOCX_TABLE_CELL",
+        "OCR_TEXT_SPAN"
+      ],
+      "title": "DocumentBlockType",
+      "type": "string"
+    },
+    "ModelRouteClass": {
+      "enum": [
+        "R1_LOW_COST_EXTRACT",
+        "R2_BALANCED_REASON",
+        "R3_STRONG_CANDIDATE"
+      ],
+      "title": "ModelRouteClass",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "abstention_allowed": {
+      "title": "Abstention Allowed",
+      "type": "boolean"
+    },
+    "allowed_input_block_types": {
+      "items": {
+        "$ref": "#/$defs/DocumentBlockType"
+      },
+      "minItems": 1,
+      "title": "Allowed Input Block Types",
+      "type": "array"
+    },
+    "backoff_multiplier": {
+      "maximum": 4,
+      "minimum": 1,
+      "title": "Backoff Multiplier",
+      "type": "number"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "egress_policy_id": {
+      "minLength": 1,
+      "title": "Egress Policy Id",
+      "type": "string"
+    },
+    "evidence_required": {
+      "title": "Evidence Required",
+      "type": "boolean"
+    },
+    "fallback_policy": {
+      "const": "DISABLED",
+      "title": "Fallback Policy",
+      "type": "string"
+    },
+    "initial_backoff_ms": {
+      "maximum": 10000,
+      "minimum": 0,
+      "title": "Initial Backoff Ms",
+      "type": "integer"
+    },
+    "max_attempts": {
+      "maximum": 3,
+      "minimum": 1,
+      "title": "Max Attempts",
+      "type": "integer"
+    },
+    "max_backoff_ms": {
+      "maximum": 30000,
+      "minimum": 0,
+      "title": "Max Backoff Ms",
+      "type": "integer"
+    },
+    "max_batch_size": {
+      "maximum": 16,
+      "minimum": 1,
+      "title": "Max Batch Size",
+      "type": "integer"
+    },
+    "max_concurrency": {
+      "maximum": 8,
+      "minimum": 1,
+      "title": "Max Concurrency",
+      "type": "integer"
+    },
+    "max_fallbacks": {
+      "const": 0,
+      "title": "Max Fallbacks",
+      "type": "integer"
+    },
+    "max_input_tokens": {
+      "minimum": 1,
+      "title": "Max Input Tokens",
+      "type": "integer"
+    },
+    "max_output_tokens": {
+      "minimum": 1,
+      "title": "Max Output Tokens",
+      "type": "integer"
+    },
+    "model_task_spec_id": {
+      "format": "uuid",
+      "title": "Model Task Spec Id",
+      "type": "string"
+    },
+    "output_schema_version": {
+      "minLength": 1,
+      "title": "Output Schema Version",
+      "type": "string"
+    },
+    "provider_capabilities": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Provider Capabilities",
+      "type": "array"
+    },
+    "risk_class": {
+      "minLength": 1,
+      "title": "Risk Class",
+      "type": "string"
+    },
+    "route_class": {
+      "$ref": "#/$defs/ModelRouteClass"
+    },
+    "task_name": {
+      "minLength": 1,
+      "title": "Task Name",
+      "type": "string"
+    },
+    "task_version": {
+      "minLength": 1,
+      "title": "Task Version",
+      "type": "string"
+    },
+    "timeout_ms": {
+      "maximum": 120000,
+      "minimum": 100,
+      "title": "Timeout Ms",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "model_task_spec_id",
+    "task_name",
+    "task_version",
+    "route_class",
+    "allowed_input_block_types",
+    "output_schema_version",
+    "max_input_tokens",
+    "max_output_tokens",
+    "evidence_required",
+    "abstention_allowed",
+    "risk_class",
+    "provider_capabilities",
+    "egress_policy_id",
+    "timeout_ms",
+    "max_attempts",
+    "initial_backoff_ms",
+    "backoff_multiplier",
+    "max_backoff_ms",
+    "max_concurrency",
+    "max_batch_size",
+    "fallback_policy",
+    "max_fallbacks",
+    "created_at"
+  ],
+  "title": "ModelTaskSpecSchemaV08",
+  "type": "object"
+}

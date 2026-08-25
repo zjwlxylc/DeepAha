@@ -37,8 +37,12 @@ def clean_committed_domain_rows(migrated_engine: Engine) -> Iterator[None]:
     with migrated_engine.begin() as connection:
         connection.execute(
             text(
-                "TRUNCATE TABLE reviewer_accounts, personal_users, sources, opportunities, "
-                "profile_snapshots, evaluation_runs RESTART IDENTITY CASCADE"
+                "TRUNCATE TABLE p9b_model_task_specs, "
+                "p9b_egress_block_classifications, "
+                "p9b_source_egress_policy_snapshots, "
+                "p9b_provider_egress_policy_snapshots, reviewer_accounts, "
+                "personal_users, sources, opportunities, profile_snapshots, "
+                "evaluation_runs RESTART IDENTITY CASCADE"
             )
         )
 

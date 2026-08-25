@@ -130,6 +130,19 @@ class RetentionClass(StrEnum):
     INTERNAL_ENCRYPTED_AUDIT = "INTERNAL_ENCRYPTED_AUDIT"
 
 
+class ModelRouteClass(StrEnum):
+    R1_LOW_COST_EXTRACT = "R1_LOW_COST_EXTRACT"
+    R2_BALANCED_REASON = "R2_BALANCED_REASON"
+    R3_STRONG_CANDIDATE = "R3_STRONG_CANDIDATE"
+
+
+class EgressDecisionValue(StrEnum):
+    ALLOW = "ALLOW"
+    REDACT_AND_ALLOW = "REDACT_AND_ALLOW"
+    DENY = "DENY"
+    LOCAL_NO_EGRESS = "LOCAL_NO_EGRESS"
+
+
 class RawResponseReferenceKind(StrEnum):
     INTERNAL_OBJECT = "INTERNAL_OBJECT"
     PROVIDER_RESPONSE_ID = "PROVIDER_RESPONSE_ID"
@@ -1116,6 +1129,101 @@ class ModelCallIntentSchemaV08(Phase9BContractModel):
         return self
 
 
+class ModelTaskSpecSchemaV08(Phase9BContractModel):
+    model_task_spec_id: EntityId
+    task_name: NonEmptyString
+    task_version: NonEmptyString
+    route_class: ModelRouteClass
+    allowed_input_block_types: list[DocumentBlockType] = Field(min_length=1)
+    output_schema_version: NonEmptyString
+    max_input_tokens: Annotated[int, Field(ge=1)]
+    max_output_tokens: Annotated[int, Field(ge=1)]
+    evidence_required: bool
+    abstention_allowed: bool
+    risk_class: NonEmptyString
+    provider_capabilities: list[NonEmptyString] = Field(min_length=1)
+    egress_policy_id: NonEmptyString
+    timeout_ms: Annotated[int, Field(ge=100, le=120000)]
+    max_attempts: Annotated[int, Field(ge=1, le=3)]
+    initial_backoff_ms: Annotated[int, Field(ge=0, le=10000)]
+    backoff_multiplier: Annotated[float, Field(strict=True, ge=1, le=4)]
+    max_backoff_ms: Annotated[int, Field(ge=0, le=30000)]
+    max_concurrency: Annotated[int, Field(ge=1, le=8)]
+    max_batch_size: Annotated[int, Field(ge=1, le=16)]
+    fallback_policy: Literal["DISABLED"]
+    max_fallbacks: Literal[0]
+    created_at: Instant
+
+    @model_validator(mode="after")
+    def require_task_bounds(self) -> Self:
+        if self.max_backoff_ms < self.initial_backoff_ms:
+            raise ValueError("maximum backoff must not precede the initial backoff")
+        if len(set(self.allowed_input_block_types)) != len(self.allowed_input_block_types):
+            raise ValueError("allowed input block types must be unique")
+        if len(set(self.provider_capabilities)) != len(self.provider_capabilities):
+            raise ValueError("provider capabilities must be unique")
+        return self
+
+
+class EgressDecisionSchemaV08(Phase9BContractModel):
+    egress_decision_id: EntityId
+    task_spec_name: NonEmptyString
+    task_spec_version: NonEmptyString
+    source_bundle_revision_id: EntityId
+    target_scope: ExtractionTargetScope
+    opportunity_id: EntityId
+    opportunity_version: VersionNumber
+    opportunity_unit_id: EntityId | None
+    opportunity_unit_version_id: EntityId | None
+    input_block_ids: list[EntityId] = Field(min_length=1)
+    input_block_hashes: list[Sha256] = Field(min_length=1)
+    data_classification_version: NonEmptyString
+    minimizer_version: NonEmptyString
+    redactor_version: NonEmptyString
+    source_policy_snapshot_id: NonEmptyString
+    source_policy_snapshot_hash: Sha256
+    provider_policy_snapshot_id: NonEmptyString
+    provider_policy_snapshot_hash: Sha256
+    provider: NonEmptyString
+    provider_region: NonEmptyString
+    original_input_hash: Sha256
+    actual_payload_hash: Sha256 | None
+    decision: EgressDecisionValue
+    actor_type: Literal["SYSTEM", "HUMAN"]
+    actor_identity: NonEmptyString | None
+    reason_codes: list[NonEmptyString] = Field(min_length=1)
+    created_at: Instant
+    expires_at: Instant | None
+
+    @model_validator(mode="after")
+    def require_decision_bindings(self) -> Self:
+        if len(self.input_block_ids) != len(self.input_block_hashes):
+            raise ValueError("egress input block IDs and hashes must align")
+        if len(set(self.input_block_ids)) != len(self.input_block_ids):
+            raise ValueError("egress input block IDs must be unique")
+        if len(set(self.reason_codes)) != len(self.reason_codes):
+            raise ValueError("egress reason codes must be unique")
+        unit_target = self.target_scope is ExtractionTargetScope.UNIT
+        if unit_target != (
+            self.opportunity_unit_id is not None
+            and self.opportunity_unit_version_id is not None
+        ):
+            raise ValueError("UNIT alone requires exact Unit identity")
+        allowed = self.decision in {
+            EgressDecisionValue.ALLOW,
+            EgressDecisionValue.REDACT_AND_ALLOW,
+        }
+        if allowed != (
+            self.actual_payload_hash is not None and self.expires_at is not None
+        ):
+            raise ValueError("allowed egress requires an exact payload hash and expiry")
+        if self.expires_at is not None and self.expires_at <= self.created_at:
+            raise ValueError("egress expiry must follow creation")
+        if (self.actor_type == "HUMAN") != (self.actor_identity is not None):
+            raise ValueError("human egress decisions require an actor identity")
+        return self
+
+
 class ModelAttemptResultSchemaV08(Phase9BContractModel):
     outcome: ModelAttemptOutcome
     provider_http_status: Annotated[int, Field(ge=100, le=599)] | None
@@ -1161,6 +1269,8 @@ __all__ = [
     "DocumentBlockSchemaV08",
     "DocumentBlockType",
     "DocumentParseIdentitySchemaV08",
+    "EgressDecisionSchemaV08",
+    "EgressDecisionValue",
     "EvidenceSupportResult",
     "ExtractionCandidateSchemaV08",
     "ExtractionRunSchemaV08",
@@ -1181,6 +1291,8 @@ __all__ = [
     "ModelAttemptResultSchemaV08",
     "ModelCallFinalStatus",
     "ModelCallIntentSchemaV08",
+    "ModelRouteClass",
+    "ModelTaskSpecSchemaV08",
     "ModelTerminalDisposition",
     "OpportunityUnitAliasKind",
     "OpportunityUnitAliasSchemaV08",

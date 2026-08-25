@@ -1,0 +1,243 @@
+{
+  "$defs": {
+    "EgressDecisionValue": {
+      "enum": [
+        "ALLOW",
+        "REDACT_AND_ALLOW",
+        "DENY",
+        "LOCAL_NO_EGRESS"
+      ],
+      "title": "EgressDecisionValue",
+      "type": "string"
+    },
+    "ExtractionTargetScope": {
+      "enum": [
+        "OPPORTUNITY",
+        "UNIT"
+      ],
+      "title": "ExtractionTargetScope",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actor_identity": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Actor Identity"
+    },
+    "actor_type": {
+      "enum": [
+        "SYSTEM",
+        "HUMAN"
+      ],
+      "title": "Actor Type",
+      "type": "string"
+    },
+    "actual_payload_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Actual Payload Hash"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "data_classification_version": {
+      "minLength": 1,
+      "title": "Data Classification Version",
+      "type": "string"
+    },
+    "decision": {
+      "$ref": "#/$defs/EgressDecisionValue"
+    },
+    "egress_decision_id": {
+      "format": "uuid",
+      "title": "Egress Decision Id",
+      "type": "string"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Expires At"
+    },
+    "input_block_hashes": {
+      "items": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Input Block Hashes",
+      "type": "array"
+    },
+    "input_block_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Input Block Ids",
+      "type": "array"
+    },
+    "minimizer_version": {
+      "minLength": 1,
+      "title": "Minimizer Version",
+      "type": "string"
+    },
+    "opportunity_id": {
+      "format": "uuid",
+      "title": "Opportunity Id",
+      "type": "string"
+    },
+    "opportunity_unit_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Id"
+    },
+    "opportunity_unit_version_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Opportunity Unit Version Id"
+    },
+    "opportunity_version": {
+      "minimum": 1,
+      "title": "Opportunity Version",
+      "type": "integer"
+    },
+    "original_input_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Original Input Hash",
+      "type": "string"
+    },
+    "provider": {
+      "minLength": 1,
+      "title": "Provider",
+      "type": "string"
+    },
+    "provider_policy_snapshot_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Provider Policy Snapshot Hash",
+      "type": "string"
+    },
+    "provider_policy_snapshot_id": {
+      "minLength": 1,
+      "title": "Provider Policy Snapshot Id",
+      "type": "string"
+    },
+    "provider_region": {
+      "minLength": 1,
+      "title": "Provider Region",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "redactor_version": {
+      "minLength": 1,
+      "title": "Redactor Version",
+      "type": "string"
+    },
+    "source_bundle_revision_id": {
+      "format": "uuid",
+      "title": "Source Bundle Revision Id",
+      "type": "string"
+    },
+    "source_policy_snapshot_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Source Policy Snapshot Hash",
+      "type": "string"
+    },
+    "source_policy_snapshot_id": {
+      "minLength": 1,
+      "title": "Source Policy Snapshot Id",
+      "type": "string"
+    },
+    "target_scope": {
+      "$ref": "#/$defs/ExtractionTargetScope"
+    },
+    "task_spec_name": {
+      "minLength": 1,
+      "title": "Task Spec Name",
+      "type": "string"
+    },
+    "task_spec_version": {
+      "minLength": 1,
+      "title": "Task Spec Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "egress_decision_id",
+    "task_spec_name",
+    "task_spec_version",
+    "source_bundle_revision_id",
+    "target_scope",
+    "opportunity_id",
+    "opportunity_version",
+    "opportunity_unit_id",
+    "opportunity_unit_version_id",
+    "input_block_ids",
+    "input_block_hashes",
+    "data_classification_version",
+    "minimizer_version",
+    "redactor_version",
+    "source_policy_snapshot_id",
+    "source_policy_snapshot_hash",
+    "provider_policy_snapshot_id",
+    "provider_policy_snapshot_hash",
+    "provider",
+    "provider_region",
+    "original_input_hash",
+    "actual_payload_hash",
+    "decision",
+    "actor_type",
+    "actor_identity",
+    "reason_codes",
+    "created_at",
+    "expires_at"
+  ],
+  "title": "EgressDecisionSchemaV08",
+  "type": "object"
+}
