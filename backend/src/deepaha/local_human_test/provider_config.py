@@ -1,5 +1,6 @@
 import base64
 import ctypes
+import json
 import os
 import subprocess
 from collections.abc import Callable
@@ -13,10 +14,15 @@ from uuid import uuid4
 from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_validator, model_validator
 
 from deepaha.local_human_test.contracts import ProviderConfigSnapshot
+from deepaha.p9b.hashing import model_request_hash
 
 
 class ProviderConfigError(RuntimeError):
     """A local Provider configuration boundary failed closed."""
+
+
+class ProviderConfigIdempotencyConflict(ProviderConfigError):
+    """The same Provider save key was bound to a different request."""
 
 
 class SecretProtector(Protocol):
@@ -70,7 +76,7 @@ class ResolvedProviderConfig(ProviderConfigSnapshot):
 class _StoredProviderConfig(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    schema_version: str = Field(pattern=r"^1\.[01]$")
+    schema_version: str = Field(pattern=r"^1\.[012]$")
     provider: str
     base_url: str
     protocol: str
@@ -81,6 +87,7 @@ class _StoredProviderConfig(BaseModel):
     training_use: bool = True
     supports_idempotency: bool = False
     protected_api_key: str | None = None
+    protected_last_save_identity: str | None = None
     updated_at: datetime
 
     @model_validator(mode="after")
@@ -99,6 +106,22 @@ class _StoredProviderConfig(BaseModel):
             }
         )
         return self
+
+
+class _StoredSaveIdentity(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    idempotency_key: str = Field(min_length=1, max_length=128)
+    request_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+    @field_validator("idempotency_key")
+    @classmethod
+    def validate_idempotency_key(cls, value: str) -> str:
+        if value != value.strip() or any(
+            not character.isprintable() for character in value
+        ):
+            raise ValueError("idempotency key is invalid")
+        return value
 
 
 class _DataBlob(ctypes.Structure):
@@ -237,8 +260,30 @@ class LocalProviderConfigStore:
     def _path(self) -> Path:
         return self._root / self._FILE_NAME
 
-    def save(self, command: SaveProviderConfig) -> ProviderConfigStatus:
+    def save(
+        self,
+        command: SaveProviderConfig,
+        *,
+        idempotency_key: str,
+    ) -> ProviderConfigStatus:
         self._prepare_root()
+        identity = _StoredSaveIdentity(
+            idempotency_key=idempotency_key,
+            request_hash=self._save_request_hash(command),
+        )
+        if self._path.exists():
+            existing = self._read()
+            prior_identity = self._read_save_identity(existing)
+            if (
+                prior_identity is not None
+                and prior_identity.idempotency_key == identity.idempotency_key
+            ):
+                if prior_identity.request_hash != identity.request_hash:
+                    raise ProviderConfigIdempotencyConflict(
+                        "PROVIDER_CONFIG_IDEMPOTENCY_CONFLICT"
+                    )
+                return self._status_from(existing)
+
         secret_buffer = bytearray(command.api_key.get_secret_value(), "utf-8")
         try:
             protected = self._protector.protect(bytes(secret_buffer))
@@ -247,8 +292,16 @@ class LocalProviderConfigStore:
         finally:
             secret_buffer[:] = b"\x00" * len(secret_buffer)
 
+        identity_buffer = bytearray(identity.model_dump_json(), "utf-8")
+        try:
+            protected_identity = self._protector.protect(bytes(identity_buffer))
+        except Exception as error:
+            raise ProviderConfigError("Provider save identity protection failed") from error
+        finally:
+            identity_buffer[:] = b"\x00" * len(identity_buffer)
+
         payload = _StoredProviderConfig(
-            schema_version="1.1",
+            schema_version="1.2",
             provider=command.provider,
             base_url=str(command.base_url).rstrip("/"),
             protocol=command.protocol,
@@ -259,6 +312,9 @@ class LocalProviderConfigStore:
             training_use=command.training_use,
             supports_idempotency=command.supports_idempotency,
             protected_api_key=base64.b64encode(protected).decode("ascii"),
+            protected_last_save_identity=base64.b64encode(protected_identity).decode(
+                "ascii"
+            ),
             updated_at=self._clock(),
         )
         self._atomic_write(payload)
@@ -352,6 +408,32 @@ class LocalProviderConfigStore:
                 temporary.unlink(missing_ok=True)
 
     @staticmethod
+    def _save_request_hash(command: SaveProviderConfig) -> str:
+        values = command.model_dump(mode="json", exclude={"api_key"})
+        values["api_key"] = command.api_key.get_secret_value()
+        return model_request_hash(values)
+
+    def _read_save_identity(
+        self,
+        payload: _StoredProviderConfig,
+    ) -> _StoredSaveIdentity | None:
+        if payload.protected_last_save_identity is None:
+            return None
+        try:
+            ciphertext = base64.b64decode(
+                payload.protected_last_save_identity,
+                validate=True,
+            )
+            plaintext = bytearray(self._protector.unprotect(ciphertext))
+            raw = json.loads(plaintext.decode("utf-8"))
+            return _StoredSaveIdentity.model_validate(raw)
+        except Exception as error:
+            raise ProviderConfigError("Provider save identity is unreadable") from error
+        finally:
+            if "plaintext" in locals():
+                plaintext[:] = b"\x00" * len(plaintext)
+
+    @staticmethod
     def _status_from(payload: _StoredProviderConfig) -> ProviderConfigStatus:
         return ProviderConfigStatus(
             configured=payload.protected_api_key is not None,
@@ -377,6 +459,7 @@ __all__ = [
     "DirectoryHardener",
     "LocalProviderConfigStore",
     "ProviderConfigError",
+    "ProviderConfigIdempotencyConflict",
     "ProviderConfigStatus",
     "ResolvedProviderConfig",
     "SaveProviderConfig",

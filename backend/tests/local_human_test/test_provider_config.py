@@ -8,6 +8,7 @@ from pydantic import SecretStr, ValidationError
 from deepaha.local_human_test.provider_config import (
     LocalProviderConfigStore,
     ProviderConfigError,
+    ProviderConfigIdempotencyConflict,
     SaveProviderConfig,
     WindowsDirectoryHardener,
 )
@@ -68,7 +69,7 @@ def make_store(
 def test_store_round_trips_without_plaintext_or_secret_status(tmp_path: Path) -> None:
     store = make_store(tmp_path)
 
-    status = store.save(save_command())
+    status = store.save(save_command(), idempotency_key="save-provider-1")
     raw = (tmp_path / "provider.json").read_bytes()
 
     assert SECRET.encode() not in raw
@@ -118,7 +119,7 @@ def test_save_hardens_directory_before_writing(tmp_path: Path) -> None:
     hardener = RecordingHardener()
     store = make_store(tmp_path, hardener=hardener)
 
-    store.save(save_command())
+    store.save(save_command(), idempotency_key="save-provider-1")
 
     assert hardener.paths == [tmp_path]
     assert (tmp_path / "provider.json").is_file()
@@ -128,7 +129,7 @@ def test_hardener_failure_leaves_no_configuration(tmp_path: Path) -> None:
     store = make_store(tmp_path, hardener=RecordingHardener(fail=True))
 
     with pytest.raises(ProviderConfigError, match="permission hardening failed"):
-        store.save(save_command())
+        store.save(save_command(), idempotency_key="save-provider-1")
 
     assert not (tmp_path / "provider.json").exists()
 
@@ -138,7 +139,10 @@ def test_atomic_replace_failure_preserves_existing_configuration(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     store = make_store(tmp_path)
-    store.save(save_command(model_id="model-before"))
+    store.save(
+        save_command(model_id="model-before"),
+        idempotency_key="save-provider-before",
+    )
     original = (tmp_path / "provider.json").read_bytes()
 
     def fail_replace(_source: Path, _destination: Path) -> None:
@@ -146,7 +150,10 @@ def test_atomic_replace_failure_preserves_existing_configuration(
 
     monkeypatch.setattr("deepaha.local_human_test.provider_config.os.replace", fail_replace)
     with pytest.raises(ProviderConfigError, match="configuration write failed"):
-        store.save(save_command(model_id="model-after"))
+        store.save(
+            save_command(model_id="model-after"),
+            idempotency_key="save-provider-after",
+        )
 
     assert (tmp_path / "provider.json").read_bytes() == original
     assert list(tmp_path.glob("*.tmp")) == []
@@ -168,7 +175,7 @@ def test_provider_configuration_rejects_unsafe_urls(base_url: str) -> None:
 
 def test_delete_secret_keeps_public_fields_and_fails_closed(tmp_path: Path) -> None:
     store = make_store(tmp_path)
-    store.save(save_command())
+    store.save(save_command(), idempotency_key="save-provider-1")
 
     status = store.delete_secret()
     stored = json.loads((tmp_path / "provider.json").read_text(encoding="utf-8"))
@@ -182,7 +189,7 @@ def test_delete_secret_keeps_public_fields_and_fails_closed(tmp_path: Path) -> N
 
 def test_corrupt_or_undecryptable_configuration_fails_without_secret_echo(tmp_path: Path) -> None:
     store = make_store(tmp_path)
-    store.save(save_command())
+    store.save(save_command(), idempotency_key="save-provider-1")
     (tmp_path / "provider.json").write_text("{not-json", encoding="utf-8")
 
     with pytest.raises(ProviderConfigError) as captured:
@@ -213,3 +220,30 @@ def test_windows_hardener_builds_a_shell_free_current_user_acl_command(tmp_path:
             "*S-1-5-18:(OI)(CI)(F)",
         ],
     ]
+
+
+def test_save_is_durably_idempotent_and_rejects_same_key_with_different_body(
+    tmp_path: Path,
+) -> None:
+    store = make_store(tmp_path)
+    command = save_command()
+
+    first = store.save(command, idempotency_key="save-provider-idempotent")
+    original = (tmp_path / "provider.json").read_bytes()
+    repeated = store.save(command, idempotency_key="save-provider-idempotent")
+
+    assert repeated == first
+    assert (tmp_path / "provider.json").read_bytes() == original
+
+    with pytest.raises(
+        ProviderConfigIdempotencyConflict,
+        match="PROVIDER_CONFIG_IDEMPOTENCY_CONFLICT",
+    ):
+        store.save(
+            save_command(model_id="different-model"),
+            idempotency_key="save-provider-idempotent",
+        )
+
+    assert (tmp_path / "provider.json").read_bytes() == original
+    assert SECRET.encode() not in original
+    assert b"save-provider-idempotent" not in original

@@ -12,6 +12,7 @@ from starlette.responses import JSONResponse
 
 from deepaha.api.feedback import router as feedback_router
 from deepaha.api.health import router as system_router
+from deepaha.api.local_human_test import router as local_human_test_router
 from deepaha.api.personal import (
     PersonalApiProblem,
     personal_invalid_request_response,
@@ -64,6 +65,13 @@ def create_app() -> FastAPI:
             return personal_invalid_request_response()
         if request.url.path.startswith("/api/v1/review"):
             return review_invalid_request_response()
+        if request.url.path.startswith("/api/v1/local-human-test"):
+            return JSONResponse(
+                status_code=400,
+                content={
+                    "detail": {"code": "INVALID_LOCAL_HUMAN_TEST_REQUEST"}
+                },
+            )
         return await request_validation_exception_handler(request, error)
 
     @application.exception_handler(SQLAlchemyError)
@@ -75,6 +83,11 @@ def create_app() -> FastAPI:
             return personal_unavailable_response()
         if request.url.path.startswith("/api/v1/review"):
             return review_unavailable_response()
+        if request.url.path.startswith("/api/v1/local-human-test"):
+            return JSONResponse(
+                status_code=503,
+                content={"detail": {"code": "LOCAL_HUMAN_TEST_UNAVAILABLE"}},
+            )
         return public_catalog_unavailable_response(request)
 
     @application.middleware("http")
@@ -106,6 +119,7 @@ def create_app() -> FastAPI:
     application.include_router(reminder_router)
     application.include_router(feedback_router)
     application.include_router(review_router)
+    application.include_router(local_human_test_router)
     return application
 
 
