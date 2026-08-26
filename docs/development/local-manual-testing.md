@@ -17,6 +17,8 @@
 - 原始官方材料和 Provider 原始响应写入
   `%LOCALAPPDATA%\DeepAha\manual-test\objects` 的本地对象存储。
 - Provider API Key 由 Windows DPAPI 加密后保存；API 和页面只返回配置状态，不能读回密钥。
+- 首次配置可选择 Agnes 2.5 Flash、DeepSeek V4 Flash、DeepSeek V4 Pro 或自定义预设；
+  系统一次只激活一套配置，旧运行继续保留创建时冻结的 Provider/模型快照。
 - 后台 Worker 在实际调用前才解密密钥；启动脚本、命令行、环境变量和运行清单都不包含密钥。
 - 本地 reviewer 是固定的非合成负责人身份；每次启动只轮换浏览器会话，不覆盖历史人工决定。
 - 默认不灌入合成 Opportunity、画像、提醒或模型结果。首次启动后的 `runs` 和 `opportunities`
@@ -40,6 +42,12 @@
 
 `OFFICIAL_REPLAY` 只复用该持久库中已经成功取得的同一 Recipe 官方证据，不访问官网；尚无可用
 证据时会明确失败，不生成伪数据。
+
+本地人工测试的模型输入只允许来自已审核 Recipe 的官方公开证据块，P9-B 分类固定为
+`PUBLIC_OFFICIAL_GENERAL` 且 `contains_user_data=false`。Provider 可以采用经明确记录的临时保留
+（`PROVIDER_TRANSIENT_RETENTION`）；零保留不再是公开资料测试的虚假必选项。真实出站仍要求
+负责人确认 Provider 不将本次输入用于模型训练。零保留和 Provider 原生幂等能力只有存在明确
+依据时才勾选，默认均为关闭。
 
 本地人工体验阶段保留逐项批准，是为了检查证据和产品体验。未来正式运行不要求所有低风险字段
 永久逐条批准；只有在相应 Release Qualification 和自动化质量门成立后，低风险结果才可按策略

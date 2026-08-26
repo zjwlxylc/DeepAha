@@ -71,7 +71,7 @@ export async function saveProviderConfigAction(
     model_snapshot: text(formData, "model_snapshot"),
     provider_region: text(formData, "provider_region"),
     zero_retention: formData.get("zero_retention") === "on",
-    training_use: false,
+    training_use: formData.get("no_training_use_confirmed") !== "on",
     supports_idempotency: formData.get("supports_idempotency") === "on",
     api_key: apiKey,
   };

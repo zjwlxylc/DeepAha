@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import HumanTestPage from "../app/review/human-test/page";
+import ProviderConfigForm from "../components/human-test/provider-config-form";
 import RunForm from "../components/human-test/run-form";
 
 vi.mock("../lib/local-human-test", async (importOriginal) => {
@@ -61,7 +62,7 @@ describe("local human test console", () => {
     expect(screen.getByText("Release Qualification：NOT_STARTED")).toBeVisible();
     expect(screen.getByText("真人参与者：0")).toBeVisible();
     expect(screen.getByText("LOCAL_HUMAN_REVIEWED")).toBeVisible();
-    expect(screen.getByText(/已安全保存/)).toBeVisible();
+    expect(screen.getByText("已保存，可真实运行")).toBeVisible();
     expect(screen.queryByDisplayValue(/secret/i)).not.toBeInTheDocument();
   });
 
@@ -74,5 +75,44 @@ describe("local human test console", () => {
     expect(button).toBeDisabled();
     fireEvent.click(screen.getByRole("checkbox", { name: /确认来源与硬预算/ }));
     expect(button).toBeEnabled();
+  });
+
+  it("offers public Provider presets without pre-claiming unverified capabilities", () => {
+    render(
+      <ProviderConfigForm
+        status={{
+          configured: false,
+          provider: null,
+          base_url: null,
+          protocol: null,
+          model_id: null,
+          model_snapshot: null,
+          provider_region: null,
+          zero_retention: null,
+          training_use: null,
+          supports_idempotency: null,
+          egress_ready: false,
+          updated_at: null,
+        }}
+      />,
+    );
+
+    expect(screen.getByLabelText("Provider 名称")).toHaveValue("agnes");
+    expect(screen.getByLabelText("HTTPS Base URL")).toHaveValue(
+      "https://apihub.agnes-ai.com/v1",
+    );
+    expect(screen.getByLabelText("模型 ID")).toHaveValue("agnes-2.5-flash");
+    expect(screen.getByRole("checkbox", { name: /零保留/ })).not.toBeChecked();
+    expect(screen.getByRole("checkbox", { name: /不用于模型训练/ })).not.toBeChecked();
+    expect(screen.getByRole("checkbox", { name: /幂等请求身份/ })).not.toBeChecked();
+
+    fireEvent.change(screen.getByLabelText("快速选择公开配置"), {
+      target: { value: "deepseek-v4-flash" },
+    });
+    expect(screen.getByLabelText("Provider 名称")).toHaveValue("deepseek");
+    expect(screen.getByLabelText("HTTPS Base URL")).toHaveValue(
+      "https://api.deepseek.com",
+    );
+    expect(screen.getByLabelText("模型 ID")).toHaveValue("deepseek-v4-flash");
   });
 });

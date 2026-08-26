@@ -45,6 +45,26 @@ describe("local human test server actions", () => {
     );
   });
 
+  it("does not claim training exclusion unless the operator confirms it", async () => {
+    const data = new FormData();
+    data.set("provider", "deepseek");
+    data.set("base_url", "https://api.deepseek.com");
+    data.set("protocol", "openai_chat_completions");
+    data.set("model_id", "deepseek-v4-flash");
+    data.set("model_snapshot", "DeepSeek-V4-Flash-0731");
+    data.set("provider_region", "cn");
+    data.set("api_key", "must-not-return-this-secret");
+
+    await saveProviderConfigAction({ error: null, message: null }, data);
+
+    const [, request] = vi.mocked(humanTestFetch).mock.calls[0];
+    expect(JSON.parse(String(request?.body))).toMatchObject({
+      zero_retention: false,
+      training_use: true,
+      supports_idempotency: false,
+    });
+  });
+
   it("refuses live work unless the source and budget confirmation is present", async () => {
     const data = new FormData();
     data.set("mode", "LIVE_OFFICIAL");

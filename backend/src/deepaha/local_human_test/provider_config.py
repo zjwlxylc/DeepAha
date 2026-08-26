@@ -438,11 +438,7 @@ class LocalProviderConfigStore:
             zero_retention=payload.zero_retention,
             training_use=payload.training_use,
             supports_idempotency=payload.supports_idempotency,
-            egress_ready=(
-                payload.provider_region != "unknown"
-                and payload.zero_retention
-                and not payload.training_use
-            ),
+            egress_ready=(payload.provider_region != "unknown" and not payload.training_use),
             updated_at=payload.updated_at,
         )
 

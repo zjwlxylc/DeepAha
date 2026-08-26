@@ -501,11 +501,7 @@ class P9BExtractionCoordinator:
             if item.document_id is None or item.opportunity_id is None:
                 raise ExtractionConfigurationError("EXTRACTION_TARGET_INCOMPLETE")
             config = ProviderConfigSnapshot.model_validate(run.provider_config_snapshot)
-            if (
-                not config.zero_retention
-                or config.training_use
-                or config.provider_region == "unknown"
-            ):
+            if config.training_use or config.provider_region == "unknown":
                 raise ExtractionConfigurationError("PROVIDER_EGRESS_POLICY_NOT_CONFIRMED")
             budget = ExternalCallBudget.model_validate(run.budget)
             opportunity = session.get(Opportunity, item.opportunity_id)
@@ -664,11 +660,17 @@ class P9BExtractionCoordinator:
 
         database_now = session.scalar(select(text("clock_timestamp()")))
         assert isinstance(database_now, datetime)
+        retention_class = (
+            RetentionClass.ZERO_RETENTION
+            if config.zero_retention
+            else RetentionClass.PROVIDER_TRANSIENT_RETENTION
+        )
         task = self._ensure_task(
             session,
             task_name=task_name,
             budget=budget,
             block_types=tuple(block.block_type for block in prompt.blocks),
+            retention_class=retention_class,
             created_at=database_now,
         )
         repository = EgressRepository(session)
@@ -742,7 +744,7 @@ class P9BExtractionCoordinator:
                 training_use=config.training_use,
                 supports_idempotency=config.supports_idempotency,
                 allowed_classifications=["PUBLIC_OFFICIAL_GENERAL"],
-                retention_class=RetentionClass.ZERO_RETENTION,
+                retention_class=retention_class,
                 valid_from=database_now,
                 valid_until=valid_until,
                 recorded_by=actor,
@@ -835,7 +837,7 @@ class P9BExtractionCoordinator:
             seed=0,
             egress_decision_id=decision.egress_decision_id,
             validation_pipeline_version="local-human-extraction-validation-v1",
-            retention_class=RetentionClass.ZERO_RETENTION,
+            retention_class=retention_class,
             registered_at=database_now,
         )
 
@@ -846,6 +848,7 @@ class P9BExtractionCoordinator:
         task_name: str,
         budget: ExternalCallBudget,
         block_types: tuple[str, ...],
+        retention_class: RetentionClass,
         created_at: datetime,
     ) -> ModelTaskSpec:
         existing = session.scalar(
@@ -861,6 +864,12 @@ class P9BExtractionCoordinator:
                 or existing.max_output_tokens != budget.max_output_tokens
                 or existing.timeout_ms != budget.timeout_seconds * 1000
                 or sorted(existing.allowed_input_block_types) != expected_types
+                or existing.provider_capabilities
+                != [
+                    "ZERO_RETENTION"
+                    if retention_class is RetentionClass.ZERO_RETENTION
+                    else "PROVIDER_TRANSIENT_RETENTION"
+                ]
             ):
                 raise ExtractionConfigurationError("MODEL_TASK_SPEC_CONFLICT")
             return existing
@@ -878,7 +887,11 @@ class P9BExtractionCoordinator:
             evidence_required=True,
             abstention_allowed=True,
             risk_class="HIGH_IMPACT_CANDIDATE",
-            provider_capabilities=["ZERO_RETENTION"],
+            provider_capabilities=[
+                "ZERO_RETENTION"
+                if retention_class is RetentionClass.ZERO_RETENTION
+                else "PROVIDER_TRANSIENT_RETENTION"
+            ],
             egress_policy_id="local-human-public-official-v1",
             timeout_ms=budget.timeout_seconds * 1000,
             max_attempts=2,

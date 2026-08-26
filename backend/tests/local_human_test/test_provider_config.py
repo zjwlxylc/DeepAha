@@ -115,6 +115,20 @@ def test_legacy_configuration_defaults_to_egress_denied(tmp_path: Path) -> None:
     assert status.egress_ready is False
 
 
+def test_public_official_provider_is_ready_without_zero_retention(tmp_path: Path) -> None:
+    store = make_store(tmp_path)
+
+    status = store.save(
+        save_command(zero_retention=False, training_use=False),
+        idempotency_key="save-transient-provider",
+    )
+
+    assert status.configured is True
+    assert status.zero_retention is False
+    assert status.training_use is False
+    assert status.egress_ready is True
+
+
 def test_save_hardens_directory_before_writing(tmp_path: Path) -> None:
     hardener = RecordingHardener()
     store = make_store(tmp_path, hardener=hardener)
