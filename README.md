@@ -15,6 +15,20 @@ DeepAha 青年机会智能系统：把分散、变化、复杂的机会信息转
 
 ## 本地启动
 
+### 面向人工使用的一键启动（Windows）
+
+非技术用户可直接双击仓库根目录的：
+
+- `启动 DeepAha 本地人工测试.cmd`
+- 使用结束后双击 `停止 DeepAha 本地人工测试.cmd`
+
+启动器会检查环境、启动隔离 PostgreSQL/S3、迁移数据库、准备合成身份、启动 API 与 Web，
+并打开可直接操作的浏览器。该环境只包含合成工程夹具，真人参与者为 `0`，提醒只进入
+`TEST_INBOX`；它不构成真人指标、生产部署或 Release Qualification 证据。详细说明和失败
+恢复见 `docs/development/local-manual-testing.md`。
+
+### 开发命令
+
 后端：
 
 ```powershell

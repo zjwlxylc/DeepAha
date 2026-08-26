@@ -26,3 +26,6 @@ Thumbs.db
 
 # Local linked worktrees
 .worktrees/
+
+# Disposable local manual-test runtime
+.deepaha-local-manual/

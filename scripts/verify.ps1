@@ -9,6 +9,11 @@ function Assert-VerificationExitCode {
     }
 }
 
+& powershell -NoProfile -ExecutionPolicy Bypass -File (
+    Join-Path $projectRoot "scripts/tests/local-manual-test.Tests.ps1"
+)
+Assert-VerificationExitCode "local manual-test launcher tests"
+
 Push-Location (Join-Path $projectRoot "backend")
 try {
     uv sync --locked --group dev
