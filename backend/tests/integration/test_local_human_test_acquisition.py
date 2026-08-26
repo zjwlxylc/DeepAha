@@ -417,7 +417,7 @@ def test_acquisition_coordinates_replay_without_fetch_and_live_with_budget_first
             assert persisted_run is not None
             assert persisted_item is not None
             assert persisted_run.official_request_count == expected_requests
-            assert persisted_item.status == ItemStatus.EXTRACTING
+            assert persisted_item.status == ItemStatus.BOOTSTRAP_REVIEW
             assert persisted_item.document_id == document_id
 
     assert len(callbacks) == 2

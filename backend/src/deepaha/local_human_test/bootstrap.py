@@ -267,7 +267,7 @@ class HumanTestAcquisitionService:
         self._run_service.transition_item(
             item_id,
             expected=ItemStatus.ACQUIRING,
-            target=ItemStatus.EXTRACTING,
+            target=ItemStatus.BOOTSTRAP_REVIEW,
             references={
                 "source_id": acquired.source_id,
                 "endpoint_id": acquired.endpoint_id,
