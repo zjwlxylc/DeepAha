@@ -68,6 +68,7 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
         <Link href={`/opportunities/${opportunity.public_id}`}>{opportunity.title}</Link>
       </h2>
       <p className="stable-id">{opportunity.public_id}</p>
+      <p className="data-label">数据标签：{opportunity.data_label}</p>
       {opportunity.change_markers.length > 0 ? (
         <ul className="change-markers" aria-label="变化标记">
           {opportunity.change_markers.map((marker) => (

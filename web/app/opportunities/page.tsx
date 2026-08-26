@@ -41,6 +41,7 @@ export default async function OpportunitiesPage({ searchParams }: OpportunitiesP
   const query = normalizedSearchParams(await searchParams);
   const result = await listPublicOpportunities(query);
   const hasFixture = result.data_labels.includes("LICENSE_SAFE_FIXTURE");
+  const hasLocalHumanReviewed = result.data_labels.includes("LOCAL_HUMAN_REVIEWED");
   return (
     <main id="main-content" className="page-shell">
       <header className="page-heading">
@@ -54,6 +55,11 @@ export default async function OpportunitiesPage({ searchParams }: OpportunitiesP
       {hasFixture ? (
         <aside className="fixture-notice" aria-label="数据证据边界">
           当前展示固定合成许可安全夹具，仅用于工程验证，不是真实 Gold 机会，也不构成发布资格证据。
+        </aside>
+      ) : null}
+      {hasLocalHumanReviewed ? (
+        <aside className="fixture-notice" aria-label="本地人工审核数据边界">
+          LOCAL_HUMAN_REVIEWED 表示项目负责人在本地逐条批准并保留官方证据；它不是 Gold，也不代表 Release Qualification。
         </aside>
       ) : null}
 

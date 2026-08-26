@@ -50,6 +50,11 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
           本页是固定合成许可安全夹具，仅用于工程验证，不代表真实 Gold 机会。
         </aside>
       ) : null}
+      {opportunity.data_label === "LOCAL_HUMAN_REVIEWED" ? (
+        <aside className="fixture-notice" aria-label="本地人工审核数据边界">
+          本页由本地人工审核事实生成并保留官方证据；它不是 Gold，也不代表 Release Qualification。
+        </aside>
+      ) : null}
 
       <header className="detail-heading">
         <div className="card-heading-row">

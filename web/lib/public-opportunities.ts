@@ -7,6 +7,10 @@ export type JsonValue =
   | { [key: string]: JsonValue };
 
 export type SearchParams = Record<string, string | string[] | undefined>;
+export type PublicDataLabel =
+  | "REAL_GOLD"
+  | "LICENSE_SAFE_FIXTURE"
+  | "LOCAL_HUMAN_REVIEWED";
 
 export interface PublicOpportunityCard {
   public_id: string;
@@ -20,14 +24,14 @@ export interface PublicOpportunityCard {
   deadline: string;
   last_verified_at: string;
   change_markers: string[];
-  data_label: "REAL_GOLD" | "LICENSE_SAFE_FIXTURE";
+  data_label: PublicDataLabel;
 }
 
 export interface PublicOpportunityPage {
   items: PublicOpportunityCard[];
   next_cursor: string | null;
   count: number;
-  data_labels: Array<"REAL_GOLD" | "LICENSE_SAFE_FIXTURE">;
+  data_labels: PublicDataLabel[];
   reproduced_at: string | null;
 }
 
