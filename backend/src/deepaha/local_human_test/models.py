@@ -38,6 +38,11 @@ class LocalHumanTestRun(Base):
         ),
         CheckConstraint("jsonb_typeof(budget) = 'object'", name="budget_object"),
         CheckConstraint(
+            "length(btrim(idempotency_key)) >= 1",
+            name="idempotency_key_nonempty",
+        ),
+        CheckConstraint("request_hash ~ '^[0-9a-f]{64}$'", name="request_hash_format"),
+        CheckConstraint(
             "official_request_count between 0 and 9 and llm_call_count between 0 and 8",
             name="counter_ranges",
         ),
@@ -55,6 +60,11 @@ class LocalHumanTestRun(Base):
         CheckConstraint(
             "completed_at is null or completed_at >= created_at",
             name="completion_timestamp_order",
+        ),
+        UniqueConstraint(
+            "created_by_reviewer_id",
+            "idempotency_key",
+            name="uq_local_human_test_runs_creator_idempotency",
         ),
     )
 
@@ -74,6 +84,8 @@ class LocalHumanTestRun(Base):
         Uuid,
         ForeignKey("reviewer_accounts.reviewer_id", ondelete="RESTRICT"),
     )
+    idempotency_key: Mapped[str] = mapped_column(String(128))
+    request_hash: Mapped[str] = mapped_column(String(64))
     lease_owner: Mapped[str | None] = mapped_column(String(128))
     lease_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     terminal_reason_code: Mapped[str | None] = mapped_column(String(128))

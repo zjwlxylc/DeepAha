@@ -3,9 +3,13 @@ from uuid import uuid4
 
 import pytest
 from alembic import command
+from alembic.autogenerate import compare_metadata
 from alembic.config import Config
+from alembic.migration import MigrationContext
 from sqlalchemy import Engine, create_engine, inspect
 from sqlalchemy.engine import URL, make_url
+
+from deepaha.db.models import Base
 
 pytestmark = pytest.mark.integration
 
@@ -70,6 +74,11 @@ def test_0030_round_trip_adds_control_tables_and_extends_closed_values(
                 item["name"]
                 for item in inspector.get_columns("local_human_test_items")
             }
+            run_columns = {
+                item["name"]
+                for item in inspector.get_columns("local_human_test_runs")
+            }
+            assert {"idempotency_key", "request_hash"} <= run_columns
             assert {
                 "document_id",
                 "opportunity_id",
@@ -94,6 +103,8 @@ def test_0030_round_trip_adds_control_tables_and_extends_closed_values(
         command.upgrade(config, "20260826_0030")
         with engine.connect() as connection:
             assert set(inspect(connection).get_table_names()) >= EXPECTED_TABLES
+            context = MigrationContext.configure(connection)
+            assert compare_metadata(context, Base.metadata) == []
     finally:
         if engine is not None:
             engine.dispose()

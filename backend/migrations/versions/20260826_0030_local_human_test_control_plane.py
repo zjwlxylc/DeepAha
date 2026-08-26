@@ -156,6 +156,8 @@ def _create_run_table() -> None:
         sa.Column("official_request_count", sa.Integer(), nullable=False),
         sa.Column("llm_call_count", sa.Integer(), nullable=False),
         sa.Column("created_by_reviewer_id", sa.Uuid(), nullable=False),
+        sa.Column("idempotency_key", sa.String(length=128), nullable=False),
+        sa.Column("request_hash", sa.String(length=64), nullable=False),
         sa.Column("lease_owner", sa.String(length=128), nullable=True),
         sa.Column("lease_expires_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("terminal_reason_code", sa.String(length=128), nullable=True),
@@ -188,6 +190,14 @@ def _create_run_table() -> None:
             name=op.f("ck_local_human_test_runs_budget_object"),
         ),
         sa.CheckConstraint(
+            "length(btrim(idempotency_key)) >= 1",
+            name=op.f("ck_local_human_test_runs_idempotency_key_nonempty"),
+        ),
+        sa.CheckConstraint(
+            "request_hash ~ '^[0-9a-f]{64}$'",
+            name=op.f("ck_local_human_test_runs_request_hash_format"),
+        ),
+        sa.CheckConstraint(
             "official_request_count between 0 and 9 and llm_call_count between 0 and 8",
             name=op.f("ck_local_human_test_runs_counter_ranges"),
         ),
@@ -216,6 +226,11 @@ def _create_run_table() -> None:
             ondelete="RESTRICT",
         ),
         sa.PrimaryKeyConstraint("run_id", name=op.f("pk_local_human_test_runs")),
+        sa.UniqueConstraint(
+            "created_by_reviewer_id",
+            "idempotency_key",
+            name="uq_local_human_test_runs_creator_idempotency",
+        ),
     )
 
 
