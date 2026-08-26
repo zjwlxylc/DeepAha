@@ -27,17 +27,9 @@ def test_seed_rejects_every_database_outside_exact_disposable_target(
 def test_identity_file_contains_only_required_synthetic_browser_sessions(tmp_path: Path) -> None:
     target = tmp_path / "identity.json"
     identity = LocalManualIdentity(
-        personal_session="personal-secret",
         reviewer_session="reviewer-secret",
-        reminder_session="reminder-secret",
-        personal_public_id="opp_personal",
-        reminder_public_id="opp_reminder",
     )
 
     write_identity_file(target, identity)
 
-    assert target.read_text("utf-8") == (
-        '{"personal_public_id":"opp_personal","personal_session":"personal-secret",'
-        '"reminder_public_id":"opp_reminder","reminder_session":"reminder-secret",'
-        '"reviewer_session":"reviewer-secret"}\n'
-    )
+    assert target.read_text("utf-8") == '{"reviewer_session":"reviewer-secret"}\n'

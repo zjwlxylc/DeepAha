@@ -6,50 +6,36 @@ from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from secrets import token_urlsafe
+from uuid import UUID
 
-from sqlalchemy import create_engine, delete, func, select
+from sqlalchemy import create_engine, delete
 from sqlalchemy.engine import make_url
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import Session
 
 from deepaha.core.settings import Settings
-from deepaha.feedback.models import FeedbackEventModel
-from deepaha.notifications.models import NotificationOutboxModel, TestInboxEntryModel
-from deepaha.notifications.worker import ReminderWorker
-from deepaha.opportunities.models import Opportunity
-from deepaha.personal.auth import token_digest
-from deepaha.personal.models import PersonalAuthSessionModel, PersonalUserModel
-from deepaha.review.auth import ReviewerRole
-from deepaha.review.models import ReviewerAccountModel
-from deepaha.sources.models import Source
-from tests.feedback.seed_phase7_browser import (
-    _persist_synthetic_profile,
-    _run_synthetic_matches,
+from deepaha.review.auth import (
+    OPPORTUNITY_FACT_VALIDATION_PURPOSE,
+    ReviewerRole,
+    reviewer_token_digest,
 )
-from tests.feedback.support import load_phase7_feedback_fixture
-from tests.notifications.support import (
-    govern_phase8_fixture_version,
-    load_phase8_deadline_fixture,
-    prepare_phase8_prechange,
-    resolve_phase8_change,
-)
-from tests.personal.support import persist_phase6_fixture
-from tests.review.support import persist_reviewer
+from deepaha.review.models import ReviewerAccountModel, ReviewerAuthSessionModel
+from deepaha.sources.registry import import_registry, load_registry_manifest
+
+LOCAL_REVIEWER_ID = UUID("019d0000-0000-7000-8000-000000000990")
+LOCAL_REVIEWER_LABEL = "LOCAL_HUMAN_TEST_OWNER"
 
 
 @dataclass(frozen=True, slots=True)
 class LocalManualIdentity:
-    personal_session: str
     reviewer_session: str
-    reminder_session: str
-    personal_public_id: str
-    reminder_public_id: str
 
 
 def assert_local_manual_database_url(database_url: str) -> None:
     target = make_url(database_url)
     if target.host != "127.0.0.1" or target.port != 55439 or target.database != "deepaha":
         raise ValueError(
-            "local manual seed requires exact disposable database 127.0.0.1:55439/deepaha"
+            "local manual bootstrap requires exact persistent database "
+            "127.0.0.1:55439/deepaha"
         )
 
 
@@ -65,96 +51,95 @@ def write_identity_file(path: Path, identity: LocalManualIdentity) -> None:
         stream.write(f"{payload}\n")
 
 
-def _assert_empty_scope(session: Session) -> None:
-    counts = {
-        "personal_users": session.scalar(select(func.count()).select_from(PersonalUserModel)),
-        "reviewers": session.scalar(select(func.count()).select_from(ReviewerAccountModel)),
-        "sources": session.scalar(select(func.count()).select_from(Source)),
-        "opportunities": session.scalar(select(func.count()).select_from(Opportunity)),
-        "feedback_events": session.scalar(select(func.count()).select_from(FeedbackEventModel)),
-        "outbox": session.scalar(select(func.count()).select_from(NotificationOutboxModel)),
-    }
-    if any(counts.values()):
-        raise RuntimeError("local manual seed requires an empty synthetic fixture scope")
-
-
-def seed_local_manual(database_url: str) -> LocalManualIdentity:
+def bootstrap_local_human_test(
+    database_url: str,
+    *,
+    registry_path: Path,
+    now: datetime | None = None,
+) -> LocalManualIdentity:
     assert_local_manual_database_url(database_url)
-    load_phase7_feedback_fixture()
-    phase8_fixture, _manifest = load_phase8_deadline_fixture()
+    current_time = now or datetime.now(UTC)
+    reviewer_session = token_urlsafe(32)
     engine = create_engine(database_url, pool_pre_ping=True)
     try:
         with Session(engine) as session:
-            _assert_empty_scope(session)
-            personal = persist_phase6_fixture(session)
-            _persist_synthetic_profile(session, personal)
-            reviewer_session = token_urlsafe(32)
-            persist_reviewer(
-                session,
-                index=10,
-                token=reviewer_session,
-                roles=tuple(ReviewerRole),
-            )
-            session.commit()
+            import_registry(session, load_registry_manifest(registry_path))
+            reviewer = session.get(ReviewerAccountModel, LOCAL_REVIEWER_ID)
+            expected_roles = [
+                ReviewerRole.LOCAL_TEST_OPERATOR.value,
+                ReviewerRole.VALIDATION_REVIEWER.value,
+            ]
+            expected_purposes = [OPPORTUNITY_FACT_VALIDATION_PURPOSE]
+            if reviewer is None:
+                reviewer = ReviewerAccountModel(
+                    reviewer_id=LOCAL_REVIEWER_ID,
+                    active=True,
+                    synthetic=False,
+                    principal_label=LOCAL_REVIEWER_LABEL,
+                    roles=expected_roles,
+                    allowed_purposes=expected_purposes,
+                    created_at=current_time,
+                )
+                session.add(reviewer)
+                session.flush()
+            elif (
+                not reviewer.active
+                or reviewer.synthetic
+                or reviewer.principal_label != LOCAL_REVIEWER_LABEL
+                or reviewer.roles != expected_roles
+                or reviewer.allowed_purposes != expected_purposes
+            ):
+                raise RuntimeError("LOCAL_HUMAN_TEST_REVIEWER_CONFLICT")
 
-        factory = sessionmaker(bind=engine, expire_on_commit=False)
-        personal_public_id = _run_synthetic_matches(factory, personal)
-        reminder = resolve_phase8_change(factory, prepare_phase8_prechange(factory))
-        govern_phase8_fixture_version(factory, reminder)
-        summary = ReminderWorker(
-            session_factory=factory,
-            clock=lambda: phase8_fixture.scenario_clock,
-        ).run_once()
-        if summary.delivered != 1:
-            raise RuntimeError("local manual seed did not deliver the fixed TEST_INBOX reminder")
-
-        reminder_session = token_urlsafe(32)
-        with factory() as session:
-            inbox_targets = session.scalars(select(TestInboxEntryModel.target)).all()
-            if inbox_targets != ["TEST_INBOX"]:
-                raise RuntimeError("local manual seed produced a non-TEST_INBOX delivery")
             session.execute(
-                delete(PersonalAuthSessionModel).where(
-                    PersonalAuthSessionModel.user_id == reminder.user_id
+                delete(ReviewerAuthSessionModel).where(
+                    ReviewerAuthSessionModel.reviewer_id == LOCAL_REVIEWER_ID
                 )
             )
             session.add(
-                PersonalAuthSessionModel(
-                    token_sha256=token_digest(reminder_session),
-                    user_id=reminder.user_id,
+                ReviewerAuthSessionModel(
+                    token_sha256=reviewer_token_digest(reviewer_session),
+                    reviewer_id=LOCAL_REVIEWER_ID,
                     expires_at=datetime(2099, 1, 1, tzinfo=UTC),
                     revoked_at=None,
-                    created_at=phase8_fixture.scenario_clock,
+                    created_at=current_time,
                 )
             )
             session.commit()
-
-        return LocalManualIdentity(
-            personal_session=personal.token_a,
-            reviewer_session=reviewer_session,
-            reminder_session=reminder_session,
-            personal_public_id=personal_public_id,
-            reminder_public_id=phase8_fixture.opportunity.public_id,
-        )
+        return LocalManualIdentity(reviewer_session=reviewer_session)
     finally:
         engine.dispose()
+
+
+def seed_local_manual(database_url: str, *, registry_path: Path) -> LocalManualIdentity:
+    return bootstrap_local_human_test(database_url, registry_path=registry_path)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--identity-file", type=Path, required=True)
+    parser.add_argument(
+        "--registry-path",
+        type=Path,
+        default=Path(__file__).resolve().parents[3]
+        / "config"
+        / "sources"
+        / "phase2-official-endpoints.json",
+    )
     args = parser.parse_args()
     database_url = Settings().database_url
     if database_url is None:
         raise ValueError("DEEPAHA_DATABASE_URL is required")
-    identity = seed_local_manual(database_url)
+    identity = bootstrap_local_human_test(
+        database_url,
+        registry_path=args.registry_path,
+    )
     write_identity_file(args.identity_file, identity)
-    print("SYNTHETIC_LOCAL_MANUAL_TEST_ONLY")
+    print("LOCAL_HUMAN_TEST_BOOTSTRAP_READY")
+    print("synthetic opportunity count=0")
     print("real participants=0")
-    print("human track=NOT_STARTED")
     print("Release Qualification=NOT_STARTED")
-    print("release decision=HOLD_MISSING_HUMAN_EVIDENCE")
-    print("delivery target=TEST_INBOX")
+    print("external calls=0")
 
 
 if __name__ == "__main__":
