@@ -13,6 +13,11 @@ from deepaha.feedback.models import (
     FeedbackEvidenceLinkModel,
     FeedbackIdempotencyRecordModel,
 )
+from deepaha.local_human_test.models import (
+    LocalHumanTestItem,
+    LocalHumanTestReviewDecision,
+    LocalHumanTestRun,
+)
 from deepaha.matching.models import MatchSnapshotModel
 from deepaha.notifications.models import (
     NotificationDeliveryAttemptModel,
@@ -153,6 +158,9 @@ __all__ = [
     "PersonalUserModel",
     "RawArtifact",
     "MatchSnapshotModel",
+    "LocalHumanTestItem",
+    "LocalHumanTestReviewDecision",
+    "LocalHumanTestRun",
     "ModelCall",
     "ModelCallAttempt",
     "ModelCallFinalization",

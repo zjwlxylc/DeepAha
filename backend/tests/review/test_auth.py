@@ -4,6 +4,7 @@ from uuid import UUID
 import pytest
 
 from deepaha.core.settings import Settings
+from deepaha.review import auth as reviewer_auth
 from deepaha.review.auth import (
     REVIEWER_AUTHENTICATION_FAILURE,
     ReviewerAuthenticationError,
@@ -17,6 +18,11 @@ from deepaha.review.auth import (
 
 REVIEWER_ID = UUID("019b0000-0000-7000-8000-000000000701")
 NOW = datetime(2026, 8, 22, 11, 0, tzinfo=UTC)
+OPPORTUNITY_FACT_VALIDATION_PURPOSE = getattr(
+    reviewer_auth,
+    "OPPORTUNITY_FACT_VALIDATION_PURPOSE",
+    None,
+)
 
 
 def test_reviewer_credentials_are_digest_only_and_parser_rejects_ambiguous_values() -> None:
@@ -63,4 +69,27 @@ def test_reviewer_role_and_purpose_are_derived_and_checked_separately() -> None:
                 synthetic=True,
             ),
             ReviewerRole.FEEDBACK_REVIEWER,
+        )
+
+
+def test_local_operator_and_fact_validation_authorities_are_separate() -> None:
+    assert OPPORTUNITY_FACT_VALIDATION_PURPOSE is not None
+    assert hasattr(ReviewerRole, "LOCAL_TEST_OPERATOR")
+    operator = ReviewerPrincipal(
+        reviewer_id=REVIEWER_ID,
+        roles=frozenset({ReviewerRole.LOCAL_TEST_OPERATOR}),
+        purposes=frozenset({OPPORTUNITY_FACT_VALIDATION_PURPOSE}),
+        synthetic=True,
+    )
+
+    require_reviewer_authority(
+        operator,
+        ReviewerRole.LOCAL_TEST_OPERATOR,
+        OPPORTUNITY_FACT_VALIDATION_PURPOSE,
+    )
+    with pytest.raises(ReviewerAuthenticationError, match=REVIEWER_AUTHENTICATION_FAILURE):
+        require_reviewer_authority(
+            operator,
+            ReviewerRole.VALIDATION_REVIEWER,
+            OPPORTUNITY_FACT_VALIDATION_PURPOSE,
         )

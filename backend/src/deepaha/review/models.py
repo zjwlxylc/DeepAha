@@ -31,12 +31,16 @@ class ReviewerAccountModel(Base):
         ),
         CheckConstraint(
             'roles <@ \'["FEEDBACK_REVIEWER", "FEEDBACK_ADJUDICATOR", '
-            '"LABEL_CURATOR", "VALIDATION_REVIEWER"]\'::jsonb',
+            '"LABEL_CURATOR", "VALIDATION_REVIEWER", "LOCAL_TEST_OPERATOR"]\'::jsonb',
             name="roles_values",
         ),
         CheckConstraint(
-            "allowed_purposes = '[\"FEEDBACK_REVIEW_AND_VALIDATION\"]'::jsonb",
-            name="allowed_purposes_value",
+            "jsonb_typeof(allowed_purposes) = 'array' and "
+            "jsonb_array_length(allowed_purposes) >= 1 and "
+            "allowed_purposes <@ "
+            "'[\"FEEDBACK_REVIEW_AND_VALIDATION\", "
+            "\"OPPORTUNITY_FACT_VALIDATION\"]'::jsonb",
+            name="allowed_purposes_values",
         ),
     )
 

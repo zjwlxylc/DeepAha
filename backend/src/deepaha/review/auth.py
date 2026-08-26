@@ -11,6 +11,8 @@ from deepaha.review.models import ReviewerAccountModel, ReviewerAuthSessionModel
 
 REVIEWER_AUTHENTICATION_FAILURE = "reviewer authentication failed"
 REVIEW_PURPOSE = "FEEDBACK_REVIEW_AND_VALIDATION"
+OPPORTUNITY_FACT_VALIDATION_PURPOSE = "OPPORTUNITY_FACT_VALIDATION"
+REVIEW_PURPOSES = frozenset({REVIEW_PURPOSE, OPPORTUNITY_FACT_VALIDATION_PURPOSE})
 
 
 class ReviewerAuthenticationError(ValueError):
@@ -22,6 +24,7 @@ class ReviewerRole(StrEnum):
     FEEDBACK_ADJUDICATOR = "FEEDBACK_ADJUDICATOR"
     LABEL_CURATOR = "LABEL_CURATOR"
     VALIDATION_REVIEWER = "VALIDATION_REVIEWER"
+    LOCAL_TEST_OPERATOR = "LOCAL_TEST_OPERATOR"
 
 
 @dataclass(frozen=True, slots=True)
@@ -83,7 +86,7 @@ def resolve_reviewer_principal(
     except ValueError as error:
         raise ReviewerAuthenticationError(REVIEWER_AUTHENTICATION_FAILURE) from error
     purposes = frozenset(reviewer.allowed_purposes)
-    if not roles or purposes != {REVIEW_PURPOSE}:
+    if not roles or not purposes or not purposes.issubset(REVIEW_PURPOSES):
         raise ReviewerAuthenticationError(REVIEWER_AUTHENTICATION_FAILURE)
     return ReviewerPrincipal(
         reviewer_id=reviewer.reviewer_id,
@@ -103,8 +106,10 @@ def require_reviewer_authority(
 
 
 __all__ = [
+    "OPPORTUNITY_FACT_VALIDATION_PURPOSE",
     "REVIEWER_AUTHENTICATION_FAILURE",
     "REVIEW_PURPOSE",
+    "REVIEW_PURPOSES",
     "ReviewerAuthenticationError",
     "ReviewerPrincipal",
     "ReviewerRole",
