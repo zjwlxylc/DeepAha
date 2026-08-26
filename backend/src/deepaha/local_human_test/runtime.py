@@ -28,7 +28,7 @@ from deepaha.acquisition.recipes import load_recipe_manifest
 from deepaha.artifacts.local_file import LocalFileObjectStore
 from deepaha.core.settings import Settings
 from deepaha.db.session import get_engine, session_factory
-from deepaha.documents.html import LxmlHtmlParser
+from deepaha.documents.html import P9BHtmlDocumentParser
 from deepaha.documents.pdf import PypdfDocumentParser
 from deepaha.documents.service import DocumentService
 from deepaha.documents.spreadsheet import OpenpyxlSpreadsheetParser
@@ -280,7 +280,7 @@ def build_human_test_worker(settings: Settings | None = None) -> HumanTestWorker
         document_service = DocumentService(
             session_factory=factory,
             object_store=object_store,
-            parsers=(LxmlHtmlParser(), PypdfDocumentParser(), OpenpyxlSpreadsheetParser()),
+            parsers=(P9BHtmlDocumentParser(), PypdfDocumentParser(), OpenpyxlSpreadsheetParser()),
         )
 
         def advance(evaluation_id: UUID) -> object:

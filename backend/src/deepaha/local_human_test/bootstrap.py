@@ -423,7 +423,7 @@ class ProvisionalOpportunityService:
             )
 
         result = self._resolution.resolve(command)
-        if result.opportunity_id is None or result.version is None:
+        if result.opportunity_id is None:
             return BootstrapReviewRequired(
                 document_id=document_id,
                 recipe_id=recipe_id,
@@ -432,8 +432,11 @@ class ProvisionalOpportunityService:
             )
         with self._session_factory() as session:
             opportunity = session.get(Opportunity, result.opportunity_id)
-            version = session.get(OpportunityVersion, (result.opportunity_id, result.version))
-            if opportunity is None or version is None:
+            if opportunity is None:
+                raise RuntimeError("PROVISIONAL_OPPORTUNITY_PERSISTENCE_MISSING")
+            version_number = result.version or opportunity.current_version
+            version = session.get(OpportunityVersion, (result.opportunity_id, version_number))
+            if version is None:
                 raise RuntimeError("PROVISIONAL_OPPORTUNITY_PERSISTENCE_MISSING")
             return ProvisionalTarget(
                 opportunity=ProvisionalOpportunityView(

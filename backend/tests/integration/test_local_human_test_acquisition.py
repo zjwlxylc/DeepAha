@@ -258,6 +258,31 @@ def test_bootstrap_uses_only_deterministic_governed_fields(
         assert session.scalar(select(func.count()).select_from(ModelCall)) == 0
 
 
+def test_bootstrap_reuses_current_version_for_equivalent_linked_document(
+    human_acquisition_engine: Engine,
+) -> None:
+    first_document_id, recipe_id, _ = _seed_document(human_acquisition_engine)
+    first = _service(human_acquisition_engine).create(
+        document_id=first_document_id,
+        recipe_id=recipe_id,
+    )
+    second_document_id, _, _ = _seed_document(human_acquisition_engine)
+
+    second = _service(human_acquisition_engine).create(
+        document_id=second_document_id,
+        recipe_id=recipe_id,
+    )
+
+    assert isinstance(first, ProvisionalTarget)
+    assert isinstance(second, ProvisionalTarget)
+    assert second.opportunity.opportunity_id == first.opportunity.opportunity_id
+    assert second.version.version == first.version.version == 1
+    with Session(human_acquisition_engine) as session:
+        assert session.scalar(select(func.count()).select_from(Opportunity)) == 1
+        assert session.scalar(select(func.count()).select_from(OpportunityVersion)) == 1
+        assert session.scalar(select(func.count()).select_from(ModelCall)) == 0
+
+
 @pytest.mark.parametrize(
     ("title", "validation_status", "role", "reason"),
     [

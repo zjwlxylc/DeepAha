@@ -70,7 +70,7 @@ def test_prompt_is_immutable_canonical_and_contains_only_minimized_blocks() -> N
         opportunity_id=UUID("019d0000-0000-7000-8000-000000000201"),
         opportunity_version=1,
         blocks=(_block(),),
-        max_input_tokens=2_000,
+        max_input_tokens=3_000,
     )
 
     assert isinstance(messages, tuple)
@@ -78,6 +78,35 @@ def test_prompt_is_immutable_canonical_and_contains_only_minimized_blocks() -> N
     assert "JSON" in messages[0].content
     assert "0.8.0" in messages[0].content
     assert "evidence_block_ids" in messages[0].content
+    for field_name in (
+        "canonical_title",
+        "type",
+        "issuer_name",
+        "jurisdiction",
+        "status",
+        "published_at",
+        "application_window",
+        "application_deadline",
+        "application_url",
+        "attachment_urls",
+        "locations",
+        "recruitment_count",
+        "applicant_scope",
+        "education_requirements",
+        "major_requirements",
+        "age_requirements",
+        "experience_requirements",
+        "credential_requirements",
+        "household_registration_requirements",
+    ):
+        assert f"`{field_name}`" in messages[0].content
+    assert "confidence must be a JSON number" in messages[0].content
+    assert "one or more exact input block_id values" in messages[0].content
+    assert "Return at most 4 facts" in messages[0].content
+    assert "Do not spend tokens on reasoning" in messages[0].content
+    assert "reason_code must be a non-empty uppercase JSON string" in messages[0].content
+    assert "uncertainties must be a JSON array containing only plain strings" in messages[0].content
+    assert "Do not emit abstained facts" in messages[0].content
     payload = json.loads(messages[1].content)
     assert payload == {
         "blocks": [

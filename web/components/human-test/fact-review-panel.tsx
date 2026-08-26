@@ -45,10 +45,10 @@ function CandidateCard({ itemId, candidate }: { itemId: string; candidate: FactC
           <input type="hidden" name="candidate_id" value={candidate.candidate_id} />
           <label>
             人工决定
-            <select name="decision" defaultValue="UNKNOWN">
-              <option value="APPROVE">批准为已验证事实</option>
+            <select name="decision" defaultValue={candidate.abstained ? "UNKNOWN" : "REJECT"}>
+              {!candidate.abstained ? <option value="APPROVE">批准为已验证事实</option> : null}
               <option value="REJECT">拒绝</option>
-              <option value="UNKNOWN">保持未知</option>
+              {candidate.abstained ? <option value="UNKNOWN">保持未知</option> : null}
             </select>
           </label>
           <label>

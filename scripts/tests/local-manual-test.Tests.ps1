@@ -83,6 +83,11 @@ if (-not (Test-RecordedProcessOwnership -Record $nativeRecord -Process $nativePr
     -ProjectRoot "C:\work\DeepAha")) {
     throw "Native CIM DateTime must retain sub-second ownership precision"
 }
+$deserializedRecord = $nativeRecord | ConvertTo-Json | ConvertFrom-Json
+if (-not (Test-RecordedProcessOwnership -Record $deserializedRecord -Process $nativeProcess `
+    -ProjectRoot "C:\work\DeepAha")) {
+    throw "Deserialized runtime DateTime must retain sub-second ownership precision"
+}
 $reused = $owned.PSObject.Copy()
 $reused.CreationDate = "2026-08-23T01:02:04.0000000Z"
 if (Test-RecordedProcessOwnership -Record $record -Process $reused -ProjectRoot "C:\work\DeepAha") {

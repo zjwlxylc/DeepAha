@@ -54,6 +54,7 @@ from deepaha.p9b.models import (
     ExtractionCandidate,
     ExtractionRun,
     ModelCall,
+    ModelCallFinalization,
     ModelTaskSpec,
     SourceBundleMember,
     SourceBundleRevision,
@@ -200,10 +201,26 @@ _SYSTEM_PROMPT = (
     "Return one JSON object using schema_version 0.8.0 with exactly these keys: "
     "schema_version, facts, rules, uncertainties. Each fact must contain field_name, "
     "raw_value, normalized_value_candidate, evidence_block_ids, confidence, abstained, "
-    "reason_code. The rules value must be an empty array because rule generation occurs "
+    "reason_code. The only allowed field_name values are: `canonical_title`, `type`, "
+    "`issuer_name`, `jurisdiction`, `status`, `published_at`, `application_window`, "
+    "`application_deadline`, `application_url`, `attachment_urls`, `locations`, "
+    "`recruitment_count`, `applicant_scope`, `education_requirements`, "
+    "`major_requirements`, `age_requirements`, `experience_requirements`, "
+    "`credential_requirements`, `household_registration_requirements`. Do not invent "
+    "synonyms or other field names. confidence must be a JSON number from 0 to 1, never "
+    "a quoted string. Every evidence_block_ids array must contain one or more exact input "
+    "block_id values and must never be empty. Return at most 4 facts, choosing only the "
+    "strongest explicitly supported fields; keep raw_value and normalized_value_candidate "
+    "concise. reason_code must be a non-empty uppercase JSON string such as "
+    "OFFICIAL_TEXT_EXPLICIT, never null or an object. uncertainties must be a JSON array "
+    "containing only plain strings, or an empty array when there are none; never return "
+    "objects there. Do not spend tokens on reasoning; immediately emit the JSON object. The "
+    "rules value must be an empty array "
+    "because rule generation occurs "
     "only after human fact verification. Every evidence_block_ids "
-    "value must name an input block. Never infer an unsupported fact. Use abstained=true, "
-    "a null candidate value, and an UNKNOWN_ reason when official text is ambiguous. "
+    "value must name an input block. Never infer an unsupported fact. Do not emit abstained "
+    "facts; omit ambiguous fields instead. Every emitted fact must use abstained=false, a "
+    "non-null normalized_value_candidate, and a reason_code that does not start with UNKNOWN_. "
     "Do not include prose outside JSON."
 )
 
@@ -645,18 +662,23 @@ class P9BExtractionCoordinator:
         revision: SourceBundleRevision,
         prompt: ExtractionPrompt,
     ) -> ModelCallIntentSchemaV08:
-        task_name = f"human-extract-{item.item_id.hex}"
+        base_task_name = f"human-extract-{item.item_id.hex}"
+        task_name = base_task_name
         existing_calls = tuple(
             session.scalars(
                 select(ModelCall)
-                .where(ModelCall.task_spec_name == task_name)
+                .where(ModelCall.task_spec_name.like(f"{base_task_name}%"))
                 .order_by(ModelCall.registered_at, ModelCall.model_call_id)
             )
         )
-        if len(existing_calls) > 1:
-            raise ExtractionConfigurationError("MULTIPLE_MODEL_CALLS_FOR_ITEM")
         if existing_calls:
-            return self._intent_from_model_call(existing_calls[0])
+            latest = existing_calls[-1]
+            finalization = session.get(ModelCallFinalization, latest.model_call_id)
+            if item.model_call_id is not None or finalization is None:
+                return self._intent_from_model_call(latest)
+            if len(existing_calls) >= budget.llm_call_limit:
+                raise BudgetExhausted("LLM call budget exhausted")
+            task_name = f"{base_task_name}-retry-{len(existing_calls) + 1}"
 
         database_now = session.scalar(select(text("clock_timestamp()")))
         assert isinstance(database_now, datetime)
@@ -828,7 +850,7 @@ class P9BExtractionCoordinator:
             opportunity_unit_id=None,
             opportunity_unit_version_id=None,
             unit_segmentation_version=None,
-            prompt_version="local-human-extraction-prompt-v1",
+            prompt_version="local-human-extraction-prompt-v5",
             output_schema_version=task.output_schema_version,
             parser_version="local-human-extraction-parser-v1",
             contract_version="p9b-v0.8.0",

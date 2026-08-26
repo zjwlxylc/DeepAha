@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import UUID, uuid7
 
 from sqlalchemy import func, select
@@ -40,7 +40,10 @@ class BundleMemberSpec:
 def _instant(value: datetime | None) -> str | None:
     if value is None:
         return None
-    return value.isoformat().replace("+00:00", "Z")
+    normalized = value.astimezone(UTC)
+    fraction = f"{normalized.microsecond:06d}".rstrip("0")
+    base = normalized.strftime("%Y-%m-%dT%H:%M:%S")
+    return f"{base}.{fraction}Z" if fraction else f"{base}Z"
 
 
 def _member_payload(

@@ -10,7 +10,7 @@ from uuid import UUID, uuid4, uuid7
 import pytest
 from alembic import command
 from alembic.config import Config
-from sqlalchemy import Engine, create_engine, func, select
+from sqlalchemy import Engine, create_engine, func, select, text
 from sqlalchemy.engine import URL, make_url
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -35,6 +35,7 @@ from deepaha.p9b.models import (
     ExtractionRunInputBlock,
     ModelCall,
     ModelCallAttempt,
+    ModelCallFinalization,
     ModelTaskSpec,
     ProviderEgressPolicySnapshot,
     SourceBundleMember,
@@ -46,6 +47,10 @@ from tests.integration.p9b_gateway_support import GATEWAY_MESSAGES, seed_gateway
 pytestmark = pytest.mark.integration
 BUCKET = "deepaha-human-test"
 WORKER_ID = "human-extraction-worker"
+PUBLIC_OFFICIAL_TRAINING_CONDITION = (
+    "(NOT policy.training_use OR policy.allowed_classifications = "
+    "ARRAY['PUBLIC_OFFICIAL_GENERAL']::text[])"
+)
 
 
 def _temporary_database(database_url: str) -> tuple[str, Engine, URL, str]:
@@ -62,6 +67,26 @@ def _temporary_database(database_url: str) -> tuple[str, Engine, URL, str]:
         temporary_url,
         temporary_url.render_as_string(hide_password=False),
     )
+
+
+def _replace_attempt_training_condition(
+    engine: Engine,
+    *,
+    current: str,
+    replacement: str,
+) -> None:
+    with engine.begin() as connection:
+        definition = connection.scalar(
+            text(
+                "select pg_get_functiondef("
+                "'p9b_guard_model_call_attempt()'::regprocedure)"
+            )
+        )
+        assert isinstance(definition, str)
+        assert current in definition
+        connection.exec_driver_sql(
+            definition.replace(current, replacement).replace("%", "%%")
+        )
 
 
 @pytest.fixture(scope="module")
@@ -394,6 +419,142 @@ def test_gateway_response_persists_exact_input_evidence_and_shared_identity(
                 .where(ModelCallAttempt.model_call_id == outcome.model_call_id)
             )
             == 1
+        )
+
+
+def test_authority_rejected_call_can_be_recovered_without_deleting_audit(
+    human_extraction_engine: Engine,
+    tmp_path: Path,
+) -> None:
+    coordinator, adapter, factory, item_id = _coordinator(
+        human_extraction_engine,
+        tmp_path,
+    )
+    _replace_attempt_training_condition(
+        human_extraction_engine,
+        current=PUBLIC_OFFICIAL_TRAINING_CONDITION,
+        replacement="NOT policy.training_use",
+    )
+    try:
+        first = coordinator.extract(item_id)
+        assert first.status is ItemStatus.FAILED
+        assert adapter.invocations == []
+    finally:
+        _replace_attempt_training_condition(
+            human_extraction_engine,
+            current="NOT policy.training_use",
+            replacement=PUBLIC_OFFICIAL_TRAINING_CONDITION,
+        )
+
+    with factory.begin() as session:
+        item = session.get(LocalHumanTestItem, item_id)
+        assert item is not None
+        run = session.get(LocalHumanTestRun, item.run_id)
+        assert run is not None
+        item.status = ItemStatus.EXTRACTING.value
+        item.error_code = None
+        item.model_call_id = None
+        item.updated_at = datetime.now(UTC)
+        run.status = "RUNNING"
+        run.terminal_reason_code = None
+        run.completed_at = None
+        run.lease_owner = None
+        run.lease_expires_at = None
+        run.updated_at = datetime.now(UTC)
+    service = HumanTestRunService(
+        session_factory=factory,
+        now_factory=lambda: datetime.now(UTC),
+    )
+    claim = service.claim_next(WORKER_ID)
+    assert claim is not None and claim.item_id == item_id
+
+    second = coordinator.extract(item_id)
+
+    assert second.status is ItemStatus.FACT_REVIEW
+    assert len(adapter.invocations) == 1
+    with factory() as session:
+        calls = tuple(
+            session.scalars(
+                select(ModelCall)
+                .where(ModelCall.task_spec_name.like(f"human-extract-{item_id.hex}%"))
+                .order_by(ModelCall.registered_at, ModelCall.model_call_id)
+            )
+        )
+        assert len(calls) == 2
+        first_finalization = session.get(ModelCallFinalization, calls[0].model_call_id)
+        second_finalization = session.get(ModelCallFinalization, calls[1].model_call_id)
+        assert first_finalization is not None
+        assert first_finalization.disposition == "AUTHORITY_REJECTED"
+        assert second_finalization is not None
+        assert second_finalization.status == "SUCCEEDED"
+
+
+def test_invalid_model_output_can_retry_with_new_call_and_keep_prior_audit(
+    human_extraction_engine: Engine,
+    tmp_path: Path,
+) -> None:
+    first_coordinator, first_adapter, factory, item_id = _coordinator(
+        human_extraction_engine,
+        tmp_path,
+        unknown_block=True,
+    )
+
+    first = first_coordinator.extract(item_id)
+
+    assert first.status is ItemStatus.EVIDENCE_BINDING_INVALID
+    assert len(first_adapter.invocations) == 1
+    with factory.begin() as session:
+        item = session.get(LocalHumanTestItem, item_id)
+        assert item is not None
+        run = session.get(LocalHumanTestRun, item.run_id)
+        assert run is not None
+        item.status = ItemStatus.EXTRACTING.value
+        item.error_code = None
+        item.model_call_id = None
+        item.updated_at = datetime.now(UTC)
+        run.status = "RUNNING"
+        run.terminal_reason_code = None
+        run.completed_at = None
+        run.lease_owner = None
+        run.lease_expires_at = None
+        run.updated_at = datetime.now(UTC)
+    service = HumanTestRunService(
+        session_factory=factory,
+        now_factory=lambda: datetime.now(UTC),
+    )
+    claim = service.claim_next(WORKER_ID)
+    assert claim is not None and claim.item_id == item_id
+    store = LocalFileObjectStore(root=tmp_path, bucket=BUCKET)
+    second_adapter = StructuredResponseAdapter(object_store=store)
+    second_coordinator = P9BExtractionCoordinator(
+        session_factory=factory,
+        gateway=GatewayExecutor(
+            session_factory=factory,
+            adapter=second_adapter,
+            sleeper=lambda _: None,
+        ),
+        object_store=store,
+        response_bucket=BUCKET,
+        run_service=service,
+        worker_id=WORKER_ID,
+    )
+
+    second = second_coordinator.extract(item_id)
+
+    assert second.status is ItemStatus.FACT_REVIEW
+    assert len(second_adapter.invocations) == 1
+    with factory() as session:
+        calls = tuple(
+            session.scalars(
+                select(ModelCall)
+                .where(ModelCall.task_spec_name.like(f"human-extract-{item_id.hex}%"))
+                .order_by(ModelCall.registered_at, ModelCall.model_call_id)
+            )
+        )
+        assert len(calls) == 2
+        assert all(
+            session.get(ModelCallFinalization, call.model_call_id) is not None
+            for call in calls
         )
 
 

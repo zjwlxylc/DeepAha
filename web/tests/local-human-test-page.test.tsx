@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import HumanTestPage from "../app/review/human-test/page";
+import FactReviewPanel from "../components/human-test/fact-review-panel";
 import ProviderConfigForm from "../components/human-test/provider-config-form";
 import RunForm from "../components/human-test/run-form";
 
@@ -119,5 +120,57 @@ describe("local human test console", () => {
       "https://api.deepseek.com",
     );
     expect(screen.getByLabelText("模型 ID")).toHaveValue("deepseek-v4-flash");
+  });
+
+  it("only offers fact decisions accepted by the verification contract", () => {
+    const baseCandidate = {
+      candidate_id: "019d0000-0000-7000-8000-000000000911",
+      field_name: "canonical_title",
+      raw_value: "示例公告",
+      normalized_value_candidate: "示例公告",
+      confidence: 1,
+      candidate_reason_code: "OFFICIAL_TEXT_EXPLICIT",
+      decision: null,
+      evidence: [{
+        evidence_ref_id: "019d0000-0000-7000-8000-000000000915",
+        block_id: "019d0000-0000-7000-8000-000000000912",
+        document_id: "019d0000-0000-7000-8000-000000000916",
+        canonical_text_or_value: "示例公告",
+        structural_locator: { ordinal: 1 },
+        source_tier: "OFFICIAL_PRIMARY",
+        block_type: "HTML_ELEMENT",
+        source_url: "https://official.example.gov.cn/notices/1",
+      }],
+    };
+
+    render(
+      <FactReviewPanel
+        itemId="019d0000-0000-7000-8000-000000000913"
+        candidates={[
+          { ...baseCandidate, abstained: false },
+          {
+            ...baseCandidate,
+            candidate_id: "019d0000-0000-7000-8000-000000000914",
+            field_name: "issuer_name",
+            normalized_value_candidate: null,
+            confidence: null,
+            abstained: true,
+            candidate_reason_code: "UNKNOWN_OFFICIAL_TEXT_AMBIGUOUS",
+          },
+        ]}
+      />,
+    );
+
+    const selects = screen.getAllByRole("combobox") as HTMLSelectElement[];
+    expect(Array.from(selects[0].options, (option) => option.value)).toEqual([
+      "APPROVE",
+      "REJECT",
+    ]);
+    expect(selects[0]).toHaveValue("REJECT");
+    expect(Array.from(selects[1].options, (option) => option.value)).toEqual([
+      "REJECT",
+      "UNKNOWN",
+    ]);
+    expect(selects[1]).toHaveValue("UNKNOWN");
   });
 });

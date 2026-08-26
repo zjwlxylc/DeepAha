@@ -415,6 +415,30 @@ def test_bundle_freeze_materializes_member_level_provenance_and_is_immutable(
         )
 
 
+def test_bundle_freeze_accepts_trailing_zero_microseconds(session: Session) -> None:
+    graph = seed_graph(session)
+    canonical_time = NOW.replace(microsecond=896520)
+    service = BundleService(session)
+    revision = service.create_revision(
+        opportunity_id=graph.opportunity_id,
+        opportunity_version=graph.opportunity_version,
+        effective_as_of=canonical_time,
+        members=[member_spec(graph)],
+    )
+
+    frozen = service.freeze_revision(
+        revision.source_bundle_revision_id,
+        frozen_at=canonical_time,
+    )
+
+    assert frozen.status == "FROZEN"
+    assert frozen.canonical_bundle_hash == session.scalar(
+        select(text("p9b_expected_bundle_hash(:revision_id)")).params(
+            revision_id=revision.source_bundle_revision_id
+        )
+    )
+
+
 def test_bundle_creation_rejects_cross_bound_run_before_persistence(session: Session) -> None:
     first = seed_graph(session, suffix="first")
     second = seed_graph(session, suffix="second")

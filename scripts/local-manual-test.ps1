@@ -87,7 +87,12 @@ function Test-RecordedProcessOwnership {
         return $false
     }
     try {
-        $recordedTime = [DateTimeOffset]::Parse([string]$Record.created_at).UtcDateTime
+        if ($Record.created_at -is [DateTime]) {
+            $recordedTime = ([DateTimeOffset]$Record.created_at).UtcDateTime
+        }
+        else {
+            $recordedTime = [DateTimeOffset]::Parse([string]$Record.created_at).UtcDateTime
+        }
         if ($Process.CreationDate -is [DateTime]) {
             $actualTime = ([DateTimeOffset]$Process.CreationDate).UtcDateTime
         }

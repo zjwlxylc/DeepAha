@@ -40,6 +40,25 @@ def _drop_database(database_name: str, maintenance_engine: Engine) -> None:
     maintenance_engine.dispose()
 
 
+def _replace_function_condition(
+    engine: Engine,
+    *,
+    signature: str,
+    current: str,
+    replacement: str,
+) -> None:
+    with engine.begin() as connection:
+        definition = connection.scalar(
+            text("select pg_get_functiondef(to_regprocedure(:signature))"),
+            {"signature": signature},
+        )
+        assert isinstance(definition, str)
+        assert current in definition
+        connection.exec_driver_sql(
+            definition.replace(current, replacement).replace("%", "%%")
+        )
+
+
 def _begin_attempt(session: Session, call_id: UUID) -> UUID:
     attempt_id = uuid7()
     session.execute(
@@ -145,6 +164,65 @@ def test_compliant_history_round_trips_through_value_contract_migration(
                 "20260825_0029"
             )
             assert connection.scalar(text("select count(*) from p9b_model_calls")) == 1
+    finally:
+        if engine is not None:
+            engine.dispose()
+        _drop_database(name, maintenance)
+
+
+def test_head_repairs_preexisting_0032_public_official_training_policy(
+    database_url: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    name, maintenance, temporary_url, rendered = _temporary_database(
+        database_url,
+        "deepaha_p9b_public_policy_repair",
+    )
+    engine = None
+    provider_condition = (
+        "(NOT policy.training_use OR policy.allowed_classifications = "
+        "ARRAY['PUBLIC_OFFICIAL_GENERAL']::text[])"
+    )
+    authority_condition = (
+        "(NOT provider_policy.training_use OR "
+        "provider_policy.allowed_classifications = "
+        "ARRAY['PUBLIC_OFFICIAL_GENERAL']::text[])"
+    )
+    try:
+        monkeypatch.setenv("DEEPAHA_DATABASE_URL", rendered)
+        config = Config("alembic.ini")
+        command.upgrade(config, "20260826_0032")
+        engine = create_engine(temporary_url)
+        _replace_function_condition(
+            engine,
+            signature="p9b_guard_model_call_attempt()",
+            current=provider_condition,
+            replacement="NOT policy.training_use",
+        )
+        _replace_function_condition(
+            engine,
+            signature="p9b_egress_decision_authorized_at(uuid,timestamptz)",
+            current=authority_condition,
+            replacement="NOT provider_policy.training_use",
+        )
+
+        command.upgrade(config, "head")
+
+        with engine.connect() as connection:
+            attempt_guard = connection.scalar(
+                text(
+                    "select pg_get_functiondef("
+                    "'p9b_guard_model_call_attempt()'::regprocedure)"
+                )
+            )
+            authority = connection.scalar(
+                text(
+                    "select pg_get_functiondef("
+                    "'p9b_egress_decision_authorized_at(uuid,timestamptz)'::regprocedure)"
+                )
+            )
+            assert provider_condition in attempt_guard
+            assert authority_condition in authority
     finally:
         if engine is not None:
             engine.dispose()
