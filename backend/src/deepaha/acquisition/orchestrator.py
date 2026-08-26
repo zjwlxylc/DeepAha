@@ -175,6 +175,7 @@ class AcquisitionOrchestrator:
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
         sleeper: Callable[[float], None] = sleep,
         validator: ContentValidator | None = None,
+        reserve_request: Callable[[], object] | None = None,
     ) -> None:
         self._recipes = recipes
         self._policy_loader = policy_loader
@@ -186,6 +187,7 @@ class AcquisitionOrchestrator:
         self._clock = clock
         self._sleeper = sleeper
         self._validator = validator or ContentValidator()
+        self._reserve_request = reserve_request
 
     def run(self, recipe_id: UUID) -> AcquisitionRunSummary:
         recipe = self._find_recipe(recipe_id)
@@ -317,6 +319,8 @@ class AcquisitionOrchestrator:
                     "contract_version": "1.0.0",
                 }
             )
+            if self._reserve_request is not None:
+                self._reserve_request()
             fetched = fetcher.fetch(request)
             used += 1
             if fetched.outcome == "FAILED":

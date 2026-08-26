@@ -18,6 +18,7 @@ from deepaha.contracts.phase3 import (
     OpportunityFieldEvidenceSchema,
     OpportunityIdentityActionType,
     OpportunityIdentityMemberRole,
+    OpportunityReviewStatus,
     OpportunitySnapshotSchema,
     ResolutionDisposition,
 )
@@ -191,11 +192,13 @@ class OpportunityResolutionService:
         id_factory: Callable[[], UUID] = uuid7,
         resolver_version: str = "0.3.0",
         candidate_service: DeadlineReminderCandidateService | None = None,
+        version_review_status: OpportunityReviewStatus = OpportunityReviewStatus.NOT_REQUIRED,
     ) -> None:
         self._session_factory = session_factory
         self._clock = clock
         self._id_factory = id_factory
         self._resolver_version = resolver_version
+        self._version_review_status = version_review_status
         if candidate_service is None:
             from deepaha.notifications.candidates import DeadlineReminderCandidateService
 
@@ -581,7 +584,7 @@ class OpportunityResolutionService:
                 field_evidence=[item.model_dump(mode="json") for item in planned.field_evidence],
                 changes=[item.model_dump(mode="json") for item in planned.changes],
                 content_sha256=planned.content_sha256,
-                review_status="NOT_REQUIRED",
+                review_status=self._version_review_status.value,
                 created_at=created_at,
             )
         )

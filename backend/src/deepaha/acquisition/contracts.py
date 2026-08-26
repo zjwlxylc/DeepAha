@@ -15,7 +15,7 @@ from pydantic import (
 
 from deepaha.contracts.common import EntityId, HttpStatus, Instant, NonEmptyString, Sha256
 from deepaha.contracts.phase1 import ContractModel
-from deepaha.contracts.phase2 import CaptureOutcome
+from deepaha.contracts.phase2 import CaptureOutcome, OpportunityTypeV02
 from deepaha.sources.transport import MAX_RESPONSE_BYTES
 
 ContractVersion = Literal["1.0.0"]
@@ -425,6 +425,7 @@ class SourceRecipe(AcquisitionContract):
     endpoint_policy_version: NonEmptyString
     recipe_version: NonEmptyString
     usage_role: SourceUsageRole
+    opportunity_type_hint: OpportunityTypeV02 | None = None
     allowed_hosts: tuple[NonEmptyString, ...] = Field(min_length=1, max_length=16)
     expected_media_types: tuple[NonEmptyString, ...] = Field(min_length=1, max_length=16)
     allowed_url_patterns: tuple[NonEmptyString, ...] = Field(min_length=1, max_length=16)

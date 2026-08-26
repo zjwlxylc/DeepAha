@@ -60,6 +60,19 @@ def test_production_manifest_tracks_only_qualified_platform_candidates() -> None
         "STATIC_HTTP",
         "OFFICIAL_ALTERNATIVE",
     }
+    assert all(
+        recipe.opportunity_type_hint is not None
+        for recipe in manifest.recipes
+        if recipe.active
+    )
+
+
+def test_recipe_rejects_unknown_opportunity_type_hint() -> None:
+    payload = valid_payload()
+    first_recipe(payload)["opportunity_type_hint"] = "MODEL_INFERRED_TYPE"
+
+    with pytest.raises(ValidationError):
+        SourceRecipeManifest.model_validate(payload)
 
 
 def test_recipe_loader_rejects_utf8_bom_and_secrets_or_executable_keys(tmp_path: Path) -> None:

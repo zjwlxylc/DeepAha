@@ -178,6 +178,7 @@ def orchestrator(
     configured_recipe: SourceRecipe,
     fetchers: dict[FetchStrategy, FakeFetcher],
     clock: Callable[[], datetime] | None = None,
+    reserve_request: Callable[[], object] | None = None,
 ) -> tuple[AcquisitionOrchestrator, FakeEvaluationRecorder, FakeAdvancer]:
     recorder = FakeEvaluationRecorder(list(fetchers.values()))
     advancer = FakeAdvancer()
@@ -190,6 +191,7 @@ def orchestrator(
         advance_valid_artifact=advancer,
         clock=clock or (lambda: NOW),
         sleeper=lambda _: None,
+        reserve_request=reserve_request,
     )
     return value, recorder, advancer
 
@@ -347,6 +349,45 @@ def test_total_request_and_elapsed_budgets_stop_before_another_fetch() -> None:
     summary = value.run(configured.recipe_id)
     assert summary.terminal_code is RunTerminalCode.ELAPSED_BUDGET_EXHAUSTED
     assert summary.request_count == 0
+
+
+def test_external_budget_is_reserved_immediately_before_each_fetch() -> None:
+    calls: list[str] = []
+
+    class OrderedFetcher(FakeFetcher):
+        def fetch(self, request: FetchRequest) -> FetchResult:
+            calls.append("fetch")
+            return super().fetch(request)
+
+    def reserve() -> None:
+        calls.append("reserve")
+
+    static = OrderedFetcher([LIST_BODY, DETAIL_BODY])
+    value, _, _ = orchestrator(
+        configured_recipe=recipe(),
+        fetchers={FetchStrategy.STATIC_HTTP: static},
+        reserve_request=reserve,
+    )
+
+    assert value.run(recipe().recipe_id).request_count == 2
+    assert calls == ["reserve", "fetch", "reserve", "fetch"]
+
+
+def test_budget_reservation_failure_prevents_fetch() -> None:
+    static = FakeFetcher([LIST_BODY])
+
+    def reject() -> None:
+        raise RuntimeError("OFFICIAL_REQUEST_BUDGET_EXHAUSTED")
+
+    value, _, _ = orchestrator(
+        configured_recipe=recipe(),
+        fetchers={FetchStrategy.STATIC_HTTP: static},
+        reserve_request=reject,
+    )
+
+    with pytest.raises(RuntimeError, match="OFFICIAL_REQUEST_BUDGET_EXHAUSTED"):
+        value.run(recipe().recipe_id)
+    assert static.requests == []
 
 
 def test_off_policy_dynamic_url_is_recorded_invalid_and_never_fetched() -> None:
