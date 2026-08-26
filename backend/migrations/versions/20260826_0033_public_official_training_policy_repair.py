@@ -68,6 +68,4 @@ def _replace_condition(signature: str, *, current: str, replacement: str) -> Non
         return
     if current not in definition:
         raise RuntimeError(f"P9B policy function shape is unsupported: {signature}")
-    connection.exec_driver_sql(
-        definition.replace(current, replacement).replace("%", "%%")
-    )
+    connection.exec_driver_sql(definition.replace(current, replacement).replace("%", "%%"))

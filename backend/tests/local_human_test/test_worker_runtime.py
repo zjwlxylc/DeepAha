@@ -3,12 +3,15 @@ import subprocess
 import sys
 from hashlib import sha256
 from pathlib import Path
+from typing import Any
 from uuid import UUID
 
 import pytest
 from sqlalchemy import create_engine
 
 from deepaha.core.settings import Settings
+from deepaha.documents.parser import DocumentParser
+from deepaha.documents.service import DocumentService
 from deepaha.local_human_test import runtime
 from deepaha.local_human_test.contracts import ItemStatus, RunMode
 from deepaha.local_human_test.worker import RoutedHumanTestItem, RoutedHumanTestItemProcessor
@@ -47,13 +50,12 @@ def test_live_acquisition_html_parser_emits_p9b_document_blocks(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    captured_parsers: list[object] = []
-    real_document_service = runtime.DocumentService
+    captured_parsers: list[DocumentParser] = []
 
-    class CapturingDocumentService(real_document_service):
-        def __init__(self, **kwargs: object) -> None:
-            captured_parsers.extend(kwargs["parsers"])  # type: ignore[arg-type]
-            super().__init__(**kwargs)  # type: ignore[arg-type]
+    class CapturingDocumentService(DocumentService):
+        def __init__(self, **kwargs: Any) -> None:
+            captured_parsers.extend(kwargs["parsers"])
+            super().__init__(**kwargs)
 
     monkeypatch.setattr(runtime, "DocumentService", CapturingDocumentService)
     monkeypatch.setattr(runtime, "get_engine", lambda _settings: create_engine("sqlite://"))
@@ -67,13 +69,11 @@ def test_live_acquisition_html_parser_emits_p9b_document_blocks(
         )
     )
     acquisition = worker._processor._acquisition  # type: ignore[attr-defined]
-    acquisition._live_runner_factory(lambda: None)  # type: ignore[attr-defined]
-    html_parser = next(
-        parser for parser in captured_parsers if parser.supports("text/html")  # type: ignore[attr-defined]
-    )
+    acquisition._live_runner_factory(lambda: None)
+    html_parser = next(parser for parser in captured_parsers if parser.supports("text/html"))
     content = b"<html><body><main><p>Official opportunity notice</p></main></body></html>"
 
-    parsed = html_parser.parse(  # type: ignore[attr-defined]
+    parsed = html_parser.parse(
         content,
         artifact_sha256=sha256(content).hexdigest(),
     )

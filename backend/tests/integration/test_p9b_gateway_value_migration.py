@@ -54,9 +54,7 @@ def _replace_function_condition(
         )
         assert isinstance(definition, str)
         assert current in definition
-        connection.exec_driver_sql(
-            definition.replace(current, replacement).replace("%", "%%")
-        )
+        connection.exec_driver_sql(definition.replace(current, replacement).replace("%", "%%"))
 
 
 def _begin_attempt(session: Session, call_id: UUID) -> UUID:
@@ -210,10 +208,7 @@ def test_head_repairs_preexisting_0032_public_official_training_policy(
 
         with engine.connect() as connection:
             attempt_guard = connection.scalar(
-                text(
-                    "select pg_get_functiondef("
-                    "'p9b_guard_model_call_attempt()'::regprocedure)"
-                )
+                text("select pg_get_functiondef('p9b_guard_model_call_attempt()'::regprocedure)")
             )
             authority = connection.scalar(
                 text(

@@ -161,6 +161,26 @@ function Invoke-NativeChecked {
     }
 }
 
+function Invoke-NativeCheckedNonInteractive {
+    param(
+        [Parameter(Mandatory = $true)][string]$Description,
+        [Parameter(Mandatory = $true)][scriptblock]$Operation
+    )
+    $previousCi = [Environment]::GetEnvironmentVariable("CI", "Process")
+    try {
+        $env:CI = "true"
+        Invoke-NativeChecked -Description $Description -Operation $Operation
+    }
+    finally {
+        if ($null -eq $previousCi) {
+            Remove-Item Env:CI -ErrorAction SilentlyContinue
+        }
+        else {
+            $env:CI = $previousCi
+        }
+    }
+}
+
 function Assert-LocalManualPortsFree {
     foreach ($port in $script:LocalManualPorts) {
         $listeners = @(Get-NetTCPConnection -State Listen -LocalPort $port -ErrorAction SilentlyContinue)
@@ -414,7 +434,11 @@ function Invoke-LocalManualStart {
         try { Invoke-NativeChecked "后端依赖准备" { uv sync --locked --group dev } }
         finally { Pop-Location }
         Push-Location (Join-Path $projectInfo.ProjectRoot "web")
-        try { Invoke-NativeChecked "Web 依赖准备" { corepack pnpm install --frozen-lockfile } }
+        try {
+            Invoke-NativeCheckedNonInteractive "Web 依赖准备" {
+                corepack pnpm install --frozen-lockfile
+            }
+        }
         finally { Pop-Location }
 
         Write-Host "[3/8] 正在启动持久化隔离数据库……"

@@ -77,16 +77,11 @@ def _replace_attempt_training_condition(
 ) -> None:
     with engine.begin() as connection:
         definition = connection.scalar(
-            text(
-                "select pg_get_functiondef("
-                "'p9b_guard_model_call_attempt()'::regprocedure)"
-            )
+            text("select pg_get_functiondef('p9b_guard_model_call_attempt()'::regprocedure)")
         )
         assert isinstance(definition, str)
         assert current in definition
-        connection.exec_driver_sql(
-            definition.replace(current, replacement).replace("%", "%%")
-        )
+        connection.exec_driver_sql(definition.replace(current, replacement).replace("%", "%%"))
 
 
 @pytest.fixture(scope="module")
@@ -553,8 +548,7 @@ def test_invalid_model_output_can_retry_with_new_call_and_keep_prior_audit(
         )
         assert len(calls) == 2
         assert all(
-            session.get(ModelCallFinalization, call.model_call_id) is not None
-            for call in calls
+            session.get(ModelCallFinalization, call.model_call_id) is not None for call in calls
         )
 
 

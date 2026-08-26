@@ -170,6 +170,25 @@ Assert-Throws {
         -TimeoutMilliseconds 50
 } "浏览器未完成页面检查"
 
+$previousCi = [Environment]::GetEnvironmentVariable("CI", "Process")
+try {
+    $env:CI = "outside-launcher"
+    $observedCi = Invoke-NativeCheckedNonInteractive -Description "non-interactive test" -Operation {
+        Write-Output $env:CI
+        & cmd.exe /d /c exit 0
+    }
+    Assert-Equal $observedCi "true" "Dependency preparation must suppress interactive package-manager prompts"
+    Assert-Equal $env:CI "outside-launcher" "Dependency preparation must restore the caller CI setting"
+}
+finally {
+    if ($null -eq $previousCi) {
+        Remove-Item Env:CI -ErrorAction SilentlyContinue
+    }
+    else {
+        $env:CI = $previousCi
+    }
+}
+
 & node --check (Join-Path $repositoryRoot "web/scripts/open-local-manual-browser.mjs")
 if ($LASTEXITCODE -ne 0) {
     throw "Browser host must be executable JavaScript"
