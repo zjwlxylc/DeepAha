@@ -2,6 +2,7 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 import pytest
+from pydantic import JsonValue
 
 from deepaha.local_human_test.publication import (
     LocalPublicationError,
@@ -14,7 +15,7 @@ EFFECTIVE_AT = datetime(2026, 8, 26, tzinfo=UTC)
 
 
 def _facts() -> tuple[PublicationFact, ...]:
-    values: dict[str, object] = {
+    values: dict[str, JsonValue] = {
         "canonical_title": "浙江省青年科研计划申报公告",
         "type": "RESEARCH_PROGRAM",
         "issuer_name": "浙江省示例主管部门",
@@ -47,6 +48,7 @@ def test_build_publication_material_requires_complete_verified_public_facts() ->
     assert material.snapshot.canonical_title == "浙江省青年科研计划申报公告"
     assert material.snapshot.type.value == "RESEARCH_PROGRAM"
     assert material.snapshot.status.value == "OPEN"
+    assert material.snapshot.application_window.closes_on is not None
     assert material.snapshot.application_window.closes_on.isoformat() == "2026-09-20"
     assert {item.field_path.value for item in material.field_evidence} == {
         "canonical_title",

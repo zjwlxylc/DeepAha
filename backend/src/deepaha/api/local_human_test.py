@@ -339,9 +339,7 @@ class LocalItemQuery:
             "actual_payload_hash": egress.actual_payload_hash,
             "egress_decision": egress.decision,
             "final_status": None if finalization is None else finalization.status,
-            "terminal_disposition": (
-                None if finalization is None else finalization.disposition
-            ),
+            "terminal_disposition": (None if finalization is None else finalization.disposition),
             "attempts": tuple(
                 {
                     "attempt_number": attempt.attempt_number,
@@ -382,8 +380,7 @@ class LocalItemQuery:
                 )
                 .join(
                     EvidenceRef,
-                    EvidenceRef.evidence_ref_id
-                    == ExtractionCandidateEvidence.evidence_ref_id,
+                    EvidenceRef.evidence_ref_id == ExtractionCandidateEvidence.evidence_ref_id,
                 )
                 .join(Document, Document.document_id == EvidenceRef.document_id)
                 .join(RawArtifact, RawArtifact.artifact_id == Document.artifact_id)
@@ -400,9 +397,7 @@ class LocalItemQuery:
                     "candidate_id": candidate.candidate_id,
                     "field_name": candidate.field_name,
                     "raw_value": candidate.raw_value,
-                    "normalized_value_candidate": (
-                        candidate.normalized_value_candidate
-                    ),
+                    "normalized_value_candidate": (candidate.normalized_value_candidate),
                     "confidence": candidate.confidence,
                     "abstained": candidate.abstained,
                     "candidate_reason_code": candidate.candidate_reason_code,
@@ -430,10 +425,7 @@ class LocalItemQuery:
         candidates = tuple(
             self._session.scalars(
                 select(RuleCandidateModel)
-                .where(
-                    RuleCandidateModel.verified_fact_set_id
-                    == item.verified_fact_set_id
-                )
+                .where(RuleCandidateModel.verified_fact_set_id == item.verified_fact_set_id)
                 .order_by(RuleCandidateModel.rule_candidate_id)
             )
         )
@@ -525,9 +517,7 @@ def get_local_provider_config_store(
 
 def get_local_recipe_views() -> tuple[ActiveRecipeView, ...]:
     project_root = Path(__file__).resolve().parents[4]
-    recipes = load_recipe_manifest(
-        project_root / "config" / "acquisition" / "recipes.v1.json"
-    )
+    recipes = load_recipe_manifest(project_root / "config" / "acquisition" / "recipes.v1.json")
     registry = load_registry_manifest(
         project_root / "config" / "sources" / "phase2-official-endpoints.json"
     )
@@ -582,9 +572,7 @@ def get_local_provisional_service(
     session: Annotated[Session, Depends(get_write_session)],
 ) -> ProvisionalOpportunityService:
     project_root = Path(__file__).resolve().parents[4]
-    recipes = load_recipe_manifest(
-        project_root / "config" / "acquisition" / "recipes.v1.json"
-    )
+    recipes = load_recipe_manifest(project_root / "config" / "acquisition" / "recipes.v1.json")
     return ProvisionalOpportunityService(
         session_factory=_factory(session),
         recipes=recipes.recipes,
@@ -874,27 +862,17 @@ def bootstrap_item(
     item = query.get_item(item_id)
     if item is None:
         raise _problem(404, "LOCAL_ITEM_NOT_FOUND")
-    if (
-        ItemStatus(item.status) is ItemStatus.EXTRACTING
-        and item.opportunity_id is not None
-    ):
+    if ItemStatus(item.status) is ItemStatus.EXTRACTING and item.opportunity_id is not None:
         _private(response)
         return ItemResponse.model_validate(item)
-    if (
-        ItemStatus(item.status) is not ItemStatus.BOOTSTRAP_REVIEW
-        or item.document_id is None
-    ):
+    if ItemStatus(item.status) is not ItemStatus.BOOTSTRAP_REVIEW or item.document_id is None:
         raise _problem(409, "BOOTSTRAP_REVIEW_TARGET_INVALID")
     result = provisional.create(
         document_id=item.document_id,
         recipe_id=UUID(item.recipe_id),
     )
     if isinstance(result, BootstrapReviewRequired):
-        code = (
-            result.reason_codes[0]
-            if result.reason_codes
-            else "BOOTSTRAP_REVIEW_REQUIRED"
-        )
+        code = result.reason_codes[0] if result.reason_codes else "BOOTSTRAP_REVIEW_REQUIRED"
         raise _problem(409, code)
     try:
         transitioned = run_service.transition_item(
@@ -944,11 +922,7 @@ def decide_fact(
             if str(error) != "ALL_FACT_CANDIDATES_REQUIRE_DECISION":
                 raise
             promotion = None
-        rules = (
-            None
-            if promotion is None
-            else rule_service.propose_from_verified_facts(item_id)
-        )
+        rules = None if promotion is None else rule_service.propose_from_verified_facts(item_id)
     except ReviewIdempotencyConflict as error:
         raise _problem(409, str(error)) from error
     except HumanReviewError as error:

@@ -96,8 +96,7 @@ def clean_human_acquisition_rows(human_acquisition_engine: Engine) -> Iterator[N
     with human_acquisition_engine.begin() as connection:
         connection.execute(
             text(
-                "TRUNCATE TABLE reviewer_accounts, sources, opportunities "
-                "RESTART IDENTITY CASCADE"
+                "TRUNCATE TABLE reviewer_accounts, sources, opportunities RESTART IDENTITY CASCADE"
             )
         )
 

@@ -117,9 +117,7 @@ class _StoredSaveIdentity(BaseModel):
     @field_validator("idempotency_key")
     @classmethod
     def validate_idempotency_key(cls, value: str) -> str:
-        if value != value.strip() or any(
-            not character.isprintable() for character in value
-        ):
+        if value != value.strip() or any(not character.isprintable() for character in value):
             raise ValueError("idempotency key is invalid")
         return value
 
@@ -175,9 +173,7 @@ class WindowsDpapiProtector:
         kernel32.LocalFree.restype = ctypes.c_void_p
 
         try:
-            operation = (
-                crypt32.CryptProtectData if protect else crypt32.CryptUnprotectData
-            )
+            operation = crypt32.CryptProtectData if protect else crypt32.CryptUnprotectData
             succeeded = operation(
                 ctypes.byref(input_blob),
                 None,
@@ -279,9 +275,7 @@ class LocalProviderConfigStore:
                 and prior_identity.idempotency_key == identity.idempotency_key
             ):
                 if prior_identity.request_hash != identity.request_hash:
-                    raise ProviderConfigIdempotencyConflict(
-                        "PROVIDER_CONFIG_IDEMPOTENCY_CONFLICT"
-                    )
+                    raise ProviderConfigIdempotencyConflict("PROVIDER_CONFIG_IDEMPOTENCY_CONFLICT")
                 return self._status_from(existing)
 
         secret_buffer = bytearray(command.api_key.get_secret_value(), "utf-8")
@@ -312,9 +306,7 @@ class LocalProviderConfigStore:
             training_use=command.training_use,
             supports_idempotency=command.supports_idempotency,
             protected_api_key=base64.b64encode(protected).decode("ascii"),
-            protected_last_save_identity=base64.b64encode(protected_identity).decode(
-                "ascii"
-            ),
+            protected_last_save_identity=base64.b64encode(protected_identity).decode("ascii"),
             updated_at=self._clock(),
         )
         self._atomic_write(payload)

@@ -126,8 +126,7 @@ class StructuredResponseAdapter:
                     "reason_code": "OFFICIAL_TEXT_EXPLICIT",
                 }
                 for field_name, value in (
-                    self._facts
-                    or ((self._fact_field_name, self._fact_value),)
+                    self._facts or ((self._fact_field_name, self._fact_value),)
                 )
             ],
             "rules": [],
@@ -187,8 +186,7 @@ def _seed_item(
         authority = seed_gateway_authority(session)
         member = session.scalar(
             select(SourceBundleMember).where(
-                SourceBundleMember.source_bundle_revision_id
-                == authority.source_bundle_revision_id
+                SourceBundleMember.source_bundle_revision_id == authority.source_bundle_revision_id
             )
         )
         assert member is not None
@@ -217,16 +215,18 @@ def _seed_item(
         assert opportunity_version is not None
         opportunity_version.review_status = "PENDING"
 
-    provider = ProviderConfigSnapshot(
-        provider="local-provider",
-        base_url="https://provider.invalid",
-        protocol="openai_chat_completions",
-        model_id="local-model",
-        model_snapshot="local-model-2026-08-26",
-        provider_region="local-test" if policy_confirmed else "unknown",
-        zero_retention=policy_confirmed,
-        training_use=not policy_confirmed,
-        supports_idempotency=True,
+    provider = ProviderConfigSnapshot.model_validate(
+        {
+            "provider": "local-provider",
+            "base_url": "https://provider.invalid",
+            "protocol": "openai_chat_completions",
+            "model_id": "local-model",
+            "model_snapshot": "local-model-2026-08-26",
+            "provider_region": "local-test" if policy_confirmed else "unknown",
+            "zero_retention": policy_confirmed,
+            "training_use": not policy_confirmed,
+            "supports_idempotency": True,
+        }
     )
     service = HumanTestRunService(
         session_factory=factory,
@@ -323,11 +323,14 @@ def test_gateway_registration_creates_no_attempt_or_adapter_dispatch(
     assert adapter.invocations == []
     with factory() as session:
         assert session.get(ModelCall, registered.model_call_id) is not None
-        assert session.scalar(
-            select(func.count())
-            .select_from(ModelCallAttempt)
-            .where(ModelCallAttempt.model_call_id == registered.model_call_id)
-        ) == 0
+        assert (
+            session.scalar(
+                select(func.count())
+                .select_from(ModelCallAttempt)
+                .where(ModelCallAttempt.model_call_id == registered.model_call_id)
+            )
+            == 0
+        )
 
 
 def test_gateway_response_persists_exact_input_evidence_and_shared_identity(
@@ -350,9 +353,10 @@ def test_gateway_response_persists_exact_input_evidence_and_shared_identity(
         assert run is not None and run.llm_call_count == 1
         assert item.extraction_run_id == outcome.extraction_run_id
         assert call.canonical_request_hash == decision.actual_payload_hash
-        assert call.canonical_request_hash == model_invocation_identity(
-            adapter.invocations[0]
-        ).canonical_request_hash
+        assert (
+            call.canonical_request_hash
+            == model_invocation_identity(adapter.invocations[0]).canonical_request_hash
+        )
         run_blocks = set(
             session.scalars(
                 select(ExtractionRunInputBlock.block_id).where(
@@ -368,11 +372,14 @@ def test_gateway_response_persists_exact_input_evidence_and_shared_identity(
             )
         )
         assert evidence_blocks and evidence_blocks <= run_blocks
-        assert session.scalar(
-            select(func.count())
-            .select_from(ModelCallAttempt)
-            .where(ModelCallAttempt.model_call_id == outcome.model_call_id)
-        ) == 1
+        assert (
+            session.scalar(
+                select(func.count())
+                .select_from(ModelCallAttempt)
+                .where(ModelCallAttempt.model_call_id == outcome.model_call_id)
+            )
+            == 1
+        )
 
 
 def test_unknown_response_block_creates_no_candidate(
@@ -393,11 +400,14 @@ def test_unknown_response_block_creates_no_candidate(
         item = session.get(LocalHumanTestItem, item_id)
         assert item is not None
         assert item.extraction_run_id is None
-        assert session.scalar(
-            select(func.count())
-            .select_from(ExtractionCandidate)
-            .where(ExtractionCandidate.opportunity_id == item.opportunity_id)
-        ) == 0
+        assert (
+            session.scalar(
+                select(func.count())
+                .select_from(ExtractionCandidate)
+                .where(ExtractionCandidate.opportunity_id == item.opportunity_id)
+            )
+            == 0
+        )
 
 
 def test_unconfirmed_provider_policy_fails_before_model_call_and_adapter(

@@ -68,9 +68,7 @@ def create_app() -> FastAPI:
         if request.url.path.startswith("/api/v1/local-human-test"):
             return JSONResponse(
                 status_code=400,
-                content={
-                    "detail": {"code": "INVALID_LOCAL_HUMAN_TEST_REQUEST"}
-                },
+                content={"detail": {"code": "INVALID_LOCAL_HUMAN_TEST_REQUEST"}},
             )
         return await request_validation_exception_handler(request, error)
 

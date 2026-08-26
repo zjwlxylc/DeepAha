@@ -1,9 +1,11 @@
 from collections.abc import Iterator
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import cast
 from uuid import UUID
 
 import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from deepaha.api.local_human_test import (
@@ -42,9 +44,7 @@ class FakeProviderStore:
             provider_region=None if self.saved is None else self.saved.provider_region,
             zero_retention=None if self.saved is None else self.saved.zero_retention,
             training_use=None if self.saved is None else self.saved.training_use,
-            supports_idempotency=(
-                None if self.saved is None else self.saved.supports_idempotency
-            ),
+            supports_idempotency=(None if self.saved is None else self.saved.supports_idempotency),
             egress_ready=(
                 self.saved is not None
                 and self.saved.provider_region != "unknown"
@@ -65,9 +65,7 @@ class FakeProviderStore:
             and self.saved_model_id is not None
             and self.saved_model_id != command.model_id
         ):
-            raise ProviderConfigIdempotencyConflict(
-                "must not expose either request"
-            )
+            raise ProviderConfigIdempotencyConflict("must not expose either request")
         self.saved = command
         self.saved_key = idempotency_key
         self.saved_model_id = command.model_id
@@ -210,7 +208,7 @@ def test_disabled_feature_is_indistinguishable_from_missing_route(
     client: tuple[TestClient, FakeProviderStore],
 ) -> None:
     api, store = client
-    api.app.dependency_overrides[get_settings] = lambda: _settings(enabled=False)
+    cast(FastAPI, api.app).dependency_overrides[get_settings] = lambda: _settings(enabled=False)
 
     response = api.get("/api/v1/local-human-test/config/provider")
 
@@ -222,7 +220,7 @@ def test_operator_role_is_required(
     client: tuple[TestClient, FakeProviderStore],
 ) -> None:
     api, store = client
-    api.app.dependency_overrides[require_local_test_principal] = lambda: _principal(
+    cast(FastAPI, api.app).dependency_overrides[require_local_test_principal] = lambda: _principal(
         ReviewerRole.VALIDATION_REVIEWER
     )
 
@@ -255,7 +253,5 @@ def test_invalid_local_provider_request_is_redacted_and_uses_stable_code(
     )
 
     assert response.status_code == 400
-    assert response.json() == {
-        "detail": {"code": "INVALID_LOCAL_HUMAN_TEST_REQUEST"}
-    }
+    assert response.json() == {"detail": {"code": "INVALID_LOCAL_HUMAN_TEST_REQUEST"}}
     assert "must-not-echo-this-secret" not in response.text

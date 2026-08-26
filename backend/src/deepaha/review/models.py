@@ -38,8 +38,8 @@ class ReviewerAccountModel(Base):
             "jsonb_typeof(allowed_purposes) = 'array' and "
             "jsonb_array_length(allowed_purposes) >= 1 and "
             "allowed_purposes <@ "
-            "'[\"FEEDBACK_REVIEW_AND_VALIDATION\", "
-            "\"OPPORTUNITY_FACT_VALIDATION\"]'::jsonb",
+            '\'["FEEDBACK_REVIEW_AND_VALIDATION", '
+            '"OPPORTUNITY_FACT_VALIDATION"]\'::jsonb',
             name="allowed_purposes_values",
         ),
     )

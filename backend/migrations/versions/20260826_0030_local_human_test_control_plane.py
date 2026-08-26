@@ -80,8 +80,8 @@ def _extend_reviewer_authority() -> None:
         "jsonb_typeof(allowed_purposes) = 'array' and "
         "jsonb_array_length(allowed_purposes) >= 1 and "
         "allowed_purposes <@ "
-        "'[\"FEEDBACK_REVIEW_AND_VALIDATION\", "
-        "\"OPPORTUNITY_FACT_VALIDATION\"]'::jsonb",
+        '\'["FEEDBACK_REVIEW_AND_VALIDATION", '
+        '"OPPORTUNITY_FACT_VALIDATION"]\'::jsonb',
     )
 
 
@@ -118,8 +118,7 @@ def _extend_public_catalog_kind() -> None:
     op.create_check_constraint(
         op.f("ck_public_catalog_entries_collection_kind_values"),
         "public_catalog_entries",
-        "collection_kind in ('REAL_GOLD', 'LICENSE_SAFE_FIXTURE', "
-        "'LOCAL_HUMAN_REVIEWED')",
+        "collection_kind in ('REAL_GOLD', 'LICENSE_SAFE_FIXTURE', 'LOCAL_HUMAN_REVIEWED')",
     )
 
 
@@ -173,8 +172,7 @@ def _create_run_table() -> None:
             name=op.f("ck_local_human_test_runs_mode_values"),
         ),
         sa.CheckConstraint(
-            "status in ('CREATED', 'RUNNING', 'COMPLETED', 'PARTIAL', 'FAILED', "
-            "'CANCELLED')",
+            "status in ('CREATED', 'RUNNING', 'COMPLETED', 'PARTIAL', 'FAILED', 'CANCELLED')",
             name=op.f("ck_local_human_test_runs_status_values"),
         ),
         sa.CheckConstraint(
@@ -207,8 +205,7 @@ def _create_run_table() -> None:
             name=op.f("ck_local_human_test_runs_lease_state"),
         ),
         sa.CheckConstraint(
-            "terminal_reason_code is null or "
-            "terminal_reason_code ~ '^[A-Z][A-Z0-9_]{0,127}$'",
+            "terminal_reason_code is null or terminal_reason_code ~ '^[A-Z][A-Z0-9_]{0,127}$'",
             name=op.f("ck_local_human_test_runs_terminal_reason_code_format"),
         ),
         sa.CheckConstraint(
@@ -391,17 +388,13 @@ def _create_review_decision_table() -> None:
         sa.ForeignKeyConstraint(
             ["item_id"],
             ["local_human_test_items.item_id"],
-            name=op.f(
-                "fk_local_human_test_review_decisions_item_id_local_human_test_items"
-            ),
+            name=op.f("fk_local_human_test_review_decisions_item_id_local_human_test_items"),
             ondelete="CASCADE",
         ),
         sa.ForeignKeyConstraint(
             ["reviewer_id"],
             ["reviewer_accounts.reviewer_id"],
-            name=op.f(
-                "fk_local_human_test_review_decisions_reviewer_id_reviewer_accounts"
-            ),
+            name=op.f("fk_local_human_test_review_decisions_reviewer_id_reviewer_accounts"),
             ondelete="RESTRICT",
         ),
         sa.PrimaryKeyConstraint(

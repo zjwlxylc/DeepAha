@@ -163,16 +163,22 @@ def test_human_fact_and_rule_review_is_independent_idempotent_and_audited(
         assert fact_decision.verifier_identity != "component:local-human-extractor/1.0.0"
         assert rule_decision is not None
         assert rule_decision.approver_identity == f"human:{principal.reviewer_id}"
-        assert session.scalar(
-            select(func.count())
-            .select_from(VerifiedFact)
-            .where(VerifiedFact.verified_fact_set_id == item.verified_fact_set_id)
-        ) == 1
-        assert session.scalar(
-            select(func.count())
-            .select_from(LocalHumanTestReviewDecision)
-            .where(LocalHumanTestReviewDecision.item_id == item_id)
-        ) == 2
+        assert (
+            session.scalar(
+                select(func.count())
+                .select_from(VerifiedFact)
+                .where(VerifiedFact.verified_fact_set_id == item.verified_fact_set_id)
+            )
+            == 1
+        )
+        assert (
+            session.scalar(
+                select(func.count())
+                .select_from(LocalHumanTestReviewDecision)
+                .where(LocalHumanTestReviewDecision.item_id == item_id)
+            )
+            == 2
+        )
 
 
 def test_only_complete_human_verified_official_facts_publish_to_local_catalog(
@@ -235,9 +241,7 @@ def test_only_complete_human_verified_official_facts_publish_to_local_catalog(
             f"publication-fact-{index}",
         )
     facts.promote(item_id, principal)
-    proposal = HumanRuleReviewService(
-        session_factory=factory
-    ).propose_from_verified_facts(item_id)
+    proposal = HumanRuleReviewService(session_factory=factory).propose_from_verified_facts(item_id)
     assert proposal.candidates == ()
     assert proposal.eligibility_ceiling == "UNCERTAIN"
 
@@ -253,9 +257,7 @@ def test_only_complete_human_verified_official_facts_publish_to_local_catalog(
         endpoint = session.get(SourceEndpoint, item.endpoint_id)
         assert endpoint is not None
         endpoint.content_use_basis = "OFFICIAL_PUBLIC_ACCESS"
-        endpoint.allowed_hosts = sorted(
-            {*endpoint.allowed_hosts, "official.example.gov.cn"}
-        )
+        endpoint.allowed_hosts = sorted({*endpoint.allowed_hosts, "official.example.gov.cn"})
     preview = publications.preview(item_id)
     assert preview.eligible
     assert preview.missing_field_names == ()

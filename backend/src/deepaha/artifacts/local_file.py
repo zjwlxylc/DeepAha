@@ -222,13 +222,7 @@ class LocalFileObjectStore:
 
     @staticmethod
     def _key_parts(key: str) -> tuple[str, ...]:
-        if (
-            not key
-            or "\\" in key
-            or "\x00" in key
-            or ":" in key
-            or key.startswith("/")
-        ):
+        if not key or "\\" in key or "\x00" in key or ":" in key or key.startswith("/"):
             raise ValueError("object key must be a canonical relative path")
         parts = tuple(key.split("/"))
         if any(part in {"", ".", ".."} or part.endswith((" ", ".")) for part in parts):

@@ -131,9 +131,7 @@ def test_publication_identity_fields_are_valid_fact_candidates(field_name: str) 
 
 
 def test_unknown_block_rejects_complete_envelope_before_any_persistence() -> None:
-    _response_id, envelope = parse_provider_envelope(
-        _response(evidence_block_id=UNKNOWN_BLOCK_ID)
-    )
+    _response_id, envelope = parse_provider_envelope(_response(evidence_block_id=UNKNOWN_BLOCK_ID))
 
     with pytest.raises(ExtractionValidationError, match="EVIDENCE_BINDING_INVALID"):
         validate_candidate_bindings(envelope, blocks=(_block(),))

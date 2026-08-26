@@ -230,7 +230,7 @@ class OpenAICompatibleProviderAdapter:
         observed = metadata
         try:
             envelope = json.loads(response.body)
-        except (UnicodeDecodeError, json.JSONDecodeError):
+        except UnicodeDecodeError, json.JSONDecodeError:
             return self._observed_failure(
                 outcome=ModelAttemptOutcome.INVALID_JSON_RESPONSE,
                 error_code="PROVIDER_RESPONSE_JSON_INVALID",
@@ -385,7 +385,7 @@ class OpenAICompatibleProviderAdapter:
         if reported_cost is not None:
             try:
                 cost = Decimal(str(reported_cost))
-            except (InvalidOperation, ValueError):
+            except InvalidOperation, ValueError:
                 return None
             if not cost.is_finite() or cost < 0:
                 return None

@@ -61,9 +61,7 @@ def test_production_manifest_tracks_only_qualified_platform_candidates() -> None
         "OFFICIAL_ALTERNATIVE",
     }
     assert all(
-        recipe.opportunity_type_hint is not None
-        for recipe in manifest.recipes
-        if recipe.active
+        recipe.opportunity_type_hint is not None for recipe in manifest.recipes if recipe.active
     )
 
 

@@ -34,8 +34,7 @@ def assert_local_manual_database_url(database_url: str) -> None:
     target = make_url(database_url)
     if target.host != "127.0.0.1" or target.port != 55439 or target.database != "deepaha":
         raise ValueError(
-            "local manual bootstrap requires exact persistent database "
-            "127.0.0.1:55439/deepaha"
+            "local manual bootstrap requires exact persistent database 127.0.0.1:55439/deepaha"
         )
 
 

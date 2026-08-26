@@ -23,6 +23,7 @@ from deepaha.api.local_human_test import (
 from deepaha.contracts.phase2 import OpportunityTypeV02
 from deepaha.core.settings import Settings, get_settings
 from deepaha.local_human_test.bootstrap import ActiveRecipeView
+from deepaha.local_human_test.contracts import CreateRunCommand
 from deepaha.local_human_test.provider_config import ProviderConfigStatus
 from deepaha.local_human_test.runs import RunIdempotencyConflict
 from deepaha.main import create_app
@@ -60,13 +61,13 @@ class ConfiguredProviderStore:
 
 class FakeRunService:
     def __init__(self) -> None:
-        self.created_command: object | None = None
+        self.created_command: CreateRunCommand | None = None
         self.created_key: str | None = None
         self.conflict = False
         self.cancelled: UUID | None = None
         self.transitioned: tuple[UUID, object, object, object] | None = None
 
-    def create(self, command: object, *, idempotency_key: str) -> SimpleNamespace:
+    def create(self, command: CreateRunCommand, *, idempotency_key: str) -> SimpleNamespace:
         if self.conflict:
             raise RunIdempotencyConflict("must not leak sensitive detail")
         self.created_command = command
@@ -189,15 +190,9 @@ class FakeItemQuery:
                     "decision": None,
                     "evidence": [
                         {
-                            "evidence_ref_id": str(
-                                UUID("019d0000-0000-7000-8000-000000000810")
-                            ),
-                            "block_id": str(
-                                UUID("019d0000-0000-7000-8000-000000000811")
-                            ),
-                            "document_id": str(
-                                UUID("019d0000-0000-7000-8000-000000000812")
-                            ),
+                            "evidence_ref_id": str(UUID("019d0000-0000-7000-8000-000000000810")),
+                            "block_id": str(UUID("019d0000-0000-7000-8000-000000000811")),
+                            "document_id": str(UUID("019d0000-0000-7000-8000-000000000812")),
                             "block_type": "HTML_ELEMENT",
                             "canonical_text_or_value": "官方示例计划",
                             "structural_locator": {"selector": "h1"},
@@ -351,38 +346,26 @@ def client() -> Iterator[tuple[TestClient, FakeRunService]]:
         local_human_test_enabled=True,
         local_human_test_root=Path("C:/local/deepaha-human-test"),
     )
-    application.dependency_overrides[require_local_test_principal] = lambda: (
-        ReviewerPrincipal(
-            reviewer_id=REVIEWER_ID,
-            roles=frozenset(
-                {
-                    ReviewerRole.LOCAL_TEST_OPERATOR,
-                    ReviewerRole.VALIDATION_REVIEWER,
-                }
-            ),
-            purposes=frozenset({"OPPORTUNITY_FACT_VALIDATION"}),
-            synthetic=False,
-        )
+    application.dependency_overrides[require_local_test_principal] = lambda: ReviewerPrincipal(
+        reviewer_id=REVIEWER_ID,
+        roles=frozenset(
+            {
+                ReviewerRole.LOCAL_TEST_OPERATOR,
+                ReviewerRole.VALIDATION_REVIEWER,
+            }
+        ),
+        purposes=frozenset({"OPPORTUNITY_FACT_VALIDATION"}),
+        synthetic=False,
     )
-    application.dependency_overrides[get_local_provider_config_store] = (
-        ConfiguredProviderStore
-    )
+    application.dependency_overrides[get_local_provider_config_store] = ConfiguredProviderStore
     application.dependency_overrides[get_local_recipe_views] = lambda: (_recipe(),)
     application.dependency_overrides[get_local_run_service] = lambda: run_service
     application.dependency_overrides[get_local_run_query] = FakeRunQuery
     application.dependency_overrides[get_local_item_query] = FakeItemQuery
-    application.dependency_overrides[get_local_fact_review_service] = (
-        FakeFactReviewService
-    )
-    application.dependency_overrides[get_local_rule_review_service] = (
-        FakeRuleReviewService
-    )
-    application.dependency_overrides[get_local_publication_service] = (
-        FakePublicationService
-    )
-    application.dependency_overrides[get_local_provisional_service] = (
-        FakeProvisionalService
-    )
+    application.dependency_overrides[get_local_fact_review_service] = FakeFactReviewService
+    application.dependency_overrides[get_local_rule_review_service] = FakeRuleReviewService
+    application.dependency_overrides[get_local_publication_service] = FakePublicationService
+    application.dependency_overrides[get_local_provisional_service] = FakeProvisionalService
     with TestClient(application, base_url="http://127.0.0.1") as api:
         yield api, run_service
     application.dependency_overrides.clear()
@@ -468,9 +451,7 @@ def test_item_detail_returns_audit_and_official_evidence_but_not_provider_bytes(
     assert listed.json()[0]["item_id"] == str(ITEM_ID)
     assert detail.status_code == 200
     assert detail.json()["model_audit"]["attempts"][0]["input_tokens"] == 321
-    assert detail.json()["candidates"][0]["evidence"][0]["source_tier"] == (
-        "OFFICIAL_PRIMARY"
-    )
+    assert detail.json()["candidates"][0]["evidence"][0]["source_tier"] == ("OFFICIAL_PRIMARY")
     assert "raw_response" not in detail.text
     assert "object_key" not in detail.text
 
@@ -492,9 +473,7 @@ def test_fact_decision_promotes_and_proposes_rules_without_auto_approval(
 
     assert response.status_code == 200
     assert response.json()["decision"]["decision"] == "APPROVE"
-    assert response.json()["promotion"]["promoted_field_names"] == [
-        "canonical_title"
-    ]
+    assert response.json()["promotion"]["promoted_field_names"] == ["canonical_title"]
     assert response.json()["rules"]["eligibility_ceiling"] == "UNCERTAIN"
 
 

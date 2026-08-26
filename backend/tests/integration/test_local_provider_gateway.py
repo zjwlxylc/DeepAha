@@ -34,9 +34,7 @@ class StaticProviderTransport:
                     {
                         "message": {
                             "role": "assistant",
-                            "content": json.dumps(
-                                {"facts": [], "rules": [], "uncertainties": []}
-                            ),
+                            "content": json.dumps({"facts": [], "rules": [], "uncertainties": []}),
                         },
                         "finish_reason": "stop",
                     }

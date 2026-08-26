@@ -166,9 +166,12 @@ def test_adapter_sends_exact_invocation_and_stores_raw_response(tmp_path: Path) 
     )
     assert result.raw_response_sha256 == sha256(body).hexdigest()
     assert result.response_hash == sha256(body).hexdigest()
-    assert result.parsed_result_hash == sha256(
-        json.dumps(PARSED_CONTENT, sort_keys=True, separators=(",", ":")).encode()
-    ).hexdigest()
+    assert (
+        result.parsed_result_hash
+        == sha256(
+            json.dumps(PARSED_CONTENT, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest()
+    )
     assert result.input_tokens == 17
     assert result.output_tokens == 11
     assert result.cache_read_tokens == 3
@@ -283,15 +286,11 @@ def test_invalid_assistant_json_is_audited_but_not_succeeded(tmp_path: Path) -> 
 def test_output_limit_and_missing_usage_fail_closed(tmp_path: Path) -> None:
     limited = make_adapter(
         tmp_path / "limited",
-        RecordingTransport(
-            response=observed_response(200, response_body(finish_reason="length"))
-        ),
+        RecordingTransport(response=observed_response(200, response_body(finish_reason="length"))),
     ).invoke(invocation())
     missing_usage = make_adapter(
         tmp_path / "usage",
-        RecordingTransport(
-            response=observed_response(200, response_body(usage={}))
-        ),
+        RecordingTransport(response=observed_response(200, response_body(usage={}))),
     ).invoke(invocation(attempt_id=UUID("019b0000-0000-7000-8000-000000000903")))
 
     assert limited.outcome is ModelAttemptOutcome.OUTPUT_LIMIT_EXCEEDED

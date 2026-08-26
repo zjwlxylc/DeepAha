@@ -24,8 +24,7 @@ class LocalHumanTestRun(Base):
         CheckConstraint("uuid_extract_version(run_id) = 7", name="run_id_uuid7"),
         CheckConstraint("mode in ('LIVE_OFFICIAL', 'OFFICIAL_REPLAY')", name="mode_values"),
         CheckConstraint(
-            "status in ('CREATED', 'RUNNING', 'COMPLETED', 'PARTIAL', 'FAILED', "
-            "'CANCELLED')",
+            "status in ('CREATED', 'RUNNING', 'COMPLETED', 'PARTIAL', 'FAILED', 'CANCELLED')",
             name="status_values",
         ),
         CheckConstraint(
@@ -52,8 +51,7 @@ class LocalHumanTestRun(Base):
             name="lease_state",
         ),
         CheckConstraint(
-            "terminal_reason_code is null or "
-            "terminal_reason_code ~ '^[A-Z][A-Z0-9_]{0,127}$'",
+            "terminal_reason_code is null or terminal_reason_code ~ '^[A-Z][A-Z0-9_]{0,127}$'",
             name="terminal_reason_code_format",
         ),
         CheckConstraint("updated_at >= created_at", name="timestamp_order"),

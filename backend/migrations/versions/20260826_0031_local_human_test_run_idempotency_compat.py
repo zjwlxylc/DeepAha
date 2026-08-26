@@ -19,17 +19,15 @@ def upgrade() -> None:
     # Early local-only 0030 databases predated these two run idempotency columns.
     # Fresh 0030 databases already contain them, so every statement is conditional.
     op.execute(
-        "ALTER TABLE local_human_test_runs "
-        "ADD COLUMN IF NOT EXISTS idempotency_key varchar(128)"
+        "ALTER TABLE local_human_test_runs ADD COLUMN IF NOT EXISTS idempotency_key varchar(128)"
     )
     op.execute(
-        "ALTER TABLE local_human_test_runs "
-        "ADD COLUMN IF NOT EXISTS request_hash varchar(64)"
+        "ALTER TABLE local_human_test_runs ADD COLUMN IF NOT EXISTS request_hash varchar(64)"
     )
     op.execute(
         "UPDATE local_human_test_runs SET "
         "idempotency_key = coalesce(idempotency_key, 'legacy-' || run_id::text), "
-        "request_hash = coalesce(request_hash, encode(digest(" 
+        "request_hash = coalesce(request_hash, encode(digest("
         "convert_to('legacy:' || run_id::text, 'UTF8'), 'sha256'), 'hex')) "
         "WHERE idempotency_key IS NULL OR request_hash IS NULL"
     )

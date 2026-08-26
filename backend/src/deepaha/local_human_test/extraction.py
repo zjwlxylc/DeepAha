@@ -181,10 +181,7 @@ class MinimizedExtractionBlock:
             len(self.block_hash) != 64
             or any(character not in "0123456789abcdef" for character in self.block_hash)
             or len(self.evidence_binding_hash) != 64
-            or any(
-                character not in "0123456789abcdef"
-                for character in self.evidence_binding_hash
-            )
+            or any(character not in "0123456789abcdef" for character in self.evidence_binding_hash)
             or self.ordinal < 1
             or not self.block_type
             or not self.content.strip()
@@ -580,8 +577,7 @@ class P9BExtractionCoordinator:
             revision = session.get(SourceBundleRevision, item.source_bundle_revision_id)
             member_exists = session.scalar(
                 select(SourceBundleMember.source_bundle_member_id).where(
-                    SourceBundleMember.source_bundle_revision_id
-                    == item.source_bundle_revision_id,
+                    SourceBundleMember.source_bundle_revision_id == item.source_bundle_revision_id,
                     SourceBundleMember.document_id == item.document_id,
                 )
             )
@@ -682,8 +678,7 @@ class P9BExtractionCoordinator:
                 select(EgressBlockClassification).where(
                     EgressBlockClassification.block_id == block.block_id,
                     EgressBlockClassification.block_hash == block.block_hash,
-                    EgressBlockClassification.classification_version
-                    == classification_version,
+                    EgressBlockClassification.classification_version == classification_version,
                 )
             )
             if existing is None:
@@ -930,8 +925,7 @@ class P9BExtractionCoordinator:
         with self._session_factory.begin() as session:
             existing = session.scalar(
                 select(ExtractionRun).where(
-                    ExtractionRun.source_bundle_revision_id
-                    == prepared.source_bundle_revision_id,
+                    ExtractionRun.source_bundle_revision_id == prepared.source_bundle_revision_id,
                     ExtractionRun.producer_identity == producer_identity,
                 )
             )

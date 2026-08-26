@@ -406,9 +406,7 @@ class HumanFactReviewService:
                 raise HumanReviewError("ALL_FACT_CANDIDATES_REQUIRE_DECISION")
             if len({decision.candidate_id for decision in decisions}) != len(decisions):
                 raise HumanReviewError("FACT_CANDIDATE_DECISION_AMBIGUOUS")
-            approved = tuple(
-                decision for decision in decisions if decision.decision == "APPROVE"
-            )
+            approved = tuple(decision for decision in decisions if decision.decision == "APPROVE")
             if not approved:
                 raise HumanReviewError("AT_LEAST_ONE_APPROVED_FACT_REQUIRED")
             fact_set = FactLifecycleService(session).promote(
@@ -465,11 +463,12 @@ class HumanFactReviewService:
             )
         )
         total = session.scalars(
-            select(FactVerificationDecisionModel).join(
+            select(FactVerificationDecisionModel)
+            .join(
                 ExtractionCandidate,
-                FactVerificationDecisionModel.candidate_id
-                == ExtractionCandidate.candidate_id,
-            ).where(ExtractionCandidate.extraction_run_id == item.extraction_run_id)
+                FactVerificationDecisionModel.candidate_id == ExtractionCandidate.candidate_id,
+            )
+            .where(ExtractionCandidate.extraction_run_id == item.extraction_run_id)
         ).all()
         return FactPromotionResult(
             item_id=item.item_id,
@@ -513,8 +512,7 @@ class HumanRuleReviewService:
             existing = tuple(
                 session.scalars(
                     select(RuleCandidateModel).where(
-                        RuleCandidateModel.verified_fact_set_id
-                        == item.verified_fact_set_id
+                        RuleCandidateModel.verified_fact_set_id == item.verified_fact_set_id
                     )
                 )
             )
@@ -526,8 +524,7 @@ class HumanRuleReviewService:
                     session.scalars(
                         select(VerifiedFact)
                         .where(
-                            VerifiedFact.verified_fact_set_id
-                            == item.verified_fact_set_id,
+                            VerifiedFact.verified_fact_set_id == item.verified_fact_set_id,
                             VerifiedFact.fact_state == "KNOWN",
                         )
                         .order_by(VerifiedFact.field_name)
@@ -570,8 +567,7 @@ class HumanRuleReviewService:
                 existing = tuple(
                     session.scalars(
                         select(RuleCandidateModel).where(
-                            RuleCandidateModel.verified_fact_set_id
-                            == item.verified_fact_set_id
+                            RuleCandidateModel.verified_fact_set_id == item.verified_fact_set_id
                         )
                     )
                 )
@@ -625,8 +621,7 @@ class HumanRuleReviewService:
                 raise HumanReviewError("RULE_REVIEW_TARGET_INVALID")
             prior = session.scalar(
                 select(RuleApprovalDecisionModel).where(
-                    RuleApprovalDecisionModel.rule_candidate_id
-                    == command.rule_candidate_id
+                    RuleApprovalDecisionModel.rule_candidate_id == command.rule_candidate_id
                 )
             )
             if prior is not None:
@@ -676,8 +671,7 @@ class HumanRuleReviewService:
     def _candidate_view(session: Session, candidate: RuleCandidateModel) -> RuleCandidateView:
         fact_ids = tuple(
             session.scalars(
-                select(RuleCandidateFact.verified_fact_id)
-                .where(
+                select(RuleCandidateFact.verified_fact_id).where(
                     RuleCandidateFact.rule_candidate_id == candidate.rule_candidate_id
                 )
             )
@@ -709,8 +703,7 @@ class HumanRuleReviewService:
             select(RuleApprovalDecisionModel.rule_approval_decision_id)
             .join(
                 RuleCandidateModel,
-                RuleApprovalDecisionModel.rule_candidate_id
-                == RuleCandidateModel.rule_candidate_id,
+                RuleApprovalDecisionModel.rule_candidate_id == RuleCandidateModel.rule_candidate_id,
             )
             .where(
                 RuleCandidateModel.verified_fact_set_id == item.verified_fact_set_id,
@@ -723,6 +716,7 @@ class HumanRuleReviewService:
             decision=decision.decision,
             eligibility_ceiling="RULE_EVALUATED" if approved is not None else "UNCERTAIN",
         )
+
 
 __all__ = [
     "FactDecisionCommand",

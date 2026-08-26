@@ -15,8 +15,7 @@ class PublicCatalogEntry(Base):
             name="positive_opportunity_version",
         ),
         CheckConstraint(
-            "collection_kind in ('REAL_GOLD', 'LICENSE_SAFE_FIXTURE', "
-            "'LOCAL_HUMAN_REVIEWED')",
+            "collection_kind in ('REAL_GOLD', 'LICENSE_SAFE_FIXTURE', 'LOCAL_HUMAN_REVIEWED')",
             name="collection_kind_values",
         ),
         CheckConstraint(

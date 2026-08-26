@@ -245,20 +245,21 @@ class LocalCatalogPublicationService:
             existing = session.scalar(
                 select(LocalHumanTestReviewDecision).where(
                     LocalHumanTestReviewDecision.item_id == item_id,
-                    LocalHumanTestReviewDecision.decision_kind
-                    == ReviewDecisionKind.PUBLISH.value,
+                    LocalHumanTestReviewDecision.decision_kind == ReviewDecisionKind.PUBLISH.value,
                     LocalHumanTestReviewDecision.idempotency_key == key,
                 )
             )
             if existing is not None:
                 if existing.request_hash != request_hash:
-                    raise PublicationIdempotencyConflict(
-                        "PUBLICATION_IDEMPOTENCY_CONFLICT"
-                    )
+                    raise PublicationIdempotencyConflict("PUBLICATION_IDEMPOTENCY_CONFLICT")
                 entry = session.get(PublicCatalogEntry, preview.opportunity_id)
-                version = None if entry is None else session.get(
-                    OpportunityVersion,
-                    (entry.opportunity_id, entry.opportunity_version),
+                version = (
+                    None
+                    if entry is None
+                    else session.get(
+                        OpportunityVersion,
+                        (entry.opportunity_id, entry.opportunity_version),
+                    )
                 )
                 if entry is None or version is None:
                     raise LocalPublicationError("PUBLICATION_DECISION_BINDING_MISSING")
@@ -344,9 +345,7 @@ class LocalCatalogPublicationService:
         *,
         lock: bool,
     ) -> PublicationPreview:
-        statement = select(LocalHumanTestItem).where(
-            LocalHumanTestItem.item_id == item_id
-        )
+        statement = select(LocalHumanTestItem).where(LocalHumanTestItem.item_id == item_id)
         if lock:
             statement = statement.with_for_update()
         item = session.scalar(statement)
@@ -392,8 +391,7 @@ class LocalCatalogPublicationService:
                     FactVerificationDecisionModel.decision == "APPROVE",
                     FactVerificationDecisionModel.verification_method == "HUMAN",
                     LocalHumanTestReviewDecision.item_id == item_id,
-                    LocalHumanTestReviewDecision.decision_kind
-                    == ReviewDecisionKind.FACT.value,
+                    LocalHumanTestReviewDecision.decision_kind == ReviewDecisionKind.FACT.value,
                 )
                 .order_by(VerifiedFact.field_name)
             )
@@ -460,8 +458,7 @@ class LocalCatalogPublicationService:
             select(RuleApprovalDecisionModel.rule_approval_decision_id)
             .join(
                 RuleCandidateModel,
-                RuleApprovalDecisionModel.rule_candidate_id
-                == RuleCandidateModel.rule_candidate_id,
+                RuleApprovalDecisionModel.rule_candidate_id == RuleCandidateModel.rule_candidate_id,
             )
             .where(
                 RuleCandidateModel.verified_fact_set_id == item.verified_fact_set_id,
@@ -475,12 +472,8 @@ class LocalCatalogPublicationService:
             approved_field_names=approved_names,
             missing_field_names=missing,
             content_use_basis=content_use_basis,
-            official_evidence_complete=(
-                len(publication_facts) == len(PUBLICATION_FACT_NAMES)
-            ),
-            eligibility_ceiling=(
-                "RULE_EVALUATED" if approved_rule is not None else "UNCERTAIN"
-            ),
+            official_evidence_complete=(len(publication_facts) == len(PUBLICATION_FACT_NAMES)),
+            eligibility_ceiling=("RULE_EVALUATED" if approved_rule is not None else "UNCERTAIN"),
             blocker_codes=tuple(sorted(blockers)),
             material=material,
         )
