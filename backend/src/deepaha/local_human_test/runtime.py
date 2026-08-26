@@ -11,6 +11,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
+import deepaha.db.models  # noqa: F401  # Register ORM FK targets in the standalone worker.
 from deepaha.acquisition.contracts import FetchStrategy, SourceRecipe
 from deepaha.acquisition.evaluations import EvaluationService
 from deepaha.acquisition.fetchers import OfficialAlternativeFetcher, StaticHttpFetcher

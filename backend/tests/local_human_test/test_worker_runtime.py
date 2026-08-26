@@ -1,3 +1,7 @@
+import os
+import subprocess
+import sys
+from pathlib import Path
 from uuid import UUID
 
 import pytest
@@ -6,6 +10,33 @@ from deepaha.local_human_test.contracts import ItemStatus, RunMode
 from deepaha.local_human_test.worker import RoutedHumanTestItem, RoutedHumanTestItemProcessor
 
 ITEM_ID = UUID("019d0000-0000-7000-8000-000000000701")
+
+
+def test_worker_runtime_registers_all_local_run_foreign_key_targets() -> None:
+    backend_root = Path(__file__).parents[2]
+    environment = os.environ.copy()
+    environment["PYTHONPATH"] = str(backend_root / "src")
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            (
+                "import deepaha.local_human_test.runtime; "
+                "from deepaha.local_human_test.models import "
+                "LocalHumanTestItem, LocalHumanTestRun; "
+                "[foreign_key.column for table in "
+                "(LocalHumanTestRun.__table__, LocalHumanTestItem.__table__) "
+                "for foreign_key in table.foreign_keys]"
+            ),
+        ],
+        cwd=backend_root,
+        env=environment,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stderr
 
 
 class Acquisition:
