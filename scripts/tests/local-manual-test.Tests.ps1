@@ -190,8 +190,9 @@ $composeSource = Get-Content -LiteralPath (
 if ($composeSource -match 'tmpfs:') {
     throw "The local human-test database must not be ephemeral"
 }
-if ($composeSource -notmatch 'postgres_data:/var/lib/postgresql') {
-    throw "The local human-test database must use its exact named Compose volume"
+if ($composeSource -notmatch 'postgres_data:/var/lib/postgresql(?:\s|$)' -or
+    $composeSource -match 'postgres_data:/var/lib/postgresql/data') {
+    throw "PostgreSQL 18 must mount its exact named volume at /var/lib/postgresql"
 }
 
 $browserSource = Get-Content -LiteralPath (
