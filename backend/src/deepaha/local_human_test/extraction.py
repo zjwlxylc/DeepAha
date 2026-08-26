@@ -501,7 +501,7 @@ class P9BExtractionCoordinator:
             if item.document_id is None or item.opportunity_id is None:
                 raise ExtractionConfigurationError("EXTRACTION_TARGET_INCOMPLETE")
             config = ProviderConfigSnapshot.model_validate(run.provider_config_snapshot)
-            if config.training_use or config.provider_region == "unknown":
+            if config.provider_region == "unknown":
                 raise ExtractionConfigurationError("PROVIDER_EGRESS_POLICY_NOT_CONFIRMED")
             budget = ExternalCallBudget.model_validate(run.budget)
             opportunity = session.get(Opportunity, item.opportunity_id)

@@ -171,7 +171,7 @@ export default function ProviderConfigForm({ status }: { status: ProviderStatus 
               type="checkbox"
               defaultChecked={status.training_use === false}
             />
-            已在 Provider 设置或合同中确认：本次输入不用于模型训练
+            Provider 已明确承诺不将输入用于模型训练（可选）
           </label>
           <label className="check-label">
             <input name="zero_retention" type="checkbox" defaultChecked={status.zero_retention ?? false} />
@@ -187,8 +187,9 @@ export default function ProviderConfigForm({ status }: { status: ProviderStatus 
           </label>
         </div>
         <p className="field-help">
-          本地真实运行只发送已审核官方公开证据。零保留和幂等能力没有书面依据时请保持未选；
-          “不用于模型训练”必须先在 Provider 设置或合同中确认。
+          本地真实运行只发送已审核的官方公开证据，不包含个人资料。Provider
+          可能保存这些公开资料或用于改进模型；这不会阻止当前人工测试。零保留、不用于训练和
+          幂等能力只有在有明确依据时才勾选。
         </p>
         <ActionMessage state={saveState} />
         <button className="button button-primary" type="submit" disabled={savePending}>

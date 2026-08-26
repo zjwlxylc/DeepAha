@@ -45,12 +45,7 @@ class FakeProviderStore:
             zero_retention=None if self.saved is None else self.saved.zero_retention,
             training_use=None if self.saved is None else self.saved.training_use,
             supports_idempotency=(None if self.saved is None else self.saved.supports_idempotency),
-            egress_ready=(
-                self.saved is not None
-                and self.saved.provider_region != "unknown"
-                and self.saved.zero_retention
-                and not self.saved.training_use
-            ),
+            egress_ready=(self.saved is not None and self.saved.provider_region != "unknown"),
             updated_at=None if self.saved is None else NOW,
         )
 

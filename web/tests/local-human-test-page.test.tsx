@@ -103,8 +103,13 @@ describe("local human test console", () => {
     );
     expect(screen.getByLabelText("模型 ID")).toHaveValue("agnes-2.5-flash");
     expect(screen.getByRole("checkbox", { name: /零保留/ })).not.toBeChecked();
-    expect(screen.getByRole("checkbox", { name: /不用于模型训练/ })).not.toBeChecked();
+    expect(
+      screen.getByRole("checkbox", { name: /不将输入用于模型训练/ }),
+    ).not.toBeChecked();
     expect(screen.getByRole("checkbox", { name: /幂等请求身份/ })).not.toBeChecked();
+    expect(
+      screen.getByText(/Provider 可能保存这些公开资料或用于改进模型/),
+    ).toBeVisible();
 
     fireEvent.change(screen.getByLabelText("快速选择公开配置"), {
       target: { value: "deepseek-v4-flash" },

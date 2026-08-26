@@ -129,6 +129,22 @@ def test_public_official_provider_is_ready_without_zero_retention(tmp_path: Path
     assert status.egress_ready is True
 
 
+def test_public_official_provider_is_ready_when_training_policy_is_unknown(
+    tmp_path: Path,
+) -> None:
+    store = make_store(tmp_path)
+
+    status = store.save(
+        save_command(zero_retention=False, training_use=True),
+        idempotency_key="save-public-provider-with-unknown-training-policy",
+    )
+
+    assert status.configured is True
+    assert status.provider_region == "cn"
+    assert status.training_use is True
+    assert status.egress_ready is True
+
+
 def test_save_hardens_directory_before_writing(tmp_path: Path) -> None:
     hardener = RecordingHardener()
     store = make_store(tmp_path, hardener=hardener)

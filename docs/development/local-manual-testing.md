@@ -45,9 +45,10 @@
 
 本地人工测试的模型输入只允许来自已审核 Recipe 的官方公开证据块，P9-B 分类固定为
 `PUBLIC_OFFICIAL_GENERAL` 且 `contains_user_data=false`。Provider 可以采用经明确记录的临时保留
-（`PROVIDER_TRANSIENT_RETENTION`）；零保留不再是公开资料测试的虚假必选项。真实出站仍要求
-负责人确认 Provider 不将本次输入用于模型训练。零保留和 Provider 原生幂等能力只有存在明确
-依据时才勾选，默认均为关闭。
+（`PROVIDER_TRANSIENT_RETENTION`）；零保留和“不用于模型训练”都不是公开资料测试的虚假必选项。
+若 Provider 数据政策未知，系统如实记录 `training_use=true` 并在页面提示可能的数据使用，但不
+阻止这类公开资料的人工测试。任何包含用户数据或不属于该公开分类的输入仍不得进入此流程。
+零保留、不用于训练和 Provider 原生幂等能力只有存在明确依据时才勾选，默认均为关闭。
 
 本地人工体验阶段保留逐项批准，是为了检查证据和产品体验。未来正式运行不要求所有低风险字段
 永久逐条批准；只有在相应 Release Qualification 和自动化质量门成立后，低风险结果才可按策略

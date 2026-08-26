@@ -226,7 +226,7 @@ def _seed_item(
             "model_snapshot": "local-model-2026-08-26",
             "provider_region": "local-test" if policy_confirmed else "unknown",
             "zero_retention": False,
-            "training_use": not policy_confirmed,
+            "training_use": True,
             "supports_idempotency": True,
         }
     )
@@ -361,6 +361,7 @@ def test_gateway_response_persists_exact_input_evidence_and_shared_identity(
         assert task is not None and policy is not None
         assert task.provider_capabilities == ["PROVIDER_TRANSIENT_RETENTION"]
         assert policy.zero_retention is False
+        assert policy.training_use is True
         assert policy.retention_class == "PROVIDER_TRANSIENT_RETENTION"
         assert call.retention_class == "PROVIDER_TRANSIENT_RETENTION"
         run = session.get(LocalHumanTestRun, item.run_id)
