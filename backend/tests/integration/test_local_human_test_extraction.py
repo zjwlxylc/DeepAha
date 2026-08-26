@@ -93,10 +93,16 @@ class StructuredResponseAdapter:
         object_store: LocalFileObjectStore,
         unknown_block: bool = False,
         provider: str = "local-provider",
+        fact_field_name: str = "application_deadline",
+        fact_value: object = "2026-09-01",
+        facts: tuple[tuple[str, object], ...] | None = None,
     ) -> None:
         self.provider = provider
         self._object_store = object_store
         self._unknown_block = unknown_block
+        self._fact_field_name = fact_field_name
+        self._fact_value = fact_value
+        self._facts = facts
         self.invocations: list[ProviderInvocation] = []
 
     def invoke(self, request: ProviderInvocation) -> ProviderAttemptResult:
@@ -111,14 +117,18 @@ class StructuredResponseAdapter:
             "schema_version": "0.8.0",
             "facts": [
                 {
-                    "field_name": "application_deadline",
-                    "raw_value": "2026-09-01",
-                    "normalized_value_candidate": "2026-09-01",
+                    "field_name": field_name,
+                    "raw_value": value,
+                    "normalized_value_candidate": value,
                     "evidence_block_ids": [block_id],
                     "confidence": 0.9,
                     "abstained": False,
                     "reason_code": "OFFICIAL_TEXT_EXPLICIT",
                 }
+                for field_name, value in (
+                    self._facts
+                    or ((self._fact_field_name, self._fact_value),)
+                )
             ],
             "rules": [],
             "uncertainties": [],
@@ -264,10 +274,19 @@ def _coordinator(
     *,
     unknown_block: bool = False,
     policy_confirmed: bool = True,
+    fact_field_name: str = "application_deadline",
+    fact_value: object = "2026-09-01",
+    facts: tuple[tuple[str, object], ...] | None = None,
 ) -> tuple[P9BExtractionCoordinator, StructuredResponseAdapter, sessionmaker[Session], UUID]:
     factory, service, item_id = _seed_item(engine, policy_confirmed=policy_confirmed)
     store = LocalFileObjectStore(root=tmp_path, bucket=BUCKET)
-    adapter = StructuredResponseAdapter(object_store=store, unknown_block=unknown_block)
+    adapter = StructuredResponseAdapter(
+        object_store=store,
+        unknown_block=unknown_block,
+        fact_field_name=fact_field_name,
+        fact_value=fact_value,
+        facts=facts,
+    )
     gateway = GatewayExecutor(session_factory=factory, adapter=adapter, sleeper=lambda _: None)
     return (
         P9BExtractionCoordinator(

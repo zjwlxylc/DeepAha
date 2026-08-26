@@ -16,6 +16,7 @@ class PublicSchema(BaseModel):
 class PublicDataLabel(StrEnum):
     REAL_GOLD = "REAL_GOLD"
     LICENSE_SAFE_FIXTURE = "LICENSE_SAFE_FIXTURE"
+    LOCAL_HUMAN_REVIEWED = "LOCAL_HUMAN_REVIEWED"
 
 
 class PublicOpportunitySort(StrEnum):

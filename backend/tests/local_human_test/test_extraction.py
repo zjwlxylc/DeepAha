@@ -116,6 +116,20 @@ def test_strict_provider_envelope_and_exact_evidence_binding() -> None:
     assert validated.facts[0].evidence_block_ids == (BLOCK_ID,)
 
 
+@pytest.mark.parametrize("field_name", ["type", "status"])
+def test_publication_identity_fields_are_valid_fact_candidates(field_name: str) -> None:
+    payload = json.loads(_response())
+    content = json.loads(payload["choices"][0]["message"]["content"])
+    content["facts"][0]["field_name"] = field_name
+    content["facts"][0]["raw_value"] = "OPEN"
+    content["facts"][0]["normalized_value_candidate"] = "OPEN"
+    payload["choices"][0]["message"]["content"] = json.dumps(content)
+
+    _response_id, envelope = parse_provider_envelope(json.dumps(payload).encode())
+
+    assert envelope.facts[0].field_name == field_name
+
+
 def test_unknown_block_rejects_complete_envelope_before_any_persistence() -> None:
     _response_id, envelope = parse_provider_envelope(
         _response(evidence_block_id=UNKNOWN_BLOCK_ID)

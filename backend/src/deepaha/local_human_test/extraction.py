@@ -65,8 +65,10 @@ EXTRACTION_SCHEMA_VERSION = "0.8.0"
 
 FactFieldName = Literal[
     "canonical_title",
+    "type",
     "issuer_name",
     "jurisdiction",
+    "status",
     "published_at",
     "application_window",
     "application_deadline",
