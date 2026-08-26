@@ -64,6 +64,15 @@ class ProviderConfigSnapshot(BaseModel):
     protocol: Literal["openai_chat_completions"]
     model_id: str = Field(min_length=1, max_length=128)
     model_snapshot: str = Field(min_length=1, max_length=128)
+    provider_region: str = Field(
+        default="unknown",
+        min_length=1,
+        max_length=64,
+        pattern=r"^[a-z0-9][a-z0-9_-]*$",
+    )
+    zero_retention: bool = False
+    training_use: bool = True
+    supports_idempotency: bool = False
 
     @field_validator("base_url")
     @classmethod

@@ -51,7 +51,7 @@ def _constraint_sql(engine: Engine, table_name: str) -> str:
     return " ".join(str(item["sqltext"]) for item in constraints)
 
 
-def test_0030_round_trip_adds_control_tables_and_extends_closed_values(
+def test_0030_0031_round_trip_and_legacy_idempotency_repair(
     database_url: str,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -88,6 +88,32 @@ def test_0030_round_trip_adds_control_tables_and_extends_closed_values(
                 "verified_fact_set_id",
             } <= item_columns
 
+        with engine.begin() as connection:
+            connection.exec_driver_sql(
+                "ALTER TABLE local_human_test_runs DROP CONSTRAINT "
+                "uq_local_human_test_runs_creator_idempotency"
+            )
+            connection.exec_driver_sql(
+                "ALTER TABLE local_human_test_runs DROP COLUMN idempotency_key, "
+                "DROP COLUMN request_hash"
+            )
+        command.upgrade(config, "20260826_0031")
+        with engine.connect() as connection:
+            inspector = inspect(connection)
+            run_columns = {
+                item["name"]
+                for item in inspector.get_columns("local_human_test_runs")
+            }
+            constraint_names = {
+                item["name"]
+                for item in inspector.get_unique_constraints("local_human_test_runs")
+            }
+            assert {"idempotency_key", "request_hash"} <= run_columns
+            assert "uq_local_human_test_runs_creator_idempotency" in constraint_names
+            assert connection.exec_driver_sql(
+                "select version_num from alembic_version"
+            ).scalar_one() == "20260826_0031"
+
         assert "LOCAL_HUMAN_REVIEWED" in _constraint_sql(engine, "public_catalog_entries")
         assert "LOCAL_TEST_OPERATOR" in _constraint_sql(engine, "reviewer_accounts")
         assert "OPPORTUNITY_FACT_VALIDATION" in _constraint_sql(
@@ -100,7 +126,7 @@ def test_0030_round_trip_adds_control_tables_and_extends_closed_values(
         assert "LOCAL_HUMAN_REVIEWED" not in _constraint_sql(engine, "public_catalog_entries")
         assert "LOCAL_TEST_OPERATOR" not in _constraint_sql(engine, "reviewer_accounts")
 
-        command.upgrade(config, "20260826_0030")
+        command.upgrade(config, "20260826_0031")
         with engine.connect() as connection:
             assert set(inspect(connection).get_table_names()) >= EXPECTED_TABLES
             context = MigrationContext.configure(connection)

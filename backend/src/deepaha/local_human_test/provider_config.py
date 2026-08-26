@@ -55,6 +55,11 @@ class ProviderConfigStatus(BaseModel):
     protocol: str | None
     model_id: str | None
     model_snapshot: str | None
+    provider_region: str | None
+    zero_retention: bool | None
+    training_use: bool | None
+    supports_idempotency: bool | None
+    egress_ready: bool
     updated_at: datetime | None
 
 
@@ -65,12 +70,16 @@ class ResolvedProviderConfig(ProviderConfigSnapshot):
 class _StoredProviderConfig(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    schema_version: str = Field(pattern=r"^1\.0$")
+    schema_version: str = Field(pattern=r"^1\.[01]$")
     provider: str
     base_url: str
     protocol: str
     model_id: str
     model_snapshot: str
+    provider_region: str = "unknown"
+    zero_retention: bool = False
+    training_use: bool = True
+    supports_idempotency: bool = False
     protected_api_key: str | None = None
     updated_at: datetime
 
@@ -83,6 +92,10 @@ class _StoredProviderConfig(BaseModel):
                 "protocol": self.protocol,
                 "model_id": self.model_id,
                 "model_snapshot": self.model_snapshot,
+                "provider_region": self.provider_region,
+                "zero_retention": self.zero_retention,
+                "training_use": self.training_use,
+                "supports_idempotency": self.supports_idempotency,
             }
         )
         return self
@@ -235,12 +248,16 @@ class LocalProviderConfigStore:
             secret_buffer[:] = b"\x00" * len(secret_buffer)
 
         payload = _StoredProviderConfig(
-            schema_version="1.0",
+            schema_version="1.1",
             provider=command.provider,
             base_url=str(command.base_url).rstrip("/"),
             protocol=command.protocol,
             model_id=command.model_id,
             model_snapshot=command.model_snapshot,
+            provider_region=command.provider_region,
+            zero_retention=command.zero_retention,
+            training_use=command.training_use,
+            supports_idempotency=command.supports_idempotency,
             protected_api_key=base64.b64encode(protected).decode("ascii"),
             updated_at=self._clock(),
         )
@@ -256,6 +273,11 @@ class LocalProviderConfigStore:
                 protocol=None,
                 model_id=None,
                 model_snapshot=None,
+                provider_region=None,
+                zero_retention=None,
+                training_use=None,
+                supports_idempotency=None,
+                egress_ready=False,
                 updated_at=None,
             )
         return self._status_from(self._read())
@@ -281,6 +303,10 @@ class LocalProviderConfigStore:
                 "protocol": payload.protocol,
                 "model_id": payload.model_id,
                 "model_snapshot": payload.model_snapshot,
+                "provider_region": payload.provider_region,
+                "zero_retention": payload.zero_retention,
+                "training_use": payload.training_use,
+                "supports_idempotency": payload.supports_idempotency,
                 "api_key": SecretStr(secret),
             }
         )
@@ -334,6 +360,15 @@ class LocalProviderConfigStore:
             protocol=payload.protocol,
             model_id=payload.model_id,
             model_snapshot=payload.model_snapshot,
+            provider_region=payload.provider_region,
+            zero_retention=payload.zero_retention,
+            training_use=payload.training_use,
+            supports_idempotency=payload.supports_idempotency,
+            egress_ready=(
+                payload.provider_region != "unknown"
+                and payload.zero_retention
+                and not payload.training_use
+            ),
             updated_at=payload.updated_at,
         )
 

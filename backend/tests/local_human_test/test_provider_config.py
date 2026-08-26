@@ -42,6 +42,10 @@ def save_command(**overrides: object) -> SaveProviderConfig:
         "protocol": "openai_chat_completions",
         "model_id": "deepseek-v4-flash",
         "model_snapshot": "deepseek-v4-flash@configured",
+        "provider_region": "cn",
+        "zero_retention": True,
+        "training_use": False,
+        "supports_idempotency": False,
         "api_key": SecretStr(SECRET),
     }
     values.update(overrides)
@@ -76,12 +80,38 @@ def test_store_round_trips_without_plaintext_or_secret_status(tmp_path: Path) ->
         "protocol": "openai_chat_completions",
         "model_id": "deepseek-v4-flash",
         "model_snapshot": "deepseek-v4-flash@configured",
+        "provider_region": "cn",
+        "zero_retention": True,
+        "training_use": False,
+        "supports_idempotency": False,
+        "egress_ready": True,
         "updated_at": "2026-08-26T12:00:00Z",
     }
     resolved = store.load_for_invocation()
     assert resolved.api_key.get_secret_value() == SECRET
     assert SECRET not in repr(resolved)
     assert SECRET not in repr(save_command())
+
+
+def test_legacy_configuration_defaults_to_egress_denied(tmp_path: Path) -> None:
+    payload = {
+        "schema_version": "1.0",
+        "provider": "deepseek",
+        "base_url": "https://platform.example.invalid",
+        "protocol": "openai_chat_completions",
+        "model_id": "deepseek-v4-flash",
+        "model_snapshot": "deepseek-v4-flash@configured",
+        "protected_api_key": None,
+        "updated_at": "2026-08-26T12:00:00Z",
+    }
+    (tmp_path / "provider.json").write_text(json.dumps(payload), encoding="utf-8")
+
+    status = make_store(tmp_path).status()
+
+    assert status.provider_region == "unknown"
+    assert status.zero_retention is False
+    assert status.training_use is True
+    assert status.egress_ready is False
 
 
 def test_save_hardens_directory_before_writing(tmp_path: Path) -> None:

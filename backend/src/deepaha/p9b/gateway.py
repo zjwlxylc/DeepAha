@@ -143,6 +143,27 @@ class GatewayExecutor:
 
         raise GatewayExecutionError("Gateway exhausted attempts without a finalization")
 
+    def register(
+        self,
+        *,
+        intent: ModelCallIntentSchemaV08,
+        messages: tuple[ProviderMessage, ...],
+    ) -> ModelCallIntentSchemaV08:
+        """Persist an authorized call identity without creating an Attempt or dispatching."""
+        if self._adapter.provider != intent.provider:
+            raise GatewayExecutionError("Gateway adapter does not match the authorized Provider")
+        if not messages:
+            raise GatewayExecutionError("Gateway invocation requires a minimized message payload")
+        task, policy_supports_idempotency = self._load_execution_contract(intent)
+        invocation = self._build_invocation(
+            intent=intent,
+            messages=messages,
+            task=task,
+            attempt_id=uuid7(),
+            policy_supports_idempotency=policy_supports_idempotency,
+        )
+        return self._register_call(intent, model_invocation_identity(invocation))
+
     def _load_execution_contract(
         self,
         intent: ModelCallIntentSchemaV08,

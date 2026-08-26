@@ -394,6 +394,43 @@ class HumanTestRunService:
     def record_llm_call(self, run_id: UUID, worker_id: str) -> int:
         return self._reserve_external_call(run_id, worker_id, kind="llm_call")
 
+    def record_item_llm_call(
+        self,
+        item_id: UUID,
+        model_call_id: UUID,
+        worker_id: str,
+    ) -> int:
+        """Bind one registered ModelCall and one budget unit atomically to an item."""
+        owner = _validate_identity(worker_id, label="worker ID")
+        now = _require_aware(self._now_factory())
+        with self._session_factory.begin() as session:
+            item = session.scalar(
+                select(LocalHumanTestItem)
+                .where(LocalHumanTestItem.item_id == item_id)
+                .with_for_update()
+            )
+            if item is None:
+                raise ItemNotFound("LOCAL_HUMAN_TEST_ITEM_NOT_FOUND")
+            run = self._locked_run(session, item.run_id)
+            self._require_active_lease(run, owner, now)
+            if ItemStatus(item.status) is not ItemStatus.EXTRACTING:
+                raise ItemTransitionError("ITEM_NOT_EXTRACTING")
+            if item.model_call_id is not None:
+                if item.model_call_id != model_call_id:
+                    raise ItemTransitionError("ITEM_MODEL_CALL_IMMUTABLE")
+                return run.llm_call_count
+            limit = self._budget_limit(run, "llm_call_limit")
+            run.llm_call_count = reserve_budget_count(
+                run.llm_call_count,
+                limit=limit,
+                kind="llm_call",
+            )
+            item.model_call_id = model_call_id
+            item.updated_at = now
+            run.updated_at = now
+            session.flush()
+            return run.llm_call_count
+
     def transition_item(
         self,
         item_id: UUID,
