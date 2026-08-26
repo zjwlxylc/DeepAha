@@ -23,13 +23,52 @@ from deepaha.contracts.phase9b import (
 from deepaha.documents.blocks import ParsedBlock, block_hash, evidence_binding_hash
 from deepaha.documents.models import Document, DocumentBlock, EvidenceRef
 from deepaha.p9b.egress import EgressRepository
-from deepaha.p9b.hashing import document_parse_key
+from deepaha.p9b.hashing import (
+    document_parse_key,
+    model_invocation_identity,
+    model_request_hash,
+)
 from deepaha.p9b.models import ModelCall
+from deepaha.p9b.provider import ProviderInvocation, ProviderMessage
 from tests.integration.test_p9b_b0_persistence import NOW, frozen_bundle, seed_graph
 
 P9B_PARSER_NAME = "deepaha-html-p9b"
 P9B_PARSER_VERSION = "0.8.0"
 P9B_PARSE_CONTRACT = "p9b-document-block-contract-v0.8.0"
+GATEWAY_MESSAGES = (ProviderMessage(role="user", content="minimized official block"),)
+
+
+def gateway_request_hashes(
+    *,
+    provider: str,
+    model_id: str,
+    model_snapshot: str,
+    messages: tuple[ProviderMessage, ...],
+    output_schema_version: str,
+    max_output_tokens: int,
+    temperature: float,
+    top_p: float,
+    seed: int,
+    timeout_ms: int,
+) -> tuple[list[str], str]:
+    identity = model_invocation_identity(
+        ProviderInvocation(
+            model_call_id=uuid7(),
+            attempt_id=uuid7(),
+            provider=provider,
+            model_id=model_id,
+            model_snapshot=model_snapshot,
+            messages=messages,
+            output_schema_version=output_schema_version,
+            max_output_tokens=max_output_tokens,
+            temperature=temperature,
+            top_p=top_p,
+            seed=seed,
+            timeout_ms=timeout_ms,
+            idempotency_key=None,
+        )
+    )
+    return list(identity.canonical_message_hashes), identity.canonical_request_hash
 
 
 @dataclass(frozen=True, slots=True)
@@ -46,6 +85,7 @@ def seed_gateway_authority(
     max_attempts: int = 2,
     timeout_ms: int = 5000,
     supports_idempotency: bool = False,
+    actual_payload_hash: str | None = None,
 ) -> GatewayAuthoritySeed:
     graph = seed_graph(session, suffix=f"gateway-{uuid7()}")
     legacy_document = session.get(Document, graph.document_id)
@@ -159,7 +199,6 @@ def seed_gateway_authority(
     egress_decision_id = uuid7()
     model_call_id = uuid7()
     valid_until = database_now + timedelta(hours=1)
-    decision_expiry = database_now + timedelta(seconds=expiry_seconds)
 
     EgressRepository(session).persist_task_spec(
         ModelTaskSpecSchemaV08(
@@ -231,6 +270,27 @@ def seed_gateway_authority(
             created_at=database_now,
         )
     )
+    message_hashes, request_hash = gateway_request_hashes(
+        provider=provider,
+        model_id="fake-model",
+        model_snapshot="fake-model-2026-08-25",
+        messages=GATEWAY_MESSAGES,
+        output_schema_version="schema-v1",
+        max_output_tokens=256,
+        temperature=0.0,
+        top_p=1.0,
+        seed=42,
+        timeout_ms=timeout_ms,
+    )
+    original_input_hash = model_request_hash(
+        {
+            "input_block_ids": [str(block_id)],
+            "input_block_hashes": [block_hash_value],
+        }
+    )
+    decision_created_at = session.scalar(select(text("clock_timestamp()")))
+    assert decision_created_at is not None
+    decision_expiry = decision_created_at + timedelta(seconds=expiry_seconds)
     repository.persist_decision(
         EgressDecisionSchemaV08(
             egress_decision_id=egress_decision_id,
@@ -253,13 +313,13 @@ def seed_gateway_authority(
             provider_policy_snapshot_hash=provider_snapshot_hash,
             provider=provider,
             provider_region="local-test",
-            original_input_hash="6" * 64,
-            actual_payload_hash="7" * 64,
+            original_input_hash=original_input_hash,
+            actual_payload_hash=actual_payload_hash or request_hash,
             decision=EgressDecisionValue.ALLOW,
             actor_type="SYSTEM",
             actor_identity=None,
             reason_codes=["POLICY_ALLOW"],
-            created_at=database_now,
+            created_at=decision_created_at,
             expires_at=decision_expiry,
         )
     )
@@ -274,8 +334,8 @@ def seed_gateway_authority(
         adapter_name="fake-adapter",
         adapter_version="v1",
         runtime_version="python-3.14",
-        canonical_request_hash="1" * 64,
-        canonical_message_hashes=["2" * 64],
+        canonical_request_hash=request_hash,
+        canonical_message_hashes=message_hashes,
         input_block_ids=[block_id],
         input_block_hashes=[block_hash_value],
         source_bundle_revision_id=revision.source_bundle_revision_id,
@@ -308,7 +368,9 @@ def persist_model_call(session: Session, intent: ModelCallIntentSchemaV08) -> Mo
 
 
 __all__ = [
+    "GATEWAY_MESSAGES",
     "GatewayAuthoritySeed",
+    "gateway_request_hashes",
     "persist_model_call",
     "seed_gateway_authority",
 ]

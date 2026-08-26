@@ -83,9 +83,9 @@ def test_database_derives_attempt_authority_and_cannot_be_forged_by_direct_sql(
     assert valid_attempt.provider_invocation_allowed is True
     assert valid_attempt.outcome is None
 
-    expired = seed_gateway_authority(session, expiry_seconds=0.05)
+    expired = seed_gateway_authority(session, expiry_seconds=1.0)
     persist_model_call(session, expired.intent)
-    time.sleep(0.08)
+    time.sleep(1.2)
     expired_attempt_id = _begin_attempt(
         session,
         expired.intent.model_call_id,

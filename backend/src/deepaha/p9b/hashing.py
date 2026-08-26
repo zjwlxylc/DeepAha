@@ -1,8 +1,15 @@
+from __future__ import annotations
+
 import json
 import re
+from dataclasses import dataclass
 from enum import StrEnum
 from hashlib import sha256
+from typing import TYPE_CHECKING
 from uuid import UUID
+
+if TYPE_CHECKING:
+    from deepaha.p9b.provider import ProviderInvocation
 
 HASH_CONTRACT_VERSION = "p9b-canonical-json-sha256-v1"
 _SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
@@ -125,6 +132,41 @@ def model_request_hash(payload: object) -> str:
     return _canonical_hash_domain("model_request_hash", payload)
 
 
+@dataclass(frozen=True, slots=True)
+class ModelInvocationIdentity:
+    canonical_message_hashes: tuple[str, ...]
+    canonical_request_hash: str
+    actual_payload_hash: str
+
+
+def model_invocation_identity(
+    invocation: ProviderInvocation,
+) -> ModelInvocationIdentity:
+    message_payloads = [
+        {"role": message.role, "content": message.content} for message in invocation.messages
+    ]
+    message_hashes = tuple(model_request_hash(payload) for payload in message_payloads)
+    request_hash = model_request_hash(
+        {
+            "provider": invocation.provider,
+            "model_id": invocation.model_id,
+            "model_snapshot": invocation.model_snapshot,
+            "messages": message_payloads,
+            "output_schema_version": invocation.output_schema_version,
+            "max_output_tokens": invocation.max_output_tokens,
+            "temperature": invocation.temperature,
+            "top_p": invocation.top_p,
+            "seed": invocation.seed,
+            "timeout_ms": invocation.timeout_ms,
+        }
+    )
+    return ModelInvocationIdentity(
+        canonical_message_hashes=message_hashes,
+        canonical_request_hash=request_hash,
+        actual_payload_hash=request_hash,
+    )
+
+
 __all__ = [
     "HASH_CONTRACT_VERSION",
     "HashDomain",
@@ -139,6 +181,8 @@ __all__ = [
     "fact_dependency_fingerprint",
     "gold_truth_hash",
     "member_provenance_hash",
+    "ModelInvocationIdentity",
+    "model_invocation_identity",
     "model_request_hash",
     "split_manifest_hash",
 ]

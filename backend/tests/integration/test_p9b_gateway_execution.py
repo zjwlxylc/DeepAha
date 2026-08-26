@@ -11,13 +11,19 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from deepaha.contracts.phase9b import ModelAttemptOutcome, ModelCallIntentSchemaV08
 from deepaha.p9b.gateway import GatewayExecutionError, GatewayExecutor
+from deepaha.p9b.hashing import model_invocation_identity, model_request_hash
 from deepaha.p9b.provider import (
     ProviderAttemptResult,
     ProviderInvocation,
     ProviderMessage,
     ProviderOutcomeUnknownError,
 )
-from tests.integration.p9b_gateway_support import persist_model_call, seed_gateway_authority
+from tests.integration.p9b_gateway_support import (
+    GATEWAY_MESSAGES,
+    gateway_request_hashes,
+    persist_model_call,
+    seed_gateway_authority,
+)
 
 pytestmark = pytest.mark.integration
 
@@ -28,6 +34,8 @@ class LedgerAttempt(TypedDict):
 
 
 class LedgerView(TypedDict):
+    canonical_request_hash: str
+    canonical_message_hashes: list[str]
     status: str
     terminal_disposition: str
     attempt_count: int
@@ -89,6 +97,7 @@ def _execute(
     adapter: StubProviderAdapter,
     intent: ModelCallIntentSchemaV08,
     *,
+    messages: tuple[ProviderMessage, ...] = GATEWAY_MESSAGES,
     sleeper: Callable[[float], None] = time.sleep,
 ) -> LedgerView:
     executor = GatewayExecutor(
@@ -100,8 +109,52 @@ def _execute(
         LedgerView,
         executor.execute(
             intent=intent,
-            messages=(ProviderMessage(role="user", content="minimized official block"),),
+            messages=messages,
         ),
+    )
+
+
+def _attempt_count(
+    factory: sessionmaker[Session],
+    intent: ModelCallIntentSchemaV08,
+) -> int:
+    with factory() as session:
+        return cast(
+            int,
+            session.scalar(
+                text(
+                    "select count(*) from p9b_model_call_attempts "
+                    "where model_call_id = :model_call_id"
+                ),
+                {"model_call_id": intent.model_call_id},
+            ),
+        )
+
+
+def _with_gateway_hashes(
+    intent: ModelCallIntentSchemaV08,
+    *,
+    messages: tuple[ProviderMessage, ...] = GATEWAY_MESSAGES,
+    max_output_tokens: int = 256,
+    timeout_ms: int = 5000,
+) -> ModelCallIntentSchemaV08:
+    message_hashes, request_hash = gateway_request_hashes(
+        provider=intent.provider,
+        model_id=intent.model_id,
+        model_snapshot=intent.model_snapshot,
+        messages=messages,
+        output_schema_version=intent.output_schema_version,
+        max_output_tokens=max_output_tokens,
+        temperature=intent.temperature,
+        top_p=intent.top_p,
+        seed=intent.seed,
+        timeout_ms=timeout_ms,
+    )
+    return intent.model_copy(
+        update={
+            "canonical_message_hashes": message_hashes,
+            "canonical_request_hash": request_hash,
+        }
     )
 
 
@@ -109,8 +162,8 @@ def test_expired_before_first_attempt_never_invokes_provider(
     owned_session_factory: sessionmaker[Session],
 ) -> None:
     with owned_session_factory.begin() as session:
-        authority = seed_gateway_authority(session, expiry_seconds=0.05)
-    time.sleep(0.08)
+        authority = seed_gateway_authority(session, expiry_seconds=1.0)
+    time.sleep(1.2)
     adapter = StubProviderAdapter(
         provider=authority.intent.provider,
         results=[],
@@ -122,13 +175,28 @@ def test_expired_before_first_attempt_never_invokes_provider(
     assert ledger["status"] == "TERMINAL_FAILED"
     assert ledger["terminal_disposition"] == "AUTHORITY_REJECTED"
     assert ledger["attempt_count"] == 1
+    with owned_session_factory() as session:
+        checked_at, expires_at, invocation_allowed, reason_code = session.execute(
+            text(
+                "select attempt.authorization_checked_at, decision.expires_at, "
+                "attempt.provider_invocation_allowed, attempt.authorization_reason_code "
+                "from p9b_model_call_attempts attempt "
+                "join p9b_egress_decisions decision "
+                "on decision.egress_decision_id = attempt.egress_decision_id "
+                "where attempt.model_call_id = :model_call_id"
+            ),
+            {"model_call_id": authority.intent.model_call_id},
+        ).one()
+    assert checked_at >= expires_at
+    assert invocation_allowed is False
+    assert reason_code == "P9B_EGRESS_AUTHORITY_EXPIRED_OR_MISMATCH"
 
 
 def test_retry_expiry_retains_first_provider_outcome_and_blocks_second_call(
     owned_session_factory: sessionmaker[Session],
 ) -> None:
     with owned_session_factory.begin() as session:
-        authority = seed_gateway_authority(session, expiry_seconds=0.12)
+        authority = seed_gateway_authority(session, expiry_seconds=1.0)
     adapter = StubProviderAdapter(
         provider=authority.intent.provider,
         results=[_result(ModelAttemptOutcome.RETRYABLE_PROVIDER_ERROR)],
@@ -138,7 +206,7 @@ def test_retry_expiry_retains_first_provider_outcome_and_blocks_second_call(
         owned_session_factory,
         adapter,
         authority.intent,
-        sleeper=lambda _: time.sleep(0.15),
+        sleeper=lambda _: time.sleep(1.2),
     )
 
     assert adapter.call_count == 1
@@ -328,6 +396,114 @@ def test_no_second_provider_entry_point_exists_in_gateway_execution(
     assert adapter.call_count == 1
 
 
+def test_changed_messages_with_stale_hashes_are_rejected_before_attempt(
+    owned_session_factory: sessionmaker[Session],
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(session, expiry_seconds=5)
+    adapter = StubProviderAdapter(provider=authority.intent.provider, results=[])
+    changed_messages = (ProviderMessage(role="user", content="different minimized official block"),)
+
+    with pytest.raises(GatewayExecutionError, match="request identity"):
+        _execute(
+            owned_session_factory,
+            adapter,
+            authority.intent,
+            messages=changed_messages,
+        )
+
+    assert adapter.call_count == 0
+    assert _attempt_count(owned_session_factory, authority.intent) == 0
+
+
+@pytest.mark.parametrize(
+    ("field_name", "changed_value"),
+    [
+        ("provider", "different-fake-provider"),
+        ("model_id", "different-fake-model"),
+        ("model_snapshot", "different-fake-model-2026-08-26"),
+    ],
+)
+def test_changed_provider_or_model_with_stale_hashes_is_rejected_before_attempt(
+    owned_session_factory: sessionmaker[Session],
+    field_name: str,
+    changed_value: str,
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(session, expiry_seconds=5)
+    changed = authority.intent.model_copy(update={field_name: changed_value})
+    adapter = StubProviderAdapter(provider=changed.provider, results=[])
+
+    with pytest.raises(GatewayExecutionError, match="request identity"):
+        _execute(owned_session_factory, adapter, changed)
+
+    assert adapter.call_count == 0
+    assert _attempt_count(owned_session_factory, authority.intent) == 0
+
+
+@pytest.mark.parametrize(
+    ("field_name", "changed_value"),
+    [
+        ("temperature", 0.5),
+        ("top_p", 0.5),
+        ("seed", 84),
+    ],
+)
+def test_changed_generation_parameters_with_stale_hashes_are_rejected_before_attempt(
+    owned_session_factory: sessionmaker[Session],
+    field_name: str,
+    changed_value: float | int,
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(session, expiry_seconds=5)
+    changed = authority.intent.model_copy(update={field_name: changed_value})
+    adapter = StubProviderAdapter(provider=changed.provider, results=[])
+
+    with pytest.raises(GatewayExecutionError, match="request identity"):
+        _execute(owned_session_factory, adapter, changed)
+
+    assert adapter.call_count == 0
+    assert _attempt_count(owned_session_factory, authority.intent) == 0
+
+
+def test_mismatched_egress_payload_hash_is_rejected_before_attempt(
+    owned_session_factory: sessionmaker[Session],
+) -> None:
+    mismatched_hash = model_request_hash({"intentional": "payload mismatch"})
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(
+            session,
+            expiry_seconds=5,
+            actual_payload_hash=mismatched_hash,
+        )
+    adapter = StubProviderAdapter(provider=authority.intent.provider, results=[])
+
+    with pytest.raises(GatewayExecutionError, match="actual payload hash"):
+        _execute(owned_session_factory, adapter, authority.intent)
+
+    assert adapter.call_count == 0
+    assert _attempt_count(owned_session_factory, authority.intent) == 0
+
+
+def test_mismatched_message_hashes_are_rejected_before_attempt(
+    owned_session_factory: sessionmaker[Session],
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(session, expiry_seconds=5)
+    changed = authority.intent.model_copy(
+        update={
+            "canonical_message_hashes": [model_request_hash({"intentional": "message mismatch"})]
+        }
+    )
+    adapter = StubProviderAdapter(provider=changed.provider, results=[])
+
+    with pytest.raises(GatewayExecutionError, match="message hashes"):
+        _execute(owned_session_factory, adapter, changed)
+
+    assert adapter.call_count == 0
+    assert _attempt_count(owned_session_factory, authority.intent) == 0
+
+
 def test_same_call_id_and_request_hash_are_idempotent(
     owned_session_factory: sessionmaker[Session],
 ) -> None:
@@ -361,6 +537,75 @@ def test_same_call_id_with_different_request_hash_is_an_idempotency_conflict(
         _execute(owned_session_factory, adapter, conflicting)
 
     assert adapter.call_count == 1
+
+
+def test_same_call_id_with_recomputed_changed_semantics_is_an_idempotency_conflict(
+    owned_session_factory: sessionmaker[Session],
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(session, expiry_seconds=5)
+    adapter = StubProviderAdapter(
+        provider=authority.intent.provider,
+        results=[_result(ModelAttemptOutcome.SUCCEEDED)],
+    )
+    _execute(owned_session_factory, adapter, authority.intent)
+    changed = _with_gateway_hashes(
+        authority.intent.model_copy(update={"model_id": "different-fake-model"})
+    )
+
+    with pytest.raises(GatewayExecutionError, match="idempotency conflict"):
+        _execute(owned_session_factory, adapter, changed)
+
+    assert adapter.call_count == 1
+
+
+def test_sent_invocation_attempt_call_decision_and_ledger_share_request_identity(
+    owned_session_factory: sessionmaker[Session],
+) -> None:
+    with owned_session_factory.begin() as session:
+        authority = seed_gateway_authority(session, expiry_seconds=5)
+    requests: list[ProviderInvocation] = []
+    adapter = StubProviderAdapter(
+        provider=authority.intent.provider,
+        results=[_result(ModelAttemptOutcome.SUCCEEDED)],
+        requests=requests,
+    )
+
+    ledger = _execute(owned_session_factory, adapter, authority.intent)
+
+    with owned_session_factory() as session:
+        recorded = session.execute(
+            text(
+                "select call.canonical_request_hash, call.canonical_message_hashes, "
+                "decision.actual_payload_hash, ledger.canonical_request_hash, "
+                "ledger.canonical_message_hashes, call.egress_decision_id, "
+                "attempt.egress_decision_id "
+                "from p9b_model_calls call "
+                "join p9b_egress_decisions decision "
+                "on decision.egress_decision_id = call.egress_decision_id "
+                "join p9b_model_call_attempts attempt "
+                "on attempt.model_call_id = call.model_call_id "
+                "join p9b_model_call_ledger_view ledger "
+                "on ledger.model_call_id = call.model_call_id "
+                "where call.model_call_id = :model_call_id"
+            ),
+            {"model_call_id": authority.intent.model_call_id},
+        ).one()
+    sent_identity = model_invocation_identity(requests[0])
+    assert (
+        sent_identity.canonical_request_hash
+        == ledger["canonical_request_hash"]
+        == recorded[0]
+        == recorded[2]
+        == recorded[3]
+    )
+    assert (
+        list(sent_identity.canonical_message_hashes)
+        == ledger["canonical_message_hashes"]
+        == recorded[1]
+        == recorded[4]
+    )
+    assert recorded[5] == recorded[6] == authority.intent.egress_decision_id
 
 
 def test_provider_idempotency_key_is_the_database_attempt_id_only_when_supported(

@@ -31,6 +31,7 @@ class ProviderMessage:
 class ProviderInvocation:
     model_call_id: UUID
     attempt_id: UUID
+    provider: str
     model_id: str
     model_snapshot: str
     messages: tuple[ProviderMessage, ...]

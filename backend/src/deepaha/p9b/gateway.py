@@ -12,7 +12,13 @@ from deepaha.contracts.phase9b import (
     ModelCallIntentSchemaV08,
     ModelCallLedgerViewSchemaV08,
 )
-from deepaha.p9b.models import ModelCall, ModelTaskSpec, ProviderEgressPolicySnapshot
+from deepaha.p9b.hashing import ModelInvocationIdentity, model_invocation_identity
+from deepaha.p9b.models import (
+    EgressDecision,
+    ModelCall,
+    ModelTaskSpec,
+    ProviderEgressPolicySnapshot,
+)
 from deepaha.p9b.provider import (
     ProviderAdapter,
     ProviderAttemptResult,
@@ -48,7 +54,16 @@ class GatewayExecutor:
             raise GatewayExecutionError("Gateway adapter does not match the authorized Provider")
         if not messages:
             raise GatewayExecutionError("Gateway invocation requires a minimized message payload")
-        task = self._register_call(intent)
+        task, policy_supports_idempotency = self._load_execution_contract(intent)
+        invocation = self._build_invocation(
+            intent=intent,
+            messages=messages,
+            task=task,
+            attempt_id=uuid7(),
+            policy_supports_idempotency=policy_supports_idempotency,
+        )
+        identity = model_invocation_identity(invocation)
+        trusted_intent = self._register_call(intent, identity)
         self.reconcile_stale_attempts(intent.model_call_id)
         progress = self._read_progress(intent.model_call_id)
         if cast(bool, progress["finalized"]):
@@ -67,25 +82,26 @@ class GatewayExecutor:
         backoff_ms = task.initial_backoff_ms
 
         for attempt_number in range(attempt_count + 1, task.max_attempts + 1):
-            attempt = self._begin_attempt(intent.model_call_id, attempt_number)
-            if not cast(bool, attempt["provider_invocation_allowed"]):
-                self._finalize_call(intent.model_call_id)
-                return self._read_ledger(intent.model_call_id)
-
-            invocation = ProviderInvocation(
-                model_call_id=intent.model_call_id,
-                attempt_id=cast(UUID, attempt["attempt_id"]),
-                model_id=intent.model_id,
-                model_snapshot=intent.model_snapshot,
-                messages=messages,
-                output_schema_version=intent.output_schema_version,
-                max_output_tokens=task.max_output_tokens,
-                temperature=intent.temperature,
-                top_p=intent.top_p,
-                seed=intent.seed,
-                timeout_ms=task.timeout_ms,
-                idempotency_key=self._idempotency_key(attempt),
+            if attempt_number > attempt_count + 1:
+                invocation = self._build_invocation(
+                    intent=trusted_intent,
+                    messages=messages,
+                    task=task,
+                    attempt_id=uuid7(),
+                    policy_supports_idempotency=policy_supports_idempotency,
+                )
+                if model_invocation_identity(invocation) != identity:
+                    raise GatewayExecutionError(
+                        "Gateway retry request identity changed before authorization"
+                    )
+            attempt = self._begin_attempt(
+                trusted_intent.model_call_id,
+                attempt_number,
+                invocation.attempt_id,
             )
+            if not cast(bool, attempt["provider_invocation_allowed"]):
+                self._finalize_call(trusted_intent.model_call_id)
+                return self._read_ledger(trusted_intent.model_call_id)
             started = time.perf_counter()
             try:
                 result = self._invoke_provider(invocation)
@@ -109,7 +125,7 @@ class GatewayExecutor:
                     monetary_cost=None,
                     latency_ms=max(0, int((time.perf_counter() - started) * 1000)),
                 )
-            self._finish_attempt(intent.model_call_id, attempt_number, result)
+            self._finish_attempt(trusted_intent.model_call_id, attempt_number, result)
 
             if (
                 result.outcome is ModelAttemptOutcome.RETRYABLE_PROVIDER_ERROR
@@ -122,13 +138,16 @@ class GatewayExecutor:
                 )
                 continue
 
-            self._finalize_call(intent.model_call_id)
-            return self._read_ledger(intent.model_call_id)
+            self._finalize_call(trusted_intent.model_call_id)
+            return self._read_ledger(trusted_intent.model_call_id)
 
         raise GatewayExecutionError("Gateway exhausted attempts without a finalization")
 
-    def _register_call(self, intent: ModelCallIntentSchemaV08) -> ModelTaskSpec:
-        with self._session_factory.begin() as session:
+    def _load_execution_contract(
+        self,
+        intent: ModelCallIntentSchemaV08,
+    ) -> tuple[ModelTaskSpec, bool]:
+        with self._session_factory() as session:
             task = session.scalar(
                 select(ModelTaskSpec).where(
                     ModelTaskSpec.task_name == intent.task_spec_name,
@@ -137,9 +156,99 @@ class GatewayExecutor:
             )
             if task is None:
                 raise GatewayExecutionError("Model TaskSpec does not exist")
+            decision = session.scalar(
+                select(EgressDecision).where(
+                    EgressDecision.egress_decision_id == intent.egress_decision_id
+                )
+            )
+            if decision is None:
+                raise GatewayExecutionError("Egress decision does not exist")
+            supports_idempotency = session.scalar(
+                select(ProviderEgressPolicySnapshot.supports_idempotency).where(
+                    ProviderEgressPolicySnapshot.snapshot_id
+                    == decision.provider_policy_snapshot_id,
+                    ProviderEgressPolicySnapshot.snapshot_hash
+                    == decision.provider_policy_snapshot_hash,
+                )
+            )
+            if supports_idempotency is None:
+                raise GatewayExecutionError("Provider egress policy snapshot does not exist")
+            session.expunge(task)
+            return task, bool(supports_idempotency)
+
+    def _build_invocation(
+        self,
+        *,
+        intent: ModelCallIntentSchemaV08,
+        messages: tuple[ProviderMessage, ...],
+        task: ModelTaskSpec,
+        attempt_id: UUID,
+        policy_supports_idempotency: bool,
+    ) -> ProviderInvocation:
+        return ProviderInvocation(
+            model_call_id=intent.model_call_id,
+            attempt_id=attempt_id,
+            provider=intent.provider,
+            model_id=intent.model_id,
+            model_snapshot=intent.model_snapshot,
+            messages=messages,
+            output_schema_version=intent.output_schema_version,
+            max_output_tokens=task.max_output_tokens,
+            temperature=intent.temperature,
+            top_p=intent.top_p,
+            seed=intent.seed,
+            timeout_ms=task.timeout_ms,
+            idempotency_key=(
+                str(attempt_id)
+                if self._adapter.supports_idempotency and policy_supports_idempotency
+                else None
+            ),
+        )
+
+    def _trusted_intent(
+        self,
+        intent: ModelCallIntentSchemaV08,
+        identity: ModelInvocationIdentity,
+    ) -> ModelCallIntentSchemaV08:
+        if tuple(intent.canonical_message_hashes) != identity.canonical_message_hashes:
+            raise GatewayExecutionError(
+                "Gateway canonical message hashes do not match request identity"
+            )
+        if intent.canonical_request_hash != identity.canonical_request_hash:
+            raise GatewayExecutionError(
+                "Gateway caller canonical request hash does not match request identity"
+            )
+        return intent.model_copy(
+            update={
+                "canonical_message_hashes": list(identity.canonical_message_hashes),
+                "canonical_request_hash": identity.canonical_request_hash,
+            }
+        )
+
+    def _register_call(
+        self,
+        intent: ModelCallIntentSchemaV08,
+        identity: ModelInvocationIdentity,
+    ) -> ModelCallIntentSchemaV08:
+        with self._session_factory.begin() as session:
+            existing = session.scalar(
+                select(ModelCall)
+                .where(ModelCall.model_call_id == intent.model_call_id)
+                .with_for_update()
+            )
+            if existing is not None:
+                self._require_existing_identity(existing, intent, identity)
+                self._require_egress_payload(
+                    session,
+                    existing.egress_decision_id,
+                    identity,
+                )
+                return self._trusted_intent(intent, identity)
+            trusted_intent = self._trusted_intent(intent, identity)
+            self._require_egress_payload(session, intent.egress_decision_id, identity)
             session.execute(
                 insert(ModelCall)
-                .values(**intent.model_dump(mode="python"))
+                .values(**trusted_intent.model_dump(mode="python"))
                 .on_conflict_do_nothing(index_elements=[ModelCall.model_call_id])
             )
             existing = session.scalar(
@@ -149,12 +258,43 @@ class GatewayExecutor:
             )
             if existing is None:
                 raise GatewayExecutionError("Model call registration was not persisted")
-            if existing.canonical_request_hash != intent.canonical_request_hash:
-                raise GatewayExecutionError(
-                    "Model call idempotency conflict: canonical request hash differs"
-                )
-            session.expunge(task)
-            return task
+            self._require_existing_identity(existing, intent, identity)
+            return trusted_intent
+
+    @staticmethod
+    def _require_existing_identity(
+        existing: ModelCall,
+        intent: ModelCallIntentSchemaV08,
+        identity: ModelInvocationIdentity,
+    ) -> None:
+        if (
+            existing.egress_decision_id != intent.egress_decision_id
+            or existing.canonical_request_hash != identity.canonical_request_hash
+            or tuple(existing.canonical_message_hashes) != identity.canonical_message_hashes
+            or intent.canonical_request_hash != identity.canonical_request_hash
+            or tuple(intent.canonical_message_hashes) != identity.canonical_message_hashes
+        ):
+            raise GatewayExecutionError(
+                "Model call idempotency conflict: Gateway request identity differs"
+            )
+
+    @staticmethod
+    def _require_egress_payload(
+        session: Session,
+        egress_decision_id: UUID,
+        identity: ModelInvocationIdentity,
+    ) -> None:
+        decision = session.scalar(
+            select(EgressDecision)
+            .where(EgressDecision.egress_decision_id == egress_decision_id)
+            .with_for_update()
+        )
+        if decision is None:
+            raise GatewayExecutionError("Egress decision does not exist")
+        if decision.actual_payload_hash != identity.actual_payload_hash:
+            raise GatewayExecutionError(
+                "Egress decision actual payload hash does not match Gateway invocation"
+            )
 
     def reconcile_stale_attempts(self, model_call_id: UUID | None = None) -> tuple[UUID, ...]:
         with self._session_factory.begin() as session:
@@ -184,7 +324,12 @@ class GatewayExecutor:
                 .one()
             )
 
-    def _begin_attempt(self, model_call_id: UUID, attempt_number: int) -> RowMapping:
+    def _begin_attempt(
+        self,
+        model_call_id: UUID,
+        attempt_number: int,
+        attempt_id: UUID,
+    ) -> RowMapping:
         with self._session_factory.begin() as session:
             row = (
                 session.execute(
@@ -200,7 +345,7 @@ class GatewayExecutor:
                     {
                         "model_call_id": model_call_id,
                         "attempt_number": attempt_number,
-                        "attempt_id": uuid7(),
+                        "attempt_id": attempt_id,
                     },
                 )
                 .mappings()
@@ -210,22 +355,6 @@ class GatewayExecutor:
 
     def _invoke_provider(self, invocation: ProviderInvocation) -> ProviderAttemptResult:
         return self._adapter.invoke(invocation)
-
-    def _idempotency_key(self, attempt: RowMapping) -> str | None:
-        if not self._adapter.supports_idempotency:
-            return None
-        with self._session_factory() as session:
-            supported = session.scalar(
-                select(ProviderEgressPolicySnapshot.supports_idempotency).where(
-                    ProviderEgressPolicySnapshot.snapshot_id
-                    == cast(str, attempt["provider_policy_snapshot_id"]),
-                    ProviderEgressPolicySnapshot.snapshot_hash
-                    == cast(str, attempt["provider_policy_snapshot_hash"]),
-                )
-            )
-        if supported:
-            return str(cast(UUID, attempt["attempt_id"]))
-        return None
 
     def _finish_attempt(
         self,

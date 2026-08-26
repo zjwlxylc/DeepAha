@@ -17,8 +17,13 @@ from deepaha.contracts.phase9b import (
     RetentionClass,
     SourceEgressPolicySnapshotSchemaV08,
 )
+from deepaha.p9b.hashing import model_invocation_identity
 from deepaha.p9b.ledger_values import is_gateway_string_value_allowed
-from deepaha.p9b.provider import ProviderAttemptResult
+from deepaha.p9b.provider import (
+    ProviderAttemptResult,
+    ProviderInvocation,
+    ProviderMessage,
+)
 
 CORPUS = (
     Path(__file__).parents[3]
@@ -31,8 +36,26 @@ NOW = datetime(2026, 8, 25, 7, 0, tzinfo=UTC)
 
 
 def _call_intent() -> dict[str, object]:
+    model_call_id = uuid7()
+    identity = model_invocation_identity(
+        ProviderInvocation(
+            model_call_id=model_call_id,
+            attempt_id=uuid7(),
+            provider="fake-provider",
+            model_id="fake-model",
+            model_snapshot="fake-model-2026-08-25",
+            messages=(ProviderMessage(role="user", content="minimized official block"),),
+            output_schema_version="schema-v1",
+            max_output_tokens=256,
+            temperature=0.0,
+            top_p=1.0,
+            seed=42,
+            timeout_ms=5000,
+            idempotency_key=None,
+        )
+    )
     return {
-        "model_call_id": uuid7(),
+        "model_call_id": model_call_id,
         "task_spec_name": "extract-opportunity",
         "task_spec_version": "v1",
         "provider": "fake-provider",
@@ -41,8 +64,8 @@ def _call_intent() -> dict[str, object]:
         "adapter_name": "fake-adapter",
         "adapter_version": "v1",
         "runtime_version": "python-3.14",
-        "canonical_request_hash": "1" * 64,
-        "canonical_message_hashes": ["2" * 64],
+        "canonical_request_hash": identity.canonical_request_hash,
+        "canonical_message_hashes": list(identity.canonical_message_hashes),
         "input_block_ids": [uuid7()],
         "input_block_hashes": ["3" * 64],
         "source_bundle_revision_id": uuid7(),

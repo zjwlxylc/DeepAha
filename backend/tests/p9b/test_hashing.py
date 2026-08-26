@@ -1,3 +1,5 @@
+from dataclasses import replace
+from typing import Any
 from uuid import UUID
 
 import pytest
@@ -9,8 +11,11 @@ from deepaha.p9b.hashing import (
     canonical_json_bytes,
     document_parse_key,
     member_provenance_hash,
+    model_invocation_identity,
+    model_request_hash,
     split_manifest_hash,
 )
+from deepaha.p9b.provider import ProviderInvocation, ProviderMessage
 
 
 def test_canonical_json_has_frozen_field_order_null_unicode_and_array_order() -> None:
@@ -76,3 +81,63 @@ def test_canonical_json_rejects_non_json_numbers(value: float) -> None:
 def test_canonical_json_rejects_implicit_uuid_stringification() -> None:
     with pytest.raises(TypeError):
         canonical_json_bytes({"id": UUID("019c0000-0000-7000-8000-000000000111")})
+
+
+def _provider_invocation() -> ProviderInvocation:
+    return ProviderInvocation(
+        model_call_id=UUID("019c0000-0000-7000-8000-000000000121"),
+        attempt_id=UUID("019c0000-0000-7000-8000-000000000122"),
+        provider="fake-provider",
+        model_id="fake-model",
+        model_snapshot="fake-model-2026-08-25",
+        messages=(ProviderMessage(role="user", content="official minimized block"),),
+        output_schema_version="schema-v1",
+        max_output_tokens=256,
+        temperature=0.0,
+        top_p=1.0,
+        seed=42,
+        timeout_ms=5000,
+        idempotency_key=None,
+    )
+
+
+@pytest.mark.parametrize(
+    ("field_name", "changed_value"),
+    [
+        ("provider", "other-provider"),
+        ("model_id", "other-model"),
+        ("model_snapshot", "other-model-2026-08-26"),
+        (
+            "messages",
+            (ProviderMessage(role="user", content="different minimized block"),),
+        ),
+        ("output_schema_version", "schema-v2"),
+        ("max_output_tokens", 512),
+        ("temperature", 0.5),
+        ("top_p", 0.5),
+        ("seed", 84),
+        ("timeout_ms", 10000),
+    ],
+)
+def test_model_invocation_identity_binds_every_provider_semantic_field(
+    field_name: str,
+    changed_value: Any,
+) -> None:
+    invocation = _provider_invocation()
+
+    baseline = model_invocation_identity(invocation)
+    changed = model_invocation_identity(replace(invocation, **{field_name: changed_value}))
+
+    assert changed.canonical_request_hash != baseline.canonical_request_hash
+    assert changed.actual_payload_hash != baseline.actual_payload_hash
+
+
+def test_model_invocation_identity_uses_the_same_normalized_message_payload() -> None:
+    invocation = _provider_invocation()
+
+    identity = model_invocation_identity(invocation)
+
+    assert identity.canonical_message_hashes == (
+        model_request_hash({"role": "user", "content": "official minimized block"}),
+    )
+    assert identity.actual_payload_hash == identity.canonical_request_hash
