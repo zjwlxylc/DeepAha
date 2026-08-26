@@ -4,7 +4,7 @@
 )
 
 $ErrorActionPreference = "Stop"
-$script:LocalManualPorts = @(55439, 55007, 8009, 3089)
+$script:LocalManualPorts = @(55439, 8009, 3089)
 
 function Get-LocalManualProjectInfo {
     param([Parameter(Mandatory = $true)][string]$ProjectRoot)
@@ -23,6 +23,9 @@ function Get-LocalManualProjectInfo {
         ProjectRoot = $normalized
         ProjectHash = $hash
         ProjectName = "deepaha-local-manual-$($hash.Substring(0, 12))"
+        DataRoot = [IO.Path]::GetFullPath(
+            (Join-Path $env:LOCALAPPDATA "DeepAha\manual-test")
+        )
         ComposeFile = [IO.Path]::GetFullPath(
             (Join-Path $normalized "infra\compose.local-manual.yaml")
         )
@@ -44,12 +47,18 @@ function Assert-RuntimeStateOwnership {
         [Parameter(Mandatory = $true)]$ProjectInfo
     )
 
+    $schemaVersion = [string]$State.schema_version
+    $dataRootMatches = (
+        $schemaVersion -eq "1.0" -or
+        [IO.Path]::GetFullPath([string]$State.data_root) -eq $ProjectInfo.DataRoot
+    )
     if (
-        $State.schema_version -ne "1.0" -or
+        $schemaVersion -notin @("1.0", "1.1") -or
         $State.project_root -ne $ProjectInfo.ProjectRoot -or
         $State.project_hash -ne $ProjectInfo.ProjectHash -or
         $State.compose_project -ne $ProjectInfo.ProjectName -or
-        [IO.Path]::GetFullPath([string]$State.compose_file) -ne $ProjectInfo.ComposeFile
+        [IO.Path]::GetFullPath([string]$State.compose_file) -ne $ProjectInfo.ComposeFile -or
+        -not $dataRootMatches
     ) {
         throw "现有运行清单不属于当前工作树，已拒绝操作。"
     }
@@ -67,6 +76,7 @@ function Test-RecordedProcessOwnership {
     }
     $fixedMarkers = @{
         api = "deepaha.main:app"
+        worker = "deepaha.local_human_test.runtime"
         web = "pnpm start"
         browser = "open-local-manual-browser.mjs"
     }
@@ -310,9 +320,7 @@ function Remove-LocalManualRuntimeSecrets {
     param([string]$RuntimeDirectory)
     foreach ($name in @(
         "identity.json",
-        "browser-ready.json",
-        "personal-browser",
-        "reminder-browser"
+        "browser-ready.json"
     )) {
         $target = Join-Path $RuntimeDirectory $name
         Assert-PathWithinRuntime -Path $target -RuntimeDirectory $RuntimeDirectory
@@ -346,9 +354,9 @@ function Invoke-LocalManualStop {
     $composeFile = [IO.Path]::GetFullPath([string]$state.compose_file)
     if (Test-ExactComposeOwnership -ProjectName $projectInfo.ProjectName `
         -ComposeFile $composeFile -ProjectRoot $projectInfo.ProjectRoot) {
-        Invoke-NativeChecked "清理隔离数据库与对象存储" {
+        Invoke-NativeChecked "停止隔离数据库" {
             docker compose --project-name $projectInfo.ProjectName --file $composeFile `
-                down --volumes --remove-orphans
+                down --remove-orphans
         }
     }
     else {
@@ -368,8 +376,14 @@ function Invoke-LocalManualStart {
     $existing = Get-LocalManualRuntimeState -StatePath $statePath
     if ($null -ne $existing) {
         Assert-RuntimeStateOwnership -State $existing -ProjectInfo $projectInfo
-        Write-Host "DeepAha 本地人工测试已经启动，请使用现有浏览器窗口。"
-        return
+        if ([string]$existing.schema_version -eq "1.0") {
+            Write-Host "检测到旧版本地测试运行，正在安全停止后升级……"
+            Invoke-LocalManualStop -ProjectRoot $projectInfo.ProjectRoot
+        }
+        else {
+            Write-Host "DeepAha 本地人工测试已经启动，请使用现有浏览器窗口。"
+            return
+        }
     }
 
     Write-Host "[1/8] 正在检查本机环境……"
@@ -398,28 +412,26 @@ function Invoke-LocalManualStart {
         try { Invoke-NativeChecked "Web 依赖准备" { corepack pnpm install --frozen-lockfile } }
         finally { Pop-Location }
 
-        Write-Host "[3/8] 正在启动隔离数据库与对象存储……"
+        Write-Host "[3/8] 正在启动持久化隔离数据库……"
         Invoke-NativeChecked "隔离服务启动" {
             docker compose --project-name $projectInfo.ProjectName --file $composeFile up -d --wait
         }
         $composeStarted = $true
 
         $env:DEEPAHA_DATABASE_URL = "postgresql+psycopg://deepaha:deepaha_local_manual_only@127.0.0.1:55439/deepaha"
-        $env:DEEPAHA_OBJECT_STORE_ENDPOINT = "http://127.0.0.1:55007"
-        $env:DEEPAHA_OBJECT_STORE_REGION = "us-east-1"
-        $env:DEEPAHA_OBJECT_STORE_BUCKET = "deepaha-raw"
-        $env:DEEPAHA_OBJECT_STORE_ACCESS_KEY = "local-manual"
-        $env:DEEPAHA_OBJECT_STORE_SECRET_KEY = "local-manual-secret"
         $env:DEEPAHA_ENVIRONMENT = "development"
-        $env:DEEPAHA_PERSONAL_AUTH_MODE = "fixture"
         $env:DEEPAHA_REVIEWER_AUTH_MODE = "fixture"
+        $env:DEEPAHA_LOCAL_HUMAN_TEST_ENABLED = "true"
+        $env:DEEPAHA_LOCAL_HUMAN_TEST_ROOT = $projectInfo.DataRoot
+        $env:DEEPAHA_LOCAL_HUMAN_TEST_BIND_HOST = "127.0.0.1"
+        $env:DEEPAHA_LOCAL_HUMAN_TEST_WORKER_ID = "local-human-test-worker"
 
-        Write-Host "[4/8] 正在迁移数据库并准备合成身份……"
+        Write-Host "[4/8] 正在迁移数据库并准备本地审核身份……"
         Push-Location (Join-Path $projectInfo.ProjectRoot "backend")
         try {
             Invoke-NativeChecked "数据库迁移" { uv run alembic upgrade head }
             $env:PYTHONPATH = "src"
-            Invoke-NativeChecked "合成测试数据准备" {
+            Invoke-NativeChecked "本地审核身份与来源注册表准备" {
                 uv run python -m tests.manual.seed_local_manual --identity-file $identityPath
             }
         }
@@ -434,28 +446,42 @@ function Invoke-LocalManualStart {
         }
         finally { Pop-Location }
 
-        Write-Host "[6/8] 正在启动 API 与 Web……"
+        Write-Host "[6/8] 正在启动 API、Worker 与 Web……"
         $escapedRoot = $projectInfo.ProjectRoot.Replace("'", "''")
-        $apiCommand = "Set-Location -LiteralPath '$escapedRoot\backend'; " +
+        $escapedDataRoot = $projectInfo.DataRoot.Replace("'", "''")
+        $serviceEnvironment = "`$env:DEEPAHA_DATABASE_URL='postgresql+psycopg://deepaha:deepaha_local_manual_only@127.0.0.1:55439/deepaha'; " +
+            "`$env:DEEPAHA_ENVIRONMENT='development'; " +
+            "`$env:DEEPAHA_REVIEWER_AUTH_MODE='fixture'; " +
+            "`$env:DEEPAHA_LOCAL_HUMAN_TEST_ENABLED='true'; " +
+            "`$env:DEEPAHA_LOCAL_HUMAN_TEST_ROOT='$escapedDataRoot'; " +
+            "`$env:DEEPAHA_LOCAL_HUMAN_TEST_BIND_HOST='127.0.0.1'; " +
+            "`$env:DEEPAHA_LOCAL_HUMAN_TEST_WORKER_ID='local-human-test-worker'; "
+        $apiCommand = $serviceEnvironment + "Set-Location -LiteralPath '$escapedRoot\backend'; " +
             "uv run uvicorn --app-dir '$escapedRoot\backend\src' deepaha.main:app " +
             "--host 127.0.0.1 --port 8009"
+        $workerCommand = $serviceEnvironment + "Set-Location -LiteralPath '$escapedRoot\backend'; " +
+            "uv run python -m deepaha.local_human_test.runtime --poll-seconds 0.5"
         $webCommand = "Set-Location -LiteralPath '$escapedRoot\web'; " +
             "`$env:DEEPAHA_API_BASE_URL='http://127.0.0.1:8009'; " +
             "corepack pnpm start --hostname 127.0.0.1 --port 3089"
         $processes.Add((Start-LocalManualProcess -Role "api" -CommandMarker "deepaha.main:app" `
             -Command $apiCommand -WorkingDirectory $projectInfo.ProjectRoot -LogDirectory $logDirectory))
+        $processes.Add((Start-LocalManualProcess -Role "worker" `
+            -CommandMarker "deepaha.local_human_test.runtime" -Command $workerCommand `
+            -WorkingDirectory $projectInfo.ProjectRoot -LogDirectory $logDirectory))
         $processes.Add((Start-LocalManualProcess -Role "web" -CommandMarker "pnpm start" `
             -Command $webCommand -WorkingDirectory $projectInfo.ProjectRoot -LogDirectory $logDirectory))
 
         Write-Host "[7/8] 正在确认服务可用……"
         Wait-LocalManualReady -Url "http://127.0.0.1:8009/api/v1/health/ready" -Name "API"
-        Wait-LocalManualReady -Url "http://127.0.0.1:3089/opportunities" -Name "Web"
+        Wait-LocalManualReady -Url "http://127.0.0.1:3089/review/human-test" -Name "Web"
 
         Write-Host "[8/8] 正在打开已准备身份的测试浏览器……"
         Remove-Item -LiteralPath $browserReadyPath -Force -ErrorAction SilentlyContinue
         $browserCommand = "Set-Location -LiteralPath '$escapedRoot\web'; " +
             "node '$escapedRoot\web\scripts\open-local-manual-browser.mjs' " +
-            "--origin http://127.0.0.1:3089 --runtime '$escapedRoot\.deepaha-local-manual' " +
+            "--origin http://127.0.0.1:3089 " +
+            "--profile '$escapedDataRoot\browser-profile' " +
             "--identity '$escapedRoot\.deepaha-local-manual\identity.json' " +
             "--ready '$escapedRoot\.deepaha-local-manual\browser-ready.json'"
         $browserRecord = Start-LocalManualProcess -Role "browser" `
@@ -466,18 +492,20 @@ function Invoke-LocalManualStart {
             -HostProcessId $browserRecord.pid
 
         $state = [ordered]@{
-            schema_version = "1.0"
+            schema_version = "1.1"
             project_root = $projectInfo.ProjectRoot
             project_hash = $projectInfo.ProjectHash
             compose_project = $projectInfo.ProjectName
             compose_file = [IO.Path]::GetFullPath($composeFile)
+            data_root = $projectInfo.DataRoot
             started_at = [DateTimeOffset]::UtcNow.ToString("o")
             processes = @($processes)
         }
         Write-LocalManualState -StatePath $statePath -State $state
         Write-Host ""
-        Write-Host "DeepAha 本地人工测试已启动。浏览器包含个人流程、审核流程和独立提醒测试窗口。"
-        Write-Host "所有数据均为合成工程夹具；真人参与者为 0；提醒仅投递到 TEST_INBOX。"
+        Write-Host "DeepAha 本地人工测试已启动。浏览器已打开受控人工体验控制台。"
+        Write-Host "启动本身外部调用为 0；仅在页面确认真实运行后采集官网并调用已配置模型。"
+        Write-Host "数据库、人工决定、审计证据和加密 Provider 配置会在正常停止后保留。"
         Write-Host "使用“停止 DeepAha 本地人工测试”入口结束本轮环境。"
     }
     catch {
@@ -488,7 +516,7 @@ function Invoke-LocalManualStart {
         if ($composeStarted -and (Test-ExactComposeOwnership -ProjectName $projectInfo.ProjectName `
             -ComposeFile $composeFile -ProjectRoot $projectInfo.ProjectRoot)) {
             & docker compose --project-name $projectInfo.ProjectName --file $composeFile `
-                down --volumes --remove-orphans *> $null
+                down --remove-orphans *> $null
         }
         Remove-LocalManualRuntimeSecrets -RuntimeDirectory $runtimeDirectory
         throw

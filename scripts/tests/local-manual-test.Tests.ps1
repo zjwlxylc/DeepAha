@@ -35,13 +35,18 @@ if ($first.ProjectName -eq $other.ProjectName) {
 }
 
 $state = [pscustomobject]@{
-    schema_version = "1.0"
+    schema_version = "1.1"
     project_root = $first.ProjectRoot
     project_hash = $first.ProjectHash
     compose_project = $first.ProjectName
     compose_file = $first.ComposeFile
+    data_root = $first.DataRoot
 }
 Assert-RuntimeStateOwnership -State $state -ProjectInfo $first
+$legacyState = $state.PSObject.Copy()
+$legacyState.schema_version = "1.0"
+$legacyState.PSObject.Properties.Remove("data_root")
+Assert-RuntimeStateOwnership -State $legacyState -ProjectInfo $first
 Assert-Throws {
     Assert-RuntimeStateOwnership -State $state -ProjectInfo $other
 } "不属于当前工作树"
@@ -97,6 +102,22 @@ if (Test-RecordedProcessOwnership -Record $forgedRecord -Process $forgedProcess 
     throw "A state file cannot redefine the fixed command marker for a role"
 }
 
+$workerRecord = [pscustomobject]@{
+    pid = 124
+    created_at = "2026-08-23T01:02:03.0000000Z"
+    role = "worker"
+    command_marker = "deepaha.local_human_test.runtime"
+}
+$workerProcess = [pscustomobject]@{
+    ProcessId = 124
+    CreationDate = "2026-08-23T01:02:03.0000000Z"
+    CommandLine = "uv run python -m deepaha.local_human_test.runtime D:\work\DeepAha"
+}
+if (-not (Test-RecordedProcessOwnership -Record $workerRecord -Process $workerProcess `
+    -ProjectRoot "D:\work\DeepAha")) {
+    throw "Exact worker process should be recognized"
+}
+
 $tree = @(
     [pscustomobject]@{ ProcessId = 10; ParentProcessId = 0 },
     [pscustomobject]@{ ProcessId = 11; ParentProcessId = 10 },
@@ -147,6 +168,40 @@ Assert-Throws {
 & node --check (Join-Path $repositoryRoot "web/scripts/open-local-manual-browser.mjs")
 if ($LASTEXITCODE -ne 0) {
     throw "Browser host must be executable JavaScript"
+}
+
+
+$launcherSource = Get-Content -LiteralPath (
+    Join-Path $repositoryRoot "scripts/local-manual-test.ps1"
+) -Raw -Encoding UTF8
+if ($launcherSource -match 'down\s+--volumes') {
+    throw "Normal stop must preserve the persistent PostgreSQL volume"
+}
+if ($launcherSource -notmatch 'DEEPAHA_LOCAL_HUMAN_TEST_ENABLED') {
+    throw "Launcher must explicitly enable only the local human-test surface"
+}
+if ($launcherSource -notmatch 'deepaha\.local_human_test\.runtime') {
+    throw "Launcher must start the recoverable local human-test worker"
+}
+
+$composeSource = Get-Content -LiteralPath (
+    Join-Path $repositoryRoot "infra/compose.local-manual.yaml"
+) -Raw -Encoding UTF8
+if ($composeSource -match 'tmpfs:') {
+    throw "The local human-test database must not be ephemeral"
+}
+if ($composeSource -notmatch 'postgres_data:/var/lib/postgresql') {
+    throw "The local human-test database must use its exact named Compose volume"
+}
+
+$browserSource = Get-Content -LiteralPath (
+    Join-Path $repositoryRoot "web/scripts/open-local-manual-browser.mjs"
+) -Raw -Encoding UTF8
+if ($browserSource -notmatch '/review/human-test') {
+    throw "Browser launcher must open the local human-test control console"
+}
+if ($browserSource -match 'deepaha_phase6_session') {
+    throw "Browser launcher must not install unrelated synthetic personal sessions"
 }
 
 Write-Host "本地人工测试启动器单元测试：PASS"

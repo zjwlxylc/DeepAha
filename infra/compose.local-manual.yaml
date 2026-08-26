@@ -7,15 +7,13 @@ services:
       POSTGRES_PASSWORD: deepaha_local_manual_only
     ports:
       - "127.0.0.1:55439:5432"
-    tmpfs:
-      - /var/lib/postgresql:rw,noexec,nosuid,size=512m,mode=1777
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U deepaha -d deepaha"]
       interval: 2s
       timeout: 2s
       retries: 30
 
-  s3:
-    image: motoserver/moto:5.2.2
-    ports:
-      - "127.0.0.1:55007:5000"
+volumes:
+  postgres_data:

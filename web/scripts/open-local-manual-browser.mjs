@@ -1,5 +1,4 @@
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
 
 import { chromium } from "@playwright/test";
 
@@ -20,32 +19,18 @@ async function openReadyPage(page, url) {
 }
 
 const origin = option("--origin");
-const runtimeDirectory = option("--runtime");
+const profilePath = option("--profile");
 const identityPath = option("--identity");
 const readyPath = option("--ready");
 const identity = existsSync(identityPath)
   ? JSON.parse(readFileSync(identityPath, "utf8"))
   : null;
 
-const personal = await chromium.launchPersistentContext(
-  join(runtimeDirectory, "personal-browser"),
-  { headless: false },
-);
-const reminder = await chromium.launchPersistentContext(
-  join(runtimeDirectory, "reminder-browser"),
-  { headless: false },
-);
+const browser = await chromium.launchPersistentContext(profilePath, { headless: false });
 
 try {
   if (identity) {
-    await personal.addCookies([
-      {
-        name: "deepaha_phase6_session",
-        value: identity.personal_session,
-        url: origin,
-        httpOnly: true,
-        sameSite: "Lax",
-      },
+    await browser.addCookies([
       {
         name: "deepaha_phase7_reviewer_session",
         value: identity.reviewer_session,
@@ -54,36 +39,16 @@ try {
         sameSite: "Lax",
       },
     ]);
-    await reminder.addCookies([
-      {
-        name: "deepaha_phase6_session",
-        value: identity.reminder_session,
-        url: origin,
-        httpOnly: true,
-        sameSite: "Lax",
-      },
-    ]);
     unlinkSync(identityPath);
   }
 
-  const personalPages = personal.pages();
-  const publicPage = personalPages[0] ?? (await personal.newPage());
-  await openReadyPage(publicPage, `${origin}/opportunities`);
-  const personalPage = await personal.newPage();
-  await openReadyPage(personalPage, `${origin}/me/opportunities`);
-  const reviewPage = await personal.newPage();
-  await openReadyPage(reviewPage, `${origin}/review/feedback`);
-
-  const reminderPages = reminder.pages();
-  const reminderPage = reminderPages[0] ?? (await reminder.newPage());
-  await openReadyPage(reminderPage, `${origin}/me/reminders`);
+  const pages = browser.pages();
+  const consolePage = pages[0] ?? (await browser.newPage());
+  await openReadyPage(consolePage, `${origin}/review/human-test`);
   writeFileSync(readyPath, '{"status":"ready"}\n', { encoding: "utf8", flag: "wx" });
 
-  await Promise.all([
-    new Promise((resolve) => personal.once("close", resolve)),
-    new Promise((resolve) => reminder.once("close", resolve)),
-  ]);
+  await new Promise((resolve) => browser.once("close", resolve));
 } catch (error) {
-  await Promise.allSettled([personal.close(), reminder.close()]);
+  await browser.close();
   throw error;
 }
