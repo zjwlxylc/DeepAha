@@ -68,6 +68,7 @@ def import_raw_artifact(
     session: Session,
     object_store: ObjectStore,
     command: ImportRawArtifactCommand,
+    reuse_content_identity: bool = False,
 ) -> ImportRawArtifactResult:
     prepared = _prepare_raw_artifact(
         object_store=object_store,
@@ -75,7 +76,11 @@ def import_raw_artifact(
         require_matching_media_type=True,
     )
     result = _insert_or_load_raw_artifact(session, prepared)
-    if not result.created and not _same_capture(result.artifact, prepared.candidate):
+    if (
+        not result.created
+        and not reuse_content_identity
+        and not _same_capture(result.artifact, prepared.candidate)
+    ):
         raise RawArtifactProvenanceConflict
     return result
 

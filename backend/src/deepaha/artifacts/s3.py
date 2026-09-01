@@ -118,6 +118,24 @@ class S3ObjectStore:
             media_type=response.get("ContentType"),
         )
 
+    def stat_if_present(self, *, key: str) -> ObjectMetadata | None:
+        try:
+            return self.stat(key=key)
+        except ClientError as error:
+            code = error.response.get("Error", {}).get("Code")
+            if self._error_status(error) == 404 or code in {"404", "NoSuchKey", "NotFound"}:
+                return None
+            raise
+
+    def delete_if_matches(self, *, key: str, sha256: str) -> bool:
+        existing = self.stat_if_present(key=key)
+        if existing is None:
+            return False
+        if existing.sha256 != sha256:
+            raise ObjectIntegrityError("refusing to delete an object with a different SHA-256")
+        self._client.delete_object(Bucket=self._bucket, Key=key)
+        return True
+
     @staticmethod
     def _error_status(error: ClientError) -> int | None:
         return error.response.get("ResponseMetadata", {}).get("HTTPStatusCode")

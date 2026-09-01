@@ -1,21 +1,46 @@
 import json
+from datetime import UTC, datetime
 from uuid import UUID
 
 import pytest
 from pydantic import ValidationError
 
 from deepaha.local_human_test.extraction import (
+    ExtractionConfigurationError,
     ExtractionValidationError,
     MinimizedExtractionBlock,
     ModelExtractionEnvelope,
+    _require_opportunity_revision,
     build_extraction_messages,
     parse_provider_envelope,
     validate_candidate_bindings,
 )
+from deepaha.p9b.models import SourceBundleRevision
 
 BLOCK_ID = UUID("019d0000-0000-7000-8000-000000000101")
 EVIDENCE_ID = UUID("019d0000-0000-7000-8000-000000000102")
 UNKNOWN_BLOCK_ID = UUID("019d0000-0000-7000-8000-000000000999")
+NOW = datetime(2026, 9, 1, 8, 0, tzinfo=UTC)
+
+
+def test_official_request_bundle_cannot_enter_opportunity_model_extraction() -> None:
+    revision = SourceBundleRevision(
+        source_bundle_revision_id=UUID("019d0000-0000-7000-8000-000000000301"),
+        source_bundle_id=UUID("019d0000-0000-7000-8000-000000000302"),
+        opportunity_id=None,
+        opportunity_version=None,
+        revision_number=1,
+        canonical_bundle_hash="a" * 64,
+        relation_graph_version="p9b-member-relation-v0.8.0",
+        precedence_graph_version="p9b-precedence-v0.8.0",
+        effective_as_of=NOW,
+        status="FROZEN",
+        created_at=NOW,
+        frozen_at=NOW,
+    )
+
+    with pytest.raises(ExtractionConfigurationError, match="SOURCE_BUNDLE_OPPORTUNITY_REQUIRED"):
+        _require_opportunity_revision(revision)
 
 
 def _block(*, content: str = "报名时间为 2026 年 9 月 1 日。") -> MinimizedExtractionBlock:

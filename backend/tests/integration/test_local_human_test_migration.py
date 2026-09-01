@@ -118,7 +118,7 @@ def test_0030_0031_round_trip_and_legacy_idempotency_repair(
         assert "LOCAL_HUMAN_REVIEWED" not in _constraint_sql(engine, "public_catalog_entries")
         assert "LOCAL_TEST_OPERATOR" not in _constraint_sql(engine, "reviewer_accounts")
 
-        command.upgrade(config, "20260826_0031")
+        command.upgrade(config, "head")
         with engine.connect() as connection:
             assert set(inspect(connection).get_table_names()) >= EXPECTED_TABLES
             context = MigrationContext.configure(connection)

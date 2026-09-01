@@ -126,3 +126,29 @@ def test_get_bytes_rejects_body_that_disagrees_with_metadata(
 
     with pytest.raises(ObjectIntegrityError, match="downloaded object"):
         object_store.get_bytes(key=key)
+
+
+def test_compensation_probe_and_delete_require_matching_hash(
+    object_store: S3ObjectStore,
+) -> None:
+    content = b"p10-b1-compensation-object"
+    digest = sha256(content).hexdigest()
+    key = f"p10b1/sha256/{digest[:2]}/{digest}"
+
+    object_store.delete_if_matches(key=key, sha256=digest)
+    assert object_store.stat_if_present(key=key) is None
+    metadata = object_store.put_bytes_if_absent(
+        key=key,
+        content=content,
+        media_type="text/plain",
+        sha256=digest,
+    )
+    assert object_store.stat_if_present(key=key) == metadata
+
+    with pytest.raises(ObjectIntegrityError, match="refusing to delete"):
+        object_store.delete_if_matches(key=key, sha256="f" * 64)
+    assert object_store.get_bytes(key=key) == content
+
+    assert object_store.delete_if_matches(key=key, sha256=digest) is True
+    assert object_store.stat_if_present(key=key) is None
+    assert object_store.delete_if_matches(key=key, sha256=digest) is False

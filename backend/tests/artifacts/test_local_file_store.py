@@ -151,3 +151,19 @@ def test_publish_failure_leaves_no_partial_object(
 
     assert not (tmp_path / BUCKET / "objects" / KEY).exists()
     assert not (tmp_path / BUCKET / "metadata" / f"{KEY}.json").exists()
+
+
+def test_compensation_probe_and_delete_require_matching_hash(tmp_path: Path) -> None:
+    store = make_store(tmp_path)
+
+    assert store.stat_if_present(key=KEY) is None
+    metadata = put(store)
+    assert store.stat_if_present(key=KEY) == metadata
+
+    with pytest.raises(ObjectIntegrityError, match="refusing to delete"):
+        store.delete_if_matches(key=KEY, sha256="f" * 64)
+    assert store.get_bytes(key=KEY) == CONTENT
+
+    assert store.delete_if_matches(key=KEY, sha256=DIGEST) is True
+    assert store.stat_if_present(key=KEY) is None
+    assert store.delete_if_matches(key=KEY, sha256=DIGEST) is False

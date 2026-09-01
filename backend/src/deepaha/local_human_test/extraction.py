@@ -351,6 +351,12 @@ class ExtractionConfigurationError(ValueError):
     """The frozen local run configuration cannot authorize model egress."""
 
 
+def _require_opportunity_revision(revision: SourceBundleRevision) -> tuple[UUID, int]:
+    if revision.opportunity_id is None or revision.opportunity_version is None:
+        raise ExtractionConfigurationError("SOURCE_BUNDLE_OPPORTUNITY_REQUIRED")
+    return revision.opportunity_id, revision.opportunity_version
+
+
 @dataclass(frozen=True, slots=True)
 class ExtractionOutcome:
     item_id: UUID
@@ -596,6 +602,14 @@ class P9BExtractionCoordinator:
             )
             if revision is None or revision.status != "FROZEN" or member_exists is None:
                 raise ExtractionConfigurationError("SOURCE_BUNDLE_BINDING_INVALID")
+            revision_opportunity_id, revision_opportunity_version = _require_opportunity_revision(
+                revision
+            )
+            if (
+                revision_opportunity_id != opportunity.opportunity_id
+                or revision_opportunity_version != version.version
+            ):
+                raise ExtractionConfigurationError("SOURCE_BUNDLE_BINDING_INVALID")
             return revision
         if item.acquisition_evaluation_id is None or item.document_id is None:
             raise ExtractionConfigurationError("ACQUISITION_LINEAGE_INCOMPLETE")
@@ -662,6 +676,7 @@ class P9BExtractionCoordinator:
         revision: SourceBundleRevision,
         prompt: ExtractionPrompt,
     ) -> ModelCallIntentSchemaV08:
+        opportunity_id, opportunity_version = _require_opportunity_revision(revision)
         base_task_name = f"human-extract-{item.item_id.hex}"
         task_name = base_task_name
         existing_calls = tuple(
@@ -799,8 +814,8 @@ class P9BExtractionCoordinator:
             task_spec_version=task.task_version,
             source_bundle_revision_id=revision.source_bundle_revision_id,
             target_scope=ExtractionTargetScope.OPPORTUNITY,
-            opportunity_id=revision.opportunity_id,
-            opportunity_version=revision.opportunity_version,
+            opportunity_id=opportunity_id,
+            opportunity_version=opportunity_version,
             opportunity_unit_id=None,
             opportunity_unit_version_id=None,
             input_block_ids=block_ids,
@@ -845,8 +860,8 @@ class P9BExtractionCoordinator:
             input_block_hashes=block_hashes,
             source_bundle_revision_id=revision.source_bundle_revision_id,
             target_scope=ExtractionTargetScope.OPPORTUNITY,
-            opportunity_id=revision.opportunity_id,
-            opportunity_version=revision.opportunity_version,
+            opportunity_id=opportunity_id,
+            opportunity_version=opportunity_version,
             opportunity_unit_id=None,
             opportunity_unit_version_id=None,
             unit_segmentation_version=None,
