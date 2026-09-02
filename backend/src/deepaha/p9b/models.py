@@ -37,18 +37,41 @@ class SourceBundle(Base):
             "retired_at is null or retired_at >= created_at",
             name="timestamp_order",
         ),
+        CheckConstraint(
+            "request_key is null or request_key ~ '^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$'",
+            name="request_key_format",
+        ),
+        CheckConstraint(
+            "request_payload_sha256 is null or request_payload_sha256 ~ '^[0-9a-f]{64}$'",
+            name="request_payload_sha256_format",
+        ),
+        CheckConstraint(
+            "(opportunity_id is not null and request_key is null and "
+            "request_payload_sha256 is null) or "
+            "(opportunity_id is null and request_key is not null and "
+            "request_payload_sha256 is not null)",
+            name="identity_binding",
+        ),
         UniqueConstraint(
             "source_bundle_id",
             "opportunity_id",
             name="uq_source_bundles_bundle_opportunity",
         ),
+        Index(
+            "uq_source_bundles_request_key",
+            "request_key",
+            unique=True,
+            postgresql_where=text("request_key is not null"),
+        ),
     )
 
     source_bundle_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
-    opportunity_id: Mapped[UUID] = mapped_column(
+    opportunity_id: Mapped[UUID | None] = mapped_column(
         Uuid,
         ForeignKey("opportunities.opportunity_id", ondelete="RESTRICT"),
     )
+    request_key: Mapped[str | None] = mapped_column(String(128))
+    request_payload_sha256: Mapped[str | None] = mapped_column(String(64))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     retired_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
@@ -62,8 +85,9 @@ class SourceBundleRevision(Base):
         ),
         CheckConstraint("revision_number >= 1", name="positive_revision"),
         CheckConstraint(
-            "opportunity_version >= 1",
-            name="positive_opportunity_version",
+            "(opportunity_id is null and opportunity_version is null) or "
+            "(opportunity_id is not null and opportunity_version >= 1)",
+            name="opportunity_binding",
         ),
         CheckConstraint(
             "canonical_bundle_hash ~ '^[0-9a-f]{64}$'",
@@ -117,9 +141,16 @@ class SourceBundleRevision(Base):
     )
 
     source_bundle_revision_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
-    source_bundle_id: Mapped[UUID] = mapped_column(Uuid)
-    opportunity_id: Mapped[UUID] = mapped_column(Uuid)
-    opportunity_version: Mapped[int] = mapped_column(Integer)
+    source_bundle_id: Mapped[UUID] = mapped_column(
+        Uuid,
+        ForeignKey(
+            "source_bundles.source_bundle_id",
+            name="fk_source_bundle_revisions_bundle_only",
+            ondelete="RESTRICT",
+        ),
+    )
+    opportunity_id: Mapped[UUID | None] = mapped_column(Uuid)
+    opportunity_version: Mapped[int | None] = mapped_column(Integer)
     revision_number: Mapped[int] = mapped_column(Integer)
     canonical_bundle_hash: Mapped[str] = mapped_column(String(64))
     relation_graph_version: Mapped[str] = mapped_column(String(64))
@@ -165,6 +196,11 @@ class SourceBundleMember(Base):
             "object_key = 'raw/sha256/' || "
             "substring(raw_artifact_sha256 from 1 for 2) || '/' || raw_artifact_sha256",
             name="content_addressed_object_key",
+        ),
+        CheckConstraint(
+            "(evidence_ref_id is null and parse_attempt_id is null) or "
+            "(evidence_ref_id is not null and parse_attempt_id is not null)",
+            name="evidence_parse_binding_pair",
         ),
         ForeignKeyConstraint(
             ["source_bundle_revision_id"],
@@ -274,6 +310,18 @@ class SourceBundleMember(Base):
             ],
             ondelete="RESTRICT",
         ),
+        ForeignKeyConstraint(
+            ["evidence_ref_id"],
+            ["evidence_refs.evidence_ref_id"],
+            name="fk_source_bundle_members_evidence_ref",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["parse_attempt_id"],
+            ["parse_attempts.parse_attempt_id"],
+            name="fk_source_bundle_members_parse_attempt",
+            ondelete="RESTRICT",
+        ),
         UniqueConstraint(
             "source_bundle_revision_id",
             "source_bundle_member_id",
@@ -314,6 +362,8 @@ class SourceBundleMember(Base):
     parser_name: Mapped[str] = mapped_column(String(128))
     parser_version: Mapped[str] = mapped_column(String(64))
     parse_contract_version: Mapped[str] = mapped_column(String(64))
+    evidence_ref_id: Mapped[UUID | None] = mapped_column(Uuid)
+    parse_attempt_id: Mapped[UUID | None] = mapped_column(Uuid)
     member_role: Mapped[str] = mapped_column(String(32))
     precedence: Mapped[int] = mapped_column(Integer)
     effective_from: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

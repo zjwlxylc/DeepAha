@@ -1,3 +1,4 @@
+import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from uuid import UUID, uuid7
@@ -7,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from deepaha.acquisition.models import AcquisitionEvaluation, AcquisitionRun
 from deepaha.artifacts.models import RawArtifact
-from deepaha.documents.models import Document
+from deepaha.documents.models import Document, EvidenceRef, ParseAttempt
 from deepaha.opportunities.models import OpportunityVersion
 from deepaha.p9b.hashing import canonical_bundle_hash, member_provenance_hash
 from deepaha.p9b.models import (
@@ -33,6 +34,8 @@ class BundleMemberSpec:
     precedence: int
     effective_from: datetime | None
     effective_to: datetime | None
+    evidence_ref_id: UUID | None = None
+    parse_attempt_id: UUID | None = None
     relation_type: str = "PRIMARY"
     related_member_index: int | None = None
 
@@ -52,7 +55,7 @@ def _member_payload(
     relation_type: str,
     related_member_id: UUID | None,
 ) -> dict[str, object]:
-    return {
+    payload: dict[str, object] = {
         "source_bundle_member_id": str(member.source_bundle_member_id),
         "source_bundle_revision_id": str(member.source_bundle_revision_id),
         "source_id": str(member.source_id),
@@ -86,6 +89,10 @@ def _member_payload(
         "effective_from": _instant(member.effective_from),
         "effective_to": _instant(member.effective_to),
     }
+    if member.evidence_ref_id is not None:
+        payload["evidence_ref_id"] = str(member.evidence_ref_id)
+        payload["parse_attempt_id"] = str(member.parse_attempt_id)
+    return payload
 
 
 class BundleService:
@@ -117,6 +124,62 @@ class BundleService:
             source_bundle_id=source_bundle_id,
             created_at=effective_as_of,
         )
+        return self._create_revision(
+            bundle=bundle,
+            opportunity_id=opportunity_id,
+            opportunity_version=opportunity_version,
+            effective_as_of=effective_as_of,
+            members=members,
+        )
+
+    def create_request_revision(
+        self,
+        *,
+        request_key: str,
+        request_payload_sha256: str,
+        effective_as_of: datetime,
+        members: list[BundleMemberSpec],
+    ) -> SourceBundleRevision:
+        if not members:
+            raise BundleProvenanceError("SourceBundleRevision requires at least one member")
+        if re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}", request_key) is None:
+            raise BundleProvenanceError("request key is invalid")
+        if re.fullmatch(r"[0-9a-f]{64}", request_payload_sha256) is None:
+            raise BundleProvenanceError("request payload SHA-256 is invalid")
+        existing = self._session.scalar(
+            select(SourceBundle).where(SourceBundle.request_key == request_key)
+        )
+        if existing is not None:
+            if existing.request_payload_sha256 != request_payload_sha256:
+                raise BundleProvenanceError("request payload drift")
+            raise BundleProvenanceError("request SourceBundle already exists")
+        bundle = SourceBundle(
+            source_bundle_id=uuid7(),
+            opportunity_id=None,
+            request_key=request_key,
+            request_payload_sha256=request_payload_sha256,
+            created_at=effective_as_of,
+            retired_at=None,
+        )
+        self._session.add(bundle)
+        self._session.flush()
+        return self._create_revision(
+            bundle=bundle,
+            opportunity_id=None,
+            opportunity_version=None,
+            effective_as_of=effective_as_of,
+            members=members,
+        )
+
+    def _create_revision(
+        self,
+        *,
+        bundle: SourceBundle,
+        opportunity_id: UUID | None,
+        opportunity_version: int | None,
+        effective_as_of: datetime,
+        members: list[BundleMemberSpec],
+    ) -> SourceBundleRevision:
         revision_number = (
             self._session.scalar(
                 select(func.max(SourceBundleRevision.revision_number)).where(
@@ -223,7 +286,9 @@ class BundleService:
             {
                 "source_bundle_id": str(revision.source_bundle_id),
                 "source_bundle_revision_id": str(revision.source_bundle_revision_id),
-                "opportunity_id": str(revision.opportunity_id),
+                "opportunity_id": (
+                    str(revision.opportunity_id) if revision.opportunity_id is not None else None
+                ),
                 "opportunity_version": revision.opportunity_version,
                 "revision_number": revision.revision_number,
                 "effective_as_of": _instant(revision.effective_as_of),
@@ -267,6 +332,8 @@ class BundleService:
         bundle = SourceBundle(
             source_bundle_id=uuid7(),
             opportunity_id=opportunity_id,
+            request_key=None,
+            request_payload_sha256=None,
             created_at=created_at,
             retired_at=None,
         )
@@ -295,6 +362,20 @@ class BundleService:
         artifact = self._session.get(RawArtifact, document.artifact_id)
         if artifact is None:
             raise BundleProvenanceError("RawArtifact does not exist")
+        if (spec.evidence_ref_id is None) != (spec.parse_attempt_id is None):
+            raise BundleProvenanceError("EvidenceRef and ParseAttempt must be bound together")
+        evidence_ref = (
+            self._session.get(EvidenceRef, spec.evidence_ref_id)
+            if spec.evidence_ref_id is not None
+            else None
+        )
+        parse_attempt = (
+            self._session.get(ParseAttempt, spec.parse_attempt_id)
+            if spec.parse_attempt_id is not None
+            else None
+        )
+        if spec.evidence_ref_id is not None and (evidence_ref is None or parse_attempt is None):
+            raise BundleProvenanceError("EvidenceRef or ParseAttempt identity does not exist")
         exact_observation = (
             observation.artifact_id == artifact.artifact_id
             and observation.source_id == artifact.source_id
@@ -324,6 +405,27 @@ class BundleService:
             raise BundleProvenanceError("AcquisitionEvaluation must be exact and VALID")
         if not exact_run:
             raise BundleProvenanceError("AcquisitionRun must contain exact Observation lineage")
+        if evidence_ref is not None:
+            exact_evidence = (
+                evidence_ref.document_id == document.document_id
+                and evidence_ref.artifact_id == artifact.artifact_id
+                and evidence_ref.locator_kind == "full_document"
+                and evidence_ref.locator_value == "*"
+                and evidence_ref.locator_schema_version == "0.1.0"
+                and evidence_ref.quote_sha256 == artifact.content_sha256
+            )
+            exact_parse = (
+                parse_attempt is not None
+                and parse_attempt.document_id == document.document_id
+                and parse_attempt.artifact_id == artifact.artifact_id
+                and parse_attempt.parser_name == document.parser_name
+                and parse_attempt.parser_version == document.parser_version
+                and parse_attempt.parse_contract_version == document.parse_contract_version
+                and parse_attempt.document_parse_key == document.document_parse_key
+                and parse_attempt.outcome == "SUCCEEDED"
+            )
+            if not exact_evidence or not exact_parse:
+                raise BundleProvenanceError("exact evidence or parse binding mismatch")
         return SourceBundleMember(
             source_bundle_member_id=uuid7(),
             source_bundle_revision_id=revision_id,
@@ -351,6 +453,8 @@ class BundleService:
             parser_name=document.parser_name,
             parser_version=document.parser_version,
             parse_contract_version=document.parse_contract_version,
+            evidence_ref_id=spec.evidence_ref_id,
+            parse_attempt_id=spec.parse_attempt_id,
             member_role=spec.member_role,
             precedence=spec.precedence,
             effective_from=spec.effective_from,

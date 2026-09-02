@@ -135,7 +135,10 @@ def collect_http_attempts(
     sleeper: Sleeper,
     max_bytes: int = MAX_RESPONSE_BYTES,
     capture_unexpected_content: bool = False,
+    max_redirects: int = MAX_REDIRECTS,
 ) -> Iterator[_AttemptDecision]:
+    if not 0 <= max_redirects <= MAX_REDIRECTS:
+        raise ValueError("max_redirects must be between zero and the collector limit")
     policy_error = _preflight_error(endpoint, source_active, rate_limit_elapsed)
     if policy_error is not None:
         now = clock.now()
@@ -157,6 +160,7 @@ def collect_http_attempts(
                 transport=transport,
                 resolver=resolver,
                 max_bytes=max_bytes,
+                max_redirects=max_redirects,
             )
             decision = _classify_response(
                 attempt_number=attempt_number,
@@ -417,11 +421,12 @@ def _get_with_redirects(
     transport: HttpTransport,
     resolver: HostResolver,
     max_bytes: int,
+    max_redirects: int,
 ) -> _RedirectedResponse:
     current_url = str(endpoint.url)
     redirect_chain = [current_url]
     is_redirect = False
-    for redirect_count in range(MAX_REDIRECTS + 1):
+    for redirect_count in range(max_redirects + 1):
         _require_public_allowed_url(
             current_url,
             endpoint.allowed_hosts,
@@ -440,7 +445,7 @@ def _get_with_redirects(
             if redirect_chain[-1] != response.url:
                 redirect_chain.append(response.url)
             return _RedirectedResponse(response=response, redirect_chain=tuple(redirect_chain))
-        if response.location is None or redirect_count == MAX_REDIRECTS:
+        if response.location is None or redirect_count == max_redirects:
             if redirect_chain[-1] != response.url:
                 redirect_chain.append(response.url)
             return _RedirectedResponse(response=response, redirect_chain=tuple(redirect_chain))

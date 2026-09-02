@@ -57,6 +57,21 @@ def _replace_function_condition(
         connection.exec_driver_sql(definition.replace(current, replacement).replace("%", "%%"))
 
 
+def _add_current_bundle_compatibility_columns(engine: Engine) -> None:
+    """Let current provenance helpers seed a historical P9-B schema."""
+    with engine.begin() as connection:
+        connection.exec_driver_sql(
+            "ALTER TABLE source_bundles "
+            "ADD COLUMN request_key varchar(128), "
+            "ADD COLUMN request_payload_sha256 varchar(64)"
+        )
+        connection.exec_driver_sql(
+            "ALTER TABLE source_bundle_members "
+            "ADD COLUMN evidence_ref_id uuid, "
+            "ADD COLUMN parse_attempt_id uuid"
+        )
+
+
 def _begin_attempt(session: Session, call_id: UUID) -> UUID:
     attempt_id = uuid7()
     session.execute(
@@ -127,6 +142,7 @@ def test_compliant_history_round_trips_through_value_contract_migration(
         config = Config("alembic.ini")
         command.upgrade(config, "20260825_0028")
         engine = create_engine(temporary_url)
+        _add_current_bundle_compatibility_columns(engine)
         factory = sessionmaker(bind=engine, expire_on_commit=False)
         with factory.begin() as session:
             authority = seed_gateway_authority(session)
@@ -243,6 +259,7 @@ def test_noncompliant_history_is_rejected_without_rewrite(
         config = Config("alembic.ini")
         command.upgrade(config, "20260825_0028")
         engine = create_engine(temporary_url)
+        _add_current_bundle_compatibility_columns(engine)
         factory = sessionmaker(bind=engine, expire_on_commit=False)
         with factory.begin() as session:
             authority = seed_gateway_authority(session)

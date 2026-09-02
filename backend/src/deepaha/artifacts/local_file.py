@@ -76,6 +76,33 @@ class LocalFileObjectStore:
         parts = self._key_parts(key)
         return self._load_metadata(key=key, parts=parts)
 
+    def stat_if_present(self, *, key: str) -> ObjectMetadata | None:
+        parts = self._key_parts(key)
+        object_path, metadata_path = self._paths(parts)
+        if not object_path.exists() and not metadata_path.exists():
+            return None
+        return self._load_metadata(key=key, parts=parts)
+
+    def delete_if_matches(self, *, key: str, sha256: str) -> bool:
+        parts = self._key_parts(key)
+        self.ensure_bucket()
+        object_path, metadata_path = self._paths(parts)
+        lock_path = self._lock_root / calculate_sha256(key.encode("utf-8")).hexdigest()
+        lock_descriptor = self._acquire_lock(lock_path)
+        try:
+            if not object_path.exists() and not metadata_path.exists():
+                return False
+            metadata = self._load_metadata(key=key, parts=parts)
+            if metadata.sha256 != sha256:
+                raise ObjectIntegrityError("refusing to delete an object with a different SHA-256")
+            object_path.unlink()
+            metadata_path.unlink()
+            return True
+        except OSError as error:
+            raise ObjectIntegrityError("compensating object deletion failed") from error
+        finally:
+            self._release_lock(lock_descriptor)
+
     def _write_new(
         self,
         *,
