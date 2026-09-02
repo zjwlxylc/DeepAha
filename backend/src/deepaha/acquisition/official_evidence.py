@@ -2,7 +2,7 @@ import json
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from hashlib import sha256
-from typing import Annotated, Literal, Protocol
+from typing import Annotated, Literal
 from uuid import uuid7
 
 from pydantic import HttpUrl, StringConstraints
@@ -23,10 +23,9 @@ from deepaha.acquisition.models import AcquisitionEvaluation, AcquisitionRun
 from deepaha.acquisition.recipes import recipe_allows_url
 from deepaha.acquisition.validation import ContentValidator
 from deepaha.artifacts.models import RawArtifact
-from deepaha.artifacts.object_store import ObjectMetadata, ObjectStore
+from deepaha.artifacts.object_store import ObjectStore
 from deepaha.artifacts.service import (
     ImportRawArtifactCommand,
-    build_raw_object_key,
     import_raw_artifact,
 )
 from deepaha.contracts.common import EntityId
@@ -123,14 +122,6 @@ class OfficialEvidenceResult(AcquisitionContract):
     contract_version: Literal["1.0.0"]
 
 
-class CompensatingObjectStore(ObjectStore, Protocol):
-    def stat_if_present(self, *, key: str) -> ObjectMetadata | None:
-        raise NotImplementedError
-
-    def delete_if_matches(self, *, key: str, sha256: str) -> bool:
-        raise NotImplementedError
-
-
 @dataclass(frozen=True, slots=True)
 class AcquiredOfficialEvidence:
     started_at: datetime
@@ -188,7 +179,7 @@ class OfficialEvidenceTask:
         self,
         *,
         session_factory: sessionmaker[Session],
-        object_store: CompensatingObjectStore,
+        object_store: ObjectStore,
         recipes: tuple[SourceRecipe, ...],
         transport: HttpTransport,
         resolver: HostResolver,
@@ -216,9 +207,6 @@ class OfficialEvidenceTask:
         recipe = self._recipes.get(request.recipe_id)
         if recipe is None:
             raise OfficialEvidencePolicyError
-        digest: str | None = None
-        object_key: str | None = None
-        existed_before = True
         with self._session_factory() as session:
             transaction = session.begin()
             try:
@@ -254,20 +242,7 @@ class OfficialEvidenceTask:
                     rate_limit_elapsed=rate_limit_elapsed,
                 )
                 digest = sha256(acquired.body).hexdigest()
-                object_key = build_raw_object_key(digest)
                 _advisory_lock(session, digest, seed=1)
-                formal_artifact_exists = (
-                    session.scalar(
-                        select(RawArtifact.artifact_id).where(
-                            RawArtifact.source_id == request.source_id,
-                            RawArtifact.content_sha256 == digest,
-                        )
-                    )
-                    is not None
-                )
-                existed_before = formal_artifact_exists or (
-                    self._object_store.stat_if_present(key=object_key) is not None
-                )
                 result = self._persist(
                     session=session,
                     request=request,
@@ -284,17 +259,9 @@ class OfficialEvidenceTask:
             except OfficialEvidenceCommitOutcomeUnknown:
                 raise
             except Exception as error:
-                cleanup_failed = False
-                if not existed_before and object_key is not None and digest is not None:
-                    try:
-                        self._object_store.delete_if_matches(key=object_key, sha256=digest)
-                    except Exception:
-                        cleanup_failed = True
                 try:
                     transaction.rollback()
                 except Exception:
-                    raise OfficialEvidencePersistenceError from None
-                if cleanup_failed:
                     raise OfficialEvidencePersistenceError from None
                 if isinstance(
                     error,
@@ -736,7 +703,6 @@ def _advisory_lock(session: Session, value: str, *, seed: int) -> None:
 
 
 __all__ = [
-    "CompensatingObjectStore",
     "OfficialEvidenceAcquisitionError",
     "OfficialEvidenceCommitOutcomeUnknown",
     "OfficialEvidencePayloadDrift",

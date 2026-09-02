@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 修复独立只读审查发现的 P10-B1 对象补偿竞态、并发准入、请求预算、RawArtifact 复用和冻结证据绑定问题，同时保持 B1 范围与单一候选提交。
+**Goal:** 修复独立只读审查发现的 P10-B1 对象生命周期竞态、并发准入、请求预算、RawArtifact 复用和冻结证据绑定问题，同时保持 B1 范围与单一候选提交。
 
-**Architecture:** 将请求键、Endpoint 和正文哈希三把 PostgreSQL advisory transaction lock 按固定顺序放入同一事务，并让对象补偿在正文锁释放前完成。请求型 SourceBundleMember 增加精确 EvidenceRef/ParseAttempt 身份并纳入不可变成员哈希；旧 Opportunity bundle 继续允许空身份且保持旧哈希格式。RawArtifact 继续以 `(source_id, content_sha256)` 为内容身份，本次采集元数据由 CaptureObservation 保存。
+**Architecture:** 将请求键、Endpoint 和正文哈希三把 PostgreSQL advisory transaction lock 按固定顺序放入同一事务。内容寻址对象按 SHA 跨 Source 共享，B1 失败只回滚数据库并保留对象，不以局部或过时状态执行删除。请求型 SourceBundleMember 增加精确 EvidenceRef/ParseAttempt 身份并纳入不可变成员哈希；旧 Opportunity bundle 继续允许空身份且保持旧哈希格式。RawArtifact 继续以 `(source_id, content_sha256)` 为内容身份，本次采集元数据由 CaptureObservation 保存。
 
 **Tech Stack:** Python 3.14、SQLAlchemy 2、PostgreSQL 18、Alembic、S3-compatible ObjectStore、pytest、Pydantic 2
 
@@ -12,41 +12,42 @@
 
 ## Global Constraints
 
-- 基线提交保持 `d806e305c4b9239a81cce0216a237cd90f89f367`，最终基线到候选只允许一个提交。
+- 基线提交保持 `d806e305c4b9239a81cce0216a237cd90f89f367`，首轮候选保持一个提交；PR #9 Critical follow-up 使用一个独立修复提交追加到原分支，不改写已审查提交。
 - 不创建 Candidate、Opportunity、资格、发布、UI、浏览器执行、Excel/PDF/DOCX/OCR、Provider、模型网关、真实来源或 Gold 特判。
-- 失败不得留下本次请求的半成品正式记录；补偿不得删除其他已提交链路引用的对象。
+- 失败不得留下本次请求的半成品正式记录；任何失败请求都不得根据局部所有权假设删除可能被正式链路引用的共享对象。
 - 旧 Opportunity SourceBundle 的字段、哈希和服务行为必须保持兼容。
 - 每项生产行为先写失败测试并观察预期失败，再写最小实现。
 
 ---
 
-### Task 1: 将并发准入与对象补偿纳入同一事务锁生命周期
+### Task 1: 将并发准入与失败安全对象生命周期纳入同一事务
 
 **Files:**
 - Modify: `backend/src/deepaha/acquisition/official_evidence.py`
 - Modify: `backend/tests/integration/test_p10b1_official_evidence.py`
 
 **Interfaces:**
-- Consumes: `OfficialEvidenceTask.run(request)`, PostgreSQL advisory locks, `CompensatingObjectStore.delete_if_matches()`
-- Produces: 固定 `request_key -> endpoint_id -> content_sha256` 锁顺序；锁内补偿与锁后提交结果
+- Consumes: `OfficialEvidenceTask.run(request)`, PostgreSQL advisory locks, shared content-addressed ObjectStore
+- Produces: 固定 `request_key -> endpoint_id -> content_sha256` 锁顺序；数据库失败时对象保留与独立提交结果边界
 
-- [x] **Step 1: 写补偿交错失败测试**
+- [x] **Step 1: 写跨 Source 共享对象失败测试**
 
-增加两个不同 request key、不同 Endpoint、相同正文的并发测试。请求 A 上传后注入失败并在删除处等待；请求 B 必须在正文锁处等待。断言 A 的补偿发生在 B 获得正文锁之前，最终 B 成功且对象仍存在。
+失败请求 A 上传对象后暂停；另一 Source B 通过不共享 B1 advisory lock 的通用导入路径提交同 SHA 的正式 RawArtifact，再让 A 进入失败处理。断言 B 的数据库引用和共享对象均保留。
 
 ```python
-assert first_store.delete_started.wait(timeout=2)
-assert not second_store.stat_seen.wait(timeout=0.2)
-first_store.allow_delete.set()
-assert second_future.result(timeout=5).content_sha256 == digest
+assert failing_store.uploaded.wait(timeout=2)
+successful = import_raw_artifact(session=other_source_session, ...)
+other_artifact_committed.set()
+with pytest.raises(OfficialEvidencePersistenceError):
+    failing_future.result(timeout=5)
 assert object_store.get_bytes(key=object_key) == VALID_BODY
 ```
 
 - [x] **Step 2: 运行测试并确认当前实现失败**
 
-Run: `uv run pytest -m integration tests/integration/test_p10b1_official_evidence.py::test_failed_writer_compensates_before_same_content_writer_can_commit -q`
+Run: `uv run pytest -m integration tests/integration/test_p10b1_official_evidence.py::test_failed_capture_never_deletes_object_committed_for_another_source -q`
 
-Expected: FAIL；第二请求在补偿完成前观察到正文锁已释放，或最终对象缺失。
+Expected: FAIL with `NoSuchKey`；另一 Source 的 RawArtifact 已提交，但失败请求删除了共享对象。
 
 - [x] **Step 3: 写同键漂移和 Endpoint 限速并发测试**
 
@@ -64,9 +65,9 @@ Run: `uv run pytest -m integration tests/integration/test_p10b1_official_evidenc
 
 Expected: FAIL；当前锁在网络之后取得，第二 transport 会被调用。
 
-- [x] **Step 5: 实现单事务固定锁顺序与锁内补偿**
+- [x] **Step 5: 实现固定锁顺序与失败安全对象保留**
 
-`run()` 保留只读快速重放；未命中后开启显式事务，依次取得 request、endpoint、content locks。request 和 endpoint 锁后完成二次重放、策略和限速检查，再执行网络；正文锁内判断对象/RawArtifact 是否已存在。任何异常先在正文锁仍持有时执行按键和 SHA 限定的补偿，再回滚事务。
+`run()` 保留只读快速重放；未命中后开启显式事务，依次取得 request、endpoint、content locks。request 和 endpoint 锁后完成二次重放、策略和限速检查，再执行网络。正文锁内写入对象和正式链路；普通异常只回滚数据库，保留对象，避免单次请求的局部快照误删其他写入路径已提交的证据。
 
 ```python
 transaction = session.begin()
@@ -79,8 +80,6 @@ try:
     transaction.commit()
     return result
 except Exception:
-    if compensate_object:
-        self._object_store.delete_if_matches(key=object_key, sha256=digest)
     transaction.rollback()
     raise
 ```
@@ -176,7 +175,7 @@ Expected: FAIL with `RAW_ARTIFACT_PROVENANCE_CONFLICT`。
 
 - [x] **Step 3: 实现内容身份复用**
 
-正文锁内先按 `(source_id, content_sha256)` 查询 RawArtifact。已有行时验证 object key、SHA 和 size，必要时恢复缺失对象；新行才调用 `import_raw_artifact()`。补偿标志只有在“对象和 RawArtifact 都不存在”时为真。返回的 `retrieved_at` 使用本次 CaptureObservation 的完成时间。
+正文锁内通过 `import_raw_artifact()` 按 `(source_id, content_sha256)` 复用 RawArtifact 内容身份并验证 object key、SHA 和 size。失败路径不推断共享对象的局部所有权，不执行对象删除。返回的 `retrieved_at` 使用本次 CaptureObservation 的完成时间。
 
 - [x] **Step 4: 运行 Task 3 测试并确认通过**
 
@@ -275,7 +274,7 @@ Expected: PASS。
 
 - [x] **Step 1: 更新设计与原计划**
 
-记录三锁顺序、锁内补偿、一次请求预算、RawArtifact 内容复用、精确 EvidenceRef/ParseAttempt 冻结和真实对象字节重放验证；不把候选写成已合并或 Release Qualification 已完成。
+记录三锁顺序、失败安全对象保留、一次请求预算、RawArtifact 内容复用、精确 EvidenceRef/ParseAttempt 冻结和真实对象字节重放验证；不把候选写成已合并或 Release Qualification 已完成。
 
 - [x] **Step 2: 运行定向和全量验证**
 
@@ -307,7 +306,7 @@ git rev-list --count d806e305c4b9239a81cce0216a237cd90f89f367..HEAD
 git status --short
 ```
 
-Expected: 基线到 HEAD 为 1 个提交，工作树干净；不推送、不合并、不部署。
+Expected: 首轮候选时基线到 HEAD 为 1 个提交，工作树干净；该步骤本身不推送、不合并、不部署。PR #9 Critical follow-up 完成后基线到 HEAD 为 2 个提交，仍不合并、不部署。
 
 ## Plan Self-Review
 
@@ -321,10 +320,17 @@ Expected: 基线到 HEAD 为 1 个提交，工作树干净；不推送、不合�
 最终独立复审未发现 Critical，但在合并前识别出三项 Important，均按 TDD 补充回归并修复：
 
 - [x] B1 禁止跟随 3xx，确保 `maximum_requests = 1` 对实际 transport 调用成立，单次 timeout 不超过配方预算。
-- [x] 将可补偿持久化异常与 `commit()` 结果未知分离；提交异常不得删除对象，并返回稳定的结果未知错误。
+- [x] 将普通持久化异常与 `commit()` 结果未知分离；提交异常不得删除对象，并返回稳定的结果未知错误。
 - [x] 0034 降级在任一成员含精确 EvidenceRef/ParseAttempt 身份时拒绝，避免删除列后冻结哈希与旧函数失配。
 - [x] 重新运行全仓、完整 integration、Alembic 与 Phase 8 验证；再次独立复审精确候选提交作为下一道门。
-- [x] 再次独立复审确认前三项关闭，并识别普通持久化失败仍泄漏底层异常；补偿与回滚后现统一为 `OFFICIAL_EVIDENCE_PERSISTENCE_FAILED`，领域错误和提交结果未知分支保持独立。
+- [x] 再次独立复审确认前三项关闭，并识别普通持久化失败仍泄漏底层异常；回滚后现统一为 `OFFICIAL_EVIDENCE_PERSISTENCE_FAILED`，领域错误和提交结果未知分支保持独立。
 - [x] 重新执行完整验证；对修订后的精确候选提交进行最后独立复审作为下一道门。
-- [x] 最后复审识别显式 `__cause__` 仍暴露底层异常；普通、cleanup、rollback 和 commit-unknown 分支现均抑制对外异常链，并补充故障注入测试。
+- [x] 最后复审识别显式 `__cause__` 仍暴露底层异常；普通、rollback 和 commit-unknown 分支现均抑制对外异常链，并补充故障注入测试。
 - [x] 重新执行最终完整验证；复核精确候选提交作为下一道门。
+
+## PR #9 Critical Follow-up
+
+- [x] 以真实 PostgreSQL/S3 并发测试复现跨 Source 共享对象误删：通用导入已提交 RawArtifact 后，失败 B1 请求按过时局部快照删除同 SHA 对象，测试稳定出现 `NoSuchKey`。
+- [x] 采用最小失败安全修复：B1 失败只回滚数据库，不再调用 `delete_if_matches()`；正式数据库引用优先，不确定时允许暂留孤立对象。
+- [x] 移除 `CompensatingObjectStore` 窄协议和过时的补偿测试，保留通用对象存储删除能力但不让 B1 推断共享对象所有权。
+- [x] 运行完整验证、更新原 PR #9，并保持 `Release Qualification=NOT_STARTED`、不得标记 `STABLE`。

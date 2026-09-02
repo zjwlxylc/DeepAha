@@ -1,10 +1,10 @@
 # P10-B1 主线打捞实施计划
 
-> 执行方式：在当前 Codex 隔离工作树中按任务顺序执行；每个行为先观察失败测试，再写最小实现。只形成一个最终候选提交。
+> 执行方式：在当前 Codex 隔离工作树中按任务顺序执行；每个行为先观察失败测试，再写最小实现。首轮候选保持单提交；PR #9 Critical follow-up 以一个独立、可审计的修复提交追加到原分支，不改写已审查提交。
 
 **目标：** 在干净主线恢复一个通用、静态 HTTP、官方一手源到冻结原始证据包的最小事实链，并证明精确重放零增量、载荷漂移与失败零正式写入。
 
-**架构：** 新同步任务入口在同一事务内按请求键、Endpoint、正文哈希顺序取得 PostgreSQL advisory transaction lock，锁内完成并发准入、单次静态请求、内容校验、现有内容身份复用和完整血缘持久化。`SourceBundle` 以互斥的 Opportunity 身份或请求身份存在；对象补偿在正文锁释放前按键和 SHA 限定执行。独立审查后的精确证据绑定与完整迁移回归见 `2026-09-02-p10-b1-review-remediation.md`。
+**架构：** 新同步任务入口在同一事务内按请求键、Endpoint、正文哈希顺序取得 PostgreSQL advisory transaction lock，锁内完成并发准入、单次静态请求、内容校验、现有内容身份复用和完整血缘持久化。`SourceBundle` 以互斥的 Opportunity 身份或请求身份存在；数据库失败只回滚正式行并保留内容寻址对象，不依据单次请求的局部状态执行删除。独立审查后的精确证据绑定、对象生命周期边界与完整迁移回归见 `2026-09-02-p10-b1-review-remediation.md`。
 
 **技术栈：** Python 3.14、Pydantic 2、SQLAlchemy 2、PostgreSQL 18、Alembic、S3/Moto、pytest、uv。
 
@@ -120,7 +120,7 @@ uv run alembic check
 
 预期：定向测试通过、仅一个 `20260901_0034` head、无新迁移操作。
 
-## Task 3：实现原始快照的事务持久化与对象补偿
+## Task 3：实现原始快照的事务持久化与失败安全对象保留
 
 **文件：**
 
@@ -146,7 +146,7 @@ uv run alembic check
 - 相同请求重放时表计数、对象计数、transport 调用数零增量。
 - 同键载荷漂移在 transport 和所有存储前零增量。
 - 网络/内容失败无行无对象。
-- 对象上传后注入事务失败，所有数据库行回滚且新对象被补偿删除。
+- 对象上传后注入事务失败，所有数据库行回滚且对象保留；跨 Source 正式引用不得被失败请求删除。
 
 **步骤 2：运行并确认红灯**
 
@@ -158,15 +158,7 @@ uv run pytest tests/artifacts/test_local_file_store.py tests/integration/test_s3
 
 **步骤 3：实现最小持久化**
 
-在新模块内定义窄协议：
-
-```python
-class CompensatingObjectStore(ObjectStore, Protocol):
-    def stat_if_present(self, *, key: str) -> ObjectMetadata | None: ...
-    def delete_if_matches(self, *, key: str, sha256: str) -> bool: ...
-```
-
-`S3ObjectStore` 与 `LocalFileObjectStore` 实现这两个方法。持久化函数在请求键锁后重查请求身份，在 Endpoint 锁内检查限速并最多发起一次静态请求，再取得正文哈希锁并判断对象和 RawArtifact 是否已存在；随后创建本次 Observation、VALID Evaluation、COMPLETE Run，复用或创建 raw snapshot Document/ParseAttempt 与全文件 EvidenceRef，并把精确 EvidenceRef/ParseAttempt ID 写入冻结成员。事务异常时先在正文锁内仅补偿本次新建且无既有 RawArtifact 依赖的对象，再回滚。
+`S3ObjectStore` 与 `LocalFileObjectStore` 的 `stat_if_present` / `delete_if_matches` 保留为通用对象存储能力，但 B1 不以它们推断单次请求拥有共享对象。持久化函数在请求键锁后重查请求身份，在 Endpoint 锁内检查限速并最多发起一次静态请求，再取得正文哈希锁；随后创建本次 Observation、VALID Evaluation、COMPLETE Run，复用或创建 raw snapshot Document/ParseAttempt 与全文件 EvidenceRef，并把精确 EvidenceRef/ParseAttempt ID 写入冻结成员。事务异常时只回滚数据库并保留对象；孤立对象治理后置到具备全局引用复核和审计的独立流程。
 
 **步骤 4：运行并确认绿灯**
 

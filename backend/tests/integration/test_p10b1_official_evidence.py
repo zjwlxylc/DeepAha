@@ -23,8 +23,9 @@ from deepaha.acquisition.official_evidence import (
     OfficialEvidenceValidationError,
 )
 from deepaha.artifacts.models import RawArtifact
-from deepaha.artifacts.object_store import ObjectMetadata
+from deepaha.artifacts.object_store import ObjectMetadata, ObjectStore
 from deepaha.artifacts.s3 import S3ObjectStore
+from deepaha.artifacts.service import ImportRawArtifactCommand, import_raw_artifact
 from deepaha.core.settings import Settings
 from deepaha.documents.models import Document, EvidenceRef, ParseAttempt
 from deepaha.opportunities.models import Opportunity, OpportunityResolutionCandidate
@@ -99,10 +100,10 @@ class BlockingTransport(ScriptedTransport):
         return super().get_once(request)
 
 
-class ObservedStatStore:
-    def __init__(self, delegate: S3ObjectStore, stat_seen: Event) -> None:
+class ObservedPutStore:
+    def __init__(self, delegate: S3ObjectStore, put_seen: Event) -> None:
         self._delegate = delegate
-        self._stat_seen = stat_seen
+        self._put_seen = put_seen
 
     def ensure_bucket(self) -> None:
         self._delegate.ensure_bucket()
@@ -115,6 +116,7 @@ class ObservedStatStore:
         media_type: str | None,
         sha256: str,
     ) -> ObjectMetadata:
+        self._put_seen.set()
         return self._delegate.put_bytes_if_absent(
             key=key,
             content=content,
@@ -129,7 +131,6 @@ class ObservedStatStore:
         return self._delegate.stat(key=key)
 
     def stat_if_present(self, *, key: str) -> ObjectMetadata | None:
-        self._stat_seen.set()
         return self._delegate.stat_if_present(key=key)
 
     def delete_if_matches(self, *, key: str, sha256: str) -> bool:
@@ -172,29 +173,33 @@ class FailAfterPutStore:
         return self._delegate.delete_if_matches(key=key, sha256=sha256)
 
 
-class FailingCleanupStore(FailAfterPutStore):
-    def delete_if_matches(self, *, key: str, sha256: str) -> bool:
-        raise RuntimeError("synthetic cleanup failure")
-
-
-class LockInspectingFailAfterPutStore(FailAfterPutStore):
-    def __init__(self, delegate: S3ObjectStore, factory: sessionmaker[Session]) -> None:
+class BlockingFailAfterPutStore(FailAfterPutStore):
+    def __init__(self, delegate: S3ObjectStore, other_artifact_committed: Event) -> None:
         super().__init__(delegate)
-        self._factory = factory
-        self.content_lock_was_available: bool | None = None
+        self.uploaded = Event()
+        self._other_artifact_committed = other_artifact_committed
 
-    def delete_if_matches(self, *, key: str, sha256: str) -> bool:
-        with self._factory.begin() as session:
-            self.content_lock_was_available = bool(
-                session.scalar(
-                    text("select pg_try_advisory_xact_lock(hashtextextended(:content_sha256, 1))"),
-                    {"content_sha256": sha256},
-                )
-            )
-        return super().delete_if_matches(key=key, sha256=sha256)
+    def put_bytes_if_absent(
+        self,
+        *,
+        key: str,
+        content: bytes,
+        media_type: str | None,
+        sha256: str,
+    ) -> ObjectMetadata:
+        self._delegate.put_bytes_if_absent(
+            key=key,
+            content=content,
+            media_type=media_type,
+            sha256=sha256,
+        )
+        self.uploaded.set()
+        if not self._other_artifact_committed.wait(timeout=5):
+            raise AssertionError("other RawArtifact did not commit")
+        raise RuntimeError("synthetic post-upload failure")
 
 
-class CorruptingReadStore(ObservedStatStore):
+class CorruptingReadStore(ObservedPutStore):
     def __init__(self, delegate: S3ObjectStore) -> None:
         super().__init__(delegate, Event())
 
@@ -344,13 +349,7 @@ def response(
 def task(
     *,
     factory: sessionmaker[Session],
-    object_store: (
-        S3ObjectStore
-        | FailAfterPutStore
-        | LockInspectingFailAfterPutStore
-        | ObservedStatStore
-        | CorruptingReadStore
-    ),
+    object_store: ObjectStore,
     recipe: SourceRecipe | tuple[SourceRecipe, ...],
     transport: ScriptedTransport,
     sleeper: NoSleep | RecordingSleep | None = None,
@@ -719,7 +718,7 @@ def test_replay_verifies_actual_object_bytes_not_only_metadata(
         replay_runner.run(request)
 
 
-def test_post_upload_failure_rolls_back_rows_and_compensates_new_object(
+def test_post_upload_failure_rolls_back_rows_and_retains_object_fail_safe(
     factory: sessionmaker[Session], object_store: S3ObjectStore
 ) -> None:
     endpoint, configured_recipe = seed_policy(factory)
@@ -741,7 +740,62 @@ def test_post_upload_failure_rolls_back_rows_and_compensates_new_object(
 
     with factory() as session:
         assert set(formal_counts(session).values()) == {0}
-    assert object_store.stat_if_present(key=object_key) is None
+    assert object_store.get_bytes(key=object_key) == VALID_BODY
+    object_store.delete_if_matches(key=object_key, sha256=digest)
+
+
+def test_failed_capture_never_deletes_object_committed_for_another_source(
+    factory: sessionmaker[Session], object_store: S3ObjectStore
+) -> None:
+    failing_endpoint, failing_recipe = seed_policy(factory)
+    successful_endpoint, _ = seed_policy(factory)
+    digest = sha256(VALID_BODY).hexdigest()
+    object_key = f"raw/sha256/{digest[:2]}/{digest}"
+    object_store.delete_if_matches(key=object_key, sha256=digest)
+    other_artifact_committed = Event()
+    failing_store = BlockingFailAfterPutStore(object_store, other_artifact_committed)
+    runner = task(
+        factory=factory,
+        object_store=failing_store,
+        recipe=failing_recipe,
+        transport=ScriptedTransport([response()]),
+    )
+
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        failing_future = executor.submit(
+            runner.run,
+            capture_request(failing_endpoint, failing_recipe),
+        )
+        assert failing_store.uploaded.wait(timeout=2)
+        try:
+            with factory.begin() as session:
+                successful = import_raw_artifact(
+                    session=session,
+                    object_store=object_store,
+                    command=ImportRawArtifactCommand(
+                        source_id=successful_endpoint.source_id,
+                        requested_url=successful_endpoint.url,
+                        resolved_url=successful_endpoint.url,
+                        retrieved_at=NOW,
+                        http_status=200,
+                        media_type="text/html; charset=utf-8",
+                        content=VALID_BODY,
+                        collector_version="synthetic-direct-import",
+                        metadata_schema_version="0.2.0",
+                    ),
+                )
+                successful_artifact_id = successful.artifact.artifact_id
+        finally:
+            other_artifact_committed.set()
+        with pytest.raises(OfficialEvidencePersistenceError):
+            failing_future.result(timeout=5)
+
+    with factory() as session:
+        committed_artifact = session.get(RawArtifact, successful_artifact_id)
+        assert committed_artifact is not None
+        assert committed_artifact.source_id == successful_endpoint.source_id
+        assert committed_artifact.content_sha256 == digest
+    assert object_store.get_bytes(key=object_key) == VALID_BODY
 
 
 def test_commit_outcome_unknown_never_compensates_the_content_object(
@@ -779,16 +833,16 @@ def test_commit_outcome_unknown_never_compensates_the_content_object(
     assert replay.replayed is True
 
 
-def test_content_existence_check_waits_for_the_content_hash_lock(
+def test_content_object_write_waits_for_the_content_hash_lock(
     factory: sessionmaker[Session], object_store: S3ObjectStore
 ) -> None:
     endpoint, configured_recipe = seed_policy(factory)
     request_seen = Event()
-    stat_seen = Event()
+    put_seen = Event()
     transport = SignalingTransport([response()], request_seen)
     runner = task(
         factory=factory,
-        object_store=ObservedStatStore(object_store, stat_seen),
+        object_store=ObservedPutStore(object_store, put_seen),
         recipe=configured_recipe,
         transport=transport,
     )
@@ -802,60 +856,11 @@ def test_content_existence_check_waits_for_the_content_hash_lock(
             )
             future = executor.submit(runner.run, capture_request(endpoint, configured_recipe))
             assert request_seen.wait(timeout=2)
-            assert not stat_seen.wait(timeout=0.2)
+            assert not put_seen.wait(timeout=0.2)
         result = future.result(timeout=5)
 
-    assert stat_seen.is_set()
+    assert put_seen.is_set()
     assert result.content_sha256 == digest
-
-
-def test_post_upload_compensation_runs_before_content_hash_lock_is_released(
-    factory: sessionmaker[Session], object_store: S3ObjectStore
-) -> None:
-    endpoint, configured_recipe = seed_policy(factory)
-    digest = sha256(VALID_BODY).hexdigest()
-    object_key = f"raw/sha256/{digest[:2]}/{digest}"
-    object_store.delete_if_matches(key=object_key, sha256=digest)
-    inspecting_store = LockInspectingFailAfterPutStore(object_store, factory)
-    runner = task(
-        factory=factory,
-        object_store=inspecting_store,
-        recipe=configured_recipe,
-        transport=ScriptedTransport([response()]),
-    )
-
-    with pytest.raises(OfficialEvidencePersistenceError) as caught:
-        runner.run(capture_request(endpoint, configured_recipe))
-
-    assert caught.value.__cause__ is None
-    assert caught.value.__suppress_context__ is True
-    assert inspecting_store.content_lock_was_available is False
-    assert object_store.stat_if_present(key=object_key) is None
-
-
-def test_cleanup_failure_uses_stable_error_without_exposing_the_store_error(
-    factory: sessionmaker[Session], object_store: S3ObjectStore
-) -> None:
-    endpoint, configured_recipe = seed_policy(factory)
-    digest = sha256(VALID_BODY).hexdigest()
-    object_key = f"raw/sha256/{digest[:2]}/{digest}"
-    object_store.delete_if_matches(key=object_key, sha256=digest)
-    runner = task(
-        factory=factory,
-        object_store=FailingCleanupStore(object_store),
-        recipe=configured_recipe,
-        transport=ScriptedTransport([response()]),
-    )
-
-    with pytest.raises(OfficialEvidencePersistenceError) as caught:
-        runner.run(capture_request(endpoint, configured_recipe))
-
-    assert caught.value.__cause__ is None
-    assert caught.value.__suppress_context__ is True
-    with factory() as session:
-        assert set(formal_counts(session).values()) == {0}
-    assert object_store.stat_if_present(key=object_key) is not None
-    object_store.delete_if_matches(key=object_key, sha256=digest)
 
 
 def test_rollback_failure_uses_stable_error_without_exposing_database_details(
@@ -892,7 +897,8 @@ def test_rollback_failure_uses_stable_error_without_exposing_database_details(
     assert caught.value.__suppress_context__ is True
     with factory() as session:
         assert set(formal_counts(session).values()) == {0}
-    assert object_store.stat_if_present(key=object_key) is None
+    assert object_store.get_bytes(key=object_key) == VALID_BODY
+    object_store.delete_if_matches(key=object_key, sha256=digest)
 
 
 def test_concurrent_payload_drift_waits_for_request_lock_before_transport(
