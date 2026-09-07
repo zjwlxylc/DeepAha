@@ -17,7 +17,7 @@ from typing import Any, NoReturn, cast
 from urllib.parse import unquote, urlsplit
 
 from jsonschema import Draft7Validator
-from lxml import html
+from lxml import etree, html
 from openpyxl import load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
 from pypdf import PdfReader
@@ -35,6 +35,53 @@ _HASH = re.compile(r"[a-fA-F0-9]{64}\Z")
 _ARTIFACT_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,255}\Z")
 _RESERVED = re.compile(r"(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\..*)?\Z", re.I)
 MAX_WORKSHEETS = 128
+_HTML_TEXT_BOUNDARIES = frozenset(
+    [
+        "address",
+        "article",
+        "aside",
+        "blockquote",
+        "body",
+        "br",
+        "caption",
+        "dd",
+        "details",
+        "dialog",
+        "div",
+        "dl",
+        "dt",
+        "fieldset",
+        "figcaption",
+        "figure",
+        "footer",
+        "form",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "header",
+        "hgroup",
+        "hr",
+        "li",
+        "main",
+        "nav",
+        "ol",
+        "p",
+        "pre",
+        "section",
+        "summary",
+        "table",
+        "tbody",
+        "td",
+        "tfoot",
+        "th",
+        "thead",
+        "tr",
+        "ul",
+    ]
+)
 
 
 class DeliveryValidationError(ValueError):
@@ -355,6 +402,23 @@ def _normalized(text: str) -> str:
     return " ".join(text.split())
 
 
+def _html_quote_text(root: html.HtmlElement) -> str:
+    """Preserve inline text while separating paragraphs, rows and cells.
+
+    This checks source text structure, not CSS layout or the meaning of a fact.
+    The original artifact bytes remain untouched.
+    """
+    parts: list[str] = []
+    for event, node in etree.iterwalk(root, events=("start", "end", "comment", "pi")):
+        if node.tag in _HTML_TEXT_BOUNDARIES:
+            parts.append(" ")
+        if event == "start" and isinstance(node.tag, str) and node.text:
+            parts.append(node.text)
+        elif event != "start" and node is not root and node.tail:
+            parts.append(node.tail)
+    return "".join(parts)
+
+
 def _quote_support(
     artifact: ValidatedArtifact, quote: str, locator: dict[str, Any], issues: set[str]
 ) -> bool:
@@ -368,22 +432,23 @@ def _quote_support(
                 if node.tag in {"script", "style", "noscript", "template"}:
                     parent = node.getparent()
                     if parent is not None:
-                        parent.remove(node)
+                        cast(html.HtmlElement, node).drop_tree()
             selector = locator.get("selector")
             if isinstance(selector, str) and set(locator) == {"selector"}:
                 nodes = tree.cssselect(selector)
                 if not nodes:
                     _fail("EVIDENCE_LOCATOR_MISMATCH")
-                selected = " ".join(
-                    " ".join(str(part) for part in node.itertext()) for node in nodes
-                )
+                # A selector may match several locations; never stitch them into a quote.
+                texts = [_html_quote_text(node) for node in nodes]
                 supported_locator = True
             else:
-                selected = " ".join(str(part) for part in tree.itertext())
+                texts = [_html_quote_text(tree)]
                 if set(locator) == {"url"}:
                     if locator["url"] != artifact.url:
                         _fail("EVIDENCE_LOCATOR_MISMATCH")
                     supported_locator = True
+            if not any(_normalized(quote) in _normalized(text) for text in texts):
+                _fail("EVIDENCE_QUOTE_MISMATCH")
         elif media == "application/pdf":
             reader = PdfReader(BytesIO(artifact.content), strict=True)
             if reader.is_encrypted:

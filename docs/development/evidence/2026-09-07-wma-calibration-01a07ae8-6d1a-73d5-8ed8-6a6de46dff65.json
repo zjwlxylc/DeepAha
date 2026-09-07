@@ -1,0 +1,45 @@
+{
+  "scope": "REAL_ANNOUNCEMENT_ENGINEERING_CALIBRATION",
+  "case_id": "01a07ae8-6d1a-73d5-8ed8-6a6de46dff65",
+  "started_at": "2026-09-07T08:07:28.106858+00:00",
+  "notice_url": "https://www.zjhcgbxy.com/gsgg/48723.jhtml",
+  "registered_business_task": false,
+  "human_reviews": 0,
+  "formal_fact_writes": 0,
+  "prompt_candidate_published": false,
+  "model_configuration_changed": false,
+  "prompt_count": 1,
+  "contract": {
+    "version": "direct-wma-intake/2",
+    "sdk": "codebuddy-cloud-agent-sdk==0.3.4",
+    "files": {
+      "investigator-sop.md": "59134ae77b92553032300f6865400c2bef7db6a4cd406bbabb01d366e4dbbb8b",
+      "schemas/opportunities.schema.json": "fbbf3f83bd078ecffaa52ab8aa79743ada115c5d88918c3a5ea25245e0f6ccd5",
+      "schemas/evidence.schema.json": "ce6ecc0afa3edcc756460741f082b8b0438808e2159d7cdaa15fb6c312d7266a"
+    },
+    "prompt_sha256": "1670df09d015f5d60221800a4c010e0c57637f6909a0e802b9b67064b9407737",
+    "scope": "INTERNAL_INTAKE_ONLY"
+  },
+  "wall_time_seconds": 600,
+  "model_telemetry": "UNREPORTED",
+  "monetary_cost": "UNREPORTED",
+  "stage": "INVESTIGATING",
+  "binding": {
+    "source": "CONTROL_PLANE",
+    "release_version": "v1",
+    "session_binding": "PUBLISHED_AGENT_SESSION",
+    "published_model": "agnes-2.5-flash",
+    "model_evidence": "CONFIGURATION_ONLY",
+    "skills_sha256": "5225177ad21df3e289a7d888bf8ca63823f0f5fc03287c857c5384c3dfa1e6d0",
+    "verified_non_prompt_configuration_sha256": "82b5a611bf56ca93bd51dbb0208eb24af4608a67f32aeb24a88c2ecbb651802b",
+    "prompt_visibility": "MASKED_BY_PROVIDER",
+    "prompt_hash_verified": false
+  },
+  "stop_reason": "refusal",
+  "status": "CALIBRATION_FAILED",
+  "error_code": "WMA_REMOTE_REFUSED",
+  "error_type": "InvestigationError",
+  "elapsed_seconds": 22.027,
+  "completed_at": "2026-09-07T08:07:50.133941+00:00",
+  "cleanup": "DELETED_OWN_CALIBRATION_RUNTIME"
+}

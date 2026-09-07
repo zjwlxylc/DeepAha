@@ -242,6 +242,87 @@ def test_section_locator_is_not_misrepresented_as_mechanically_verified() -> Non
     assert "EVIDENCE_LOCATOR_REVIEW_REQUIRED:notice" in result.issues
 
 
+@pytest.mark.parametrize(
+    "markup,selector,quote,accepted",
+    [
+        (
+            '<p id="terms">公共管理（<span>125200</span>）</p>',
+            "#terms",
+            "公共管理（125200）",
+            True,
+        ),
+        (
+            '<p id="terms"><span>博士</span><strong>研究生</strong></p>',
+            "#terms",
+            "博士研究生",
+            True,
+        ),
+        ('<p id="terms">Degree: <b>doctorate</b>.</p>', "#terms", "Degree: doctorate.", True),
+        ('<p id="terms">Degree: <b>doctorate</b>.</p>', "#terms", "Degree:doctorate.", False),
+        ('<p id="terms">博<script>ignore</script>士</p>', "#terms", "博士", True),
+        ('<p id="terms">博<!-- hidden -->士</p>', "#terms", "博士", True),
+        ('<p id="terms">博士</p>其他要求', "#terms", "博士其他要求", False),
+        (
+            '<div id="terms"><p>博士</p><p>研究生</p></div>',
+            "#terms",
+            "博士研究生",
+            False,
+        ),
+        (
+            '<div id="terms"><p>博士</p><p>研究生</p></div>',
+            "#terms",
+            "博士 研究生",
+            True,
+        ),
+        (
+            '<div id="terms"><p>第一条</p><p>中间条款</p><p>第三条</p></div>',
+            "#terms",
+            "第一条……第三条",
+            False,
+        ),
+        (
+            '<p id="first">第一条</p><p>中间条款</p><p id="last">第三条</p>',
+            "#first, #last",
+            "第一条 第三条",
+            False,
+        ),
+        (
+            '<p id="first">第一条</p><p>中间条款</p><p id="last">第三条</p>',
+            "#first, #last",
+            "第三条",
+            True,
+        ),
+        (
+            '<table id="terms"><tr><td>岗位</td><td>人数</td></tr>'
+            "<tr><td>甲</td><td>1</td></tr><tr><td>乙</td><td>2</td></tr></table>",
+            "#terms",
+            "岗位 人数 乙 2",
+            False,
+        ),
+    ],
+)
+def test_html_quotes_preserve_inline_text_without_accepting_omitted_passages(
+    markup: str, selector: str, quote: str, accepted: bool
+) -> None:
+    o, e, artifacts = _sample()
+    artifacts["notice"] = (
+        '<html><head><meta charset="utf-8"></head><body>' + markup + "</body></html>"
+    ).encode()
+    e["artifacts"][0]["sha256"] = sha256(artifacts["notice"]).hexdigest()
+    for fact in (_fact(o), e["facts_flat"][0]):
+        fact["evidence"][0].update(quote=quote, locator={"selector": selector})
+    if accepted:
+        result = _validate(o, e, artifacts)
+        assert result.facts[0].evidence[0].mechanically_verified
+        assert result.artifacts[0].content == artifacts["notice"]
+        assert "HUMAN_FACT_REVIEW_REQUIRED" in result.issues
+    else:
+        with pytest.raises(
+            _delivery_module().DeliveryValidationError, match="EVIDENCE_QUOTE_MISMATCH"
+        ):
+            _validate(o, e, artifacts)
+
+
 def test_xlsx_quote_is_checked_in_the_declared_row_not_another_position() -> None:
     o, e, artifacts = _sample()
     book = Workbook()
