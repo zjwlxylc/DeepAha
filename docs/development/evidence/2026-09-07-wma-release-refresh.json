@@ -1,0 +1,12 @@
+{
+  "checked_at": "2026-09-07T06:15:44.993825+00:00",
+  "scope": "READ_ONLY_PUBLISHED_AGENT_REFRESH",
+  "runtime_created": false,
+  "prompt_sent": false,
+  "model_configuration_changed": false,
+  "status": "PROVIDER_LOOKUP_FAILED",
+  "error_type": "APINetworkError",
+  "http_status": 500,
+  "provider_code": 10000,
+  "message": "10000:get enterprise info error: rpc error: code = DeadlineExceeded desc = stream terminated by RST_STREAM with error code: CANCEL:rpc error: code = DeadlineExceeded desc = stream terminated by RST_STREAM with error code: CANCEL"
+}

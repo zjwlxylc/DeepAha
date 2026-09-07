@@ -1,0 +1,54 @@
+{
+  "runtime_name_prefix": "deepaha-binding-probe",
+  "prompts_sent": 0,
+  "started_at_utc": "2026-09-07T05:08:21.607553+00:00",
+  "agent_session_response_keys": [
+    "acp",
+    "createdAt",
+    "runtimeId",
+    "sessionId",
+    "sessionName",
+    "sessionStatus",
+    "updatedAt"
+  ],
+  "published_version": "v1",
+  "published_model_configuration": "agnes-2.5-flash",
+  "session_detail_keys": [
+    "agentManifest",
+    "createdAt",
+    "runtimeId",
+    "sessionId",
+    "sessionName",
+    "sessionStatus",
+    "updatedAt"
+  ],
+  "actual_manifest_keys": [
+    "description",
+    "envs",
+    "id",
+    "manifestVersion",
+    "name",
+    "secrets",
+    "settingsJson",
+    "skills",
+    "system_prompt",
+    "useWorkspaceRoot"
+  ],
+  "prompt_matches": false,
+  "actual_prompt_chars": 3,
+  "skills_match": false,
+  "actual_skill_count": 6,
+  "actual_env_keys": [
+    "X_ENTERPRISE_ID",
+    "ACC_USER_ID",
+    "SANDBOX_PROXY_DISABLE_SET_MODEL",
+    "CODEBUDDY_PRE_MESSAGE_COMPACT",
+    "CODEBUDDY_PRE_MESSAGE_COMPACT_PCT"
+  ],
+  "actual_secret_keys": [
+    "CODEBUDDY_API_KEY"
+  ],
+  "published_manifest_sha256": "7cdd3bf4294670a2fbeb3854ba518eae093d71bff24d38635c1084005a04fde4",
+  "owned_runtime_cleanup": "DELETED",
+  "finished_at_utc": "2026-09-07T05:08:31.159437+00:00"
+}

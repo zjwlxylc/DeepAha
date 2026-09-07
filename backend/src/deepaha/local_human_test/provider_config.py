@@ -3,6 +3,7 @@ import ctypes
 import json
 import os
 import subprocess
+import sys
 from collections.abc import Callable
 from contextlib import suppress
 from ctypes import wintypes
@@ -139,7 +140,7 @@ class WindowsDpapiProtector:
         return self._crypt(ciphertext, protect=False)
 
     def _crypt(self, content: bytes, *, protect: bool) -> bytes:
-        if os.name != "nt":
+        if sys.platform != "win32":
             raise ProviderConfigError("Windows DPAPI is unavailable")
         if not content:
             raise ProviderConfigError("DPAPI input must not be empty")

@@ -1,0 +1,22 @@
+{
+  "scope": "DIRECT_AGNES_MINIMAL_DIAGNOSTIC",
+  "model_requested": "agnes-2.5-flash",
+  "http_status": 200,
+  "configured_host": "apihub.agnes-ai.cn",
+  "prompt_count": 1,
+  "max_output_tokens": 32,
+  "credential_source": "EXISTING_LOCAL_WORKBUDDY_MODEL_CONFIGURATION",
+  "key_disclosed": false,
+  "cloud_agent_configuration_changed": false,
+  "returned_model": "agnes-2.5-flash",
+  "usage": {
+    "completion_tokens": 2,
+    "prompt_tokens": 290,
+    "total_tokens": 292,
+    "prompt_tokens_details": {
+      "cached_tokens": 256
+    }
+  },
+  "finish_reason": "stop",
+  "expected_response_observed": true
+}

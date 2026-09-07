@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import sys
 from contextlib import suppress
 from hashlib import sha256 as calculate_sha256
 from pathlib import Path, PurePosixPath
@@ -206,16 +207,16 @@ class LocalFileObjectStore:
                 os.write(descriptor, b"\0")
                 os.fsync(descriptor)
             os.lseek(descriptor, 0, os.SEEK_SET)
-            if os.name == "nt":
+            if sys.platform == "win32":
                 import msvcrt
 
                 msvcrt.locking(descriptor, msvcrt.LK_NBLCK, 1)
             else:
                 import fcntl
 
-                fcntl.flock(  # type: ignore[attr-defined]
+                fcntl.flock(
                     descriptor,
-                    fcntl.LOCK_EX | fcntl.LOCK_NB,  # type: ignore[attr-defined]
+                    fcntl.LOCK_EX | fcntl.LOCK_NB,
                 )
             return descriptor
         except OSError as error:
@@ -227,16 +228,16 @@ class LocalFileObjectStore:
     def _release_lock(descriptor: int) -> None:
         try:
             os.lseek(descriptor, 0, os.SEEK_SET)
-            if os.name == "nt":
+            if sys.platform == "win32":
                 import msvcrt
 
                 msvcrt.locking(descriptor, msvcrt.LK_UNLCK, 1)
             else:
                 import fcntl
 
-                fcntl.flock(  # type: ignore[attr-defined]
+                fcntl.flock(
                     descriptor,
-                    fcntl.LOCK_UN,  # type: ignore[attr-defined]
+                    fcntl.LOCK_UN,
                 )
         finally:
             os.close(descriptor)

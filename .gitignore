@@ -29,3 +29,6 @@ Thumbs.db
 
 # Disposable local manual-test runtime
 .deepaha-local-manual/
+
+# Reproducible investigation browser evidence (retained locally)
+web/output/playwright/investigations/
