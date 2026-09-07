@@ -18,6 +18,7 @@ export interface InvestigationFact {
   field: string;
   value: string | null;
   status: string;
+  note?: string | null;
   evidence: {
     artifact_id: string;
     quote: string;

@@ -3,7 +3,7 @@
 import asyncio
 import copy
 from contextlib import nullcontext
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime, timedelta, timezone
 from typing import Any, cast
 from uuid import UUID
 
@@ -93,6 +93,56 @@ class StoreBoundary(InvestigationStore):
 
     def _source(self, session: Session, command: CreateInvestigation) -> dict[str, Any]:
         return copy.deepcopy(SOURCE)
+
+
+def test_view_timestamps_are_stable_across_database_session_timezones() -> None:
+    store = StoreBoundary()
+    first = store.get(TASK)
+    local = timezone(timedelta(hours=8))
+    store.task.created_at = store.task.created_at.astimezone(local)
+    store.task.updated_at = store.task.updated_at.astimezone(local)
+    assert store.task.deadline_at is not None
+    store.task.deadline_at = store.task.deadline_at.astimezone(local)
+
+    assert store.get(TASK) == first
+    assert store.task.created_at.utcoffset() == timedelta(hours=8)
+    assert not store.session.events
+
+
+def test_legacy_view_recovers_notes_by_entity_and_field_without_rewriting_delivery() -> None:
+    store = StoreBoundary()
+    store.task.delivery_hash = "e" * 64
+    store.task.delivery = {
+        "facts": [
+            {"entity_id": "a", "field": "degree", "value": "doctorate", "status": "CONFIRMED"},
+            {"entity_id": "b", "field": "degree", "value": None, "status": "UNKNOWN"},
+        ],
+        "evidence": {
+            "facts_flat": [
+                {"entity_id": "a", "field": "degree", "note": "Candidate A exception."},
+                {"entity_id": "b", "field": "degree", "note": "Candidate B missing evidence."},
+            ]
+        },
+    }
+    before = copy.deepcopy(store.task.delivery)
+    result = store.get(TASK)
+    assert [fact["note"] for fact in result["facts"]] == [
+        "Candidate A exception.",
+        "Candidate B missing evidence.",
+    ]
+    assert store.task.delivery == before
+    assert result["delivery_hash"] == store.task.delivery_hash == "e" * 64
+    assert not store.session.events
+
+
+@pytest.mark.parametrize("note", [None, "Frozen candidate note."])
+def test_view_preserves_explicit_frozen_note(note: str | None) -> None:
+    store = StoreBoundary()
+    store.task.delivery = {
+        "facts": [{"entity_id": "a", "field": "degree", "note": note}],
+        "evidence": {"facts_flat": [{"entity_id": "a", "field": "degree", "note": "Other"}]},
+    }
+    assert store.get(TASK)["facts"][0]["note"] == note
 
 
 def test_expired_creation_checkpoint_keeps_ids_without_extending_execution() -> None:

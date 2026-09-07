@@ -116,6 +116,7 @@ class DeliveryFact:
     value: str | None
     status: str
     evidence: tuple[DeliveryEvidence, ...]
+    note: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -552,7 +553,14 @@ def validate_delivery(
                 DeliveryEvidence(artifact.artifact_id, quote, locator, artifact.sha256, verified)
             )
         facts.append(
-            DeliveryFact(entity, fact["field"], fact["value"], fact["status"], tuple(references))
+            DeliveryFact(
+                entity,
+                fact["field"],
+                fact["value"],
+                fact["status"],
+                tuple(references),
+                note=fact.get("note"),
+            )
         )
     manifest = {
         "files": {key: sha256(value).hexdigest() for key, value in result_files.items()},

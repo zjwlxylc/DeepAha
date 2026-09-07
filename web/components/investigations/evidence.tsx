@@ -66,7 +66,9 @@ export default function InvestigationEvidence({ task }: { task: InvestigationTas
         {Array.from(factGroups, ([entityId, facts]) => <section className="investigation-entity" key={entityId}>
           <h3>{entityNames.get(entityId) ?? `公告或其他实体 · ${entityId}`}</h3>
           <div className="candidate-list">{facts.map((fact, index) => <article className="candidate-card" key={`${fact.field}-${index}`}>
-            <div className="candidate-grid"><div><h4>{labels[fact.field] ?? fact.field}</h4><p>{fact.value ?? "未知 / 未提供"}</p><span className="status-badge">{factStatuses[fact.status] ?? `待核对 · ${fact.status}`}</span></div>
+            <div className="candidate-grid"><div><h4>{labels[fact.field] ?? fact.field}</h4><p>{fact.value ?? "未知 / 未提供"}</p><span className="status-badge">{factStatuses[fact.status] ?? `待核对 · ${fact.status}`}</span>
+              {fact.note ? <div className="risk-note"><strong>调查备注（待人工核对）</strong><p>{fact.note}</p></div> : null}
+            </div>
               <div>{fact.evidence.length ? fact.evidence.map((evidence, evidenceIndex) => <blockquote className="official-evidence-block" key={`${evidence.artifact_id}-${evidenceIndex}`}>
                 <p>{evidence.quote || "未提供引文"}</p>
                 <footer><p>{readable(evidence.locator)}</p><p>{evidence.mechanically_verified ? "已核验字节与引文定位；语义待人工核对" : "原件与定位尚未完成机械核验"}</p>

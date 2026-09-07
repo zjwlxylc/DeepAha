@@ -1,0 +1,16 @@
+{
+  "scope": "NO_TOOL_CONNECTION_DIAGNOSTIC",
+  "started_at": "2026-09-07T09:00:00.759098+00:00",
+  "max_wall_seconds": 90,
+  "model_configuration_changed": false,
+  "prompt_count": 1,
+  "tool_permission_in_prompt": false,
+  "thought_content_collected": false,
+  "stop_reason": "refusal",
+  "public_response_received": true,
+  "model_service_error": "400 model [agnes-2.5-flash] service info not found",
+  "connection_acknowledged": false,
+  "status": "DIAGNOSTIC_FAILED",
+  "cleanup": "DELETED_OWN_DIAGNOSTIC_RUNTIME",
+  "completed_at": "2026-09-07T09:00:28.118412+00:00"
+}

@@ -12,6 +12,8 @@ test("registers without execution, reads evidence, downloads privately and recor
   await page.screenshot({ path: testInfo.outputPath("list.png"), fullPage: true });
   await page.goto(`/review/investigations/${taskId}`);
   await expect(page.getByText("学历要求：硕士及以上")).toBeVisible();
+  await expect(page.getByText("调查备注（待人工核对）")).toBeVisible();
+  await expect(page.getByText("示例疑点：应届毕业生的证书取得时间仍需核对。")).toBeVisible();
   await expect(page.getByText(/工作表：岗位表；行：5；列：D/)).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("detail.png"), fullPage: true });

@@ -20,6 +20,7 @@ export const task: InvestigationTask = {
     units: [{ id: "unit-1", name: "示例学院", positions: [{ id: "position-1", name: "教学岗位", code: "P001" }] }],
   },
   facts: [{ entity_id: "position-1", field: "education", value: "硕士及以上", status: "CONFIRMED",
+    note: "示例疑点：应届毕业生的证书取得时间仍需核对。",
     evidence: [{ artifact_id: "attachment-1", quote: "学历要求：硕士及以上", locator: { sheet: "岗位表", row: 5, column: "D" }, sha256: "c".repeat(64), mechanically_verified: true }],
   }],
   materials: [{ artifact_id: "attachment-1", url: `${source.url}/jobs.xlsx`, sha256: "c".repeat(64), media_type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", size_bytes: 1024 }],

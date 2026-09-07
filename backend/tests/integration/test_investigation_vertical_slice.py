@@ -1,8 +1,10 @@
 """Real database/API/runner with synthetic transport and synthetic review action."""
 
 import asyncio
+import json
 from collections.abc import Callable
 from pathlib import Path
+from typing import Any, cast
 from uuid import UUID
 
 import pytest
@@ -14,6 +16,7 @@ from deepaha.api.investigations import get_investigation_store
 from deepaha.api.local_human_test import require_local_test_principal
 from deepaha.core.settings import Settings, get_settings
 from deepaha.investigations.delivery import preflight_manifest
+from deepaha.investigations.models import InvestigationTask
 from deepaha.investigations.prompt import task_root
 from deepaha.investigations.runner import execute_investigation
 from deepaha.investigations.wma import WmaSessionRef
@@ -32,6 +35,15 @@ pytestmark = pytest.mark.integration
 class SyntheticClient:
     def __init__(self, task_id: UUID) -> None:
         results, artifacts = _files(task_id)
+        for name in ("opportunities.json", "evidence.json"):
+            document = json.loads(results[name])
+            fact = (
+                document["units"][0]["positions"][0]["facts"][0]
+                if name == "opportunities.json"
+                else document["facts_flat"][0]
+            )
+            fact["note"] = "Synthetic candidate note; the issuer must clarify the exception."
+            results[name] = json.dumps(document).encode()
         root = task_root(task_id)
         self.files = {f"{root}/result/{name}": data for name, data in results.items()}
         self.files.update(
@@ -98,6 +110,16 @@ def test_register_execute_download_and_internal_review_through_real_api(
         detail = client.get(f"{base}/{task_id}").json()
         assert detail["status"] == "PENDING_REVIEW"
         assert len(detail["facts"]) > 0 and detail["materials"]
+        assert detail["facts"][0]["note"] == (
+            "Synthetic candidate note; the issuer must clarify the exception."
+        )
+        with h.factory() as session:
+            frozen = session.get(InvestigationTask, task_id)
+            assert frozen is not None
+            assert (
+                cast(dict[str, Any], frozen.delivery)["facts"][0]["note"]
+                == (detail["facts"][0]["note"])
+            )
         material = detail["materials"][0]
         response = client.get(f"{base}/{task_id}/materials/{material['artifact_id']}")
         _, originals = _files(task_id)

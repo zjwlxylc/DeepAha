@@ -1,0 +1,43 @@
+{
+  "scope": "READ_ONLY_RELEASE_AND_EXACT_CALIBRATION_RUNTIME_LOOKUP",
+  "checked_at": "2026-09-07T08:30:29.339188+00:00",
+  "new_prompts": 0,
+  "model_configuration_changed": false,
+  "calls": [
+    {
+      "operation": "AGENT_LIST",
+      "status": "FAILED",
+      "error_type": "APINetworkError",
+      "http_status": 500,
+      "provider_code": 10000,
+      "known_reason": "UNCLASSIFIED"
+    },
+    {
+      "operation": "RUNTIME_LIST",
+      "status": "PASS"
+    }
+  ],
+  "release_error": "WMA_RELEASE_INSPECTION_FAILED",
+  "runtime_lookup_error": "AttributeError",
+  "corrected_runtime_lookup": {
+    "checked_at": "2026-09-07T08:32:22.721151+00:00",
+    "matched_local_case": "01a07afb-f633-7579-8bcb-9fd7cf0542fe",
+    "mutations": 0,
+    "status": "PASS",
+    "matches": 0,
+    "complete": true
+  },
+  "later_release_check": {
+    "checked_at": "2026-09-07T08:53:44.580986+00:00",
+    "new_prompts": 0,
+    "model_configuration_changed": false,
+    "status": "PASS",
+    "release": {
+      "release_version": "v1",
+      "published_model": "agnes-2.5-flash",
+      "prompt_sha256": "6bed7a9984ee5d9324739d1e38f97b1f6f1b8f3f669aef7d5e68e176f69d6b73",
+      "configuration_sha256": "33b2b922b25a55c1737bdc3823073a7ad23694dfceafc4df455493c6a91a7dae",
+      "skills_sha256": "5225177ad21df3e289a7d888bf8ca63823f0f5fc03287c857c5384c3dfa1e6d0"
+    }
+  }
+}

@@ -2,7 +2,7 @@ from collections.abc import Callable
 from dataclasses import asdict
 from datetime import UTC, datetime, timedelta
 from hashlib import sha256
-from typing import Any
+from typing import Any, cast
 from uuid import UUID, uuid7
 
 from sqlalchemy import func, select, text
@@ -430,18 +430,29 @@ class InvestigationStore:
             task.result_objects = keys
 
     def _view(self, session: Session, task: InvestigationTask) -> dict[str, Any]:
-        delivery = task.delivery or {}
+        delivery = cast(dict[str, Any], task.delivery or {})
+        # Older snapshots retained notes in the original bundle but omitted them
+        # from the materialized facts. Restore them in the read view only.
+        original_notes = {
+            (fact["entity_id"], fact["field"]): fact.get("note")
+            for fact in delivery.get("evidence", {}).get("facts_flat", [])
+        }
+        facts = [
+            fact
+            | {"note": fact.get("note", original_notes.get((fact["entity_id"], fact["field"])))}
+            for fact in delivery.get("facts", [])
+        ]
         return dict(task.request) | {
             "task_id": str(task.task_id),
             "status": task.status,
             "error_code": task.error_code,
-            "created_at": task.created_at.isoformat(),
-            "updated_at": task.updated_at.isoformat(),
+            "created_at": task.created_at.astimezone(UTC).isoformat(),
+            "updated_at": task.updated_at.astimezone(UTC).isoformat(),
             "contract_hash": task.contract_hash,
             "delivery_hash": task.delivery_hash,
             "issues": delivery.get("issues", []),
             "opportunities": delivery.get("opportunities"),
-            "facts": delivery.get("facts", []),
+            "facts": facts,
             "report": delivery.get("report"),
             "materials": [
                 m.metadata_snapshot
@@ -455,7 +466,9 @@ class InvestigationStore:
             "execution": task.execution,
             "runtime_id": task.runtime_id,
             "remote_session_id": task.remote_session_id,
-            "deadline_at": None if task.deadline_at is None else task.deadline_at.isoformat(),
+            "deadline_at": (
+                None if task.deadline_at is None else task.deadline_at.astimezone(UTC).isoformat()
+            ),
             "source_snapshot": task.source_snapshot,
         }
 

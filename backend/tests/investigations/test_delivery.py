@@ -1,6 +1,7 @@
 import copy
 import importlib
 import json
+from dataclasses import asdict
 from hashlib import sha256
 from io import BytesIO
 from typing import Any
@@ -113,6 +114,27 @@ def test_validates_actual_nested_and_flat_shape_against_real_bytes() -> None:
     assert result.facts[0].evidence[0].mechanically_verified
     assert "HUMAN_FACT_REVIEW_REQUIRED" in result.issues
     assert result.sha256 == _validate(o, e, artifacts).sha256
+
+
+@pytest.mark.parametrize("note", [None, "Candidate inference only; the issuer must clarify."])
+def test_fact_notes_survive_validation_for_review(note: str | None) -> None:
+    o, e, artifacts = _sample()
+    for fact in (_fact(o), e["facts_flat"][0]):
+        fact["note"] = note
+    result = _validate(o, e, artifacts)
+    assert asdict(result.facts[0])["note"] == note
+    assert result.facts[0].status == "CONFIRMED"
+    assert "HUMAN_FACT_REVIEW_REQUIRED" in result.issues
+
+
+def test_note_disagreement_between_nested_and_flat_facts_is_rejected() -> None:
+    o, e, artifacts = _sample()
+    _fact(o)["note"] = "Candidate inference only."
+    e["facts_flat"][0]["note"] = "No uncertainty."
+    with pytest.raises(
+        _delivery_module().DeliveryValidationError, match="FACT_REPRESENTATION_MISMATCH"
+    ):
+        _validate(o, e, artifacts)
 
 
 def test_nullable_nested_parent_uses_unambiguous_containment_but_flat_parent_stays_exact() -> None:

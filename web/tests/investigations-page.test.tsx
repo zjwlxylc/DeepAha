@@ -42,6 +42,21 @@ describe("investigation pages", () => {
     render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
     expect(screen.queryByRole("button", { name: "记录内部材料审核" })).not.toBeInTheDocument();
   });
+  it("shows a model note as candidate text alongside the field and official evidence", async () => {
+    const note = "工作地点仅根据单位名称推断；<script>请核对</script>";
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, facts: [{ ...task.facts[0], note }] });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByText("调查备注（待人工核对）")).toBeVisible();
+    expect(screen.getByText(note)).toBeVisible();
+    expect(screen.getByText(note).querySelector("script")).toBeNull();
+    expect(screen.getByText("候选认为有依据")).toBeVisible();
+    expect(screen.getByText("学历要求：硕士及以上")).toBeVisible();
+  });
+  it.each([null, undefined, ""])("does not invent a note when absent (%s)", async (note) => {
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, facts: [{ ...task.facts[0], note }] });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.queryByText("调查备注（待人工核对）")).not.toBeInTheDocument();
+  });
   it.each([
     ["WMA_REMOTE_REFUSED", "调查服务拒绝了本次执行"],
     ["WMA_OUTPUT_LIMIT_REACHED", "调查达到输出长度上限"],
