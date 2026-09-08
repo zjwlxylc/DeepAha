@@ -1,0 +1,158 @@
+{
+  "pull_request": "https://github.com/zjwlxylc/DeepAha/pull/13",
+  "candidate": "d51faa9daef9da4a2048660d992ff27e476ae612",
+  "merge_commit": "fcd120567a98db415a7b072454faede9bf5803ec",
+  "candidate_tree": "c88d15bf032181dc535af172cb8f089444ff202a",
+  "merge_tree": "c88d15bf032181dc535af172cb8f089444ff202a",
+  "ci_run": 34219932696,
+  "ci_number": 80,
+  "jobs": [
+    {
+      "id": 102040397404,
+      "name": "backend-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102040397536,
+      "name": "phase5-public-trust",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102040397576,
+      "name": "integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102040397580,
+      "name": "phase3-resolution",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102040397582,
+      "name": "phase7-feedback-review",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102040397596,
+      "name": "phase4-eligibility",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102040397601,
+      "name": "web-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102040397603,
+      "name": "phase8-deadline-reminder",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102040397680,
+      "name": "phase6-profile-action",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "frozen_counts": {
+    "PASS": 94,
+    "FAIL": 0,
+    "UNVERIFIED": 30
+  },
+  "delivery_verdict": "UNVERIFIED",
+  "wma_calls": 0,
+  "deployment": false,
+  "human_fact_approvals": 0,
+  "root_user_checkout_changed": false,
+  "cleanup": {
+    "ephemeral_replay_databases": "REMOVED",
+    "ephemeral_replay_objects": "REMOVED",
+    "owned_test_containers": "RETAINED_TOOL_POLICY_REJECTION",
+    "containers": [
+      "deepaha-evidence-blocks-db",
+      "deepaha-evidence-blocks-s3"
+    ]
+  },
+  "historical_notifications": [
+    {
+      "number": 80,
+      "sha": "d51faa9daef9da4a2048660d992ff27e476ae612",
+      "conclusion": "success",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/34219932696"
+    },
+    {
+      "number": 79,
+      "sha": "7d34ed711d525c75f258c637996a46887ac77933",
+      "conclusion": "success",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/34217789355"
+    },
+    {
+      "number": 78,
+      "sha": "18a02d94e02a6b63848bd892791a19a18c667f65",
+      "conclusion": "success",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/34216893603"
+    },
+    {
+      "number": 77,
+      "sha": "46a264778aea4c7ba31a99c5b02733970b8c50ef",
+      "conclusion": "success",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/34212418474"
+    },
+    {
+      "number": 76,
+      "sha": "a59c6ec1585ce7c3fdb4cf174f90117f8cfd4296",
+      "conclusion": "success",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/34211810036"
+    },
+    {
+      "number": 75,
+      "sha": "22b9cb8d8f6b661c104d69266eb8eceab7dca743",
+      "conclusion": "success",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/34207301100"
+    },
+    {
+      "number": 74,
+      "sha": "088afc21fa038daa83811d9d2530cd51164cf771",
+      "conclusion": "success",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/34206716808"
+    },
+    {
+      "number": 73,
+      "sha": "3a83994f430d73092f842767ddb4606b5d76fdd1",
+      "conclusion": "failure",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/34206238154"
+    },
+    {
+      "number": 72,
+      "sha": "9c8f5b2b38d195789efbc021635c11f9dc9c54ea",
+      "conclusion": "failure",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/33603460834"
+    },
+    {
+      "number": 71,
+      "sha": "c8a10dbb3e8ff1fd3dd966d3f0f947a72e08d2d4",
+      "conclusion": "failure",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/33600183301"
+    },
+    {
+      "number": 70,
+      "sha": "e699df77c2b373d3843b98a5d84d6710d5abb48d",
+      "conclusion": "failure",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/33591489123"
+    },
+    {
+      "number": 69,
+      "sha": "d806e305c4b9239a81cce0216a237cd90f89f367",
+      "conclusion": "failure",
+      "url": "https://github.com/zjwlxylc/DeepAha/actions/runs/32975231166"
+    }
+  ]
+}

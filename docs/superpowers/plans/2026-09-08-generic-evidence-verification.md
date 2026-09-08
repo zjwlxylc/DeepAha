@@ -4,7 +4,7 @@
 
 依据：[已确认的架构结论](D:/DeepAha/docs/development/reviews/2026-09-08-evidence-verification-architecture-review.md)、[开发顺序](../../development/2026-09-08-evidence-architecture-adoption.md)。用户已要求在合适阶段实施，不新增逐步审批或固定子 Agent 流程。采用现有 Python/Pydantic/PostgreSQL/对象存储，不引入新服务或模型调用。
 
-本计划实施状态：IN_PROGRESS。首批 PR #10 已合入主线 `22b9cb8`；A 的 PR #11 已通过九项 CI 并合入 `46a2647`；B 的 PR #12 已通过九项 CI 并合入 `7d34ed7`，合并树与候选一致。C 已实现，共同 Delivery 与新持久回执对冻结案例 124 条引用逐条一致，正在完成最终数据库矩阵与候选集成。较长分支仅作既有功能移入和兼容性参考，不把其全量类型失败带进主线。
+本计划实施状态：IMPLEMENTED，A–D 已完成并集成。首批 PR #10 合入 `22b9cb8`；A 的 PR #11 合入 `46a2647`；B 的 PR #12 合入 `7d34ed7`；C/D 的 PR #13 九项 CI #80 全部通过后合入 `fcd1205`，合并树与候选 `d51faa9` 一致。共同 Delivery 与新持久回执对冻结案例 124 条引用逐条一致，仍为 94 PASS / 0 FAIL / 30 UNVERIFIED。此状态仅表示本架构方案实现与集成完成，不表示全项目完成、真实发布资格通过或 Word 已可机械绑定。
 
 ## 不变量
 
@@ -52,11 +52,11 @@
 - [x] 持久绑定验证 DocumentBlock 身份与 Hash 后复用同一范围表示；四条表头与内联发布时间均获实际 EvidenceRef，旧回执不改写。
 - [x] 追加保存核验版本、表示 Hash、content support、declared locator、binding/anchor、precision、ambiguity、verdict/reasons。新记录具备不可变性、实际引用关联和计数一致性约束。
 - [x] 审核页面显示内容、定位与持久绑定的独立状态及候选位置。未绑定或需人工确认时保持 UNVERIFIED，材料接收和正式事实审批边界不变。
-- [x] 冻结案例逐条回放、52 项定向持久化/历史/迁移测试、桌面与手机 10 项浏览器验证通过；原路径替换仍须候选 CI 通过后合并。
+- [x] 冻结案例逐条回放、52 项定向持久化/历史/迁移测试、桌面与手机 10 项浏览器验证通过；候选 CI 九项通过后完成原路径替换与合并。
 
 ## 批次 D：扩展性证明与收尾
 
 - [x] 用测试内新增的合成文本格式 Adapter，证明仅新增 Adapter、注册配置和测试即可读取/定位/回放；`verifier.py`、Delivery 核心、Candidate、Fact lifecycle、VerifiedFact 审批、Opportunity 的生产改动数为零。
 - [x] 错 Hash、错范围、日期/否定词变化、跨格拼接、重复位置、不完整读取、视觉材料待审都有确定结果；没有 OCR 生产 Reader，也没有强行追求 124/124。
-- [ ] 执行相关纯函数/契约/数据库回归、`ruff`、完整 `mypy src tests`、Web 检查及必要浏览器链，独立代码评审后提交 PR，检查通过再合入。
-- [ ] 更新实现与验证状态、保留可复现脚本和证据。低频 DOC/XLS/OCR Adapter 按后续真实收益决定投入；本计划不预先选择转换程序，不以此扩建文档取证平台。
+- [x] 执行相关纯函数/契约/数据库回归、`ruff`、完整 `mypy src tests`、Web 检查及必要浏览器链，独立代码评审后提交 PR，检查通过再合入。
+- [x] 更新实现与验证状态、保留可复现脚本和证据。低频 DOC/XLS/OCR Adapter 按后续真实收益决定投入；本计划不预先选择转换程序，不以此扩建文档取证平台。
