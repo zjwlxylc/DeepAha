@@ -48,7 +48,7 @@ describe("investigation pages", () => {
     vi.mocked(getInvestigation).mockResolvedValue({ ...task, status: "APPROVED", document_preparation: preparedDocuments });
     vi.mocked(getInvestigationBindingTargets).mockResolvedValue({ targets: [] });
     render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
-    expect(screen.getByText(/目前没有可选择的正式机会版本/)).toBeVisible();
+    expect(screen.getByText(/目前没有可选择的机会版本/)).toBeVisible();
     expect(screen.queryByRole("button", { name: "确认归属并冻结来源" })).not.toBeInTheDocument();
   });
   it("offers explicit local evidence preparation with an honest boundary", async () => {

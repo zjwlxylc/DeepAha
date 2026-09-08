@@ -1,6 +1,6 @@
 # 通用核验接线与不可变调查回执
 
-实现状态：IMPLEMENTED；候选集成尚在验证。接续架构审查的 C/D 批次，基线为 PR #12 合并 `7d34ed7`。本次不部署、不批准事实，也不把工程通过写成发布资格通过。
+实现状态：IMPLEMENTED，已通过 [PR #13](https://github.com/zjwlxylc/DeepAha/pull/13) 合入远程 main `fcd120567a98db415a7b072454faede9bf5803ec`。CI #80 九项全部通过，合并树与候选 `d51faa9` 一致。接续架构审查的 C/D 批次，基线为 PR #12 合并 `7d34ed7`。本次不部署、不批准事实，也不把工程通过写成发布资格通过。
 
 ## 结果与边界
 
@@ -23,14 +23,17 @@ Delivery 的活动路径改为共同 EvidenceVerifier，继续保留两份冻结
 - Web：139 passed、lint/typecheck/生产构建通过；桌面/手机浏览器 10 passed，覆盖丢失回执重试、准备、内容与定位展示、下载和内部材料审核。详情展开后另做两端视觉检查。
 - 独立评审指出一项回执关系约束问题，已用 PostgreSQL 失败测试复现并修复；修复测试覆盖缺失引用、错误计数、改写引文、错误索引、错误引用 ID、错误材料集合和不可变性。其余常规复核未发现明确回归；独立 7 项 Delivery 测试与 3 类实际 UI 状态检查通过。
 
-完整 PostgreSQL/Moto 数据库矩阵：516 passed / 3 skipped，跳过项依赖专用数据库名称，由对应 CI 作业执行。其后补充检查器版本进入 input_hash，19 项定向数据库、204 项公共/Delivery 回归及同一真实案例重放再次通过；Alembic check 无模型差异。候选 CI 尚待执行。
+完整 PostgreSQL/Moto 数据库矩阵：516 passed / 3 skipped，跳过项依赖专用数据库名称，由对应 CI 作业执行。其后补充检查器版本进入 input_hash，19 项定向数据库、204 项公共/Delivery 回归及同一真实案例重放再次通过；Alembic check 无模型差异。候选 CI #80 全九项通过，含两个完整数据库作业。
 
 ## 可复现证据
 
 - `docs/development/evidence/2026-09-08-investigation-receipt-replay.py`
 - `docs/development/evidence/2026-09-08-investigation-receipt-replay.json`
 - `docs/development/evidence/2026-09-08-receipt-integration-tests.txt`
+- `docs/development/evidence/2026-09-08-generic-evidence-receipts-merged-ci.json`
 - `backend/tests/integration/test_investigation_evidence_checks.py`
 - `web/e2e/investigations.spec.ts`
 
 30 条 Word 的已保存诊断读取不自动晋升为共同 Reader 或可执行定位。后续若开发 DOC/扫描件适配器，需单独建立确定性读取、范围与可靠性证据；当前不修改 Prompt、不重跑 WMA，不以降低 Evidence Gate 换取通过。
+
+本轮重放创建的临时数据库和对象目录已由脚本清除。最终清理本机专用测试容器及空目录的 exec_command 被自动审批以 `blocked by policy` 拒绝，保留 `deepaha-evidence-blocks-db`（127.0.0.1:55437）与 `deepaha-evidence-blocks-s3`（127.0.0.1:55438）；未改变工具策略或绕过拒绝。用户根工作区改动始终保留。

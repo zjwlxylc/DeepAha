@@ -42,6 +42,12 @@ function failure(error: unknown, registration: boolean): InvestigationActionStat
     return invalid("当前审核身份没有操作权限。请使用已授权的真人审核会话。");
   }
   if (error instanceof LocalHumanTestApiError && error.status === 409) {
+    const identityMessages: Record<string, string> = {
+      REGISTRATION_EXISTING_IDENTITY_OR_REVIEW_REQUIRED: "检测到已有身份或可能重复的机会。请核对已有机会并使用关联入口；身份不明确时需先核对。",
+      REGISTRATION_POSITION_INVALID: "岗位重复、已关联或属于单位分组，请核对勾选项。",
+      REGISTRATION_POSITION_KEY_CONFLICT: "内部岗位识别键已被使用，请核对已有岗位并关联，或修正识别键。",
+    };
+    if (error instanceof InvestigationApiError && error.code && identityMessages[error.code]) return invalid(identityMessages[error.code]);
     if (registration) {
       const messages: Record<string, string> = {
         APPROVED_SOURCE_REQUIRED: "所选来源当前未获批准。请刷新来源列表后重新选择。",
@@ -163,4 +169,30 @@ export async function bindInvestigationAction(
     delivery_hash: deliveryHash, opportunity_id: opportunityId, opportunity_version: version,
     positions, previous_binding_id: previous || null, reason,
   }, text(form, "request_key"), "归属确认已记录，材料来源已冻结；尚未关联的岗位和所有字段事实仍待处理。");
+}
+
+export async function registerInvestigationIdentityAction(
+  _state: InvestigationActionState, form: FormData,
+): Promise<InvestigationActionState> {
+  const taskId = text(form, "task_id"), deliveryHash = text(form, "delivery_hash");
+  const previous = text(form, "previous_binding_id"), reason = text(form, "reason");
+  if (!UUID.test(taskId) || !SHA256.test(deliveryHash) || (previous && !UUID.test(previous))) return invalid("任务、材料或归属版本无效，请刷新详情。");
+  if (!reason || reason.length > 2000) return invalid("请填写登记核对依据（1–2000 个字符）。");
+  const positions = form.getAll("new_position").map(value => {
+    const entityId = String(value);
+    return { entity_id: entityId, unit_key: text(form, `unit_key:${entityId}`), label: text(form, `label:${entityId}`) };
+  });
+  if ((previous && !positions.length) || positions.length > 2000
+    || positions.some(p => !p.entity_id || p.entity_id.length > 256 || !p.unit_key || p.unit_key.length > 256 || !p.label || p.label.length > 500)
+    || new Set(positions.map(p => p.entity_id)).size !== positions.length
+    || new Set(positions.map(p => p.unit_key.replace(/\s+/g, " ").toLowerCase())).size !== positions.length) return invalid("请勾选要登记的岗位，填写不重复的识别键及岗位名称。");
+  if (previous) return submit(`/investigations/${taskId}/positions`, {
+    delivery_hash: deliveryHash, previous_binding_id: previous, positions, reason,
+  }, text(form, "request_key"), "岗位身份已登记，已有归属保留；字段内容仍待核验。");
+  const title = text(form, "canonical_title"), type = text(form, "type"), issuer = text(form, "issuer_name");
+  const allowedTypes = ["PUBLIC_INSTITUTION_JOB", "STATE_OWNED_ENTERPRISE_JOB", "CIVIL_SERVICE", "GRASSROOTS_PROGRAM", "YOUTH_POLICY_BENEFIT", "COMPETITION", "RESEARCH_PROGRAM", "SCHOLARSHIP", "YOUTH_DEVELOPMENT_PROGRAM"];
+  if (!title || title.length > 500 || !issuer || issuer.length > 500 || !allowedTypes.includes(type)) return invalid("请依据公告填写名称、发布单位，并明确选择机会类别。");
+  return submit(`/investigations/${taskId}/identity`, { delivery_hash: deliveryHash,
+    canonical_title: title, type, issuer_name: issuer, positions, reason,
+  }, text(form, "request_key"), "内部机会身份已登记并关联材料，内容保持待核验，尚未公开发布。");
 }

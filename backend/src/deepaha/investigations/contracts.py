@@ -7,6 +7,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from deepaha.contracts.phase2 import OpportunityTypeV02
+
 MAX_FILE_BYTES = 20 * 1024 * 1024
 MAX_TOTAL_BYTES = 100 * 1024 * 1024
 MAX_FILES = 50
@@ -57,6 +59,31 @@ class BindInvestigation(BaseModel):
     opportunity_version: int = Field(ge=1)
     positions: tuple[InvestigationPositionBinding, ...] = Field(default=(), max_length=2000)
     previous_binding_id: UUID | None = None
+    reason: str = Field(min_length=1, max_length=2000)
+
+
+class RegisterInvestigationPosition(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+    entity_id: str = Field(min_length=1, max_length=256)
+    unit_key: str = Field(min_length=1, max_length=256)
+    label: str = Field(min_length=1, max_length=500)
+
+
+class RegisterInvestigationIdentity(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+    delivery_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+    canonical_title: str = Field(min_length=1, max_length=500)
+    type: OpportunityTypeV02
+    issuer_name: str = Field(min_length=1, max_length=500)
+    positions: tuple[RegisterInvestigationPosition, ...] = Field(default=(), max_length=2000)
+    reason: str = Field(min_length=1, max_length=2000)
+
+
+class RegisterInvestigationPositions(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+    delivery_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+    previous_binding_id: UUID
+    positions: tuple[RegisterInvestigationPosition, ...] = Field(min_length=1, max_length=2000)
     reason: str = Field(min_length=1, max_length=2000)
 
 

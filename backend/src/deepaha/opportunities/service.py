@@ -187,7 +187,7 @@ class OpportunityResolutionService:
     def __init__(
         self,
         *,
-        session_factory: sessionmaker[Session],
+        session_factory: Callable[[], Session],
         clock: Callable[[], datetime],
         id_factory: Callable[[], UUID] = uuid7,
         resolver_version: str = "0.3.0",
@@ -206,105 +206,98 @@ class OpportunityResolutionService:
         self._candidate_service = candidate_service
 
     def resolve(self, command: ResolutionDocument) -> ResolutionResult:
-        with self._session_factory() as session:
-            try:
-                self._validate_evidence_pair(session, command)
-                previous_candidate = self._existing_candidate(session, command.document_id)
-                if previous_candidate is not None:
-                    session.rollback()
-                    return previous_candidate
-                previous_link = self._existing_link_result(session, command.document_id)
-                if previous_link is not None:
-                    session.rollback()
-                    return previous_link
+        with self._session_factory() as session, session.begin():
+            return self.resolve_in_session(session, command)
 
-                decision = resolve_document(command, load_resolution_index(session))
-                now = self._clock()
-                if decision.disposition is ResolutionDisposition.NEEDS_REVIEW:
-                    result = self._save_candidate(session, command, decision, now)
-                    session.commit()
-                    return result
+    def resolve_in_session(self, session: Session, command: ResolutionDocument) -> ResolutionResult:
+        """Resolve using the caller transaction; never commit partial identity changes."""
+        self._validate_evidence_pair(session, command)
+        previous_candidate = self._existing_candidate(session, command.document_id)
+        if previous_candidate is not None:
+            return previous_candidate
+        previous_link = self._existing_link_result(session, command.document_id)
+        if previous_link is not None:
+            return previous_link
 
-                opportunity = self._resolve_opportunity(session, command, decision, now)
-                if decision.disposition is ResolutionDisposition.LINKED:
-                    concurrent_result = self._existing_link_result(session, command.document_id)
-                    if concurrent_result is not None:
-                        session.rollback()
-                        return concurrent_result
-                link = DocumentOpportunityLink(
-                    link_id=self._id_factory(),
-                    document_id=command.document_id,
-                    opportunity_id=opportunity.opportunity_id,
-                    role=command.role.value,
-                    resolution_key=decision.resolution_key,
-                    resolver_version=self._resolver_version,
-                    source_evidence_ref_id=command.evidence_ref_id,
-                    linked_at=now,
-                    ended_at=None,
-                    ended_by_identity_action_id=None,
-                )
-                session.add(link)
-                self._add_missing_aliases(session, opportunity, command, now)
-                session.flush()
+        decision = resolve_document(command, load_resolution_index(session))
+        now = self._clock()
+        if decision.disposition is ResolutionDisposition.NEEDS_REVIEW:
+            result = self._save_candidate(session, command, decision, now)
+            return result
 
-                current = self._load_version_state(session, opportunity)
-                planned = plan_version(
-                    current,
-                    VersionCommand(
-                        opportunity_id=opportunity.opportunity_id,
-                        source_document_id=command.document_id,
-                        source_evidence_ref_id=command.evidence_ref_id,
-                        source_tier=command.source_tier,
-                        role=command.role,
-                        effective_at=command.effective_at,
-                        facts=command.facts,
-                    ),
-                )
-                if planned is None:
-                    session.commit()
-                    return ResolutionResult(
-                        disposition=decision.disposition.value,
-                        opportunity_id=opportunity.opportunity_id,
-                        public_id=opportunity.public_id,
-                        version=None,
-                        event_type=None,
-                        candidate_id=None,
-                        reason_codes=(),
-                        resolution_key=decision.resolution_key,
-                    )
-                if isinstance(planned, VersionConflict):
-                    conflict_decision = ResolutionDecision(
-                        disposition=ResolutionDisposition.NEEDS_REVIEW,
-                        opportunity_id=None,
-                        public_id=None,
-                        candidate_opportunity_ids=(opportunity.opportunity_id,),
-                        reason_codes=planned.reason_codes,
-                        resolution_key=decision.resolution_key,
-                    )
-                    result = self._save_candidate(
-                        session,
-                        command,
-                        conflict_decision,
-                        now,
-                    )
-                    session.commit()
-                    return result
+        opportunity = self._resolve_opportunity(session, command, decision, now)
+        if decision.disposition is ResolutionDisposition.LINKED:
+            concurrent_result = self._existing_link_result(session, command.document_id)
+            if concurrent_result is not None:
+                return concurrent_result
+        link = DocumentOpportunityLink(
+            link_id=self._id_factory(),
+            document_id=command.document_id,
+            opportunity_id=opportunity.opportunity_id,
+            role=command.role.value,
+            resolution_key=decision.resolution_key,
+            resolver_version=self._resolver_version,
+            source_evidence_ref_id=command.evidence_ref_id,
+            linked_at=now,
+            ended_at=None,
+            ended_by_identity_action_id=None,
+        )
+        session.add(link)
+        self._add_missing_aliases(session, opportunity, command, now)
+        session.flush()
 
-                self._persist_plan(session, opportunity, planned, now)
-                session.commit()
-                return ResolutionResult(
-                    disposition=decision.disposition.value,
-                    opportunity_id=opportunity.opportunity_id,
-                    public_id=opportunity.public_id,
-                    version=planned.version,
-                    event_type=planned.event_type.value,
-                    candidate_id=None,
-                    reason_codes=(),
-                    resolution_key=decision.resolution_key,
-                )
-            except Exception:
-                session.rollback()
-                raise
+        current = self._load_version_state(session, opportunity)
+        planned = plan_version(
+            current,
+            VersionCommand(
+                opportunity_id=opportunity.opportunity_id,
+                source_document_id=command.document_id,
+                source_evidence_ref_id=command.evidence_ref_id,
+                source_tier=command.source_tier,
+                role=command.role,
+                effective_at=command.effective_at,
+                facts=command.facts,
+            ),
+        )
+        if planned is None:
+            return ResolutionResult(
+                disposition=decision.disposition.value,
+                opportunity_id=opportunity.opportunity_id,
+                public_id=opportunity.public_id,
+                version=None,
+                event_type=None,
+                candidate_id=None,
+                reason_codes=(),
+                resolution_key=decision.resolution_key,
+            )
+        if isinstance(planned, VersionConflict):
+            conflict_decision = ResolutionDecision(
+                disposition=ResolutionDisposition.NEEDS_REVIEW,
+                opportunity_id=None,
+                public_id=None,
+                candidate_opportunity_ids=(opportunity.opportunity_id,),
+                reason_codes=planned.reason_codes,
+                resolution_key=decision.resolution_key,
+            )
+            result = self._save_candidate(
+                session,
+                command,
+                conflict_decision,
+                now,
+            )
+            return result
+
+        self._persist_plan(session, opportunity, planned, now)
+        return ResolutionResult(
+            disposition=decision.disposition.value,
+            opportunity_id=opportunity.opportunity_id,
+            public_id=opportunity.public_id,
+            version=planned.version,
+            event_type=planned.event_type.value,
+            candidate_id=None,
+            reason_codes=(),
+            resolution_key=decision.resolution_key,
+        )
 
     def _validate_evidence_pair(
         self,

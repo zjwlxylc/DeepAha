@@ -1127,6 +1127,22 @@ code {
   resize: vertical;
 }
 
+.review-form label.investigation-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  min-height: 2.75rem;
+}
+
+.review-form .investigation-check input[type="checkbox"] {
+  width: 1.15rem;
+  height: 1.15rem;
+  min-height: 0;
+  flex: 0 0 auto;
+  margin-top: 0.2rem;
+  padding: 0;
+}
+
 .investigation-shell .human-test-panel,
 .investigation-shell .compact-facts dd,
 .investigation-shell .human-test-run-list li,

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { bindInvestigationAction, createInvestigationAction, prepareInvestigationDocumentsAction, reviewInvestigationAction } from "../app/review/investigations/actions";
+import { registerInvestigationIdentityAction, bindInvestigationAction, createInvestigationAction, prepareInvestigationDocumentsAction, reviewInvestigationAction } from "../app/review/investigations/actions";
 import { source, task, taskId } from "./investigations-fixture";
 
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: () => ({ value: "synthetic-reviewer-session" }) }) }));
@@ -27,6 +27,31 @@ describe("investigation actions", () => {
       String(url).endsWith("/sources") ? { sources: [source] } : task,
     ));
   });
+  it("requires explicit classification and sends only selected new post identities", async () => {
+    const data = new FormData(); data.set("request_key", source.source_id);
+    data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+    data.set("canonical_title", "招聘公告"); data.set("issuer_name", "发布单位"); data.set("reason", "核对原件");
+    expect((await registerInvestigationIdentityAction(empty, data)).error).toContain("明确选择");
+    expect(submissions()).toHaveLength(0);
+    data.set("type", "PUBLIC_INSTITUTION_JOB"); data.append("new_position", "post-1");
+    data.set("unit_key:post-1", "A01"); data.set("label:post-1", "岗位甲");
+    expect((await registerInvestigationIdentityAction(empty, data)).message).toContain("尚未公开发布");
+    expect(String(submissions()[0][0])).toMatch(/\/identity$/);
+    expect(JSON.parse(submissions()[0][1]!.body as string).positions).toEqual([
+      { entity_id: "post-1", unit_key: "A01", label: "岗位甲" },
+    ]);
+  });
+
+  it("adds posts against an exact binding revision without resending opportunity fields", async () => {
+    const data = new FormData(); data.set("request_key", source.source_id); data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+    data.set("previous_binding_id", source.source_id); data.set("reason", "补充岗位");
+    data.append("new_position", "post-1"); data.set("unit_key:post-1", "A01"); data.set("label:post-1", "岗位甲");
+    expect((await registerInvestigationIdentityAction(empty, data)).message).toContain("已有归属保留");
+    expect(String(submissions()[0][0])).toMatch(/\/positions$/);
+    const body = JSON.parse(submissions()[0][1]!.body as string);
+    expect(body.previous_binding_id).toBe(source.source_id); expect(body.canonical_title).toBeUndefined();
+  });
+
   const submissions = () => vi.mocked(fetch).mock.calls.filter(([, request]) => request?.method === "POST");
 
   it("submits an explicit identity association and preserves unmapped positions", async () => {
