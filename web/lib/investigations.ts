@@ -24,10 +24,37 @@ export interface InvestigationFact {
     locator: Record<string, unknown>;
     sha256: string;
     mechanically_verified: boolean;
+    verification?: EvidenceVerification | null;
+  }[];
+}
+
+export interface EvidenceVerification {
+  artifact_id: string; artifact_sha256: string; quote: string;
+  original_locator: Record<string, unknown>;
+  reader: { name: string; version: string; parse_contract: string; comparison_version: string } | null;
+  representation_sha256: string | null; content_support: string; declared_locator: string;
+  binding: string; precision: string; verdict: "PASS" | "FAIL" | "UNVERIFIED";
+  matches: { projection_id: string; source_spans: { origin_id: string; start: number; end: number }[] }[];
+  reason_codes: string[]; verifier_version: string;
+}
+
+export interface InvestigationEvidenceCheck {
+  check_id: string; input_hash: string; result_hash: string; delivery_hash: string;
+  created_at: string; scope: "MECHANICAL_EVIDENCE_ONLY";
+  verdict: "PASS" | "FAIL" | "UNVERIFIED";
+  counts: Record<"PASS" | "FAIL" | "UNVERIFIED", number>;
+  references: {
+    fact_index: number; reference_index: number; entity_id: string; field: string; artifact_id: string;
+    verification: EvidenceVerification; verdict: "PASS" | "FAIL" | "UNVERIFIED";
+    persistent_binding: { document_id: string; document_parse_key: string; parse_attempt_id: string;
+      block_id: string; evidence_ref_id: string; evidence_binding_hash: string } | null;
+    binding_reason: string | null;
   }[];
 }
 
 export interface InvestigationTask {
+  evidence_check?: InvestigationEvidenceCheck | null;
+  evidence_check_history?: InvestigationEvidenceCheck[];
   binding_history?: NonNullable<InvestigationTask["entity_binding"]>[];
   binding_entities?: { id: string; name: string; kind: string; code?: string }[];
   entity_binding?: {

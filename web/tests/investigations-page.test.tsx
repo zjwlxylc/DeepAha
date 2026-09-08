@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import InvestigationsPage from "../app/review/investigations/page";
 import InvestigationPage from "../app/review/investigations/[taskId]/page";
 import { getInvestigations, getInvestigationSources, getInvestigation, getInvestigationBindingTargets } from "../lib/investigations";
-import { source, task, taskId, preparedDocuments, bindingTarget } from "./investigations-fixture";
+import { source, task, taskId, preparedDocuments, bindingTarget, evidenceCheck } from "./investigations-fixture";
 
 vi.mock("../lib/investigations", async (original) => ({
   ...await original<typeof import("../lib/investigations")>(),
@@ -13,6 +13,24 @@ vi.mock("../lib/investigations", async (original) => ({
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
 describe("investigation pages", () => {
+  it("does not invent new verification dimensions from a historical boolean", async () => {
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByText(/旧版回执：机械核验通过/)).toBeVisible();
+    expect(screen.queryByText(/内容：找到原文/)).not.toBeInTheDocument();
+  });
+  it("separates found text, unsupported locator and missing persistent evidence", async () => {
+    const check = structuredClone(evidenceCheck);
+    check.verdict = "UNVERIFIED";
+    check.counts = { PASS: 0, FAIL: 0, UNVERIFIED: 1 };
+    Object.assign(check.references[0], { verdict: "UNVERIFIED", persistent_binding: null, binding_reason: "PERSISTENT_BINDING_UNAVAILABLE" });
+    Object.assign(check.references[0].verification, { verdict: "UNVERIFIED", declared_locator: "UNSUPPORTED", binding: "UNBOUND" });
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, evidence_check: check });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByText("内容：找到原文 · 定位：定位方式未支持")).toBeVisible();
+    expect(screen.getByText("持久证据：尚未关联 · 待核验")).toBeVisible();
+    expect(screen.getByText(/通过 0 \/ 失败 0 \/ 待核验 1/)).toBeVisible();
+    expect(screen.queryByText(/旧版回执：机械核验通过/)).not.toBeInTheDocument();
+  });
   beforeEach(() => {
     vi.mocked(getInvestigations).mockResolvedValue({ tasks: [] });
     vi.mocked(getInvestigationSources).mockResolvedValue({ sources: [source] });

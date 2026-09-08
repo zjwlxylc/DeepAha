@@ -9,12 +9,11 @@ from sqlalchemy.orm import Session, sessionmaker
 from deepaha.artifacts.models import RawArtifact
 from deepaha.artifacts.object_store import ObjectIntegrityError
 from deepaha.documents.docx import DeterministicDocxParser
-from deepaha.documents.html import P9BHtmlDocumentParser
 from deepaha.documents.models import DocumentBlock, EvidenceRef, ParseAttempt
 from deepaha.documents.parser import DocumentParser
-from deepaha.documents.pdf import P9BPdfDocumentParser
+from deepaha.documents.reader import ReaderDocumentParser
 from deepaha.documents.service import DocumentService, ParseDocumentCommand
-from deepaha.documents.spreadsheet import P9BSpreadsheetDocumentParser
+from deepaha.evidence_verification.adapters.defaults import default_registry
 from deepaha.investigations.contracts import CreateInvestigation, InvestigationError, digest
 from deepaha.investigations.models import InvestigationMaterial
 from deepaha.review.auth import (
@@ -31,9 +30,7 @@ if TYPE_CHECKING:
 
 def document_parsers() -> tuple[DocumentParser, ...]:
     return (
-        P9BHtmlDocumentParser(),
-        P9BPdfDocumentParser(),
-        P9BSpreadsheetDocumentParser(),
+        *(ReaderDocumentParser(adapter) for adapter in default_registry().active_adapters),
         DeterministicDocxParser(),
     )
 
@@ -185,3 +182,6 @@ def prepare_documents(
                 {"key": int(digest(["investigation-document", str(raw.artifact_id)])[:15], 16)},
             )
             service.parse(ParseDocumentCommand(artifact_id=raw.artifact_id))
+        from deepaha.investigations.evidence_checks import append_check
+
+        append_check(session, store.objects, task, materials, principal.reviewer_id, store.clock())

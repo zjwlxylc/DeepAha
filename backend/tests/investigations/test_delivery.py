@@ -8,7 +8,7 @@ from typing import Any
 from zipfile import ZipFile
 
 import pytest
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from pypdf import PdfWriter
 
 
@@ -114,6 +114,34 @@ def test_validates_actual_nested_and_flat_shape_against_real_bytes() -> None:
     assert result.facts[0].evidence[0].mechanically_verified
     assert "HUMAN_FACT_REVIEW_REQUIRED" in result.issues
     assert result.sha256 == _validate(o, e, artifacts).sha256
+    verification = result.facts[0].evidence[0].verification
+    assert verification.content_support == "FOUND" and verification.declared_locator == "VERIFIED"
+    assert verification.original_locator == {"selector": "#terms"}
+    assert verification.reader is not None and verification.representation_sha256
+
+
+def test_default_detects_ambiguous_locations_without_rewriting_legacy_replay() -> None:
+    o, e, artifacts = _sample()
+    artifacts["notice"] = (
+        b'<main id="terms"><p>Degree: doctorate.</p><p>Degree: doctorate.</p></main>'
+    )
+    e["artifacts"][0]["sha256"] = sha256(artifacts["notice"]).hexdigest()
+    files = {
+        "opportunities.json": json.dumps(o).encode(),
+        "evidence.json": json.dumps(e).encode(),
+        "report.md": b"Synthetic report",
+    }
+    module = _delivery_module()
+    new, old = (
+        module.validate_delivery(files, artifacts),
+        module.validate_legacy_delivery(files, artifacts),
+    )
+    assert old.facts[0].evidence[0].mechanically_verified
+    assert old.facts[0].evidence[0].verification is None
+    assert new.facts[0].evidence[0].verification.binding == "AMBIGUOUS"
+    assert not new.facts[0].evidence[0].mechanically_verified
+    assert old.sha256 == new.sha256
+    assert old.facts[0].evidence[0].quote == new.facts[0].evidence[0].quote
 
 
 @pytest.mark.parametrize("note", [None, "Candidate inference only; the issuer must clarify."])
@@ -468,8 +496,9 @@ def test_utf8_fragment_is_validated_with_same_text_as_document_parser() -> None:
 def test_many_xlsx_references_read_each_workbook_once_and_do_not_reuse_other_deliveries(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    module = _delivery_module()
-    original = module.load_workbook
+    from deepaha.documents import spreadsheet
+
+    original = load_workbook
     reads = 0
 
     def counted(*args: Any, **kwargs: Any) -> Any:
@@ -477,7 +506,7 @@ def test_many_xlsx_references_read_each_workbook_once_and_do_not_reuse_other_del
         reads += 1
         return original(*args, **kwargs)
 
-    monkeypatch.setattr(module, "load_workbook", counted)
+    monkeypatch.setattr(spreadsheet, "load_workbook", counted)
     o, e, artifacts = _sample()
     book = Workbook()
     sheet = book.active

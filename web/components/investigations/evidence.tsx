@@ -1,4 +1,5 @@
 import type { InvestigationTask } from "../../lib/investigations";
+import { EvidenceCheckDetail, EvidenceCheckSummary } from "./evidence-check";
 
 const labels: Record<string, string> = {
   opportunity_name: "机会名称", publish_unit: "发布单位", opportunity_type: "机会类别",
@@ -63,6 +64,7 @@ export default function InvestigationEvidence({ task }: { task: InvestigationTas
       <section className="human-test-panel" aria-labelledby="investigation-facts-title">
         <h2 id="investigation-facts-title">字段、官方引文与定位</h2>
         <p className="risk-note" role="note">字节与引文定位核验不能证明完整语义。请人工检查适用实体、共同条件、例外和遗漏。</p>
+        <EvidenceCheckSummary check={task.evidence_check} history={task.evidence_check_history} />
         {Array.from(factGroups, ([entityId, facts]) => <section className="investigation-entity" key={entityId}>
           <h3>{entityNames.get(entityId) ?? `公告或其他实体 · ${entityId}`}</h3>
           <div className="candidate-list">{facts.map((fact, index) => <article className="candidate-card" key={`${fact.field}-${index}`}>
@@ -71,7 +73,7 @@ export default function InvestigationEvidence({ task }: { task: InvestigationTas
             </div>
               <div>{fact.evidence.length ? fact.evidence.map((evidence, evidenceIndex) => <blockquote className="official-evidence-block" key={`${evidence.artifact_id}-${evidenceIndex}`}>
                 <p>{evidence.quote || "未提供引文"}</p>
-                <footer><p>{readable(evidence.locator)}</p><p>{evidence.mechanically_verified ? "已核验字节与引文定位；语义待人工核对" : "原件与定位尚未完成机械核验"}</p>
+                <footer><p>{readable(evidence.locator)}</p><EvidenceCheckDetail evidence={evidence} receipt={task.evidence_check?.references.find((item) => item.fact_index === task.facts.indexOf(fact) && item.reference_index === evidenceIndex)} />
                   {materialIds.has(evidence.artifact_id) ? <a href={materialPath(task.task_id, evidence.artifact_id)}>下载原件 · {evidence.artifact_id}</a> : <p className="form-alert">关联原件尚不可下载</p>}
                 </footer>
               </blockquote>) : <p className="form-alert">缺少关联证据，保持未知并补充核对。</p>}</div>

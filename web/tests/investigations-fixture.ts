@@ -1,4 +1,4 @@
-import type { InvestigationTask, InvestigationBindingTarget } from "../lib/investigations";
+import type { InvestigationTask, InvestigationBindingTarget, InvestigationEvidenceCheck } from "../lib/investigations";
 
 export const bindingTarget: InvestigationBindingTarget = {
   opportunity_id: "019d0000-0000-7000-8000-000000000911", public_id: "opp_019d0000000070008000000000000911",
@@ -12,7 +12,7 @@ export const preparedDocuments: NonNullable<InvestigationTask["document_preparat
   scope: "DOCUMENT_EVIDENCE_ONLY", status: "PREPARED", material_count: 1, prepared_count: 1,
   materials: [{ material_id: "attachment-1", outcome: "SUCCEEDED", error_code: null,
     document_id: "019d0000-0000-7000-8000-000000000904", document_parse_key: "d".repeat(64),
-    parser_name: "xlsx_openpyxl", parser_version: "0.8.0", parse_contract_version: "p9b-document-block-contract-v0.8.0",
+    parser_name: "deepaha-evidence-reader", parser_version: "a".repeat(64), parse_contract_version: "reader-document-block-contract-v1",
     block_count: 8, evidence_ref_count: 9 }],
 };
 
@@ -41,4 +41,24 @@ export const task: InvestigationTask = {
     evidence: [{ artifact_id: "attachment-1", quote: "学历要求：硕士及以上", locator: { sheet: "岗位表", row: 5, column: "D" }, sha256: "c".repeat(64), mechanically_verified: true }],
   }],
   materials: [{ artifact_id: "attachment-1", url: `${source.url}/jobs.xlsx`, sha256: "c".repeat(64), media_type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", size_bytes: 1024 }],
+};
+
+export const evidenceCheck: InvestigationEvidenceCheck = {
+  check_id: "019d0000-0000-7000-8000-000000000920", input_hash: "a".repeat(64),
+  result_hash: "d".repeat(64), delivery_hash: task.delivery_hash!, created_at: task.updated_at,
+  scope: "MECHANICAL_EVIDENCE_ONLY", verdict: "PASS", counts: { PASS: 1, FAIL: 0, UNVERIFIED: 0 },
+  references: [{ fact_index: 0, reference_index: 0, entity_id: "position-1", field: "education",
+    artifact_id: "attachment-1", verdict: "PASS", binding_reason: null,
+    verification: {
+      artifact_id: "attachment-1", artifact_sha256: "c".repeat(64), quote: task.facts[0].evidence[0].quote,
+      original_locator: task.facts[0].evidence[0].locator,
+      reader: { name: "xlsx_literal", version: "synthetic-test/1", parse_contract: "synthetic/1", comparison_version: "literal/1" },
+      representation_sha256: "e".repeat(64), content_support: "FOUND", declared_locator: "VERIFIED",
+      binding: "BOUND", precision: "SPAN", verdict: "PASS", reason_codes: [], verifier_version: "evidence-literal/1",
+      matches: [{ projection_id: "sheet/岗位表/D5", source_spans: [{ origin_id: "岗位表!D5", start: 0, end: 10 }] }],
+    },
+    persistent_binding: { document_id: "019d0000-0000-7000-8000-000000000904", document_parse_key: "d".repeat(64),
+      parse_attempt_id: "019d0000-0000-7000-8000-000000000905", block_id: "019d0000-0000-7000-8000-000000000906",
+      evidence_ref_id: "019d0000-0000-7000-8000-000000000907", evidence_binding_hash: "f".repeat(64) },
+  }],
 };

@@ -435,6 +435,7 @@ class InvestigationStore:
     ) -> dict[str, Any]:
         from deepaha.investigations.bindings import describe_bindings
         from deepaha.investigations.documents import describe_documents
+        from deepaha.investigations.evidence_checks import describe_checks
 
         materials = list(
             session.scalars(
@@ -456,6 +457,7 @@ class InvestigationStore:
             for fact in delivery.get("facts", [])
         ]
         bindings = describe_bindings(session, task) if include_documents else []
+        checks = describe_checks(session, task) if include_documents else []
         return dict(task.request) | {
             "task_id": str(task.task_id),
             "status": task.status,
@@ -475,6 +477,8 @@ class InvestigationStore:
             "review": task.review,
             "entity_binding": bindings[0] if bindings else None,
             "binding_history": bindings,
+            "evidence_check": checks[0] if checks else None,
+            "evidence_check_history": checks,
             "binding_entities": delivery.get("evidence", {}).get("entities", [])
             if include_documents
             else [],

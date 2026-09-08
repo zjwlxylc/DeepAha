@@ -105,6 +105,30 @@ class InvestigationEvent(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class InvestigationEvidenceCheck(Base):
+    """Versioned mechanical receipt; never replaces delivery or human decisions."""
+
+    __tablename__ = "investigation_evidence_checks"
+    __table_args__ = (
+        UniqueConstraint("task_id", "input_hash", name="uq_investigation_evidence_check_input"),
+        CheckConstraint("uuid_extract_version(check_id) = 7", name="check_id_uuid7"),
+        CheckConstraint(
+            "delivery_hash ~ '^[0-9a-f]{64}$' and input_hash ~ '^[0-9a-f]{64}$' "
+            "and result_hash ~ '^[0-9a-f]{64}$'",
+            name="hash_formats",
+        ),
+        CheckConstraint("jsonb_typeof(payload) = 'object'", name="payload_object"),
+    )
+    check_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    task_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("investigation_tasks.task_id"))
+    delivery_hash: Mapped[str] = mapped_column(String(64))
+    input_hash: Mapped[str] = mapped_column(String(64))
+    result_hash: Mapped[str] = mapped_column(String(64))
+    payload: Mapped[dict[str, object]] = mapped_column(JSONB)
+    checked_by: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 class InvestigationBinding(Base):
     """Append-only full association snapshots; absent positions stay unmapped."""
 

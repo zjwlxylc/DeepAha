@@ -101,8 +101,14 @@ test("registers without execution, reads evidence, downloads privately and recor
   await prepare.press("Enter");
   await expect(page.getByText("1 / 1 份材料已完成文档证据准备。")).toBeVisible();
   await expect(page.getByText("文档证据已准备，语义待核对")).toBeVisible();
+  await expect(page.getByText("内容：找到原文 · 定位：声明定位成立")).toBeVisible();
+  await expect(page.getByText("持久证据：已关联 EvidenceRef · 通过")).toBeVisible();
+  await page.getByText("核验依据与候选位置").click();
+  await expect(page.getByText(/Reader：xlsx_literal/)).toBeVisible();
   await page.reload();
   await expect(page.getByText("1 / 1 份材料已完成文档证据准备。")).toBeVisible();
+  await page.getByText("核验依据与候选位置").click();
+  await page.getByText("核验版本与历史").click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("documents.png"), fullPage: true });
   await page.getByRole("combobox", { name: "审核决定" }).selectOption("APPROVE");
