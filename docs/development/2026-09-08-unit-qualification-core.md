@@ -24,6 +24,6 @@
 - Ruff、格式及 mypy Linux/Windows（438 files）通过。本批不修改前端、数据库迁移或 WMA 调查链，前一批有效验证不重复宣称为本批真人证据。
 - 四个合成样本的计划、实际画像、完整结果、输入源码及目录/映射摘要保存在 `evidence/2026-09-08-unit-core-replay.json`。固定构造器来自 `backend/tests/unit_qualification/test_evaluator.py` 的 `request` / `composite_plan`；可用相同版本的 `evaluate_unit_qualification` 重放。
 
-实现状态 IMPLEMENTED；候选 CI 与合并尚待完成。未调用 WMA、未写入业务数据库、未生成真实人工审批或真实岗位资格结论。冻结 WMA 样本仍保留原有 94 PASS / 0 FAIL / 30 UNVERIFIED，Delivery UNVERIFIED。
+实现状态 IMPLEMENTED；PR #18 已合并，候选 `9702800` 的 CI #90 九项全部成功。合并提交 `a080198` 与候选代码树一致，见 `evidence/2026-09-08-unit-core-ci.json`。未调用 WMA、未写入业务数据库、未生成真实人工审批或真实岗位资格结论。冻结 WMA 样本仍保留原有 94 PASS / 0 FAIL / 30 UNVERIFIED，Delivery UNVERIFIED。
 
 下一批先做受信快照适配：核对当前调查回执、来源/文档/事实/规则版本和正式岗位身份，将全部原始条件组成覆盖分母。完整范围、共同条件、分组适用和例外审核尚未接通时，继续保留上述限制。

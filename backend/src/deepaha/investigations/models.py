@@ -285,3 +285,30 @@ class InvestigationRuleDecision(Base):
     request_hash: Mapped[str] = mapped_column(String(64))
     request: Mapped[dict[str, object]] = mapped_column(JSONB)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class InvestigationUnitPlan(Base):
+    __tablename__ = "investigation_unit_plans"
+    __table_args__ = (
+        UniqueConstraint(
+            "rule_preparation_id",
+            "contract_version",
+            "adapter_version",
+            name="uq_investigation_unit_plan_version",
+        ),
+    )
+    plan_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    rule_preparation_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("investigation_rule_preparations.rule_preparation_id")
+    )
+    unit_version_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("opportunity_unit_versions.opportunity_unit_version_id")
+    )
+    contract_version: Mapped[str] = mapped_column(String(64))
+    adapter_version: Mapped[str] = mapped_column(String(128))
+    plan: Mapped[dict[str, object]] = mapped_column(JSONB)
+    plan_hash: Mapped[str] = mapped_column(String(64))
+    context: Mapped[dict[str, object]] = mapped_column(JSONB)
+    context_hash: Mapped[str] = mapped_column(String(64))
+    reviewer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
