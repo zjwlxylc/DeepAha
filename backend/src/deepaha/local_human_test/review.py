@@ -53,6 +53,8 @@ from deepaha.review.auth import (
     require_reviewer_authority,
 )
 
+RULE_DERIVATION_VERSION = "1.0.1"
+
 
 class HumanReviewError(ValueError):
     pass
@@ -201,7 +203,7 @@ def build_rule_payload(
         values = (
             RuleOperator.IN,
             RuleField.MAJOR_CODE,
-            RuleValueType.STRING_SET,
+            RuleValueType.STRING,
             cast(JsonValue, items),
             "专业代码必须属于官方允许范围",
         )
@@ -221,7 +223,7 @@ def build_rule_payload(
         values = (
             RuleOperator.IN,
             RuleField.HUKOU_REGION,
-            RuleValueType.STRING_SET,
+            RuleValueType.STRING,
             cast(JsonValue, items),
             "户籍必须属于官方允许范围",
         )
@@ -231,7 +233,7 @@ def build_rule_payload(
         values = (
             RuleOperator.IN,
             RuleField.STUDENT_STATUS,
-            RuleValueType.STRING_SET,
+            RuleValueType.STRING,
             cast(JsonValue, items),
             "在读或毕业状态必须属于官方允许范围",
         )
@@ -557,8 +559,8 @@ class HumanRuleReviewService:
                             rule_type="ATOMIC_QUALIFICATION",
                             proposed_rule_payload=payload,
                             evidence_ref_ids=evidence_ids,
-                            compiler_version="local-human-fact-rule-1.0.0",
-                            producer_identity="component:local-human-fact-rule/1.0.0",
+                            compiler_version=f"local-human-fact-rule-{RULE_DERIVATION_VERSION}",
+                            producer_identity=f"component:local-human-fact-rule/{RULE_DERIVATION_VERSION}",
                             status=RuleCandidateStatus.PROPOSED,
                             created_at=self._clock(),
                         ),
