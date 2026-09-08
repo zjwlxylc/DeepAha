@@ -48,6 +48,22 @@ const server = createServer(async (request, response) => {
         unmapped_position_ids: values.positions.length ? [] : ["position-1"],
       } };
     }
+    else if (path.endsWith("/identity") || path.endsWith("/positions")) {
+      const prior = current.entity_binding;
+      const positions = [...(prior?.positions ?? []), ...values.positions.map(p => ({
+        entity_id: p.entity_id, opportunity_unit_id: bindingTarget.positions[0].unit_id,
+        opportunity_unit_version_id: bindingTarget.positions[0].version_id,
+      }))];
+      const sequence = (prior?.sequence ?? 0) + 1;
+      current = { ...current, entity_binding: {
+        ...values, positions, binding_id: `019d0000-0000-7000-8000-00000000092${sequence}`, sequence,
+        opportunity_id: prior?.opportunity_id ?? bindingTarget.opportunity_id, opportunity_version: 1,
+        source_bundle_revision_id: "019d0000-0000-7000-8000-000000000915", bundle_status: "FROZEN",
+        canonical_bundle_hash: "f".repeat(64), opportunity_public_id: bindingTarget.public_id,
+        opportunity_title: prior?.opportunity_title ?? values.canonical_title, created_at: task.updated_at,
+        unmapped_position_ids: positions.length ? [] : ["position-1"],
+      } };
+    }
     else if (path.endsWith("/review")) current = { ...current, status: values.decision === "APPROVE" ? "APPROVED" : "REJECTED", review: { ...values, reviewer_id: "synthetic-browser-reviewer", created_at: task.updated_at } };
     else current = { ...task, ...values, status: "QUEUED", opportunities: null, facts: [], materials: [], delivery_hash: null };
     receipts.set(key, { path, body, task: structuredClone(current) });

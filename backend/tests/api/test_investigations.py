@@ -176,3 +176,59 @@ def test_disabled_binding_cannot_mutate(tmp_path: Path) -> None:
         )
     assert result.status_code == 404
     assert not store.mock_calls
+
+
+@pytest.mark.parametrize("kind", ["identity", "positions"])
+def test_identity_endpoints_require_key_and_return_private_receipt(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, kind: str
+) -> None:
+    client, store = make_client(tmp_path)
+    method = Mock(return_value={"status": "APPROVED", "entity_binding": {"sequence": 1}})
+    monkeypatch.setattr(f"deepaha.investigations.registration.register_{kind}", method)
+    payload: dict[str, Any] = {
+        "delivery_hash": "a" * 64,
+        "reason": "Synthetic registration",
+        "positions": [],
+    }
+    if kind == "identity":
+        payload.update(canonical_title="Test", type="PUBLIC_INSTITUTION_JOB", issuer_name="Test")
+    else:
+        payload.update(
+            previous_binding_id=str(uuid7()),
+            positions=[
+                {
+                    "entity_id": "post",
+                    "unit_key": "P01",
+                    "label": "Synthetic post",
+                }
+            ],
+        )
+    with client:
+        path = f"/api/v1/local-human-test/investigations/{uuid7()}/{kind}"
+        missing = client.post(path, json=payload)
+        result = client.post(path, json=payload, headers={"Idempotency-Key": "synthetic-identity"})
+    assert missing.status_code == 400
+    assert result.status_code == 200
+    assert result.headers["cache-control"] == "private, no-store"
+    assert method.call_count == 1
+
+
+@pytest.mark.parametrize("kind", ["identity", "positions"])
+@pytest.mark.parametrize("enabled", [True, False])
+def test_identity_routes_preserve_intake_access(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, kind: str, enabled: bool
+) -> None:
+    client, store = make_client(
+        tmp_path, enabled=enabled, roles=frozenset({ReviewerRole.FEEDBACK_REVIEWER})
+    )
+    method = Mock()
+    monkeypatch.setattr(f"deepaha.investigations.registration.register_{kind}", method)
+    with client:
+        response = client.post(
+            f"/api/v1/local-human-test/investigations/{uuid7()}/{kind}",
+            json={},
+            headers={"Idempotency-Key": "synthetic"},
+        )
+    assert response.status_code == (403 if enabled else 404)
+    method.assert_not_called()
+    assert not store.mock_calls

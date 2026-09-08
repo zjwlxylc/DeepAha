@@ -22,6 +22,8 @@ from deepaha.investigations.contracts import (
     CreateInvestigation,
     InvestigationError,
     PrepareInvestigationDocuments,
+    RegisterInvestigationIdentity,
+    RegisterInvestigationPositions,
     ReviewInvestigation,
 )
 from deepaha.investigations.models import InvestigationMaterial
@@ -168,6 +170,42 @@ def task_detail(
     try:
         return store.get(task_id)
     except InvestigationError as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/identity")
+def register_identity(
+    task_id: UUID,
+    command: RegisterInvestigationIdentity,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.registration import register_identity as register
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return register(store, task_id, command, principal, key)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/positions")
+def register_positions(
+    task_id: UUID,
+    command: RegisterInvestigationPositions,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.registration import register_positions as register
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return register(store, task_id, command, principal, key)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 
 

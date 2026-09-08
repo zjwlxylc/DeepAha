@@ -145,6 +145,48 @@ def binding_targets(store: InvestigationStore) -> list[dict[str, Any]]:
         return targets
 
 
+def _authorize(session: Session, principal: ReviewerPrincipal) -> None:
+    account = session.scalar(
+        select(ReviewerAccountModel)
+        .where(
+            ReviewerAccountModel.reviewer_id == principal.reviewer_id,
+        )
+        .with_for_update()
+    )
+    if account is None or not account.active or account.synthetic:
+        raise InvestigationError("HUMAN_VALIDATION_AUTHORITY_REQUIRED")
+    require_human_fact_reviewer(
+        ReviewerPrincipal(
+            account.reviewer_id,
+            frozenset(ReviewerRole(role) for role in account.roles),
+            frozenset(account.allowed_purposes),
+            account.synthetic,
+        )
+    )
+
+
+def _validated_members(
+    store: InvestigationStore, session: Session, task: InvestigationTask
+) -> list[BundleMemberSpec | WmaBundleMemberSpec]:
+    materials = list(
+        session.scalars(
+            select(InvestigationMaterial)
+            .where(
+                InvestigationMaterial.task_id == task.task_id,
+            )
+            .order_by(InvestigationMaterial.material_id)
+        )
+    )
+    if len(materials) != (task.delivery or {}).get("material_count"):
+        raise InvestigationError("STORED_MATERIAL_INTEGRITY_FAILED")
+    try:
+        store._verify_stored_bytes(session, task)
+        specs = _members(store, session, task, materials)
+    except (OSError, ObjectIntegrityError) as error:
+        raise InvestigationError("STORED_MATERIAL_INTEGRITY_FAILED") from error
+    return specs
+
+
 def bind(
     store: InvestigationStore,
     task_id: UUID,
@@ -157,23 +199,7 @@ def bind(
     request = command.model_dump(mode="json")
     request_hash = digest(request)
     with store.factory() as session, session.begin():
-        account = session.scalar(
-            select(ReviewerAccountModel)
-            .where(
-                ReviewerAccountModel.reviewer_id == principal.reviewer_id,
-            )
-            .with_for_update()
-        )
-        if account is None or not account.active or account.synthetic:
-            raise InvestigationError("HUMAN_VALIDATION_AUTHORITY_REQUIRED")
-        require_human_fact_reviewer(
-            ReviewerPrincipal(
-                account.reviewer_id,
-                frozenset(ReviewerRole(role) for role in account.roles),
-                frozenset(account.allowed_purposes),
-                account.synthetic,
-            )
-        )
+        _authorize(session, principal)
         task = store._get(session, task_id, lock=True)
         existing = session.scalar(
             select(InvestigationBinding).where(
@@ -213,22 +239,7 @@ def bind(
         ):
             raise InvestigationError("BINDING_TARGET_VERSION_CONFLICT")
         _check_positions(session, task, command)
-        materials = list(
-            session.scalars(
-                select(InvestigationMaterial)
-                .where(
-                    InvestigationMaterial.task_id == task_id,
-                )
-                .order_by(InvestigationMaterial.material_id)
-            )
-        )
-        if len(materials) != (task.delivery or {}).get("material_count"):
-            raise InvestigationError("STORED_MATERIAL_INTEGRITY_FAILED")
-        try:
-            store._verify_stored_bytes(session, task)
-            specs = _members(store, session, task, materials)
-        except (OSError, ObjectIntegrityError) as error:
-            raise InvestigationError("STORED_MATERIAL_INTEGRITY_FAILED") from error
+        specs = _validated_members(store, session, task)
         service = BundleService(session)
         revision = service.create_revision(
             opportunity_id=command.opportunity_id,
