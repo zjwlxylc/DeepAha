@@ -1,0 +1,103 @@
+{
+  "$defs": {
+    "ReaderIdentitySchema": {
+      "additionalProperties": false,
+      "properties": {
+        "comparison_version": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Comparison Version",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "parse_contract": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Parse Contract",
+          "type": "string"
+        },
+        "version": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "parse_contract",
+        "comparison_version"
+      ],
+      "title": "ReaderIdentitySchema",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A Reader projection, not an original-file byte offset or a fact assertion.\n\nThe representation hash pins the complete character-to-origin trace. An\nanchor becomes usable only after the registered Reader replays it from raw\nbytes. Format-specific coordinates live in that Reader, not arbitrary JSON.",
+  "properties": {
+    "anchor_schema": {
+      "const": "reader-projection/1",
+      "default": "reader-projection/1",
+      "title": "Anchor Schema",
+      "type": "string"
+    },
+    "artifact_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Artifact Sha256",
+      "type": "string"
+    },
+    "kind": {
+      "const": "reader_anchor",
+      "default": "reader_anchor",
+      "title": "Kind",
+      "type": "string"
+    },
+    "projection_id": {
+      "maxLength": 16384,
+      "minLength": 1,
+      "title": "Projection Id",
+      "type": "string"
+    },
+    "projection_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Projection Sha256",
+      "type": "string"
+    },
+    "reader": {
+      "$ref": "#/$defs/ReaderIdentitySchema"
+    },
+    "representation_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Representation Sha256",
+      "type": "string"
+    },
+    "text_end": {
+      "exclusiveMinimum": 0,
+      "title": "Text End",
+      "type": "integer"
+    },
+    "text_start": {
+      "maximum": 0,
+      "minimum": 0,
+      "title": "Text Start",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "reader",
+    "artifact_sha256",
+    "representation_sha256",
+    "projection_id",
+    "projection_sha256",
+    "text_start",
+    "text_end"
+  ],
+  "title": "ReaderAnchor",
+  "type": "object"
+}

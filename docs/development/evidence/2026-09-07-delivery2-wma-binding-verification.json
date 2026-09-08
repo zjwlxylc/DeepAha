@@ -1,0 +1,110 @@
+{
+  "scope": "delivery2-direct-wma-provenance-and-existing-entity-association",
+  "recorded_at": "2026-09-07T10:36:05.971012+00:00",
+  "base_commit": "17ee5d3",
+  "slice_implementation_status": "IMPLEMENTED",
+  "delivery2_implementation_status": "IN_PROGRESS",
+  "release_qualification_claimed": false,
+  "human_fact_approval_claimed": false,
+  "live_wma_called": false,
+  "environment": {
+    "python": "3.14.7",
+    "postgresql": "18.6",
+    "database_timezone": "Asia/Shanghai",
+    "object_store": "dedicated local MinIO RELEASE.2025-06-13T11-33-47Z",
+    "data": "synthetic only"
+  },
+  "verification": {
+    "backend": {
+      "passed": 343,
+      "failed": 0,
+      "command": "python -m pytest -o addopts=\"\" tests/investigations tests/api/test_investigations.py tests/integration/test_investigation_store.py tests/integration/test_investigation_documents.py tests/integration/test_investigation_binding.py tests/integration/test_investigation_vertical_slice.py tests/integration/test_p9b_b0_persistence.py tests/integration/test_p9b_fact_persistence.py tests/integration/test_p10b1_official_evidence.py tests/integration/test_p10b1_migration.py -s --tb=short"
+    },
+    "web_vitest": {
+      "passed": 132,
+      "files": 30,
+      "command": "node node_modules/vitest/vitest.mjs run --reporter=dot"
+    },
+    "browser": {
+      "passed": 2,
+      "projects": [
+        "desktop",
+        "mobile"
+      ],
+      "screenshots_visually_inspected": true,
+      "command": "node node_modules/@playwright/test/cli.js test --config=playwright.investigations.config.ts"
+    },
+    "mypy": {
+      "passed": true,
+      "source_files": 170,
+      "command": "python -m mypy src/deepaha"
+    },
+    "ruff": {
+      "check": "passed",
+      "format": "passed",
+      "scope": "changed Python files and investigations package"
+    },
+    "typescript": "passed",
+    "eslint": "passed",
+    "next_production_build": "passed",
+    "schema_consistency": {
+      "command": "python -m alembic check",
+      "result": "No new upgrade operations detected."
+    },
+    "model_code_review": {
+      "remaining_p1_p2": 0,
+      "resolved": [
+        "distinct same-byte materials",
+        "post-delivery material insertion and frozen manifest membership",
+        "case-insensitive valid SHA-256 representation"
+      ],
+      "human_domain_signoff": false
+    }
+  },
+  "source_sha256": {
+    "backend/migrations/versions/20260907_0037_direct_wma_bundle_bindings.py": "0742a91a454064e576b54caa08a4496073a383d2d9ffba5927c192bf798bf08d",
+    "backend/src/deepaha/p9b/models.py": "0162fd168ba369fe82f14df3fba8c2a39aa8bca7855894802d4948301d53a6c9",
+    "backend/src/deepaha/p9b/provenance.py": "e321dd9900520b3205ab1db24680e38cb25669c0cc245e65950c27ca2fd07481",
+    "backend/src/deepaha/p9b/wma_provenance.py": "91b679dcfb71699078f11efcca9ed4bbbf3caa445e16ecee95e2e16457bb97a6",
+    "backend/src/deepaha/investigations/bindings.py": "01ecbf0435dcc1395133efcfe30db72fc4b6b06d565c312ad77218e43c79960a",
+    "backend/src/deepaha/investigations/store.py": "36bd9516ccb420914dc6d2f8a65fe6bf1e46ebca6222e9dd242c3506fc027f60",
+    "backend/src/deepaha/investigations/contracts.py": "a6952a52cbd382f291d0ff192dac827a5c74b204abc93fce1f9defd307c497b8",
+    "backend/src/deepaha/investigations/models.py": "7cd096fbf0c7dc9d685dcb433b45dc5fd0ae93d37c6b33a1a764625e8354658c",
+    "backend/src/deepaha/api/investigations.py": "b0f00d777a7fbe9030531f335e2a3aacfb43cc973f525a5e33db41f2f90d0a2b",
+    "backend/tests/integration/test_investigation_binding.py": "e4af662f0cfc861015319ee8412ab58299a78d91cabc9c18559108d3bb1b81cc",
+    "web/components/investigations/bindings.tsx": "1138010448ab71cf83e77628bf1e73b48cc55d9b4bb71bceb94477d86234712e",
+    "web/components/investigations/binding-form.tsx": "2514cd7f5e7d96c98bd716b7bb748fe3edf31211b766f5ea30da173c012edd64",
+    "web/app/review/investigations/actions.ts": "32cc6c2a0f4445d1034b8ea9b599244771f9a4e302560f561f00d18a61063715",
+    "web/app/review/investigations/[taskId]/page.tsx": "d7ab7e8446b095ce1106187b4f5511ec1bf41d0f18c66da638ec2599cca06198",
+    "web/lib/investigations.ts": "419a16695a7f5f76211d3618254d47400f02d5fdbf148cf07766f16e2624e6ce"
+  },
+  "local_log_sha256": {
+    "backend-deepaha-binding-alias-red.log": "4ccd9f82110373d0f21d6f32d879b6504a363afa0f8545c8ce8269e05531e7c3",
+    "backend-deepaha-binding-final-regression.log": "34feb7aea66931d96d94e729e1d12a368ae290b9855b738b137807a5e420067d",
+    "backend-deepaha-binding-final.log": "5d27af4a3bc0336e7facd89127d74a49b209a458a2770eb8087728f98cb9c447",
+    "backend-deepaha-binding-full.log": "25507a783974ff886c55ecdf51e5e2eb88ab81a81de04ec435916881125d673f",
+    "backend-deepaha-binding-mypy-all.log": "9f4322193d96a9c3fb6471cec566274c1292a62f07871cc8f337693e8ce20fcb",
+    "backend-deepaha-binding-mypy.log": "281a094c39385b4d7b53e5db635f52158036861433c2a4975b9039e77a627a24",
+    "backend-deepaha-binding-red.log": "d1df4cf3bda080ba197f96820b77c4132a1c746499f17e5a301ccf69eef30607",
+    "backend-deepaha-binding-regression.log": "dd61dcdd03593eefb52868ae69fe598c2ea9ed1491456ea1de63b63b66964586",
+    "backend-deepaha-binding-regression2.log": "83448e2f58d08d8be40bf6fb8bb84a76bdee455a445faed89af8a3dff9b4a002",
+    "backend-deepaha-binding-ruff.log": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0",
+    "backend-deepaha-binding-schema-check.log": "764b08c76c2885df34b1eabe955772eb49348598c8c674a3673556e98d0ed1ed",
+    "backend-deepaha-binding-test.log": "213eac9eb94c1ca6805b52c6ad8273a05fdc1c9a9b69bc6935373ff805b8ed60",
+    "backend-deepaha-binding-uppercase-red.log": "08499ebdfc1bf3b19e8f46d254666885746af69319ffa91b5dad83caa06a04ca",
+    "web-deepaha-binding-browser.log": "2b430dbfa73e3bb7ccc48b388dcb7a3cdb5415de0546f9d4cdec678e0c190433",
+    "web-deepaha-binding-build.log": "0c4ea90178b0c47eecc61eaab23244520a4873082a73fa99c923b58724628704",
+    "web-deepaha-binding-vitest.log": "c8d4a61fe386b0e5bab7fc8cad3039ab2df58d42ac5464de3c0bb4c3cccff4fe"
+  },
+  "remaining": [
+    "first-time explicit Opportunity/Unit identity registration",
+    "candidate field to DocumentBlock mapping and independent fact review",
+    "live WMA calibration and independent human truth"
+  ],
+  "source_sha256_mode": "UTF-8 text with LF newlines",
+  "cleanup": {
+    "dedicated_minio_container": "stopped and removed",
+    "isolated_postgresql": "stopped; recovery files retained",
+    "temporary_logs": "retained under local validation directory"
+  }
+}

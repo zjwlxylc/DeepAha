@@ -19,6 +19,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from deepaha.db.base import Base
+from deepaha.documents.reader_constraints import READER_BLOCK_SHAPE, READER_EVIDENCE_SHAPE
 
 
 class Document(Base):
@@ -84,7 +85,7 @@ class EvidenceRef(Base):
             "locator_kind in ('page', 'paragraph', 'css_selector', 'text_span', 'full_document', "
             "'html_selector', 'pdf_page_text', 'spreadsheet_range', "
             "'html_element_span', 'pdf_text_span', 'pdf_table_cell', "
-            "'spreadsheet_cell', 'docx_paragraph', 'docx_table_cell')",
+            "'spreadsheet_cell', 'docx_paragraph', 'docx_table_cell', 'reader_anchor')",
             name="locator_kind_values",
         ),
         CheckConstraint(
@@ -97,7 +98,9 @@ class EvidenceRef(Base):
             " or (locator_schema_version = '0.8.0' and "
             "locator_kind in ('html_element_span', 'pdf_text_span', 'pdf_table_cell', "
             "'spreadsheet_cell', 'spreadsheet_range', 'docx_paragraph', "
-            "'docx_table_cell') and locator_value is null and locator_payload is not null)",
+            "'docx_table_cell') and locator_value is null and locator_payload is not null)"
+            " or (locator_schema_version = '0.9.0' and locator_kind = 'reader_anchor' "
+            "and locator_value is null and locator_payload is not null)",
             name="locator_schema_form",
         ),
         CheckConstraint(
@@ -153,6 +156,7 @@ class EvidenceRef(Base):
             "quote_sha256 is null or quote_sha256 ~ '^[0-9a-f]{64}$'",
             name="quote_sha256_format",
         ),
+        CheckConstraint(READER_EVIDENCE_SHAPE, name="reader_evidence_shape"),
         ForeignKeyConstraint(
             ["document_id", "artifact_id"],
             ["documents.document_id", "documents.artifact_id"],
@@ -243,9 +247,10 @@ class DocumentBlock(Base):
         CheckConstraint(
             "block_type in ('HTML_SECTION', 'HTML_ELEMENT', 'PDF_TEXT_SPAN', "
             "'PDF_TABLE_CELL', 'SPREADSHEET_CELL', 'SPREADSHEET_RANGE', "
-            "'DOCX_PARAGRAPH', 'DOCX_TABLE_CELL', 'OCR_TEXT_SPAN')",
+            "'DOCX_PARAGRAPH', 'DOCX_TABLE_CELL', 'OCR_TEXT_SPAN', 'READER_TEXT_SPAN')",
             name="block_type_values",
         ),
+        CheckConstraint(READER_BLOCK_SHAPE, name="reader_block_shape"),
         CheckConstraint(
             "length(btrim(canonical_text_or_value)) >= 1",
             name="canonical_value_nonempty",

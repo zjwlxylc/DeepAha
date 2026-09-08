@@ -3,12 +3,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import InvestigationsPage from "../app/review/investigations/page";
 import InvestigationPage from "../app/review/investigations/[taskId]/page";
-import { getInvestigations, getInvestigationSources, getInvestigation } from "../lib/investigations";
-import { source, task, taskId } from "./investigations-fixture";
+import { getInvestigations, getInvestigationSources, getInvestigation, getInvestigationBindingTargets } from "../lib/investigations";
+import { source, task, taskId, preparedDocuments, bindingTarget } from "./investigations-fixture";
 
 vi.mock("../lib/investigations", async (original) => ({
   ...await original<typeof import("../lib/investigations")>(),
-  getInvestigations: vi.fn(), getInvestigationSources: vi.fn(), getInvestigation: vi.fn(),
+  getInvestigations: vi.fn(), getInvestigationSources: vi.fn(), getInvestigation: vi.fn(), getInvestigationBindingTargets: vi.fn(),
 }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
@@ -17,6 +17,45 @@ describe("investigation pages", () => {
     vi.mocked(getInvestigations).mockResolvedValue({ tasks: [] });
     vi.mocked(getInvestigationSources).mockResolvedValue({ sources: [source] });
     vi.mocked(getInvestigation).mockResolvedValue(task);
+    vi.mocked(getInvestigationBindingTargets).mockResolvedValue({ targets: [bindingTarget] });
+  });
+  it("requires explicit identity selection after intake approval and full document preparation", async () => {
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, status: "APPROVED", document_preparation: preparedDocuments });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByRole("combobox", { name: "关联到已有机会" })).toHaveValue("");
+    expect(screen.getByRole("button", { name: "确认归属并冻结来源" })).toBeDisabled();
+    expect(screen.getByText(/字段内容仍是候选/)).toBeVisible();
+  });
+  it("preserves pending identity when no existing target is available", async () => {
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, status: "APPROVED", document_preparation: preparedDocuments });
+    vi.mocked(getInvestigationBindingTargets).mockResolvedValue({ targets: [] });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByText(/目前没有可选择的正式机会版本/)).toBeVisible();
+    expect(screen.queryByRole("button", { name: "确认归属并冻结来源" })).not.toBeInTheDocument();
+  });
+  it("offers explicit local evidence preparation with an honest boundary", async () => {
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByRole("button", { name: "准备文档证据" })).toBeVisible();
+    expect(screen.getByText(/只解析已回收的原件/)).toBeVisible();
+  });
+  it("keeps failed and unsupported documents visible in the denominator", async () => {
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, document_preparation: {
+      ...preparedDocuments, status: "NEEDS_ATTENTION", material_count: 3, prepared_count: 1,
+      materials: [...preparedDocuments.materials,
+        { ...preparedDocuments.materials[0], material_id: "legacy.doc", outcome: "UNSUPPORTED", block_count: 0, error_code: "DOCUMENT_FORMAT_UNSUPPORTED" },
+        { ...preparedDocuments.materials[0], material_id: "empty.pdf", outcome: "FAILED", block_count: 0, error_code: "PDF_TEXT_EMPTY" }],
+    } });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByText("1 / 3 份材料已完成文档证据准备。")).toBeVisible();
+    expect(screen.getByText("格式尚不支持，保留原件待处理")).toBeVisible();
+    expect(screen.getByText("解析失败")).toBeVisible();
+    expect(screen.getByText(/仍有未准备、需复核或不支持/)).toBeVisible();
+    expect(screen.getByRole("button", { name: "记录内部材料审核" })).toBeVisible();
+  });
+  it.each(["QUEUED", "REJECTED", "EXPIRED"])("does not offer document preparation in %s", async (status) => {
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, status });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.queryByRole("button", { name: "准备文档证据" })).not.toBeInTheDocument();
   });
   it("registers tasks without a live execution control", async () => {
     render(await InvestigationsPage());

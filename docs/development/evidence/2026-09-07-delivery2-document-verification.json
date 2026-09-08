@@ -1,0 +1,71 @@
+{
+  "scope": "DELIVERY2_DOCUMENT_EVIDENCE_PREPARATION_ONLY",
+  "recorded_at": "2026-09-07T09:40:21.067669+00:00",
+  "base_commit": "4bd5847",
+  "implementation": "IMPLEMENTED",
+  "delivery2_overall": "IN_PROGRESS",
+  "release_qualification_claimed": false,
+  "code_sha256": {
+    "backend/src/deepaha/investigations/documents.py": "920f86b5ae0486bdaa492bb7f087d522cb2943a9426549955b40a85cf472e160",
+    "backend/src/deepaha/investigations/store.py": "f01bce4a5af36a4c9e3fca39ccd8dadc3e07776447f128a2d43145cd9dda5193",
+    "backend/src/deepaha/investigations/contracts.py": "e881851d848afdcb65668ba8b6a6e41c0102e15c666872131bbd38da0ffd0b80",
+    "backend/src/deepaha/api/investigations.py": "862238d5c443464676edf5aa0baad12d3fedb28f6904c35743f9ec17506a2972",
+    "web/components/investigations/documents.tsx": "2ccb2acb2d9d086c13991c515fbe2da9d3a359558e5d3703c868edc80b5f29d9",
+    "web/components/investigations/prepare-documents-form.tsx": "a0f6dbbaa2027fd1e5a5ba16d9e9fed17500e1cfbde559878a822f5090aa2b38",
+    "web/app/review/investigations/actions.ts": "d13db72d1ad242ae429d683ebb4e96918730bda9bc0cec6955097fcf987959e0",
+    "web/app/review/investigations/[taskId]/page.tsx": "56dd200f4f4ce7259d356d827772f4358f34cd133a64643cca537a13a36dce88",
+    "web/lib/investigations.ts": "fdfa5736cd031bc9cc74770c0178428c42a8d21f1fcc25ffa9d2bc75516ef8b4"
+  },
+  "database": {
+    "version": "PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit",
+    "timezone": "Asia/Shanghai",
+    "migration_head": "20260907_0036",
+    "dedicated_synthetic_database": true,
+    "business_data_used": false,
+    "new_migrations": false,
+    "stopped_after_verification": true
+  },
+  "checks": {
+    "backend_combined": {
+      "passed": 340,
+      "duration_seconds": 50.48,
+      "includes_new_document_integration": 8,
+      "includes_investigation_store_and_api_integration": 32
+    },
+    "final_list_view_followup": {
+      "passed": 61,
+      "duration_seconds": 46.59,
+      "scope": "INVESTIGATION_INTEGRATION_AND_STORE_BOUNDARIES",
+      "not_added_to_previous_total": true
+    },
+    "backend_static": {
+      "ruff": "PASS",
+      "format_files": 7,
+      "mypy_files": 7
+    },
+    "web": {
+      "test_files": 30,
+      "tests_passed": 128,
+      "typescript": "PASS",
+      "eslint_changed_files": "PASS",
+      "production_build": "PASS",
+      "desktop_mobile_browser_tests_passed": 2,
+      "browser_duration_seconds": 14.7,
+      "screenshots_viewed": true,
+      "browser_api": "SYNTHETIC_FIXTURE"
+    }
+  },
+  "independent_engineering_review": {
+    "blocking_findings": 0,
+    "reviewer_type": "MODEL_ASSISTED_CODE_REVIEW",
+    "human_fact_approval": false
+  },
+  "scope_limits": {
+    "new_wma_announcement_success": false,
+    "formal_fact_writes": 0,
+    "opportunity_or_unit_writes": 0,
+    "rule_writes": 0,
+    "model_configuration_changed": false,
+    "derived_text_objects_rechecked_on_parse_reuse": false
+  }
+}

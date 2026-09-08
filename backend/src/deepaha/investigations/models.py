@@ -103,3 +103,41 @@ class InvestigationEvent(Base):
     status: Mapped[str] = mapped_column(String(32))
     error_code: Mapped[str | None] = mapped_column(String(128))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class InvestigationBinding(Base):
+    """Append-only full association snapshots; absent positions stay unmapped."""
+
+    __tablename__ = "investigation_bindings"
+    __table_args__ = (
+        UniqueConstraint("task_id", "sequence", name="uq_investigation_bindings_sequence"),
+        UniqueConstraint(
+            "task_id", "reviewer_id", "request_key_hash", name="uq_investigation_bindings_request"
+        ),
+        ForeignKeyConstraint(
+            ["opportunity_id", "opportunity_version"],
+            ["opportunity_versions.opportunity_id", "opportunity_versions.version"],
+        ),
+        CheckConstraint("uuid_extract_version(binding_id) = 7", name="binding_id_uuid7"),
+        CheckConstraint("sequence >= 1 and opportunity_version >= 1", name="positive_versions"),
+        CheckConstraint("jsonb_typeof(request) = 'object'", name="request_object"),
+        CheckConstraint(
+            "delivery_hash ~ '^[0-9a-f]{64}$' and request_key_hash ~ '^[0-9a-f]{64}$' "
+            "and request_hash ~ '^[0-9a-f]{64}$'",
+            name="hash_formats",
+        ),
+    )
+    binding_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    task_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("investigation_tasks.task_id"))
+    sequence: Mapped[int] = mapped_column(Integer)
+    delivery_hash: Mapped[str] = mapped_column(String(64))
+    source_bundle_revision_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("source_bundle_revisions.source_bundle_revision_id")
+    )
+    opportunity_id: Mapped[UUID] = mapped_column(Uuid)
+    opportunity_version: Mapped[int] = mapped_column(Integer)
+    reviewer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    request_key_hash: Mapped[str] = mapped_column(String(64))
+    request_hash: Mapped[str] = mapped_column(String(64))
+    request: Mapped[dict[str, object]] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

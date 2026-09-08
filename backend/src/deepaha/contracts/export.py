@@ -4,6 +4,7 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
+from deepaha.contracts.evidence_anchor import ReaderAnchor
 from deepaha.contracts.phase1 import (
     DocumentSchema,
     EvidenceRefSchema,
@@ -370,6 +371,27 @@ def write_phase9b_schemas(repository_root: Path) -> dict[str, Path]:
     return written
 
 
+def render_evidence_anchor_schemas() -> dict[str, bytes]:
+    return {
+        "reader-anchor.schema.json": (
+            json.dumps(
+                ReaderAnchor.model_json_schema(), ensure_ascii=False, indent=2, sort_keys=True
+            )
+            + "\n"
+        ).encode("utf-8")
+    }
+
+
+def write_evidence_anchor_schemas(repository_root: Path) -> dict[str, Path]:
+    target = repository_root.resolve() / "contracts" / "schemas" / "v0.9.0"
+    target.mkdir(parents=True, exist_ok=True)
+    paths = {}
+    for name, content in render_evidence_anchor_schemas().items():
+        paths[name] = target / name
+        paths[name].write_bytes(content)
+    return paths
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export versioned DeepAha JSON Schemas")
     parser.add_argument("repository_root", type=Path)
@@ -384,11 +406,14 @@ def main() -> None:
             "0.6.0",
             "0.7.0",
             "0.8.0",
+            "0.9.0",
         ),
         default="0.1.0",
     )
     arguments = parser.parse_args()
-    if arguments.version == "0.8.0":
+    if arguments.version == "0.9.0":
+        write_evidence_anchor_schemas(arguments.repository_root)
+    elif arguments.version == "0.8.0":
         write_phase9b_schemas(arguments.repository_root)
     elif arguments.version == "0.7.0":
         write_phase8_schemas(arguments.repository_root)

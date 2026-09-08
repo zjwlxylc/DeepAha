@@ -2,6 +2,8 @@
 
 根据用户指定任务“通用Delivery 验证器设计”的[架构结论](D:/DeepAha/docs/development/reviews/2026-09-08-evidence-verification-architecture-review.md)，从已合并 PR #10 的主线 `22b9cb8` 继续实施。采用薄层通用核验，不建设第二套文档理解系统；完整顺序见[实施计划](../superpowers/plans/2026-09-08-generic-evidence-verification.md)。
 
+本批已通过 [PR #11](https://github.com/zjwlxylc/DeepAha/pull/11) 合入远程 main，合并 SHA `46a2647`；候选 `a59c6ec` 的 CI #76 九项全部通过，合并代码树与候选一致。[合并/CI 回执](evidence/2026-09-08-generic-evidence-merged-ci.json)。
+
 ## 本批实现
 
 - `evidence_verification/contracts.py / registry.py / verifier.py` 定义原件、Reader 身份、可追溯文本投影和公共字面核验。结果分别记录内容存在、声明定位、Reader 文本位置绑定、精度、歧义及 PASS/FAIL/UNVERIFIED。注册表仅接受本地代码；历史回放精确选择 Reader 身份，不默用最新版。
@@ -27,7 +29,7 @@
 
 6. XLSX 单元格保留公式/布尔/错误类型及非字面数字格式的歧义标记；未读取缓存显示值时不能以未命中证明引文错误，也不计算公式。标记仅影响相应 cell/row，不污染其他普通单元格。
 
-独立只读复核确认六项 P2 均可关闭、无遗留 P2 及以上问题，结论限于本批影子路径。候选 CI 状态随后追加，不把本地验证写成正式发布资格。
+独立只读复核确认六项 P2 均可关闭、无遗留 P2 及以上问题，结论限于本批影子路径。最终候选 CI 九项通过；代码评审和工程矩阵不构成正式事实批准或发布资格。
 
 ## 冻结真实案例
 

@@ -126,6 +126,17 @@ def test_register_execute_download_and_internal_review_through_real_api(
         assert response.content == originals[material["artifact_id"]]
         assert response.headers["content-disposition"].startswith("attachment;")
         assert response.headers["content-type"] == "application/octet-stream"
+        prepared = client.post(
+            f"{base}/{task_id}/documents", json={"delivery_hash": detail["delivery_hash"]}
+        )
+        assert prepared.status_code == 200
+        assert prepared.json()["document_preparation"]["status"] == "PREPARED"
+        assert prepared.json()["facts"] == detail["facts"]
+        assert prepared.json()["review"] is None
+        repeated = client.post(
+            f"{base}/{task_id}/documents", json={"delivery_hash": detail["delivery_hash"]}
+        )
+        assert repeated.json() == prepared.json()
         reviewed = client.post(
             f"{base}/{task_id}/review",
             json={

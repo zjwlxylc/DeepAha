@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from deepaha.artifacts.object_store import ObjectStore
 from deepaha.artifacts.service import ImportRawArtifactCommand, import_raw_artifact
 from deepaha.investigations.contracts import (
+    BindInvestigation,
     CreateInvestigation,
     InvestigationError,
     ReviewInvestigation,
@@ -429,7 +430,19 @@ class InvestigationStore:
             self._owned(session, task_id, owner)
             task.result_objects = keys
 
-    def _view(self, session: Session, task: InvestigationTask) -> dict[str, Any]:
+    def _view(
+        self, session: Session, task: InvestigationTask, *, include_documents: bool = True
+    ) -> dict[str, Any]:
+        from deepaha.investigations.bindings import describe_bindings
+        from deepaha.investigations.documents import describe_documents
+
+        materials = list(
+            session.scalars(
+                select(InvestigationMaterial)
+                .where(InvestigationMaterial.task_id == task.task_id)
+                .order_by(InvestigationMaterial.material_id)
+            )
+        )
         delivery = cast(dict[str, Any], task.delivery or {})
         # Older snapshots retained notes in the original bundle but omitted them
         # from the materialized facts. Restore them in the read view only.
@@ -442,6 +455,7 @@ class InvestigationStore:
             | {"note": fact.get("note", original_notes.get((fact["entity_id"], fact["field"])))}
             for fact in delivery.get("facts", [])
         ]
+        bindings = describe_bindings(session, task) if include_documents else []
         return dict(task.request) | {
             "task_id": str(task.task_id),
             "status": task.status,
@@ -454,15 +468,16 @@ class InvestigationStore:
             "opportunities": delivery.get("opportunities"),
             "facts": facts,
             "report": delivery.get("report"),
-            "materials": [
-                m.metadata_snapshot
-                for m in session.scalars(
-                    select(InvestigationMaterial)
-                    .where(InvestigationMaterial.task_id == task.task_id)
-                    .order_by(InvestigationMaterial.material_id)
-                )
-            ],
+            "materials": [m.metadata_snapshot for m in materials],
+            "document_preparation": (
+                describe_documents(session, materials) if delivery and include_documents else None
+            ),
             "review": task.review,
+            "entity_binding": bindings[0] if bindings else None,
+            "binding_history": bindings,
+            "binding_entities": delivery.get("evidence", {}).get("entities", [])
+            if include_documents
+            else [],
             "execution": task.execution,
             "runtime_id": task.runtime_id,
             "remote_session_id": task.remote_session_id,
@@ -476,13 +491,28 @@ class InvestigationStore:
         with self.factory() as session:
             return self._view(session, self._get(session, task_id))
 
+    def prepare_documents(
+        self, task_id: UUID, delivery_hash: str, principal: ReviewerPrincipal
+    ) -> dict[str, Any]:
+        from deepaha.investigations.documents import prepare_documents
+
+        prepare_documents(self, task_id, delivery_hash, principal)
+        return self.get(task_id)
+
     def list_tasks(self) -> list[dict[str, Any]]:
         with self.factory() as session:
             return [
-                self._view(session, task)
+                self._view(session, task, include_documents=False)
                 for task in session.scalars(
                     select(InvestigationTask)
                     .order_by(InvestigationTask.created_at.desc())
                     .limit(100)
                 )
             ]
+
+    def bind(
+        self, task_id: UUID, command: BindInvestigation, principal: ReviewerPrincipal, key: str
+    ) -> dict[str, Any]:
+        from deepaha.investigations.bindings import bind
+
+        return bind(self, task_id, command, principal, key)

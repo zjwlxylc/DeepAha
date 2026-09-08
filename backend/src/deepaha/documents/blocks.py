@@ -3,6 +3,7 @@ from hashlib import sha256
 
 from pydantic import TypeAdapter
 
+from deepaha.contracts.evidence_anchor import ReaderAnchor
 from deepaha.contracts.phase9b import DocumentBlockLocatorSchemaV08
 from deepaha.documents.normalization import normalize_text
 from deepaha.p9b.hashing import (
@@ -41,6 +42,25 @@ def validate_parsed_blocks(blocks: tuple[ParsedBlock, ...]) -> tuple[ParsedBlock
         raise ValueError("parser returned no DocumentBlock")
     result: list[ParsedBlock] = []
     for ordinal, block in enumerate(blocks, start=1):
+        if block.block_type == "READER_TEXT_SPAN":
+            anchor = ReaderAnchor.model_validate(block.structural_locator)
+            if (
+                not block.canonical_text_or_value.strip()
+                or anchor.text_end != len(block.canonical_text_or_value)
+                or anchor.projection_sha256
+                != sha256(block.canonical_text_or_value.encode()).hexdigest()
+                or block.parent_ordinal is not None
+            ):
+                raise ValueError("Reader block text or anchor mismatch")
+            result.append(
+                ParsedBlock(
+                    block.block_type,
+                    block.canonical_text_or_value,
+                    anchor.model_dump(mode="json"),
+                    None,
+                )
+            )
+            continue
         expected_kind = _LOCATOR_FOR_BLOCK_TYPE.get(block.block_type)
         if expected_kind is None:
             raise ValueError("unsupported DocumentBlock type")
@@ -155,7 +175,11 @@ def replay_block_value(
     structural_locator: StructuralLocator,
     expected_value_sha256: str,
 ) -> str:
-    locator = _LOCATOR_ADAPTER.validate_python(structural_locator).model_dump(mode="json")
+    locator = (
+        ReaderAnchor.model_validate(structural_locator).model_dump(mode="json")
+        if structural_locator.get("kind") == "reader_anchor"
+        else _LOCATOR_ADAPTER.validate_python(structural_locator).model_dump(mode="json")
+    )
     matches = [
         block for block in validate_parsed_blocks(blocks) if block.structural_locator == locator
     ]

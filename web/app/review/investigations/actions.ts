@@ -122,3 +122,45 @@ export async function reviewInvestigationAction(
     decision, delivery_hash: deliveryHash, reason,
   }, text(form, "request_key"), "内部材料审核已记录；正式机会与资格规则尚未发布。");
 }
+
+export async function prepareInvestigationDocumentsAction(
+  _state: InvestigationActionState,
+  form: FormData,
+): Promise<InvestigationActionState> {
+  const taskId = text(form, "task_id");
+  const deliveryHash = text(form, "delivery_hash");
+  if (!UUID.test(taskId) || !SHA256.test(deliveryHash)) return invalid("当前任务或材料版本不可准备，请刷新详情。");
+  return submit(`/investigations/${taskId}/documents`, { delivery_hash: deliveryHash },
+    text(form, "request_key"),
+    "文档准备结果已更新，请逐项查看未支持或需复核的材料；事实仍待人工审核。");
+}
+
+export async function bindInvestigationAction(
+  _state: InvestigationActionState, form: FormData,
+): Promise<InvestigationActionState> {
+  const taskId = text(form, "task_id");
+  const deliveryHash = text(form, "delivery_hash");
+  const [opportunityId, rawVersion, extra] = text(form, "target").split("/");
+  const previous = text(form, "previous_binding_id");
+  const reason = text(form, "reason");
+  const version = Number(rawVersion);
+  if (!UUID.test(taskId) || !SHA256.test(deliveryHash) || !UUID.test(opportunityId ?? "")
+    || !Number.isSafeInteger(version) || version < 1 || extra !== undefined
+    || (previous && !UUID.test(previous))) return invalid("请选择明确的机会版本；材料或关联版本变化时请刷新详情。");
+  if (!reason || reason.length > 2000) return invalid("请填写 1–2000 个字符，说明确认归属的依据。");
+  const positions: { entity_id: string; opportunity_unit_id: string; opportunity_unit_version_id: string }[] = [];
+  for (const [key, value] of form.entries()) {
+    if (!key.startsWith("position:") || !value) continue;
+    const [unitId, unitVersion, extraUnit] = String(value).split("/");
+    const entityId = key.slice("position:".length);
+    if (!entityId || entityId.length > 256 || !UUID.test(unitId) || !UUID.test(unitVersion)
+      || extraUnit !== undefined) return invalid("岗位版本无效，请刷新后重新选择。");
+    positions.push({ entity_id: entityId, opportunity_unit_id: unitId, opportunity_unit_version_id: unitVersion });
+  }
+  if (new Set(positions.map(p => p.entity_id)).size !== positions.length
+    || new Set(positions.map(p => p.opportunity_unit_id)).size !== positions.length) return invalid("同一岗位不能重复关联，请核对每一项。");
+  return submit(`/investigations/${taskId}/bindings`, {
+    delivery_hash: deliveryHash, opportunity_id: opportunityId, opportunity_version: version,
+    positions, previous_binding_id: previous || null, reason,
+  }, text(form, "request_key"), "归属确认已记录，材料来源已冻结；尚未关联的岗位和所有字段事实仍待处理。");
+}

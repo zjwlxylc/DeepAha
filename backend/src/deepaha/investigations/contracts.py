@@ -38,6 +38,28 @@ class ReviewInvestigation(BaseModel):
     reason: str = Field(min_length=1, max_length=2000)
 
 
+class PrepareInvestigationDocuments(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    delivery_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+class InvestigationPositionBinding(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    entity_id: str = Field(min_length=1, max_length=256)
+    opportunity_unit_id: UUID
+    opportunity_unit_version_id: UUID
+
+
+class BindInvestigation(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    delivery_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+    opportunity_id: UUID
+    opportunity_version: int = Field(ge=1)
+    positions: tuple[InvestigationPositionBinding, ...] = Field(default=(), max_length=2000)
+    previous_binding_id: UUID | None = None
+    reason: str = Field(min_length=1, max_length=2000)
+
+
 def digest(value: object) -> str:
     return sha256(
         json.dumps(

@@ -32,7 +32,7 @@ def make_client(
     return TestClient(app, base_url="http://127.0.0.1"), store
 
 
-@pytest.mark.parametrize("suffix", ["", "/sources", "/" + str(uuid7())])
+@pytest.mark.parametrize("suffix", ["", "/sources", "/binding-targets", "/" + str(uuid7())])
 def test_disabled_intake_stays_hidden(tmp_path: Path, suffix: str) -> None:
     client, store = make_client(tmp_path, enabled=False)
     with client:
@@ -91,4 +91,88 @@ def test_review_must_supply_current_delivery_hash(tmp_path: Path) -> None:
             headers={"Idempotency-Key": "synthetic-review"},
         )
     assert response.status_code == 400
+    assert not store.mock_calls
+
+
+def test_document_preparation_requires_frozen_delivery_and_returns_private_receipt(
+    tmp_path: Path,
+) -> None:
+    client, store = make_client(tmp_path)
+    task_id = uuid7()
+    store.prepare_documents.return_value = {
+        "status": "PENDING_REVIEW",
+        "document_preparation": {"status": "PREPARED"},
+    }
+    with client:
+        missing = client.post(
+            f"/api/v1/local-human-test/investigations/{task_id}/documents", json={}
+        )
+        result = client.post(
+            f"/api/v1/local-human-test/investigations/{task_id}/documents",
+            json={"delivery_hash": "a" * 64},
+        )
+    assert missing.status_code == 400
+    assert result.status_code == 200
+    assert result.json()["document_preparation"]["status"] == "PREPARED"
+    assert result.headers["cache-control"] == "private, no-store"
+    store.prepare_documents.assert_called_once()
+    assert store.prepare_documents.call_args.args[:2] == (task_id, "a" * 64)
+
+
+def test_disabled_document_preparation_cannot_parse(tmp_path: Path) -> None:
+    client, store = make_client(tmp_path, enabled=False)
+    with client:
+        result = client.post(
+            f"/api/v1/local-human-test/investigations/{uuid7()}/documents",
+            json={"delivery_hash": "a" * 64},
+        )
+    assert result.status_code == 404
+    assert not store.mock_calls
+
+
+def test_binding_requires_exact_contract_and_idempotency(tmp_path: Path) -> None:
+    client, store = make_client(tmp_path)
+    task_id = uuid7()
+    payload = {
+        "delivery_hash": "a" * 64,
+        "opportunity_id": str(uuid7()),
+        "opportunity_version": 1,
+        "reason": "Synthetic association",
+        "positions": [],
+    }
+    store.bind.return_value = {"entity_binding": {"scope": "ENTITY_ASSOCIATION_ONLY"}}
+    with client:
+        missing_key = client.post(
+            f"/api/v1/local-human-test/investigations/{task_id}/bindings", json=payload
+        )
+        invalid = client.post(
+            f"/api/v1/local-human-test/investigations/{task_id}/bindings",
+            json=payload | {"opportunity_version": 0},
+            headers={"Idempotency-Key": "one"},
+        )
+        result = client.post(
+            f"/api/v1/local-human-test/investigations/{task_id}/bindings",
+            json=payload,
+            headers={"Idempotency-Key": "one"},
+        )
+    assert missing_key.status_code == invalid.status_code == 400
+    assert result.status_code == 200
+    assert result.headers["cache-control"] == "private, no-store"
+    store.bind.assert_called_once()
+
+
+def test_disabled_binding_cannot_mutate(tmp_path: Path) -> None:
+    client, store = make_client(tmp_path, enabled=False)
+    with client:
+        result = client.post(
+            f"/api/v1/local-human-test/investigations/{uuid7()}/bindings",
+            json={
+                "delivery_hash": "a" * 64,
+                "opportunity_id": str(uuid7()),
+                "opportunity_version": 1,
+                "reason": "Synthetic association",
+            },
+            headers={"Idempotency-Key": "one"},
+        )
+    assert result.status_code == 404
     assert not store.mock_calls

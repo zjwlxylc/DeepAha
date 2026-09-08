@@ -4,7 +4,7 @@
 
 依据：[已确认的架构结论](D:/DeepAha/docs/development/reviews/2026-09-08-evidence-verification-architecture-review.md)、[开发顺序](../../development/2026-09-08-evidence-architecture-adoption.md)。用户已要求在合适阶段实施，不新增逐步审批或固定子 Agent 流程。采用现有 Python/Pydantic/PostgreSQL/对象存储，不引入新服务或模型调用。
 
-本计划实施状态：IN_PROGRESS。首批 PR #10 已合入主线 `22b9cb8`；批次 A 已实现并完成影子逐条回放，独立复核与候选 CI 在交付记录中追加。B/C 尚未完成，不能把 Reader 文本位置映射当成持久 EvidenceRef。较长分支仅作既有功能移入和兼容性参考，不把其全量类型失败带进主线。
+本计划实施状态：IN_PROGRESS。首批 PR #10 已合入主线 `22b9cb8`；批次 A 已实现并完成影子逐条回放，六项评审问题修复后独立复核通过，PR #11 候选 CI 九项通过并已合入 `46a2647`。B 的持久化与只读绑定已实现并完成本地验证，尚待候选 CI 与合并；C 尚未完成，不能把 Reader 文本位置映射当成持久 EvidenceRef。较长分支仅作既有功能移入和兼容性参考，不把其全量类型失败带进主线。
 
 ## 不变量
 
@@ -38,11 +38,11 @@
 
 涉及 `contracts` 中新增版本化通用锚点契约、`documents/blocks.py`、`models.py`、`service.py`、`parser.py` 及新的 `backend/migrations/versions/` 文件。沿用已有 UUID、Document parse identity、block hash 和 evidence binding hash；不改写已版本化 migration。
 
-- [ ] 新增一种通用文本片段与 Reader 锚点种类。统一外壳严格记录 Reader namespace/version、anchor schema、原范围 payload；格式 payload 必须经对应 Adapter 验证，不允许任意 JSON 自称有效。
-- [ ] 数据库继续约束文档/原件/块/引用的一致关联、Hash、父块顺序和不可变性。新种类使用统一约束，未来格式不再加数据库枚举。
-- [ ] 对 0.1/0.2/0.8 历史记录继续采用原加载和回放身份。新表示产生新 parse key；旧绑定或批准不能被新版本自动继承。
-- [ ] 迁移编号与依赖在集成时按实际唯一 Alembic head 分配，先处理直接需要的原件/绑定桥接依赖，保持一条可回退链；不得为抢占编号改写历史文件或将未来 25 个迁移整体带入。
-- [ ] PostgreSQL/Moto 集成测试覆盖旧记录、新通用块、Hash/外键/非法 payload、不可变更新拒绝、回退前置条件及模型一致性。
+- [x] 新增一种通用文本片段与 Reader 锚点种类。统一外壳严格记录 Reader namespace/version、anchor schema、原范围 payload；格式 payload 必须经对应 Adapter 验证，不允许任意 JSON 自称有效。
+- [x] 数据库继续约束文档/原件/块/引用的一致关联、Hash、父块顺序和不可变性。新种类使用统一约束，未来格式不再加数据库枚举。
+- [x] 对 0.1/0.2/0.8 历史记录继续采用原加载和回放身份。新表示产生新 parse key；旧绑定或批准不能被新版本自动继承。
+- [x] 迁移编号与依赖在集成时按实际唯一 Alembic head 分配，先处理直接需要的原件/绑定桥接依赖，保持一条可回退链；不得为抢占编号改写历史文件或将未来 25 个迁移整体带入。
+- [x] PostgreSQL/Moto 集成测试覆盖旧记录、新通用块、Hash/外键/非法 payload、不可变更新拒绝、回退前置条件及模型一致性。
 
 ## 批次 C：Delivery 与正式绑定共用结果
 
