@@ -232,3 +232,75 @@ def test_identity_routes_preserve_intake_access(
     assert response.status_code == (403 if enabled else 404)
     method.assert_not_called()
     assert not store.mock_calls
+
+
+@pytest.mark.parametrize("suffix", ["facts", "facts/decisions", "facts/promotions"])
+def test_fact_routes_validate_inputs_key_and_return_private_receipt(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, suffix: str
+) -> None:
+    client, store = make_client(tmp_path)
+    method = Mock()
+    monkeypatch.setattr(
+        "deepaha.investigations.facts."
+        + ("prepare_facts" if suffix == "facts" else "act_on_facts"),
+        method,
+    )
+    store.get.return_value = {"fact_review": {"scope": "INDEPENDENT_FACT_REVIEW"}}
+    payload: dict[str, Any] = {
+        "delivery_hash": "a" * 64,
+        "binding_id": str(uuid7()),
+        "check_id": str(uuid7()),
+    }
+    if suffix != "facts":
+        payload.update(preparation_id=str(uuid7()), reason="Synthetic review")
+        if suffix.endswith("decisions"):
+            payload.update(
+                candidate_id=str(uuid7()),
+                decision="APPROVE",
+                evidence_support="SUPPORTED",
+                precedence_check="PASSED",
+            )
+        else:
+            payload.update(entity_id="position-1")
+    with client:
+        path = f"/api/v1/local-human-test/investigations/{uuid7()}/{suffix}"
+        invalid = client.post(path, json={}, headers={"Idempotency-Key": "test"})
+        assert invalid.status_code == 400
+        if suffix != "facts":
+            assert client.post(path, json=payload).status_code == 400
+        result = client.post(path, json=payload, headers={"Idempotency-Key": "test"})
+    assert result.status_code == 200
+    assert result.headers["cache-control"] == "private, no-store"
+    assert result.json() == store.get.return_value
+    method.assert_called_once()
+
+
+@pytest.mark.parametrize("suffix", ["facts", "facts/decisions", "facts/promotions"])
+@pytest.mark.parametrize(
+    "enabled,roles,expected",
+    [
+        (False, None, 404),
+        (True, frozenset({ReviewerRole.FEEDBACK_REVIEWER}), 403),
+    ],
+)
+def test_fact_routes_cannot_bypass_intake_access(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    suffix: str,
+    enabled: bool,
+    roles: frozenset[ReviewerRole] | None,
+    expected: int,
+) -> None:
+    client, store = make_client(tmp_path, enabled=enabled, roles=roles)
+    method = Mock()
+    monkeypatch.setattr("deepaha.investigations.facts.prepare_facts", method)
+    monkeypatch.setattr("deepaha.investigations.facts.act_on_facts", method)
+    with client:
+        result = client.post(
+            f"/api/v1/local-human-test/investigations/{uuid7()}/{suffix}",
+            json={},
+            headers={"Idempotency-Key": "test"},
+        )
+    assert result.status_code == expected
+    method.assert_not_called()
+    assert not store.mock_calls

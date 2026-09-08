@@ -20,8 +20,11 @@ from deepaha.db.session import get_engine, session_factory
 from deepaha.investigations.contracts import (
     BindInvestigation,
     CreateInvestigation,
+    DecideInvestigationFact,
     InvestigationError,
     PrepareInvestigationDocuments,
+    PrepareInvestigationFacts,
+    PromoteInvestigationFacts,
     RegisterInvestigationIdentity,
     RegisterInvestigationPositions,
     ReviewInvestigation,
@@ -205,6 +208,62 @@ def register_positions(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return register(store, task_id, command, principal, key)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/facts")
+def prepare_facts(
+    task_id: UUID,
+    command: PrepareInvestigationFacts,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.facts import prepare_facts as prepare
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        prepare(store, task_id, command, principal)
+        return store.get(task_id)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/facts/decisions")
+def decide_fact(
+    task_id: UUID,
+    command: DecideInvestigationFact,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.facts import act_on_facts
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        act_on_facts(store, task_id, command, principal, key)
+        return store.get(task_id)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/facts/promotions")
+def promote_facts(
+    task_id: UUID,
+    command: PromoteInvestigationFacts,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.facts import act_on_facts
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        act_on_facts(store, task_id, command, principal, key)
+        return store.get(task_id)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 

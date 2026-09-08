@@ -457,6 +457,13 @@ class InvestigationStore:
             for fact in delivery.get("facts", [])
         ]
         bindings = describe_bindings(session, task) if include_documents else []
+        from deepaha.investigations.facts import describe_facts
+
+        fact_review = (
+            describe_facts(session, task.task_id, UUID(bindings[0]["binding_id"]))
+            if bindings
+            else {"current": None, "history": []}
+        )
         checks = describe_checks(session, task) if include_documents else []
         return dict(task.request) | {
             "task_id": str(task.task_id),
@@ -477,6 +484,7 @@ class InvestigationStore:
             "review": task.review,
             "entity_binding": bindings[0] if bindings else None,
             "binding_history": bindings,
+            "fact_review": fact_review,
             "evidence_check": checks[0] if checks else None,
             "evidence_check_history": checks,
             "binding_entities": delivery.get("evidence", {}).get("entities", [])

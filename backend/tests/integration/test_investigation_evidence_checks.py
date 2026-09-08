@@ -27,6 +27,57 @@ __all__ = ["harness"]
 pytestmark = pytest.mark.integration
 
 
+def test_raw_file_anchor_added_by_binding_does_not_change_reader_receipt(
+    harness: StoreHarness,
+) -> None:
+    from deepaha.investigations.evidence_checks import evaluate_check
+    from deepaha.investigations.models import InvestigationMaterial
+    from deepaha.investigations.registration import register_identity
+    from tests.integration.test_investigation_registration import _command, _ready
+
+    h = harness
+    task_id, delivery = _ready(h)
+    before = h.store.get(task_id)["evidence_check"]
+    register_identity(h.store, task_id, _command(delivery), h.principal, "new-identity")
+    with h.factory() as session:
+        task = session.get(InvestigationTask, task_id)
+        assert task is not None
+        materials = list(
+            session.scalars(
+                select(InvestigationMaterial)
+                .where(InvestigationMaterial.task_id == task_id)
+                .order_by(InvestigationMaterial.material_id)
+            )
+        )
+        current = evaluate_check(session, h.store.objects, task, materials)
+    assert current["inputs"] == before["inputs"]
+    assert digest(current) == before["result_hash"]
+
+
+def test_read_only_evaluation_replays_the_exact_persisted_receipt(harness: StoreHarness) -> None:
+    from deepaha.investigations.evidence_checks import evaluate_check
+    from deepaha.investigations.models import InvestigationMaterial
+
+    h = harness
+    task_id, delivery, _ = _pending(h)
+    h.store.prepare_documents(task_id, delivery.sha256, h.principal)
+    with h.factory.begin() as session:
+        session.execute(text("SET TRANSACTION READ ONLY"))
+        task = session.get(InvestigationTask, task_id)
+        receipt = session.scalar(select(InvestigationEvidenceCheck))
+        assert task is not None and receipt is not None
+        materials = list(
+            session.scalars(
+                select(InvestigationMaterial)
+                .where(InvestigationMaterial.task_id == task_id)
+                .order_by(InvestigationMaterial.material_id)
+            )
+        )
+        payload = evaluate_check(session, h.store.objects, task, materials)
+        assert digest(payload) == receipt.result_hash
+        assert json.loads(json.dumps(payload)) == receipt.payload
+
+
 def test_check_is_bound_idempotent_and_does_not_rewrite_delivery(harness: StoreHarness) -> None:
     h = harness
     task_id, delivery, _ = _pending(h)

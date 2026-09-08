@@ -1,0 +1,91 @@
+{
+  "scope": "INTERNAL_FIELD_REVIEW_ENGINEERING_ONLY",
+  "base_commit": "757fb3c0522b2092bbaa402e3e8ea3ea166d783f",
+  "implementation": "IMPLEMENTED",
+  "release_qualification": "NOT_STARTED",
+  "backend_nonintegration": {
+    "passed": 1330,
+    "deselected": 552,
+    "seconds": 43.58
+  },
+  "backend_integration": {
+    "passed": 549,
+    "skipped": 3,
+    "deselected": 1330,
+    "seconds": 428.7
+  },
+  "field_postgresql_targeted_passed": 18,
+  "frontend": {
+    "passed": 145,
+    "files": 31,
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "production_build": "PASS"
+  },
+  "browser": {
+    "passed": 16,
+    "seconds": 53.7,
+    "viewports": [
+      "1280x900",
+      "390x844"
+    ],
+    "field_flow_posts": 11,
+    "field_flow_mutations": 7,
+    "screenshots_visually_checked": true
+  },
+  "ruff": "PASS",
+  "mypy": {
+    "linux": "PASS",
+    "win32": "PASS",
+    "source_files": 426
+  },
+  "migration": {
+    "head": "20260908_0040",
+    "empty_roundtrip": "PASS",
+    "history_downgrade_refused": "PASS",
+    "alembic_check": "PASS"
+  },
+  "independent_review": {
+    "open_p2_plus": 0,
+    "findings_fixed": [
+      "material_order",
+      "pending_adjudication_recovery",
+      "noncandidate_block_metadata",
+      "unique_decision_action"
+    ]
+  },
+  "frozen_replay": {
+    "path": "2026-09-08-field-review-receipt-replay.json",
+    "references": 124,
+    "PASS": 94,
+    "FAIL": 0,
+    "UNVERIFIED": 30,
+    "delivery": "UNVERIFIED",
+    "wma_calls": 0,
+    "all_references_equal": true,
+    "six_input_hashes_unchanged": true
+  },
+  "workspace_file_sha256": {
+    "backend/migrations/versions/20260908_0040_investigation_fact_bridge.py": "e0b8cf8c559206ecc598a1b7f6a9c1a1f78d26c858900d833b0d6e8abe981e23",
+    "backend/src/deepaha/api/investigations.py": "a8c671a1945f705618d2983df97e22014f9a4ebdf8efa4fe34870299206a419a",
+    "backend/src/deepaha/investigations/contracts.py": "59d498113f40ee07f68f3bc261ba28550a790c7fe574a73c4c73482ebdbeba4b",
+    "backend/src/deepaha/investigations/evidence_checks.py": "c69f30707f3c9775275fbc0123605d86327ad8f960466d6a44a9ba40486dc0be",
+    "backend/src/deepaha/investigations/facts.py": "c5148821762df5b90d3f7fc4728acb9965d7e77a84a470bcb0912e03d6510fb2",
+    "backend/src/deepaha/investigations/field_mapping.py": "5e40a8170ec01e3684bd9767e7bcfc390543a79a02aef3aa52302416fb92f8eb",
+    "backend/src/deepaha/investigations/models.py": "f8aa321a6571d875bf0881ec3197889ec54c38d9c4477b2bb890dae5c309af09",
+    "backend/src/deepaha/investigations/store.py": "68632c92b05b6acae46ddc5bfaa58231ec3c628000672ac04e2dd3066c26832a",
+    "backend/tests/api/test_investigations.py": "9d6a0982a198495e8fd470477c07668367dbb4cfbf786b9f02f185a78dfa5e97",
+    "backend/tests/integration/test_investigation_evidence_checks.py": "f829f14264aaaa190de2088cee8d843dbc510ad536875a06e65099b15ab3f8aa",
+    "backend/tests/integration/test_investigation_facts.py": "e84399d3e95b62f110a2204377596968b86f6d79324c92353bfeb1294c836f83",
+    "backend/tests/investigations/test_field_mapping.py": "678123ff386cc0dce8b143736ce586c227e81656ea51c9fa3f2b55691762efb0",
+    "web/app/review/investigations/[taskId]/page.tsx": "ce668d9aa0aa9ea9098657cfbde0c4f9fed70627351510fdaf8a5f0022ff1835",
+    "web/app/review/investigations/actions.ts": "bcbc9573bed2fa49bd5979e4a861861302a9fdc6c2e5bc94cb75125bbf5e7f8c",
+    "web/components/investigations/fact-review.tsx": "45a65445dcc71e4912104c3c84d8dcfef2e8e4c49109ac43efcaf545502e2564",
+    "web/e2e/investigation-api.mjs": "0ad883f1c0f991a74ef16586ed2d6434a40c780b80110f4b15cf83ed3991a499",
+    "web/e2e/investigations.spec.ts": "a141f650a70eb8d2d1cf117fb95a0f6752beddf444fac0bae68c062650fe6a04",
+    "web/lib/investigations.ts": "77ce3850e1188e51836c08251e85a5f375a79d170e9ab810faf31782275a162e",
+    "web/tests/investigation-fact-review.test.tsx": "a09f9ddf69094200375f47c6504a42b41365fb5826c10ac58268e56692b35446",
+    "web/tests/investigations-fixture.ts": "764d64206bf105f4f5709f0b9fc6ef4bafdb9b46c11d809484ac6784b9222913",
+    "web/tests/investigations-page.test.tsx": "0f2ea81968d4a8be24563febe6c56a469493895d817a354e63073c8efe536086"
+  }
+}
