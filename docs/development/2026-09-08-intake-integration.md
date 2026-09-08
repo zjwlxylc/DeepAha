@@ -1,6 +1,6 @@
 # 首批 Direct WMA 调查底座集成
 
-状态：集成候选，尚未合并、部署或取得发布资格。起点为远程 main `9c8f5b2`；当前代码候选 `6b587ee`。原开发分支 `codex/delivery1-direct-wma` 的后续功能保留，未整支合入。
+状态：已通过 PR #10 合入远程 main，合并 SHA `22b9cb8`。最终候选 `088afc2` 的 CI #74（run `34206716808`）九项全部通过；合并代码树与该候选一致。尚未部署或取得发布资格。起点为远程 main `9c8f5b2`。原开发分支 `codex/delivery1-direct-wma` 的后续功能保留，未整支合入。
 
 ## 本批范围
 
@@ -22,7 +22,7 @@
 | 相同真实交付离线核验 | Schema/跨文件 PASS；94 PASS / 0 FAIL / 30 UNVERIFIED；四条 HTML 表头 PASS；六个原始文件哈希不变 |
 | 真实 PostgreSQL 18 / Moto 全套集成 | 修复后完整重跑 464 passed / 3 skipped / 1179 deselected。此前一轮唯一失败为测试桶名与 CI 不同；已改用 CI 桶名，未为该环境问题修改业务或测试断言 |
 | 数据库迁移 | 空库到主线 0034 再到本批 0036、空测试库 0036→0034→0036 往返及 Alembic 模型一致性通过 |
-| 独立只读代码审查 / 候选 CI | 三项 P2 已修复并通过独立复核 / PR #10 首轮 CI 暴露 Schema checkout 字节转换，已修正后重新送验 |
+| 独立只读代码审查 / 候选 CI | 三项 P2 已修复并通过独立复核 / PR #10 首轮 CI 暴露 Schema checkout 字节转换；修正后的最终候选 CI 九项全部通过 |
 
 数据库使用本批新建的独立容器；没有操作用户已有业务库。浏览器使用实际 Next 构建和合成 API，实际 API/runner/数据库链由数据库集成测试覆盖；这些均不构成真人事实审核或真实 WMA 重复稳定性证据。
 
@@ -53,3 +53,7 @@
 PR #10 首轮 CI `34206238154` 中，backend-quality 的 101 个失败均受 `DELIVERY_SCHEMA_INTEGRITY_ERROR` 影响。Windows 工作区的两份外部 Schema 与固定 SHA 完全相同，但 Git 默认文本转换将入库 blob 改成 LF；Linux checkout 因此未取得约定的原始 CRLF 字节。
 
 修复仅为这两份外部 Schema 设置 `.gitattributes -text`，将原本已在 Windows 工作区验证过的完整字节存入 Git。工作区 Schema 字节、JSON 字段/层级/枚举、固定 SHA 和校验逻辑均不变；没有对参与校验的数据做换行归一化。`git diff --check` 对这两个文件识别 CRLF 结尾，其他行尾空白检查保留。[Git blob 与原件哈希比较](evidence/2026-09-08-intake-schema-checkout.json)记录修复前后 SHA 及 JSON 契约不变断言。提交后需以新候选 CI 重新验收，不能使用旧 CI 通过部分代替。
+
+## 合并记录
+
+2026-09-08 经独立评审和最终 CI 后合并 [PR #10](https://github.com/zjwlxylc/DeepAha/pull/10)。[合并与九项 CI 回执](evidence/2026-09-08-intake-merged-ci.json)保存候选、主线和运行身份。用于本批集成的独立 PostgreSQL/Moto 容器已清理；用户根工作区和原开发分支保留。下一批从这一主线基线落实通用 Evidence 架构。

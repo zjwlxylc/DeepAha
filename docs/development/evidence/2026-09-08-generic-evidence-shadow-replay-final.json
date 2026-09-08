@@ -1,0 +1,4904 @@
+{
+  "checked_at": "2026-09-08T09:43:26.140256+00:00",
+  "case_id": "01a07fb6-4415-76bc-a14c-c6422b84cb0e",
+  "mode": "SHADOW_ONLY",
+  "wma_calls": 0,
+  "business_database_writes": 0,
+  "original_hashes_before": {
+    "result/opportunities.json": "2bfc04b07dd95eaef15c5fdbd9ba2f77fe3cfe0eb1c381bc7edbf66859171d74",
+    "result/report.md": "6d5002be467b5c49a019cf7b2acbe317985739ec5a2701fdb3db40461a7aa5bc",
+    "result/evidence.json": "d151d28011e2ac7ed5aa68ba4a0a80748a72b2c6df73dfb62c9e599244a361a6",
+    "artifacts/notice_48723.html": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+    "artifacts/attachment1_baoming.doc": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+    "artifacts/attachment2_chengguo.doc": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6"
+  },
+  "original_hashes_after": {
+    "result/opportunities.json": "2bfc04b07dd95eaef15c5fdbd9ba2f77fe3cfe0eb1c381bc7edbf66859171d74",
+    "result/report.md": "6d5002be467b5c49a019cf7b2acbe317985739ec5a2701fdb3db40461a7aa5bc",
+    "result/evidence.json": "d151d28011e2ac7ed5aa68ba4a0a80748a72b2c6df73dfb62c9e599244a361a6",
+    "artifacts/notice_48723.html": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+    "artifacts/attachment1_baoming.doc": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+    "artifacts/attachment2_chengguo.doc": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6"
+  },
+  "originals_unchanged": true,
+  "schema": "PASS",
+  "cross_file_consistency": "PASS",
+  "production_counts": {
+    "PASS": 94,
+    "FAIL": 0,
+    "UNVERIFIED": 30
+  },
+  "shadow_counts": {
+    "PASS": 94,
+    "FAIL": 0,
+    "UNVERIFIED": 30
+  },
+  "legacy_pass_regressions": 0,
+  "delivery_verdict": "UNVERIFIED",
+  "reader_scope": "HTML/PDF/XLSX registered; binary DOC remains unsupported",
+  "source_hashes": {
+    "__init__.py": "11b8f8c67e5991a569ae38226857431bc917d60ea26e24b3aa001f108525f1ac",
+    "adapters/__init__.py": "ca5ed2c698be61c2f576c8101ae0d3efd1205425bd343d6a194db8b9f54f10f7",
+    "adapters/defaults.py": "c478747ddb37c3f7cfd6224246c89b5849ef775668f4df3126a75cf3262046e2",
+    "adapters/html.py": "618ab556b661f770c200b09930b9b41fe7231f37c363befcf4e5bb368ac9711f",
+    "adapters/html_text.py": "fa385375f04cb0a548d5eaf0a5cafc525fe9b7ccbd44e1c08e1670b0ac6e86df",
+    "adapters/pdf.py": "3d55de90670c252def717df05f420caaafe0ce9ac45b25e7ed113edd3b0447ed",
+    "adapters/projection.py": "5bba39ecb181f663aa4f8afc2302eda74ff9338dd18c3ba76fa998e85bb44748",
+    "adapters/spreadsheet.py": "51777366350b54f84b83445757d4a6bb62f1626e37716134a2b4168a87d8a14f",
+    "contracts.py": "0f64167454deeac07624f71700c005fe2127a3c6e1797a64e1433b16f5024771",
+    "registry.py": "3298ab2b735e37b15c58f16afdd8b907e32744f83e73f19c207ca022a692a281",
+    "verifier.py": "fc9619f9f0991949a057e18eee6710e6cd43472564335a5c2da81a914fb81063"
+  },
+  "shared_reader_hashes": {
+    "documents/html.py": "eee031459b68731c2d1d5cbb928c916e8ba0a8ba2ed2a2baa0f6dbf8ebb928fc",
+    "documents/spreadsheet_reading.py": "41e55f46fe1b3e1262f4bb1ebfb4c6a61943120c4a7210c0d18758d8933bb1a0",
+    "investigations/delivery.py": "0ddde92333dcdd06eb491c3622a07b25e89de1b61d265a06f68e68940e37dbc4"
+  },
+  "four_html_headers_pass": true,
+  "inline_publication_scope_pass": true,
+  "references": [
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "opportunity_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "2026年浙江红船干部学院 中共嘉兴市委党校公开招聘高层次人才公告",
+        "original_locator": {
+          "selector": ".artice1 > div > h3"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[1]/h3",
+            "projection_sha256": "1288e2cbcd2ac8021ff046c5db4b3b551304d12c8c687730614d667819787807",
+            "projection_start": 0,
+            "projection_end": 33,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[1]/h3::text",
+                "start": 0,
+                "end": 33
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "publish_unit",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "因工作需要，浙江红船干部学院、中共嘉兴市委党校决定面向社会公开招聘工作人员5名（事业编制）。现将有关事项公告如下：",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[1]",
+            "projection_sha256": "2c432229c8216964e20d32bdc3f7158a1f7d0c6452d93df6371446c8f675fab5",
+            "projection_start": 0,
+            "projection_end": 57,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[1]/span::text",
+                "start": 0,
+                "end": 57
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "publish_unit",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "浙江红船干部学院",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(64)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[64]",
+            "projection_sha256": "cfb5a294b36bcf0657bef1699acf89fedafee367b1c37038917f62dd1aa0bb8f",
+            "projection_start": 0,
+            "projection_end": 8,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[64]/span::text",
+                "start": 0,
+                "end": 8
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "publish_unit",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "中共嘉兴市委党校",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(65)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[65]",
+            "projection_sha256": "e0788279be7ce2dd084e16f92c4c21726fe8cb21c87fae10a391bb03bbad1a80",
+            "projection_start": 0,
+            "projection_end": 8,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[65]/span::text",
+                "start": 0,
+                "end": 8
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "publish_date",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "2026年7月13日",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(66)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[66]",
+            "projection_sha256": "f0d31c49311dbb1ab322ba8419ddd7f98f6754f5f5005b14ba731645f2fb88d2",
+            "projection_start": 0,
+            "projection_end": 10,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[66]/span::text",
+                "start": 30,
+                "end": 40
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "site_publish_time",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "2026-07-14 15:33:47",
+        "original_locator": {
+          "selector": ".click1 > span:nth-of-type(3) > span"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[2]/span[3]/span",
+            "projection_sha256": "78e710437378f0a7891aaf1f06c39d93e50dd28b535fde2f80fb9a064e9e8842",
+            "projection_start": 0,
+            "projection_end": 19,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[2]/span[3]/span::text",
+                "start": 0,
+                "end": 19
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "opportunity_type",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "因工作需要，浙江红船干部学院、中共嘉兴市委党校决定面向社会公开招聘工作人员5名（事业编制）。现将有关事项公告如下：",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[1]",
+            "projection_sha256": "2c432229c8216964e20d32bdc3f7158a1f7d0c6452d93df6371446c8f675fab5",
+            "projection_start": 0,
+            "projection_end": 57,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[1]/span::text",
+                "start": 0,
+                "end": 57
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "opportunity_type",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "聘用人员列入事业编制管理，与招聘单位签订事业单位聘用合同，并按规定约定试用期。试用期满后，考核合格者，予以正式聘用；考核不合格的，取消聘用。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(49)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[49]",
+            "projection_sha256": "6f5716c523e4a5e1547ef62abe6950a2ea1320b24ba94b0b4aa3dc4e8e4b3911",
+            "projection_start": 0,
+            "projection_end": 70,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[49]/span::text",
+                "start": 0,
+                "end": 70
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "headcount_total",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "因工作需要，浙江红船干部学院、中共嘉兴市委党校决定面向社会公开招聘工作人员5名（事业编制）。现将有关事项公告如下：",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[1]",
+            "projection_sha256": "2c432229c8216964e20d32bdc3f7158a1f7d0c6452d93df6371446c8f675fab5",
+            "projection_start": 0,
+            "projection_end": 57,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[1]/span::text",
+                "start": 0,
+                "end": 57
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "headcount_total",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "本次公开招聘计划推出岗位4个，招聘教师5名。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(6)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[6]",
+            "projection_sha256": "152a8a3eadcd71acddbbd18ee4e33491cac0aca5e4c52a425ac1b9eff8a0e170",
+            "projection_start": 0,
+            "projection_end": 22,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[6]/span::text",
+                "start": 0,
+                "end": 22
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "position_count",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "本次公开招聘计划推出岗位4个，招聘教师5名。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(6)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[6]",
+            "projection_sha256": "152a8a3eadcd71acddbbd18ee4e33491cac0aca5e4c52a425ac1b9eff8a0e170",
+            "projection_start": 0,
+            "projection_end": 22,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[6]/span::text",
+                "start": 0,
+                "end": 22
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "recruitment_scope",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "本次招聘在全国范围内面向具有博士研究生学历学位的人员。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(10)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[10]",
+            "projection_sha256": "acc60786657648b9b5c4984007f79db088de0508a48e8994495981f7dad5c276",
+            "projection_start": 0,
+            "projection_end": 27,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[10]/span::text",
+                "start": 0,
+                "end": 27
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "education_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "本次招聘在全国范围内面向具有博士研究生学历学位的人员。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(10)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[10]",
+            "projection_sha256": "acc60786657648b9b5c4984007f79db088de0508a48e8994495981f7dad5c276",
+            "projection_start": 0,
+            "projection_end": 27,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[10]/span::text",
+                "start": 0,
+                "end": 27
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "nationality_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "1.具有中华人民共和国国籍，有良好的思想政治素质，拥护党的路线、方针、政策。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(12)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[12]",
+            "projection_sha256": "6252ff3898fc8d7e8f3a5a8bd3c15fb59555e5a4514413974fa29d355b698b98",
+            "projection_start": 0,
+            "projection_end": 38,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[12]/span::text",
+                "start": 0,
+                "end": 38
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "ideology_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "1.具有中华人民共和国国籍，有良好的思想政治素质，拥护党的路线、方针、政策。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(12)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[12]",
+            "projection_sha256": "6252ff3898fc8d7e8f3a5a8bd3c15fb59555e5a4514413974fa29d355b698b98",
+            "projection_start": 0,
+            "projection_end": 38,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[12]/span::text",
+                "start": 0,
+                "end": 38
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "age_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "4.年龄要求：博士研究生年龄在38周岁及以下（即1987年7月13日以后出生，以此类推）。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(15)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[15]",
+            "projection_sha256": "3fc800ea0d412af46434a53b548368cbd327db8898d41fee185bad2e61999e86",
+            "projection_start": 0,
+            "projection_end": 45,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[15]/span::text",
+                "start": 0,
+                "end": 45
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "health_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "5.具有适应岗位要求的身体条件。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(16)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[16]",
+            "projection_sha256": "96c9677c26f284a6efcc4c41db7efc067bd102f7811cd2581f69a00fe1525685",
+            "projection_start": 0,
+            "projection_end": 16,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[16]/span::text",
+                "start": 0,
+                "end": 16
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "overseas_degree_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（留学人员须取得教育部留学服务中心出具的国外境外学历学位认证书）；普通高校2026年应届毕业生报考的，学历、学位证书须于2026年12月31日前取得。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(14)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[14]",
+            "projection_sha256": "c72922b57b4338a32c7fdffcf92e9fbd91b887a026de89b515286dea65294f89",
+            "projection_start": 36,
+            "projection_end": 111,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[14]/span::text",
+                "start": 36,
+                "end": 111
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "fresh_graduate_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "普通高校2026年应届毕业生报考的，学历、学位证书须于2026年12月31日前取得。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(14)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[14]",
+            "projection_sha256": "c72922b57b4338a32c7fdffcf92e9fbd91b887a026de89b515286dea65294f89",
+            "projection_start": 69,
+            "projection_end": 111,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[14]/span::text",
+                "start": 69,
+                "end": 111
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "fresh_graduate_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "普通高校2026年应届毕业生不能按时取得或未取得招聘岗位规定的学历、学位证书的，取消聘用资格。社会人员办理报到前须与原单位解除劳动（聘用）合同。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(48)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[48]",
+            "projection_sha256": "0ecfee9a63371e96857d25f71f8810e1b29816c4de23bd2742a255e09def3c5b",
+            "projection_start": 61,
+            "projection_end": 133,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[48]/span::text",
+                "start": 61,
+                "end": 133
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "6.有下列情形之一的，不具备报考资格：",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(17)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[17]",
+            "projection_sha256": "a92772f1c975319b660e20a689996cdba39f6a5c2037a20f2f49f620b7811b10",
+            "projection_start": 0,
+            "projection_end": 19,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[17]/span::text",
+                "start": 0,
+                "end": 19
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（1）曾因犯罪受过刑事处罚的或曾被开除公职的；被依法列为失信联合惩戒对象的。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(18)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[18]",
+            "projection_sha256": "402a617b74ad7f3170e131fe84104b6007b45354368f99aa4961c6308227742e",
+            "projection_start": 0,
+            "projection_end": 38,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[18]/span::text",
+                "start": 0,
+                "end": 38
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（2）涉嫌违纪违法正在接受纪检监察机关或者司法机关审查尚未作出结论的；受党纪、政务处分未满处分期限（影响期限）的。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(19)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[19]",
+            "projection_sha256": "36d339e5375571a393ad525789aa3de5894fb4b4e0cc9a11c01d2de595b877c2",
+            "projection_start": 0,
+            "projection_end": 57,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[19]/span::text",
+                "start": 0,
+                "end": 57
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（3）按照《事业单位人事管理回避规定》构成回避关系的。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(20)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[20]",
+            "projection_sha256": "f02a516e417782653b0f387a48f0e9a072032ffef362f5853b26a1e2952172d9",
+            "projection_start": 0,
+            "projection_end": 27,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[20]/span::text",
+                "start": 0,
+                "end": 27
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（4）法律法规规定的其他不得招聘为事业单位工作人员的情形。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(21)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[21]",
+            "projection_sha256": "c7b63102bb891fc974b9b7df32b96dde4d0c90297cdf2f099a600af6eedb18da",
+            "projection_start": 0,
+            "projection_end": 29,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[21]/span::text",
+                "start": 0,
+                "end": 29
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（5）曾有学术不端等不良行为的。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(22)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[22]",
+            "projection_sha256": "bc5c80a21e702019f978e9537a573d70f7c82e6760287277ac87a8fa479b389e",
+            "projection_start": 0,
+            "projection_end": 16,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[22]/span::text",
+                "start": 0,
+                "end": 16
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "major_review_rule",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "招聘岗位所需专业由招聘单位参考国家教育行政部门发布的《授予博士、硕士学位和培养研究生的学科、专业目录（1997年颁布，2008年更新）》《研究生教育学科专业目录（2022年）》设置及审查认定，对于考生所学专业未列入以上教育行政部门公布的目录中的，由招聘单位按专业所学课程、研究方向相同或相近原则审查。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(34)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[34]",
+            "projection_sha256": "19aa5202cd656cad0eb9fa5bbf75c6e6b0fa49ec5abd2c12e3682bf78a2792e3",
+            "projection_start": 34,
+            "projection_end": 184,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[34]/span::text",
+                "start": 34,
+                "end": 184
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "registration_start",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "1.报名时间：公告发布之日起至2026年12月31日。根据报名情况，结合院校教学、科研工作需要，适时对符合资格条件的高层次人才组织考试，直至相应岗位落实聘用人员。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(26)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[26]",
+            "projection_sha256": "f0bc7bd6a2b9681892f0d2c93120f6c3aa06a55df0c35c7046af0062d4155eb0",
+            "projection_start": 0,
+            "projection_end": 81,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[26]/span::text",
+                "start": 0,
+                "end": 81
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "registration_deadline",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "1.报名时间：公告发布之日起至2026年12月31日。根据报名情况，结合院校教学、科研工作需要，适时对符合资格条件的高层次人才组织考试，直至相应岗位落实聘用人员。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(26)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[26]",
+            "projection_sha256": "f0bc7bd6a2b9681892f0d2c93120f6c3aa06a55df0c35c7046af0062d4155eb0",
+            "projection_start": 0,
+            "projection_end": 81,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[26]/span::text",
+                "start": 0,
+                "end": 81
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "exam_arrangement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "根据报名情况，结合院校教学、科研工作需要，适时对符合资格条件的高层次人才组织考试，直至相应岗位落实聘用人员。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(26)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[26]",
+            "projection_sha256": "f0bc7bd6a2b9681892f0d2c93120f6c3aa06a55df0c35c7046af0062d4155eb0",
+            "projection_start": 27,
+            "projection_end": 81,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[26]/span::text",
+                "start": 27,
+                "end": 81
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_method",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "2.报名方式。本次公开招聘采用网上报名方式。应聘人员可于规定时间将报名登记表（附件1）及相关材料扫描件电子稿发送至报名邮箱：zjhcgbxy2026@163.com，文件名为“应聘岗位+专业+姓名”。相关报名材料可在考试前提供原件及复印件各一套，所提供材料不全或材料审核不符合报名条件的不得参加考试。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(27)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[27]",
+            "projection_sha256": "f1986b07f3f5ad6885899636992cfb951392cdedecfee094766a4c33611f0cc8",
+            "projection_start": 0,
+            "projection_end": 150,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[27]/span::text",
+                "start": 0,
+                "end": 150
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_email",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "2.报名方式。本次公开招聘采用网上报名方式。应聘人员可于规定时间将报名登记表（附件1）及相关材料扫描件电子稿发送至报名邮箱：zjhcgbxy2026@163.com，文件名为“应聘岗位+专业+姓名”。相关报名材料可在考试前提供原件及复印件各一套，所提供材料不全或材料审核不符合报名条件的不得参加考试。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(27)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[27]",
+            "projection_sha256": "f1986b07f3f5ad6885899636992cfb951392cdedecfee094766a4c33611f0cc8",
+            "projection_start": 0,
+            "projection_end": 150,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[27]/span::text",
+                "start": 0,
+                "end": 150
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_materials",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（1）报名登记表一式两份（粘贴一寸正面免冠证件照）；",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(29)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[29]",
+            "projection_sha256": "134a84353f6c8e584f4a958e0835fddcc1de682fa3fd4859c2f9456f1b0d3173",
+            "projection_start": 0,
+            "projection_end": 26,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[29]/span::text",
+                "start": 0,
+                "end": 26
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_materials",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（2）学历、学位证书的原件及复印件（普通高校2026年应届毕业生未取得学历、学位证书可提供学校核发的就业推荐表和就业协议书，留学人员报考提供教育部留学服务中心出具的国外境外学历学位认证书）；",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(30)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[30]",
+            "projection_sha256": "edc72ac870a6ccddef1e42b25d135ba265b065f75cc6e3ab9f7cd006b7d50de3",
+            "projection_start": 0,
+            "projection_end": 95,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[30]/span::text",
+                "start": 0,
+                "end": 95
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_materials",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（3）本人身份证原件及复印件；",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(31)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[31]",
+            "projection_sha256": "b57422481c9b10afaebf7ebec8e3de44444ee51151ae7351e94517bb9ef1f900",
+            "projection_start": 0,
+            "projection_end": 15,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[31]/span::text",
+                "start": 0,
+                "end": 15
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_materials",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（4）专业技术资格证书原件及复印件；",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(32)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[32]",
+            "projection_sha256": "4a1b127002399a9e8047c947d4c1b111dfa15ffe0789de96c6280b830580308e",
+            "projection_start": 0,
+            "projection_end": 18,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[32]/span::text",
+                "start": 0,
+                "end": 18
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_materials",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（5）反映个人学术水平的科研成果等情况清单（附件2）及证明材料扫描件。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(33)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[33]",
+            "projection_sha256": "6a438d5c3bf04ae894868d94346cb6992477564ad087ce5a9730d3e6e0328937",
+            "projection_start": 0,
+            "projection_end": 35,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[33]/span::text",
+                "start": 0,
+                "end": 35
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "material_supplement_rule",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "相关报名材料可在考试前提供原件及复印件各一套，所提供材料不全或材料审核不符合报名条件的不得参加考试。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(27)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[27]",
+            "projection_sha256": "f1986b07f3f5ad6885899636992cfb951392cdedecfee094766a4c33611f0cc8",
+            "projection_start": 100,
+            "projection_end": 150,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[27]/span::text",
+                "start": 100,
+                "end": 150
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "official_contact",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "联系电话：0573-82710058",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(57)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[57]",
+            "projection_sha256": "5630918b9be5ca54c25a24e85aa76d7bd419b5c795a19192e0264caa25c71481",
+            "projection_start": 0,
+            "projection_end": 18,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[57]/span::text",
+                "start": 0,
+                "end": 18
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "official_contact",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "联 系 人：包老师",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(58)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[58]",
+            "projection_sha256": "7dc6a816671248a877947993775ce3b69e25ddeeda8007953ab76c1ba6ec4af6",
+            "projection_start": 0,
+            "projection_end": 9,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[58]/span::text",
+                "start": 0,
+                "end": 9
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "official_contact",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "监督电话：0573-82521962",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(59)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[59]",
+            "projection_sha256": "7c9b02153bc33990fc974ffd83ca6d03af3b0680033c53641dc9ec369bd592fc",
+            "projection_start": 0,
+            "projection_end": 18,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[59]/span::text",
+                "start": 0,
+                "end": 18
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "recruitment_procedure",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "采取报名（资格初审）、考试、体检、考察、公示、聘用等程序进行。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(24)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[24]",
+            "projection_sha256": "98483ec5a8cac669ded77aa38ba9e3cb44bc1607c21468f19c9a2cff5346df2f",
+            "projection_start": 37,
+            "projection_end": 68,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[24]/span::text",
+                "start": 37,
+                "end": 68
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "exam_method",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "考试采取科研能力评价、试讲、面试相结合的方式进行。科研能力评价、试讲、面试单项科目成绩满分均为100分，合格分数均为70分，单项科目低于70分的，不列入体检、考察对象。总成绩=科研能力评价30%+试讲成绩40%+面试成绩30%。具体考试时间、地点以及考试方式将通过电话和邮件，通知考生本人。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(38)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[38]",
+            "projection_sha256": "c9945ea93f7fbf9de0d5339a8e56de0a6cb45fa5007bcc2917c988bf3e5a1426",
+            "projection_start": 0,
+            "projection_end": 145,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[38]/span/span[1]/span::text",
+                "start": 0,
+                "end": 94
+              },
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[38]/span/span[1]/span::tail",
+                "start": 0,
+                "end": 51
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "exam_open_ratio",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "招聘单位将根据报名情况适时组织考试，不受最低开考比例限制，招满即止。考试前，将组织应聘人员进行资格条件复审，通过资格复审的人员可以参加考试。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(37)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[37]",
+            "projection_sha256": "221754870cf7de9c525d6166af4a40810abde0a18488af3a01a03cdb557224bc",
+            "projection_start": 0,
+            "projection_end": 70,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[37]/span::text",
+                "start": 0,
+                "end": 70
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "qualification_recheck",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "考试前，将组织应聘人员进行资格条件复审，通过资格复审的人员可以参加考试。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(37)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[37]",
+            "projection_sha256": "221754870cf7de9c525d6166af4a40810abde0a18488af3a01a03cdb557224bc",
+            "projection_start": 34,
+            "projection_end": 70,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[37]/span::text",
+                "start": 34,
+                "end": 70
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "medical_exam_rule",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "根据考试总成绩，从高分到低分按照招聘计划的1:1比例确定体检对象。体检参照《公务员录用体检通用标准（试行）》及有关规定执行，体检合格者确定为考察对象。应聘人员不按规定的时间、地点参加体检，视作放弃体检资格。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(40)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[40]",
+            "projection_sha256": "f23236134911888e96a4caa9567bb799056ea3484d3dd26edaa588b2b37b63a1",
+            "projection_start": 0,
+            "projection_end": 103,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[40]/span::text",
+                "start": 0,
+                "end": 103
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "inspection_rule",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "考察参照《公务员录用考察办法（试行）》（中组发〔2021〕11号）及相关规定执行。主要对体检合格的人员进行资格条件的复核和德、能、勤、绩、廉以及需要回避的情况等考察，考察不合格不予聘用。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(42)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[42]",
+            "projection_sha256": "9ab434ec361c8d9cef2275256835d2d5469e306a91e26de6fa381065116a0eda",
+            "projection_start": 0,
+            "projection_end": 93,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[42]/span::text",
+                "start": 0,
+                "end": 93
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "substitution_rule",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "应聘人员在体检、考察环节出现不合格的或自愿放弃的，由招聘单位研究决定是否安排递补。决定递补的，根据考试总成绩从高分到低分依次进行。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(43)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[43]",
+            "projection_sha256": "dade7e6fe72513d0022fdfd0e940817b975fcd33cd2ebb6d30d2b6af7b70a43d",
+            "projection_start": 0,
+            "projection_end": 65,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[43]/span::text",
+                "start": 0,
+                "end": 65
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "publicity_rule",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "拟聘用人员名单在浙江红船干部学院网站上公示5个工作日。公示期满，对拟聘用人员没有异议或反映有问题经查实不影响聘用的，招聘单位按规定办理聘用手续。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(46)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[46]",
+            "projection_sha256": "41e2e1e064b0ebb61e10132776d9209ba91c2eaebfcb6f78eb90991f3a6618b4",
+            "projection_start": 22,
+            "projection_end": 94,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[46]/span::text",
+                "start": 22,
+                "end": 94
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "employment_rule",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "确定聘用人选后，按《事业单位人事管理条例》等有关规定办理聘用手续。拟聘用人员无正当理由未在规定时间内报到的，取消聘用资格。普通高校2026年应届毕业生不能按时取得或未取得招聘岗位规定的学历、学位证书的，取消聘用资格。社会人员办理报到前须与原单位解除劳动（聘用）合同。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(48)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[48]",
+            "projection_sha256": "0ecfee9a63371e96857d25f71f8810e1b29816c4de23bd2742a255e09def3c5b",
+            "projection_start": 0,
+            "projection_end": 133,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[48]/span::text",
+                "start": 0,
+                "end": 133
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "probation_rule",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "聘用人员列入事业编制管理，与招聘单位签订事业单位聘用合同，并按规定约定试用期。试用期满后，考核合格者，予以正式聘用；考核不合格的，取消聘用。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(49)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[49]",
+            "projection_sha256": "6f5716c523e4a5e1547ef62abe6950a2ea1320b24ba94b0b4aa3dc4e8e4b3911",
+            "projection_start": 0,
+            "projection_end": 70,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[49]/span::text",
+                "start": 0,
+                "end": 70
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "talent_treatment",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "1.引进人才可享受院校安家费、购房补助等高层次人才待遇。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(51)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[51]",
+            "projection_sha256": "13eac5477e2e431cba410b46ce9fcb2c245d5d565ce5597d03992e179e05ed8a",
+            "projection_start": 0,
+            "projection_end": 28,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[51]/span::text",
+                "start": 0,
+                "end": 28
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "talent_subsidy",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "2.嘉兴市各类人才补贴以人才引进时嘉兴市最新颁布的文件为准，补贴申请手续由人才本人根据相关文件细则自行办理。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(52)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[52]",
+            "projection_sha256": "ce90ada56c4b1b58549a8218f87078d7b48f391ac2abffabafd26f04ae710080",
+            "projection_start": 0,
+            "projection_end": 54,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[52]/span::text",
+                "start": 0,
+                "end": 54
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "supervision_authority",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "（一）本次公开招聘工作由浙江红船干部学院、中共嘉兴市委党校按有关规定组织实施，嘉兴市纪委市监委驻市委组织部纪检监察组监督。对考试违纪违规行为的认定和处理，按照《事业单位公开招聘违纪违规行为处理规定》（人社部令第35号）执行。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(54)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[54]",
+            "projection_sha256": "91edce66af818526ba9ffde08abe309c22b904f871b7ecbf46687b1abd88e43b",
+            "projection_start": 0,
+            "projection_end": 112,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[54]/span/span[1]::text",
+                "start": 0,
+                "end": 11
+              },
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[54]/span/span[2]::text",
+                "start": 0,
+                "end": 20
+              },
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[54]/span/span[3]::text",
+                "start": 0,
+                "end": 81
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "information_website",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "本次公开招聘相关事宜将发布于浙江红船干部学院、中共嘉兴市委党校网站（https://www.zjhcgbxy.com），届时应聘人员可到网上查询。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(55)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[55]",
+            "projection_sha256": "a1debbaa8cc3b1cf4b86f8b37dbe1f98fdc4d25aa118ff627a8cb7ac005a1c28",
+            "projection_start": 39,
+            "projection_end": 112,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[55]/span::text",
+                "start": 39,
+                "end": 112
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment_list",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "附件1：公开招聘高层次人才报名登记表",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(61)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[61]",
+            "projection_sha256": "f70a6bec424c7fa442c5d1466b3a55281be80aa1c98634f33e57189962284b8d",
+            "projection_start": 0,
+            "projection_end": 18,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[61]/span::text",
+                "start": 0,
+                "end": 4
+              },
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[61]/a/span::text",
+                "start": 0,
+                "end": 14
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment_list",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "附件2：科研成果清单",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(62)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[62]",
+            "projection_sha256": "dda1c8b9e2fefa315a82f9022a2a80b890bcfd552da08c94ab4237ff590718c5",
+            "projection_start": 0,
+            "projection_end": 10,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[62]/span::text",
+                "start": 0,
+                "end": 4
+              },
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[62]/a/span::text",
+                "start": 0,
+                "end": 6
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment1_title",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "公开招聘高层次人才报名登记表",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "报考岗位：",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "出生年月",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "籍  贯",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "民  族",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "政治面貌",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "婚姻状况",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "健康状况",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "职称",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "最高学历毕业学校",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "最高学历毕业时间",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "最高学历专业",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "硕士毕业学校及专业",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "本科毕业学校及专业",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "工作简历",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "家庭主要成员关系",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "特长",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "奖惩情况",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "个人承诺",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "form_work_resume_instruction",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "XX年XX月-XX年XX月，工作单位、岗位、担任职务，没有填“无”",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "form_declaration",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att1-baoming-doc",
+        "artifact_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+        "quote": "本人声明：上述填写内容真实完整。如有不实，本人愿承担一切责任。",
+        "original_locator": {
+          "file": "attachment1_baoming.doc",
+          "section": "附件1 公开招聘高层次人才报名登记表",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_title",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att2-chengguo-doc",
+        "artifact_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+        "quote": "科研成果清单",
+        "original_locator": {
+          "file": "attachment2_chengguo.doc",
+          "section": "附件2 科研成果清单",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att2-chengguo-doc",
+        "artifact_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+        "quote": "一、博士论文",
+        "original_locator": {
+          "file": "attachment2_chengguo.doc",
+          "section": "附件2 科研成果清单",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att2-chengguo-doc",
+        "artifact_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+        "quote": "二、核心期刊发表情况",
+        "original_locator": {
+          "file": "attachment2_chengguo.doc",
+          "section": "附件2 科研成果清单",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att2-chengguo-doc",
+        "artifact_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+        "quote": "三、其他公开刊物发表情况",
+        "original_locator": {
+          "file": "attachment2_chengguo.doc",
+          "section": "附件2 科研成果清单",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att2-chengguo-doc",
+        "artifact_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+        "quote": "四、主持、参与课题（根据级别由高到低）填写",
+        "original_locator": {
+          "file": "attachment2_chengguo.doc",
+          "section": "附件2 科研成果清单",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att2-chengguo-doc",
+        "artifact_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+        "quote": "五、决策咨询成果",
+        "original_locator": {
+          "file": "attachment2_chengguo.doc",
+          "section": "附件2 科研成果清单",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att2-chengguo-doc",
+        "artifact_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+        "quote": "六、科研获奖情况",
+        "original_locator": {
+          "file": "attachment2_chengguo.doc",
+          "section": "附件2 科研成果清单",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att2-chengguo-doc",
+        "artifact_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+        "quote": "七、其他科研成果",
+        "original_locator": {
+          "file": "attachment2_chengguo.doc",
+          "section": "附件2 科研成果清单",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "achievement_form_rule",
+      "legacy_verdict": "UNVERIFIED",
+      "new_result": {
+        "artifact_id": "art-att2-chengguo-doc",
+        "artifact_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+        "quote": "填报信息必须真实、准确，如发现虚假填报信息，取消招聘资格。",
+        "original_locator": {
+          "file": "attachment2_chengguo.doc",
+          "section": "附件2 科研成果清单",
+          "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+          "human_verify": true
+        },
+        "reader": null,
+        "representation_sha256": null,
+        "content_support": "NOT_ESTABLISHED",
+        "declared_locator": "UNBOUND",
+        "binding": "UNBOUND",
+        "precision": "NONE",
+        "verdict": "UNVERIFIED",
+        "matches": [],
+        "reason_codes": [
+          "READER_UNSUPPORTED"
+        ],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "unit-zjhcgbxy",
+      "field": "unit_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "因工作需要，浙江红船干部学院、中共嘉兴市委党校决定面向社会公开招聘工作人员5名（事业编制）。现将有关事项公告如下：",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[1]",
+            "projection_sha256": "2c432229c8216964e20d32bdc3f7158a1f7d0c6452d93df6371446c8f675fab5",
+            "projection_start": 0,
+            "projection_end": 57,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[1]/span::text",
+                "start": 0,
+                "end": 57
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "unit-zjhcgbxy",
+      "field": "unit_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "浙江红船干部学院",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(64)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[64]",
+            "projection_sha256": "cfb5a294b36bcf0657bef1699acf89fedafee367b1c37038917f62dd1aa0bb8f",
+            "projection_start": 0,
+            "projection_end": 8,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[64]/span::text",
+                "start": 0,
+                "end": 8
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "unit-zjhcgbxy",
+      "field": "unit_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "中共嘉兴市委党校",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(65)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[65]",
+            "projection_sha256": "e0788279be7ce2dd084e16f92c4c21726fe8cb21c87fae10a391bb03bbad1a80",
+            "projection_start": 0,
+            "projection_end": 8,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[65]/span::text",
+                "start": 0,
+                "end": 8
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "unit-zjhcgbxy",
+      "field": "unit_nature",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "浙江红船干部学院是由中共浙江省委组织部和中共嘉兴市委共同管理，以中共嘉兴市委管理为主的事业单位，与中共嘉兴市委党校合署办公。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(3)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[3]",
+            "projection_sha256": "020f1f4a65bdcf66d1342ca0fe322938e0c0a14de92068e41c951f534652161a",
+            "projection_start": 0,
+            "projection_end": 62,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[3]/span::text",
+                "start": 0,
+                "end": 62
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "unit-zjhcgbxy",
+      "field": "unit_function",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "浙江红船干部学院、中共嘉兴市委党校是对党政干部、公务员、企业经营管理者、专业技术人员、高层次人才、基层干部进行理论教育和党性教育的培训院校；是培训各级领导干部的主渠道；是开展习近平新时代中国特色社会主义思想研究、宣传和教育，推进党的思想理论建设，弘扬红船精神、浙江精神和新时代嘉兴人文精神的重要阵地；是哲学社会科学研究机构和省情、市情研究的重要智库；是民主党派、无党派人士的联合党校和统一战线人才教育培养的主阵地；是世界政党交流的重要平台。",
+        "original_locator": {
+          "selector": "#edutor_txt > p:nth-of-type(4)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[4]",
+            "projection_sha256": "75b6e59f02184bb3adfe0f7c8b82d26e0ff0efd6a9e35e1c8ef17845aef93660",
+            "projection_start": 0,
+            "projection_end": 220,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/p[4]/span::text",
+                "start": 0,
+                "end": 220
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "position_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "教师岗位1",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(2) > td:nth-child(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[2]/td[1]",
+            "projection_sha256": "b78a678eb9d77026ae1dc2f3d08884e1a129cde0ade0903236695cabb105d77b",
+            "projection_start": 0,
+            "projection_end": 5,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[2]/td[1]/p/span::text",
+                "start": 0,
+                "end": 5
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "position_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "招聘岗位",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[1]",
+            "projection_sha256": "3d77657693fe3e671cb6e09e57abfae0dfed77307ea24ff791278ec9dee6e52b",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[1]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "headcount",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "1",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(2) > td:nth-child(2)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[2]/td[2]",
+            "projection_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+            "projection_start": 0,
+            "projection_end": 1,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[2]/td[2]/p/span::text",
+                "start": 0,
+                "end": 1
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "headcount",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "招聘人数",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(2)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[2]",
+            "projection_sha256": "c344e50e56ab24dfd0a1d5eb7cc928dec1d180a69b0b6f0dac6c40173484b04f",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[2]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "major_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "区域经济学、产业经济学",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(2) > td:nth-child(3)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[2]/td[3]",
+            "projection_sha256": "97f098653aa2d592cac4efdaa8d1cc3b96ed862bcc6fa3ff246e2532742fac9d",
+            "projection_start": 0,
+            "projection_end": 11,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[2]/td[3]/p/span::text",
+                "start": 0,
+                "end": 11
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "major_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "所需专业",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(3)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[3]",
+            "projection_sha256": "fefa907804305e7dc57785235e4886849eaeae986b9ad3c600f7335d3caa98ef",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[3]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "education_degree_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "博士研究生",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(2) > td:nth-child(4)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[2]/td[4]",
+            "projection_sha256": "21c8fac6c465d6afc4d2ab68642283971472fea187293d1b3dcf7fb322302256",
+            "projection_start": 0,
+            "projection_end": 5,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[2]/td[4]/p/span::text",
+                "start": 0,
+                "end": 5
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "education_degree_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "学历、学位要求",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(4)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]::cell-wraps",
+            "projection_sha256": "b8a9c880d861453f8141c2eb53a26d74d1f2f742732759c33d18cd44751907b2",
+            "projection_start": 0,
+            "projection_end": 7,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]/p[1]/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              },
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]/p[2]/span/strong/span::text",
+                "start": 0,
+                "end": 3
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "position_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "教师岗位2",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(3) > td:nth-child(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[3]/td[1]",
+            "projection_sha256": "5847ab536ee8ecfdb61e470d0ac0579f0a1dd965985a42526e8c1e70fb6b7067",
+            "projection_start": 0,
+            "projection_end": 5,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[3]/td[1]/p/span::text",
+                "start": 0,
+                "end": 5
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "position_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "招聘岗位",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[1]",
+            "projection_sha256": "3d77657693fe3e671cb6e09e57abfae0dfed77307ea24ff791278ec9dee6e52b",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[1]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "headcount",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "2",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(3) > td:nth-child(2)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[3]/td[2]",
+            "projection_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+            "projection_start": 0,
+            "projection_end": 1,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[3]/td[2]/p/span::text",
+                "start": 0,
+                "end": 1
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "headcount",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "招聘人数",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(2)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[2]",
+            "projection_sha256": "c344e50e56ab24dfd0a1d5eb7cc928dec1d180a69b0b6f0dac6c40173484b04f",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[2]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "major_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "行政管理、公共管理学（120400）、公共管理（125200）",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(3) > td:nth-child(3)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[3]/td[3]",
+            "projection_sha256": "e5c17f1cb691a8677f5f3fa4e17e833a6b5b763f508cb66946cb680f47de8f08",
+            "projection_start": 0,
+            "projection_end": 31,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[3]/td[3]/p/span[1]::text",
+                "start": 0,
+                "end": 19
+              },
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[3]/td[3]/p/span[2]::text",
+                "start": 0,
+                "end": 5
+              },
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[3]/td[3]/p/span[3]::text",
+                "start": 0,
+                "end": 7
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "major_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "所需专业",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(3)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[3]",
+            "projection_sha256": "fefa907804305e7dc57785235e4886849eaeae986b9ad3c600f7335d3caa98ef",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[3]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "education_degree_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "博士研究生",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(3) > td:nth-child(4)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[3]/td[4]",
+            "projection_sha256": "21c8fac6c465d6afc4d2ab68642283971472fea187293d1b3dcf7fb322302256",
+            "projection_start": 0,
+            "projection_end": 5,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[3]/td[4]/p/span::text",
+                "start": 0,
+                "end": 5
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "education_degree_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "学历、学位要求",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(4)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]::cell-wraps",
+            "projection_sha256": "b8a9c880d861453f8141c2eb53a26d74d1f2f742732759c33d18cd44751907b2",
+            "projection_start": 0,
+            "projection_end": 7,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]/p[1]/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              },
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]/p[2]/span/strong/span::text",
+                "start": 0,
+                "end": 3
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "position_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "教师岗位3",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(4) > td:nth-child(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[4]/td[1]",
+            "projection_sha256": "92bf247e7653293da95b9ee0de0f0044c5c852349578d500c57a63c6064e7999",
+            "projection_start": 0,
+            "projection_end": 5,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[4]/td[1]/p/span::text",
+                "start": 0,
+                "end": 5
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "position_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "招聘岗位",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[1]",
+            "projection_sha256": "3d77657693fe3e671cb6e09e57abfae0dfed77307ea24ff791278ec9dee6e52b",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[1]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "headcount",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "1",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(4) > td:nth-child(2)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[4]/td[2]",
+            "projection_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+            "projection_start": 0,
+            "projection_end": 1,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[4]/td[2]/p/span::text",
+                "start": 0,
+                "end": 1
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "headcount",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "招聘人数",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(2)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[2]",
+            "projection_sha256": "c344e50e56ab24dfd0a1d5eb7cc928dec1d180a69b0b6f0dac6c40173484b04f",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[2]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "major_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "中共党史党建学、中共党史",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(4) > td:nth-child(3)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[4]/td[3]",
+            "projection_sha256": "a682397c52dcb4d7c187476ce2366b15ce5f20b2ba96cd2987360c008700c955",
+            "projection_start": 0,
+            "projection_end": 12,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[4]/td[3]/p/span::text",
+                "start": 0,
+                "end": 12
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "major_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "所需专业",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(3)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[3]",
+            "projection_sha256": "fefa907804305e7dc57785235e4886849eaeae986b9ad3c600f7335d3caa98ef",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[3]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "education_degree_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "博士研究生",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(4) > td:nth-child(4)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[4]/td[4]",
+            "projection_sha256": "21c8fac6c465d6afc4d2ab68642283971472fea187293d1b3dcf7fb322302256",
+            "projection_start": 0,
+            "projection_end": 5,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[4]/td[4]/p/span::text",
+                "start": 0,
+                "end": 5
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "education_degree_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "学历、学位要求",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(4)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]::cell-wraps",
+            "projection_sha256": "b8a9c880d861453f8141c2eb53a26d74d1f2f742732759c33d18cd44751907b2",
+            "projection_start": 0,
+            "projection_end": 7,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]/p[1]/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              },
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]/p[2]/span/strong/span::text",
+                "start": 0,
+                "end": 3
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "position_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "教师岗位4",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(5) > td:nth-child(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[5]/td[1]",
+            "projection_sha256": "55c9a1bb5d981906ca8e06b4cdfbb363753e06dc7bc67b91e8787d7a18332a4a",
+            "projection_start": 0,
+            "projection_end": 5,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[5]/td[1]/p/span::text",
+                "start": 0,
+                "end": 5
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "position_name",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "招聘岗位",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(1)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[1]",
+            "projection_sha256": "3d77657693fe3e671cb6e09e57abfae0dfed77307ea24ff791278ec9dee6e52b",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[1]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "headcount",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "1",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(5) > td:nth-child(2)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[5]/td[2]",
+            "projection_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+            "projection_start": 0,
+            "projection_end": 1,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[5]/td[2]/p/span::text",
+                "start": 0,
+                "end": 1
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "headcount",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "招聘人数",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(2)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[2]",
+            "projection_sha256": "c344e50e56ab24dfd0a1d5eb7cc928dec1d180a69b0b6f0dac6c40173484b04f",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[2]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "major_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "社会学（0303）、中国近现代史、中国古典文献学",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(5) > td:nth-child(3)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[5]/td[3]",
+            "projection_sha256": "057665e603b198b85a77555b73231fca3d9a081e20c6ccf739731f977783a9c2",
+            "projection_start": 0,
+            "projection_end": 24,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[5]/td[3]/p/span::text",
+                "start": 0,
+                "end": 24
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "major_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "所需专业",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(3)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[3]",
+            "projection_sha256": "fefa907804305e7dc57785235e4886849eaeae986b9ad3c600f7335d3caa98ef",
+            "projection_start": 0,
+            "projection_end": 4,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[3]/p/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "education_degree_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "博士研究生",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(5) > td:nth-child(4)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[5]/td[4]",
+            "projection_sha256": "21c8fac6c465d6afc4d2ab68642283971472fea187293d1b3dcf7fb322302256",
+            "projection_start": 0,
+            "projection_end": 5,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[5]/td[4]/p/span::text",
+                "start": 0,
+                "end": 5
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "education_degree_requirement",
+      "legacy_verdict": "PASS",
+      "new_result": {
+        "artifact_id": "art-notice-48723-html",
+        "artifact_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+        "quote": "学历、学位要求",
+        "original_locator": {
+          "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(4)"
+        },
+        "reader": {
+          "name": "html_lxml_literal",
+          "version": "1",
+          "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+          "comparison_version": "html-quote-c14n/1"
+        },
+        "representation_sha256": "6b0d8b6fb47227614466689d1705a43dd9f0cfe9974124daa66686d4f7cec4e6",
+        "content_support": "FOUND",
+        "declared_locator": "VERIFIED",
+        "binding": "BOUND",
+        "precision": "SCOPE",
+        "verdict": "PASS",
+        "matches": [
+          {
+            "projection_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]::cell-wraps",
+            "projection_sha256": "b8a9c880d861453f8141c2eb53a26d74d1f2f742732759c33d18cd44751907b2",
+            "projection_start": 0,
+            "projection_end": 7,
+            "source_spans": [
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]/p[1]/span/strong/span::text",
+                "start": 0,
+                "end": 4
+              },
+              {
+                "origin_id": "/html/body/div[2]/div/div/div[2]/div[2]/div[4]/div[1]/table/tbody/tr[1]/td[4]/p[2]/span/strong/span::text",
+                "start": 0,
+                "end": 3
+              }
+            ]
+          }
+        ],
+        "reason_codes": [],
+        "verifier_version": "evidence-literal/1"
+      }
+    }
+  ]
+}
