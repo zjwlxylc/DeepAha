@@ -111,3 +111,42 @@ export function ruleReadyTask(): InvestigationTask {
       positions: [], unmapped_position_ids: [], reason: "Synthetic", created_at: task.updated_at },
   };
 }
+
+export function unitSnapshotFixture(): { task: InvestigationTask; snapshot: import("../lib/unit-snapshots").InvestigationUnitSnapshot } {
+  const current = ruleReadyTask(), prep = current.rule_review!.current[0];
+  const candidate = prep.rows[0].rule_candidate_id!, decisionId = "019d0000-0000-7000-8000-000000000980";
+  prep.decisions[candidate] = { decision_id: decisionId, rule_candidate_id: candidate, decision: "APPROVE", reason: "合成独立批准，仅测试流程", evidence: [], reviewer_id: "synthetic-browser-reviewer", created_at: task.updated_at };
+  prep.decision_history.push(prep.decisions[candidate]);
+  for (const [index, field] of ["户籍", "专业", "证书", "其他岗位条件"].entries()) {
+    const source = structuredClone(prep.source_rows[0]);
+    source.source_index = index + 1; source.original_field = field; source.field_name = field;
+    source.candidate_id = null; source.original = { ...source.original, field, value: "合成待核对条件", note: null };
+    if (index === 0) { source.original.status = "UNKNOWN"; source.original.value = null; }
+    if (index === 1) { source.evidence[0].binding = null; source.evidence[0].check_reference = { ...source.evidence[0].check_reference!, verdict: "UNVERIFIED", persistent_binding: null }; }
+    if (index === 3) { source.entity_id = "peer"; source.original.entity_id = "peer"; }
+    prep.source_rows.push(source);
+  }
+  const states = ["KNOWN", "UNKNOWN", "UNLOCATED", "REJECTED"];
+  return { task: current, snapshot: {
+    plan_id: "019d0000-0000-7000-8000-000000000981", plan_hash: "a".repeat(64), context_hash: "b".repeat(64), reviewer_id: "synthetic-browser-reviewer", created_at: task.updated_at,
+    plan: {
+      qualification_plan_id: "019d0000-0000-7000-8000-000000000981", contract_version: "unit-qualification/2.0.0",
+      target: { opportunity_id: bindingTarget.opportunity_id, opportunity_version: 1, unit_id: bindingTarget.positions[0].unit_id, unit_version: 1, unit_version_id: bindingTarget.positions[0].version_id },
+      manifest: { preparation_id: prep.fact_preparation_id, preparation_sha256: prep.fact_preparation_hash,
+        upstream_blockers: ["SOURCE_COMPLETENESS_UNVERIFIED", "SOURCE_NOTES_UNREVIEWED"],
+        conditions: prep.source_rows.slice(0, 4).map((source, index) => ({ condition_id: `source:${index}`, source_entity_id: source.entity_id, source_index: index, field_name: source.field_name!, scope: "UNIT", state: states[index], source_sha256: "c".repeat(64), fact_id: index === 0 ? prep.rows[0].verified_fact_id : null, evidence_ref_ids: index === 0 ? prep.rows[0].evidence_ref_ids : [] })),
+      },
+      dispositions: states.map((_, index) => ({ condition_id: `source:${index}`, kind: index === 0 ? "RULE" : "UNRESOLVED", rule_ids: index === 0 ? [candidate] : [], decision_id: index === 0 ? decisionId : null, reason: "Synthetic" })),
+      rules: [{ rule_id: candidate, field: "education_level", operator: "GTE", value: "MASTER" }],
+      admissions: [{ rule_id: candidate, approval_decision_id: decisionId, producer_principal_id: "component:synthetic", reviewer_principal_id: "human:synthetic-reviewer", reviewed_at: task.updated_at,
+        evidence_validity: [{ evidence_ref_id: prep.rows[0].evidence_ref_ids[0], valid_from: task.updated_at, valid_until: null }] }],
+    },
+    context: { adapter_version: "investigation-unit-snapshot/1.0.0", rule_preparation_id: prep.rule_preparation_id, rule_preparation_hash: prep.result_hash,
+      fact_preparation_hash: prep.fact_preparation_hash, binding_id: prep.binding_id, check_id: prep.check_id, delivery_hash: prep.delivery_hash,
+      fact_set_id: prep.fact_set_id, fact_set_version: 1, source_bundle_revision_id: prep.source_bundle_revision_id,
+      source_row_count: 5, excluded_source_rows: [{ source_index: 4, entity_id: "peer", source_sha256: "c".repeat(64), reason: "DIFFERENT_ENTITY_SCOPE" }],
+      source_notes: [{ condition_id: "source:0", note: task.facts[0].note! }],
+      evidence_reference_counts: { PASS: 4, FAIL: 0, UNVERIFIED: 1 }, unresolved_source_references: [prep.source_rows[2].evidence[0].check_reference!],
+    },
+  } };
+}

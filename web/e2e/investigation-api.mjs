@@ -1,15 +1,19 @@
 // Browser fixtures only. This process never calls an official source or WMA.
 import { createServer } from "node:http";
-import { source, task, preparedDocuments, bindingTarget, evidenceCheck, factPreparation, rulePreparation, ruleReadyTask } from "../tests/investigations-fixture.ts";
+import { source, task, preparedDocuments, bindingTarget, evidenceCheck, factPreparation, rulePreparation, ruleReadyTask, unitSnapshotFixture } from "../tests/investigations-fixture.ts";
 
 let current = structuredClone(task);
 let dropNextReceipt = false;
 const receipts = new Map();
 let posts = 0;
+let unitSnapshot = null;
+let staleSnapshot = false;
 const server = createServer(async (request, response) => {
   const path = new URL(request.url, "http://127.0.0.1:3097").pathname;
   response.setHeader("Content-Type", "application/json");
-  if (path === "/reset") { current = structuredClone(task); receipts.clear(); posts = 0; dropNextReceipt = false; response.end("{}"); return; }
+  if (path === "/reset") { current = structuredClone(task); receipts.clear(); posts = 0; dropNextReceipt = false; unitSnapshot = null; staleSnapshot = false; response.end("{}"); return; }
+  if (path === "/seed-unit-snapshot") { current = unitSnapshotFixture().task; response.end("{}"); return; }
+  if (path === "/stale-unit-snapshot") { staleSnapshot = true; response.end("{}"); return; }
   if (path === "/seed-rule-review") { current = ruleReadyTask(); current.rule_review = { current: [], history: [] }; response.end("{}"); return; }
   if (path === "/drop-next-receipt") { dropNextReceipt = true; response.end("{}"); return; }
   if (path === "/receipts") { response.end(JSON.stringify({ mutations: receipts.size, posts })); return; }
@@ -18,6 +22,12 @@ const server = createServer(async (request, response) => {
   }
   if (path.endsWith("/sources")) { response.end(JSON.stringify({ sources: [source] })); return; }
   if (path.endsWith("/binding-targets")) { response.end(JSON.stringify({ targets: [bindingTarget] })); return; }
+  if (request.method === "GET" && path.includes("/unit-plans/")) {
+    response.setHeader("Cache-Control", "private, no-store");
+    if (staleSnapshot) { response.writeHead(409); response.end(JSON.stringify({ detail: { code: "RULE_FACT_SET_CONFLICT" } })); return; }
+    if (!unitSnapshot || !path.endsWith(`/${unitSnapshot.plan_id}`)) { response.writeHead(404); response.end("{}"); return; }
+    response.end(JSON.stringify(unitSnapshot)); return;
+  }
   if (path.includes("/materials/")) {
     response.setHeader("Content-Type", "text/plain");
     response.setHeader("Content-Disposition", 'attachment; filename="original-cccccccccccccccc.xlsx"');
@@ -34,6 +44,12 @@ const server = createServer(async (request, response) => {
       response.end(JSON.stringify(receipt.task)); return;
     }
     const values = JSON.parse(body);
+    if (path.endsWith("/unit-plans")) {
+      unitSnapshot = unitSnapshotFixture().snapshot;
+      receipts.set(key, { path, body, task: structuredClone(unitSnapshot) });
+      if (dropNextReceipt) { dropNextReceipt = false; response.destroy(); return; }
+      response.end(JSON.stringify(unitSnapshot)); return;
+    }
     if (path.endsWith("/documents")) {
       if (values.delivery_hash !== current.delivery_hash) { response.writeHead(409); response.end("{}"); return; }
       current = { ...current, document_preparation: preparedDocuments, evidence_check: evidenceCheck, evidence_check_history: [evidenceCheck] };

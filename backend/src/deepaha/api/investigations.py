@@ -30,7 +30,11 @@ from deepaha.investigations.contracts import (
     ReviewInvestigation,
 )
 from deepaha.investigations.models import InvestigationMaterial
-from deepaha.investigations.rule_contracts import DecideInvestigationRule, PrepareInvestigationRules
+from deepaha.investigations.rule_contracts import (
+    DecideInvestigationRule,
+    MaterializeInvestigationUnitPlan,
+    PrepareInvestigationRules,
+)
 from deepaha.investigations.store import InvestigationStore
 from deepaha.local_human_test.review import HumanReviewError
 from deepaha.review.auth import (
@@ -86,10 +90,12 @@ KeyDep = Annotated[str, Depends(require_local_idempotency_key)]
 
 def problem(error: Exception) -> HTTPException:
     code = getattr(error, "code", "INVESTIGATION_AUTHORITY_REQUIRED")
-    status = 404 if code == "INVESTIGATION_NOT_FOUND" else 409
+    status = 404 if code in {"INVESTIGATION_NOT_FOUND", "UNIT_PLAN_NOT_FOUND"} else 409
     if isinstance(error, (HumanReviewError, ReviewerAuthenticationError)):
         status = 403
-    return HTTPException(status, detail={"code": code})
+    return HTTPException(
+        status, detail={"code": code}, headers={"Cache-Control": "private, no-store"}
+    )
 
 
 @router.get("")
@@ -318,6 +324,40 @@ def review_task(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return store.review(task_id, command, principal, key)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/unit-plans")
+def prepare_unit_plan(
+    task_id: UUID,
+    command: MaterializeInvestigationUnitPlan,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.unit_snapshots import materialize_unit_plan
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return materialize_unit_plan(store, task_id, command, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/{task_id}/unit-plans/{plan_id}")
+def read_unit_plan(
+    task_id: UUID,
+    plan_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.unit_snapshots import load_unit_plan
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return load_unit_plan(store, task_id, plan_id, principal)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 

@@ -53,6 +53,36 @@ test("retries document preparation after the receipt is lost", async ({ page, re
   expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 1, posts: 2 });
 });
 
+test("creates and reads a current unit snapshot with retry and stale evidence feedback", async ({ page, request }, testInfo) => {
+  await request.get("http://127.0.0.1:3097/seed-unit-snapshot");
+  await page.goto(`/review/investigations/${taskId}`);
+  const button = page.getByRole("button", { name: "整理条件快照" });
+  const form = page.locator("form").filter({ has: button });
+  const key = await form.locator('input[name="request_key"]').inputValue();
+  await request.get("http://127.0.0.1:3097/drop-next-receipt");
+  await button.click();
+  await expect(form.getByRole("alert")).toHaveText(/可保留当前输入重试/);
+  await expect(form.locator('input[name="request_key"]')).toHaveValue(key);
+  await button.click();
+  await page.getByRole("link", { name: "查看条件快照", exact: true }).click();
+  await expect(page.getByRole("heading", { name: /教学岗位 · 条件快照/ })).toBeVisible();
+  await expect(page.getByText(/通过 4 · 错误 0 · 未核验 1/)).toBeVisible();
+  await expect(page.getByText(/调查后信息不足/)).toBeVisible();
+  await expect(page.getByText(/证据尚不能定位核验/)).toBeVisible();
+  await expect(page.getByText(/已拒绝，仍待处理/)).toBeVisible();
+  await expect(page.getByText(/原始备注：示例疑点/)).toBeVisible();
+  expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 1, posts: 2 });
+  await page.reload();
+  await expect(page.getByText(/整体资格保持不确定/)).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath("unit-snapshot.png"), fullPage: true });
+  await request.get("http://127.0.0.1:3097/stale-unit-snapshot");
+  await page.reload();
+  await expect(page.getByRole("main").getByRole("alert")).toHaveText(/快照暂不可用/);
+  await expect(page.getByRole("heading", { name: "逐项条件与依据" })).toHaveCount(0);
+  await page.screenshot({ path: testInfo.outputPath("unit-snapshot-stale.png") });
+});
+
 test("retries a binding with the same opportunity, positions and reason after a lost receipt", async ({ page, request }) => {
   await page.goto(`/review/investigations/${taskId}`);
   await page.getByRole("button", { name: "准备文档证据" }).click();
