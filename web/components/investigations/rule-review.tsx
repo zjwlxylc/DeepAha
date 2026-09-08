@@ -5,6 +5,7 @@ import { investigationRuleAction, type InvestigationActionState } from "../../ap
 import type { InvestigationFactPreparation, InvestigationRulePreparation, InvestigationTask } from "../../lib/investigations";
 import { ruleAuthorities, ruleRelations, ruleApplicability, ruleDecisions } from "../../lib/investigation-rule-options";
 import { EvidenceCheckDetail } from "./evidence-check";
+import UnitPlanForm from "./unit-plan-form";
 
 const initial: InvestigationActionState = { error: null, message: null, taskId: null };
 type RuleRow = InvestigationRulePreparation["rows"][number];
@@ -129,6 +130,7 @@ export default function InvestigationRuleReview({ task, requestKey }: { task: In
         <details><summary>规则来源与版本</summary><p>{prep.compiler_version}</p><p className="investigation-hash">{prep.result_hash}</p>
           <p>事实集版本 {prep.fact_set_version} · {prep.fact_set_id}</p><p>来源包：{prep.source_bundle_revision_id}</p>
         </details>
+        {current ? <UnitPlanForm task={task} prep={prep} requestKey={requestKey} /> : null}
       </article>;
     })}
     {task.rule_review?.history.length ? <details><summary>历次规则候选清单</summary><ul>{task.rule_review.history.map(p => <li key={p.rule_preparation_id}>{p.created_at} · {p.entity_id} · {p.compiler_version}</li>)}</ul></details> : null}

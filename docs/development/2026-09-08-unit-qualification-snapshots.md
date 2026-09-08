@@ -15,6 +15,7 @@
 - 26 项真实 PostgreSQL 合成测试通过（40.41 秒），包括完整九行源分母、并发相同快照、丢失响应重试、未知/未定位/拒绝、原备注、证据三态、外部任务读取、账号撤销、事实依赖过期、摘要和身份篡改、重新计算摘要后的内容篡改、直接 SQL 写入后受信读取拒绝、不可变历史及带历史降级拒绝。
 - 独立评审发现微秒时差兼容 P2，递增时钟在修复前实际失败，修复后通过；独立内存复核确认合法时差通过、审核员不一致仍拒绝。指定范围内无剩余 P1/P2。
 - 全后端非集成回归 1414 passed / 605 deselected（53.14 秒）；Ruff / 格式及 mypy Linux、Windows（442 files）通过。
-- 全 PostgreSQL / 对象存储回归 602 passed / 3 skipped / 1414 deselected（584.64 秒）；新快照定向测试无跳过。空历史 0042 → 0041 → 0042 迁移往返通过，`alembic check` 无结构漂移。候选 CI 尚未运行。
+- 全 PostgreSQL / 对象存储回归 602 passed / 3 skipped / 1414 deselected（584.64 秒）；新快照定向测试无跳过。空历史 0042 → 0041 → 0042 迁移往返通过，`alembic check` 无结构漂移。
+- PR #19 候选 `5047367` 的 CI #92 九项全部成功，已合并为 `cf5d09c`；候选与合并代码树一致，见 `evidence/2026-09-08-unit-snapshots-ci.json`。
 
-实现状态 IMPLEMENTED，合并检查进行中。合成审核身份与数据仅用于工程验证，不证明实际人工批准、Gold 或发布资格。未调用 WMA 或官方网络；冻结样本仍为 94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery UNVERIFIED。
+实现状态 IMPLEMENTED，已合并主线。合成审核身份与数据仅用于工程验证，不证明实际人工批准、Gold 或发布资格。未调用 WMA 或官方网络；冻结样本仍为 94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery UNVERIFIED。

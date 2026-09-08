@@ -168,7 +168,7 @@ export class InvestigationApiError extends LocalHumanTestApiError {
   constructor(status: number, public readonly code: string | null) { super(status); }
 }
 
-export async function postInvestigation(path: string, body: object, requestKey: string): Promise<InvestigationTask> {
+export async function postInvestigation<T = InvestigationTask>(path: string, body: object, requestKey: string): Promise<T> {
   const token = (await cookies()).get("deepaha_phase7_reviewer_session")?.value;
   if (!token) throw new InvestigationApiError(401, null);
   const baseUrl = process.env.DEEPAHA_API_BASE_URL ?? "http://127.0.0.1:8000";
@@ -189,7 +189,7 @@ export async function postInvestigation(path: string, body: object, requestKey: 
     }
     throw new InvestigationApiError(response.status, code);
   }
-  return await response.json() as InvestigationTask;
+  return await response.json() as T;
 }
 
 export function getInvestigations(): Promise<{ tasks: InvestigationTask[] }> {

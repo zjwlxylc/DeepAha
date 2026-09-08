@@ -9,4 +9,4 @@
 5. SQL 保护身份、摘要和不可变历史；读取/返回时由受信适配器重新构造并逐项比对完整计划及上下文，拒绝内容被篡改或已过期的快照。数据库约束不替代这一步；未经此校验的 JSON 不作为可信核心输入。
 6. 验证真实 PG 合成薄链路、当前性/重试/并发、终态选择、完整分母、其他岗位隔离、未知与原始备注、重算摘要后的篡改、历史不可变及迁移往返。当前核心输出始终受范围门限制为 UNCERTAIN；本批测试不代替真实人工审核。
 
-状态 IMPLEMENTED，本地定向及全量回归、迁移往返、静态检查与独立复核通过，候选 CI 与合并待完成。证据见 `docs/development/2026-09-08-unit-qualification-snapshots.md`。本批只实现服务和持久快照；浏览器入口及画像回放后续在同一计划顺序接入。冻结 WMA 样本、Prompt、Schema、原件和 Candidate Facts 保持原样，不调用 WMA 或官方网络。
+状态 IMPLEMENTED，PR #19 已合并；本地定向及全量回归、迁移往返、静态检查、独立复核及候选 CI #92 九项通过。证据见 `docs/development/2026-09-08-unit-qualification-snapshots.md`。本批只实现服务和持久快照；浏览器入口及画像回放后续在同一计划顺序接入。冻结 WMA 样本、Prompt、Schema、原件和 Candidate Facts 保持原样，不调用 WMA 或官方网络。

@@ -1,0 +1,59 @@
+{
+  "scope": "synthetic engineering evidence only",
+  "backend_unit": {
+    "passed": 1420,
+    "deselected": 606,
+    "seconds": 40.55
+  },
+  "private_api_tests": 39,
+  "postgres_http_thin_path": 1,
+  "frontend": {
+    "files": 35,
+    "passed": 182
+  },
+  "browser": {
+    "existing_scenarios_passed": 18,
+    "new_scenarios_passed_after_main_alert_locator_fix": 2,
+    "new_seconds": 9.1,
+    "snapshot_posts": 2,
+    "snapshot_mutations": 1,
+    "stale_snapshot_shown": false
+  },
+  "static": {
+    "ruff": "PASS",
+    "mypy_linux": 444,
+    "mypy_win32": 444,
+    "frontend_lint": "PASS",
+    "frontend_typecheck": "PASS",
+    "frontend_build": "PASS"
+  },
+  "independent_review": {
+    "p1": 0,
+    "p2": 0,
+    "frontend_tests": 12,
+    "api_tests": 6
+  },
+  "screenshots": [
+    {
+      "surface": "desktop",
+      "path": "docs/development/evidence/2026-09-08-unit-snapshot-ui/desktop-unit-snapshot.png",
+      "sha256": "754772d053d250bae6bda5fb76817d070520d865b890394ab7f23db8013751f2"
+    },
+    {
+      "surface": "mobile",
+      "path": "docs/development/evidence/2026-09-08-unit-snapshot-ui/mobile-unit-snapshot.png",
+      "sha256": "1139fc36761e575e3fb9292aab487894b1f8bea111748b7da53303632c1a6412"
+    },
+    {
+      "surface": "desktop",
+      "path": "docs/development/evidence/2026-09-08-unit-snapshot-ui/desktop-unit-snapshot-stale.png",
+      "sha256": "6c93731dc1e8ff61e655c1e5615207db5f603eb04e02300ece06198215140d07"
+    },
+    {
+      "surface": "mobile",
+      "path": "docs/development/evidence/2026-09-08-unit-snapshot-ui/mobile-unit-snapshot-stale.png",
+      "sha256": "f04e6279c0a2d3041ab6100852c26bbf350cfb1215d9030e6feffe451b9de759"
+    }
+  ],
+  "frozen_delivery": "UNVERIFIED:94 PASS / 0 FAIL /30 binary Word UNVERIFIED; no WMA rerun"
+}
