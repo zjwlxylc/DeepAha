@@ -192,6 +192,49 @@ for (const withInitialPost of [true, false]) {
   });
 }
 
+test("reviews rules independently and retries each lost response", async ({ page, request }, testInfo) => {
+  await request.get("http://127.0.0.1:3097/seed-rule-review");
+  await page.goto(`/review/investigations/${taskId}`);
+  const panel = page.getByRole("region", { name: "规则候选与独立审核" });
+  for (const kind of ["prepare", "pending", "approve"]) {
+    if (kind !== "prepare") {
+      for (const label of ["规则决定", "证据权威级别", "与拟规则的关系", "是否适用于此目标", "证据生效时间（含时区）"]) await expect(panel.getByLabel(label)).toHaveValue("");
+      await panel.getByLabel("规则决定").selectOption(kind === "pending" ? "NEEDS_ADJUDICATION" : "APPROVE");
+      await panel.getByLabel("是否适用于此目标").selectOption(kind === "pending" ? "UNRESOLVED" : "APPLIES_TO_EXACT_TARGET");
+      if (kind === "approve") {
+        await panel.getByLabel("证据权威级别").selectOption("FORMAL_OFFICIAL_ATTACHMENT");
+        await panel.getByLabel("与拟规则的关系").selectOption("SUPPORTS");
+        await panel.getByLabel("证据生效时间（含时区）").fill("2026-09-07T10:30:00+08:00");
+      }
+      await panel.getByLabel("证据判断依据").fill("合成证据判断，不代替真人审查");
+      await panel.getByLabel("规则审核依据").fill("合成独立规则决定");
+    }
+    const name = kind === "prepare" ? "整理规则候选" : "记录规则审核";
+    const button = panel.getByRole("button", { name });
+    const form = panel.locator("form").filter({ has: page.getByRole("button", { name }) });
+    const key = await form.locator('input[name="request_key"]').inputValue();
+    await request.get("http://127.0.0.1:3097/drop-next-receipt");
+    await button.click(); await expect(form.getByRole("alert")).toBeVisible();
+    await expect(form.locator('input[name="request_key"]')).toHaveValue(key);
+    if (kind !== "prepare") await expect(panel.getByLabel("证据判断依据")).toHaveValue("合成证据判断，不代替真人审查");
+    if (kind === "approve") {
+      await expect(panel.getByLabel("证据生效时间（含时区）")).toHaveValue("2026-09-07T10:30:00+08:00");
+      await panel.screenshot({ path: testInfo.outputPath("rule-review-retry.png") });
+    }
+    await button.click();
+    if (kind === "prepare") await expect(panel.getByLabel("规则决定")).toBeVisible();
+    if (kind === "pending") await expect(panel.getByText(/规则审核：需要进一步裁决/)).toBeVisible();
+    if (kind === "approve") await expect(panel.getByText(/规则审核：批准拟规则/)).toBeVisible();
+  }
+  expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 3, posts: 6 });
+  await page.reload();
+  await expect(panel.getByRole("button", { name: "记录规则审核" })).toHaveCount(0);
+  await panel.getByText("历次规则审核与证据判断", { exact: true }).click();
+  await expect(panel.getByText(/NEEDS_ADJUDICATION/)).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await panel.screenshot({ path: testInfo.outputPath("rule-review.png") });
+});
+
 test("reviews field facts through the shared evidence receipt and retries each lost response", async ({ page, request }, testInfo) => {
   await page.goto(`/review/investigations/${taskId}`);
   await page.getByRole("button", { name: "准备文档证据" }).click();

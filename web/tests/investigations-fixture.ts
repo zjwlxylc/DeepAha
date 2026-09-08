@@ -1,4 +1,4 @@
-import type { InvestigationTask, InvestigationBindingTarget, InvestigationEvidenceCheck, InvestigationFactPreparation } from "../lib/investigations";
+import type { InvestigationTask, InvestigationBindingTarget, InvestigationEvidenceCheck, InvestigationFactPreparation, InvestigationRulePreparation } from "../lib/investigations";
 
 export const bindingTarget: InvestigationBindingTarget = {
   opportunity_id: "019d0000-0000-7000-8000-000000000911", public_id: "opp_019d0000000070008000000000000911",
@@ -78,3 +78,36 @@ export const factPreparation: InvestigationFactPreparation = {
         block_text: "学历要求：硕士及以上", structural_locator: { kind: "reader_anchor", projection_id: "sheet/岗位表/D5" } } }],
   }], decisions: {}, promotions: {}, active_fact_sets: {},
 };
+
+export const rulePreparation: InvestigationRulePreparation = {
+  rule_preparation_id: "019d0000-0000-7000-8000-000000000940", fact_preparation_id: factPreparation.preparation_id,
+  fact_set_id: "019d0000-0000-7000-8000-000000000933", entity_id: "position-1",
+  binding_id: factPreparation.binding_id, delivery_hash: task.delivery_hash!, check_id: evidenceCheck.check_id,
+  compiler_version: "direct-wma-rule-bridge/2.0.0+deriver-1.0.1", result_hash: "f".repeat(64),
+  fact_preparation_hash: factPreparation.result_hash, fact_set_version: 1,
+  source_bundle_revision_id: "019d0000-0000-7000-8000-000000000915", scope_status: "COMPLETE_CONDITION_REVIEW_REQUIRED",
+  target: factPreparation.targets[0], source_rows: factPreparation.rows,
+  rows: [{ verified_fact_id: "019d0000-0000-7000-8000-000000000941", candidate_id: factPreparation.rows[0].candidate_id!,
+    field_name: "education_requirements", fact_state: "KNOWN", normalized_value: { minimum_level: "MASTER" },
+    rule_candidate_id: "019d0000-0000-7000-8000-000000000942", reason_code: "INDEPENDENT_RULE_REVIEW_REQUIRED",
+    payload: { field: "education_level", operator: "GTE", value_type: "STRING", value: "MASTER", code: "synthetic-rule" },
+    evidence_ref_ids: [evidenceCheck.references[0].persistent_binding!.evidence_ref_id],
+    evidence: [{ evidence_ref_id: evidenceCheck.references[0].persistent_binding!.evidence_ref_id,
+      document_id: evidenceCheck.references[0].persistent_binding!.document_id, block_id: evidenceCheck.references[0].persistent_binding!.block_id,
+      text: factPreparation.rows[0].evidence[0].binding!.block_text,
+      structural_locator: factPreparation.rows[0].evidence[0].binding!.structural_locator }],
+  }], decisions: {}, decision_history: [],
+};
+
+export function ruleReadyTask(): InvestigationTask {
+  const facts = structuredClone(factPreparation);
+  facts.promotions[rulePreparation.entity_id] = { fact_set_id: rulePreparation.fact_set_id, status: "ACTIVE", reason: "Synthetic" };
+  facts.active_fact_sets[rulePreparation.entity_id] = { fact_set_id: rulePreparation.fact_set_id, version: 1, source_bundle_revision_id: rulePreparation.source_bundle_revision_id };
+  return { ...structuredClone(task), status: "APPROVED", evidence_check: structuredClone(evidenceCheck),
+    fact_review: { current: facts, history: [] }, rule_review: { current: [structuredClone(rulePreparation)], history: [] },
+    entity_binding: { binding_id: factPreparation.binding_id, sequence: 1, opportunity_id: bindingTarget.opportunity_id,
+      opportunity_version: 1, opportunity_public_id: bindingTarget.public_id, opportunity_title: bindingTarget.title,
+      source_bundle_revision_id: rulePreparation.source_bundle_revision_id, canonical_bundle_hash: "a".repeat(64), bundle_status: "FROZEN",
+      positions: [], unmapped_position_ids: [], reason: "Synthetic", created_at: task.updated_at },
+  };
+}

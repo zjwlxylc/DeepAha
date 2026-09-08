@@ -1,0 +1,30 @@
+{
+  "scope": "INDEPENDENT_INVESTIGATION_RULE_REVIEW",
+  "base": "0add01de54669f521c83b2d7465d04af62a6e05a",
+  "new_rule_bridge": "direct-wma-rule-bridge/2.0.0+deriver-1.0.1",
+  "legacy_rule_set_hash": "20946cc6321cefbc28700728a32c2ae9497b97193b3f63b0b43c4e6ab867dce9",
+  "backend_non_integration": {"passed": 1344, "deselected": 579, "seconds": 46.72},
+  "targeted_postgresql_and_api": {"passed": 56, "seconds": 46.58},
+  "full_postgresql": {"status": "PASS", "passed": 576, "skipped": 3, "deselected": 1344, "seconds": 511.84},
+  "migration": {"from": "20260908_0041", "downgrade": "20260908_0040", "upgrade": "20260908_0041", "roundtrip": "PASS", "alembic_check": "No new upgrade operations detected."},
+  "static_checks": {"ruff": "PASS", "format": "PASS", "mypy_linux": "PASS", "mypy_windows": "PASS", "mypy_source_files": 431},
+  "web": {"passed": 170, "files": 33, "typecheck": "PASS", "lint": "PASS", "build": "PASS"},
+  "browser": {
+    "full_suite": {"passed": 18, "seconds": 59.4},
+    "final_rule_display_rerun": {"passed": 2, "seconds": 12.7},
+    "initial_test_bug": "Relative form filter repeated its ancestor region; page snapshot contained the intended button. Fixed test locator.",
+    "surfaces": ["desktop 1280x900", "mobile 390x844"],
+    "rule_lost_responses": {"steps": ["prepare", "NEEDS_ADJUDICATION", "APPROVE"], "posts": 6, "mutations": 3},
+    "visual_inspection": "PASS",
+    "screenshots": [
+      {"path": "web/output/playwright/investigations/investigations-reviews-rul-ed8c0--retries-each-lost-response-desktop/rule-review-retry.png", "sha256": "16c93456376134e1d4fed9e6199b9529da70eb1e9d9d09eb0738bf0ac3327ccf"},
+      {"path": "web/output/playwright/investigations/investigations-reviews-rul-ed8c0--retries-each-lost-response-mobile/rule-review-retry.png", "sha256": "dac8f4c9976bdbe59bf11f040af0f9c2f0210e77dadefeab92b33306edb78417"}
+    ]
+  },
+  "independent_review": {"backend": "No P2+; 20 pure tests passed", "api_and_ui": "No P2+; 25 pure UI/action tests passed"},
+  "frozen_delivery": {"references": 124, "PASS": 94, "FAIL": 0, "UNVERIFIED": 30, "verdict": "UNVERIFIED", "proof_reused": "2026-09-08-field-review-receipt-replay.json"},
+  "wma_calls": 0,
+  "official_downloads": 0,
+  "real_human_approvals": 0,
+  "unit_qualification_or_publication": false
+}

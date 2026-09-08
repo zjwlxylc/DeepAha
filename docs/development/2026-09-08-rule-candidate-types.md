@@ -13,3 +13,5 @@
 - 相关测试：`backend/tests/local_human_test/test_rule_compilation.py`、`backend/tests/local_human_test/test_review.py`、`backend/tests/integration/test_local_human_test_review_publication.py`。
 
 下一步仍是独立规则审核与精确岗位资格接入。全部条件、共同条件适用范围、例外和未处理项的覆盖审查应单独保留；单条规则编译通过不能证明一个岗位可以确定地作出资格结论。
+
+集成已完成：PR #16 的候选 `23f88eb14205c9f491d206a6ebba24b8e60411b5` 在 CI #86（run 34228605773）九项均通过，合并提交为 `0add01de54669f521c83b2d7465d04af62a6e05a`。候选及合并代码树均为 `617c1e30a497ec4d637f4f1093616e671b071f54`。证据见 `evidence/2026-09-08-rule-candidate-types-ci.json`；此工程结论不改变 Release Qualification。

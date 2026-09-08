@@ -33,12 +33,7 @@ _LIST_OPERATORS = frozenset(
 
 
 def compile_rule_set(rule_set: RuleSetSchemaV04) -> CompiledRuleSet:
-    rules_by_id = _index_rules(rule_set.rules)
-    _validate_roots(rule_set.root_rule_ids, rules_by_id)
-    for rule in rule_set.rules:
-        _validate_rule(rule, rules_by_id)
-    ordered_rule_ids = _topological_order(rule_set.root_rule_ids, rules_by_id)
-    compiled_rules = tuple(_compile_rule(rules_by_id[rule_id]) for rule_id in ordered_rule_ids)
+    compiled_rules = compile_rule_graph(rule_set.rules, rule_set.root_rule_ids)
     compiled_sha256 = _compiled_hash(rule_set, compiled_rules)
     return CompiledRuleSet(
         rule_set_id=rule_set.rule_set_id,
@@ -50,6 +45,18 @@ def compile_rule_set(rule_set: RuleSetSchemaV04) -> CompiledRuleSet:
         compiled_sha256=compiled_sha256,
         compiler_version=COMPILER_VERSION,
     )
+
+
+def compile_rule_graph(
+    rules: tuple[RuleSchemaV04, ...], root_rule_ids: tuple[UUID, ...]
+) -> tuple[CompiledRule, ...]:
+    """Validate graph semantics without manufacturing an opportunity identity."""
+    rules_by_id = _index_rules(rules)
+    _validate_roots(root_rule_ids, rules_by_id)
+    for rule in rules:
+        _validate_rule(rule, rules_by_id)
+    ordered_rule_ids = _topological_order(root_rule_ids, rules_by_id)
+    return tuple(_compile_rule(rules_by_id[rule_id]) for rule_id in ordered_rule_ids)
 
 
 def _index_rules(rules: tuple[RuleSchemaV04, ...]) -> dict[UUID, RuleSchemaV04]:
@@ -292,4 +299,4 @@ def _rule_payload(rule: CompiledRule) -> dict[str, object]:
     }
 
 
-__all__ = ["COMPILER_VERSION", "compile_rule_set"]
+__all__ = ["COMPILER_VERSION", "compile_rule_graph", "compile_rule_set"]

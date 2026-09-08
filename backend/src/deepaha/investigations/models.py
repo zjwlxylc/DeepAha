@@ -230,3 +230,58 @@ class InvestigationFactAction(Base):
     request_hash: Mapped[str] = mapped_column(String(64))
     request: Mapped[dict[str, object]] = mapped_column(JSONB)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class InvestigationRulePreparation(Base):
+    __tablename__ = "investigation_rule_preparations"
+    __table_args__ = (
+        UniqueConstraint(
+            "fact_preparation_id",
+            "entity_id",
+            "fact_set_id",
+            "compiler_version",
+            name="uq_investigation_rule_preparation_version",
+        ),
+    )
+    rule_preparation_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    fact_preparation_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("investigation_fact_preparations.preparation_id")
+    )
+    entity_id: Mapped[str] = mapped_column(String(256))
+    fact_set_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("versioned_verified_fact_sets.verified_fact_set_id")
+    )
+    compiler_version: Mapped[str] = mapped_column(String(128))
+    reviewer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    result: Mapped[dict[str, object]] = mapped_column(JSONB)
+    result_hash: Mapped[str] = mapped_column(String(64))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class InvestigationRuleDecision(Base):
+    __tablename__ = "investigation_rule_decisions"
+    __table_args__ = (
+        UniqueConstraint(
+            "rule_preparation_id",
+            "reviewer_id",
+            "request_key_hash",
+            name="uq_investigation_rule_decision_request",
+        ),
+        ForeignKeyConstraint(
+            ["decision_id", "rule_candidate_id"],
+            [
+                "p9b_rule_approval_decisions.rule_approval_decision_id",
+                "p9b_rule_approval_decisions.rule_candidate_id",
+            ],
+        ),
+    )
+    decision_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    rule_preparation_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("investigation_rule_preparations.rule_preparation_id")
+    )
+    rule_candidate_id: Mapped[UUID] = mapped_column(Uuid)
+    reviewer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    request_key_hash: Mapped[str] = mapped_column(String(64))
+    request_hash: Mapped[str] = mapped_column(String(64))
+    request: Mapped[dict[str, object]] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
