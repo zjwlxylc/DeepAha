@@ -1,0 +1,550 @@
+{
+  "mode": "SYNTHETIC_DATABASE_TO_ENGINE_REPLAY_ONLY",
+  "wma_calls": 0,
+  "official_source_requests": 0,
+  "real_participants": 0,
+  "real_human_approvals": 0,
+  "fixture_database_writes": true,
+  "code_hash_normalization": "CRLF_TO_LF",
+  "input_files": {
+    "src/deepaha/investigations/unit_snapshots.py": "cba77f00dc991c742273ad7c0e631998f3605257097115e0e77ac61d4cb53b29",
+    "src/deepaha/investigations/unit_manifest.py": "bb9ac1aa829ec4b32163b2d0611366f04653ad16bf0cd4ec31d84b7bc3010630",
+    "src/deepaha/unit_qualification/contracts.py": "83d5899990326d322843139dc18ac487de996aa5e03577405358428909048203",
+    "src/deepaha/unit_qualification/compiler.py": "354a07c680f1cf26034932b9155fda4df063b151d89fd4299ab992f488da4f24",
+    "src/deepaha/unit_qualification/evaluator.py": "bcecb99ad4dbed39e1f3adf2cdeae45b299f9e00f03d10ccb10dbb38c06f71b1",
+    "src/deepaha/eligibility/engine.py": "e531374f5bb492ea37195efde6d3ac1f6843bc5d7c097038defdd55e3531c0eb",
+    "tests/integration/test_investigation_unit_replay.py": "eb06c47fe9b3c5b642a866bba83da3b56e67c11b3b69088c18b81c705a228309"
+  },
+  "major_catalog": {
+    "version": "phase4-synthetic-major-catalog-v1",
+    "synthetic_only": true,
+    "license": "CC0-1.0",
+    "entries": [
+      {
+        "code": "08",
+        "name": "Synthetic Engineering",
+        "parent_codes": []
+      },
+      {
+        "code": "0809",
+        "name": "Synthetic Computer Studies",
+        "parent_codes": [
+          "08"
+        ]
+      },
+      {
+        "code": "080901",
+        "name": "Synthetic Computer Science",
+        "parent_codes": [
+          "0809"
+        ]
+      },
+      {
+        "code": "080902",
+        "name": "Synthetic Software Engineering",
+        "parent_codes": [
+          "0809"
+        ]
+      },
+      {
+        "code": "080903",
+        "name": "Synthetic Network Engineering",
+        "parent_codes": [
+          "0809"
+        ]
+      },
+      {
+        "code": "03",
+        "name": "Synthetic Social Sciences",
+        "parent_codes": []
+      },
+      {
+        "code": "0301",
+        "name": "Synthetic Law Studies",
+        "parent_codes": [
+          "03"
+        ]
+      },
+      {
+        "code": "030101",
+        "name": "Synthetic Law",
+        "parent_codes": [
+          "0301"
+        ]
+      },
+      {
+        "code": "12",
+        "name": "Synthetic Management",
+        "parent_codes": []
+      },
+      {
+        "code": "1204",
+        "name": "Synthetic Public Administration",
+        "parent_codes": [
+          "12"
+        ]
+      },
+      {
+        "code": "120401",
+        "name": "Synthetic Public Service Administration",
+        "parent_codes": [
+          "1204"
+        ]
+      },
+      {
+        "code": "120402",
+        "name": "Synthetic Administrative Management",
+        "parent_codes": [
+          "1204"
+        ]
+      }
+    ]
+  },
+  "major_mapping": {
+    "version": "phase4-synthetic-major-mapping-v1",
+    "catalog_version": "phase4-synthetic-major-catalog-v1",
+    "synthetic_only": true,
+    "license": "CC0-1.0",
+    "approved_by": "phase4-fixture-governance",
+    "approved_at": "2026-08-22T00:00:00Z",
+    "entries": [
+      {
+        "source_code": "080903",
+        "target_code": "080902",
+        "approved": true
+      },
+      {
+        "source_code": "120402",
+        "target_code": "120401",
+        "approved": true
+      }
+    ]
+  },
+  "trusted_snapshot": {
+    "plan_id": "01a08186-e3c5-75e5-9c10-4548e4e40cb7",
+    "plan": {
+      "qualification_plan_id": "01a08186-e3c5-75e5-9c10-4548e4e40cb7",
+      "version": 1,
+      "target": {
+        "opportunity_id": "01a08186-e063-7640-907f-089b17cfb9df",
+        "opportunity_version": 1,
+        "unit_id": "01a08186-e0ce-77fd-98ef-ef212ed29cc9",
+        "unit_version": 1,
+        "unit_version_id": "01a08186-e0d8-7035-be77-617a60e4f26c"
+      },
+      "manifest": {
+        "target": {
+          "opportunity_id": "01a08186-e063-7640-907f-089b17cfb9df",
+          "opportunity_version": 1,
+          "unit_id": "01a08186-e0ce-77fd-98ef-ef212ed29cc9",
+          "unit_version": 1,
+          "unit_version_id": "01a08186-e0d8-7035-be77-617a60e4f26c"
+        },
+        "preparation_id": "01a08186-e195-72b0-aa7a-c0f1aaee2b9a",
+        "preparation_sha256": "ff2eb5b05dc2f7aeb8ab8d7ab6c0d6657488001757d6d9ac58c21df92c24d3cf",
+        "conditions": [
+          {
+            "condition_id": "source:0",
+            "scope": "UNIT",
+            "source_entity_id": "position",
+            "source_index": 0,
+            "source_unit_id": "01a08186-e0ce-77fd-98ef-ef212ed29cc9",
+            "source_unit_version": 1,
+            "source_unit_version_id": "01a08186-e0d8-7035-be77-617a60e4f26c",
+            "field_name": "education_requirements",
+            "source_sha256": "e7688f99b4a0159238d24a73c44bcdb8301e69393770b61b7ee219840c3af816",
+            "state": "KNOWN",
+            "fact_id": "01a08186-e297-713f-8d75-828f604ac314",
+            "evidence_ref_ids": [
+              "01a08186-df6f-7646-a6e4-7b86f0efc946"
+            ]
+          }
+        ],
+        "upstream_blockers": [
+          "SOURCE_COMPLETENESS_UNVERIFIED"
+        ],
+        "coverage_policy_version": "unit-condition-coverage/2.0.0"
+      },
+      "manifest_sha256": "21292b4225d8f6b3497ae61e6228f8d475941123415b660d15346fb0a240986a",
+      "dispositions": [
+        {
+          "condition_id": "source:0",
+          "kind": "RULE",
+          "rule_ids": [
+            "01a08186-e319-7402-bed9-80e13cc35914"
+          ],
+          "decision_id": "01a08186-e3af-77f3-95bb-ff94edc94284",
+          "reviewer_principal_id": "human:01a08186-ddb2-711c-96af-2d72ef9c8116",
+          "reason": "Synthetic independent rule review"
+        }
+      ],
+      "rules": [
+        {
+          "rule_id": "01a08186-e319-7402-bed9-80e13cc35914",
+          "code": "investigation-01a08186-e297-713f-8d75-828f604ac314",
+          "operator": "GTE",
+          "field": "education_level",
+          "value_type": "STRING",
+          "value": "MASTER",
+          "operand_rule_ids": [],
+          "required": true,
+          "reason_template": "学历必须满足官方最低要求",
+          "evidence": [
+            {
+              "evidence_ref_id": "01a08186-df6f-7646-a6e4-7b86f0efc946",
+              "document_id": "01a08186-df66-765d-90bb-51bcd0d82f62",
+              "authority": "ORIGINAL_OFFICIAL_NOTICE",
+              "precedence": 400,
+              "relation": "SUPPORTS",
+              "effective_at": "2025-12-31T16:00:00Z",
+              "assertion_sha256": "70669616d9487b34210147ba6a3df30cde2925aa471f80049a3539342e9d700d"
+            }
+          ]
+        }
+      ],
+      "root_rule_ids": [
+        "01a08186-e319-7402-bed9-80e13cc35914"
+      ],
+      "admissions": [
+        {
+          "rule_id": "01a08186-e319-7402-bed9-80e13cc35914",
+          "target": {
+            "opportunity_id": "01a08186-e063-7640-907f-089b17cfb9df",
+            "opportunity_version": 1,
+            "unit_id": "01a08186-e0ce-77fd-98ef-ef212ed29cc9",
+            "unit_version": 1,
+            "unit_version_id": "01a08186-e0d8-7035-be77-617a60e4f26c"
+          },
+          "rule_sha256": "513e782047cb610bf88a8bf2b3f25806d649054e131822f35f8e9c9b225c6d24",
+          "condition_ids": [
+            "source:0"
+          ],
+          "candidate_id": "01a08186-e319-7402-bed9-80e13cc35914",
+          "approval_decision_id": "01a08186-e3af-77f3-95bb-ff94edc94284",
+          "producer_principal_id": "component:direct-wma-rule-bridge/2.0.0+deriver-1.0.1",
+          "reviewer_principal_id": "human:01a08186-ddb2-711c-96af-2d72ef9c8116",
+          "reviewed_at": "2026-09-07T10:00:00Z",
+          "evidence_validity": [
+            {
+              "evidence_ref_id": "01a08186-df6f-7646-a6e4-7b86f0efc946",
+              "valid_from": "2025-12-31T16:00:00Z",
+              "valid_until": null
+            }
+          ]
+        }
+      ],
+      "contract_version": "unit-qualification/2.0.0"
+    },
+    "plan_hash": "3392d69567e33b9153dcde297ded6a4f83a718a3a2cac8385e2825ed18e13c7b",
+    "context": {
+      "adapter_version": "investigation-unit-snapshot/1.0.0",
+      "rule_preparation_id": "01a08186-e32c-7702-aaa3-25a9b32525ee",
+      "rule_preparation_hash": "07ba26ffca87f7f10b55ffe8bdd85b8b3f6a7299fd71f0b6bb738e545656d613",
+      "fact_preparation_hash": "ff2eb5b05dc2f7aeb8ab8d7ab6c0d6657488001757d6d9ac58c21df92c24d3cf",
+      "check_id": "01a08186-dfc1-77a1-9469-cb8fcd7d0a14",
+      "binding_id": "01a08186-e0f0-774f-bb01-5a30741cd0a6",
+      "delivery_hash": "5f3914072a87b16683849c593b863815b3acd2dc204c7877734fcac4cc3f3717",
+      "fact_set_id": "01a08186-e284-7039-a6b7-8be9383288b0",
+      "fact_set_version": 1,
+      "source_bundle_revision_id": "01a08186-e08f-7419-a121-7814b4ab1765",
+      "source_row_count": 1,
+      "excluded_source_rows": [],
+      "source_notes": [],
+      "evidence_reference_counts": {
+        "PASS": 1,
+        "FAIL": 0,
+        "UNVERIFIED": 0
+      },
+      "unresolved_source_references": [],
+      "rule_decisions": {
+        "01a08186-e319-7402-bed9-80e13cc35914": {
+          "decision_id": "01a08186-e3af-77f3-95bb-ff94edc94284",
+          "request_hash": "d2685a5d3020e9ccc0ff44981a97e7973b5304857ffe5b2c5b7ed47fa53114bd",
+          "receipt_created_at": "2026-09-07T10:00:00+00:00"
+        }
+      },
+      "evidence_valid_until_policy": "NOT_ESTABLISHED"
+    },
+    "context_hash": "e05145393b38213d473abdb524b0f880af8878109508e565e905cf73f3b76129",
+    "reviewer_id": "01a08186-ddb2-711c-96af-2d72ef9c8116",
+    "created_at": "2026-09-07T10:00:00+00:00"
+  },
+  "cases": [
+    {
+      "profile": {
+        "profile_snapshot_id": "01a08186-e429-74d4-920c-dd8e8ae18632",
+        "profile_id": "01a08186-e429-74d4-920c-dd8fbb8711cc",
+        "version": 1,
+        "synthetic": true,
+        "persona_family_id": "c58f6707-2e47-717a-8677-db077f9ca7d0",
+        "attributes": {
+          "education_level": "MASTER",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-01-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-09-07",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-09-07T10:00:00Z",
+        "created_by": "synthetic-unit-replay-fixture",
+        "reviewed_by": "synthetic-unit-replay-checks",
+        "change_note": "Synthetic engineering fixture only; not a real participant"
+      },
+      "result": {
+        "target": "opportunity_id=UUID('01a08186-e063-7640-907f-089b17cfb9df') opportunity_version=1 unit_id=UUID('01a08186-e0ce-77fd-98ef-ef212ed29cc9') unit_version=1 unit_version_id=UUID('01a08186-e0d8-7035-be77-617a60e4f26c')",
+        "qualification_plan_id": "01a08186-e3c5-75e5-9c10-4548e4e40cb7",
+        "qualification_plan_version": 1,
+        "status": "UNCERTAIN",
+        "engine_status": "ELIGIBLE",
+        "rule_evaluations": [
+          {
+            "rule_id": "01a08186-e319-7402-bed9-80e13cc35914",
+            "outcome": "SATISFIED",
+            "deterministic": true,
+            "official_evidence": true,
+            "reason_code": "RULE_SATISFIED",
+            "evidence_ref_ids": [
+              "01a08186-df6f-7646-a6e4-7b86f0efc946"
+            ],
+            "missing_fields": []
+          }
+        ],
+        "satisfied_rule_ids": [
+          "01a08186-e319-7402-bed9-80e13cc35914"
+        ],
+        "conflict_rule_ids": [],
+        "unknown_rule_ids": [],
+        "diagnostic_rule_ids": [],
+        "missing_fields": [],
+        "review_reasons": [
+          "HUMAN_SCOPE_REVIEW_UNVERIFIED",
+          "SOURCE_COMPLETENESS_UNVERIFIED"
+        ],
+        "coverage_blockers": [
+          {
+            "code": "HUMAN_SCOPE_REVIEW_UNVERIFIED",
+            "condition_id": null,
+            "rule_id": null
+          },
+          {
+            "code": "SOURCE_COMPLETENESS_UNVERIFIED",
+            "condition_id": null,
+            "rule_id": null
+          }
+        ],
+        "status_cap": "UNCERTAIN",
+        "applied_status_cap": "UNCERTAIN",
+        "profile_snapshot_id": "01a08186-e429-74d4-920c-dd8e8ae18632",
+        "profile_version": 1,
+        "profile_schema_version": "0.4.0",
+        "major_catalog_version": "phase4-synthetic-major-catalog-v1",
+        "major_mapping_version": "phase4-synthetic-major-mapping-v1",
+        "scenario_clock": "2026-09-07",
+        "evidence_as_of": "2026-09-07 10:00:00+00:00",
+        "input_sha256": "8740400220728be0989827dabf8b4e137cfd7b0fab47f457bb414b033ecc379c",
+        "compiled_sha256": "c361e24a0776197eefeb5100fbbd193db36ba80c3edfc25fc9a86f4bf305d738",
+        "engine_version": "phase4-eligibility-engine-v1",
+        "compiler_version": "unit-qualification-compiler/2.0.0",
+        "coverage_policy_version": "unit-condition-coverage/2.0.0",
+        "contract_version": "unit-qualification/2.0.0"
+      }
+    },
+    {
+      "profile": {
+        "profile_snapshot_id": "01a08186-e48f-7178-bc08-748395202df2",
+        "profile_id": "01a08186-e48f-7178-bc08-74840e168ae9",
+        "version": 1,
+        "synthetic": true,
+        "persona_family_id": "c58f6707-2e47-717a-8677-db077f9ca7d0",
+        "attributes": {
+          "education_level": "BACHELOR",
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-01-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-09-07",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-09-07T10:00:00Z",
+        "created_by": "synthetic-unit-replay-fixture",
+        "reviewed_by": "synthetic-unit-replay-checks",
+        "change_note": "Synthetic engineering fixture only; not a real participant"
+      },
+      "result": {
+        "target": "opportunity_id=UUID('01a08186-e063-7640-907f-089b17cfb9df') opportunity_version=1 unit_id=UUID('01a08186-e0ce-77fd-98ef-ef212ed29cc9') unit_version=1 unit_version_id=UUID('01a08186-e0d8-7035-be77-617a60e4f26c')",
+        "qualification_plan_id": "01a08186-e3c5-75e5-9c10-4548e4e40cb7",
+        "qualification_plan_version": 1,
+        "status": "UNCERTAIN",
+        "engine_status": "INELIGIBLE",
+        "rule_evaluations": [
+          {
+            "rule_id": "01a08186-e319-7402-bed9-80e13cc35914",
+            "outcome": "CONFLICT",
+            "deterministic": true,
+            "official_evidence": true,
+            "reason_code": "RULE_CONFLICT",
+            "evidence_ref_ids": [
+              "01a08186-df6f-7646-a6e4-7b86f0efc946"
+            ],
+            "missing_fields": []
+          }
+        ],
+        "satisfied_rule_ids": [],
+        "conflict_rule_ids": [
+          "01a08186-e319-7402-bed9-80e13cc35914"
+        ],
+        "unknown_rule_ids": [],
+        "diagnostic_rule_ids": [],
+        "missing_fields": [],
+        "review_reasons": [
+          "NEGATIVE_CONCLUSION_REQUIRES_SCOPE_REVIEW",
+          "HUMAN_SCOPE_REVIEW_UNVERIFIED",
+          "SOURCE_COMPLETENESS_UNVERIFIED"
+        ],
+        "coverage_blockers": [
+          {
+            "code": "HUMAN_SCOPE_REVIEW_UNVERIFIED",
+            "condition_id": null,
+            "rule_id": null
+          },
+          {
+            "code": "SOURCE_COMPLETENESS_UNVERIFIED",
+            "condition_id": null,
+            "rule_id": null
+          }
+        ],
+        "status_cap": "UNCERTAIN",
+        "applied_status_cap": "UNCERTAIN",
+        "profile_snapshot_id": "01a08186-e48f-7178-bc08-748395202df2",
+        "profile_version": 1,
+        "profile_schema_version": "0.4.0",
+        "major_catalog_version": "phase4-synthetic-major-catalog-v1",
+        "major_mapping_version": "phase4-synthetic-major-mapping-v1",
+        "scenario_clock": "2026-09-07",
+        "evidence_as_of": "2026-09-07 10:00:00+00:00",
+        "input_sha256": "48de0bde270fac7d5038bb4f78be32bd8ebc24c18d5eba20c8d455dd17280253",
+        "compiled_sha256": "c361e24a0776197eefeb5100fbbd193db36ba80c3edfc25fc9a86f4bf305d738",
+        "engine_version": "phase4-eligibility-engine-v1",
+        "compiler_version": "unit-qualification-compiler/2.0.0",
+        "coverage_policy_version": "unit-condition-coverage/2.0.0",
+        "contract_version": "unit-qualification/2.0.0"
+      }
+    },
+    {
+      "profile": {
+        "profile_snapshot_id": "01a08186-e4fa-719a-9e4a-7b54af93c9b7",
+        "profile_id": "01a08186-e4fa-719a-9e4a-7b5565b720cf",
+        "version": 1,
+        "synthetic": true,
+        "persona_family_id": "c58f6707-2e47-717a-8677-db077f9ca7d0",
+        "attributes": {
+          "education_level": null,
+          "major_name": "Synthetic major family 1",
+          "major_code": "080901",
+          "graduation_year": 2026,
+          "student_status": "GRADUATING",
+          "birth_date": "1998-01-15",
+          "hukou_region": "SYN-ZJ-A",
+          "residence_region": "SYN-ZJ-B",
+          "target_regions": [
+            "SYN-NATIONAL",
+            "SYN-ZJ-A"
+          ],
+          "certificates": [
+            "SYN-CERT-1"
+          ]
+        },
+        "scenario_clock": "2026-09-07",
+        "profile_schema_version": "0.4.0",
+        "created_at": "2026-09-07T10:00:00Z",
+        "created_by": "synthetic-unit-replay-fixture",
+        "reviewed_by": "synthetic-unit-replay-checks",
+        "change_note": "Synthetic engineering fixture only; not a real participant"
+      },
+      "result": {
+        "target": "opportunity_id=UUID('01a08186-e063-7640-907f-089b17cfb9df') opportunity_version=1 unit_id=UUID('01a08186-e0ce-77fd-98ef-ef212ed29cc9') unit_version=1 unit_version_id=UUID('01a08186-e0d8-7035-be77-617a60e4f26c')",
+        "qualification_plan_id": "01a08186-e3c5-75e5-9c10-4548e4e40cb7",
+        "qualification_plan_version": 1,
+        "status": "UNCERTAIN",
+        "engine_status": "UNCERTAIN",
+        "rule_evaluations": [
+          {
+            "rule_id": "01a08186-e319-7402-bed9-80e13cc35914",
+            "outcome": "UNKNOWN",
+            "deterministic": false,
+            "official_evidence": false,
+            "reason_code": "FIELD_MISSING",
+            "evidence_ref_ids": [
+              "01a08186-df6f-7646-a6e4-7b86f0efc946"
+            ],
+            "missing_fields": [
+              "education_level"
+            ]
+          }
+        ],
+        "satisfied_rule_ids": [],
+        "conflict_rule_ids": [],
+        "unknown_rule_ids": [
+          "01a08186-e319-7402-bed9-80e13cc35914"
+        ],
+        "diagnostic_rule_ids": [],
+        "missing_fields": [
+          "education_level"
+        ],
+        "review_reasons": [
+          "FIELD_MISSING",
+          "HUMAN_SCOPE_REVIEW_UNVERIFIED",
+          "SOURCE_COMPLETENESS_UNVERIFIED"
+        ],
+        "coverage_blockers": [
+          {
+            "code": "HUMAN_SCOPE_REVIEW_UNVERIFIED",
+            "condition_id": null,
+            "rule_id": null
+          },
+          {
+            "code": "SOURCE_COMPLETENESS_UNVERIFIED",
+            "condition_id": null,
+            "rule_id": null
+          }
+        ],
+        "status_cap": "UNCERTAIN",
+        "applied_status_cap": null,
+        "profile_snapshot_id": "01a08186-e4fa-719a-9e4a-7b54af93c9b7",
+        "profile_version": 1,
+        "profile_schema_version": "0.4.0",
+        "major_catalog_version": "phase4-synthetic-major-catalog-v1",
+        "major_mapping_version": "phase4-synthetic-major-mapping-v1",
+        "scenario_clock": "2026-09-07",
+        "evidence_as_of": "2026-09-07 10:00:00+00:00",
+        "input_sha256": "f59d7e6ab68154052323e1bf1500eec1a6b06a6763c83dd9c956380077b82835",
+        "compiled_sha256": "c361e24a0776197eefeb5100fbbd193db36ba80c3edfc25fc9a86f4bf305d738",
+        "engine_version": "phase4-eligibility-engine-v1",
+        "compiler_version": "unit-qualification-compiler/2.0.0",
+        "coverage_policy_version": "unit-condition-coverage/2.0.0",
+        "contract_version": "unit-qualification/2.0.0"
+      }
+    }
+  ]
+}
