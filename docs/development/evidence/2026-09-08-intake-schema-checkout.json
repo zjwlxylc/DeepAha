@@ -1,0 +1,23 @@
+{
+  "previous_ci_run": 34206238154,
+  "failure": "Git text conversion changed original CRLF schemas to LF blobs",
+  "fix": "Disable text conversion for vendored schema bytes; retain all content and exact SHA checks",
+  "schemas": [
+    {
+      "file": "backend/src/deepaha/investigations/schemas/opportunities.schema.json",
+      "expected_original_sha256": "fbbf3f83bd078ecffaa52ab8aa79743ada115c5d88918c3a5ea25245e0f6ccd5",
+      "previous_git_blob_sha256": "89db170b9ad91ef38e9f8e8ec3619068afa59e4db5727768feec3a3d195b8eb3",
+      "staged_git_blob_sha256": "fbbf3f83bd078ecffaa52ab8aa79743ada115c5d88918c3a5ea25245e0f6ccd5",
+      "worktree_bytes_unchanged": true,
+      "json_contract_unchanged": true
+    },
+    {
+      "file": "backend/src/deepaha/investigations/schemas/evidence.schema.json",
+      "expected_original_sha256": "ce6ecc0afa3edcc756460741f082b8b0438808e2159d7cdaa15fb6c312d7266a",
+      "previous_git_blob_sha256": "e216948507bcba6a70754c26108d20ea6027026acd1015d2c83baaf843df32c2",
+      "staged_git_blob_sha256": "ce6ecc0afa3edcc756460741f082b8b0438808e2159d7cdaa15fb6c312d7266a",
+      "worktree_bytes_unchanged": true,
+      "json_contract_unchanged": true
+    }
+  ]
+}

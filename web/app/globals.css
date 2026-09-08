@@ -1118,6 +1118,41 @@ code {
   font-weight: 700;
 }
 
+.investigation-shell textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font: inherit;
+  resize: vertical;
+}
+
+.investigation-shell .human-test-panel,
+.investigation-shell .compact-facts dd,
+.investigation-shell .human-test-run-list li,
+.investigation-hash {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.investigation-hierarchy,
+.investigation-hierarchy ul {
+  display: grid;
+  gap: 12px;
+  padding-left: 22px;
+}
+
+.investigation-entity + .investigation-entity {
+  margin-top: 28px;
+}
+
+.investigation-json {
+  overflow: auto;
+  max-height: 28rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .human-test-shell {
   max-width: 82rem;
 }

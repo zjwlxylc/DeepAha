@@ -1,0 +1,47 @@
+{
+  "scope": "DELIVERY1_NOTES_AND_TIMESTAMP_VERIFICATION",
+  "verified_at": "2026-09-07T09:01:14.200200+00:00",
+  "database": {
+    "engine": "PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit",
+    "session_timezone": "Asia/Shanghai",
+    "migration_head": "20260907_0036",
+    "isolation": "DEDICATED_SYNTHETIC_LOOPBACK_DATABASE",
+    "business_data_used": false,
+    "stopped_after_verification": true
+  },
+  "backend": {
+    "passed": 260,
+    "investigation_and_api_passed": 228,
+    "integration_passed": 32,
+    "command": "python -m pytest tests/investigations tests/api/test_investigations.py tests/integration/test_investigation_store.py tests/integration/test_investigation_vertical_slice.py -q -o addopts=''",
+    "duration_seconds": 40.28,
+    "ruff": "PASS",
+    "format_files": 5,
+    "mypy_files": 5
+  },
+  "web": {
+    "test_files": 30,
+    "tests_passed": 122,
+    "typescript": "PASS",
+    "eslint_changed_files": "PASS",
+    "production_build": "PASS",
+    "desktop_mobile_browser_tests_passed": 2,
+    "screenshots_visually_checked": true,
+    "browser_api": "SYNTHETIC_FIXTURE"
+  },
+  "failures_reproduced_before_fix": {
+    "backend_note_tests": 3,
+    "web_note_tests": 1,
+    "non_utc_database_repeated_review": 1,
+    "timestamp_view_unit": 1
+  },
+  "human_reviews": 0,
+  "formal_fact_writes": 0,
+  "model_configuration_changed": false,
+  "release_qualification_claimed": false,
+  "docker_after_user_started": {
+    "read_only_check": "RUNNING",
+    "server_version": "29.6.1",
+    "further_mutations": false
+  }
+}

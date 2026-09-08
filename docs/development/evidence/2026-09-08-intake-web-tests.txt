@@ -1,0 +1,50 @@
+
+> deepaha-web@0.1.0 test D:\DeepAha\.worktrees\integration-wma-evidence\web
+> vitest run
+
+
+ RUN  v3.2.7 D:/DeepAha/.worktrees/integration-wma-evidence/web
+
+ ✓ tests/reminder-api-client.test.ts (2 tests) 20ms
+ ✓ tests/investigations-download.test.ts (19 tests) 62ms
+ ✓ tests/investigations-actions.test.ts (19 tests) 93ms
+ ✓ tests/personal-route-states.test.tsx (12 tests) 321ms
+ ✓ tests/review-actions.test.ts (2 tests) 14ms
+ ✓ tests/local-human-test-actions.test.ts (3 tests) 15ms
+ ✓ tests/reminder-actions.test.ts (5 tests) 18ms
+ ✓ tests/feedback-actions.test.ts (2 tests) 17ms
+ ✓ tests/personal-actions.test.ts (2 tests) 94ms
+ ✓ tests/reminder-inbox.test.tsx (3 tests) 426ms
+   ✓ test reminder inbox > renders exact old/new dates, direction, evidence and personal action link  304ms
+ ✓ tests/public-opportunities.test.tsx (3 tests) 515ms
+   ✓ public opportunity directory > renders trusted fields, finite filters and fixture evidence boundary  427ms
+ ✓ tests/investigations-page.test.tsx (14 tests) 974ms
+ ✓ tests/personal-api-client.test.ts (2 tests) 23ms
+ ✓ tests/status-states.test.tsx (2 tests) 317ms
+ ✓ tests/opportunity-detail.test.tsx (1 test) 577ms
+   ✓ public opportunity detail > renders official links, evidence locator and change history  575ms
+ ✓ tests/local-human-test-client.test.ts (2 tests) 22ms
+ ✓ tests/review-feedback.test.tsx (4 tests) 623ms
+   ✓ controlled reviewer flow > renders only case evidence, history and native assessment/adjudication controls  473ms
+ ✓ tests/reminder-preference-toggle.test.tsx (2 tests) 258ms
+ ✓ tests/local-human-test-page.test.tsx (4 tests) 765ms
+   ✓ local human test console > states the evidence boundary and never renders a stored secret  354ms
+ ✓ tests/feedback-status.test.tsx (1 test) 271ms
+ ✓ tests/personal-opportunities.test.tsx (2 tests) 369ms
+ ✓ tests/feedback-form.test.tsx (1 test) 344ms
+   ✓ feedback correction form > uses controlled claims, bound versions, official evidence and explicit consent  341ms
+ ✓ tests/action-panel.test.tsx (2 tests) 464ms
+   ✓ personal action panel > resets form controls to the latest server action snapshot  412ms
+ ✓ tests/personal-detail.test.tsx (7 tests) 703ms
+   ✓ personal opportunity detail > explains uncertainty, evidence, urgency and official next action  495ms
+ ✓ tests/fit-check-boundary.test.tsx (1 test) 271ms
+ ✓ tests/home.test.tsx (1 test) 234ms
+ ✓ tests/public-api-client.test.ts (1 test) 20ms
+ ✓ tests/profile.test.tsx (1 test) 184ms
+ ✓ tests/brand-asset-boundary.test.ts (1 test) 5ms
+ ✓ tests/layout-shell.test.tsx (1 test) 13ms
+
+ Test Files  30 passed (30)
+      Tests  122 passed (122)
+   Start at  16:07:41
+   Duration  29.34s (transform 3.89s, setup 96.84s, collect 34.91s, tests 8.03s, environment 240.59s, prepare 19.26s)

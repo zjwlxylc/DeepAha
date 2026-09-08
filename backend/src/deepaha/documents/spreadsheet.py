@@ -22,6 +22,11 @@ from deepaha.documents.parser import (
     ExpectedParseError,
     ParsedDocument,
 )
+from deepaha.documents.spreadsheet_limits import (
+    MAX_WORKSHEETS,
+    WorksheetExpansionBudget,
+    preflight_worksheet,
+)
 
 XLSX_MEDIA_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 MAX_ARCHIVE_ENTRIES = 10_000
@@ -50,10 +55,14 @@ class OpenpyxlSpreadsheetParser:
         _preflight_archive(content)
         workbook = _load_workbook(content)
         try:
+            if len(workbook.worksheets) > MAX_WORKSHEETS:
+                raise ExpectedParseError("XLSX_WORKSHEET_LIMIT_EXCEEDED")
+            expansion = WorksheetExpansionBudget()
             text_lines: list[str] = []
             locators: list[EvidenceLocatorV02] = []
             parsed_blocks: list[ParsedBlock] = []
             for worksheet in workbook.worksheets:
+                _preflight_loaded_worksheet(worksheet, expansion)
                 _ignore_declared_dimensions(worksheet)
                 sheet_lines: list[str] = []
                 for row_number, row in enumerate(worksheet.iter_rows(), start=1):
@@ -192,6 +201,11 @@ def _preflight_archive(content: bytes) -> None:
                 content_types = archive.read(content_types_name).lower()
                 if b"macroenabled" in content_types or b"vbaproject" in content_types:
                     raise ExpectedParseError("XLSX_MACRO_NOT_ALLOWED")
+            expansion = WorksheetExpansionBudget()
+            for entry in entries:
+                if entry.filename.lower().endswith(".xml"):
+                    with archive.open(entry) as source:
+                        preflight_worksheet(source, expansion)
     except ExpectedParseError:
         raise
     except (BadZipFile, KeyError, OSError) as error:
@@ -214,6 +228,19 @@ def _ignore_declared_dimensions(worksheet: object) -> None:
     if not isinstance(worksheet, ReadOnlyWorksheet):
         raise RuntimeError("XLSX parser requires a read-only worksheet")
     worksheet.reset_dimensions()
+
+
+def _preflight_loaded_worksheet(worksheet: object, budget: WorksheetExpansionBudget) -> None:
+    # Resolve exactly what openpyxl will read, including non-.xml relationship
+    # targets and aliases. Repeated physical parts count once per logical sheet.
+    if not isinstance(worksheet, ReadOnlyWorksheet):
+        raise RuntimeError("XLSX parser requires a read-only worksheet")
+    archive = getattr(worksheet.parent, "_archive", None)
+    path = getattr(worksheet, "_worksheet_path", None)
+    if not isinstance(archive, ZipFile) or not isinstance(path, str):
+        raise RuntimeError("XLSX reader did not expose its worksheet source")
+    with archive.open(path) as source:
+        preflight_worksheet(source, budget, required=True)
 
 
 def _normalize_cell_value(value: object) -> str:

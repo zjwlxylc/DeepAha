@@ -39,6 +39,7 @@ export default async function HumanTestPage() {
       <aside className="fixture-notice" aria-label="证据责任边界">
         这里用于负责人本人体验和人工检查；本地批准不等于 Gold、不等于生产发布，也不会替你批准重大资格判断。
       </aside>
+      <p><Link className="button button-secondary" href="/review/investigations">官方机会调查：登记任务与核对原件</Link></p>
       <div className="human-test-dashboard-grid">
         <ProviderConfigForm status={provider} />
         <RunForm sources={sources} providerReady={provider.egress_ready && provider.configured} />

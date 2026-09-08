@@ -72,6 +72,7 @@ class LxmlHtmlParser:
     version = "0.2.0"
     parse_contract_version = "phase2-locator-contract-v0.2.0"
     emit_document_blocks = False
+    utf8_fallback = False
 
     def supports(self, media_type: str) -> bool:
         return media_type.partition(";")[0].strip().lower() == "text/html"
@@ -80,7 +81,7 @@ class LxmlHtmlParser:
         if sha256(content).hexdigest() != artifact_sha256:
             raise ValueError("artifact SHA-256 does not match HTML bytes")
 
-        tree = _parse_html_tree(content)
+        tree = _parse_html_tree(content, utf8_fallback=self.utf8_fallback)
         root = _select_content_root(tree)
         blocks = _leaf_text_blocks(root)
         block_texts = [_normalized_visible_text(node) for node in blocks]
@@ -125,7 +126,9 @@ class LxmlHtmlParser:
             published_at=None,
             language=language,
             normalized_text=normalize_text("\n\n".join(block_texts) + "\n"),
-            locators=tuple(locators),
+            # P9B encoding rules belong to versioned DocumentBlocks, not the
+            # legacy 0.2 locator replay contract (which must remain unchanged).
+            locators=() if self.emit_document_blocks else tuple(locators),
             needs_review_reasons=(),
             blocks=(
                 validate_parsed_blocks(tuple(parsed_blocks)) if self.emit_document_blocks else ()
@@ -134,13 +137,43 @@ class LxmlHtmlParser:
 
 
 class P9BHtmlDocumentParser(LxmlHtmlParser):
-    version = "0.8.0"
+    version = "0.8.2"
     parse_contract_version = P9B_BLOCK_PARSE_CONTRACT_VERSION
     emit_document_blocks = True
+    utf8_fallback = True
 
 
-def _parse_html_tree(content: bytes) -> etree._Element:
-    parser = etree.HTMLParser(no_network=True, recover=True, huge_tree=False)
+def _parse_html_tree(content: bytes, *, utf8_fallback: bool = False) -> etree._Element:
+    tree = _read_html_tree(content)
+    if utf8_fallback and not _has_encoding_declaration(content, tree):
+        # JSON-backed official pages often return a UTF-8 HTML fragment without a
+        # head/meta element. Never let libxml2's Latin-1 fallback corrupt its blocks.
+        try:
+            content.decode("utf-8", errors="strict")
+        except UnicodeDecodeError as error:
+            raise ExpectedParseError("HTML_ENCODING_UNRESOLVED") from error
+        tree = _read_html_tree(content, encoding="utf-8")
+    _remove_excluded_nodes(tree)
+    return tree
+
+
+def _has_encoding_declaration(content: bytes, tree: etree._Element) -> bool:
+    if content.startswith((b"\xef\xbb\xbf", b"\xff\xfe", b"\xfe\xff", b"\x00\x00\xfe\xff")):
+        return True
+    if re.match(rb"\s*<\?xml\s[^>]*\bencoding\s*=", content, re.I):
+        return True
+    for node in tree.iter("meta"):
+        if node.get("charset"):
+            return True
+        if node.get("http-equiv", "").strip().lower() == "content-type" and re.search(
+            r"\bcharset\s*=", node.get("content", ""), re.I
+        ):
+            return True
+    return False
+
+
+def _read_html_tree(content: bytes, *, encoding: str | None = None) -> etree._Element:
+    parser = etree.HTMLParser(encoding=encoding, no_network=True, recover=True, huge_tree=False)
     parser.resolvers.add(_RejectExternalResolver())
     try:
         tree = etree.fromstring(content, parser=parser)
@@ -149,7 +182,6 @@ def _parse_html_tree(content: bytes) -> etree._Element:
         raise ExpectedParseError(code) from error
     if tree is None:
         raise ExpectedParseError("HTML_TEXT_EMPTY")
-    _remove_excluded_nodes(tree)
     return tree
 
 

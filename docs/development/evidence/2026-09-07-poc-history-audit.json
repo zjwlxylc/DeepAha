@@ -1,0 +1,3800 @@
+{
+  "audit_version": "poc-history-readonly/1",
+  "audited_at_utc": "2026-09-07T05:53:56.445975+00:00",
+  "source_database": {
+    "path": "runs/dail.db",
+    "access": "SQLite URI mode=ro; PRAGMA query_only=ON",
+    "sha256_before": "7846409cf2076a3621f93325f274430363deca7fa077295c77a1836158091f92",
+    "sha256_after": "7846409cf2076a3621f93325f274430363deca7fa077295c77a1836158091f92",
+    "unchanged": true,
+    "cases_rows": 26,
+    "runs_rows": 24,
+    "distinct_case_ids_with_runs": 21
+  },
+  "source_files_read_count": 175,
+  "source_files_unchanged_at_end": true,
+  "schema_sha256": {
+    "opportunities": "fbbf3f83bd078ecffaa52ab8aa79743ada115c5d88918c3a5ea25245e0f6ccd5",
+    "evidence": "ce6ecc0afa3edcc756460741f082b8b0438808e2159d7cdaa15fb6c312d7266a"
+  },
+  "methodology": {
+    "selected_columns": [
+      "id",
+      "case_id",
+      "status",
+      "mode",
+      "runner_kind",
+      "model"
+    ],
+    "wma_definition": "runs.runner_kind == 'workbuddy-wma'; NULL is not inferred",
+    "three_files_complete": "opportunities.json and evidence.json parse as JSON; report.md is present and nonempty",
+    "artifact_denominator": "All entries in result/evidence.json.artifacts; entries may be snapshots or derived documents, not independently authenticated official originals",
+    "path_resolution": "Use local_path only; absolute path must resolve inside its own run; runs/<exact_run_id>/... is relative to PoC; all other relative paths are relative to own run. Resolve links before opening. Never use remote_path, basename searching, cross-run substitution or network recovery.",
+    "hash": "SHA256 of actual read_bytes versus a valid 64-hex artifacts[i].sha256; null/empty is missing_hash; absent evidence.json contributes zero declarations but is not a successful empty delivery.",
+    "projection_check": "Structural diagnostic only: nested vs facts_flat field/value/status/note and artifact_id/quote/locator/sha256; entity ID/name/code/kind/parent consistency. Not semantic or human verification.",
+    "model": "DB model is configured/requested metadata only. WMA session_info_update and usage_update payloads inspected for public model fields; no returned model captured. Current runner uses default session without passing cfg.model.",
+    "excluded": "No case prompts, seed URLs, cloud IDs, credential values, contacts, original text, quotes, thought/reasoning or arbitrary logs exported. Local run_id and artifact ordinal retained for audit."
+  },
+  "aggregate": {
+    "all": {
+      "runs": 24,
+      "three_files_complete": 17,
+      "db_status_counts": {
+        "COMPLETE": 24
+      },
+      "old_verdict_counts": {
+        "OK": 16,
+        "ABSENT": 7,
+        "NEEDS_REVIEW": 1
+      },
+      "artifacts": {
+        "declared": 93,
+        "located": 90,
+        "equal": 18,
+        "mismatch": 72,
+        "missing_hash": 3,
+        "invalid_hash": 0,
+        "unlocatable": 3,
+        "valid_hash_unchecked": 0
+      },
+      "schema_valid_both": 15,
+      "every_declared_hash_equal_and_nonempty": 1,
+      "session_info_events": 1309,
+      "session_info_empty_payloads": 1309,
+      "usage_events": 13,
+      "usage_empty_payloads": 13
+    },
+    "wma": {
+      "runs": 17,
+      "three_files_complete": 14,
+      "db_status_counts": {
+        "COMPLETE": 17
+      },
+      "old_verdict_counts": {
+        "OK": 13,
+        "ABSENT": 3,
+        "NEEDS_REVIEW": 1
+      },
+      "artifacts": {
+        "declared": 78,
+        "located": 78,
+        "equal": 6,
+        "mismatch": 72,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "schema_valid_both": 12,
+      "every_declared_hash_equal_and_nonempty": 0,
+      "session_info_events": 1309,
+      "session_info_empty_payloads": 1309,
+      "usage_events": 13,
+      "usage_empty_payloads": 13
+    },
+    "runner_kind_counts": {
+      "workbuddy-wma": 17,
+      "codex": 1,
+      "NULL_UNSPECIFIED": 4,
+      "workbuddy-cli": 2
+    },
+    "configured_mode_counts": {
+      "blind": 23,
+      "interactive": 1
+    }
+  },
+  "runs": [
+    {
+      "run_id": "bs-competition#1",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "b45febfc411d7bcd08b55e2a5791f1d33f49df66eb5db9503c6a221506bfdefc",
+          "bytes": 31693,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "1a6054b3dd573549c9c745abe9f5d258d267cb5408bdbd15868b6f899937bf2e",
+          "bytes": 38554,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "2ef6f863c332939c7cec66758953f4e0208365bee3527ab7fa2607cab7784911",
+          "bytes": 20161
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "c9fd69fdfa86a3526cc2d3a6b4b1c9f38139630b659e9bfa8bbe4f373f31232e",
+          "bytes": 271,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 42,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 8,
+        "located": 8,
+        "equal": 0,
+        "mismatch": 8,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 26303,
+          "declared_sha256": "9d2e3c74a611490699bc3d2d7e5c36f36aa9506caa15bebbd91a1016b4c4a280",
+          "computed_sha256": "e6f4b181ffda091fb10f4c5656d83980a739da57206d263fa1467d68ac9c6a04",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 1225361,
+          "declared_sha256": "39f2723457fee8def0025f408b99892145de440c65a1e172a971cde83a9751ae",
+          "computed_sha256": "cf78fdc8d460571ac9401b1745c7ed495a980caa9eec840af16f91d891de20f8",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 862497,
+          "declared_sha256": "2ca1208b47ee91b28e5b02e1ed1fa3cdba8f3f144cee02e0fbe8c310b367ddbe",
+          "computed_sha256": "aa850684e391765141adbfe612ed7514833c634d2269cc92df07e5c8bf369e10",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 3,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 3541090,
+          "declared_sha256": "37d7c8c99d2f5172efbf40858688cea20cf1c723962b259642f0ad10f7231787",
+          "computed_sha256": "a6885f75824bbc948253e3fc40cff5b041d914b2059871fc7c5101a2f254d938",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 4,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 356364,
+          "declared_sha256": "89b1ab44baed82eae9fad896086ad484d601db9628135e50a9d39348aa6769a7",
+          "computed_sha256": "e4394efb016f12f29dd133926449a4351478c89897b4f8856dae3f39312d8357",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 5,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 1607808,
+          "declared_sha256": "9c2657dcb9a2f170d681e15790cf8f295e7fa2ae57417e44590a34a16b368925",
+          "computed_sha256": "e5e74c8d90b5208be3fde5635cfc61d3ccec03fa813c4e59e636be9460bdc42b",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 6,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 4915162,
+          "declared_sha256": "8c08518df8af1352e6b56812f1b5ccaad0d64749248a079838e7239d2b59272e",
+          "computed_sha256": "f9e6da1ba2c22d6c1587e6e7bdb90d6819b59ec14932a78fcad10892ca700975",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 7,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 1904399,
+          "declared_sha256": "fc581537368ba7715fab2ffd187f395080b24dfd209a47c20c7c97f0a28f18f4",
+          "computed_sha256": "cc81fe13f7f90cb492e83d8ab92b8f724a6e6b0216da320971bbbc125e717aa0",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat"
+        ],
+        "unit_count": 3,
+        "position_count": 2,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 3,
+          "position": 2
+        },
+        "nested_fact_node_count": 42,
+        "nested_status_counts": {
+          "CONFIRMED": 33,
+          "UNKNOWN": 9
+        },
+        "facts_flat_count": 42,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 86,
+        "session_info_empty_payload_count": 86,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 4,
+        "first_usage_line": 10812,
+        "event_file_sha256": "1d3aa5879c3ab25a9ee3cec7ed7543acece359573dd04a5b31c728fc7f3a2f35",
+        "event_line_count": 10829
+      }
+    },
+    {
+      "run_id": "bs-competition#2",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "e883fcd9276a7749e4d973b554e38bb4f3405a32ac961859c1ab16ff98745b56",
+          "bytes": 80872,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "fd8fa4d23aea486e17b224ee17c0063a0c4c45241590e5e84eee8846879708aa",
+          "bytes": 105756,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "3d6a0b5076fb285f35ca40e61215d3f244501e9dda65dd97d10436c7983da6ac",
+          "bytes": 11292
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "b1dbee47b6a2ad7c959431576721fc1e96938f61506ff1044ac90fa685e9851e",
+          "bytes": 274,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 118,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 8,
+        "located": 8,
+        "equal": 0,
+        "mismatch": 8,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 26303,
+          "declared_sha256": "9d2e3c74a611490699bc3d2d7e5c36f36aa9506caa15bebbd91a1016b4c4a280",
+          "computed_sha256": "e6f4b181ffda091fb10f4c5656d83980a739da57206d263fa1467d68ac9c6a04",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 1225361,
+          "declared_sha256": "39f2723457fee8def0025f408b99892145de440c65a1e172a971cde83a9751ae",
+          "computed_sha256": "cf78fdc8d460571ac9401b1745c7ed495a980caa9eec840af16f91d891de20f8",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 862497,
+          "declared_sha256": "2ca1208b47ee91b28e5b02e1ed1fa3cdba8f3f144cee02e0fbe8c310b367ddbe",
+          "computed_sha256": "aa850684e391765141adbfe612ed7514833c634d2269cc92df07e5c8bf369e10",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 3,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 3541090,
+          "declared_sha256": "37d7c8c99d2f5172efbf40858688cea20cf1c723962b259642f0ad10f7231787",
+          "computed_sha256": "a6885f75824bbc948253e3fc40cff5b041d914b2059871fc7c5101a2f254d938",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 4,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 356364,
+          "declared_sha256": "89b1ab44baed82eae9fad896086ad484d601db9628135e50a9d39348aa6769a7",
+          "computed_sha256": "e4394efb016f12f29dd133926449a4351478c89897b4f8856dae3f39312d8357",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 5,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 1607808,
+          "declared_sha256": "9c2657dcb9a2f170d681e15790cf8f295e7fa2ae57417e44590a34a16b368925",
+          "computed_sha256": "e5e74c8d90b5208be3fde5635cfc61d3ccec03fa813c4e59e636be9460bdc42b",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 6,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 4915162,
+          "declared_sha256": "8c08518df8af1352e6b56812f1b5ccaad0d64749248a079838e7239d2b59272e",
+          "computed_sha256": "f9e6da1ba2c22d6c1587e6e7bdb90d6819b59ec14932a78fcad10892ca700975",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 7,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 1904399,
+          "declared_sha256": "fc581537368ba7715fab2ffd187f395080b24dfd209a47c20c7c97f0a28f18f4",
+          "computed_sha256": "cc81fe13f7f90cb492e83d8ab92b8f724a6e6b0216da320971bbbc125e717aa0",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat"
+        ],
+        "unit_count": 3,
+        "position_count": 9,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "track": 3,
+          "position": 9
+        },
+        "nested_fact_node_count": 118,
+        "nested_status_counts": {
+          "CONFIRMED": 107,
+          "INSUFFICIENT": 1,
+          "UNKNOWN": 10
+        },
+        "facts_flat_count": 118,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": false
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 94,
+        "session_info_empty_payload_count": 94,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 4,
+        "first_usage_line": 2674,
+        "event_file_sha256": "9eb7cdeaf316b740a0a8b527faf82792a073aa0e15aa8b62261d7af51cb3f24e",
+        "event_line_count": 2691
+      }
+    },
+    {
+      "run_id": "bs-entrepreneurship#1",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "4354b5847b8edf691416e64c9483f3ba4b687060c7c9bca155fd1914c92c565c",
+          "bytes": 31672,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "0fa8cf3a1ca5b31f8665fbeea0eb41557e6b50d14b5fe1c392ad7fe0283a45b1",
+          "bytes": 34227,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "baa7f22dc3073a29b1bd782fb03ba1fc85f169b6e38ff217d05188181774f9dc",
+          "bytes": 10324
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "94cd24acef8476a1e3ff5f55e5f4efa76e2d651b217add93fcc8e2b66593ce87",
+          "bytes": 272,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 46,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 3,
+        "located": 3,
+        "equal": 0,
+        "mismatch": 3,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 13067,
+          "declared_sha256": "30bea6438d286de346bba2a65fc80c5048ce6d8be401aacb4c4144357bac0166",
+          "computed_sha256": "5818f0ce2a845e39ea1a12486e92698efbb8d0a8057a81bc756f8e16db65c86a",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 28823,
+          "declared_sha256": "ebf440dd84095010f1debf4e942e162f3438fde643216fdcf14b61d43d89c99e",
+          "computed_sha256": "7d9539c0039c251ba213266bef4cdaa9f308b00b5847eacc8a06b913356e984d",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 44412,
+          "declared_sha256": "5ab7897f49132656f0bfd47ed7b7471e8379fc57a70bd6f5c6bdc462e3f91486",
+          "computed_sha256": "88aed00782d1b276c34bf7319921518d44c0927b7bc314c7f330c8d0fb78a7f0",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat",
+          "metadata"
+        ],
+        "unit_count": 1,
+        "position_count": 4,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 1,
+          "position": 4
+        },
+        "nested_fact_node_count": 46,
+        "nested_status_counts": {
+          "CONFIRMED": 31,
+          "UNKNOWN": 15
+        },
+        "facts_flat_count": 46,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 65,
+        "session_info_empty_payload_count": 65,
+        "usage_count": 0,
+        "usage_empty_payload_count": 0,
+        "returned_model_fields": [],
+        "first_session_info_line": 4,
+        "first_usage_line": null,
+        "event_file_sha256": "647b299dc500ea153fc271131c8dda225fc70e2f7e8de8ce177585529964de78",
+        "event_line_count": 13688
+      }
+    },
+    {
+      "run_id": "codex1#1",
+      "runner_kind": "codex",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": false,
+      "result_files": {
+        "opportunities.json": {
+          "status": "MISSING"
+        },
+        "evidence.json": {
+          "status": "MISSING"
+        },
+        "report.md": {
+          "status": "MISSING",
+          "sha256": null,
+          "bytes": null
+        }
+      },
+      "old_verification": {
+        "verdict": "ABSENT",
+        "file": {
+          "status": "MISSING"
+        },
+        "facts_total": null,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 0,
+        "located": 0,
+        "equal": 0,
+        "mismatch": 0,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [],
+      "schema_checks": {
+        "opportunities": null,
+        "evidence": null
+      },
+      "structure": null,
+      "model_audit": {
+        "db_configured_model": "gpt-5.6-sol",
+        "actual_returned_model": null,
+        "actual_model_status": "NOT_ASSESSED_FOR_NON_WMA",
+        "event_file_present": false,
+        "session_info_count": 0,
+        "session_info_empty_payload_count": 0,
+        "usage_count": 0,
+        "usage_empty_payload_count": 0,
+        "returned_model_fields": [],
+        "first_session_info_line": null,
+        "first_usage_line": null
+      }
+    },
+    {
+      "run_id": "interact-test#1",
+      "runner_kind": null,
+      "db_status": "COMPLETE",
+      "configured_mode": "interactive",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "24e098c1e5a962f2d72d852c084cda5c92e4219983b1c40f9db6d23709f8da36",
+          "bytes": 29920,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "a49ec7261676d20a6ee02c22da38f8c2bd7bd87530b1110a20d1a5cc1818a221",
+          "bytes": 46760,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "c263aa5d2bd0d4bb218778b35fb4eb620da9fc79912298c92febe602dd6cc75f",
+          "bytes": 10605
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "4d8e75f33b9a74e49f60eebae1e3daa0bf3e7b0b9f319fcf50d5626a043222d9",
+          "bytes": 1019,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 53,
+        "issue_rule_counts": {
+          "V5": 3
+        }
+      },
+      "artifact_counts": {
+        "declared": 5,
+        "located": 3,
+        "equal": 3,
+        "mismatch": 0,
+        "missing_hash": 2,
+        "invalid_hash": 0,
+        "unlocatable": 2,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": false,
+          "path_interpretation": "MISSING_LOCAL_PATH",
+          "file_status": "MISSING_LOCAL_PATH",
+          "extension": null,
+          "bytes": null,
+          "declared_sha256": null,
+          "computed_sha256": null,
+          "hash_result": "MISSING_HASH",
+          "id_field": "artifact_id",
+          "media_type_present": true,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": false,
+          "path_interpretation": "MISSING_LOCAL_PATH",
+          "file_status": "MISSING_LOCAL_PATH",
+          "extension": null,
+          "bytes": null,
+          "declared_sha256": null,
+          "computed_sha256": null,
+          "hash_result": "MISSING_HASH",
+          "id_field": "artifact_id",
+          "media_type_present": true,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 1569210,
+          "declared_sha256": "3fb19e7f10854b82f78eda27ff7b60407033b8b4a02cafeb7faa654cc3ecbecd",
+          "computed_sha256": "3fb19e7f10854b82f78eda27ff7b60407033b8b4a02cafeb7faa654cc3ecbecd",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": true,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 3,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 697216,
+          "declared_sha256": "a643ea183affb021ad0518e8b5f688bdff5168c45cf0067cd4adc40623834b7a",
+          "computed_sha256": "a643ea183affb021ad0518e8b5f688bdff5168c45cf0067cd4adc40623834b7a",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": true,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 4,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 659997,
+          "declared_sha256": "76cde7f4435cb82d76cba86100f766d2d470ed4ca28ac664dc3cee00ad725490",
+          "computed_sha256": "76cde7f4435cb82d76cba86100f766d2d470ed4ca28ac664dc3cee00ad725490",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": true,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "case_id",
+          "entities",
+          "facts_flat",
+          "integrity_notes",
+          "investigated_at",
+          "seed_url"
+        ],
+        "unit_count": 1,
+        "position_count": 9,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 1,
+          "position": 9
+        },
+        "nested_fact_node_count": 53,
+        "nested_status_counts": {
+          "CONFIRMED": 50,
+          "UNKNOWN": 3
+        },
+        "facts_flat_count": 53,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "gpt-5.6-sol",
+        "actual_returned_model": null,
+        "actual_model_status": "NOT_ASSESSED_FOR_NON_WMA",
+        "event_file_present": false,
+        "session_info_count": 0,
+        "session_info_empty_payload_count": 0,
+        "usage_count": 0,
+        "usage_empty_payload_count": 0,
+        "returned_model_fields": [],
+        "first_session_info_line": null,
+        "first_usage_line": null
+      }
+    },
+    {
+      "run_id": "phase1-smoke#1",
+      "runner_kind": null,
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": false,
+      "result_files": {
+        "opportunities.json": {
+          "status": "MISSING"
+        },
+        "evidence.json": {
+          "status": "MISSING"
+        },
+        "report.md": {
+          "status": "MISSING",
+          "sha256": null,
+          "bytes": null
+        }
+      },
+      "old_verification": {
+        "verdict": "ABSENT",
+        "file": {
+          "status": "MISSING"
+        },
+        "facts_total": null,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 0,
+        "located": 0,
+        "equal": 0,
+        "mismatch": 0,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [],
+      "schema_checks": {
+        "opportunities": null,
+        "evidence": null
+      },
+      "structure": null,
+      "model_audit": {
+        "db_configured_model": "gpt-5.6-sol",
+        "actual_returned_model": null,
+        "actual_model_status": "NOT_ASSESSED_FOR_NON_WMA",
+        "event_file_present": false,
+        "session_info_count": 0,
+        "session_info_empty_payload_count": 0,
+        "usage_count": 0,
+        "usage_empty_payload_count": 0,
+        "returned_model_fields": [],
+        "first_session_info_line": null,
+        "first_usage_line": null
+      }
+    },
+    {
+      "run_id": "phase2-smoke#1",
+      "runner_kind": null,
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": false,
+      "result_files": {
+        "opportunities.json": {
+          "status": "MISSING"
+        },
+        "evidence.json": {
+          "status": "MISSING"
+        },
+        "report.md": {
+          "status": "MISSING",
+          "sha256": null,
+          "bytes": null
+        }
+      },
+      "old_verification": {
+        "verdict": "ABSENT",
+        "file": {
+          "status": "MISSING"
+        },
+        "facts_total": null,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 0,
+        "located": 0,
+        "equal": 0,
+        "mismatch": 0,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [],
+      "schema_checks": {
+        "opportunities": null,
+        "evidence": null
+      },
+      "structure": null,
+      "model_audit": {
+        "db_configured_model": "gpt-5.6-sol",
+        "actual_returned_model": null,
+        "actual_model_status": "NOT_ASSESSED_FOR_NON_WMA",
+        "event_file_present": false,
+        "session_info_count": 0,
+        "session_info_empty_payload_count": 0,
+        "usage_count": 0,
+        "usage_empty_payload_count": 0,
+        "returned_model_fields": [],
+        "first_session_info_line": null,
+        "first_usage_line": null
+      }
+    },
+    {
+      "run_id": "web-1788454943467#1",
+      "runner_kind": "workbuddy-cli",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "c4f46fba82b197bd3b4dd996aa84cffbafe7d517203a0a989c935e733d6a5d45",
+          "bytes": 12323,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "86c20d1e149abc6f4e28a625bef340cd04c53c0ee576fbb92d9800a21a3b0b73",
+          "bytes": 17434,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "0cfdee70dce346428c6187860585a4a29de9cfab8089e80db47ea22c8a2b936d",
+          "bytes": 7050
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "c8291eb7284b5fd3d0fbcef3a0124e0767186b9d8f8993f7ebaaa0ca9785ab80",
+          "bytes": 271,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 22,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 3,
+        "located": 2,
+        "equal": 2,
+        "mismatch": 0,
+        "missing_hash": 1,
+        "invalid_hash": 0,
+        "unlocatable": 1,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": false,
+          "path_interpretation": "MISSING_LOCAL_PATH",
+          "file_status": "MISSING_LOCAL_PATH",
+          "extension": null,
+          "bytes": null,
+          "declared_sha256": null,
+          "computed_sha256": null,
+          "hash_result": "MISSING_HASH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 27648,
+          "declared_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+          "computed_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 33792,
+          "declared_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+          "computed_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat"
+        ],
+        "unit_count": 2,
+        "position_count": 4,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 2,
+          "position": 4
+        },
+        "nested_fact_node_count": 22,
+        "nested_status_counts": {
+          "CONFIRMED": 19,
+          "UNKNOWN": 3
+        },
+        "facts_flat_count": 33,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": false,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "NOT_ASSESSED_FOR_NON_WMA",
+        "event_file_present": false,
+        "session_info_count": 0,
+        "session_info_empty_payload_count": 0,
+        "usage_count": 0,
+        "usage_empty_payload_count": 0,
+        "returned_model_fields": [],
+        "first_session_info_line": null,
+        "first_usage_line": null
+      }
+    },
+    {
+      "run_id": "wma-2026-1#1",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "173df5ef3fe6e96b26a98254069d518b583694043514776814ac3aa09f700503",
+          "bytes": 1200853,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "9b73af97fa6e34b669bd408c2cd85818f302405665c6eeb8ea5f520758b6bcd8",
+          "bytes": 1220691,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "1908eddab121dc32554df194dfd0b0438d3a898089e43feec948a8fdf2a45417",
+          "bytes": 87991
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "8b56934aed511ed542b1d3eb7752366338b0260a4f6d0998e01fa6daf5f8ac7a",
+          "bytes": 277,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 2419,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 3,
+        "located": 3,
+        "equal": 0,
+        "mismatch": 3,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 11968,
+          "declared_sha256": "c20873f5b4bdabc923420ef814ef998096d0d5be3a6e49698de30f72957e44c8",
+          "computed_sha256": "744d9e97bb51a79524d63fda49dbfe486325242c627ec2571b53c9d3ad327f2f",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".xlsx",
+          "bytes": 5160624,
+          "declared_sha256": "a3485e908528dd22a917b5acc83db0760d5412e8598729bd49f54f52bcc1ae38",
+          "computed_sha256": "4e573a595a2eb5dd190d2372c58d54d4f2fdc7805c3c05b77afc75f79d828ee0",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 166687,
+          "declared_sha256": "3790369304ca83fdae88729127fa2a60fdc8e17b2b6fafeb5f6e98f575ea88c4",
+          "computed_sha256": "bf180784bf5577181400ebbb5eecc4c396f3bc5c754e419ff94a407d0bcdcb34",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat",
+          "metadata"
+        ],
+        "unit_count": 58,
+        "position_count": 106,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 58,
+          "position": 106
+        },
+        "nested_fact_node_count": 2419,
+        "nested_status_counts": {
+          "CONFIRMED": 2153,
+          "UNKNOWN": 266
+        },
+        "facts_flat_count": 2419,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 102,
+        "session_info_empty_payload_count": 102,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 5,
+        "first_usage_line": 12299,
+        "event_file_sha256": "4d924935ce910b58383cf651979a3290166ba87ecacd481950dbc0e4a0de60fa",
+        "event_line_count": 12311
+      }
+    },
+    {
+      "run_id": "wma-2026-2#1",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "ef259a3fca1243f38c06d138afafac0da744f6345cb5317f9702bce7c0adfebe",
+          "bytes": 152796,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "9402159bbf16d96f0c8e335bdff88bcb96945e1d669f33fc8ceef55beda20b36",
+          "bytes": 188222,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "dfedc9e9687b16f25127a3f76e0b4d9bb1f1277de6067a3e419a601d445727cb",
+          "bytes": 35302
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "fc8bde38c7ae48b5a56c8bb42c083b23b50b0334609f8811c9cbc1a551fba5f9",
+          "bytes": 273,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 262,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 9,
+        "located": 9,
+        "equal": 2,
+        "mismatch": 7,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".json",
+          "bytes": 36571,
+          "declared_sha256": "2c963fe0850847e82bc4cdde5950c63fb1711f6d2fbfa1714192810c3d5cb406",
+          "computed_sha256": "2c963fe0850847e82bc4cdde5950c63fb1711f6d2fbfa1714192810c3d5cb406",
+          "hash_result": "EQUAL",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 34842,
+          "declared_sha256": "008bb1572f17ddba52a8b3a623b189ca6e0bf8f328dc6e1b7dec71f3691e27f9",
+          "computed_sha256": "008bb1572f17ddba52a8b3a623b189ca6e0bf8f328dc6e1b7dec71f3691e27f9",
+          "hash_result": "EQUAL",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpeg",
+          "bytes": 299995,
+          "declared_sha256": "b8d9dba5b6ba9daa72ac2c90590cf3db8a9ff259153ee2eacd6eccd07b5cc311",
+          "computed_sha256": "0a29a03247d4d9f7c08a6789430e6dbf4ca92d0560a90ed6a0ba75c0ed30e3fc",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 3,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpeg",
+          "bytes": 248450,
+          "declared_sha256": "30f4ddec0ac920e62a19c70fb642bf96ebd728d6277c2d285420ffa180215d07",
+          "computed_sha256": "4071e6edc9e3b0a4d36c327410cffe4a78dc709a6f8fdd853c9d7e694fe6e355",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 4,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpeg",
+          "bytes": 633022,
+          "declared_sha256": "e1ac3e24b5d234866a41f0e27308353603f234e01dda026f68ce383b0bf11049",
+          "computed_sha256": "84ebe64e42b8e1e1da44a685c91c45d34a1bc0b35dabb0ade21d7a3b76fc4fae",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 5,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".png",
+          "bytes": 61508,
+          "declared_sha256": "65e3d522e6fb7dca88256a107a460007cbfa7e4053d6fd7db57abd0118cfa8c1",
+          "computed_sha256": "2b326ec8ca157bc6aeeb94d8290391a827db8a323ba657cbe05ecd86d0e2743b",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 6,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpeg",
+          "bytes": 198342,
+          "declared_sha256": "1f3e147041a2ec48756d108f58c9daaf0aa5379cb6fe38cf867919c893e9b267",
+          "computed_sha256": "b2d2fec2cddfdf352459ea07a0c0fef3104f53e32983066442736897923ca016",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 7,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpeg",
+          "bytes": 198342,
+          "declared_sha256": "1f3e147041a2ec48756d108f58c9daaf0aa5379cb6fe38cf867919c893e9b267",
+          "computed_sha256": "b2d2fec2cddfdf352459ea07a0c0fef3104f53e32983066442736897923ca016",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 8,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpeg",
+          "bytes": 232739,
+          "declared_sha256": "c9a2c22581d5321a050a89877e00443546107911a7007dc062e82e8d06c83e3e",
+          "computed_sha256": "6046bb347dc41eeb4b2d2a154477f3a346f0f8f8a01c2dd9b07e6aa7a3d92861",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat"
+        ],
+        "unit_count": 7,
+        "position_count": 28,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 7,
+          "position": 28
+        },
+        "nested_fact_node_count": 262,
+        "nested_status_counts": {
+          "CONFIRMED": 251,
+          "UNKNOWN": 9,
+          "CONFLICT": 2
+        },
+        "facts_flat_count": 262,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 70,
+        "session_info_empty_payload_count": 70,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 5,
+        "first_usage_line": 12867,
+        "event_file_sha256": "0b6830cc3914ee90c26eb65e3ba051a9a008d5aa033f3aafd0afd9c2e428761a",
+        "event_line_count": 12885
+      }
+    },
+    {
+      "run_id": "wma-2026-3#2",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "1808d07b867621ccec4e4f567ec0d536eedac017ba9d7bce108664e573c1015f",
+          "bytes": 2249133,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "e0163381f67fdf1179ff5a1fd9e397fc4dad570a36f025491dcb2be2f2d3d15a",
+          "bytes": 2317735,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "aa17a347ffc30f1acf1995e9a8511564eb05756903c615afa812c22fc88ecf4c",
+          "bytes": 15268
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "747ff3940efaeb8dc4b8aba2afdca9d6fc5058c2f3e2467d1b0df97feb70f187",
+          "bytes": 277,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 3337,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 3,
+        "located": 3,
+        "equal": 2,
+        "mismatch": 1,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 311977,
+          "declared_sha256": "16d76762de5e253fcd09aca3e65fb89ebb9108d55e4d8aaa84a5cce75d3eda38",
+          "computed_sha256": "16d76762de5e253fcd09aca3e65fb89ebb9108d55e4d8aaa84a5cce75d3eda38",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".json",
+          "bytes": 324311,
+          "declared_sha256": "b05bb06b6707092a7290945443608bad066ba70ad8125c2f90a6e81360d06440",
+          "computed_sha256": "b05bb06b6707092a7290945443608bad066ba70ad8125c2f90a6e81360d06440",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 11968,
+          "declared_sha256": "6369fe78a7aec59a82ea5f5709296e36ef76a5f70a917722a3ea3cdad3c9c992",
+          "computed_sha256": "21a245ee1d0161ea3e4078dc29b96c31a6bf963a681daafa736d4db6224aec44",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "case_id",
+          "entities",
+          "facts_flat",
+          "summary"
+        ],
+        "unit_count": 274,
+        "position_count": 300,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 274,
+          "position": 300
+        },
+        "nested_fact_node_count": 3337,
+        "nested_status_counts": {
+          "CONFIRMED": 3019,
+          "UNKNOWN": 318
+        },
+        "facts_flat_count": 3337,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 79,
+        "session_info_empty_payload_count": 79,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 5,
+        "first_usage_line": 13973,
+        "event_file_sha256": "c849b4da6d90f8ec96e8fdac4ac1a4893597e9dfa7110fa08f3cc3ffd1822d87",
+        "event_line_count": 13982
+      }
+    },
+    {
+      "run_id": "wma-smoke4#1",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": false,
+      "result_files": {
+        "opportunities.json": {
+          "status": "MISSING"
+        },
+        "evidence.json": {
+          "status": "MISSING"
+        },
+        "report.md": {
+          "status": "MISSING",
+          "sha256": null,
+          "bytes": null
+        }
+      },
+      "old_verification": {
+        "verdict": "ABSENT",
+        "file": {
+          "status": "MISSING"
+        },
+        "facts_total": null,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 0,
+        "located": 0,
+        "equal": 0,
+        "mismatch": 0,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [],
+      "schema_checks": {
+        "opportunities": null,
+        "evidence": null
+      },
+      "structure": null,
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 42,
+        "session_info_empty_payload_count": 42,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 3,
+        "first_usage_line": 7274,
+        "event_file_sha256": "beab567a819dbfc329b9a2272363bee1bb3e4d24497689c39b760a95ae9ae963",
+        "event_line_count": 7278
+      }
+    },
+    {
+      "run_id": "wma-verify#1",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": false,
+      "result_files": {
+        "opportunities.json": {
+          "status": "MISSING"
+        },
+        "evidence.json": {
+          "status": "MISSING"
+        },
+        "report.md": {
+          "status": "MISSING",
+          "sha256": null,
+          "bytes": null
+        }
+      },
+      "old_verification": {
+        "verdict": "ABSENT",
+        "file": {
+          "status": "MISSING"
+        },
+        "facts_total": null,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 0,
+        "located": 0,
+        "equal": 0,
+        "mismatch": 0,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [],
+      "schema_checks": {
+        "opportunities": null,
+        "evidence": null
+      },
+      "structure": null,
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 43,
+        "session_info_empty_payload_count": 43,
+        "usage_count": 0,
+        "usage_empty_payload_count": 0,
+        "returned_model_fields": [],
+        "first_session_info_line": 3,
+        "first_usage_line": null,
+        "event_file_sha256": "41fc5b08272ec7cf6f66dc0dcb4ae160fa838342a4ae01ae55f71fc4366016ae",
+        "event_line_count": 6792
+      }
+    },
+    {
+      "run_id": "wma-zjhr#2",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": false,
+      "result_files": {
+        "opportunities.json": {
+          "status": "MISSING"
+        },
+        "evidence.json": {
+          "status": "MISSING"
+        },
+        "report.md": {
+          "status": "MISSING",
+          "sha256": null,
+          "bytes": null
+        }
+      },
+      "old_verification": {
+        "verdict": "ABSENT",
+        "file": {
+          "status": "MISSING"
+        },
+        "facts_total": null,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 0,
+        "located": 0,
+        "equal": 0,
+        "mismatch": 0,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [],
+      "schema_checks": {
+        "opportunities": null,
+        "evidence": null
+      },
+      "structure": null,
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 47,
+        "session_info_empty_payload_count": 47,
+        "usage_count": 0,
+        "usage_empty_payload_count": 0,
+        "returned_model_fields": [],
+        "first_session_info_line": 3,
+        "first_usage_line": null,
+        "event_file_sha256": "178442eaf47158ebd828cf385536126722cb0ce2998ec6cf06f10098a845cc41",
+        "event_line_count": 8734
+      }
+    },
+    {
+      "run_id": "wma-zjhr#3",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "95de89ff99c76d72523fc87fca253890c56880860e3d4d80175ff21d585167de",
+          "bytes": 27696,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "494d6a687d698a329c7ea937e97bf9bfa1e2d00937c0cede66e913aae4248cd4",
+          "bytes": 28640,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "f9f28bc0c02d1567e00a084d92dcce307fdc0f8a90f057007fa7b87a9e7165b2",
+          "bytes": 7282
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "7961dc6e7d5c037926c517a605c2a6f15d458971b43dc81506adbf7abd7fc116",
+          "bytes": 1057,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 51,
+        "issue_rule_counts": {
+          "V4": 3
+        }
+      },
+      "artifact_counts": {
+        "declared": 3,
+        "located": 3,
+        "equal": 0,
+        "mismatch": 3,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 58003,
+          "declared_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+          "computed_sha256": "cc9cbd6de45cbede24d5bf3f42353da653d2a25441487689f5b28d333b7fd4b9",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 34176,
+          "declared_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+          "computed_sha256": "fbe5c3c9d46a534a26a85fbbd116ce3a17ff0ca451b2b5d793834da25faa9250",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 44038,
+          "declared_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+          "computed_sha256": "1c5b7195b638620efccec9527f1522757e2789234aab1b31d5664ebbe76e9f0b",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": false,
+          "error_keyword_counts": {
+            "required": 5
+          }
+        },
+        "evidence": {
+          "valid": false,
+          "error_keyword_counts": {
+            "required": 2
+          }
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": true,
+        "opportunities_top_level_keys": [
+          "case_id",
+          "investigated_at",
+          "opportunity",
+          "schema_version",
+          "seed_url"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "case_id",
+          "entity_tree",
+          "flattened_facts",
+          "investigated_at",
+          "schema_version",
+          "seed_url",
+          "summary_counts"
+        ],
+        "unit_count": 0,
+        "position_count": 0,
+        "entity_kind_counts": {},
+        "nested_fact_node_count": 51,
+        "nested_status_counts": {
+          "CONFIRMED": 41,
+          "CONFLICT": 1,
+          "UNKNOWN": 8,
+          "INSUFFICIENT": 1
+        },
+        "facts_flat_count": 0,
+        "alternate_flattened_facts_count": 51,
+        "nested_flat_projection_equal": null,
+        "canonical_entity_binding_equal": null
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 59,
+        "session_info_empty_payload_count": 59,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 3,
+        "first_usage_line": 9477,
+        "event_file_sha256": "c2490fa184381ad0d94ec4eb3e0c3474b424c6236aea33845c3315297d0379ef",
+        "event_line_count": 9489
+      }
+    },
+    {
+      "run_id": "wma-zjhr#4",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "92504636aa9c7fb9e2c616c02b55758df9a24682505f0f7c824995df3b47825c",
+          "bytes": 25473,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "86d33a106f535d9809cca1c53c04ec6332c7323c8ba9d93391cb74d702f991a7",
+          "bytes": 31913,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "5305b923ba151276098d9c8b15917914f7899e37cc9192253792e720719b4ce5",
+          "bytes": 9344
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "69d1e2937f183502db2ec443a70b334d1e1284595ad4d937c4670435b7123719",
+          "bytes": 271,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 42,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 3,
+        "located": 3,
+        "equal": 0,
+        "mismatch": 3,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 58003,
+          "declared_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+          "computed_sha256": "cc9cbd6de45cbede24d5bf3f42353da653d2a25441487689f5b28d333b7fd4b9",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": true,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 34176,
+          "declared_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+          "computed_sha256": "fbe5c3c9d46a534a26a85fbbd116ce3a17ff0ca451b2b5d793834da25faa9250",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": true,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 44038,
+          "declared_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+          "computed_sha256": "1c5b7195b638620efccec9527f1522757e2789234aab1b31d5664ebbe76e9f0b",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": true,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat",
+          "metadata"
+        ],
+        "unit_count": 1,
+        "position_count": 4,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 1,
+          "position": 4
+        },
+        "nested_fact_node_count": 42,
+        "nested_status_counts": {
+          "CONFIRMED": 38,
+          "UNKNOWN": 4
+        },
+        "facts_flat_count": 42,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 43,
+        "session_info_empty_payload_count": 43,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 4,
+        "first_usage_line": 5225,
+        "event_file_sha256": "7e42b7d6a442e84d63a0858e632991970b24ae1a537878209280cc80d00ca2a0",
+        "event_line_count": 5237
+      }
+    },
+    {
+      "run_id": "zjhr-cli#1#1",
+      "runner_kind": "workbuddy-cli",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": false,
+      "result_files": {
+        "opportunities.json": {
+          "status": "MISSING"
+        },
+        "evidence.json": {
+          "status": "MISSING"
+        },
+        "report.md": {
+          "status": "MISSING",
+          "sha256": null,
+          "bytes": null
+        }
+      },
+      "old_verification": {
+        "verdict": "ABSENT",
+        "file": {
+          "status": "MISSING"
+        },
+        "facts_total": null,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 0,
+        "located": 0,
+        "equal": 0,
+        "mismatch": 0,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [],
+      "schema_checks": {
+        "opportunities": null,
+        "evidence": null
+      },
+      "structure": null,
+      "model_audit": {
+        "db_configured_model": "gpt-5.6-sol",
+        "actual_returned_model": null,
+        "actual_model_status": "NOT_ASSESSED_FOR_NON_WMA",
+        "event_file_present": false,
+        "session_info_count": 0,
+        "session_info_empty_payload_count": 0,
+        "usage_count": 0,
+        "usage_empty_payload_count": 0,
+        "returned_model_fields": [],
+        "first_session_info_line": null,
+        "first_usage_line": null
+      }
+    },
+    {
+      "run_id": "zjhr-live#1",
+      "runner_kind": null,
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "d6f2e3fcfbc36d4831c5d97435f55f6e4c7d8fcb56b9d8256d7745be40bcb013",
+          "bytes": 47361,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "a689e423ff8149528e31f6b3966b5f85714141fc3c4c64151e48f85d71da39ff",
+          "bytes": 48838,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "db76bed7e6e1f3cd504bb9660286aeb312066b31a39bcf7c5c8d698c5e185646",
+          "bytes": 8103
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "4cbf319c0f64747f96a7a937c0e088b71f7f047fdd44a9ecd8ed92232132cdaa",
+          "bytes": 1276,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 58,
+        "issue_rule_counts": {
+          "V5": 4
+        }
+      },
+      "artifact_counts": {
+        "declared": 7,
+        "located": 7,
+        "equal": 7,
+        "mismatch": 0,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 71348,
+          "declared_sha256": "06d7fe5958cdd658731c693bcb341f9b9abed523b877fc20b06735cc97687ede",
+          "computed_sha256": "06d7fe5958cdd658731c693bcb341f9b9abed523b877fc20b06735cc97687ede",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 11587,
+          "declared_sha256": "0a9e6fdb892a61903b1bead121cd74150165325aac2097f65c76437f2674a11e",
+          "computed_sha256": "0a9e6fdb892a61903b1bead121cd74150165325aac2097f65c76437f2674a11e",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 57180,
+          "declared_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+          "computed_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 3,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 27648,
+          "declared_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+          "computed_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 4,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 33792,
+          "declared_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+          "computed_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 5,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 183074,
+          "declared_sha256": "da0aae5c403fabefdabc46bb100e39dd675ea44d0578a80e5905dacb7c6bc709",
+          "computed_sha256": "da0aae5c403fabefdabc46bb100e39dd675ea44d0578a80e5905dacb7c6bc709",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": true
+        },
+        {
+          "evidence_artifact_index": 6,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 197325,
+          "declared_sha256": "e8710169259117fba720370ddb81feefe34e09649bc03b3d3c4871ec55c20adf",
+          "computed_sha256": "e8710169259117fba720370ddb81feefe34e09649bc03b3d3c4871ec55c20adf",
+          "hash_result": "EQUAL",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": true
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "case_id",
+          "entities",
+          "entity_tree",
+          "facts_flat",
+          "investigated_at",
+          "quality_notes",
+          "seed_url",
+          "selected_announcement_url"
+        ],
+        "unit_count": 1,
+        "position_count": 4,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 1,
+          "position": 4
+        },
+        "nested_fact_node_count": 58,
+        "nested_status_counts": {
+          "CONFIRMED": 48,
+          "INSUFFICIENT": 2,
+          "UNKNOWN": 8
+        },
+        "facts_flat_count": 58,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "gpt-5.6-sol",
+        "actual_returned_model": null,
+        "actual_model_status": "NOT_ASSESSED_FOR_NON_WMA",
+        "event_file_present": false,
+        "session_info_count": 0,
+        "session_info_empty_payload_count": 0,
+        "usage_count": 0,
+        "usage_empty_payload_count": 0,
+        "returned_model_fields": [],
+        "first_session_info_line": null,
+        "first_usage_line": null
+      }
+    },
+    {
+      "run_id": "zz-wma-2#1",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "70036dd5cd82f6e883b622fe059ec12d544eae79a38b66c1889b94a2587c0c5e",
+          "bytes": 3361949,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "bfa2ea15876dde5481a82742d14b5c800c1a5e081251775d513eeca18eaf0301",
+          "bytes": 3060979,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "88d7d3cced3bf391a154179155f0079d6f9dabf9f02ddc63cf1c38665f9545da",
+          "bytes": 76416
+        }
+      },
+      "old_verification": {
+        "verdict": "NEEDS_REVIEW",
+        "file": {
+          "status": "PARSED",
+          "sha256": "b9688d3ce2f42c460c39d5cac3a081e0deee8cafecd7298e8547c83d3c53bba6",
+          "bytes": 813,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 6179,
+        "issue_rule_counts": {
+          "V3": 3
+        }
+      },
+      "artifact_counts": {
+        "declared": 3,
+        "located": 3,
+        "equal": 0,
+        "mismatch": 3,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".txt",
+          "bytes": 17224,
+          "declared_sha256": "35a751cbdb1d91342fb540049a470f08993420ff5cb8b335bc5cd707c790d902",
+          "computed_sha256": "2530ad66e86ff1ac647eae01bc6aa91c8df6a34c1daccbea1fc36d8fd9373bd0",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".xlsx",
+          "bytes": 425651,
+          "declared_sha256": "d466fbfb51ccffd7446b1e864c0628ff7217be400ec9ae44f3216e0f85e6cada",
+          "computed_sha256": "d9f216899904631934d7f4ff0b3a01c2ac86bb6482f51477dd7bc4ad36fe4ee5",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 162651,
+          "declared_sha256": "f76f63456f7f1d2c64ca6a617be05a5383cd2c3efdeedd5e75e8c0588f50692d",
+          "computed_sha256": "f1f298e293e939a43528ba9afc9bfcc13de1b5cf5a9f396636c2df68c62b54de",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": true
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat",
+          "metadata"
+        ],
+        "unit_count": 95,
+        "position_count": 232,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 95,
+          "position": 232
+        },
+        "nested_fact_node_count": 6179,
+        "nested_status_counts": {
+          "CONFIRMED": 4879,
+          "UNKNOWN": 1300
+        },
+        "facts_flat_count": 6179,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 118,
+        "session_info_empty_payload_count": 118,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 5,
+        "first_usage_line": 18648,
+        "event_file_sha256": "190cac1ff355a5fa4baccc71ca967193bb7fc4134a5c2cb7d40a2035af86f093",
+        "event_line_count": 18660
+      }
+    },
+    {
+      "run_id": "zz-wma-3#1",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "d15ee878f9550ff4c8b122a29905260587773ab8696aa6809bbd96f441c869d2",
+          "bytes": 585895,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "c0a09b70f5d9f68d2d1519c734db59fce72ae3636483fee66393da4fd7ed30d3",
+          "bytes": 557432,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "44eea8836fb370b3a14c7278a1e66c3c6d105437343a67e581c54facda0df672",
+          "bytes": 8349
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "810b9b8051564c51e139d291ae009f2c905c398e6608ce7ba2a50b09b3461c0f",
+          "bytes": 277,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 928,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 13,
+        "located": 13,
+        "equal": 2,
+        "mismatch": 11,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 11968,
+          "declared_sha256": "fb35b141167c3fb04897a8a6203146ff674f7ce84517ea3907fd1481bc1cf682",
+          "computed_sha256": "8821c59dbccf831ebef71a57b12ba2b3b87f0bdf4cfea642aeffa9a3c59a14b2",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".json",
+          "bytes": 27903,
+          "declared_sha256": "5a2bf6335f0edc8e06f2e821e59d4b0a72b0bf7e67ef34f71fb399d2aeaea8ad",
+          "computed_sha256": "5a2bf6335f0edc8e06f2e821e59d4b0a72b0bf7e67ef34f71fb399d2aeaea8ad",
+          "hash_result": "EQUAL",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 26720,
+          "declared_sha256": "947c9bdf8026bc6ba823e7315437ae174d161346d1afaf3e18876a8fda43da73",
+          "computed_sha256": "947c9bdf8026bc6ba823e7315437ae174d161346d1afaf3e18876a8fda43da73",
+          "hash_result": "EQUAL",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 3,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".txt",
+          "bytes": 7728,
+          "declared_sha256": "b5dbfedc096a1aeeead7512ef73cdf33602e825d6298b0515bf96dc2f25942a6",
+          "computed_sha256": "d82067a223d44d2740af4759850b497ad0b29a5fed2c2e86b724b82208a232ff",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 4,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpg",
+          "bytes": 918775,
+          "declared_sha256": "c9c1b6dc857ac8ac078a1f824eb7de07cecbbda2b66594bd22955ec285c85254",
+          "computed_sha256": "c76086ee1a54bddb1de91c6812f9654e6094320b0b5f58668838e31e9a9dc3ac",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 5,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpg",
+          "bytes": 946648,
+          "declared_sha256": "345443c1f5d9404344dbeba1767899b9938eb52c7eb5408e43f6f113ba303e81",
+          "computed_sha256": "15592f71f1cde7253ed500970f1d4fe4fe3272bdc74e48a26d8b76aace51be02",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 6,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpg",
+          "bytes": 989181,
+          "declared_sha256": "7abbd45fd4d9791b667b22a798ddc87bfa9266568846517632c872dd4dcecb1e",
+          "computed_sha256": "e23c40460c970f61e794d4c7fd73d11f24a7a3fb3632c746fac685fd85fae7b3",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 7,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpg",
+          "bytes": 726535,
+          "declared_sha256": "cee208a3e6c1e331bccc0bc01dd5c9b23a230b5318d125d63c6008c03afd52be",
+          "computed_sha256": "f6fa9e37ca03d4b234bee0dc780676f8caf6286678e94b1680300c155dafba8a",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 8,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpg",
+          "bytes": 615862,
+          "declared_sha256": "ece7ca687a2bd622faafe39be656f104d262f60e5136c8a9208f88f7c0d4b7c3",
+          "computed_sha256": "4c7ef9c0059397c77d7d665c1388a6eaa6205fdd3f20e2274216f67f3e6265b1",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 9,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpg",
+          "bytes": 1105992,
+          "declared_sha256": "d166cf62a32d1f1c7ca50a3969afdc659bbb6c2056a25a015f49d9f785adde35",
+          "computed_sha256": "1b4b9fd546dfc2a87cef0b1fc641f33e9e107c9d68fa0b9a55c62deca646ef60",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 10,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpg",
+          "bytes": 850515,
+          "declared_sha256": "6f55af9c7c663aa807565c51914619724d4cf45310463938450a5e4be8b3ae71",
+          "computed_sha256": "cd92740e6643debc10bc6177fbf8a9e872bcd5103f45130715ac9e7f5cb2a97f",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 11,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".png",
+          "bytes": 26754,
+          "declared_sha256": "2d371d1b98ffedeb0784888543daea6ea61dc38788c7f46d096a538a997bf306",
+          "computed_sha256": "f80a6939edaf472176e84d3ddaf8af736b877cfecfb158d25ba5f8dd63b88476",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 12,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".jpg",
+          "bytes": 177045,
+          "declared_sha256": "35a75ec1748972e78afd2a55702f8183b1f65db532d8800d4ddfdba29ad74fac",
+          "computed_sha256": "76984c6f06b10273a41372dbd35106f5f19688a13021b5d78e670489fb7941bb",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat"
+        ],
+        "unit_count": 9,
+        "position_count": 139,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 9,
+          "position": 139
+        },
+        "nested_fact_node_count": 928,
+        "nested_status_counts": {
+          "CONFIRMED": 871,
+          "UNKNOWN": 6,
+          "INSUFFICIENT": 51
+        },
+        "facts_flat_count": 928,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 196,
+        "session_info_empty_payload_count": 196,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 5,
+        "first_usage_line": 55876,
+        "event_file_sha256": "bd0ed33cceeb1274f9b72ea0b214812e3182beb41f4760cd7ece161e4dbc0111",
+        "event_line_count": 55898
+      }
+    },
+    {
+      "run_id": "zz-wma-4#2",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "94d6d22f5ddae40b1459e8df37c9951b25e406672ea2016fa4701ef0d7474ae0",
+          "bytes": 19236,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "9d4c81464d90f974c11114dea36bea1d041d7986c0570207a69d304a54e16727",
+          "bytes": 17615,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "c128bab725b47c50acbe288e272eab88aad777237d62b6e599e90d247829b367",
+          "bytes": 8061
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "154c8cc80d8edf9308363326577d9bdea0e0e62831d881b48b53c666b05ce465",
+          "bytes": 271,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 30,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 1,
+        "located": 1,
+        "equal": 0,
+        "mismatch": 1,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 15414,
+          "declared_sha256": "a658b1a4b3fbce7173cdfeefc93b84952cac0db5002a36b2e23838c3c00bae99",
+          "computed_sha256": "62e237ce8e3824e677d1b70cf6c5e1431137dfb751e27ff9060463d62f78bfac",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": false,
+          "error_keyword_counts": {
+            "required": 5
+          }
+        },
+        "evidence": {
+          "valid": false,
+          "error_keyword_counts": {
+            "required": 1
+          }
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": true,
+        "opportunities_top_level_keys": [
+          "case_id",
+          "generated_at",
+          "opportunity",
+          "schema_version",
+          "seed_url"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "case_id",
+          "entity_tree",
+          "facts_flat",
+          "generated_at",
+          "schema_version",
+          "seed_url",
+          "summary"
+        ],
+        "unit_count": 0,
+        "position_count": 0,
+        "entity_kind_counts": {},
+        "nested_fact_node_count": 30,
+        "nested_status_counts": {
+          "CONFIRMED": 23,
+          "UNKNOWN": 7
+        },
+        "facts_flat_count": 30,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": null,
+        "canonical_entity_binding_equal": null
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 30,
+        "session_info_empty_payload_count": 30,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 5,
+        "first_usage_line": 3479,
+        "event_file_sha256": "e475824757e0ada6785e39e18e8800aa5dcd4ea7d98cfb797ca01412f25c81dd",
+        "event_line_count": 3489
+      }
+    },
+    {
+      "run_id": "zz-wma-5#1",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "fca1ce5366b5827590b27a9e736fda3431b2bea5c4d9e9aaa8316ff3d2cb4069",
+          "bytes": 20295,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "cdafe3c23d533f4c0353a0e82e8d160bd6d50d008de6aea11bc48806991e1b11",
+          "bytes": 26667,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "01995866825a8aa79404007099145d2a47a528737b5489a0c7463647b8fd144f",
+          "bytes": 6201
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "54972dd8ec4af592eed5b20dc6780ff2413e195e5187f5504084205758c817da",
+          "bytes": 271,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 35,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 1,
+        "located": 1,
+        "equal": 0,
+        "mismatch": 1,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".htm",
+          "bytes": 46351,
+          "declared_sha256": "2584a3f39d9c388f774ea5608dd4409d88448bb46c3c1cb92459d87592753ee8",
+          "computed_sha256": "996be8a735de283304ef1bb56a08ee8640ee60cfb1170ae20d93c51b6591889d",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat",
+          "metadata"
+        ],
+        "unit_count": 0,
+        "position_count": 0,
+        "entity_kind_counts": {
+          "announcement": 1
+        },
+        "nested_fact_node_count": 35,
+        "nested_status_counts": {
+          "CONFIRMED": 26,
+          "UNKNOWN": 9
+        },
+        "facts_flat_count": 35,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 51,
+        "session_info_empty_payload_count": 51,
+        "usage_count": 0,
+        "usage_empty_payload_count": 0,
+        "returned_model_fields": [],
+        "first_session_info_line": 5,
+        "first_usage_line": null,
+        "event_file_sha256": "5b879cfe4adb7199117cd30d8415d53e35db3ff8ee729cf88eb08bdc5ca27862",
+        "event_line_count": 4613
+      }
+    },
+    {
+      "run_id": "zz-wma-6#3",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "3c8f588e9b58b71a67a3d7892f66c60b9d544c681824e3600bc27600ba35ae94",
+          "bytes": 50229,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "ee9e40e9833f7981f833f35ad86cf107327d5b8050fa20ef7d78fb735a1ec1b4",
+          "bytes": 56033,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "682589108d4ae27e31e8351c7b5e4e3d217b00191127e2f4f9a49d591c43dcf0",
+          "bytes": 19836
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "5b1f4d468a01d846fe2db89f8c5eb635158b226bace730d8ffc6b8ae643db324",
+          "bytes": 272,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 54,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 4,
+        "located": 4,
+        "equal": 0,
+        "mismatch": 4,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 94668,
+          "declared_sha256": "81aee735b65c46f109ddb449ec75db48118de5266069729462049e531393ee3c",
+          "computed_sha256": "001bb736e9783219b591fd72b143b8b6070e8ad11ebe7c7060ccc857ea075fd8",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".png",
+          "bytes": 102811,
+          "declared_sha256": "a4454e8769888397555c86c2c78f53a70935219d5cd1206434cb06df3cc08083",
+          "computed_sha256": "4b488b738e9c1b67b28936a08aba357b6ffb387f62100df71874c6636d382f9f",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 309379,
+          "declared_sha256": "746fea2250f51571bba27cceb7a089f733d004186e865bf1b2389c893d55082d",
+          "computed_sha256": "b4b1b9072eea4a008c6c528c7ada48d290e49adf896ca7c70c8a886ba8c83c63",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 3,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 182640,
+          "declared_sha256": "ebe60fb0d4d7bafa28ea1b9ee7f84eee79e512b59574ebd076703f08799243f5",
+          "computed_sha256": "b4e8a3b799768927506e4f4312ea81430f698e29a7daa169bbf5ec225dd563dd",
+          "hash_result": "MISMATCH",
+          "id_field": "id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat"
+        ],
+        "unit_count": 4,
+        "position_count": 17,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 4,
+          "position": 17
+        },
+        "nested_fact_node_count": 54,
+        "nested_status_counts": {
+          "CONFIRMED": 39,
+          "UNKNOWN": 12,
+          "INSUFFICIENT": 3
+        },
+        "facts_flat_count": 54,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 70,
+        "session_info_empty_payload_count": 70,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 5,
+        "first_usage_line": 8938,
+        "event_file_sha256": "c73ca39e640e1f1d09925b73203bb1c5712f4a584358fa0e9e3b4a31b726a52c",
+        "event_line_count": 8951
+      }
+    },
+    {
+      "run_id": "zz-wma-7#1",
+      "runner_kind": "workbuddy-wma",
+      "db_status": "COMPLETE",
+      "configured_mode": "blind",
+      "three_files_complete": true,
+      "result_files": {
+        "opportunities.json": {
+          "status": "PARSED",
+          "sha256": "927847bb0a82ed190911838abd71dfc174e6446425c6770afb78d42d89f98395",
+          "bytes": 52856,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "evidence.json": {
+          "status": "PARSED",
+          "sha256": "0da633aa1fd107fb1fd66d967c69865c207fa46a8dd316db7c3439cedc479481",
+          "bytes": 63406,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "report.md": {
+          "status": "PRESENT_NONEMPTY",
+          "sha256": "52016a21f19136bf61fd741f2d2bbbb11e9294a170a738e1c605e3a68d9d07b8",
+          "bytes": 12831
+        }
+      },
+      "old_verification": {
+        "verdict": "OK",
+        "file": {
+          "status": "PARSED",
+          "sha256": "ffd36db29f29a8f0286d84f8f2dab757aca0aa5ebb42d62f3f62c641a8050f08",
+          "bytes": 275,
+          "duplicate_key_count": 0,
+          "nonfinite_constant_count": 0
+        },
+        "facts_total": 66,
+        "issue_rule_counts": {}
+      },
+      "artifact_counts": {
+        "declared": 16,
+        "located": 16,
+        "equal": 0,
+        "mismatch": 16,
+        "missing_hash": 0,
+        "invalid_hash": 0,
+        "unlocatable": 0,
+        "valid_hash_unchecked": 0
+      },
+      "artifacts": [
+        {
+          "evidence_artifact_index": 0,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 35506,
+          "declared_sha256": "51a84baf04098984570b2256570e844150308c116ee5520a25452a849dba203a",
+          "computed_sha256": "2f3f6c281fbf12b4eb844c7e8b4086cccefca77340b5331c1e80421b4ea5e5f4",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 1,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 19225,
+          "declared_sha256": "a7b7d2b04b27281ab997375196bdf275bb6095a9f074aac4a7d93072fdb554e5",
+          "computed_sha256": "0e7dbf1565a420feaa28cfa696371e2bed9cae51eb61b22581f415ad7d71eec2",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 2,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 15224,
+          "declared_sha256": "b30346eb44430eed90a87971baaf961d6b381022804f8d507deffa5f800b0229",
+          "computed_sha256": "8be3c9d48ffc5e1b1cedd74cddd63f78fb5593a9d52036f1f94d8e7674cca1d5",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 3,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 24446,
+          "declared_sha256": "6bdaa1c162e7f61edf85a70bdafcf8b4a030b8e50e5bb1d2e95d7f9efeee165a",
+          "computed_sha256": "238f9970fe6473648c885016eee0393caa97f048b5673c4806c3eff12ea101ac",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 4,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 35970,
+          "declared_sha256": "244766b1a05e0550dd318ad3b1384fc6e3af6d167bfe6ce5b306333740dccf95",
+          "computed_sha256": "526d71751fb8e514b41894f90546be0d40f79e4596b63197d60727bf0c458ec8",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 5,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 41688,
+          "declared_sha256": "80e5bd759a75d9219cb69f5b1883fa8b81a79d844955433276de8b03dff00ef8",
+          "computed_sha256": "751dfe9b2171ccda7049e7cc6a0f22540d628b377323f541714536b492b6f49b",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 6,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 25445,
+          "declared_sha256": "2cc277ec7b073b9dc68858cc2724feb2fbb51f43c410aae2dffd7863b0fa8728",
+          "computed_sha256": "3ecdcdbb92baabcdb93f2ddcfcb46920b14aea4a07a10f8ff0ac262e538b4d0e",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 7,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 17511,
+          "declared_sha256": "d7453856f9f3992995da2095f303991124558c6d9ede0705275ddcc94c045d24",
+          "computed_sha256": "9274b72ad4cdea7f44b9d78ca76750761bddcca120c7eeb5a9266edc5e3dce60",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 8,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 40126,
+          "declared_sha256": "efdc0e4620e6f7e3bed711c8617cfa2876702c772a346b1c8d54f1e6eb39f368",
+          "computed_sha256": "9e1e08559f9ab9b3e3e45e371959ebebb52235e3c1f88f89331e054df148f358",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 9,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".doc",
+          "bytes": 23589,
+          "declared_sha256": "d770bbe5dd7afaa6194faf89ebc4d73d7324824832782d75bc1cda9eea985d53",
+          "computed_sha256": "27523d643f60274e9e82df75b92382288df71ea9f8663270738a6ab4f2a026df",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 10,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".docx",
+          "bytes": 40181,
+          "declared_sha256": "daa5a16796922510e2117440ab510d2fc481b409ae49e4429deebaf2027e1397",
+          "computed_sha256": "29c8ab7625872af4fd7d2104a5bc6439869f533da07dfaee76d752cba089911d",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 11,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".html",
+          "bytes": 18703,
+          "declared_sha256": "0aeea4ccb770a4e0a5a12315b637aadc5301f1808ee6c2bdcd0ea1354cd001a2",
+          "computed_sha256": "f9391e37726a794ec294bee83f6430b564e97c7636bfdcac4a8f8f9f3631d190",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 12,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".docx",
+          "bytes": 23316,
+          "declared_sha256": "1616374b8ab550716e5e40e5222a0e9b6703aadd715a7359b587673d4a8b539c",
+          "computed_sha256": "44744da3cd5f6f00fc6aa3464bb8141a15b2f197cf606706810dd1c971430cb1",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 13,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".docx",
+          "bytes": 29485,
+          "declared_sha256": "52db56ca2a0de26eef1bf814049112e7dd62eef94a87376c69f6b3ce69cf3cfd",
+          "computed_sha256": "9f644ff42d2ea9e9f10a9e7e5e08c9a6a459ef6cec7950b00f0e7de3b4637ba5",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 14,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".pdf",
+          "bytes": 21475616,
+          "declared_sha256": "147afad2c68c3aa5396209caab1627aa0b7e9cbf441e1324d8cc7608cf16988b",
+          "computed_sha256": "9b500e5fc80181aba2f1742eb33297115eb9f43a281cac780919b2143dd46959",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        },
+        {
+          "evidence_artifact_index": 15,
+          "located": true,
+          "path_interpretation": "ABSOLUTE_LOCAL",
+          "file_status": "PRESENT_NONEMPTY",
+          "extension": ".txt",
+          "bytes": 18197,
+          "declared_sha256": "3995f2863fcba36bf60fa81df54487e5cb2023ad6a2cd3788c43deb072739c5c",
+          "computed_sha256": "d7bf6a8e9cce143a354942bc02cc4319032b956c8a9c97014bdac9e3ded80e3a",
+          "hash_result": "MISMATCH",
+          "id_field": "artifact_id",
+          "media_type_present": false,
+          "derived_metadata_present": false
+        }
+      ],
+      "schema_checks": {
+        "opportunities": {
+          "valid": true,
+          "error_keyword_counts": {}
+        },
+        "evidence": {
+          "valid": true,
+          "error_keyword_counts": {}
+        }
+      },
+      "structure": {
+        "opportunity_wrapper": false,
+        "opportunities_top_level_keys": [
+          "announcement_level",
+          "application_method",
+          "metadata",
+          "official_contact",
+          "opportunity_name",
+          "opportunity_type",
+          "publish_date",
+          "publish_unit",
+          "registration_deadline",
+          "registration_start",
+          "units",
+          "work_location"
+        ],
+        "evidence_top_level_keys": [
+          "artifacts",
+          "entities",
+          "facts_flat",
+          "metadata"
+        ],
+        "unit_count": 2,
+        "position_count": 9,
+        "entity_kind_counts": {
+          "announcement": 1,
+          "unit": 2,
+          "position": 9
+        },
+        "nested_fact_node_count": 66,
+        "nested_status_counts": {
+          "CONFIRMED": 41,
+          "INSUFFICIENT": 1,
+          "UNKNOWN": 24
+        },
+        "facts_flat_count": 66,
+        "alternate_flattened_facts_count": 0,
+        "nested_flat_projection_equal": true,
+        "canonical_entity_binding_equal": true
+      },
+      "model_audit": {
+        "db_configured_model": "custom:agnes-2.5-flash",
+        "actual_returned_model": null,
+        "actual_model_status": "UNKNOWN",
+        "event_file_present": true,
+        "session_info_count": 114,
+        "session_info_empty_payload_count": 114,
+        "usage_count": 1,
+        "usage_empty_payload_count": 1,
+        "returned_model_fields": [],
+        "first_session_info_line": 5,
+        "first_usage_line": 23137,
+        "event_file_sha256": "0ad1e2d691cd09ff87c24abfd4e01817cbd8f78f9a6e5ab47bff837666b15756",
+        "event_line_count": 23162
+      }
+    }
+  ],
+  "interpretation": {
+    "blind_mode_is_not_blind_test_evidence": true,
+    "complete_status_is_not_delivery_acceptance": true,
+    "hash_equal_is_not_fact_approval": true,
+    "old_ok_is_not_current_validation": true,
+    "wma_actual_model_unknown": true,
+    "live_or_verifier_executed": false
+  }
+}

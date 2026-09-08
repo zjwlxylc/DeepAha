@@ -1,0 +1,45 @@
+
+> deepaha-web@0.1.0 build D:\DeepAha\.worktrees\integration-wma-evidence\web
+> next build
+
+▲ Next.js 16.3.2 (Turbopack)
+✓ Running next.config.ts took 37ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 806ms
+  Running TypeScript ...
+  Finished TypeScript in 3.2s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/13) ...
+  Generating static pages using 15 workers (3/13)
+  Generating static pages using 15 workers (6/13)
+  Generating static pages using 15 workers (9/13)
+✓ Generating static pages using 15 workers (13/13) in 493ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /manifest.webmanifest
+├ ƒ /me/feedback
+├ ƒ /me/feedback/[feedbackId]
+├ ƒ /me/opportunities
+├ ƒ /me/opportunities/[publicId]
+├ ƒ /me/opportunities/[publicId]/feedback
+├ ƒ /me/reminders
+├ ƒ /opportunities
+├ ƒ /opportunities/[publicId]
+├ ƒ /opportunities/[publicId]/fit-check
+├ ƒ /profile
+├ ƒ /review/feedback
+├ ƒ /review/feedback/[caseId]
+├ ƒ /review/human-test
+├ ƒ /review/human-test/items/[itemId]
+├ ƒ /review/human-test/runs/[runId]
+├ ƒ /review/investigations
+├ ƒ /review/investigations/[taskId]
+└ ƒ /review/investigations/[taskId]/materials/[artifactId]
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

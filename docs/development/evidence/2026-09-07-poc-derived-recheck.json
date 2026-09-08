@@ -1,0 +1,463 @@
+{
+  "scope": "DERIVED_LOCAL_RECHECK_WITH_CURRENT_MATCHING_OFFICIAL_BYTES",
+  "historical_case": "wma-zjhr#4",
+  "facts_or_values_changed": false,
+  "business_database_writes": 0,
+  "human_reviews": 0,
+  "path_normalization": [
+    {
+      "artifact_id": "art_seed",
+      "changed_fields": [
+        "local_path"
+      ],
+      "new_local_path": "artifacts/seed_page.html"
+    },
+    {
+      "artifact_id": "art_att1",
+      "changed_fields": [
+        "local_path"
+      ],
+      "new_local_path": "artifacts/附件1_报名登记表.doc"
+    },
+    {
+      "artifact_id": "art_att2",
+      "changed_fields": [
+        "local_path"
+      ],
+      "new_local_path": "artifacts/附件2_科研成果清单.doc"
+    }
+  ],
+  "validation": {
+    "status": "FAILED",
+    "error_code": "EVIDENCE_QUOTE_MISMATCH"
+  },
+  "quote_checks": [
+    {
+      "entity_id": "ann_1",
+      "field": "招聘对象/范围",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "学历要求",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "学位要求",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "年龄要求",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "应届生/毕业年份要求",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "国籍要求",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "身体条件",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "不得报考情形",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "有下列情形之一的，不具备报考资格：（1）曾因犯罪受过刑事处罚的或曾被开除公职的；被依法列为失信联合惩戒对象的。……（5）曾有学术不端等不良行为的。",
+      "locator": {
+        "section": "三、招聘范围和条件（二）报考条件 第6点"
+      }
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "报名方式",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "报名入口",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "报名开始时间",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "报名截止时间",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "报名材料",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "报名材料（1）报名登记表一式两份（粘贴一寸正面免冠证件照）；（2）学历、学位证书的原件及复印件……（4）专业技术资格证书原件及复印件；（5）反映个人学术水平的科研成果等情况清单（附件2）及证明材料扫描件。",
+      "locator": {
+        "section": "四、招聘程序和办法（一）报名及资格初审 第3点"
+      }
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "报名材料",
+      "artifact_id": "art_att1",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_FORMAT_REVIEW_REQUIRED:art_att1"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "报名材料",
+      "artifact_id": "art_att2",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_FORMAT_REVIEW_REQUIRED:art_att2"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "招聘流程",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "考试方式与评分",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "考试采取科研能力评价、试讲、面试相结合的方式进行。科研能力评价、试讲、面试单项科目成绩满分均为100分，合格分数均为70分……总成绩=科研能力评价30%+试讲成绩40%+面试成绩30%。",
+      "locator": {
+        "section": "四、招聘程序和办法（二）考试"
+      }
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "工作地点",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "浙江红船干部学院……与中共嘉兴市委党校合署办公。",
+      "locator": {
+        "section": "一、招聘单位简介"
+      }
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "招聘人数（总）",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "岗位数",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "官方联系方式",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "相关待遇",
+      "artifact_id": "art_seed",
+      "quote_check": "NO_MISMATCH_DETECTED",
+      "locator_mechanically_verified": false,
+      "issues": [
+        "EVIDENCE_LOCATOR_REVIEW_REQUIRED:art_seed"
+      ]
+    },
+    {
+      "entity_id": "ann_1",
+      "field": "发布日期",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "发布时间：2026-07-14 15:33:47 …… 浙江红船干部学院 中共嘉兴市委党校 2026年7月13日",
+      "locator": {
+        "section": "页脚发布时间/落款"
+      }
+    },
+    {
+      "entity_id": "unit_1",
+      "field": "单位性质",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "浙江红船干部学院是由中共浙江省委组织部和中共嘉兴市委共同管理……与中共嘉兴市委党校合署办公。",
+      "locator": {
+        "section": "一、招聘单位简介"
+      }
+    },
+    {
+      "entity_id": "pos_1",
+      "field": "岗位名称",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位1 1 区域经济学、产业经济学 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_1",
+      "field": "招聘人数",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位1 1 区域经济学、产业经济学 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_1",
+      "field": "专业要求",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位1 1 区域经济学、产业经济学 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_1",
+      "field": "学历学位要求",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位1 1 区域经济学、产业经济学 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_2",
+      "field": "岗位名称",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位2 2 行政管理、公共管理学（120400）、公共管理（125200） 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_2",
+      "field": "招聘人数",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位2 2 行政管理、公共管理学（120400）、公共管理（125200） 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_2",
+      "field": "专业要求",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位2 2 行政管理、公共管理学（120400）、公共管理（125200） 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_2",
+      "field": "学历学位要求",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位2 2 行政管理、公共管理学（120400）、公共管理（125200） 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_3",
+      "field": "岗位名称",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位3 1 中共党史党建学、中共党史 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_3",
+      "field": "招聘人数",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位3 1 中共党史党建学、中共党史 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_3",
+      "field": "专业要求",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位3 1 中共党史党建学、中共党史 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_3",
+      "field": "学历学位要求",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位3 1 中共党史党建学、中共党史 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_4",
+      "field": "岗位名称",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位4 1 社会学（0303）、中国近现代史、中国古典文献学 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_4",
+      "field": "招聘人数",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位4 1 社会学（0303）、中国近现代史、中国古典文献学 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_4",
+      "field": "专业要求",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位4 1 社会学（0303）、中国近现代史、中国古典文献学 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    },
+    {
+      "entity_id": "pos_4",
+      "field": "学历学位要求",
+      "artifact_id": "art_seed",
+      "quote_check": "FAILED",
+      "error_code": "EVIDENCE_QUOTE_MISMATCH",
+      "quote": "招聘岗位 招聘人数 所需专业 学历、学位要求 教师岗位4 1 社会学（0303）、中国近现代史、中国古典文献学 博士研究生",
+      "locator": {
+        "section": "二、招聘计划和要求（岗位表）"
+      }
+    }
+  ],
+  "quote_summary": {
+    "references_checked": 40,
+    "failed": 22,
+    "locator_mechanically_verified": 0
+  }
+}

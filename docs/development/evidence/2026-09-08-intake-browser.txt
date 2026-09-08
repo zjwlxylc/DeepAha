@@ -1,0 +1,24 @@
+
+[WebServer] (node:18396) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:18396) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///D:/DeepAha/.worktrees/integration-wma-evidence/web/tests/investigations-fixture.ts is not specified and it doesn't parse as CommonJS.
+[WebServer] Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+[WebServer] To eliminate this warning, add "type": "module" to D:\DeepAha\.worktrees\integration-wma-evidence\web\package.json.
+
+[WebServer] (node:5064) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:23408) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1/2] [desktop] › e2e\investigations.spec.ts:9:5 › registers without execution, reads evidence, downloads privately and records internal review
+(node:9572) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[2/2] [mobile] › e2e\investigations.spec.ts:9:5 › registers without execution, reads evidence, downloads privately and records internal review
+  2 passed (12.9s)

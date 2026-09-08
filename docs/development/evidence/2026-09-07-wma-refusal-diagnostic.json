@@ -1,0 +1,38 @@
+{
+  "kind": "NO_TOOL_PUBLISHED_AGENT_DIAGNOSTIC",
+  "started_at": "2026-09-07T05:45:07.448844+00:00",
+  "prompt_count": 1,
+  "max_wall_seconds": 90,
+  "requested_tool_calls": 0,
+  "business_writes": 0,
+  "cleanup": "DELETED_OWN_DIAGNOSTIC_RUNTIME",
+  "release_version": "v1",
+  "configured_model": "agnes-2.5-flash",
+  "stop_reason": "refusal",
+  "notification_types": {
+    "session_info_update": 8,
+    "agent_message_chunk": 1,
+    "usage_update": 1
+  },
+  "completed_at": "2026-09-07T05:45:37.037986+00:00",
+  "provider_error": "400 model [agnes-2.5-flash] service info not found",
+  "account_supported_models": [
+    "hy3",
+    "glm-5.2",
+    "glm-5.1",
+    "glm-5.0",
+    "glm-5.0-turbo",
+    "glm-5v-turbo",
+    "glm-4.7",
+    "minimax-m3",
+    "minimax-m2.7",
+    "kimi-k3-1",
+    "kimi-k2.7",
+    "kimi-k2.6",
+    "kimi-k2.5",
+    "deepseek-v4-pro",
+    "deepseek-v4-flash",
+    "deepseek-v3-2-volc"
+  ],
+  "diagnostic_scope": "User-visible provider error only; request trace identifiers omitted; no model thought captured."
+}

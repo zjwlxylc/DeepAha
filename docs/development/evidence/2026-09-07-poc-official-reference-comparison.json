@@ -1,0 +1,35 @@
+{
+  "scope": "CURRENT_OFFICIAL_BYTES_VS_HISTORICAL_DECLARATIONS",
+  "historical_case": "wma-zjhr#4",
+  "historical_files_modified": false,
+  "business_database_writes": 0,
+  "human_reviews": 0,
+  "historical_bytes_recovered": false,
+  "records": [
+    {
+      "artifact_id": "art_seed",
+      "source_url": "https://www.zjhcgbxy.com/gsgg/48723.jhtml",
+      "historical_declared_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+      "current_official_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+      "matches_historical_declaration": true
+    },
+    {
+      "artifact_id": "art_att1",
+      "source_url": "https://www.zjhcgbxy.com/u/cms/www/202607/1415395136pz.doc",
+      "historical_declared_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+      "current_official_sha256": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+      "matches_historical_declaration": true
+    },
+    {
+      "artifact_id": "art_att2",
+      "source_url": "https://www.zjhcgbxy.com/u/cms/www/202607/14154244v5ky.doc",
+      "historical_declared_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+      "current_official_sha256": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6",
+      "matches_historical_declaration": true
+    }
+  ],
+  "mechanical_recheck": {
+    "status": "FAILED",
+    "error_code": "ARTIFACT_PATH_INVALID"
+  }
+}

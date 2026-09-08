@@ -1,0 +1,28 @@
+
+[WebServer] (node:11300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:11300) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///D:/DeepAha/.worktrees/integration-wma-evidence/web/tests/investigations-fixture.ts is not specified and it doesn't parse as CommonJS.
+[WebServer] Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+[WebServer] To eliminate this warning, add "type": "module" to D:\DeepAha\.worktrees\integration-wma-evidence\web\package.json.
+
+
+[WebServer] (node:32740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+
+(node:15228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1/6] [desktop] › e2e\investigations.spec.ts:10:7 › retries registration after a lost receipt without changing the form or duplicating a write
+[2/6] [desktop] › e2e\investigations.spec.ts:10:7 › retries review after a lost receipt without changing the form or duplicating a write
+[3/6] [desktop] › e2e\investigations.spec.ts:41:5 › registers without execution, reads evidence, downloads privately and records internal review
+
+(node:30268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[4/6] [mobile] › e2e\investigations.spec.ts:10:7 › retries registration after a lost receipt without changing the form or duplicating a write
+[5/6] [mobile] › e2e\investigations.spec.ts:10:7 › retries review after a lost receipt without changing the form or duplicating a write
+[6/6] [mobile] › e2e\investigations.spec.ts:41:5 › registers without execution, reads evidence, downloads privately and records internal review
+  6 passed (20.2s)

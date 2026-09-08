@@ -9,6 +9,7 @@ dependencies = [
   "defusedxml>=0.7,<1",
   "fastapi>=0.115,<1",
   "httpx2>=2.12,<3",
+  "jsonschema>=4.25,<5",
   "lxml[cssselect]>=6.1,<7",
   "openpyxl>=3.1.5,<4",
   "psycopg[binary]>=3.2,<4",
@@ -17,6 +18,11 @@ dependencies = [
   "pypdf>=6.16,<7",
   "sqlalchemy>=2.0,<3",
   "uvicorn[standard]>=0.35,<1",
+]
+
+[project.optional-dependencies]
+wma = [
+    "codebuddy-cloud-agent-sdk==0.3.4",
 ]
 
 [dependency-groups]

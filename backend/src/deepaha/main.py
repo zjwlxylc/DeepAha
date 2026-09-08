@@ -12,6 +12,7 @@ from starlette.responses import JSONResponse
 
 from deepaha.api.feedback import router as feedback_router
 from deepaha.api.health import router as system_router
+from deepaha.api.investigations import router as investigations_router
 from deepaha.api.local_human_test import router as local_human_test_router
 from deepaha.api.personal import (
     PersonalApiProblem,
@@ -41,6 +42,7 @@ def create_app() -> FastAPI:
     settings = get_settings()
     configure_logging(settings.log_level)
     application = FastAPI(title="DeepAha API", version=settings.app_version)
+    application.include_router(investigations_router)
 
     @application.exception_handler(PersonalApiProblem)
     async def personal_problem(

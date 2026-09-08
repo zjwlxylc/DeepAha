@@ -13,6 +13,11 @@ from deepaha.feedback.models import (
     FeedbackEvidenceLinkModel,
     FeedbackIdempotencyRecordModel,
 )
+from deepaha.investigations.models import (
+    InvestigationEvent,
+    InvestigationMaterial,
+    InvestigationTask,
+)
 from deepaha.local_human_test.models import (
     LocalHumanTestItem,
     LocalHumanTestReviewDecision,
@@ -106,6 +111,9 @@ from deepaha.validation.models import (
 )
 
 __all__ = [
+    "InvestigationEvent",
+    "InvestigationMaterial",
+    "InvestigationTask",
     "AcquisitionEvaluation",
     "AcquisitionRun",
     "Base",

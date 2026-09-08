@@ -1,0 +1,72 @@
+{
+  "prompts_sent": 0,
+  "method": "SDK_AGENT_SESSION_CONFIGURATION_PROBE",
+  "started_at_utc": "2026-09-07T05:10:34.529687+00:00",
+  "sdk_agent_session_create": "PASSED",
+  "actual_shape": {
+    "description": {
+      "type": "str",
+      "length": 124,
+      "value": "[content]"
+    },
+    "manifestVersion": {
+      "type": "str",
+      "length": 3,
+      "value": "1.0"
+    },
+    "name": {
+      "type": "str",
+      "length": 17,
+      "value": "DeepAha 官方机会调查智能体"
+    },
+    "settingsJson": {
+      "model": {
+        "type": "str",
+        "length": 15,
+        "value": "agnes-2.5-flash"
+      }
+    },
+    "skills": [
+      {
+        "downloadUrl": {
+          "type": "url",
+          "host": "openplatform-cdn.codebuddy.cn",
+          "query_keys": [
+            "sign",
+            "skill_id"
+          ]
+        },
+        "name": {
+          "type": "str",
+          "length": 11,
+          "value": "browser-use"
+        },
+        "scope": {
+          "type": "str",
+          "length": 4,
+          "value": "USER"
+        }
+      }
+    ],
+    "system_prompt": {
+      "type": "str",
+      "length": 3,
+      "value": "***"
+    },
+    "useWorkspaceRoot": true
+  },
+  "prompt_equal_paths": [],
+  "model_equal_paths": [
+    ".model"
+  ],
+  "prefixed_model_equal_paths": [],
+  "settings_shape": {
+    "model": {
+      "type": "str",
+      "length": 15,
+      "value": "agnes-2.5-flash"
+    }
+  },
+  "skill_names_match": true,
+  "owned_runtime_cleanup": "DELETED"
+}

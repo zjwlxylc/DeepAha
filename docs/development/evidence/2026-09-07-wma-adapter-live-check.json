@@ -1,0 +1,30 @@
+{
+  "method": "CURRENT_ADAPTER_LIVE_CONTROL_PLANE_AND_BINARY_TRANSFER",
+  "prompts_sent": 0,
+  "started_at_utc": "2026-09-07T05:28:21.624066+00:00",
+  "binary_source": "SYNTHETIC_TEST_BYTES",
+  "release": {
+    "release_version": "v1",
+    "published_model": "agnes-2.5-flash",
+    "prompt_sha256": "6bed7a9984ee5d9324739d1e38f97b1f6f1b8f3f669aef7d5e68e176f69d6b73",
+    "configuration_sha256": "33b2b922b25a55c1737bdc3823073a7ad23694dfceafc4df455493c6a91a7dae",
+    "skills_sha256": "5225177ad21df3e289a7d888bf8ca63823f0f5fc03287c857c5384c3dfa1e6d0"
+  },
+  "binding": {
+    "source": "CONTROL_PLANE",
+    "session_binding": "PUBLISHED_AGENT_SESSION",
+    "model_evidence": "CONFIGURATION_ONLY",
+    "prompt_visibility": "MASKED_BY_PROVIDER",
+    "prompt_hash_verified": false,
+    "verified_non_prompt_configuration_sha256": "82b5a611bf56ca93bd51dbb0208eb24af4608a67f32aeb24a88c2ecbb651802b"
+  },
+  "checkpoints": [
+    "RUNTIME_CREATED",
+    "SESSION_CREATED"
+  ],
+  "binary_roundtrip": "PASSED",
+  "fresh_connection_recovery": "PASSED",
+  "sha256": "bed8b47125fc91ade50a21b75f6121d0f4eb8052c5b872dbcabf1013ee2c3faa",
+  "owned_runtime_cleanup": "DELETED",
+  "finished_at_utc": "2026-09-07T05:28:39.920809+00:00"
+}

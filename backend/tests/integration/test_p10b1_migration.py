@@ -5,6 +5,7 @@ from uuid import UUID, uuid4, uuid7
 import pytest
 from alembic import command
 from alembic.config import Config
+from alembic.script import ScriptDirectory
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.engine import URL, Engine, make_url
 from sqlalchemy.orm import sessionmaker
@@ -208,7 +209,7 @@ def test_upgrade_from_main_head_preserves_legacy_bundle_and_round_trips(
         with temporary_engine.connect() as connection:
             assert (
                 connection.exec_driver_sql("select version_num from alembic_version").scalar_one()
-                == P10B1_HEAD
+                == ScriptDirectory.from_config(config).get_current_head()
             )
             assert (
                 connection.exec_driver_sql(
@@ -410,7 +411,7 @@ def test_downgrade_refuses_request_bundle_without_deleting_history(
             )
             assert (
                 connection.exec_driver_sql("select version_num from alembic_version").scalar_one()
-                == P10B1_HEAD
+                == ScriptDirectory.from_config(config).get_current_head()
             )
     finally:
         if temporary_engine is not None:

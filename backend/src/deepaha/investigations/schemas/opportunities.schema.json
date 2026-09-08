@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Opportunities",
+  "type": "object",
+  "required": ["opportunity_name", "publish_unit", "opportunity_type", "units", "announcement_level"],
+  "properties": {
+    "opportunity_name": {"type": "string"},
+    "publish_unit": {"type": "string"},
+    "opportunity_type": {"type": "string"},
+    "publish_date": {"type": ["string", "null"]},
+    "registration_start": {"type": ["string", "null"]},
+    "registration_deadline": {"type": ["string", "null"]},
+    "work_location": {"type": ["string", "null"]},
+    "application_method": {"type": ["string", "null"]},
+    "official_contact": {"type": ["string", "null"]},
+    "announcement_level": {
+      "type": "array",
+      "description": "公告级共同条件",
+      "items": {"$ref": "#/definitions/Fact"}
+    },
+    "units": {
+      "type": "array",
+      "description": "招聘单位 / 子机会",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "positions"],
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "parent_id": {"type": ["string", "null"]},
+          "unit_level": {
+            "type": "array",
+            "description": "单位级条件",
+            "items": {"$ref": "#/definitions/Fact"}
+          },
+          "positions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "name", "facts"],
+              "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "code": {"type": ["string", "null"]},
+                "facts": {
+                  "type": "array",
+                  "description": "岗位级条件",
+                  "items": {"$ref": "#/definitions/Fact"}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {"type": "object"}
+  },
+  "definitions": {
+    "Fact": {
+      "type": "object",
+      "required": ["field", "value", "status"],
+      "properties": {
+        "field": {"type": "string"},
+        "value": {"type": ["string", "null"]},
+        "status": {
+          "type": "string",
+          "enum": ["CONFIRMED", "CONFLICT", "INSUFFICIENT", "UNKNOWN"]
+        },
+        "note": {"type": ["string", "null"]},
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["artifact_id", "quote"],
+            "properties": {
+              "artifact_id": {"type": "string"},
+              "locator": {
+                "type": "object",
+                "description": "例如 {\"sheet\":\"Sheet1\",\"row\":5} 或 {\"page\":7} 或 {\"url\":\"...\"}"
+              },
+              "quote": {"type": "string"},
+              "sha256": {"type": ["string", "null"]}
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "CONFIRMED"}}},
+          "then": {
+            "required": ["evidence"],
+            "properties": {
+              "evidence": {
+                "minItems": 1,
+                "items": {"required": ["artifact_id", "quote"]}
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
