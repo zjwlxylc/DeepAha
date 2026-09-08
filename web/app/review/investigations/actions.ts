@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 
 import { getInvestigationSources, InvestigationApiError, postInvestigation } from "../../../lib/investigations";
 import { LocalHumanTestApiError } from "../../../lib/local-human-test";
+import { isExplicitRuleTime, ruleAuthorities, ruleRelations, ruleApplicability, ruleDecisions } from "../../../lib/investigation-rule-options";
 
 export interface InvestigationActionState {
   error: string | null;
@@ -43,6 +44,9 @@ function failure(error: unknown, registration: boolean): InvestigationActionStat
   }
   if (error instanceof LocalHumanTestApiError && error.status === 409) {
     const identityMessages: Record<string, string> = {
+      RULE_EVIDENCE_REVIEW_INCOMPLETE: "请逐条核对本规则的全部证据。批准需要明确权威级别、支持关系、生效时间及精确适用目标。",
+      RULE_NOT_EXECUTABLE: "该候选尚不能编译为可执行规则，请保留待裁决并核对条件。",
+      RULE_CANDIDATE_ALREADY_DECIDED: "该规则已经有最终决定，请刷新查看审核记录。",
       FACT_EVIDENCE_CHECK_REFRESH_REQUIRED: "核验版本已变化，请重新准备文档证据，再整理字段候选。旧审核记录会保留。",
       FACT_BINDING_DOCUMENTS_CHANGED: "当前解析版本与已确认来源不一致，请先重新确认材料归属。",
       FACT_ALL_CANDIDATES_REQUIRE_DECISION: "此目标仍有候选字段尚未作出决定，或存在待裁决项。请先逐项核对。",
@@ -198,6 +202,36 @@ export async function registerInvestigationIdentityAction(
   return submit(`/investigations/${taskId}/identity`, { delivery_hash: deliveryHash,
     canonical_title: title, type, issuer_name: issuer, positions, reason,
   }, text(form, "request_key"), "内部机会身份已登记并关联材料，内容保持待核验，尚未公开发布。");
+}
+
+export async function investigationRuleAction(
+  _state: InvestigationActionState, form: FormData,
+): Promise<InvestigationActionState> {
+  const taskId = text(form, "task_id"), deliveryHash = text(form, "delivery_hash");
+  const bindingId = text(form, "binding_id"), checkId = text(form, "check_id");
+  const factPreparationId = text(form, "fact_preparation_id"), factSetId = text(form, "fact_set_id"), entityId = text(form, "entity_id");
+  if (![taskId, bindingId, checkId, factPreparationId, factSetId].every(value => UUID.test(value))
+    || !SHA256.test(deliveryHash) || !entityId || entityId.length > 256) return invalid("请选择当前已保存的审核事实集及核验回执。");
+  const body = { delivery_hash: deliveryHash, binding_id: bindingId, check_id: checkId,
+    fact_preparation_id: factPreparationId, fact_set_id: factSetId, entity_id: entityId };
+  const kind = text(form, "kind");
+  if (kind === "prepare") return submit(`/investigations/${taskId}/rules`, body, text(form, "request_key"), "规则候选已整理，未知和不支持的条件继续保留；规则尚未批准。");
+  const preparationId = text(form, "rule_preparation_id"), candidateId = text(form, "rule_candidate_id");
+  const decision = text(form, "decision"), reason = text(form, "reason");
+  if (kind !== "decision" || !UUID.test(preparationId) || !UUID.test(candidateId)
+    || !Object.hasOwn(ruleDecisions, decision) || !reason || reason.length > 2000) return invalid("请明确选择规则决定，并填写 1–2000 个字符的核对依据。");
+  const ids = form.getAll("evidence_ref_id").map(String);
+  if (!ids.length || ids.length > 2000 || new Set(ids).size !== ids.length || ids.some(id => !UUID.test(id))) return invalid("规则证据清单无效，请刷新详情。");
+  const evidence = ids.map(id => ({ evidence_ref_id: id, authority: text(form, `authority:${id}`) || null,
+    relation: text(form, `relation:${id}`) || null, effective_at: text(form, `effective_at:${id}`) || null,
+    applicability: text(form, `applicability:${id}`), reason: text(form, `evidence_reason:${id}`) }));
+  if (evidence.some(e => (e.authority !== null && !Object.hasOwn(ruleAuthorities, e.authority))
+    || (e.relation !== null && !Object.hasOwn(ruleRelations, e.relation)) || !Object.hasOwn(ruleApplicability, e.applicability)
+    || !e.reason || e.reason.length > 2000 || (e.effective_at !== null && !isExplicitRuleTime(e.effective_at)))) return invalid("请为每条证据填写核对依据；时间如已确认，须填写真实日期、时间及时区，不能只填日期。");
+  if (decision === "APPROVE" && evidence.some(e => !e.authority || !e.relation || !e.effective_at
+    || e.applicability !== "APPLIES_TO_EXACT_TARGET")) return invalid("批准需要逐条明确证据的权威级别、支持关系、生效时间及精确适用目标；未解决事项可保留待裁决。");
+  return submit(`/investigations/${taskId}/rules/decisions`, { ...body, rule_preparation_id: preparationId,
+    rule_candidate_id: candidateId, decision, evidence, reason }, text(form, "request_key"), "独立规则审核已记录；完整条件覆盖与资格判断尚待后续处理。");
 }
 
 export async function investigationFactAction(

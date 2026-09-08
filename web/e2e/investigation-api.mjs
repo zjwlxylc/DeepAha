@@ -1,6 +1,6 @@
 // Browser fixtures only. This process never calls an official source or WMA.
 import { createServer } from "node:http";
-import { source, task, preparedDocuments, bindingTarget, evidenceCheck, factPreparation } from "../tests/investigations-fixture.ts";
+import { source, task, preparedDocuments, bindingTarget, evidenceCheck, factPreparation, rulePreparation, ruleReadyTask } from "../tests/investigations-fixture.ts";
 
 let current = structuredClone(task);
 let dropNextReceipt = false;
@@ -10,6 +10,7 @@ const server = createServer(async (request, response) => {
   const path = new URL(request.url, "http://127.0.0.1:3097").pathname;
   response.setHeader("Content-Type", "application/json");
   if (path === "/reset") { current = structuredClone(task); receipts.clear(); posts = 0; dropNextReceipt = false; response.end("{}"); return; }
+  if (path === "/seed-rule-review") { current = ruleReadyTask(); current.rule_review = { current: [], history: [] }; response.end("{}"); return; }
   if (path === "/drop-next-receipt") { dropNextReceipt = true; response.end("{}"); return; }
   if (path === "/receipts") { response.end(JSON.stringify({ mutations: receipts.size, posts })); return; }
   if (request.headers.authorization !== "Bearer synthetic-browser-reviewer") {
@@ -77,6 +78,17 @@ const server = createServer(async (request, response) => {
       current.fact_review.current.promotions[values.entity_id] = {
         fact_set_id: "019d0000-0000-7000-8000-000000000933", status: "ACTIVE", reason: values.reason,
       };
+      current.fact_review.current.active_fact_sets[values.entity_id] = { fact_set_id: "019d0000-0000-7000-8000-000000000933", version: 1, source_bundle_revision_id: rulePreparation.source_bundle_revision_id };
+    }
+    else if (path.endsWith("/rules")) {
+      current.rule_review = { current: [{ ...structuredClone(rulePreparation), binding_id: values.binding_id, check_id: values.check_id }], history: [] };
+    }
+    else if (path.endsWith("/rules/decisions")) {
+      const prep = current.rule_review.current[0];
+      const decision = { decision_id: `019d0000-0000-7000-8000-${String(receipts.size + 970).padStart(12, "0")}`,
+        rule_candidate_id: values.rule_candidate_id, decision: values.decision, evidence: values.evidence,
+        reason: values.reason, reviewer_id: "synthetic-browser-reviewer", created_at: task.updated_at };
+      prep.decisions[values.rule_candidate_id] = decision; prep.decision_history.push(decision);
     }
     else if (path.endsWith("/review")) current = { ...current, status: values.decision === "APPROVE" ? "APPROVED" : "REJECTED", review: { ...values, reviewer_id: "synthetic-browser-reviewer", created_at: task.updated_at } };
     else current = { ...task, ...values, status: "QUEUED", opportunities: null, facts: [], materials: [], delivery_hash: null };

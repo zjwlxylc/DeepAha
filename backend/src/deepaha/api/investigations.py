@@ -30,6 +30,7 @@ from deepaha.investigations.contracts import (
     ReviewInvestigation,
 )
 from deepaha.investigations.models import InvestigationMaterial
+from deepaha.investigations.rule_contracts import DecideInvestigationRule, PrepareInvestigationRules
 from deepaha.investigations.store import InvestigationStore
 from deepaha.local_human_test.review import HumanReviewError
 from deepaha.review.auth import (
@@ -263,6 +264,43 @@ def promote_facts(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         act_on_facts(store, task_id, command, principal, key)
+        return store.get(task_id)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/rules")
+def prepare_rules(
+    task_id: UUID,
+    command: PrepareInvestigationRules,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.rules import prepare_rules as prepare
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        prepare(store, task_id, command, principal)
+        return store.get(task_id)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/rules/decisions")
+def decide_rule(
+    task_id: UUID,
+    command: DecideInvestigationRule,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.rules import decide_rule as decide
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        decide(store, task_id, command, principal, key)
         return store.get(task_id)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None

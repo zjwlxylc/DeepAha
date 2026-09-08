@@ -304,3 +304,64 @@ def test_fact_routes_cannot_bypass_intake_access(
     assert result.status_code == expected
     method.assert_not_called()
     assert not store.mock_calls
+
+
+@pytest.mark.parametrize("suffix", ["rules", "rules/decisions"])
+def test_rule_routes_validate_and_return_private_receipt(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, suffix: str
+) -> None:
+    client, store = make_client(tmp_path)
+    method = Mock()
+    monkeypatch.setattr(
+        "deepaha.investigations.rules." + ("prepare_rules" if suffix == "rules" else "decide_rule"),
+        method,
+    )
+    store.get.return_value = {"rule_review": {"current": [], "history": []}}
+    payload: dict[str, Any] = {
+        "delivery_hash": "a" * 64,
+        "binding_id": str(uuid7()),
+        "check_id": str(uuid7()),
+        "fact_preparation_id": str(uuid7()),
+        "entity_id": "post",
+        "fact_set_id": str(uuid7()),
+    }
+    if suffix != "rules":
+        payload.update(
+            rule_preparation_id=str(uuid7()),
+            rule_candidate_id=str(uuid7()),
+            decision="NEEDS_ADJUDICATION",
+            evidence=[],
+            reason="Synthetic review",
+        )
+    with client:
+        path = f"/api/v1/local-human-test/investigations/{uuid7()}/{suffix}"
+        assert client.post(path, json={}, headers={"Idempotency-Key": "test"}).status_code == 400
+        if suffix != "rules":
+            assert client.post(path, json=payload).status_code == 400
+        result = client.post(path, json=payload, headers={"Idempotency-Key": "test"})
+    assert result.status_code == 200
+    assert result.headers["cache-control"] == "private, no-store"
+    assert result.json() == store.get.return_value
+    method.assert_called_once()
+
+
+@pytest.mark.parametrize("suffix", ["rules", "rules/decisions"])
+@pytest.mark.parametrize("enabled", [True, False])
+def test_rule_routes_preserve_access_boundary(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, suffix: str, enabled: bool
+) -> None:
+    client, store = make_client(
+        tmp_path, enabled=enabled, roles=frozenset({ReviewerRole.FEEDBACK_REVIEWER})
+    )
+    method = Mock()
+    monkeypatch.setattr("deepaha.investigations.rules.prepare_rules", method)
+    monkeypatch.setattr("deepaha.investigations.rules.decide_rule", method)
+    with client:
+        result = client.post(
+            f"/api/v1/local-human-test/investigations/{uuid7()}/{suffix}",
+            json={},
+            headers={"Idempotency-Key": "test"},
+        )
+    assert result.status_code == (403 if enabled else 404)
+    method.assert_not_called()
+    assert not store.mock_calls

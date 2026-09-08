@@ -53,6 +53,7 @@ export interface InvestigationEvidenceCheck {
 }
 
 export interface InvestigationTask {
+  rule_review?: { current: InvestigationRulePreparation[]; history: { rule_preparation_id: string; entity_id: string; fact_set_id: string; compiler_version: string; created_at: string }[] };
   fact_review?: { current: InvestigationFactPreparation | null; history: { preparation_id: string; binding_id: string; mapping_version: string; created_at: string }[] };
   evidence_check?: InvestigationEvidenceCheck | null;
   evidence_check_history?: InvestigationEvidenceCheck[];
@@ -124,6 +125,29 @@ export interface InvestigationFactPreparation {
   active_fact_sets: Record<string, { fact_set_id: string; version: number; source_bundle_revision_id: string }>;
 }
 
+export interface InvestigationRuleAssessment {
+  evidence_ref_id: string; authority: string | null; relation: string | null; effective_at: string | null;
+  applicability: string; reason: string;
+}
+
+export interface InvestigationRuleDecision {
+  decision_id: string; rule_candidate_id: string; decision: string; reason: string;
+  evidence: InvestigationRuleAssessment[]; reviewer_id: string; created_at: string;
+}
+
+export interface InvestigationRulePreparation {
+  rule_preparation_id: string; fact_preparation_id: string; fact_set_id: string; entity_id: string;
+  binding_id: string; delivery_hash: string; check_id: string; compiler_version: string; result_hash: string;
+  fact_preparation_hash: string; fact_set_version: number; source_bundle_revision_id: string; scope_status: string;
+  target: InvestigationFactPreparation["targets"][number]; source_rows: InvestigationFactPreparation["rows"];
+  rows: { verified_fact_id: string; candidate_id: string; field_name: string; fact_state: string;
+    normalized_value: unknown; rule_candidate_id: string | null; reason_code: string;
+    payload: { field: string; operator: string; value_type: string; value: unknown; code: string } | null;
+    evidence_ref_ids: string[]; evidence: { evidence_ref_id: string; document_id: string; block_id: string;
+      text: string; structural_locator: Record<string, unknown> }[] }[];
+  decisions: Record<string, InvestigationRuleDecision>; decision_history: InvestigationRuleDecision[];
+}
+
 export interface InvestigationBindingTarget {
   opportunity_id: string; public_id: string; version: number; title: string;
   positions: { unit_id: string; version_id: string; public_id: string; key: string; label: string }[];
@@ -134,6 +158,7 @@ export function getInvestigationBindingTargets(): Promise<{ targets: Investigati
 }
 
 const registrationConflictCodes = new Set([
+  "RULE_EVIDENCE_REVIEW_INCOMPLETE", "RULE_NOT_EXECUTABLE", "RULE_CANDIDATE_ALREADY_DECIDED",
   "REGISTRATION_EXISTING_IDENTITY_OR_REVIEW_REQUIRED", "REGISTRATION_POSITION_INVALID", "REGISTRATION_POSITION_KEY_CONFLICT",
   "FACT_EVIDENCE_CHECK_REFRESH_REQUIRED", "FACT_BINDING_DOCUMENTS_CHANGED", "FACT_ALL_CANDIDATES_REQUIRE_DECISION",
   "APPROVED_SOURCE_REQUIRED", "NOTICE_OUTSIDE_APPROVED_HOSTS", "IDEMPOTENCY_CONFLICT",

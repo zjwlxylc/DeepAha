@@ -182,6 +182,17 @@ def test_compiler_emits_deterministic_topological_order_and_hash() -> None:
     assert first == second
 
 
+def test_identity_free_graph_preserves_legacy_ruleset_and_hash() -> None:
+    from deepaha.rules.compiler import compile_rule_graph
+
+    source = rule_set()
+    legacy = compile_rule_set(source)
+    assert compile_rule_graph(source.rules, source.root_rule_ids) == legacy.rules
+    assert (
+        legacy.compiled_sha256 == "20946cc6321cefbc28700728a32c2ae9497b97193b3f63b0b43c4e6ab867dce9"
+    )
+
+
 def test_compiler_rejects_unknown_operator_even_if_contract_validation_is_bypassed() -> None:
     rules = valid_rules()
     invalid = rules[0].model_copy(update={"operator": "EXEC"})
