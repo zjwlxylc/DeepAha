@@ -13,4 +13,4 @@
 - 桌面 1280 / 手机 390 无横向溢出，正常及过期截图已检查并归档在 `evidence/2026-09-08-unit-snapshot-ui/`。截图路径及摘要见 `evidence/2026-09-08-unit-snapshot-ui-validation.json`。测试均为明确合成数据，不访问官方来源或 WMA。
 - 独立审查未发现 P1/P2；独立运行前端 12 项、API 6 项通过。
 
-状态 IMPLEMENTED，本地验证通过，候选 CI 与合并待完成。冻结样本仍为 94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery UNVERIFIED。后续接精确目标与画像的离线回放，完整范围未审期间继续保留不确定限制。
+状态 IMPLEMENTED。PR #20 已合并为 `d5455cc8e3f6bc5e8920811f10b1ab99febfa36e`，候选 `e86375be70c9c5dbbe1ad961615629ae807fd2b8` 的 CI #94（34240991105）全部 9 项通过；合并树与候选树相同。证据见 `evidence/2026-09-08-unit-snapshot-ui-ci.json`。冻结样本仍为 94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery UNVERIFIED。后续接精确目标与画像的离线回放，完整范围未审期间继续保留不确定限制。
