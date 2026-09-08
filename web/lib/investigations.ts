@@ -111,7 +111,7 @@ export interface InvestigationTask {
 
 export interface InvestigationFactPreparation {
   preparation_id: string; binding_id: string; check_id: string; mapping_version: string; result_hash: string;
-  targets: { entity_id: string; name: string; target_scope: "OPPORTUNITY" | "UNIT";
+  targets: { entity_id: string; entity_kind?: string; name: string; target_scope: "OPPORTUNITY" | "UNIT";
     opportunity_id: string; opportunity_version: number; opportunity_unit_id: string | null;
     opportunity_unit_version_id: string | null; extraction_run_id: string | null }[];
   rows: { source_index: number; entity_id: string; original: InvestigationFact;

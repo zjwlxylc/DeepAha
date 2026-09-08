@@ -7,4 +7,4 @@
 - 验证精确五元目标不能串岗/串版本，未知事实不会凭画像变成满足，多层条件、未定位引用、原备注及排除字段不会在计算中丢失。
 - 保留完整合成输入、快照上下文、规则结果、两个时钟、版本及摘要的离线回放证据。证据仅支持工程连接与边界，不支持真人资格、Gold 准确率或发布资格。
 
-状态 IMPLEMENTED。新增 8 项 PG 集成样本通过，已归档 3 份完整合成证据并使用只读脚本成功重放 5 个场景；生产代码无需修改。检查记录见 `docs/development/2026-09-08-trusted-unit-profile-replay.md`，候选 CI / 合并待完成。冻结 WMA 样本仍保持 94 PASS / 0 FAIL / 30 Word UNVERIFIED。
+状态 IMPLEMENTED。新增 8 项 PG 集成样本通过，已归档 3 份完整合成证据并使用只读脚本成功重放 5 个场景；生产代码无需修改。PR #21 已通过最终候选 CI #97 九项并合并，main CI #98 成功。检查记录见 `docs/development/2026-09-08-trusted-unit-profile-replay.md`。冻结 WMA 样本仍保持 94 PASS / 0 FAIL / 30 Word UNVERIFIED。

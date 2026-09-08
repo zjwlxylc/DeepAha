@@ -25,4 +25,6 @@ backend/.venv/Scripts/python.exe docs/development/evidence/2026-09-08-trusted-un
 
 这些文件只证明历史合成输入可重复计算，不能作为当前数据库准入、真人裁决或发布资格。fixture 的 reviewer 身份只用于测试鉴权路径，所有真实参与者、真人批准及 WMA 调用均为零。冻结 WMA 样本仍为 94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery UNVERIFIED。
 
-状态 IMPLEMENTED，本地集成及文件重放通过，候选 CI / 合并待完成。下一步审阅公告/单位条件的适用范围与例外记录路径；在其验收前，不解除整体资格的范围阻塞。
+状态 IMPLEMENTED，已通过 [PR #21](https://github.com/zjwlxylc/DeepAha/pull/21) 合并。最终候选 `f1a40dd9d08c16b6aaf0be9430fd834ac36b3aba` 的 CI #97（run `34242672556`）九项均成功；合并提交 `32983b69ba0e2d153b5e31e62d362492941f727b` 与候选同树 `42295bc75427012b467fd296de39ca27f842da86`。2026-09-08 再查 main CI #98（run `34243639619`）同样成功。候选与合并证据见 `evidence/2026-09-08-trusted-unit-profile-replay-ci.json`。
+
+下一步审阅公告/单位条件的适用范围与例外记录路径；在其验收前，不解除整体资格的范围阻塞。

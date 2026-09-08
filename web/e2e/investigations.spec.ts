@@ -1,5 +1,12 @@
 import { expect, test } from "@playwright/test";
 import { source, taskId, bindingTarget } from "../tests/investigations-fixture";
+import { applicabilityIds } from "../tests/rule-applicability-fixture";
+
+async function seedApplicability(request: import("@playwright/test").APIRequestContext) {
+  const identity = await (await request.get("http://127.0.0.1:3097/seed-rule-applicability")).json();
+  return { snapshotPath: `/review/investigations/${identity.task_id}/unit-plans/${identity.target_plan_id}`,
+    reviewPath: `/review/investigations/${identity.task_id}/unit-plans/${identity.target_plan_id}/applicability/${identity.source_rule_preparation_id}/${identity.source_rule_candidate_id}` };
+}
 
 test.beforeEach(async ({ context, request }) => {
   await request.get("http://127.0.0.1:3097/reset");
@@ -51,6 +58,97 @@ test("retries document preparation after the receipt is lost", async ({ page, re
   await button.click();
   await expect(page.getByText("1 / 1 份材料已完成文档证据准备。")).toBeVisible();
   expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 1, posts: 2 });
+});
+
+test("records announcement applicability independently, retries a lost receipt and appends corrections", async ({ page, request }, testInfo) => {
+  const { snapshotPath } = await seedApplicability(request);
+  await page.goto(snapshotPath);
+  await page.getByRole("link", { name: "审阅公告规则适用性" }).click();
+  await expect(page.getByRole("heading", { name: "来源公告" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "目标岗位" })).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "适用性决定", exact: true })).toHaveValue("");
+  await expect(page.getByText(/不解除整体 UNCERTAIN/)).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("announcement-applicability-initial.png"), fullPage: true });
+  await page.getByRole("combobox", { name: "适用性决定", exact: true }).selectOption("NEEDS_ADJUDICATION");
+  await page.getByLabel("决定理由").fill("合成工程测试：尚待核对公告适用范围，不是真人批准。");
+  await page.getByRole("button", { name: "保存适用性决定" }).click();
+  await expect(page.getByText("当前决定：待裁决（第 1 次）")).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "适用性决定", exact: true })).toHaveValue("");
+
+  await page.getByRole("combobox", { name: "适用性决定", exact: true }).selectOption("APPLIES");
+  await page.getByLabel("决定理由").fill("合成工程测试：原文明确覆盖全部岗位。");
+  await page.getByLabel("引用原文 1", { exact: true }).check();
+  const quote = await page.getByRole("textbox", { name: "引用文字 1", exact: true }).inputValue();
+  await request.get("http://127.0.0.1:3097/drop-next-receipt");
+  await page.getByRole("button", { name: "保存适用性决定" }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toBeVisible();
+  await expect(page.getByLabel("决定理由")).toBeDisabled();
+  await expect(page.getByRole("textbox", { name: "引用文字 1", exact: true })).toHaveValue(quote);
+  await page.screenshot({ path: testInfo.outputPath("announcement-applicability-retry.png"), fullPage: true });
+  await page.getByRole("button", { name: "重试原请求" }).click();
+  await expect(page.getByText("当前决定：适用于此岗位（第 2 次）")).toBeVisible();
+
+  await page.getByRole("button", { name: "加载更多原文" }).click();
+  await expect(page.getByText("已加载当前可引用的全部原文块，共 2 块。")).toBeVisible();
+  await expect(page.getByRole("article", { name: "原文块 2", exact: true }).getByRole("link", { name: "查看官方原文" })).toHaveAttribute("href", "https://example.test/notices/copied-announcement.html");
+  await page.getByLabel("引用原文 2", { exact: true }).check();
+  await page.getByRole("combobox", { name: "适用性决定", exact: true }).selectOption("DOES_NOT_APPLY");
+  await page.getByLabel("决定理由").fill("合成工程测试：追加更正，保留前两次记录。");
+  await page.getByRole("button", { name: "保存适用性决定" }).click();
+  await expect(page.getByText("当前决定：不适用于此岗位（第 3 次）")).toBeVisible();
+  expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 3, posts: 4 });
+  const history = await (await request.get("http://127.0.0.1:3097/applicability-records")).json();
+  expect(history.map((item: { request: { previous_decision_id: string | null } }) => item.request.previous_decision_id)).toEqual([null, history[0].decision_id, history[1].decision_id]);
+  expect(history[1].request.evidence[0].quote).toBe(quote);
+  expect(history[2].request.evidence[0]).toMatchObject({ member_id: applicabilityIds.secondBlock, block_id: applicabilityIds.block });
+  await page.reload();
+  await expect(page.getByText("当前决定：不适用于此岗位（第 3 次）")).toBeVisible();
+  await expect(page.getByText(/不解除整体 UNCERTAIN/)).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath("announcement-applicability.png"), fullPage: true });
+});
+
+for (const kind of ["stale", "forbidden", "unavailable"]) {
+  test(`hides applicability evidence after ${kind} response`, async ({ page, request }, testInfo) => {
+    const { reviewPath } = await seedApplicability(request);
+    await page.goto(reviewPath);
+    await expect(page.getByRole("combobox", { name: "适用性决定", exact: true })).toBeVisible();
+    await request.get(`http://127.0.0.1:3097/rule-applicability-mode?kind=${kind}`);
+    await page.getByRole("button", { name: "重新读取最新状态" }).click();
+    await expect(page.getByRole("main").getByRole("alert")).toBeVisible();
+    await expect(page.getByRole("combobox", { name: "适用性决定", exact: true })).toHaveCount(0);
+    await expect(page.getByText("示例招聘公告", { exact: true })).toHaveCount(0);
+    await expect(page.getByText("synthetic private failure must not leak")).toHaveCount(0);
+    await page.reload();
+    await expect(page.getByRole("heading", { name: "适用性审阅暂不可用" })).toBeVisible();
+    await expect(page.getByRole("combobox", { name: "适用性决定", exact: true })).toHaveCount(0);
+    if (kind === "stale") await page.screenshot({ path: testInfo.outputPath("announcement-applicability-stale.png"), fullPage: true });
+  });
+}
+
+test("does not mix evidence pages across changed applicability context", async ({ page, request }) => {
+  const { reviewPath } = await seedApplicability(request);
+  await page.goto(reviewPath);
+  await page.getByLabel("引用原文 1", { exact: true }).check();
+  await request.get("http://127.0.0.1:3097/rule-applicability-mode?kind=changed");
+  await page.getByRole("button", { name: "加载更多原文" }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("已变化");
+  await expect(page.getByLabel("引用原文 1", { exact: true })).toHaveCount(0);
+  expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 0, posts: 0 });
+});
+
+test("keeps empty applicability evidence unresolved and rejects a stale open form", async ({ page, request }) => {
+  const { reviewPath } = await seedApplicability(request);
+  await request.get("http://127.0.0.1:3097/rule-applicability-mode?kind=empty");
+  await page.goto(reviewPath);
+  await expect(page.getByText("当前没有可引用的原文块。可记录待裁决及理由。")).toBeVisible();
+  await page.getByRole("combobox", { name: "适用性决定", exact: true }).selectOption("NEEDS_ADJUDICATION");
+  await page.getByLabel("决定理由").fill("合成工程测试：无可读依据，保持待裁决。");
+  await request.get("http://127.0.0.1:3097/rule-applicability-mode?kind=stale");
+  await page.getByRole("button", { name: "保存适用性决定" }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("已变化");
+  await expect(page.getByRole("combobox", { name: "适用性决定", exact: true })).toHaveCount(0);
+  expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 0, posts: 1 });
 });
 
 test("creates and reads a current unit snapshot with retry and stale evidence feedback", async ({ page, request }, testInfo) => {

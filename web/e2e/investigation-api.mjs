@@ -1,6 +1,7 @@
 // Browser fixtures only. This process never calls an official source or WMA.
 import { createServer } from "node:http";
 import { source, task, preparedDocuments, bindingTarget, evidenceCheck, factPreparation, rulePreparation, ruleReadyTask, unitSnapshotFixture } from "../tests/investigations-fixture.ts";
+import { applicabilityViewFixture, applicabilityDecisionFixture, applicabilityIds } from "../tests/rule-applicability-fixture.ts";
 
 let current = structuredClone(task);
 let dropNextReceipt = false;
@@ -8,10 +9,20 @@ const receipts = new Map();
 let posts = 0;
 let unitSnapshot = null;
 let staleSnapshot = false;
+let applicability = null;
+let applicabilityMode = null;
+function applicabilityOptions() {
+  const first = applicability.view.evidence_options[0];
+  return [first, { ...first, member_id: applicabilityIds.secondBlock, material_id: "attachment-second", source_url: "https://example.test/notices/copied-announcement.html" }];
+}
 const server = createServer(async (request, response) => {
-  const path = new URL(request.url, "http://127.0.0.1:3097").pathname;
+  const url = new URL(request.url, "http://127.0.0.1:3097"), path = url.pathname;
   response.setHeader("Content-Type", "application/json");
-  if (path === "/reset") { current = structuredClone(task); receipts.clear(); posts = 0; dropNextReceipt = false; unitSnapshot = null; staleSnapshot = false; response.end("{}"); return; }
+  response.setHeader("Cache-Control", "private, no-store");
+  if (path === "/reset") { current = structuredClone(task); receipts.clear(); posts = 0; dropNextReceipt = false; unitSnapshot = null; staleSnapshot = false; applicability = null; applicabilityMode = null; response.end("{}"); return; }
+  if (path === "/seed-rule-applicability") { applicability = applicabilityViewFixture(unitSnapshotFixture()); current = applicability.task; unitSnapshot = applicability.snapshot; response.end(JSON.stringify(applicability.identity)); return; }
+  if (path === "/rule-applicability-mode") { applicabilityMode = url.searchParams.get("kind"); response.end("{}"); return; }
+  if (path === "/applicability-records") { response.end(JSON.stringify(applicability?.view.history ?? [])); return; }
   if (path === "/seed-unit-snapshot") { current = unitSnapshotFixture().task; response.end("{}"); return; }
   if (path === "/stale-unit-snapshot") { staleSnapshot = true; response.end("{}"); return; }
   if (path === "/seed-rule-review") { current = ruleReadyTask(); current.rule_review = { current: [], history: [] }; response.end("{}"); return; }
@@ -22,6 +33,16 @@ const server = createServer(async (request, response) => {
   }
   if (path.endsWith("/sources")) { response.end(JSON.stringify({ sources: [source] })); return; }
   if (path.endsWith("/binding-targets")) { response.end(JSON.stringify({ targets: [bindingTarget] })); return; }
+  if (request.method === "GET" && path.includes("/rule-applicability/")) {
+    const id = applicability?.identity;
+    if (!id || path !== `/api/v1/local-human-test/investigations/${id.task_id}/unit-plans/${id.target_plan_id}/rule-applicability/${id.source_rule_preparation_id}/${id.source_rule_candidate_id}`) { response.writeHead(404); response.end("{}"); return; }
+    if (["stale", "forbidden", "unavailable"].includes(applicabilityMode)) { response.writeHead({ stale: 409, forbidden: 403, unavailable: 503 }[applicabilityMode]); response.end(JSON.stringify({ detail: "synthetic private failure must not leak" })); return; }
+    const after = url.searchParams.get("after"), view = applicability.view;
+    if (after && after !== view.next_cursor) { response.writeHead(422); response.end("{}"); return; }
+    const options = applicabilityMode === "empty" ? [] : applicabilityOptions();
+    response.end(JSON.stringify({ ...view, context_hash: applicabilityMode === "changed" ? "f".repeat(64) : view.context_hash,
+      evidence_options: after ? options.slice(1) : options.slice(0, 1), next_cursor: !after && options.length > 1 ? view.next_cursor : null })); return;
+  }
   if (request.method === "GET" && path.includes("/unit-plans/")) {
     response.setHeader("Cache-Control", "private, no-store");
     if (staleSnapshot) { response.writeHead(409); response.end(JSON.stringify({ detail: { code: "RULE_FACT_SET_CONFLICT" } })); return; }
@@ -44,6 +65,32 @@ const server = createServer(async (request, response) => {
       response.end(JSON.stringify(receipt.task)); return;
     }
     const values = JSON.parse(body);
+    if (path.endsWith("/rule-applicability")) {
+      const view = applicability?.view, id = applicability?.identity;
+      if (applicabilityMode === "forbidden") { response.writeHead(403); response.end("{}"); return; }
+      if (!view || ["stale", "changed"].includes(applicabilityMode) || values.context_hash !== view.context_hash
+        || values.target_plan_id !== id.target_plan_id || values.source_rule_preparation_id !== id.source_rule_preparation_id
+        || values.source_rule_candidate_id !== id.source_rule_candidate_id || values.previous_decision_id !== (view.latest?.decision_id ?? null)) {
+        response.writeHead(409); response.end("{}"); return;
+      }
+      if (!["APPLIES", "DOES_NOT_APPLY", "NEEDS_ADJUDICATION"].includes(values.outcome) || !values.reason.trim()
+        || values.reason.length > 2000 || values.evidence.length > 20 || (values.outcome !== "NEEDS_ADJUDICATION" && !values.evidence.length)
+        || values.evidence.some(e => !e.quote.trim() || e.quote.length > 20000 || !applicabilityOptions().some(option => option.member_id === e.member_id && option.block_id === e.block_id && option.text.includes(e.quote)))) {
+        response.writeHead(422); response.end("{}"); return;
+      }
+      const sequence = view.history.length + 1;
+      const decision = { ...applicabilityDecisionFixture(view, values), sequence,
+        decision_id: `019d0000-0000-7000-8000-${String(sequence + 1006).padStart(12, "0")}`,
+        evidence_snapshot: values.evidence.map(e => {
+          const original = applicabilityOptions().find(option => option.member_id === e.member_id && option.block_id === e.block_id);
+          return { ...e, material_id: original.material_id, source_url: original.source_url, document_id: original.document_id, evidence_ref_id: original.evidence_ref_id, locator: original.locator, block_hash: "c".repeat(64), binding_hash: "d".repeat(64) };
+        }),
+      };
+      view.latest = decision; view.history.push(decision);
+      receipts.set(key, { path, body, task: structuredClone(decision) });
+      if (dropNextReceipt) { dropNextReceipt = false; response.destroy(); return; }
+      response.end(JSON.stringify(decision)); return;
+    }
     if (path.endsWith("/unit-plans")) {
       unitSnapshot = unitSnapshotFixture().snapshot;
       receipts.set(key, { path, body, task: structuredClone(unitSnapshot) });
