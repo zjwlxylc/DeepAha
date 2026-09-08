@@ -27,7 +27,7 @@
 - 浏览器：16 passed，桌面 1280×900 与移动 390×844。新字段流程覆盖整理候选、待裁决、明确批准、保存，并在这四次操作各模拟一次响应丢失；11 次 POST 只发生 7 次状态写入（包括前置三步）。逐项确认初始为空，待裁决后可恢复，原文和未知项保持可见，无横向溢出。
 - 桌面与手机截图已实际查看：`web/output/playwright/investigations/investigations-reviews-fie-d6055--retries-each-lost-response-{desktop,mobile}/field-review-retry.png` 与 `field-review.png`。均为合成数据，仅验证工程流程。
 - 完整 PostgreSQL / S3 回归：549 passed / 3 skipped / 1330 deselected，428.70 秒；Alembic check 无新增迁移操作。空库可从 0039 升级至 0040 并往返；有审核历史时降级被拒绝。
-- 候选提交及远端 CI 结果在合并后记录；本地验证证据见 `evidence/2026-09-08-field-review-validation.json`。
+- 候选 `81a3dec687c302b1665872079e167941178531bd` 的 CI #84（run 34227749605）9 项全部 success；PR #15 合并为 `c97b1b877d3e9cd62a6997bcb7122b4546300de4`，两者代码树均为 `3bca3a20b41d41de27ecd57184eef436636c6752`。证据见 `evidence/2026-09-08-field-review-ci.json`；本地验证见 `evidence/2026-09-08-field-review-validation.json`。
 
 测试入口：`backend/tests/integration/test_investigation_facts.py`、`backend/tests/integration/test_investigation_evidence_checks.py`、`backend/tests/investigations/test_field_mapping.py`、`backend/tests/api/test_investigations.py`、`web/tests/investigation-fact-review.test.tsx`、`web/e2e/investigations.spec.ts`。
 

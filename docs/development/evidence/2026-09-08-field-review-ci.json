@@ -1,0 +1,75 @@
+{
+  "scope": "INTERNAL_FIELD_REVIEW_INTEGRATION",
+  "candidate": "81a3dec687c302b1665872079e167941178531bd",
+  "merge": "c97b1b877d3e9cd62a6997bcb7122b4546300de4",
+  "candidate_and_merge_tree": "3bca3a20b41d41de27ecd57184eef436636c6752",
+  "pr": "https://github.com/zjwlxylc/DeepAha/pull/15",
+  "ci": {
+    "run_id": 34227749605,
+    "number": 84,
+    "jobs": [
+      {
+        "id": 102065946781,
+        "name": "phase6-profile-action",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102065946881,
+        "name": "phase5-public-trust",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102065946999,
+        "name": "phase7-feedback-review",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102065947098,
+        "name": "backend-quality",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102065947126,
+        "name": "phase8-deadline-reminder",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102065947153,
+        "name": "phase3-resolution",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102065947177,
+        "name": "web-quality",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102065947245,
+        "name": "phase4-eligibility",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102065947379,
+        "name": "integration",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "release_qualification": "NOT_STARTED",
+  "delivery_verdict": "UNVERIFIED",
+  "wma_calls": 0,
+  "frozen_case": {
+    "PASS": 94,
+    "FAIL": 0,
+    "UNVERIFIED": 30
+  }
+}

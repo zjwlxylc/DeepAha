@@ -70,7 +70,7 @@ def test_fact_and_rule_commands_are_strict_and_bounded() -> None:
         (
             "major_requirements",
             {"allowed_codes": ["0809", "0810"]},
-            ("IN", "major_code", "STRING_SET", ["0809", "0810"]),
+            ("IN", "major_code", "STRING", ["0809", "0810"]),
         ),
         (
             "credential_requirements",

@@ -25,6 +25,7 @@ from deepaha.local_human_test.review import (
 from deepaha.p9b.models import (
     FactVerificationDecisionModel,
     RuleApprovalDecisionModel,
+    RuleCandidateModel,
     VerifiedFact,
 )
 from deepaha.public_catalog.schemas import PublicOpportunityQuery
@@ -51,15 +52,26 @@ def _human() -> ReviewerPrincipal:
     )
 
 
+@pytest.mark.parametrize(
+    ("field_name", "value"),
+    [
+        ("education_requirements", {"minimum_level": "BACHELOR"}),
+        ("major_requirements", {"allowed_codes": ["080901"]}),
+        ("household_registration_requirements", {"allowed_regions": ["330100"]}),
+        ("applicant_scope", {"student_statuses": ["GRADUATING"]}),
+    ],
+)
 def test_human_fact_and_rule_review_is_independent_idempotent_and_audited(
     human_extraction_engine: Engine,
     tmp_path: Path,
+    field_name: str,
+    value: object,
 ) -> None:
     coordinator, adapter, factory, item_id = extraction_support._coordinator(
         human_extraction_engine,
         tmp_path,
-        fact_field_name="education_requirements",
-        fact_value={"minimum_level": "BACHELOR"},
+        fact_field_name=field_name,
+        fact_value=value,
     )
     extraction = coordinator.extract(item_id)
     assert extraction.status is ItemStatus.FACT_REVIEW
@@ -115,7 +127,7 @@ def test_human_fact_and_rule_review_is_independent_idempotent_and_audited(
         )
 
     promoted = facts.promote(item_id, principal)
-    assert promoted.promoted_field_names == ("education_requirements",)
+    assert promoted.promoted_field_names == (field_name,)
     assert facts.promote(item_id, principal) == promoted
 
     rules = HumanRuleReviewService(session_factory=factory)
@@ -151,6 +163,10 @@ def test_human_fact_and_rule_review_is_independent_idempotent_and_audited(
     assert rules.propose_from_verified_facts(item_id).candidates == proposal.candidates
 
     with factory() as session:
+        stored_candidate = session.get(RuleCandidateModel, rule_candidate.rule_candidate_id)
+        assert stored_candidate is not None
+        assert stored_candidate.compiler_version == "local-human-fact-rule-1.0.1"
+        assert stored_candidate.producer_identity == "component:local-human-fact-rule/1.0.1"
         item = session.get(LocalHumanTestItem, item_id)
         fact_decision = session.get(FactVerificationDecisionModel, first.decision_id)
         rule_decision = session.get(

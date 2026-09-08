@@ -2,7 +2,7 @@
 
 状态：IN_PROGRESS。基线：PR #13 / main fcd1205；此前通用证据链工程已合并，不代表真实发布资格通过。
 
-步骤 1 已 IMPLEMENTED，经完整本地回归和候选 CI #82（9/9）后随 PR #14 合并至 main 757fb3c，主线 CI #83 success。步骤 2 已实现并完成本地回归，等待候选 CI 与集成。字段值映射与证据回放分离；候选准备关联不可变机械核验回执，并在写入及人工决定前重新核对当前原件、解析与核验版本。完整记录见 `docs/development/2026-09-08-investigation-field-review.md`。
+步骤 1 已 IMPLEMENTED，经完整本地回归和候选 CI #82（9/9）后随 PR #14 合并至 main 757fb3c，主线 CI #83 success。步骤 2 已 IMPLEMENTED，候选 CI #84（9/9）通过，PR #15 合并为 c97b1b8。字段值映射与证据回放分离；候选准备关联不可变机械核验回执，并在写入及人工决定前重新核对当前原件、解析与核验版本。完整记录见 `docs/development/2026-09-08-investigation-field-review.md`。
 
 ## 顺序和边界
 
