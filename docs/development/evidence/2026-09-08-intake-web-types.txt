@@ -1,0 +1,4 @@
+
+> deepaha-web@0.1.0 typecheck D:\DeepAha\.worktrees\integration-wma-evidence\web
+> tsc --noEmit
+

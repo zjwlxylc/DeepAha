@@ -1,0 +1,44 @@
+...............................................F........................ [ 15%]
+........................................................................ [ 30%]
+........................................................................ [ 46%]
+........................................................................ [ 61%]
+........................................................................ [ 77%]
+..............................s............................s............ [ 92%]
+...................s...............                                      [100%]
+================================== FAILURES ===================================
+______ test_success_persists_derived_text_document_evidence_and_attempt _______
+
+owned_session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://deepaha:***@127.0.0.1:55436/deepaha), autoflush=True, expire_on_commit=False)
+object_store = <deepaha.artifacts.s3.S3ObjectStore object at 0x00000246FB0B1E00>
+
+    def test_success_persists_derived_text_document_evidence_and_attempt(
+        owned_session_factory: sessionmaker[Session], object_store: S3ObjectStore
+    ) -> None:
+        artifact_id, raw_key, raw_sha = create_artifact(owned_session_factory, object_store)
+        parser = FakeParser()
+        service = service_for(owned_session_factory, object_store, parser)
+    
+        result = service.parse(ParseDocumentCommand(artifact_id=artifact_id))
+    
+        assert result.created is True
+        assert result.outcome == "SUCCEEDED"
+        assert result.document_id is not None
+        assert result.error_code is None
+        derived_key = build_derived_text_key(
+            raw_sha,
+            parser.name,
+            parser.version,
+            parser.parse_contract_version,
+        )
+>       assert result.extracted_text_uri == f"s3://deepaha-raw/{derived_key}"
+E       AssertionError: assert 's3://deepaha....2.0/text.txt' == 's3://deepaha....2.0/text.txt'
+E         
+E         - s3://deepaha-raw/derived/documents/0ac135e9351e442b690dad4c7f16602ed0cfc73bfb0d6e914c6b8f30d535114f/html_fake/0.2.0/phase2-locator-contract-v0.2.0/text.txt
+E         ?                ^
+E         + s3://deepaha-intake-integration/derived/documents/0ac135e9351e442b690dad4c7f16602ed0cfc73bfb0d6e914c6b8f30d535114f/html_fake/0.2.0/phase2-locator-contract-v0.2.0/text.txt
+E         ?              ++++++++++++  ^^^^
+
+tests\integration\test_document_service.py:198: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/integration/test_document_service.py::test_success_persists_derived_text_document_evidence_and_attempt
+1 failed, 463 passed, 3 skipped, 1167 deselected in 408.54s (0:06:48)

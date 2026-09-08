@@ -1,0 +1,4 @@
+
+> deepaha-web@0.1.0 lint D:\DeepAha\.worktrees\integration-wma-evidence\web
+> eslint .
+
