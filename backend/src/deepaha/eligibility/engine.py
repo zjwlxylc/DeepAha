@@ -11,13 +11,14 @@ from deepaha.contracts.phase4 import (
     RuleOutcome,
     RuleValueType,
 )
+from deepaha.eligibility.types import RuleEvaluationGraph
 from deepaha.rules.major import (
     ApprovedMajorMapping,
     MajorCatalog,
     MajorMatchKind,
     match_major,
 )
-from deepaha.rules.types import CompiledRule, CompiledRuleSet
+from deepaha.rules.types import CompiledRule
 
 ENGINE_VERSION = "phase4-eligibility-engine-v1"
 _OFFICIAL_PRECEDENCE_FLOOR = 300
@@ -37,7 +38,7 @@ _EDUCATION_ORDER = {
 
 @dataclass(frozen=True, slots=True)
 class EvaluationContext:
-    rule_set: CompiledRuleSet
+    rule_set: RuleEvaluationGraph
     profile_attributes: Mapping[str, object]
     major_catalog: MajorCatalog
     major_mapping: ApprovedMajorMapping
