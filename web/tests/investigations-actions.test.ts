@@ -9,6 +9,7 @@ vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 const empty = { error: null, message: null, taskId: null };
 function creation() {
   const data = new FormData();
+  data.set("request_key", "11111111-1111-4111-8111-111111111111");
   data.set("source_key", `${source.source_id}/${source.endpoint_id}`);
   data.set("notice_url", task.notice_url);
   data.set("brief", task.brief);
@@ -98,6 +99,7 @@ describe("investigation actions", () => {
 
   it("binds explicit review to the delivered material version", async () => {
     const data = new FormData();
+    data.set("request_key", "11111111-1111-4111-8111-111111111111");
     data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
     data.set("decision", "APPROVE"); data.set("reason", "已逐项核对官方原件和对应实体");
     const result = await reviewInvestigationAction(empty, data);
@@ -108,5 +110,39 @@ describe("investigation actions", () => {
     vi.clearAllMocks(); data.delete("delivery_hash");
     expect((await reviewInvestigationAction(empty, data)).error).toBeTruthy();
     expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it.each(["registration", "review"])("replays a committed %s after the response is lost", async (operation) => {
+    const data = creation();
+    if (operation === "review") {
+      data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+      data.set("decision", "APPROVE"); data.set("reason", "已核对原件");
+    }
+    const receipts = new Map<string, typeof task>();
+    let dropResponse = true;
+    vi.mocked(fetch).mockImplementation(async (url, request) => {
+      if (String(url).endsWith("/sources")) return Response.json({ sources: [source] });
+      const key = new Headers(request?.headers).get("Idempotency-Key")!;
+      if (!receipts.has(key)) receipts.set(key, { ...task });
+      if (dropResponse) { dropResponse = false; throw new TypeError("synthetic lost response after commit"); }
+      return Response.json(receipts.get(key));
+    });
+    const action = operation === "registration" ? createInvestigationAction : reviewInvestigationAction;
+    expect((await action(empty, data)).error).toBeTruthy();
+    // Even the action state may have been lost; the key must already be in the form.
+    expect((await action(empty, data)).taskId).toBe(taskId);
+    expect(receipts.size).toBe(1);
+    data.set(operation === "registration" ? "brief" : "reason", "修改后的调查或审核说明");
+    await action(empty, data);
+    expect(receipts.size).toBe(2);
+    data.set("request_key", "22222222-2222-4222-8222-222222222222");
+    await action(empty, data);
+    expect(receipts.size).toBe(3);
+  });
+
+  it("requires the form request identity before any mutation", async () => {
+    const data = creation(); data.delete("request_key");
+    expect((await createInvestigationAction(empty, data)).error).toBeTruthy();
+    expect(submissions()).toHaveLength(0);
   });
 });

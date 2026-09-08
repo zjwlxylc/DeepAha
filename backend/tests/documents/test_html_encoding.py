@@ -13,7 +13,9 @@ def test_utf8_fragment_preserves_chinese_block_and_inline_quote() -> None:
     parsed = P9BHtmlDocumentParser().parse(content, artifact_sha256=sha256(content).hexdigest())
     assert parsed.blocks[0].canonical_text_or_value == "报考要求：本科及以上。"
     assert parsed.needs_review_reasons == ()
-    assert P9BHtmlDocumentParser.version != "0.8.0"
+    assert P9BHtmlDocumentParser.version == "0.8.2"
+    # The legacy 0.2 replay contract cannot reproduce the new UTF-8 fallback.
+    assert parsed.locators == ()
 
 
 @pytest.mark.parametrize(

@@ -84,7 +84,8 @@ def _create_artifact(
 def test_document_service_persists_immutable_blocks_and_field_locator_evidence(
     owned_session_factory: sessionmaker[Session], object_store: S3ObjectStore
 ) -> None:
-    artifact_id = _create_artifact(owned_session_factory, object_store)
+    content = CONTENT.replace(b"Official field value", "本科及以上".encode())
+    artifact_id = _create_artifact(owned_session_factory, object_store, content=content)
     service = DocumentService(
         session_factory=owned_session_factory,
         object_store=object_store,
@@ -110,14 +111,14 @@ def test_document_service_persists_immutable_blocks_and_field_locator_evidence(
         assert block.document_id == document.document_id
         assert block.document_parse_key == document.document_parse_key
         assert block.block_type == "HTML_ELEMENT"
-        assert block.canonical_text_or_value == "Official field value"
+        assert block.canonical_text_or_value == "本科及以上"
         assert block.structural_locator == {
             "kind": "html_element_span",
             "selector": (
                 "html:nth-of-type(1) > body:nth-of-type(1) > main:nth-of-type(1) > p:nth-of-type(1)"
             ),
             "text_start": 0,
-            "text_end": len("Official field value"),
+            "text_end": len("本科及以上"),
         }
         evidence = session.get(EvidenceRef, block.evidence_ref_id)
         assert evidence is not None
@@ -126,9 +127,9 @@ def test_document_service_persists_immutable_blocks_and_field_locator_evidence(
         assert evidence.locator_payload is not None
         assert evidence.locator_payload["block_id"] == str(block.block_id)
         assert evidence.locator_payload["document_parse_key"] == document.document_parse_key
-        assert evidence.quote_sha256 == sha256(b"Official field value").hexdigest()
+        assert evidence.quote_sha256 == sha256("本科及以上".encode()).hexdigest()
         assert session.scalar(select(func.count()).select_from(DocumentBlock)) == 1
-        assert session.scalar(select(func.count()).select_from(EvidenceRef)) == 2
+        assert session.scalar(select(func.count()).select_from(EvidenceRef)) == 1
 
     with owned_session_factory() as session:
         block = session.get(DocumentBlock, first.document_block_ids[0])

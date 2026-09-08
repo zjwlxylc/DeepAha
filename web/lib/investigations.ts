@@ -1,6 +1,5 @@
 import "server-only";
 
-import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 
 import { humanTestFetch, LocalHumanTestApiError } from "./local-human-test";
@@ -62,7 +61,7 @@ export class InvestigationApiError extends LocalHumanTestApiError {
   constructor(status: number, public readonly code: string | null) { super(status); }
 }
 
-export async function postInvestigation(path: string, body: object): Promise<InvestigationTask> {
+export async function postInvestigation(path: string, body: object, requestKey: string): Promise<InvestigationTask> {
   const token = (await cookies()).get("deepaha_phase7_reviewer_session")?.value;
   if (!token) throw new InvestigationApiError(401, null);
   const baseUrl = process.env.DEEPAHA_API_BASE_URL ?? "http://127.0.0.1:8000";
@@ -70,7 +69,7 @@ export async function postInvestigation(path: string, body: object): Promise<Inv
     method: "POST", cache: "no-store", redirect: "error",
     headers: {
       Accept: "application/json", "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, "Idempotency-Key": randomUUID(),
+      Authorization: `Bearer ${token}`, "Idempotency-Key": requestKey,
     },
     body: JSON.stringify(body),
   });

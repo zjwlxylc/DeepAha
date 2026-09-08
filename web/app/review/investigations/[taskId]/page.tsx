@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { randomUUID } from "node:crypto";
 
 import InvestigationEvidence, { safeOfficialUrl } from "../../../../components/investigations/evidence";
 import InvestigationReviewForm from "../../../../components/investigations/review-form";
@@ -24,7 +25,7 @@ export default async function InvestigationPage({ params }: { params: Promise<{ 
       <InvestigationEvidence task={task} />
       <section className="human-test-panel" aria-labelledby="investigation-review-title">
         <h2 id="investigation-review-title">内部材料审核</h2>
-        {task.review ? <dl className="compact-facts"><div><dt>审核决定</dt><dd>{task.review.decision === "APPROVE" ? "批准内部材料" : "退回材料"}</dd></div><div><dt>核对理由</dt><dd>{task.review.reason}</dd></div><div><dt>记录时间</dt><dd>{formatDateTime(task.review.created_at)}</dd></div><div><dt>审核员标识</dt><dd>{task.review.reviewer_id}</dd></div></dl> : task.status === "PENDING_REVIEW" && task.delivery_hash ? <InvestigationReviewForm taskId={task.task_id} deliveryHash={task.delivery_hash} key={task.delivery_hash} /> : <p>当前材料尚不可审核。请先完成回收与核验；执行失败不会被当作已完成。</p>}
+        {task.review ? <dl className="compact-facts"><div><dt>审核决定</dt><dd>{task.review.decision === "APPROVE" ? "批准内部材料" : "退回材料"}</dd></div><div><dt>核对理由</dt><dd>{task.review.reason}</dd></div><div><dt>记录时间</dt><dd>{formatDateTime(task.review.created_at)}</dd></div><div><dt>审核员标识</dt><dd>{task.review.reviewer_id}</dd></div></dl> : task.status === "PENDING_REVIEW" && task.delivery_hash ? <InvestigationReviewForm taskId={task.task_id} deliveryHash={task.delivery_hash} requestKey={randomUUID()} key={task.delivery_hash} /> : <p>当前材料尚不可审核。请先完成回收与核验；执行失败不会被当作已完成。</p>}
       </section>
       <details className="human-test-panel"><summary>任务版本与原始候选（补充核对）</summary><dl className="compact-facts"><div><dt>任务标识</dt><dd>{task.task_id}</dd></div><div><dt>调查约定版本</dt><dd className="investigation-hash">{task.contract_hash}</dd></div><div><dt>材料版本</dt><dd className="investigation-hash">{task.delivery_hash ?? "尚未交付"}</dd></div><div><dt>登记时间</dt><dd>{formatDateTime(task.created_at)}</dd></div></dl><pre className="investigation-json">{JSON.stringify(task.opportunities, null, 2)}</pre></details>
     </main>

@@ -1,5 +1,6 @@
 "use server";
 
+import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 
 import { getInvestigationSources, InvestigationApiError, postInvestigation } from "../../../lib/investigations";
@@ -55,9 +56,13 @@ function failure(error: unknown, registration: boolean): InvestigationActionStat
   return invalid("操作未完成。请核对来源、任务状态和材料后重试。");
 }
 
-async function submit(path: string, body: object, message: string): Promise<InvestigationActionState> {
+async function submit(path: string, body: object, requestKey: string, message: string): Promise<InvestigationActionState> {
+  if (!UUID.test(requestKey)) return invalid("表单已失效，请刷新页面后重新填写。");
+  // The form identity exists before the first POST, so a lost API/action response
+  // can be replayed. Changed content is a different intent, not a conflicting retry.
+  const key = createHash("sha256").update(JSON.stringify([requestKey, path, body])).digest("hex");
   try {
-    const task = await postInvestigation(path, body);
+    const task = await postInvestigation(path, body, key);
     revalidatePath("/review/investigations");
     revalidatePath(`/review/investigations/${task.task_id}`);
     return { error: null, message, taskId: task.task_id };
@@ -98,7 +103,7 @@ export async function createInvestigationAction(
     source_id: sourceId, endpoint_id: endpointId, notice_url: noticeUrl, brief,
     expected_artifact_urls: artifactUrls, expected_entity_keys: entityKeys,
     calibration: form.get("calibration") === "on", wall_time_seconds: wallTimeSeconds,
-  }, "调查任务已登记，后续由获授权的运维人员安排执行。");
+  }, text(form, "request_key"), "调查任务已登记，后续由获授权的运维人员安排执行。");
 }
 
 export async function reviewInvestigationAction(
@@ -115,5 +120,5 @@ export async function reviewInvestigationAction(
   }
   return submit(`/investigations/${taskId}/review`, {
     decision, delivery_hash: deliveryHash, reason,
-  }, "内部材料审核已记录；正式机会与资格规则尚未发布。");
+  }, text(form, "request_key"), "内部材料审核已记录；正式机会与资格规则尚未发布。");
 }

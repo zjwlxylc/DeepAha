@@ -25,7 +25,12 @@ from pypdf import PdfReader
 from deepaha.documents.html import _parse_html_tree
 from deepaha.documents.parser import ExpectedParseError
 from deepaha.documents.pdf import MAX_PDF_PAGES
-from deepaha.documents.spreadsheet import _ignore_declared_dimensions, _preflight_archive
+from deepaha.documents.spreadsheet import (
+    _ignore_declared_dimensions,
+    _preflight_archive,
+    _preflight_loaded_worksheet,
+)
+from deepaha.documents.spreadsheet_limits import MAX_WORKSHEETS, WorksheetExpansionBudget
 
 SCHEMA_SHA256 = {
     "opportunities": "fbbf3f83bd078ecffaa52ab8aa79743ada115c5d88918c3a5ea25245e0f6ccd5",
@@ -35,7 +40,6 @@ _FILES = {"opportunities.json", "evidence.json", "report.md"}
 _HASH = re.compile(r"[a-fA-F0-9]{64}\Z")
 _ARTIFACT_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,255}\Z")
 _RESERVED = re.compile(r"(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\..*)?\Z", re.I)
-MAX_WORKSHEETS = 128
 HTML_QUOTE_CANONICALIZATION_VERSION = "html-quote-c14n/1"
 _HAN = r"[\u3400-\u4dbf\u4e00-\u9fff]"
 _HAN_FORMAT_MARKS = re.compile(rf"(?<={_HAN})[\u200b\ufeff]+(?={_HAN})")
@@ -579,18 +583,29 @@ def _spreadsheet_text(
 def _read_spreadsheet_text(content: bytes) -> _SpreadsheetText:
     """Read cells once per validation, retaining zeroes and exact worksheet names."""
     try:
-        _preflight_archive(content)
+        return _bounded_spreadsheet_text(content)
     except ExpectedParseError as error:
-        if error.code in {"XLSX_ENTRY_LIMIT_EXCEEDED", "XLSX_UNCOMPRESSED_SIZE_EXCEEDED"}:
+        if error.code in {
+            "XLSX_ENTRY_LIMIT_EXCEEDED",
+            "XLSX_UNCOMPRESSED_SIZE_EXCEEDED",
+            "XLSX_EXPANSION_LIMIT_EXCEEDED",
+            "XLSX_WORKSHEET_LIMIT_EXCEEDED",
+        }:
             _fail("EVIDENCE_RESOURCE_LIMIT_EXCEEDED")
         raise
+
+
+def _bounded_spreadsheet_text(content: bytes) -> _SpreadsheetText:
+    _preflight_archive(content)
     book = load_workbook(BytesIO(content), read_only=True, data_only=False, keep_links=False)
     try:
         if len(book.sheetnames) > MAX_WORKSHEETS:
             _fail("EVIDENCE_RESOURCE_LIMIT_EXCEEDED")
         sheets: dict[str, dict[int, dict[int, str]]] = {}
         row_counts: dict[str, int] = {}
+        expansion = WorksheetExpansionBudget()
         for worksheet in book.worksheets:
+            _preflight_loaded_worksheet(worksheet, expansion)
             _ignore_declared_dimensions(worksheet)
             rows = sheets[worksheet.title] = {}
             row_counts[worksheet.title] = 0

@@ -6,6 +6,38 @@ test.beforeEach(async ({ context, request }) => {
   await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true, sameSite: "Lax" }]);
 });
 
+for (const operation of ["registration", "review"] as const) {
+  test(`retries ${operation} after a lost receipt without changing the form or duplicating a write`, async ({ page, request }) => {
+    await page.goto(operation === "registration" ? "/review/investigations" : `/review/investigations/${taskId}`);
+    const requestKey = await page.locator('input[name="request_key"]').inputValue();
+    const input = page.getByLabel(operation === "registration" ? "调查说明" : "核对理由");
+    const button = page.getByRole("button", { name: operation === "registration" ? "登记调查任务" : "记录内部材料审核" });
+    if (operation === "registration") {
+      await page.getByLabel("已批准来源").selectOption(`${source.source_id}/${source.endpoint_id}`);
+      await page.getByLabel("明确公告地址").fill(`${source.url}/1`);
+      await page.getByLabel("执行时间上限（秒）").fill("1200");
+      await page.getByRole("checkbox").uncheck();
+    } else {
+      await page.getByRole("combobox", { name: "审核决定" }).selectOption("APPROVE");
+    }
+    await input.fill("合成浏览器测试：模拟后端提交成功但回执丢失。");
+    await request.get("http://127.0.0.1:3097/drop-next-receipt");
+    await button.click();
+    await expect(page.locator("form").getByRole("alert")).toBeVisible();
+    await expect(input).toHaveValue("合成浏览器测试：模拟后端提交成功但回执丢失。");
+    await expect(page.locator('input[name="request_key"]')).toHaveValue(requestKey);
+    if (operation === "registration") {
+      await expect(page.getByLabel("执行时间上限（秒）")).toHaveValue("1200");
+      await expect(page.getByRole("checkbox")).not.toBeChecked();
+    } else await expect(page.getByRole("combobox", { name: "审核决定" })).toHaveValue("APPROVE");
+    expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 1, posts: 1 });
+    await button.click();
+    if (operation === "registration") await expect(page.getByRole("status")).toContainText("调查任务已登记");
+    else await expect(page.getByText("批准内部材料", { exact: true })).toBeVisible();
+    expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 1, posts: 2 });
+  });
+}
+
 test("registers without execution, reads evidence, downloads privately and records internal review", async ({ page }, testInfo) => {
   await page.goto("/review/investigations");
   await expect(page.getByRole("button", { name: "登记调查任务" })).toBeVisible();

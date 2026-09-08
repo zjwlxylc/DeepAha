@@ -126,7 +126,9 @@ class LxmlHtmlParser:
             published_at=None,
             language=language,
             normalized_text=normalize_text("\n\n".join(block_texts) + "\n"),
-            locators=tuple(locators),
+            # P9B encoding rules belong to versioned DocumentBlocks, not the
+            # legacy 0.2 locator replay contract (which must remain unchanged).
+            locators=() if self.emit_document_blocks else tuple(locators),
             needs_review_reasons=(),
             blocks=(
                 validate_parsed_blocks(tuple(parsed_blocks)) if self.emit_document_blocks else ()
@@ -135,7 +137,7 @@ class LxmlHtmlParser:
 
 
 class P9BHtmlDocumentParser(LxmlHtmlParser):
-    version = "0.8.1"
+    version = "0.8.2"
     parse_contract_version = P9B_BLOCK_PARSE_CONTRACT_VERSION
     emit_document_blocks = True
     utf8_fallback = True
