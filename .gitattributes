@@ -1,4 +1,6 @@
 contracts/schemas/** text eol=lf
+# Vendored WMA contracts are checked by original byte hash, including CRLF.
+backend/src/deepaha/investigations/schemas/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 backend/tests/fixtures/official/civil-service-fast-stream-news-2025.json -text
 backend/tests/fixtures/official/*.html binary
 backend/tests/fixtures/documents/*.pdf binary
