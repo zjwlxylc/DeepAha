@@ -1,0 +1,456 @@
+........................................................................ [ 14%]
+........................................................................ [ 28%]
+........................................................................ [ 42%]
+........................................................................ [ 56%]
+...........F.FFFF....................................................... [ 71%]
+..............................................s......................... [ 85%]
+................s.........................................s............. [ 99%]
+..                                                                       [100%]
+================================== FAILURES ===================================
+_____ test_compliant_history_round_trips_through_value_contract_migration _____
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\psycopg\cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: column "provenance_kind" of relation "source_bundle_members" does not exist
+E   LINE 1: ...ource_bundle_revision_id, source_id, endpoint_id, provenance...
+E                                                                ^
+
+The above exception was the direct cause of the following exception:
+tests\integration\test_p9b_gateway_value_migration.py:148: in test_compliant_history_round_trips_through_value_contract_migration
+    authority = seed_gateway_authority(session)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\integration\p9b_gateway_support.py:189: in seed_gateway_authority
+    revision = frozen_bundle(session, block_graph)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\integration\test_p9b_b0_persistence.py:325: in frozen_bundle
+    revision = service.create_revision(
+src\deepaha\p9b\provenance.py:145: in create_revision
+    return self._create_revision(
+src\deepaha\p9b\provenance.py:239: in _create_revision
+    self._session.flush()
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4353: in flush
+    self._flush(objects)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4488: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4449: in _flush
+    flush_context.execute()
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:465: in execute
+    rec.execute(self)
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:1049: in _emit_insert_statements
+    result = connection.execute(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1421: in execute
+    return meth(
+.venv\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1643: in _execute_clauseelement
+    ret = self._execute_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1848: in _execute_context
+    return self._exec_single_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:2365: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\psycopg\cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) column "provenance_kind" of relation "source_bundle_members" does not exist
+E   LINE 1: ...ource_bundle_revision_id, source_id, endpoint_id, provenance...
+E                                                                ^
+E   [SQL: INSERT INTO source_bundle_members (source_bundle_member_id, source_bundle_revision_id, source_id, endpoint_id, provenance_kind, wma_task_id, wma_material_id, wma_delivery_hash, wma_contract_hash, capture_observation_id, acquisition_evaluation_id, acquisition_validation_status, acquisition_run_id, recipe_id, recipe_version, policy_version, fetch_strategy, fetcher_name, fetcher_version, validator_name, validator_version, raw_artifact_id, raw_artifact_sha256, raw_artifact_size, storage_bucket, object_key, document_id, document_parse_key, parser_name, parser_version, parse_contract_version, evidence_ref_id, parse_attempt_id, member_role, precedence, effective_from, effective_to, member_provenance_hash, created_at) VALUES (%(source_bundle_member_id)s::UUID, %(source_bundle_revision_id)s::UUID, %(source_id)s::UUID, %(endpoint_id)s::UUID, %(provenance_kind)s::VARCHAR, %(wma_task_id)s::UUID, %(wma_material_id)s::VARCHAR, %(wma_delivery_hash)s::VARCHAR, %(wma_contract_hash)s::VARCHAR, %(capture_observation_id)s::UUID, %(acquisition_evaluation_id)s::UUID, %(acquisition_validation_status)s::VARCHAR, %(acquisition_run_id)s::UUID, %(recipe_id)s::UUID, %(recipe_version)s::VARCHAR, %(policy_version)s::VARCHAR, %(fetch_strategy)s::VARCHAR, %(fetcher_name)s::VARCHAR, %(fetcher_version)s::VARCHAR, %(validator_name)s::VARCHAR, %(validator_version)s::VARCHAR, %(raw_artifact_id)s::UUID, %(raw_artifact_sha256)s::VARCHAR, %(raw_artifact_size)s::INTEGER, %(storage_bucket)s::VARCHAR, %(object_key)s::VARCHAR, %(document_id)s::UUID, %(document_parse_key)s::VARCHAR, %(parser_name)s::VARCHAR, %(parser_version)s::VARCHAR, %(parse_contract_version)s::VARCHAR, %(evidence_ref_id)s::UUID, %(parse_attempt_id)s::UUID, %(member_role)s::VARCHAR, %(precedence)s::INTEGER, %(effective_from)s::TIMESTAMP WITH TIME ZONE, %(effective_to)s::TIMESTAMP WITH TIME ZONE, %(member_provenance_hash)s::VARCHAR, %(created_at)s::TIMESTAMP WITH TIME ZONE)]
+E   [parameters: {'source_bundle_member_id': UUID('01a08096-97c9-7422-8a21-f45f16e824dd'), 'source_bundle_revision_id': UUID('01a08096-97be-7562-b002-e44cc92af2a0'), 'source_id': UUID('01a08096-977a-76a6-ba69-5e7d86e8dd0d'), 'endpoint_id': UUID('01a08096-977a-76a6-ba69-5e7e68d6cf45'), 'provenance_kind': 'ACQUISITION', 'wma_task_id': None, 'wma_material_id': None, 'wma_delivery_hash': None, 'wma_contract_hash': None, 'capture_observation_id': UUID('01a08096-977a-76a6-ba69-5e8134f51688'), 'acquisition_evaluation_id': UUID('01a08096-977a-76a6-ba69-5e8293de74dc'), 'acquisition_validation_status': 'VALID', 'acquisition_run_id': UUID('01a08096-977a-76a6-ba69-5e832e7bb749'), 'recipe_id': UUID('01a08096-977a-76a6-ba69-5e84a1dfe8ed'), 'recipe_version': '2026-08-24.1', 'policy_version': '2026-08-24.1', 'fetch_strategy': 'STATIC_HTTP', 'fetcher_name': 'static-http', 'fetcher_version': '1.0.0', 'validator_name': 'deepaha-content-validator', 'validator_version': '1.0.0', 'raw_artifact_id': UUID('01a08096-977a-76a6-ba69-5e7f8a66d1d6'), 'raw_artifact_sha256': '7775e673276f505c2bf101d4a92fd11dc0cdee5111c1ab71f03c2bc30304173a', 'raw_artifact_size': 30, 'storage_bucket': 'deepaha-raw', 'object_key': 'raw/sha256/77/7775e673276f505c2bf101d4a92fd11dc0cdee5111c1ab71f03c2bc30304173a', 'document_id': UUID('01a08096-97a9-71a3-a235-a3d1badc6174'), 'document_parse_key': '88f27f7337ce52805409266c3f2b5c7c53f1f28e154221bf4b33bfd4923e2ed3', 'parser_name': 'deepaha-html-p9b', 'parser_version': '0.8.0', 'parse_contract_version': 'p9b-document-block-contract-v0.8.0', 'evidence_ref_id': None, 'parse_attempt_id': None, 'member_role': 'PRIMARY_NOTICE', 'precedence': 1000, 'effective_from': datetime.datetime(2026, 8, 24, 12, 0, tzinfo=datetime.timezone.utc), 'effective_to': None, 'member_provenance_hash': '46dbf6f1b64751529cc53110b82f0da82917a5d6034524322fb8d01559e49b40', 'created_at': datetime.datetime(2026, 8, 24, 12, 0, tzinfo=datetime.timezone.utc)}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+---------------------------- Captured stderr call -----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 20260821_0001, phase1_domain_evidence
+INFO  [alembic.runtime.migration] Running upgrade 20260821_0001 -> 20260821_0002, phase2_observation_and_locators
+INFO  [alembic.runtime.migration] Running upgrade 20260821_0002 -> 20260822_0003, phase3_opportunity_history
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0003 -> 20260822_0004, phase4_rules_eligibility_evaluation
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0004 -> 20260822_0005, phase5_public_catalog
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0005 -> 20260822_0006, phase6_personal_action
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0006 -> 20260822_0007, phase7_feedback_review_validation
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0007 -> 20260822_0008, phase8_deadline_reminders
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0008 -> 20260823_0009, source_acquisition_evaluations
+INFO  [alembic.runtime.migration] Running upgrade 20260823_0009 -> 20260823_0010, source_acquisition_health
+INFO  [alembic.runtime.migration] Running upgrade 20260823_0010 -> 20260824_0011, p9b_identity_provenance
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0011 -> 20260824_0012, p9b_document_blocks
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0012 -> 20260824_0013, p9b_fact_lifecycle
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0013 -> 20260824_0014, p9b_gold_benchmark
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0014 -> 20260825_0023, p9b_replacement_provenance_identity_integrity
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0023 -> 20260825_0024, p9b_replacement_gold_attestation_integrity
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0024 -> 20260825_0025, p9b_replacement_revision_initial_state
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0025 -> 20260825_0026, p9b_replacement_gateway_state
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0026 -> 20260825_0027, p9b_replacement_gateway_authority
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0027 -> 20260825_0028, p9b_replacement_unknown_reconciliation
+_______ test_noncompliant_history_is_rejected_without_rewrite[model_id] _______
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\psycopg\cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: column "provenance_kind" of relation "source_bundle_members" does not exist
+E   LINE 1: ...ource_bundle_revision_id, source_id, endpoint_id, provenance...
+E                                                                ^
+
+The above exception was the direct cause of the following exception:
+tests\integration\test_p9b_gateway_value_migration.py:265: in test_noncompliant_history_is_rejected_without_rewrite
+    authority = seed_gateway_authority(session)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\integration\p9b_gateway_support.py:189: in seed_gateway_authority
+    revision = frozen_bundle(session, block_graph)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\integration\test_p9b_b0_persistence.py:325: in frozen_bundle
+    revision = service.create_revision(
+src\deepaha\p9b\provenance.py:145: in create_revision
+    return self._create_revision(
+src\deepaha\p9b\provenance.py:239: in _create_revision
+    self._session.flush()
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4353: in flush
+    self._flush(objects)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4488: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4449: in _flush
+    flush_context.execute()
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:465: in execute
+    rec.execute(self)
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:1049: in _emit_insert_statements
+    result = connection.execute(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1421: in execute
+    return meth(
+.venv\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1643: in _execute_clauseelement
+    ret = self._execute_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1848: in _execute_context
+    return self._exec_single_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:2365: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\psycopg\cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) column "provenance_kind" of relation "source_bundle_members" does not exist
+E   LINE 1: ...ource_bundle_revision_id, source_id, endpoint_id, provenance...
+E                                                                ^
+E   [SQL: INSERT INTO source_bundle_members (source_bundle_member_id, source_bundle_revision_id, source_id, endpoint_id, provenance_kind, wma_task_id, wma_material_id, wma_delivery_hash, wma_contract_hash, capture_observation_id, acquisition_evaluation_id, acquisition_validation_status, acquisition_run_id, recipe_id, recipe_version, policy_version, fetch_strategy, fetcher_name, fetcher_version, validator_name, validator_version, raw_artifact_id, raw_artifact_sha256, raw_artifact_size, storage_bucket, object_key, document_id, document_parse_key, parser_name, parser_version, parse_contract_version, evidence_ref_id, parse_attempt_id, member_role, precedence, effective_from, effective_to, member_provenance_hash, created_at) VALUES (%(source_bundle_member_id)s::UUID, %(source_bundle_revision_id)s::UUID, %(source_id)s::UUID, %(endpoint_id)s::UUID, %(provenance_kind)s::VARCHAR, %(wma_task_id)s::UUID, %(wma_material_id)s::VARCHAR, %(wma_delivery_hash)s::VARCHAR, %(wma_contract_hash)s::VARCHAR, %(capture_observation_id)s::UUID, %(acquisition_evaluation_id)s::UUID, %(acquisition_validation_status)s::VARCHAR, %(acquisition_run_id)s::UUID, %(recipe_id)s::UUID, %(recipe_version)s::VARCHAR, %(policy_version)s::VARCHAR, %(fetch_strategy)s::VARCHAR, %(fetcher_name)s::VARCHAR, %(fetcher_version)s::VARCHAR, %(validator_name)s::VARCHAR, %(validator_version)s::VARCHAR, %(raw_artifact_id)s::UUID, %(raw_artifact_sha256)s::VARCHAR, %(raw_artifact_size)s::INTEGER, %(storage_bucket)s::VARCHAR, %(object_key)s::VARCHAR, %(document_id)s::UUID, %(document_parse_key)s::VARCHAR, %(parser_name)s::VARCHAR, %(parser_version)s::VARCHAR, %(parse_contract_version)s::VARCHAR, %(evidence_ref_id)s::UUID, %(parse_attempt_id)s::UUID, %(member_role)s::VARCHAR, %(precedence)s::INTEGER, %(effective_from)s::TIMESTAMP WITH TIME ZONE, %(effective_to)s::TIMESTAMP WITH TIME ZONE, %(member_provenance_hash)s::VARCHAR, %(created_at)s::TIMESTAMP WITH TIME ZONE)]
+E   [parameters: {'source_bundle_member_id': UUID('01a08096-c8c3-75bb-8cae-3a35b811801d'), 'source_bundle_revision_id': UUID('01a08096-c8b8-760e-8b83-67d2bcc323c6'), 'source_id': UUID('01a08096-c874-76d3-9d46-09b432092dd8'), 'endpoint_id': UUID('01a08096-c874-76d3-9d46-09b502dc5227'), 'provenance_kind': 'ACQUISITION', 'wma_task_id': None, 'wma_material_id': None, 'wma_delivery_hash': None, 'wma_contract_hash': None, 'capture_observation_id': UUID('01a08096-c874-76d3-9d46-09b84b98f1cd'), 'acquisition_evaluation_id': UUID('01a08096-c874-76d3-9d46-09b94cae94a8'), 'acquisition_validation_status': 'VALID', 'acquisition_run_id': UUID('01a08096-c874-76d3-9d46-09bad6de3948'), 'recipe_id': UUID('01a08096-c874-76d3-9d46-09bbaf689a3d'), 'recipe_version': '2026-08-24.1', 'policy_version': '2026-08-24.1', 'fetch_strategy': 'STATIC_HTTP', 'fetcher_name': 'static-http', 'fetcher_version': '1.0.0', 'validator_name': 'deepaha-content-validator', 'validator_version': '1.0.0', 'raw_artifact_id': UUID('01a08096-c874-76d3-9d46-09b64f9f35b4'), 'raw_artifact_sha256': '7775e673276f505c2bf101d4a92fd11dc0cdee5111c1ab71f03c2bc30304173a', 'raw_artifact_size': 30, 'storage_bucket': 'deepaha-raw', 'object_key': 'raw/sha256/77/7775e673276f505c2bf101d4a92fd11dc0cdee5111c1ab71f03c2bc30304173a', 'document_id': UUID('01a08096-c8a4-711a-82a8-1456d69f6e85'), 'document_parse_key': '8bbceb2dc53b95dc88d176167a2c36e78d94472917af3ee2fae483289ebb1d0a', 'parser_name': 'deepaha-html-p9b', 'parser_version': '0.8.0', 'parse_contract_version': 'p9b-document-block-contract-v0.8.0', 'evidence_ref_id': None, 'parse_attempt_id': None, 'member_role': 'PRIMARY_NOTICE', 'precedence': 1000, 'effective_from': datetime.datetime(2026, 8, 24, 12, 0, tzinfo=datetime.timezone.utc), 'effective_to': None, 'member_provenance_hash': '8d7769499d87754d3dbf3fde20495b4849b13fb7e227581e0b49659624c6aa27', 'created_at': datetime.datetime(2026, 8, 24, 12, 0, tzinfo=datetime.timezone.utc)}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+---------------------------- Captured stderr call -----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 20260821_0001, phase1_domain_evidence
+INFO  [alembic.runtime.migration] Running upgrade 20260821_0001 -> 20260821_0002, phase2_observation_and_locators
+INFO  [alembic.runtime.migration] Running upgrade 20260821_0002 -> 20260822_0003, phase3_opportunity_history
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0003 -> 20260822_0004, phase4_rules_eligibility_evaluation
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0004 -> 20260822_0005, phase5_public_catalog
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0005 -> 20260822_0006, phase6_personal_action
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0006 -> 20260822_0007, phase7_feedback_review_validation
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0007 -> 20260822_0008, phase8_deadline_reminders
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0008 -> 20260823_0009, source_acquisition_evaluations
+INFO  [alembic.runtime.migration] Running upgrade 20260823_0009 -> 20260823_0010, source_acquisition_health
+INFO  [alembic.runtime.migration] Running upgrade 20260823_0010 -> 20260824_0011, p9b_identity_provenance
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0011 -> 20260824_0012, p9b_document_blocks
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0012 -> 20260824_0013, p9b_fact_lifecycle
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0013 -> 20260824_0014, p9b_gold_benchmark
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0014 -> 20260825_0023, p9b_replacement_provenance_identity_integrity
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0023 -> 20260825_0024, p9b_replacement_gold_attestation_integrity
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0024 -> 20260825_0025, p9b_replacement_revision_initial_state
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0025 -> 20260825_0026, p9b_replacement_gateway_state
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0026 -> 20260825_0027, p9b_replacement_gateway_authority
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0027 -> 20260825_0028, p9b_replacement_unknown_reconciliation
+_ test_noncompliant_history_is_rejected_without_rewrite[provider_response_id] _
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\psycopg\cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: column "provenance_kind" of relation "source_bundle_members" does not exist
+E   LINE 1: ...ource_bundle_revision_id, source_id, endpoint_id, provenance...
+E                                                                ^
+
+The above exception was the direct cause of the following exception:
+tests\integration\test_p9b_gateway_value_migration.py:265: in test_noncompliant_history_is_rejected_without_rewrite
+    authority = seed_gateway_authority(session)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\integration\p9b_gateway_support.py:189: in seed_gateway_authority
+    revision = frozen_bundle(session, block_graph)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\integration\test_p9b_b0_persistence.py:325: in frozen_bundle
+    revision = service.create_revision(
+src\deepaha\p9b\provenance.py:145: in create_revision
+    return self._create_revision(
+src\deepaha\p9b\provenance.py:239: in _create_revision
+    self._session.flush()
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4353: in flush
+    self._flush(objects)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4488: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4449: in _flush
+    flush_context.execute()
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:465: in execute
+    rec.execute(self)
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:1049: in _emit_insert_statements
+    result = connection.execute(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1421: in execute
+    return meth(
+.venv\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1643: in _execute_clauseelement
+    ret = self._execute_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1848: in _execute_context
+    return self._exec_single_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:2365: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\psycopg\cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) column "provenance_kind" of relation "source_bundle_members" does not exist
+E   LINE 1: ...ource_bundle_revision_id, source_id, endpoint_id, provenance...
+E                                                                ^
+E   [SQL: INSERT INTO source_bundle_members (source_bundle_member_id, source_bundle_revision_id, source_id, endpoint_id, provenance_kind, wma_task_id, wma_material_id, wma_delivery_hash, wma_contract_hash, capture_observation_id, acquisition_evaluation_id, acquisition_validation_status, acquisition_run_id, recipe_id, recipe_version, policy_version, fetch_strategy, fetcher_name, fetcher_version, validator_name, validator_version, raw_artifact_id, raw_artifact_sha256, raw_artifact_size, storage_bucket, object_key, document_id, document_parse_key, parser_name, parser_version, parse_contract_version, evidence_ref_id, parse_attempt_id, member_role, precedence, effective_from, effective_to, member_provenance_hash, created_at) VALUES (%(source_bundle_member_id)s::UUID, %(source_bundle_revision_id)s::UUID, %(source_id)s::UUID, %(endpoint_id)s::UUID, %(provenance_kind)s::VARCHAR, %(wma_task_id)s::UUID, %(wma_material_id)s::VARCHAR, %(wma_delivery_hash)s::VARCHAR, %(wma_contract_hash)s::VARCHAR, %(capture_observation_id)s::UUID, %(acquisition_evaluation_id)s::UUID, %(acquisition_validation_status)s::VARCHAR, %(acquisition_run_id)s::UUID, %(recipe_id)s::UUID, %(recipe_version)s::VARCHAR, %(policy_version)s::VARCHAR, %(fetch_strategy)s::VARCHAR, %(fetcher_name)s::VARCHAR, %(fetcher_version)s::VARCHAR, %(validator_name)s::VARCHAR, %(validator_version)s::VARCHAR, %(raw_artifact_id)s::UUID, %(raw_artifact_sha256)s::VARCHAR, %(raw_artifact_size)s::INTEGER, %(storage_bucket)s::VARCHAR, %(object_key)s::VARCHAR, %(document_id)s::UUID, %(document_parse_key)s::VARCHAR, %(parser_name)s::VARCHAR, %(parser_version)s::VARCHAR, %(parse_contract_version)s::VARCHAR, %(evidence_ref_id)s::UUID, %(parse_attempt_id)s::UUID, %(member_role)s::VARCHAR, %(precedence)s::INTEGER, %(effective_from)s::TIMESTAMP WITH TIME ZONE, %(effective_to)s::TIMESTAMP WITH TIME ZONE, %(member_provenance_hash)s::VARCHAR, %(created_at)s::TIMESTAMP WITH TIME ZONE)]
+E   [parameters: {'source_bundle_member_id': UUID('01a08096-d5b5-7354-9299-eb5e6130b7ce'), 'source_bundle_revision_id': UUID('01a08096-d5a9-7159-90b7-e8cb8949e4db'), 'source_id': UUID('01a08096-d566-7102-bcab-862c2fcc13a3'), 'endpoint_id': UUID('01a08096-d566-7102-bcab-862dc568c5de'), 'provenance_kind': 'ACQUISITION', 'wma_task_id': None, 'wma_material_id': None, 'wma_delivery_hash': None, 'wma_contract_hash': None, 'capture_observation_id': UUID('01a08096-d566-7102-bcab-8630ae1f7799'), 'acquisition_evaluation_id': UUID('01a08096-d566-7102-bcab-8631487ba0ed'), 'acquisition_validation_status': 'VALID', 'acquisition_run_id': UUID('01a08096-d566-7102-bcab-8632052c73f6'), 'recipe_id': UUID('01a08096-d566-7102-bcab-86332a4f7eaa'), 'recipe_version': '2026-08-24.1', 'policy_version': '2026-08-24.1', 'fetch_strategy': 'STATIC_HTTP', 'fetcher_name': 'static-http', 'fetcher_version': '1.0.0', 'validator_name': 'deepaha-content-validator', 'validator_version': '1.0.0', 'raw_artifact_id': UUID('01a08096-d566-7102-bcab-862ef4a068e8'), 'raw_artifact_sha256': '7775e673276f505c2bf101d4a92fd11dc0cdee5111c1ab71f03c2bc30304173a', 'raw_artifact_size': 30, 'storage_bucket': 'deepaha-raw', 'object_key': 'raw/sha256/77/7775e673276f505c2bf101d4a92fd11dc0cdee5111c1ab71f03c2bc30304173a', 'document_id': UUID('01a08096-d594-76d6-9b33-6c865c64d42f'), 'document_parse_key': 'da14acd1af315c04ead86e02b43dd2a6eb0aba50c7dc26fcee573695f98d86fe', 'parser_name': 'deepaha-html-p9b', 'parser_version': '0.8.0', 'parse_contract_version': 'p9b-document-block-contract-v0.8.0', 'evidence_ref_id': None, 'parse_attempt_id': None, 'member_role': 'PRIMARY_NOTICE', 'precedence': 1000, 'effective_from': datetime.datetime(2026, 8, 24, 12, 0, tzinfo=datetime.timezone.utc), 'effective_to': None, 'member_provenance_hash': '436ebc6fad2d5aa416a79df468a75f1f919c2febf0d02a4ce6e6a58215b03cc6', 'created_at': datetime.datetime(2026, 8, 24, 12, 0, tzinfo=datetime.timezone.utc)}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+---------------------------- Captured stderr call -----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 20260821_0001, phase1_domain_evidence
+INFO  [alembic.runtime.migration] Running upgrade 20260821_0001 -> 20260821_0002, phase2_observation_and_locators
+INFO  [alembic.runtime.migration] Running upgrade 20260821_0002 -> 20260822_0003, phase3_opportunity_history
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0003 -> 20260822_0004, phase4_rules_eligibility_evaluation
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0004 -> 20260822_0005, phase5_public_catalog
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0005 -> 20260822_0006, phase6_personal_action
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0006 -> 20260822_0007, phase7_feedback_review_validation
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0007 -> 20260822_0008, phase8_deadline_reminders
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0008 -> 20260823_0009, source_acquisition_evaluations
+INFO  [alembic.runtime.migration] Running upgrade 20260823_0009 -> 20260823_0010, source_acquisition_health
+INFO  [alembic.runtime.migration] Running upgrade 20260823_0010 -> 20260824_0011, p9b_identity_provenance
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0011 -> 20260824_0012, p9b_document_blocks
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0012 -> 20260824_0013, p9b_fact_lifecycle
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0013 -> 20260824_0014, p9b_gold_benchmark
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0014 -> 20260825_0023, p9b_replacement_provenance_identity_integrity
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0023 -> 20260825_0024, p9b_replacement_gold_attestation_integrity
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0024 -> 20260825_0025, p9b_replacement_revision_initial_state
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0025 -> 20260825_0026, p9b_replacement_gateway_state
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0026 -> 20260825_0027, p9b_replacement_gateway_authority
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0027 -> 20260825_0028, p9b_replacement_unknown_reconciliation
+______ test_noncompliant_history_is_rejected_without_rewrite[object_key] ______
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\psycopg\cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: column "provenance_kind" of relation "source_bundle_members" does not exist
+E   LINE 1: ...ource_bundle_revision_id, source_id, endpoint_id, provenance...
+E                                                                ^
+
+The above exception was the direct cause of the following exception:
+tests\integration\test_p9b_gateway_value_migration.py:265: in test_noncompliant_history_is_rejected_without_rewrite
+    authority = seed_gateway_authority(session)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\integration\p9b_gateway_support.py:189: in seed_gateway_authority
+    revision = frozen_bundle(session, block_graph)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\integration\test_p9b_b0_persistence.py:325: in frozen_bundle
+    revision = service.create_revision(
+src\deepaha\p9b\provenance.py:145: in create_revision
+    return self._create_revision(
+src\deepaha\p9b\provenance.py:239: in _create_revision
+    self._session.flush()
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4353: in flush
+    self._flush(objects)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4488: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4449: in _flush
+    flush_context.execute()
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:465: in execute
+    rec.execute(self)
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:1049: in _emit_insert_statements
+    result = connection.execute(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1421: in execute
+    return meth(
+.venv\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1643: in _execute_clauseelement
+    ret = self._execute_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1848: in _execute_context
+    return self._exec_single_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:2365: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\psycopg\cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) column "provenance_kind" of relation "source_bundle_members" does not exist
+E   LINE 1: ...ource_bundle_revision_id, source_id, endpoint_id, provenance...
+E                                                                ^
+E   [SQL: INSERT INTO source_bundle_members (source_bundle_member_id, source_bundle_revision_id, source_id, endpoint_id, provenance_kind, wma_task_id, wma_material_id, wma_delivery_hash, wma_contract_hash, capture_observation_id, acquisition_evaluation_id, acquisition_validation_status, acquisition_run_id, recipe_id, recipe_version, policy_version, fetch_strategy, fetcher_name, fetcher_version, validator_name, validator_version, raw_artifact_id, raw_artifact_sha256, raw_artifact_size, storage_bucket, object_key, document_id, document_parse_key, parser_name, parser_version, parse_contract_version, evidence_ref_id, parse_attempt_id, member_role, precedence, effective_from, effective_to, member_provenance_hash, created_at) VALUES (%(source_bundle_member_id)s::UUID, %(source_bundle_revision_id)s::UUID, %(source_id)s::UUID, %(endpoint_id)s::UUID, %(provenance_kind)s::VARCHAR, %(wma_task_id)s::UUID, %(wma_material_id)s::VARCHAR, %(wma_delivery_hash)s::VARCHAR, %(wma_contract_hash)s::VARCHAR, %(capture_observation_id)s::UUID, %(acquisition_evaluation_id)s::UUID, %(acquisition_validation_status)s::VARCHAR, %(acquisition_run_id)s::UUID, %(recipe_id)s::UUID, %(recipe_version)s::VARCHAR, %(policy_version)s::VARCHAR, %(fetch_strategy)s::VARCHAR, %(fetcher_name)s::VARCHAR, %(fetcher_version)s::VARCHAR, %(validator_name)s::VARCHAR, %(validator_version)s::VARCHAR, %(raw_artifact_id)s::UUID, %(raw_artifact_sha256)s::VARCHAR, %(raw_artifact_size)s::INTEGER, %(storage_bucket)s::VARCHAR, %(object_key)s::VARCHAR, %(document_id)s::UUID, %(document_parse_key)s::VARCHAR, %(parser_name)s::VARCHAR, %(parser_version)s::VARCHAR, %(parse_contract_version)s::VARCHAR, %(evidence_ref_id)s::UUID, %(parse_attempt_id)s::UUID, %(member_role)s::VARCHAR, %(precedence)s::INTEGER, %(effective_from)s::TIMESTAMP WITH TIME ZONE, %(effective_to)s::TIMESTAMP WITH TIME ZONE, %(member_provenance_hash)s::VARCHAR, %(created_at)s::TIMESTAMP WITH TIME ZONE)]
+E   [parameters: {'source_bundle_member_id': UUID('01a08096-e176-71d9-be0e-1083674b2dbd'), 'source_bundle_revision_id': UUID('01a08096-e16b-71bb-92d2-7d973702241d'), 'source_id': UUID('01a08096-e128-73d1-a610-ed1f91f157be'), 'endpoint_id': UUID('01a08096-e128-73d1-a610-ed2011b42a99'), 'provenance_kind': 'ACQUISITION', 'wma_task_id': None, 'wma_material_id': None, 'wma_delivery_hash': None, 'wma_contract_hash': None, 'capture_observation_id': UUID('01a08096-e128-73d1-a610-ed23965e0434'), 'acquisition_evaluation_id': UUID('01a08096-e128-73d1-a610-ed24ced7dcab'), 'acquisition_validation_status': 'VALID', 'acquisition_run_id': UUID('01a08096-e128-73d1-a610-ed259c30b49c'), 'recipe_id': UUID('01a08096-e128-73d1-a610-ed265443c112'), 'recipe_version': '2026-08-24.1', 'policy_version': '2026-08-24.1', 'fetch_strategy': 'STATIC_HTTP', 'fetcher_name': 'static-http', 'fetcher_version': '1.0.0', 'validator_name': 'deepaha-content-validator', 'validator_version': '1.0.0', 'raw_artifact_id': UUID('01a08096-e128-73d1-a610-ed21c50fca15'), 'raw_artifact_sha256': '7775e673276f505c2bf101d4a92fd11dc0cdee5111c1ab71f03c2bc30304173a', 'raw_artifact_size': 30, 'storage_bucket': 'deepaha-raw', 'object_key': 'raw/sha256/77/7775e673276f505c2bf101d4a92fd11dc0cdee5111c1ab71f03c2bc30304173a', 'document_id': UUID('01a08096-e157-745d-9dba-87ef2b3020a1'), 'document_parse_key': '65d417deee95b84f0e289c799915f2056e4180748362750ebed12b073a8f760f', 'parser_name': 'deepaha-html-p9b', 'parser_version': '0.8.0', 'parse_contract_version': 'p9b-document-block-contract-v0.8.0', 'evidence_ref_id': None, 'parse_attempt_id': None, 'member_role': 'PRIMARY_NOTICE', 'precedence': 1000, 'effective_from': datetime.datetime(2026, 8, 24, 12, 0, tzinfo=datetime.timezone.utc), 'effective_to': None, 'member_provenance_hash': '2864b92d6628d85400adbb7cc84ec164688ea2c1bfd7a0bd8acd4239d1664a7a', 'created_at': datetime.datetime(2026, 8, 24, 12, 0, tzinfo=datetime.timezone.utc)}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+---------------------------- Captured stderr call -----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 20260821_0001, phase1_domain_evidence
+INFO  [alembic.runtime.migration] Running upgrade 20260821_0001 -> 20260821_0002, phase2_observation_and_locators
+INFO  [alembic.runtime.migration] Running upgrade 20260821_0002 -> 20260822_0003, phase3_opportunity_history
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0003 -> 20260822_0004, phase4_rules_eligibility_evaluation
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0004 -> 20260822_0005, phase5_public_catalog
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0005 -> 20260822_0006, phase6_personal_action
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0006 -> 20260822_0007, phase7_feedback_review_validation
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0007 -> 20260822_0008, phase8_deadline_reminders
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0008 -> 20260823_0009, source_acquisition_evaluations
+INFO  [alembic.runtime.migration] Running upgrade 20260823_0009 -> 20260823_0010, source_acquisition_health
+INFO  [alembic.runtime.migration] Running upgrade 20260823_0010 -> 20260824_0011, p9b_identity_provenance
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0011 -> 20260824_0012, p9b_document_blocks
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0012 -> 20260824_0013, p9b_fact_lifecycle
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0013 -> 20260824_0014, p9b_gold_benchmark
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0014 -> 20260825_0023, p9b_replacement_provenance_identity_integrity
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0023 -> 20260825_0024, p9b_replacement_gold_attestation_integrity
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0024 -> 20260825_0025, p9b_replacement_revision_initial_state
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0025 -> 20260825_0026, p9b_replacement_gateway_state
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0026 -> 20260825_0027, p9b_replacement_gateway_authority
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0027 -> 20260825_0028, p9b_replacement_unknown_reconciliation
+_ test_noncompliant_history_is_rejected_without_rewrite[raw_response_sha256] __
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\psycopg\cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedColumn: column "provenance_kind" of relation "source_bundle_members" does not exist
+E   LINE 1: ...ource_bundle_revision_id, source_id, endpoint_id, provenance...
+E                                                                ^
+
+The above exception was the direct cause of the following exception:
+tests\integration\test_p9b_gateway_value_migration.py:265: in test_noncompliant_history_is_rejected_without_rewrite
+    authority = seed_gateway_authority(session)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\integration\p9b_gateway_support.py:189: in seed_gateway_authority
+    revision = frozen_bundle(session, block_graph)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\integration\test_p9b_b0_persistence.py:325: in frozen_bundle
+    revision = service.create_revision(
+src\deepaha\p9b\provenance.py:145: in create_revision
+    return self._create_revision(
+src\deepaha\p9b\provenance.py:239: in _create_revision
+    self._session.flush()
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4353: in flush
+    self._flush(objects)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4488: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4449: in _flush
+    flush_context.execute()
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:465: in execute
+    rec.execute(self)
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:1049: in _emit_insert_statements
+    result = connection.execute(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1421: in execute
+    return meth(
+.venv\Lib\site-packages\sqlalchemy\sql\elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1643: in _execute_clauseelement
+    ret = self._execute_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1848: in _execute_context
+    return self._exec_single_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:2365: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\psycopg\cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   sqlalchemy.exc.ProgrammingError: (psycopg.errors.UndefinedColumn) column "provenance_kind" of relation "source_bundle_members" does not exist
+E   LINE 1: ...ource_bundle_revision_id, source_id, endpoint_id, provenance...
+E                                                                ^
+E   [SQL: INSERT INTO source_bundle_members (source_bundle_member_id, source_bundle_revision_id, source_id, endpoint_id, provenance_kind, wma_task_id, wma_material_id, wma_delivery_hash, wma_contract_hash, capture_observation_id, acquisition_evaluation_id, acquisition_validation_status, acquisition_run_id, recipe_id, recipe_version, policy_version, fetch_strategy, fetcher_name, fetcher_version, validator_name, validator_version, raw_artifact_id, raw_artifact_sha256, raw_artifact_size, storage_bucket, object_key, document_id, document_parse_key, parser_name, parser_version, parse_contract_version, evidence_ref_id, parse_attempt_id, member_role, precedence, effective_from, effective_to, member_provenance_hash, created_at) VALUES (%(source_bundle_member_id)s::UUID, %(source_bundle_revision_id)s::UUID, %(source_id)s::UUID, %(endpoint_id)s::UUID, %(provenance_kind)s::VARCHAR, %(wma_task_id)s::UUID, %(wma_material_id)s::VARCHAR, %(wma_delivery_hash)s::VARCHAR, %(wma_contract_hash)s::VARCHAR, %(capture_observation_id)s::UUID, %(acquisition_evaluation_id)s::UUID, %(acquisition_validation_status)s::VARCHAR, %(acquisition_run_id)s::UUID, %(recipe_id)s::UUID, %(recipe_version)s::VARCHAR, %(policy_version)s::VARCHAR, %(fetch_strategy)s::VARCHAR, %(fetcher_name)s::VARCHAR, %(fetcher_version)s::VARCHAR, %(validator_name)s::VARCHAR, %(validator_version)s::VARCHAR, %(raw_artifact_id)s::UUID, %(raw_artifact_sha256)s::VARCHAR, %(raw_artifact_size)s::INTEGER, %(storage_bucket)s::VARCHAR, %(object_key)s::VARCHAR, %(document_id)s::UUID, %(document_parse_key)s::VARCHAR, %(parser_name)s::VARCHAR, %(parser_version)s::VARCHAR, %(parse_contract_version)s::VARCHAR, %(evidence_ref_id)s::UUID, %(parse_attempt_id)s::UUID, %(member_role)s::VARCHAR, %(precedence)s::INTEGER, %(effective_from)s::TIMESTAMP WITH TIME ZONE, %(effective_to)s::TIMESTAMP WITH TIME ZONE, %(member_provenance_hash)s::VARCHAR, %(created_at)s::TIMESTAMP WITH TIME ZONE)]
+E   [parameters: {'source_bundle_member_id': UUID('01a08096-ed06-7318-9595-8c0ecd040f73'), 'source_bundle_revision_id': UUID('01a08096-ecfc-7505-8cdc-170e64126a18'), 'source_id': UUID('01a08096-ecba-7607-afc4-916d9dd684c0'), 'endpoint_id': UUID('01a08096-ecba-7607-afc4-916eef9b02ff'), 'provenance_kind': 'ACQUISITION', 'wma_task_id': None, 'wma_material_id': None, 'wma_delivery_hash': None, 'wma_contract_hash': None, 'capture_observation_id': UUID('01a08096-ecba-7607-afc4-9171919d88dc'), 'acquisition_evaluation_id': UUID('01a08096-ecba-7607-afc4-9172c725bbb4'), 'acquisition_validation_status': 'VALID', 'acquisition_run_id': UUID('01a08096-ecba-7607-afc4-91738afbd689'), 'recipe_id': UUID('01a08096-ecba-7607-afc4-91747963dcb1'), 'recipe_version': '2026-08-24.1', 'policy_version': '2026-08-24.1', 'fetch_strategy': 'STATIC_HTTP', 'fetcher_name': 'static-http', 'fetcher_version': '1.0.0', 'validator_name': 'deepaha-content-validator', 'validator_version': '1.0.0', 'raw_artifact_id': UUID('01a08096-ecba-7607-afc4-916f22e81b9b'), 'raw_artifact_sha256': '7775e673276f505c2bf101d4a92fd11dc0cdee5111c1ab71f03c2bc30304173a', 'raw_artifact_size': 30, 'storage_bucket': 'deepaha-raw', 'object_key': 'raw/sha256/77/7775e673276f505c2bf101d4a92fd11dc0cdee5111c1ab71f03c2bc30304173a', 'document_id': UUID('01a08096-ece8-772e-90bf-e4c4278ce60e'), 'document_parse_key': '82b9f3f91007c6559683758ad9e4e09c5180f13d982477e079864488085f0be2', 'parser_name': 'deepaha-html-p9b', 'parser_version': '0.8.0', 'parse_contract_version': 'p9b-document-block-contract-v0.8.0', 'evidence_ref_id': None, 'parse_attempt_id': None, 'member_role': 'PRIMARY_NOTICE', 'precedence': 1000, 'effective_from': datetime.datetime(2026, 8, 24, 12, 0, tzinfo=datetime.timezone.utc), 'effective_to': None, 'member_provenance_hash': '1287339affb06ec962eb9e7b0deb1354689935eb48a64a94cd7e3c16eb5bf2af', 'created_at': datetime.datetime(2026, 8, 24, 12, 0, tzinfo=datetime.timezone.utc)}]
+E   (Background on this error at: https://sqlalche.me/e/20/f405)
+---------------------------- Captured stderr call -----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 20260821_0001, phase1_domain_evidence
+INFO  [alembic.runtime.migration] Running upgrade 20260821_0001 -> 20260821_0002, phase2_observation_and_locators
+INFO  [alembic.runtime.migration] Running upgrade 20260821_0002 -> 20260822_0003, phase3_opportunity_history
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0003 -> 20260822_0004, phase4_rules_eligibility_evaluation
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0004 -> 20260822_0005, phase5_public_catalog
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0005 -> 20260822_0006, phase6_personal_action
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0006 -> 20260822_0007, phase7_feedback_review_validation
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0007 -> 20260822_0008, phase8_deadline_reminders
+INFO  [alembic.runtime.migration] Running upgrade 20260822_0008 -> 20260823_0009, source_acquisition_evaluations
+INFO  [alembic.runtime.migration] Running upgrade 20260823_0009 -> 20260823_0010, source_acquisition_health
+INFO  [alembic.runtime.migration] Running upgrade 20260823_0010 -> 20260824_0011, p9b_identity_provenance
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0011 -> 20260824_0012, p9b_document_blocks
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0012 -> 20260824_0013, p9b_fact_lifecycle
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0013 -> 20260824_0014, p9b_gold_benchmark
+INFO  [alembic.runtime.migration] Running upgrade 20260824_0014 -> 20260825_0023, p9b_replacement_provenance_identity_integrity
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0023 -> 20260825_0024, p9b_replacement_gold_attestation_integrity
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0024 -> 20260825_0025, p9b_replacement_revision_initial_state
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0025 -> 20260825_0026, p9b_replacement_gateway_state
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0026 -> 20260825_0027, p9b_replacement_gateway_authority
+INFO  [alembic.runtime.migration] Running upgrade 20260825_0027 -> 20260825_0028, p9b_replacement_unknown_reconciliation
+=========================== short test summary info ===========================
+FAILED tests/integration/test_p9b_gateway_value_migration.py::test_compliant_history_round_trips_through_value_contract_migration
+FAILED tests/integration/test_p9b_gateway_value_migration.py::test_noncompliant_history_is_rejected_without_rewrite[model_id]
+FAILED tests/integration/test_p9b_gateway_value_migration.py::test_noncompliant_history_is_rejected_without_rewrite[provider_response_id]
+FAILED tests/integration/test_p9b_gateway_value_migration.py::test_noncompliant_history_is_rejected_without_rewrite[object_key]
+FAILED tests/integration/test_p9b_gateway_value_migration.py::test_noncompliant_history_is_rejected_without_rewrite[raw_response_sha256]
+5 failed, 498 passed, 3 skipped, 1291 deselected in 386.02s (0:06:26)

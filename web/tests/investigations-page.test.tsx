@@ -3,12 +3,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import InvestigationsPage from "../app/review/investigations/page";
 import InvestigationPage from "../app/review/investigations/[taskId]/page";
-import { getInvestigations, getInvestigationSources, getInvestigation } from "../lib/investigations";
-import { source, task, taskId, preparedDocuments } from "./investigations-fixture";
+import { getInvestigations, getInvestigationSources, getInvestigation, getInvestigationBindingTargets } from "../lib/investigations";
+import { source, task, taskId, preparedDocuments, bindingTarget } from "./investigations-fixture";
 
 vi.mock("../lib/investigations", async (original) => ({
   ...await original<typeof import("../lib/investigations")>(),
-  getInvestigations: vi.fn(), getInvestigationSources: vi.fn(), getInvestigation: vi.fn(),
+  getInvestigations: vi.fn(), getInvestigationSources: vi.fn(), getInvestigation: vi.fn(), getInvestigationBindingTargets: vi.fn(),
 }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
@@ -17,6 +17,21 @@ describe("investigation pages", () => {
     vi.mocked(getInvestigations).mockResolvedValue({ tasks: [] });
     vi.mocked(getInvestigationSources).mockResolvedValue({ sources: [source] });
     vi.mocked(getInvestigation).mockResolvedValue(task);
+    vi.mocked(getInvestigationBindingTargets).mockResolvedValue({ targets: [bindingTarget] });
+  });
+  it("requires explicit identity selection after intake approval and full document preparation", async () => {
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, status: "APPROVED", document_preparation: preparedDocuments });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByRole("combobox", { name: "关联到已有机会" })).toHaveValue("");
+    expect(screen.getByRole("button", { name: "确认归属并冻结来源" })).toBeDisabled();
+    expect(screen.getByText(/字段内容仍是候选/)).toBeVisible();
+  });
+  it("preserves pending identity when no existing target is available", async () => {
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, status: "APPROVED", document_preparation: preparedDocuments });
+    vi.mocked(getInvestigationBindingTargets).mockResolvedValue({ targets: [] });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByText(/目前没有可选择的正式机会版本/)).toBeVisible();
+    expect(screen.queryByRole("button", { name: "确认归属并冻结来源" })).not.toBeInTheDocument();
   });
   it("offers explicit local evidence preparation with an honest boundary", async () => {
     render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));

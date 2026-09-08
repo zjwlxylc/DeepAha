@@ -15,7 +15,6 @@ from tests.integration.test_p9b_b0_persistence import NOW, Graph, member_spec, s
 
 pytestmark = pytest.mark.integration
 MAIN_HEAD = "20260826_0033"
-P10B1_HEAD = "20260901_0034"
 
 
 def temporary_database(database_url: str, prefix: str) -> tuple[str, Engine, URL, str]:
@@ -242,7 +241,9 @@ def test_full_frozen_legacy_bundle_supports_new_revision_and_round_trip(
             temporary_engine
         )
 
-        command.upgrade(config, P10B1_HEAD)
+        # Current ORM runs against current head; the legacy fixture and the
+        # downgrade to MAIN_HEAD still exercise 0034's original hash contract.
+        command.upgrade(config, "head")
         factory = sessionmaker(bind=temporary_engine, expire_on_commit=False)
         with factory.begin() as session:
             revision = BundleService(session).create_revision(
@@ -320,7 +321,7 @@ def test_downgrade_refuses_opportunity_member_with_exact_evidence_binding(
     try:
         monkeypatch.setenv("DEEPAHA_DATABASE_URL", rendered_url)
         config = Config("alembic.ini")
-        command.upgrade(config, P10B1_HEAD)
+        command.upgrade(config, "head")
         temporary_engine = create_engine(temporary_url)
         factory = sessionmaker(bind=temporary_engine, expire_on_commit=False)
         with factory.begin() as session:
@@ -372,7 +373,10 @@ def test_downgrade_refuses_opportunity_member_with_exact_evidence_binding(
                 {"revision_id": revision_id},
             ).one()
             assert row == (before_hash, "FROZEN")
-            assert connection.scalar(text("select version_num from alembic_version")) == P10B1_HEAD
+            assert (
+                connection.scalar(text("select version_num from alembic_version"))
+                == ScriptDirectory.from_config(config).get_current_head()
+            )
     finally:
         if temporary_engine is not None:
             temporary_engine.dispose()

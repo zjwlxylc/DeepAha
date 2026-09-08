@@ -1,4 +1,5 @@
 import re
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from uuid import UUID, uuid7
@@ -16,6 +17,11 @@ from deepaha.p9b.models import (
     SourceBundleMember,
     SourceBundleMemberRelation,
     SourceBundleRevision,
+)
+from deepaha.p9b.wma_provenance import (
+    ACQUISITION_FIELDS,
+    WmaBundleMemberSpec,
+    materialize_wma_member,
 )
 from deepaha.sources.models import CaptureObservation
 
@@ -92,6 +98,18 @@ def _member_payload(
     if member.evidence_ref_id is not None:
         payload["evidence_ref_id"] = str(member.evidence_ref_id)
         payload["parse_attempt_id"] = str(member.parse_attempt_id)
+    if member.provenance_kind == "DIRECT_WMA":
+        for key in ACQUISITION_FIELDS:
+            payload.pop(key)
+        payload.update(
+            provenance_kind="DIRECT_WMA",
+            provenance_version="direct-wma-member/1",
+            url_provenance="AGENT_DECLARED",
+            wma_task_id=str(member.wma_task_id),
+            wma_material_id=member.wma_material_id,
+            wma_delivery_hash=member.wma_delivery_hash,
+            wma_contract_hash=member.wma_contract_hash,
+        )
     return payload
 
 
@@ -105,7 +123,7 @@ class BundleService:
         opportunity_id: UUID,
         opportunity_version: int,
         effective_as_of: datetime,
-        members: list[BundleMemberSpec],
+        members: Sequence[BundleMemberSpec | WmaBundleMemberSpec],
         source_bundle_id: UUID | None = None,
     ) -> SourceBundleRevision:
         if not members:
@@ -138,7 +156,7 @@ class BundleService:
         request_key: str,
         request_payload_sha256: str,
         effective_as_of: datetime,
-        members: list[BundleMemberSpec],
+        members: Sequence[BundleMemberSpec | WmaBundleMemberSpec],
     ) -> SourceBundleRevision:
         if not members:
             raise BundleProvenanceError("SourceBundleRevision requires at least one member")
@@ -178,7 +196,7 @@ class BundleService:
         opportunity_id: UUID | None,
         opportunity_version: int | None,
         effective_as_of: datetime,
-        members: list[BundleMemberSpec],
+        members: Sequence[BundleMemberSpec | WmaBundleMemberSpec],
     ) -> SourceBundleRevision:
         revision_number = (
             self._session.scalar(
@@ -277,7 +295,10 @@ class BundleService:
                     related_member_id=relation.target_member_id if relation else None,
                 )
             )
-            if member.acquisition_validation_status != "VALID":
+            if (
+                member.provenance_kind != "DIRECT_WMA"
+                and member.acquisition_validation_status != "VALID"
+            ):
                 raise BundleProvenanceError("only VALID members can freeze")
             if member.member_provenance_hash != expected:
                 raise BundleProvenanceError("member provenance hash recomputation failed")
@@ -344,8 +365,10 @@ class BundleService:
     def _materialize_member(
         self,
         revision_id: UUID,
-        spec: BundleMemberSpec,
+        spec: BundleMemberSpec | WmaBundleMemberSpec,
     ) -> SourceBundleMember:
+        if isinstance(spec, WmaBundleMemberSpec):
+            return materialize_wma_member(self._session, revision_id, spec)
         document = self._session.get(Document, spec.document_id)
         observation = self._session.get(CaptureObservation, spec.capture_observation_id)
         evaluation = self._session.get(
@@ -427,6 +450,7 @@ class BundleService:
             if not exact_evidence or not exact_parse:
                 raise BundleProvenanceError("exact evidence or parse binding mismatch")
         return SourceBundleMember(
+            provenance_kind="ACQUISITION",
             source_bundle_member_id=uuid7(),
             source_bundle_revision_id=revision_id,
             source_id=observation.source_id,
@@ -467,7 +491,7 @@ class BundleService:
     def _validate_relation(
         *,
         index: int,
-        spec: BundleMemberSpec,
+        spec: BundleMemberSpec | WmaBundleMemberSpec,
         rows: list[SourceBundleMember],
     ) -> UUID | None:
         if spec.relation_type == "PRIMARY":

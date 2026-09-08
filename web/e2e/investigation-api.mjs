@@ -1,6 +1,6 @@
 // Browser fixtures only. This process never calls an official source or WMA.
 import { createServer } from "node:http";
-import { source, task, preparedDocuments } from "../tests/investigations-fixture.ts";
+import { source, task, preparedDocuments, bindingTarget } from "../tests/investigations-fixture.ts";
 
 let current = structuredClone(task);
 let dropNextReceipt = false;
@@ -16,6 +16,7 @@ const server = createServer(async (request, response) => {
     response.writeHead(401); response.end("{}"); return;
   }
   if (path.endsWith("/sources")) { response.end(JSON.stringify({ sources: [source] })); return; }
+  if (path.endsWith("/binding-targets")) { response.end(JSON.stringify({ targets: [bindingTarget] })); return; }
   if (path.includes("/materials/")) {
     response.setHeader("Content-Type", "text/plain");
     response.setHeader("Content-Disposition", 'attachment; filename="original-cccccccccccccccc.xlsx"');
@@ -35,6 +36,17 @@ const server = createServer(async (request, response) => {
     if (path.endsWith("/documents")) {
       if (values.delivery_hash !== current.delivery_hash) { response.writeHead(409); response.end("{}"); return; }
       current = { ...current, document_preparation: preparedDocuments };
+    }
+    else if (path.endsWith("/bindings")) {
+      if (current.status !== "APPROVED" || current.document_preparation?.status !== "PREPARED"
+        || values.delivery_hash !== current.delivery_hash) { response.writeHead(409); response.end("{}"); return; }
+      current = { ...current, entity_binding: {
+        ...values, binding_id: "019d0000-0000-7000-8000-000000000914", sequence: 1,
+        source_bundle_revision_id: "019d0000-0000-7000-8000-000000000915", bundle_status: "FROZEN",
+        canonical_bundle_hash: "f".repeat(64), opportunity_public_id: bindingTarget.public_id,
+        opportunity_title: bindingTarget.title, created_at: task.updated_at,
+        unmapped_position_ids: values.positions.length ? [] : ["position-1"],
+      } };
     }
     else if (path.endsWith("/review")) current = { ...current, status: values.decision === "APPROVE" ? "APPROVED" : "REJECTED", review: { ...values, reviewer_id: "synthetic-browser-reviewer", created_at: task.updated_at } };
     else current = { ...task, ...values, status: "QUEUED", opportunities: null, facts: [], materials: [], delivery_hash: null };

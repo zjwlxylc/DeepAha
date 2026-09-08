@@ -5,8 +5,9 @@ import { randomUUID } from "node:crypto";
 import InvestigationEvidence, { safeOfficialUrl } from "../../../../components/investigations/evidence";
 import InvestigationReviewForm from "../../../../components/investigations/review-form";
 import InvestigationDocuments from "../../../../components/investigations/documents";
+import InvestigationBindings from "../../../../components/investigations/bindings";
 import { investigationFailureMessage, investigationStatus } from "../../../../components/investigations/status";
-import { getInvestigation } from "../../../../lib/investigations";
+import { getInvestigation, getInvestigationBindingTargets } from "../../../../lib/investigations";
 import { formatDateTime } from "../../../../lib/public-opportunities";
 
 export const metadata: Metadata = { title: "调查材料与内部审核" };
@@ -15,6 +16,8 @@ export default async function InvestigationPage({ params }: { params: Promise<{ 
   const { taskId } = await params;
   const task = await getInvestigation(taskId);
   const title = task.opportunities?.opportunity_name;
+  const targets = task.status === "APPROVED" && task.document_preparation?.status === "PREPARED"
+    ? (await getInvestigationBindingTargets()).targets : [];
   return (
     <main id="main-content" className="page-shell human-test-shell investigation-shell">
       <nav className="breadcrumbs" aria-label="面包屑"><Link href="/review/investigations">官方机会调查</Link><span aria-hidden="true">/</span><span aria-current="page">材料与审核</span></nav>
@@ -25,6 +28,7 @@ export default async function InvestigationPage({ params }: { params: Promise<{ 
       {task.issues.length || task.error_code ? <section className="human-test-panel" aria-labelledby="investigation-issues-title"><h2 id="investigation-issues-title">待处理问题</h2>{task.error_code ? <><p>{investigationFailureMessage(task.error_code)}</p><p>系统不会自动重新调查。已有材料需完成回收与核验后，才能提交审核。</p></> : <p>这些问题需处理并重新核对，不能据此认定调查完整。</p>}<ul>{task.issues.map((issue, index) => <li key={index}>{issue}</li>)}</ul>{task.error_code ? <details><summary>故障标识（供排查）</summary><code>{task.error_code}</code></details> : null}</section> : null}
       <InvestigationEvidence task={task} />
       <InvestigationDocuments task={task} />
+      <InvestigationBindings task={task} targets={targets} />
       <section className="human-test-panel" aria-labelledby="investigation-review-title">
         <h2 id="investigation-review-title">内部材料审核</h2>
         {task.review ? <dl className="compact-facts"><div><dt>审核决定</dt><dd>{task.review.decision === "APPROVE" ? "批准内部材料" : "退回材料"}</dd></div><div><dt>核对理由</dt><dd>{task.review.reason}</dd></div><div><dt>记录时间</dt><dd>{formatDateTime(task.review.created_at)}</dd></div><div><dt>审核员标识</dt><dd>{task.review.reviewer_id}</dd></div></dl> : task.status === "PENDING_REVIEW" && task.delivery_hash ? <InvestigationReviewForm taskId={task.task_id} deliveryHash={task.delivery_hash} requestKey={randomUUID()} key={task.delivery_hash} /> : <p>当前材料尚不可审核。请先完成回收与核验；执行失败不会被当作已完成。</p>}

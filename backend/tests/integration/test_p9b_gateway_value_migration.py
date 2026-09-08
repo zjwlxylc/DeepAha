@@ -68,7 +68,12 @@ def _add_current_bundle_compatibility_columns(engine: Engine) -> None:
         connection.exec_driver_sql(
             "ALTER TABLE source_bundle_members "
             "ADD COLUMN evidence_ref_id uuid, "
-            "ADD COLUMN parse_attempt_id uuid"
+            "ADD COLUMN parse_attempt_id uuid, "
+            "ADD COLUMN provenance_kind varchar(16) NOT NULL DEFAULT 'ACQUISITION', "
+            "ADD COLUMN wma_task_id uuid, "
+            "ADD COLUMN wma_material_id varchar(256), "
+            "ADD COLUMN wma_delivery_hash varchar(64), "
+            "ADD COLUMN wma_contract_hash varchar(64)"
         )
 
 

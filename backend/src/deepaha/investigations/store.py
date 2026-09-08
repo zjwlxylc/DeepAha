@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from deepaha.artifacts.object_store import ObjectStore
 from deepaha.artifacts.service import ImportRawArtifactCommand, import_raw_artifact
 from deepaha.investigations.contracts import (
+    BindInvestigation,
     CreateInvestigation,
     InvestigationError,
     ReviewInvestigation,
@@ -432,6 +433,7 @@ class InvestigationStore:
     def _view(
         self, session: Session, task: InvestigationTask, *, include_documents: bool = True
     ) -> dict[str, Any]:
+        from deepaha.investigations.bindings import describe_bindings
         from deepaha.investigations.documents import describe_documents
 
         materials = list(
@@ -453,6 +455,7 @@ class InvestigationStore:
             | {"note": fact.get("note", original_notes.get((fact["entity_id"], fact["field"])))}
             for fact in delivery.get("facts", [])
         ]
+        bindings = describe_bindings(session, task) if include_documents else []
         return dict(task.request) | {
             "task_id": str(task.task_id),
             "status": task.status,
@@ -470,6 +473,11 @@ class InvestigationStore:
                 describe_documents(session, materials) if delivery and include_documents else None
             ),
             "review": task.review,
+            "entity_binding": bindings[0] if bindings else None,
+            "binding_history": bindings,
+            "binding_entities": delivery.get("evidence", {}).get("entities", [])
+            if include_documents
+            else [],
             "execution": task.execution,
             "runtime_id": task.runtime_id,
             "remote_session_id": task.remote_session_id,
@@ -501,3 +509,10 @@ class InvestigationStore:
                     .limit(100)
                 )
             ]
+
+    def bind(
+        self, task_id: UUID, command: BindInvestigation, principal: ReviewerPrincipal, key: str
+    ) -> dict[str, Any]:
+        from deepaha.investigations.bindings import bind
+
+        return bind(self, task_id, command, principal, key)

@@ -173,6 +173,33 @@ class SourceBundleMember(Base):
             name="valid_only",
         ),
         CheckConstraint(
+            "(provenance_kind = 'ACQUISITION' and "
+            "capture_observation_id is not null and acquisition_evaluation_id is not null and "
+            "acquisition_validation_status is not null and acquisition_run_id is not null and "
+            "recipe_id is not null and recipe_version is not null "
+            "and fetch_strategy is not null and "
+            "fetcher_name is not null and fetcher_version is not null and "
+            "validator_name is not null and validator_version is not null and "
+            "wma_task_id is null and wma_material_id is null and wma_delivery_hash is null and "
+            "wma_contract_hash is null) or (provenance_kind = 'DIRECT_WMA' and "
+            "capture_observation_id is null and acquisition_evaluation_id is null and "
+            "acquisition_validation_status is null and acquisition_run_id is null and "
+            "recipe_id is null and recipe_version is null and fetch_strategy is null and "
+            "fetcher_name is null and fetcher_version is null and "
+            "validator_name is null and validator_version is null and "
+            "wma_task_id is not null and wma_material_id is not null and "
+            "wma_delivery_hash is not null and wma_delivery_hash ~ '^[0-9a-f]{64}$' and "
+            "wma_contract_hash is not null and wma_contract_hash ~ '^[0-9a-f]{64}$' and "
+            "evidence_ref_id is not null and parse_attempt_id is not null)",
+            name="provenance_shape",
+        ),
+        ForeignKeyConstraint(
+            ["wma_task_id", "wma_material_id"],
+            ["investigation_materials.task_id", "investigation_materials.material_id"],
+            name="fk_source_bundle_members_wma_material",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint(
             "raw_artifact_sha256 ~ '^[0-9a-f]{64}$' and "
             "document_parse_key ~ '^[0-9a-f]{64}$' and "
             "member_provenance_hash ~ '^[0-9a-f]{64}$'",
@@ -327,12 +354,22 @@ class SourceBundleMember(Base):
             "source_bundle_member_id",
             name="uq_source_bundle_members_revision_member",
         ),
-        UniqueConstraint(
+        Index(
+            "uq_source_bundle_members_revision_document_role",
             "source_bundle_revision_id",
             "document_id",
             "document_parse_key",
             "member_role",
-            name="uq_source_bundle_members_revision_document_role",
+            unique=True,
+            postgresql_where=text("provenance_kind = 'ACQUISITION'"),
+        ),
+        Index(
+            "uq_source_bundle_members_revision_wma_material",
+            "source_bundle_revision_id",
+            "wma_task_id",
+            "wma_material_id",
+            unique=True,
+            postgresql_where=text("provenance_kind = 'DIRECT_WMA'"),
         ),
     )
 
@@ -340,18 +377,23 @@ class SourceBundleMember(Base):
     source_bundle_revision_id: Mapped[UUID] = mapped_column(Uuid)
     source_id: Mapped[UUID] = mapped_column(Uuid)
     endpoint_id: Mapped[UUID] = mapped_column(Uuid)
-    capture_observation_id: Mapped[UUID] = mapped_column(Uuid)
-    acquisition_evaluation_id: Mapped[UUID] = mapped_column(Uuid)
-    acquisition_validation_status: Mapped[str] = mapped_column(String(32))
-    acquisition_run_id: Mapped[UUID] = mapped_column(Uuid)
-    recipe_id: Mapped[UUID] = mapped_column(Uuid)
-    recipe_version: Mapped[str] = mapped_column(String(64))
+    provenance_kind: Mapped[str] = mapped_column(String(16), server_default="ACQUISITION")
+    wma_task_id: Mapped[UUID | None] = mapped_column(Uuid)
+    wma_material_id: Mapped[str | None] = mapped_column(String(256))
+    wma_delivery_hash: Mapped[str | None] = mapped_column(String(64))
+    wma_contract_hash: Mapped[str | None] = mapped_column(String(64))
+    capture_observation_id: Mapped[UUID | None] = mapped_column(Uuid)
+    acquisition_evaluation_id: Mapped[UUID | None] = mapped_column(Uuid)
+    acquisition_validation_status: Mapped[str | None] = mapped_column(String(32))
+    acquisition_run_id: Mapped[UUID | None] = mapped_column(Uuid)
+    recipe_id: Mapped[UUID | None] = mapped_column(Uuid)
+    recipe_version: Mapped[str | None] = mapped_column(String(64))
     policy_version: Mapped[str] = mapped_column(String(64))
-    fetch_strategy: Mapped[str] = mapped_column(String(32))
-    fetcher_name: Mapped[str] = mapped_column(String(128))
-    fetcher_version: Mapped[str] = mapped_column(String(64))
-    validator_name: Mapped[str] = mapped_column(String(128))
-    validator_version: Mapped[str] = mapped_column(String(64))
+    fetch_strategy: Mapped[str | None] = mapped_column(String(32))
+    fetcher_name: Mapped[str | None] = mapped_column(String(128))
+    fetcher_version: Mapped[str | None] = mapped_column(String(64))
+    validator_name: Mapped[str | None] = mapped_column(String(128))
+    validator_version: Mapped[str | None] = mapped_column(String(64))
     raw_artifact_id: Mapped[UUID] = mapped_column(Uuid)
     raw_artifact_sha256: Mapped[str] = mapped_column(String(64))
     raw_artifact_size: Mapped[int] = mapped_column(Integer)

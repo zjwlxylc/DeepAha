@@ -1,4 +1,12 @@
-import type { InvestigationTask } from "../lib/investigations";
+import type { InvestigationTask, InvestigationBindingTarget } from "../lib/investigations";
+
+export const bindingTarget: InvestigationBindingTarget = {
+  opportunity_id: "019d0000-0000-7000-8000-000000000911", public_id: "opp_019d0000000070008000000000000911",
+  version: 1, title: "示例正式机会（合成数据）", positions: [{
+    unit_id: "019d0000-0000-7000-8000-000000000912", version_id: "019d0000-0000-7000-8000-000000000913",
+    public_id: "unit_019d0000000070008000000000000912", key: "P001", label: "示例教学岗位",
+  }],
+};
 
 export const preparedDocuments: NonNullable<InvestigationTask["document_preparation"]> = {
   scope: "DOCUMENT_EVIDENCE_ONLY", status: "PREPARED", material_count: 1, prepared_count: 1,
@@ -17,6 +25,7 @@ export const source = {
   allowed_hosts: ["official.example.gov.cn"],
 };
 export const task: InvestigationTask = {
+  binding_entities: [{ id: "position-1", name: "教学岗位", kind: "position", code: "P001" }],
   task_id: taskId, status: "PENDING_REVIEW", notice_url: `${source.url}/1`,
   source_id: source.source_id, endpoint_id: source.endpoint_id,
   brief: "检查示例公告与全部岗位条件", calibration: true,

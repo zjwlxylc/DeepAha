@@ -28,6 +28,15 @@ export interface InvestigationFact {
 }
 
 export interface InvestigationTask {
+  binding_history?: NonNullable<InvestigationTask["entity_binding"]>[];
+  binding_entities?: { id: string; name: string; kind: string; code?: string }[];
+  entity_binding?: {
+    binding_id: string; sequence: number; opportunity_id: string; opportunity_version: number;
+    opportunity_public_id: string; opportunity_title: string; bundle_status: string;
+    source_bundle_revision_id: string; canonical_bundle_hash: string;
+    positions: { entity_id: string; opportunity_unit_id: string; opportunity_unit_version_id: string }[];
+    unmapped_position_ids: string[]; reason: string; created_at: string;
+  } | null;
   task_id: string;
   status: string;
   notice_url: string;
@@ -69,6 +78,15 @@ export interface InvestigationTask {
       evidence_ref_count: number;
     }[];
   } | null;
+}
+
+export interface InvestigationBindingTarget {
+  opportunity_id: string; public_id: string; version: number; title: string;
+  positions: { unit_id: string; version_id: string; public_id: string; key: string; label: string }[];
+}
+
+export function getInvestigationBindingTargets(): Promise<{ targets: InvestigationBindingTarget[] }> {
+  return humanTestFetch("/investigations/binding-targets");
 }
 
 const registrationConflictCodes = new Set([

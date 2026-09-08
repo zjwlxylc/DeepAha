@@ -18,6 +18,7 @@ from deepaha.artifacts.models import RawArtifact
 from deepaha.core.settings import Settings, get_settings
 from deepaha.db.session import get_engine, session_factory
 from deepaha.investigations.contracts import (
+    BindInvestigation,
     CreateInvestigation,
     InvestigationError,
     PrepareInvestigationDocuments,
@@ -132,6 +133,30 @@ def create_task(
     try:
         return store.get(store.create(command, principal, key))
     except (InvestigationError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/binding-targets")
+def binding_targets(store: StoreDep, principal: PrincipalDep, response: Response) -> dict[str, Any]:
+    from deepaha.investigations.bindings import binding_targets as targets
+
+    response.headers["Cache-Control"] = "private, no-store"
+    return {"targets": targets(store)}
+
+
+@router.post("/{task_id}/bindings")
+def bind_task(
+    task_id: UUID,
+    command: BindInvestigation,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return store.bind(task_id, command, principal, key)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 
 

@@ -17,6 +17,10 @@ from deepaha.evidence_verification.registry import AdapterRegistry
 MAX_MATCHES = 256
 
 
+class RepresentationIdentityError(ValueError):
+    pass
+
+
 class EvidenceVerifier:
     """One delivery/replay's cache and literal checks; no fact or approval inputs."""
 
@@ -26,6 +30,27 @@ class EvidenceVerifier:
         self._indexes: dict[tuple[str, str, ReaderIdentity], dict[str, Projection]] = {}
         self._hashes: dict[tuple[str, str, ReaderIdentity], str] = {}
         self._read_errors: dict[tuple[str, str, ReaderIdentity], str] = {}
+
+    def read(self, artifact: ArtifactInput, identity: ReaderIdentity) -> Representation:
+        """Read through the same pinned, validated cache used by literal checks."""
+        if sha256(artifact.content).hexdigest() != artifact.sha256:
+            raise RepresentationIdentityError("ARTIFACT_HASH_MISMATCH")
+        adapter = self._registry.select(artifact.media_type, identity)
+        if adapter is None:
+            raise LookupError("READER_VERSION_UNAVAILABLE")
+        key = artifact.artifact_id, artifact.sha256, identity
+        representation = self._representations.get(key)
+        if representation is None:
+            representation = adapter.read(artifact.content)
+            if (
+                representation.artifact_sha256 != artifact.sha256
+                or representation.reader != identity
+            ):
+                raise RepresentationIdentityError("REPRESENTATION_IDENTITY_MISMATCH")
+            self._representations[key] = representation
+            self._indexes[key] = {p.projection_id: p for p in representation.projections}
+            self._hashes[key] = representation.sha256
+        return representation
 
     def verify(
         self,
@@ -64,21 +89,15 @@ class EvidenceVerifier:
         representation = self._representations.get(key)
         try:
             if representation is None:
-                representation = adapter.read(artifact.content)
-                if (
-                    representation.artifact_sha256 != digest
-                    or representation.reader != adapter.identity
-                ):
-                    return replace(
-                        result, verdict="FAIL", reason_codes=("REPRESENTATION_IDENTITY_MISMATCH",)
-                    )
-                self._representations[key] = representation
-                self._indexes[key] = {p.projection_id: p for p in representation.projections}
-                self._hashes[key] = representation.sha256
+                representation = self.read(artifact, adapter.identity)
             scope = adapter.resolve_scope(
                 representation, deepcopy(locator), source_url=artifact.source_url
             )
             comparable_quote = adapter.normalize_quote(quote)
+        except RepresentationIdentityError:
+            return replace(
+                result, verdict="FAIL", reason_codes=("REPRESENTATION_IDENTITY_MISMATCH",)
+            )
         except ExpectedParseError as error:
             code = f"READER_{error.code}"
             if representation is None:

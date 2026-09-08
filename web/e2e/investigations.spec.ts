@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { source, taskId } from "../tests/investigations-fixture";
+import { source, taskId, bindingTarget } from "../tests/investigations-fixture";
 
 test.beforeEach(async ({ context, request }) => {
   await request.get("http://127.0.0.1:3097/reset");
@@ -53,6 +53,35 @@ test("retries document preparation after the receipt is lost", async ({ page, re
   expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 1, posts: 2 });
 });
 
+test("retries a binding with the same opportunity, positions and reason after a lost receipt", async ({ page, request }) => {
+  await page.goto(`/review/investigations/${taskId}`);
+  await page.getByRole("button", { name: "准备文档证据" }).click();
+  await expect(page.getByText("1 / 1 份材料已完成文档证据准备。")).toBeVisible();
+  await page.getByRole("combobox", { name: "审核决定" }).selectOption("APPROVE");
+  await page.getByLabel("核对理由").fill("合成测试的材料准备");
+  await page.getByRole("button", { name: "记录内部材料审核" }).click();
+  const button = page.getByRole("button", { name: "确认归属并冻结来源" });
+  const form = page.locator("form").filter({ has: button });
+  const requestKey = await form.locator('input[name="request_key"]').inputValue();
+  const target = page.getByRole("combobox", { name: "关联到已有机会" });
+  const position = page.getByRole("combobox", { name: "教学岗位（P001）" });
+  const reason = page.getByLabel("归属核对依据");
+  const unit = bindingTarget.positions[0];
+  await target.selectOption(`${bindingTarget.opportunity_id}/1`);
+  await position.selectOption(`${unit.unit_id}/${unit.version_id}`);
+  await reason.fill("合成测试：保留岗位版本和归属核对依据");
+  await request.get("http://127.0.0.1:3097/drop-next-receipt");
+  await button.click();
+  await expect(form.getByRole("alert")).toBeVisible();
+  await expect(form.locator('input[name="request_key"]')).toHaveValue(requestKey);
+  await expect(target).toHaveValue(`${bindingTarget.opportunity_id}/1`);
+  await expect(position).toHaveValue(`${unit.unit_id}/${unit.version_id}`);
+  await expect(reason).toHaveValue("合成测试：保留岗位版本和归属核对依据");
+  await button.click();
+  await expect(page.getByText("已关联 1 个岗位，仍有 0 个岗位待关联。")).toBeVisible();
+  expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 3, posts: 4 });
+});
+
 test("registers without execution, reads evidence, downloads privately and records internal review", async ({ page }, testInfo) => {
   await page.goto("/review/investigations");
   await expect(page.getByRole("button", { name: "登记调查任务" })).toBeVisible();
@@ -81,6 +110,20 @@ test("registers without execution, reads evidence, downloads privately and recor
   await page.getByRole("button", { name: "记录内部材料审核" }).click();
   await expect(page.getByText("批准内部材料", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "记录内部材料审核" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "确认归属并冻结来源" })).toBeDisabled();
+  await page.getByRole("combobox", { name: "关联到已有机会" }).selectOption(`${bindingTarget.opportunity_id}/1`);
+  const unit = bindingTarget.positions[0];
+  await page.getByRole("combobox", { name: "教学岗位（P001）" }).selectOption(`${unit.unit_id}/${unit.version_id}`);
+  await page.getByLabel("归属核对依据").fill("合成浏览器测试：岗位编号一致，只验证操作流程。");
+  const confirm = page.getByRole("button", { name: "确认归属并冻结来源" });
+  await confirm.focus(); await confirm.press("Enter");
+  await expect(page.getByText("已关联 1 个岗位，仍有 0 个岗位待关联。")).toBeVisible();
+  await page.reload();
+  await expect(page.getByText(/机会版本 1 · 归属修订 1/)).toBeVisible();
+  await page.getByText("查看来源与归属记录").click();
+  await expect(page.getByText(/Direct WMA；网址由调查服务声明/)).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath("binding.png"), fullPage: true });
   await page.goto("/review/investigations");
   await page.getByLabel("已批准来源").selectOption(`${source.source_id}/${source.endpoint_id}`);
   await page.getByLabel("明确公告地址").fill(`${source.url}/1`);

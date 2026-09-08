@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { createInvestigationAction, prepareInvestigationDocumentsAction, reviewInvestigationAction } from "../app/review/investigations/actions";
+import { bindInvestigationAction, createInvestigationAction, prepareInvestigationDocumentsAction, reviewInvestigationAction } from "../app/review/investigations/actions";
 import { source, task, taskId } from "./investigations-fixture";
 
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: () => ({ value: "synthetic-reviewer-session" }) }) }));
@@ -28,6 +28,30 @@ describe("investigation actions", () => {
     ));
   });
   const submissions = () => vi.mocked(fetch).mock.calls.filter(([, request]) => request?.method === "POST");
+
+  it("submits an explicit identity association and preserves unmapped positions", async () => {
+    const data = new FormData();
+    data.set("request_key", "11111111-1111-4111-8111-111111111111");
+    data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+    data.set("target", `${source.source_id}/1`); data.set("reason", "核对官方岗位编号");
+    data.set("position:unmapped", "");
+    const result = await bindInvestigationAction(empty, data);
+    expect(result.message).toContain("归属确认已记录");
+    expect(JSON.parse(submissions()[0][1]!.body as string)).toEqual({
+      delivery_hash: task.delivery_hash, opportunity_id: source.source_id, opportunity_version: 1,
+      positions: [], previous_binding_id: null, reason: "核对官方岗位编号",
+    });
+  });
+
+  it("rejects duplicate unit selection before submitting", async () => {
+    const data = new FormData();
+    data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+    data.set("target", `${source.source_id}/1`); data.set("reason", "核对");
+    data.set("position:a", `${source.source_id}/${source.endpoint_id}`);
+    data.set("position:b", `${source.source_id}/${source.endpoint_id}`);
+    expect((await bindInvestigationAction(empty, data)).error).toContain("不能重复关联");
+    expect(submissions()).toHaveLength(0);
+  });
 
   it("prepares existing documents against the frozen delivery without dispatching investigation", async () => {
     const data = new FormData();
@@ -141,11 +165,15 @@ describe("investigation actions", () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it.each(["registration", "review"])("replays a committed %s after the response is lost", async (operation) => {
+  it.each(["registration", "review", "binding"])("replays a committed %s after the response is lost", async (operation) => {
     const data = creation();
     if (operation === "review") {
       data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
       data.set("decision", "APPROVE"); data.set("reason", "已核对原件");
+    }
+    if (operation === "binding") {
+      data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+      data.set("target", `${source.source_id}/1`); data.set("reason", "核对机会归属");
     }
     const receipts = new Map<string, typeof task>();
     let dropResponse = true;
@@ -156,7 +184,8 @@ describe("investigation actions", () => {
       if (dropResponse) { dropResponse = false; throw new TypeError("synthetic lost response after commit"); }
       return Response.json(receipts.get(key));
     });
-    const action = operation === "registration" ? createInvestigationAction : reviewInvestigationAction;
+    const action = operation === "registration" ? createInvestigationAction
+      : operation === "review" ? reviewInvestigationAction : bindInvestigationAction;
     expect((await action(empty, data)).error).toBeTruthy();
     // Even the action state may have been lost; the key must already be in the form.
     expect((await action(empty, data)).taskId).toBe(taskId);
@@ -166,6 +195,9 @@ describe("investigation actions", () => {
     expect(receipts.size).toBe(2);
     data.set("request_key", "22222222-2222-4222-8222-222222222222");
     await action(empty, data);
+    expect(receipts.size).toBe(3);
+    data.delete("request_key");
+    expect((await action(empty, data)).error).toBeTruthy();
     expect(receipts.size).toBe(3);
   });
 

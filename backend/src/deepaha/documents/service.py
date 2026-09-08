@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from deepaha.acquisition.models import AcquisitionEvaluation
 from deepaha.artifacts.models import RawArtifact
 from deepaha.artifacts.object_store import ObjectIntegrityError, ObjectStore
+from deepaha.contracts.evidence_anchor import READER_BLOCK_CONTRACT, READER_EVIDENCE_VERSION
 from deepaha.contracts.phase2 import (
     EvidenceLocatorV02,
     LegacyEvidenceLocator,
@@ -166,10 +167,17 @@ class DocumentService:
 
             locators = self._validate_parsed(parsed)
             blocks = validate_parsed_blocks(parsed.blocks) if parsed.blocks else ()
-            if blocks and parser.parse_contract_version != P9B_BLOCK_PARSE_CONTRACT_VERSION:
+            block_contracts = {P9B_BLOCK_PARSE_CONTRACT_VERSION, READER_BLOCK_CONTRACT}
+            if blocks and parser.parse_contract_version not in block_contracts:
                 raise ValueError("DocumentBlock output requires the P9-B parse contract")
-            if parser.parse_contract_version == P9B_BLOCK_PARSE_CONTRACT_VERSION and not blocks:
+            if parser.parse_contract_version in block_contracts and not blocks:
                 raise ValueError("P9-B parse contract requires DocumentBlock output")
+            if any(
+                (b.block_type == "READER_TEXT_SPAN")
+                != (parser.parse_contract_version == READER_BLOCK_CONTRACT)
+                for b in blocks
+            ):
+                raise ValueError("Reader blocks require their own versioned parse contract")
             text_bytes = parsed.normalized_text.encode("utf-8")
             derived_key = build_derived_text_key(
                 artifact.content_sha256,
@@ -348,15 +356,18 @@ class DocumentService:
             kind = block.structural_locator.get("kind")
             if not isinstance(kind, str):
                 raise ValueError("DocumentBlock locator kind is missing")
+            schema_version = (
+                READER_EVIDENCE_VERSION if block.block_type == "READER_TEXT_SPAN" else "0.8.0"
+            )
             evidence_ref = EvidenceRef(
                 evidence_ref_id=uuid7(),
                 document_id=document.document_id,
                 artifact_id=artifact.artifact_id,
                 locator_kind=kind,
                 locator_value=None,
-                locator_schema_version="0.8.0",
+                locator_schema_version=schema_version,
                 locator_payload={
-                    "schema_version": "0.8.0",
+                    "schema_version": schema_version,
                     "kind": kind,
                     "block_id": str(block_id),
                     "document_parse_key": document.document_parse_key,
