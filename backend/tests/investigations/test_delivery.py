@@ -283,6 +283,61 @@ def test_section_locator_is_not_misrepresented_as_mechanically_verified() -> Non
         ('<p id="terms">Degree: <b>doctorate</b>.</p>', "#terms", "Degree:doctorate.", False),
         ('<p id="terms">博<script>ignore</script>士</p>', "#terms", "博士", True),
         ('<p id="terms">博<!-- hidden -->士</p>', "#terms", "博士", True),
+        (
+            '<table><tr><td id="terms"><p>学历、学</p><p>位要求</p></td></tr></table>',
+            "#terms",
+            "学历、学位要求",
+            True,
+        ),
+        (
+            '<table><tr><th id="terms"><p><span>学历、学</span></p>'
+            "<p><strong>位要求</strong></p></th></tr></table>",
+            "#terms",
+            "学历、学 位要求",
+            True,
+        ),
+        (
+            '<table><tr><td id="terms"><p>学历、学 </p><p>位要求</p></td></tr></table>',
+            "#terms",
+            "学历、学位要求",
+            False,
+        ),
+        (
+            '<table><tr><td id="terms"><p>1</p><p>2</p></td></tr></table>',
+            "#terms",
+            "12",
+            False,
+        ),
+        (
+            '<table><tr><td id="terms"><p>not</p><p>eligible</p></td></tr></table>',
+            "#terms",
+            "noteligible",
+            False,
+        ),
+        (
+            '<table id="terms"><tr><td>学历、学</td><td>位要求</td></tr></table>',
+            "#terms",
+            "学历、学位要求",
+            False,
+        ),
+        (
+            '<table><tr><td id="terms"><p>须</p><p>持证</p><p>方可报名</p></td></tr></table>',
+            "#terms",
+            "须方可报名",
+            False,
+        ),
+        (
+            '<table><tr><td id="terms"><p>学历：本科</p><p>须持证</p></td></tr></table>',
+            "#terms",
+            "学历：本科无需持证",
+            False,
+        ),
+        ('<p id="terms">博士\u200b研究生</p>', "#terms", "博士研究生", True),
+        ('<p id="terms">博士研究生</p>', "#terms", "\ufeff博士研究生", True),
+        ('<p id="terms">Degree:\r\n\t&nbsp;doctorate.</p>', "#terms", "Degree: doctorate.", True),
+        ('<p id="terms">not eligible</p>', "#terms", "noteligible", False),
+        ('<p id="terms">a\u200cb</p>', "#terms", "ab", False),
+        ('<p id="terms">2026-12-31</p>', "#terms", "2026-12-30", False),
         ('<p id="terms">博士</p>其他要求', "#terms", "博士其他要求", False),
         (
             '<div id="terms"><p>博士</p><p>研究生</p></div>',
@@ -336,6 +391,7 @@ def test_html_quotes_preserve_inline_text_without_accepting_omitted_passages(
     if accepted:
         result = _validate(o, e, artifacts)
         assert result.facts[0].evidence[0].mechanically_verified
+        assert result.facts[0].evidence[0].quote == quote
         assert result.artifacts[0].content == artifacts["notice"]
         assert "HUMAN_FACT_REVIEW_REQUIRED" in result.issues
     else:
@@ -369,6 +425,90 @@ def test_xlsx_quote_is_checked_in_the_declared_row_not_another_position() -> Non
     module = _delivery_module()
     with pytest.raises(module.DeliveryValidationError, match="EVIDENCE_QUOTE_MISMATCH"):
         _validate(o, e, artifacts)
+
+
+@pytest.mark.parametrize(
+    "col,quote,valid", [(2, "doctorate", True), (1, "doctorate", False), (3, "0", True)]
+)
+def test_xlsx_numeric_column_locator_checks_exact_cell(col: int, quote: str, valid: bool) -> None:
+    module = _delivery_module()
+    book = Workbook()
+    sheet = book.active
+    assert sheet is not None
+    sheet.append(["P1", "doctorate", 0])
+    output = BytesIO()
+    book.save(output)
+    book.close()
+    artifact = module.ValidatedArtifact(
+        "table",
+        "https://example.gov/table.xlsx",
+        "artifacts/table.xlsx",
+        sha256(output.getvalue()).hexdigest(),
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        output.getvalue(),
+    )
+    if valid:
+        assert module._quote_support(
+            artifact, quote, {"sheet": "Sheet", "row": 1, "col": col}, set()
+        )
+    else:
+        with pytest.raises(module.DeliveryValidationError, match="EVIDENCE_QUOTE_MISMATCH"):
+            module._quote_support(artifact, quote, {"sheet": "Sheet", "row": 1, "col": col}, set())
+
+
+def test_utf8_fragment_is_validated_with_same_text_as_document_parser() -> None:
+    o, e, artifacts = _sample()
+    artifacts["notice"] = '<p id="terms">报考要求：<strong>本科</strong>及以上。</p>'.encode()
+    e["artifacts"][0]["sha256"] = sha256(artifacts["notice"]).hexdigest()
+    for fact in (_fact(o), e["facts_flat"][0]):
+        fact["evidence"][0]["quote"] = "本科及以上"
+    assert _validate(o, e, artifacts).facts[0].evidence[0].mechanically_verified
+
+
+def test_many_xlsx_references_read_each_workbook_once_and_do_not_reuse_other_deliveries(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = _delivery_module()
+    original = module.load_workbook
+    reads = 0
+
+    def counted(*args: Any, **kwargs: Any) -> Any:
+        nonlocal reads
+        reads += 1
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(module, "load_workbook", counted)
+    o, e, artifacts = _sample()
+    book = Workbook()
+    sheet = book.active
+    assert sheet is not None
+    sheet.append(["doctorate", "P1"])
+    output = BytesIO()
+    book.save(output)
+    book.close()
+    artifacts["notice"] = output.getvalue()
+    e["artifacts"][0].update(
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        sha256=sha256(artifacts["notice"]).hexdigest(),
+    )
+    for fact in (_fact(o), e["facts_flat"][0]):
+        fact["evidence"] = [
+            {
+                "artifact_id": "notice",
+                "quote": "doctorate",
+                "locator": {"sheet": "Sheet", "cell": "A1"},
+            },
+            {
+                "artifact_id": "notice",
+                "quote": "P1",
+                "locator": {"sheet": "Sheet", "row": 1, "col": 2},
+            },
+        ]
+    first = _validate(o, e, artifacts)
+    assert all(r.mechanically_verified for r in first.facts[0].evidence)
+    assert reads == 1
+    assert _validate(o, e, artifacts).sha256 == first.sha256
+    assert reads == 2
 
 
 def test_preflight_returns_only_validated_task_relative_artifact_paths() -> None:

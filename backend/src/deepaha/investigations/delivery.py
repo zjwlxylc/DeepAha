@@ -13,18 +13,19 @@ from dataclasses import dataclass
 from hashlib import sha256
 from io import BytesIO
 from pathlib import Path, PurePosixPath
-from typing import Any, NoReturn, cast
+from typing import Any, NoReturn
 from urllib.parse import unquote, urlsplit
 
 from jsonschema import Draft7Validator
-from lxml import etree, html
+from lxml import etree
 from openpyxl import load_workbook
-from openpyxl.worksheet.worksheet import Worksheet
+from openpyxl.utils.cell import column_index_from_string
 from pypdf import PdfReader
 
+from deepaha.documents.html import _parse_html_tree
 from deepaha.documents.parser import ExpectedParseError
 from deepaha.documents.pdf import MAX_PDF_PAGES
-from deepaha.documents.spreadsheet import _preflight_archive
+from deepaha.documents.spreadsheet import _ignore_declared_dimensions, _preflight_archive
 
 SCHEMA_SHA256 = {
     "opportunities": "fbbf3f83bd078ecffaa52ab8aa79743ada115c5d88918c3a5ea25245e0f6ccd5",
@@ -35,6 +36,9 @@ _HASH = re.compile(r"[a-fA-F0-9]{64}\Z")
 _ARTIFACT_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,255}\Z")
 _RESERVED = re.compile(r"(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\..*)?\Z", re.I)
 MAX_WORKSHEETS = 128
+HTML_QUOTE_CANONICALIZATION_VERSION = "html-quote-c14n/1"
+_HAN = r"[\u3400-\u4dbf\u4e00-\u9fff]"
+_HAN_FORMAT_MARKS = re.compile(rf"(?<={_HAN})[\u200b\ufeff]+(?={_HAN})")
 _HTML_TEXT_BOUNDARIES = frozenset(
     [
         "address",
@@ -88,6 +92,12 @@ class DeliveryValidationError(ValueError):
     def __init__(self, code: str) -> None:
         self.code = code
         super().__init__(code)
+
+
+@dataclass(frozen=True, slots=True)
+class _SpreadsheetText:
+    rows: dict[str, dict[int, dict[int, str]]]
+    row_counts: dict[str, int]
 
 
 @dataclass(frozen=True, slots=True)
@@ -403,37 +413,64 @@ def _normalized(text: str) -> str:
     return " ".join(text.split())
 
 
-def _html_quote_text(root: html.HtmlElement) -> str:
+def _canonical_html_text(text: str) -> str:
+    # Whitespace is collapsed, not deleted. Keep Latin word separators, numeric
+    # boundaries, punctuation, ZWJ/ZWNJ and bidi controls. No Unicode folding.
+    return _normalized(_HAN_FORMAT_MARKS.sub("", text.strip().lstrip("\ufeff")))
+
+
+def _html_quote_text(root: etree._Element, *, join_cell_wraps: bool = False) -> str:
     """Preserve inline text while separating paragraphs, rows and cells.
 
     This checks source text structure, not CSS layout or the meaning of a fact.
     The original artifact bytes remain untouched.
     """
-    parts: list[str] = []
+    # Only an explicitly selected cell may join adjacent Han text across p/br
+    # layout boundaries. None records an extractor-generated separator; literal
+    # source whitespace and all row/cell/other block boundaries remain distinct.
+    cell_wraps = join_cell_wraps and root.tag in {"td", "th"}
+    parts: list[str | None] = []
     for event, node in etree.iterwalk(root, events=("start", "end", "comment", "pi")):
         if node.tag in _HTML_TEXT_BOUNDARIES:
-            parts.append(" ")
+            parts.append(None if cell_wraps and node.tag in {"p", "br"} else " ")
         if event == "start" and isinstance(node.tag, str) and node.text:
             parts.append(node.text)
         elif event != "start" and node is not root and node.tail:
             parts.append(node.tail)
-    return "".join(parts)
+    rendered: list[str] = []
+    pending_wrap = False
+    for part in parts:
+        if part is None:
+            pending_wrap = True
+        elif part:
+            if (
+                pending_wrap
+                and rendered
+                and not (re.fullmatch(_HAN, rendered[-1][-1]) and re.fullmatch(_HAN, part[0]))
+            ):
+                rendered.append(" ")
+            rendered.append(part)
+            pending_wrap = False
+    return "".join(rendered)
 
 
 def _quote_support(
-    artifact: ValidatedArtifact, quote: str, locator: dict[str, Any], issues: set[str]
+    artifact: ValidatedArtifact,
+    quote: str,
+    locator: dict[str, Any],
+    issues: set[str],
+    *,
+    spreadsheet_cache: dict[str, _SpreadsheetText] | None = None,
 ) -> bool:
     media = artifact.media_type.partition(";")[0].strip().lower()
     supported_locator = False
     selected: str | None = None
     try:
         if media == "text/html":
-            tree = html.fromstring(artifact.content, parser=html.HTMLParser(no_network=True))
-            for node in list(tree.iter()):
-                if node.tag in {"script", "style", "noscript", "template"}:
-                    parent = node.getparent()
-                    if parent is not None:
-                        cast(html.HtmlElement, node).drop_tree()
+            tree = _parse_html_tree(artifact.content, utf8_fallback=True)
+            canonical_quote = _canonical_html_text(quote)
+            if not canonical_quote:
+                _fail("EVIDENCE_QUOTE_INVALID")
             selector = locator.get("selector")
             if isinstance(selector, str) and set(locator) == {"selector"}:
                 nodes = tree.cssselect(selector)
@@ -441,6 +478,11 @@ def _quote_support(
                     _fail("EVIDENCE_LOCATOR_MISMATCH")
                 # A selector may match several locations; never stitch them into a quote.
                 texts = [_html_quote_text(node) for node in nodes]
+                texts.extend(
+                    _html_quote_text(node, join_cell_wraps=True)
+                    for node in nodes
+                    if node.tag in {"td", "th"}
+                )
                 supported_locator = True
             else:
                 texts = [_html_quote_text(tree)]
@@ -448,7 +490,7 @@ def _quote_support(
                     if locator["url"] != artifact.url:
                         _fail("EVIDENCE_LOCATOR_MISMATCH")
                     supported_locator = True
-            if not any(_normalized(quote) in _normalized(text) for text in texts):
+            if not any(canonical_quote in _canonical_html_text(text) for text in texts):
                 _fail("EVIDENCE_QUOTE_MISMATCH")
         elif media == "application/pdf":
             reader = PdfReader(BytesIO(artifact.content), strict=True)
@@ -464,12 +506,19 @@ def _quote_support(
                 selected = reader.pages[page - 1].extract_text() or ""
                 supported_locator = True
         elif media == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-            selected, supported_locator = _spreadsheet_text(artifact.content, locator)
+            selected, supported_locator = _spreadsheet_text(
+                artifact.content, locator, cache=spreadsheet_cache, cache_key=artifact.artifact_id
+            )
         else:
             issues.add(f"EVIDENCE_FORMAT_REVIEW_REQUIRED:{artifact.artifact_id}")
             return False
     except DeliveryValidationError:
         raise
+    except ExpectedParseError as error:
+        if error.code == "HTML_ENCODING_UNRESOLVED":
+            issues.add(f"EVIDENCE_FORMAT_REVIEW_REQUIRED:{artifact.artifact_id}")
+            return False
+        raise DeliveryValidationError("EVIDENCE_MATERIAL_INVALID") from None
     except Exception:
         # Parser-specific errors must not expose material bytes or local paths.
         raise DeliveryValidationError("EVIDENCE_MATERIAL_INVALID") from None
@@ -480,15 +529,55 @@ def _quote_support(
     return supported_locator
 
 
-def _spreadsheet_text(content: bytes, locator: dict[str, Any]) -> tuple[str | None, bool]:
+def _spreadsheet_text(
+    content: bytes,
+    locator: dict[str, Any],
+    *,
+    cache: dict[str, _SpreadsheetText] | None = None,
+    cache_key: str = "",
+) -> tuple[str | None, bool]:
     sheet = locator.get("sheet")
     row = locator.get("row")
     cell = locator.get("cell")
+    column = locator.get("col")
+    numeric_cell = set(locator) == {"sheet", "row", "col"}
+    if numeric_cell and (
+        type(row) is not int
+        or not 1 <= row <= 1048576
+        or type(column) is not int
+        or not 1 <= column <= 16384
+    ):
+        _fail("EVIDENCE_LOCATOR_MISMATCH")
     if not (
         (set(locator) == {"sheet", "row"} and type(row) is int)
         or (set(locator) == {"sheet", "cell"} and isinstance(cell, str))
+        or numeric_cell
     ):
         return None, False
+    if "cell" in locator:
+        match = re.fullmatch(r"([A-Z]{1,3})([1-9][0-9]{0,6})", str(cell))
+        if match is None:
+            _fail("EVIDENCE_LOCATOR_MISMATCH")
+        column, row = column_index_from_string(match[1]), int(match[2])
+        if column > 16384 or row > 1048576:
+            _fail("EVIDENCE_LOCATOR_MISMATCH")
+    tables = cache.get(cache_key) if cache is not None else None
+    if tables is None:
+        tables = _read_spreadsheet_text(content)
+        if cache is not None:
+            cache[cache_key] = tables
+    if not isinstance(sheet, str) or sheet not in tables.rows:
+        _fail("EVIDENCE_LOCATOR_MISMATCH")
+    if type(row) is not int or not 1 <= row <= tables.row_counts[sheet]:
+        _fail("EVIDENCE_LOCATOR_MISMATCH")
+    values = tables.rows[sheet].get(row, {})
+    if column is not None:
+        return values.get(column, ""), True
+    return " ".join(values.values()), True
+
+
+def _read_spreadsheet_text(content: bytes) -> _SpreadsheetText:
+    """Read cells once per validation, retaining zeroes and exact worksheet names."""
     try:
         _preflight_archive(content)
     except ExpectedParseError as error:
@@ -499,17 +588,20 @@ def _spreadsheet_text(content: bytes, locator: dict[str, Any]) -> tuple[str | No
     try:
         if len(book.sheetnames) > MAX_WORKSHEETS:
             _fail("EVIDENCE_RESOURCE_LIMIT_EXCEEDED")
-        if not isinstance(sheet, str) or sheet not in book.sheetnames:
-            _fail("EVIDENCE_LOCATOR_MISMATCH")
-        worksheet = cast(Worksheet, book[sheet])
-        if type(row) is int:
-            if row < 1 or row > (worksheet.max_row or 0):
-                _fail("EVIDENCE_LOCATOR_MISMATCH")
-            values = next(worksheet.iter_rows(min_row=row, max_row=row, values_only=True))
-            return " ".join(str(value) for value in values if value is not None), True
-        if not isinstance(cell, str) or re.fullmatch(r"[A-Z]{1,3}[1-9][0-9]{0,6}", cell) is None:
-            _fail("EVIDENCE_LOCATOR_MISMATCH")
-        return str(worksheet[cell].value or ""), True
+        sheets: dict[str, dict[int, dict[int, str]]] = {}
+        row_counts: dict[str, int] = {}
+        for worksheet in book.worksheets:
+            _ignore_declared_dimensions(worksheet)
+            rows = sheets[worksheet.title] = {}
+            row_counts[worksheet.title] = 0
+            for number, values in enumerate(worksheet.iter_rows(values_only=True), 1):
+                populated = {
+                    i: str(value) for i, value in enumerate(values, 1) if value is not None
+                }
+                if populated:
+                    rows[number] = populated
+                row_counts[worksheet.title] = number
+        return _SpreadsheetText(sheets, row_counts)
     finally:
         book.close()
 
@@ -535,6 +627,7 @@ def validate_delivery(
     raw_facts = _facts(o, e, entities, root)
     issues = {"HUMAN_FACT_REVIEW_REQUIRED"}
     facts: list[DeliveryFact] = []
+    spreadsheet_cache: dict[str, _SpreadsheetText] = {}
     for entity, fact in raw_facts:
         references: list[DeliveryEvidence] = []
         for ref in fact.get("evidence", []):
@@ -548,7 +641,9 @@ def validate_delivery(
             ):
                 _fail("EVIDENCE_HASH_MISMATCH")
             locator = ref.get("locator", {})
-            verified = _quote_support(artifact, quote, locator, issues)
+            verified = _quote_support(
+                artifact, quote, locator, issues, spreadsheet_cache=spreadsheet_cache
+            )
             references.append(
                 DeliveryEvidence(artifact.artifact_id, quote, locator, artifact.sha256, verified)
             )

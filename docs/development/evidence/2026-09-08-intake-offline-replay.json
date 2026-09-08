@@ -1,0 +1,1364 @@
+{
+  "checked_at": "2026-09-08T08:12:14.228914+00:00",
+  "case_id": "01a07fb6-4415-76bc-a14c-c6422b84cb0e",
+  "verifier_path": "D:\\DeepAha\\.worktrees\\integration-wma-evidence\\backend\\src\\deepaha\\investigations\\delivery.py",
+  "verifier_sha256": "be55c35a176f0dffdf5fad44ecd0a2de759b33f22a596d6aaf4b772959cf6645",
+  "canonicalization_version": "html-quote-c14n/1",
+  "wma_calls": 0,
+  "business_database_writes": 0,
+  "schema": "PASS",
+  "cross_file_consistency": "PASS",
+  "original_hashes": {
+    "result/report.md": "6d5002be467b5c49a019cf7b2acbe317985739ec5a2701fdb3db40461a7aa5bc",
+    "result/opportunities.json": "2bfc04b07dd95eaef15c5fdbd9ba2f77fe3cfe0eb1c381bc7edbf66859171d74",
+    "result/evidence.json": "d151d28011e2ac7ed5aa68ba4a0a80748a72b2c6df73dfb62c9e599244a361a6",
+    "artifacts/notice_48723.html": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+    "artifacts/attachment1_baoming.doc": "73e1fee73b73603d32b283d59503a76fe53ada9b192ff82d84496fb906aba716",
+    "artifacts/attachment2_chengguo.doc": "9cbb6007aa4b6064193dae455b23cdbd8eaa80320591767755ec75fb5e9c15a6"
+  },
+  "originals_unchanged": true,
+  "counts": {
+    "PASS": 94,
+    "FAIL": 0,
+    "UNVERIFIED": 30
+  },
+  "four_html_headers_pass": true,
+  "delivery_verdict": "UNVERIFIED",
+  "issues": [
+    "EVIDENCE_FORMAT_REVIEW_REQUIRED:art-att1-baoming-doc",
+    "EVIDENCE_FORMAT_REVIEW_REQUIRED:art-att2-chengguo-doc",
+    "HUMAN_FACT_REVIEW_REQUIRED"
+  ],
+  "references": [
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "opportunity_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "2026年浙江红船干部学院 中共嘉兴市委党校公开招聘高层次人才公告",
+      "locator": {
+        "selector": ".artice1 > div > h3"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "publish_unit",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "因工作需要，浙江红船干部学院、中共嘉兴市委党校决定面向社会公开招聘工作人员5名（事业编制）。现将有关事项公告如下：",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "publish_unit",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "浙江红船干部学院",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(64)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "publish_unit",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "中共嘉兴市委党校",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(65)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "publish_date",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "2026年7月13日",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(66)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "site_publish_time",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "2026-07-14 15:33:47",
+      "locator": {
+        "selector": ".click1 > span:nth-of-type(3) > span"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "opportunity_type",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "因工作需要，浙江红船干部学院、中共嘉兴市委党校决定面向社会公开招聘工作人员5名（事业编制）。现将有关事项公告如下：",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "opportunity_type",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "聘用人员列入事业编制管理，与招聘单位签订事业单位聘用合同，并按规定约定试用期。试用期满后，考核合格者，予以正式聘用；考核不合格的，取消聘用。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(49)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "headcount_total",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "因工作需要，浙江红船干部学院、中共嘉兴市委党校决定面向社会公开招聘工作人员5名（事业编制）。现将有关事项公告如下：",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "headcount_total",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "本次公开招聘计划推出岗位4个，招聘教师5名。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(6)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "position_count",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "本次公开招聘计划推出岗位4个，招聘教师5名。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(6)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "recruitment_scope",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "本次招聘在全国范围内面向具有博士研究生学历学位的人员。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(10)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "education_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "本次招聘在全国范围内面向具有博士研究生学历学位的人员。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(10)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "nationality_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "1.具有中华人民共和国国籍，有良好的思想政治素质，拥护党的路线、方针、政策。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(12)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "ideology_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "1.具有中华人民共和国国籍，有良好的思想政治素质，拥护党的路线、方针、政策。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(12)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "age_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "4.年龄要求：博士研究生年龄在38周岁及以下（即1987年7月13日以后出生，以此类推）。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(15)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "health_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "5.具有适应岗位要求的身体条件。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(16)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "overseas_degree_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（留学人员须取得教育部留学服务中心出具的国外境外学历学位认证书）；普通高校2026年应届毕业生报考的，学历、学位证书须于2026年12月31日前取得。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(14)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "fresh_graduate_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "普通高校2026年应届毕业生报考的，学历、学位证书须于2026年12月31日前取得。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(14)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "fresh_graduate_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "普通高校2026年应届毕业生不能按时取得或未取得招聘岗位规定的学历、学位证书的，取消聘用资格。社会人员办理报到前须与原单位解除劳动（聘用）合同。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(48)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "6.有下列情形之一的，不具备报考资格：",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(17)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（1）曾因犯罪受过刑事处罚的或曾被开除公职的；被依法列为失信联合惩戒对象的。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(18)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（2）涉嫌违纪违法正在接受纪检监察机关或者司法机关审查尚未作出结论的；受党纪、政务处分未满处分期限（影响期限）的。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(19)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（3）按照《事业单位人事管理回避规定》构成回避关系的。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(20)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（4）法律法规规定的其他不得招聘为事业单位工作人员的情形。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(21)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "disqualification_conditions",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（5）曾有学术不端等不良行为的。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(22)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "major_review_rule",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "招聘岗位所需专业由招聘单位参考国家教育行政部门发布的《授予博士、硕士学位和培养研究生的学科、专业目录（1997年颁布，2008年更新）》《研究生教育学科专业目录（2022年）》设置及审查认定，对于考生所学专业未列入以上教育行政部门公布的目录中的，由招聘单位按专业所学课程、研究方向相同或相近原则审查。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(34)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "registration_start",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "1.报名时间：公告发布之日起至2026年12月31日。根据报名情况，结合院校教学、科研工作需要，适时对符合资格条件的高层次人才组织考试，直至相应岗位落实聘用人员。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(26)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "registration_deadline",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "1.报名时间：公告发布之日起至2026年12月31日。根据报名情况，结合院校教学、科研工作需要，适时对符合资格条件的高层次人才组织考试，直至相应岗位落实聘用人员。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(26)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "exam_arrangement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "根据报名情况，结合院校教学、科研工作需要，适时对符合资格条件的高层次人才组织考试，直至相应岗位落实聘用人员。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(26)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_method",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "2.报名方式。本次公开招聘采用网上报名方式。应聘人员可于规定时间将报名登记表（附件1）及相关材料扫描件电子稿发送至报名邮箱：zjhcgbxy2026@163.com，文件名为“应聘岗位+专业+姓名”。相关报名材料可在考试前提供原件及复印件各一套，所提供材料不全或材料审核不符合报名条件的不得参加考试。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(27)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_email",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "2.报名方式。本次公开招聘采用网上报名方式。应聘人员可于规定时间将报名登记表（附件1）及相关材料扫描件电子稿发送至报名邮箱：zjhcgbxy2026@163.com，文件名为“应聘岗位+专业+姓名”。相关报名材料可在考试前提供原件及复印件各一套，所提供材料不全或材料审核不符合报名条件的不得参加考试。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(27)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_materials",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（1）报名登记表一式两份（粘贴一寸正面免冠证件照）；",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(29)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_materials",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（2）学历、学位证书的原件及复印件（普通高校2026年应届毕业生未取得学历、学位证书可提供学校核发的就业推荐表和就业协议书，留学人员报考提供教育部留学服务中心出具的国外境外学历学位认证书）；",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(30)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_materials",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（3）本人身份证原件及复印件；",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(31)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_materials",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（4）专业技术资格证书原件及复印件；",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(32)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_materials",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（5）反映个人学术水平的科研成果等情况清单（附件2）及证明材料扫描件。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(33)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "material_supplement_rule",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "相关报名材料可在考试前提供原件及复印件各一套，所提供材料不全或材料审核不符合报名条件的不得参加考试。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(27)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "official_contact",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "联系电话：0573-82710058",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(57)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "official_contact",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "联 系 人：包老师",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(58)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "official_contact",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "监督电话：0573-82521962",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(59)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "recruitment_procedure",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "采取报名（资格初审）、考试、体检、考察、公示、聘用等程序进行。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(24)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "exam_method",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "考试采取科研能力评价、试讲、面试相结合的方式进行。科研能力评价、试讲、面试单项科目成绩满分均为100分，合格分数均为70分，单项科目低于70分的，不列入体检、考察对象。总成绩=科研能力评价30%+试讲成绩40%+面试成绩30%。具体考试时间、地点以及考试方式将通过电话和邮件，通知考生本人。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(38)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "exam_open_ratio",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "招聘单位将根据报名情况适时组织考试，不受最低开考比例限制，招满即止。考试前，将组织应聘人员进行资格条件复审，通过资格复审的人员可以参加考试。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(37)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "qualification_recheck",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "考试前，将组织应聘人员进行资格条件复审，通过资格复审的人员可以参加考试。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(37)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "medical_exam_rule",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "根据考试总成绩，从高分到低分按照招聘计划的1:1比例确定体检对象。体检参照《公务员录用体检通用标准（试行）》及有关规定执行，体检合格者确定为考察对象。应聘人员不按规定的时间、地点参加体检，视作放弃体检资格。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(40)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "inspection_rule",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "考察参照《公务员录用考察办法（试行）》（中组发〔2021〕11号）及相关规定执行。主要对体检合格的人员进行资格条件的复核和德、能、勤、绩、廉以及需要回避的情况等考察，考察不合格不予聘用。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(42)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "substitution_rule",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "应聘人员在体检、考察环节出现不合格的或自愿放弃的，由招聘单位研究决定是否安排递补。决定递补的，根据考试总成绩从高分到低分依次进行。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(43)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "publicity_rule",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "拟聘用人员名单在浙江红船干部学院网站上公示5个工作日。公示期满，对拟聘用人员没有异议或反映有问题经查实不影响聘用的，招聘单位按规定办理聘用手续。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(46)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "employment_rule",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "确定聘用人选后，按《事业单位人事管理条例》等有关规定办理聘用手续。拟聘用人员无正当理由未在规定时间内报到的，取消聘用资格。普通高校2026年应届毕业生不能按时取得或未取得招聘岗位规定的学历、学位证书的，取消聘用资格。社会人员办理报到前须与原单位解除劳动（聘用）合同。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(48)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "probation_rule",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "聘用人员列入事业编制管理，与招聘单位签订事业单位聘用合同，并按规定约定试用期。试用期满后，考核合格者，予以正式聘用；考核不合格的，取消聘用。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(49)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "talent_treatment",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "1.引进人才可享受院校安家费、购房补助等高层次人才待遇。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(51)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "talent_subsidy",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "2.嘉兴市各类人才补贴以人才引进时嘉兴市最新颁布的文件为准，补贴申请手续由人才本人根据相关文件细则自行办理。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(52)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "supervision_authority",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "（一）本次公开招聘工作由浙江红船干部学院、中共嘉兴市委党校按有关规定组织实施，嘉兴市纪委市监委驻市委组织部纪检监察组监督。对考试违纪违规行为的认定和处理，按照《事业单位公开招聘违纪违规行为处理规定》（人社部令第35号）执行。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(54)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "information_website",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "本次公开招聘相关事宜将发布于浙江红船干部学院、中共嘉兴市委党校网站（https://www.zjhcgbxy.com），届时应聘人员可到网上查询。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(55)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment_list",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "附件1：公开招聘高层次人才报名登记表",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(61)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment_list",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "附件2：科研成果清单",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(62)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment1_title",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "公开招聘高层次人才报名登记表",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "报考岗位：",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "出生年月",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "籍  贯",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "民  族",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "政治面貌",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "婚姻状况",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "健康状况",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "职称",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "最高学历毕业学校",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "最高学历毕业时间",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "最高学历专业",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "硕士毕业学校及专业",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "本科毕业学校及专业",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "工作简历",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "家庭主要成员关系",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "特长",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "奖惩情况",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "application_form_fields",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "个人承诺",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "form_work_resume_instruction",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "XX年XX月-XX年XX月，工作单位、岗位、担任职务，没有填“无”",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "form_declaration",
+      "artifact_id": "art-att1-baoming-doc",
+      "quote": "本人声明：上述填写内容真实完整。如有不实，本人愿承担一切责任。",
+      "locator": {
+        "file": "attachment1_baoming.doc",
+        "section": "附件1 公开招聘高层次人才报名登记表",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_title",
+      "artifact_id": "art-att2-chengguo-doc",
+      "quote": "科研成果清单",
+      "locator": {
+        "file": "attachment2_chengguo.doc",
+        "section": "附件2 科研成果清单",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "artifact_id": "art-att2-chengguo-doc",
+      "quote": "一、博士论文",
+      "locator": {
+        "file": "attachment2_chengguo.doc",
+        "section": "附件2 科研成果清单",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "artifact_id": "art-att2-chengguo-doc",
+      "quote": "二、核心期刊发表情况",
+      "locator": {
+        "file": "attachment2_chengguo.doc",
+        "section": "附件2 科研成果清单",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "artifact_id": "art-att2-chengguo-doc",
+      "quote": "三、其他公开刊物发表情况",
+      "locator": {
+        "file": "attachment2_chengguo.doc",
+        "section": "附件2 科研成果清单",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "artifact_id": "art-att2-chengguo-doc",
+      "quote": "四、主持、参与课题（根据级别由高到低）填写",
+      "locator": {
+        "file": "attachment2_chengguo.doc",
+        "section": "附件2 科研成果清单",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "artifact_id": "art-att2-chengguo-doc",
+      "quote": "五、决策咨询成果",
+      "locator": {
+        "file": "attachment2_chengguo.doc",
+        "section": "附件2 科研成果清单",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "artifact_id": "art-att2-chengguo-doc",
+      "quote": "六、科研获奖情况",
+      "locator": {
+        "file": "attachment2_chengguo.doc",
+        "section": "附件2 科研成果清单",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "attachment2_structure",
+      "artifact_id": "art-att2-chengguo-doc",
+      "quote": "七、其他科研成果",
+      "locator": {
+        "file": "attachment2_chengguo.doc",
+        "section": "附件2 科研成果清单",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "ann-2026-zjhcgbxy",
+      "field": "achievement_form_rule",
+      "artifact_id": "art-att2-chengguo-doc",
+      "quote": "填报信息必须真实、准确，如发现虚假填报信息，取消招聘资格。",
+      "locator": {
+        "file": "attachment2_chengguo.doc",
+        "section": "附件2 科研成果清单",
+        "method": "OLE WordDocument 流 UTF-16LE 文本抽取（派生读取，非独立来源）",
+        "human_verify": true
+      },
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "entity_id": "unit-zjhcgbxy",
+      "field": "unit_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "因工作需要，浙江红船干部学院、中共嘉兴市委党校决定面向社会公开招聘工作人员5名（事业编制）。现将有关事项公告如下：",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "unit-zjhcgbxy",
+      "field": "unit_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "浙江红船干部学院",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(64)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "unit-zjhcgbxy",
+      "field": "unit_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "中共嘉兴市委党校",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(65)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "unit-zjhcgbxy",
+      "field": "unit_nature",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "浙江红船干部学院是由中共浙江省委组织部和中共嘉兴市委共同管理，以中共嘉兴市委管理为主的事业单位，与中共嘉兴市委党校合署办公。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(3)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "unit-zjhcgbxy",
+      "field": "unit_function",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "浙江红船干部学院、中共嘉兴市委党校是对党政干部、公务员、企业经营管理者、专业技术人员、高层次人才、基层干部进行理论教育和党性教育的培训院校；是培训各级领导干部的主渠道；是开展习近平新时代中国特色社会主义思想研究、宣传和教育，推进党的思想理论建设，弘扬红船精神、浙江精神和新时代嘉兴人文精神的重要阵地；是哲学社会科学研究机构和省情、市情研究的重要智库；是民主党派、无党派人士的联合党校和统一战线人才教育培养的主阵地；是世界政党交流的重要平台。",
+      "locator": {
+        "selector": "#edutor_txt > p:nth-of-type(4)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "position_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "教师岗位1",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(2) > td:nth-child(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "position_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "招聘岗位",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "headcount",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "1",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(2) > td:nth-child(2)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "headcount",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "招聘人数",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(2)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "major_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "区域经济学、产业经济学",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(2) > td:nth-child(3)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "major_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "所需专业",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(3)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "education_degree_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "博士研究生",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(2) > td:nth-child(4)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-1",
+      "field": "education_degree_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "学历、学位要求",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(4)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "position_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "教师岗位2",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(3) > td:nth-child(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "position_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "招聘岗位",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "headcount",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "2",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(3) > td:nth-child(2)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "headcount",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "招聘人数",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(2)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "major_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "行政管理、公共管理学（120400）、公共管理（125200）",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(3) > td:nth-child(3)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "major_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "所需专业",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(3)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "education_degree_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "博士研究生",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(3) > td:nth-child(4)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-2",
+      "field": "education_degree_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "学历、学位要求",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(4)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "position_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "教师岗位3",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(4) > td:nth-child(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "position_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "招聘岗位",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "headcount",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "1",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(4) > td:nth-child(2)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "headcount",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "招聘人数",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(2)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "major_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "中共党史党建学、中共党史",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(4) > td:nth-child(3)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "major_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "所需专业",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(3)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "education_degree_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "博士研究生",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(4) > td:nth-child(4)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-3",
+      "field": "education_degree_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "学历、学位要求",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(4)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "position_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "教师岗位4",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(5) > td:nth-child(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "position_name",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "招聘岗位",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(1)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "headcount",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "1",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(5) > td:nth-child(2)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "headcount",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "招聘人数",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(2)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "major_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "社会学（0303）、中国近现代史、中国古典文献学",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(5) > td:nth-child(3)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "major_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "所需专业",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(3)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "education_degree_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "博士研究生",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(5) > td:nth-child(4)"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "entity_id": "pos-4",
+      "field": "education_degree_requirement",
+      "artifact_id": "art-notice-48723-html",
+      "quote": "学历、学位要求",
+      "locator": {
+        "selector": "#edutor_txt > table > tbody > tr:nth-child(1) > td:nth-child(4)"
+      },
+      "verdict": "PASS"
+    }
+  ]
+}
