@@ -2,7 +2,17 @@
 
 本目录把产品 Blueprint 转换为可执行、可验证、可持续维护的工程基线。这里的内容描述“应该如何开发”，不代表代码已经存在或指标已经达成。
 
-**本分支的当前范围（2026-09-08）：** [首批调查底座集成](2026-09-08-intake-integration.md)仅包含内部调查及证据回收/核验、0035–0036 迁移和审核入口，后续事实/岗位/个人功能仍在独立开发分支。最近固定公告已成功完成 WMA 调查；同批文件离线为 94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery 仍未 PASS。下文 WMA 服务拒绝记录属于历史，不是当前服务状态。首批已通过 PR #10 合入远程 main，最终候选 CI 九项全部通过；未部署或取得发布资格。下一批见[通用核验实施与影子回放](2026-09-08-generic-evidence-verification.md)。
+**本次集成状态（2026-09-08，已合入 main 至 PR #20）：** 调查及证据回收、通用核验与持久定位、机会/岗位身份、独立字段审核、规则候选及独立规则裁决、受限资格内核、受信岗位条件快照及其私有管理页面已经分批合并。最新主线提交为 `d5455cc8e3f6bc5e8920811f10b1ab99febfa36e`；PR #20 的候选 CI #94 全部九项通过，合并与候选同树。不是仅完成调查底座，也未完成真实个人资格或发布资格。
+
+| 当前工程环节 | 可复查记录 |
+| --- | --- |
+| 调查及共享证据核验、持久引用 | [调查底座](2026-09-08-intake-integration.md)、[通用证据块](2026-09-08-evidence-block-integration.md)、[共同核验回执](2026-09-08-generic-evidence-receipts.md) |
+| 身份与独立字段事实 | [身份登记](2026-09-08-investigation-identity-integration.md)、[字段审核](2026-09-08-investigation-field-review.md) |
+| 规则与受限资格计算 | [规则类型](2026-09-08-rule-candidate-types.md)、[独立规则审核](2026-09-08-investigation-rule-review.md)、[受限内核](2026-09-08-unit-qualification-core.md) |
+| 数据库受信快照与管理入口 | [条件快照](2026-09-08-unit-qualification-snapshots.md)、[私有页面](2026-09-08-unit-snapshot-review-ui.md) |
+| 本批：精确目标与合成画像回放 | [本地八项集成及五场景重放](2026-09-08-trusted-unit-profile-replay.md)，PR #21 待候选 CI / 合并 |
+
+最近固定公告的 WMA 调查已完成；同批文件仍为 **94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery UNVERIFIED**。三十条旧 Word 引用缺少生产 Reader，诊断发现原文不等于机械通过。当前集成不重新调用 WMA、不改提示词或冻结原件。真实独立批准、完整适用范围、例外、Gold 与真人发布资格尚未完成；整体资格继续保留 UNCERTAIN。后续按[范围与例外集成顺序](../superpowers/plans/2026-09-08-unit-scope-integration-order.md)逐批推进。
 
 下列为 2026-09-07 的历史检查记录；当前状态以上面的 2026-09-08 集成说明为准，原阶段 Gate 与历史证据不因此自动改写。
 
