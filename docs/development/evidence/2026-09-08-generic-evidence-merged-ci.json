@@ -1,0 +1,68 @@
+{
+  "pr": 11,
+  "url": "https://github.com/zjwlxylc/DeepAha/pull/11",
+  "head_sha": "a59c6ec1585ce7c3fdb4cf174f90117f8cfd4296",
+  "merge_sha": "46a264778aea4c7ba31a99c5b02733970b8c50ef",
+  "merged": true,
+  "run_id": 34211810036,
+  "run_number": 76,
+  "jobs": [
+    {
+      "id": 102014317502,
+      "name": "phase5-public-trust",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102014317542,
+      "name": "web-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102014317596,
+      "name": "phase7-feedback-review",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102014317598,
+      "name": "phase3-resolution",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102014317603,
+      "name": "phase8-deadline-reminder",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102014317653,
+      "name": "phase4-eligibility",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102014317662,
+      "name": "phase6-profile-action",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102014317668,
+      "name": "backend-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102014317684,
+      "name": "integration",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "merge_tree_equals_tested_candidate": true,
+  "release_qualified": false,
+  "wma_calls": 0
+}

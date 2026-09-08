@@ -51,6 +51,24 @@ export interface InvestigationTask {
     size_bytes: number;
   }[];
   review: { decision: string; reviewer_id: string; reason: string; created_at: string } | null;
+  document_preparation?: {
+    scope: "DOCUMENT_EVIDENCE_ONLY";
+    status: string;
+    material_count: number;
+    prepared_count: number;
+    materials: {
+      material_id: string;
+      outcome: string;
+      error_code: string | null;
+      document_id: string | null;
+      document_parse_key: string | null;
+      parser_name: string | null;
+      parser_version: string | null;
+      parse_contract_version: string | null;
+      block_count: number;
+      evidence_ref_count: number;
+    }[];
+  } | null;
 }
 
 const registrationConflictCodes = new Set([

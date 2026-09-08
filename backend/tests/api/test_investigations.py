@@ -92,3 +92,39 @@ def test_review_must_supply_current_delivery_hash(tmp_path: Path) -> None:
         )
     assert response.status_code == 400
     assert not store.mock_calls
+
+
+def test_document_preparation_requires_frozen_delivery_and_returns_private_receipt(
+    tmp_path: Path,
+) -> None:
+    client, store = make_client(tmp_path)
+    task_id = uuid7()
+    store.prepare_documents.return_value = {
+        "status": "PENDING_REVIEW",
+        "document_preparation": {"status": "PREPARED"},
+    }
+    with client:
+        missing = client.post(
+            f"/api/v1/local-human-test/investigations/{task_id}/documents", json={}
+        )
+        result = client.post(
+            f"/api/v1/local-human-test/investigations/{task_id}/documents",
+            json={"delivery_hash": "a" * 64},
+        )
+    assert missing.status_code == 400
+    assert result.status_code == 200
+    assert result.json()["document_preparation"]["status"] == "PREPARED"
+    assert result.headers["cache-control"] == "private, no-store"
+    store.prepare_documents.assert_called_once()
+    assert store.prepare_documents.call_args.args[:2] == (task_id, "a" * 64)
+
+
+def test_disabled_document_preparation_cannot_parse(tmp_path: Path) -> None:
+    client, store = make_client(tmp_path, enabled=False)
+    with client:
+        result = client.post(
+            f"/api/v1/local-human-test/investigations/{uuid7()}/documents",
+            json={"delivery_hash": "a" * 64},
+        )
+    assert result.status_code == 404
+    assert not store.mock_calls

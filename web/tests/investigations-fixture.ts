@@ -1,5 +1,13 @@
 import type { InvestigationTask } from "../lib/investigations";
 
+export const preparedDocuments: NonNullable<InvestigationTask["document_preparation"]> = {
+  scope: "DOCUMENT_EVIDENCE_ONLY", status: "PREPARED", material_count: 1, prepared_count: 1,
+  materials: [{ material_id: "attachment-1", outcome: "SUCCEEDED", error_code: null,
+    document_id: "019d0000-0000-7000-8000-000000000904", document_parse_key: "d".repeat(64),
+    parser_name: "xlsx_openpyxl", parser_version: "0.8.0", parse_contract_version: "p9b-document-block-contract-v0.8.0",
+    block_count: 8, evidence_ref_count: 9 }],
+};
+
 export const taskId = "019d0000-0000-7000-8000-000000000901";
 export const source = {
   source_id: "019d0000-0000-7000-8000-000000000902",

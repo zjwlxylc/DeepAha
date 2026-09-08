@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { createInvestigationAction, reviewInvestigationAction } from "../app/review/investigations/actions";
+import { createInvestigationAction, prepareInvestigationDocumentsAction, reviewInvestigationAction } from "../app/review/investigations/actions";
 import { source, task, taskId } from "./investigations-fixture";
 
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: () => ({ value: "synthetic-reviewer-session" }) }) }));
@@ -28,6 +28,35 @@ describe("investigation actions", () => {
     ));
   });
   const submissions = () => vi.mocked(fetch).mock.calls.filter(([, request]) => request?.method === "POST");
+
+  it("prepares existing documents against the frozen delivery without dispatching investigation", async () => {
+    const data = new FormData();
+    data.set("request_key", "11111111-1111-4111-8111-111111111111");
+    data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+    const result = await prepareInvestigationDocumentsAction(empty, data);
+    expect(result.message).toMatch(/文档准备.*逐项/);
+    const [path, request] = submissions()[0];
+    expect(String(path)).toMatch(new RegExp(`/investigations/${taskId}/documents$`));
+    expect(JSON.parse(String(request?.body))).toEqual({ delivery_hash: task.delivery_hash });
+    vi.clearAllMocks(); data.delete("delivery_hash");
+    expect((await prepareInvestigationDocumentsAction(empty, data)).error).toBeTruthy();
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("retries document preparation with the same request identity after a lost receipt", async () => {
+    const data = new FormData();
+    data.set("request_key", "11111111-1111-4111-8111-111111111111");
+    data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+    vi.mocked(fetch).mockRejectedValueOnce(new TypeError("synthetic lost receipt"));
+    expect((await prepareInvestigationDocumentsAction(empty, data)).error).toBeTruthy();
+    expect((await prepareInvestigationDocumentsAction(empty, data)).taskId).toBe(taskId);
+    const keys = submissions().map(([, request]) => new Headers(request?.headers).get("Idempotency-Key"));
+    expect(keys[0]).toBeTruthy();
+    expect(keys[0]).toBe(keys[1]);
+    vi.mocked(fetch).mockClear(); data.delete("request_key");
+    expect((await prepareInvestigationDocumentsAction(empty, data)).error).toBeTruthy();
+    expect(submissions()).toHaveLength(0);
+  });
 
   it("registers a bounded task without an execution request", async () => {
     const result = await createInvestigationAction(empty, creation());

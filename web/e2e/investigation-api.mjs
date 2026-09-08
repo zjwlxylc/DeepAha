@@ -1,6 +1,6 @@
 // Browser fixtures only. This process never calls an official source or WMA.
 import { createServer } from "node:http";
-import { source, task } from "../tests/investigations-fixture.ts";
+import { source, task, preparedDocuments } from "../tests/investigations-fixture.ts";
 
 let current = structuredClone(task);
 let dropNextReceipt = false;
@@ -32,7 +32,11 @@ const server = createServer(async (request, response) => {
       response.end(JSON.stringify(receipt.task)); return;
     }
     const values = JSON.parse(body);
-    if (path.endsWith("/review")) current = { ...current, status: values.decision === "APPROVE" ? "APPROVED" : "REJECTED", review: { ...values, reviewer_id: "synthetic-browser-reviewer", created_at: task.updated_at } };
+    if (path.endsWith("/documents")) {
+      if (values.delivery_hash !== current.delivery_hash) { response.writeHead(409); response.end("{}"); return; }
+      current = { ...current, document_preparation: preparedDocuments };
+    }
+    else if (path.endsWith("/review")) current = { ...current, status: values.decision === "APPROVE" ? "APPROVED" : "REJECTED", review: { ...values, reviewer_id: "synthetic-browser-reviewer", created_at: task.updated_at } };
     else current = { ...task, ...values, status: "QUEUED", opportunities: null, facts: [], materials: [], delivery_hash: null };
     receipts.set(key, { path, body, task: structuredClone(current) });
     if (dropNextReceipt) { dropNextReceipt = false; response.destroy(); return; }

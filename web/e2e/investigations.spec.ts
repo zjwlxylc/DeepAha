@@ -9,9 +9,10 @@ test.beforeEach(async ({ context, request }) => {
 for (const operation of ["registration", "review"] as const) {
   test(`retries ${operation} after a lost receipt without changing the form or duplicating a write`, async ({ page, request }) => {
     await page.goto(operation === "registration" ? "/review/investigations" : `/review/investigations/${taskId}`);
-    const requestKey = await page.locator('input[name="request_key"]').inputValue();
     const input = page.getByLabel(operation === "registration" ? "调查说明" : "核对理由");
     const button = page.getByRole("button", { name: operation === "registration" ? "登记调查任务" : "记录内部材料审核" });
+    const form = page.locator("form").filter({ has: button });
+    const requestKey = await form.locator('input[name="request_key"]').inputValue();
     if (operation === "registration") {
       await page.getByLabel("已批准来源").selectOption(`${source.source_id}/${source.endpoint_id}`);
       await page.getByLabel("明确公告地址").fill(`${source.url}/1`);
@@ -25,7 +26,7 @@ for (const operation of ["registration", "review"] as const) {
     await button.click();
     await expect(page.locator("form").getByRole("alert")).toBeVisible();
     await expect(input).toHaveValue("合成浏览器测试：模拟后端提交成功但回执丢失。");
-    await expect(page.locator('input[name="request_key"]')).toHaveValue(requestKey);
+    await expect(form.locator('input[name="request_key"]')).toHaveValue(requestKey);
     if (operation === "registration") {
       await expect(page.getByLabel("执行时间上限（秒）")).toHaveValue("1200");
       await expect(page.getByRole("checkbox")).not.toBeChecked();
@@ -37,6 +38,20 @@ for (const operation of ["registration", "review"] as const) {
     expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 1, posts: 2 });
   });
 }
+
+test("retries document preparation after the receipt is lost", async ({ page, request }) => {
+  await page.goto(`/review/investigations/${taskId}`);
+  const button = page.getByRole("button", { name: "准备文档证据" });
+  const form = page.locator("form").filter({ has: button });
+  const requestKey = await form.locator('input[name="request_key"]').inputValue();
+  await request.get("http://127.0.0.1:3097/drop-next-receipt");
+  await button.click();
+  await expect(form.getByRole("alert")).toBeVisible();
+  await expect(form.locator('input[name="request_key"]')).toHaveValue(requestKey);
+  await button.click();
+  await expect(page.getByText("1 / 1 份材料已完成文档证据准备。")).toBeVisible();
+  expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 1, posts: 2 });
+});
 
 test("registers without execution, reads evidence, downloads privately and records internal review", async ({ page }, testInfo) => {
   await page.goto("/review/investigations");
@@ -52,6 +67,15 @@ test("registers without execution, reads evidence, downloads privately and recor
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("link", { name: "下载原件 · attachment-1" }).first().click();
   expect((await downloadPromise).suggestedFilename()).toBe("original-cccccccccccccccc.xlsx");
+  const prepare = page.getByRole("button", { name: "准备文档证据" });
+  await prepare.focus();
+  await prepare.press("Enter");
+  await expect(page.getByText("1 / 1 份材料已完成文档证据准备。")).toBeVisible();
+  await expect(page.getByText("文档证据已准备，语义待核对")).toBeVisible();
+  await page.reload();
+  await expect(page.getByText("1 / 1 份材料已完成文档证据准备。")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath("documents.png"), fullPage: true });
   await page.getByRole("combobox", { name: "审核决定" }).selectOption("APPROVE");
   await page.getByLabel("核对理由").fill("合成浏览器测试：核对界面流程，不构成真实人工审核证据。");
   await page.getByRole("button", { name: "记录内部材料审核" }).click();

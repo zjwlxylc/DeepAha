@@ -4,7 +4,7 @@
 
 依据：[已确认的架构结论](D:/DeepAha/docs/development/reviews/2026-09-08-evidence-verification-architecture-review.md)、[开发顺序](../../development/2026-09-08-evidence-architecture-adoption.md)。用户已要求在合适阶段实施，不新增逐步审批或固定子 Agent 流程。采用现有 Python/Pydantic/PostgreSQL/对象存储，不引入新服务或模型调用。
 
-本计划实施状态：IN_PROGRESS。首批 PR #10 已合入主线 `22b9cb8`；批次 A 已实现并完成影子逐条回放，独立复核与候选 CI 在交付记录中追加。B/C 尚未完成，不能把 Reader 文本位置映射当成持久 EvidenceRef。较长分支仅作既有功能移入和兼容性参考，不把其全量类型失败带进主线。
+本计划实施状态：IN_PROGRESS。首批 PR #10 已合入主线 `22b9cb8`；批次 A 已实现并完成影子逐条回放，六项评审问题修复后独立复核通过，PR #11 候选 CI 九项通过并已合入 `46a2647`。B/C 尚未完成，不能把 Reader 文本位置映射当成持久 EvidenceRef。较长分支仅作既有功能移入和兼容性参考，不把其全量类型失败带进主线。
 
 ## 不变量
 

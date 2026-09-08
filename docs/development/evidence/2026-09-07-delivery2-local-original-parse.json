@@ -1,0 +1,35 @@
+{
+  "scope": "CACHED_OFFICIAL_BYTES_DOCUMENT_PARSE_ONLY",
+  "checked_at": "2026-09-07T09:34:54.102705+00:00",
+  "original_sha256": "49e181f39f3e3885e9f9483a701cff62061c8b848774388e24e72a44c35f44c9",
+  "original_matches_prior_reference": true,
+  "parser_name": "html_lxml",
+  "parser_version": "0.8.0",
+  "parse_contract_version": "p9b-document-block-contract-v0.8.0",
+  "document_block_count": 100,
+  "normalized_character_count": 3649,
+  "needs_review_reasons": [],
+  "prior_local_quote_examples": [
+    {
+      "quote": "区域经济学、产业经济学",
+      "block_matches": 1
+    },
+    {
+      "quote": "行政管理、公共管理学（120400）、公共管理（125200）",
+      "block_matches": 1
+    },
+    {
+      "quote": "中共党史党建学、中共党史",
+      "block_matches": 1
+    },
+    {
+      "quote": "社会学（0303）、中国近现代史、中国古典文献学",
+      "block_matches": 1
+    }
+  ],
+  "legacy_doc_parser_supported": false,
+  "new_wma_output": false,
+  "human_fact_review": false,
+  "business_database_writes": 0,
+  "new_network_fetch": false
+}

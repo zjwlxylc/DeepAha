@@ -1,0 +1,15 @@
+{
+  "case_id": "01a07b2b-a9ae-7749-be15-6ddd8b1b60ea",
+  "scope": "NO_TOOL_CONNECTION_RECHECK",
+  "started_at": "2026-09-07T09:20:54.663747+00:00",
+  "model_configuration_changed": false,
+  "thought_content_collected": false,
+  "prompt_count": 1,
+  "published_model": "agnes-2.5-flash",
+  "stop_reason": "refusal",
+  "provider_error": "400 model [agnes-2.5-flash] service info not found",
+  "connection_acknowledged": false,
+  "status": "FAILED",
+  "cleanup": "DELETED_OWN_DIAGNOSTIC_RUNTIME",
+  "completed_at": "2026-09-07T09:21:14.641731+00:00"
+}

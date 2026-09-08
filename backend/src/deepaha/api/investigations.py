@@ -20,6 +20,7 @@ from deepaha.db.session import get_engine, session_factory
 from deepaha.investigations.contracts import (
     CreateInvestigation,
     InvestigationError,
+    PrepareInvestigationDocuments,
     ReviewInvestigation,
 )
 from deepaha.investigations.models import InvestigationMaterial
@@ -158,6 +159,21 @@ def review_task(
     try:
         return store.review(task_id, command, principal, key)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/documents")
+def prepare_documents(
+    task_id: UUID,
+    command: PrepareInvestigationDocuments,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return store.prepare_documents(task_id, command.delivery_hash, principal)
+    except (InvestigationError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 
 

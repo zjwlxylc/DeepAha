@@ -122,3 +122,15 @@ export async function reviewInvestigationAction(
     decision, delivery_hash: deliveryHash, reason,
   }, text(form, "request_key"), "内部材料审核已记录；正式机会与资格规则尚未发布。");
 }
+
+export async function prepareInvestigationDocumentsAction(
+  _state: InvestigationActionState,
+  form: FormData,
+): Promise<InvestigationActionState> {
+  const taskId = text(form, "task_id");
+  const deliveryHash = text(form, "delivery_hash");
+  if (!UUID.test(taskId) || !SHA256.test(deliveryHash)) return invalid("当前任务或材料版本不可准备，请刷新详情。");
+  return submit(`/investigations/${taskId}/documents`, { delivery_hash: deliveryHash },
+    text(form, "request_key"),
+    "文档准备结果已更新，请逐项查看未支持或需复核的材料；事实仍待人工审核。");
+}

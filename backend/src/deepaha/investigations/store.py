@@ -429,7 +429,18 @@ class InvestigationStore:
             self._owned(session, task_id, owner)
             task.result_objects = keys
 
-    def _view(self, session: Session, task: InvestigationTask) -> dict[str, Any]:
+    def _view(
+        self, session: Session, task: InvestigationTask, *, include_documents: bool = True
+    ) -> dict[str, Any]:
+        from deepaha.investigations.documents import describe_documents
+
+        materials = list(
+            session.scalars(
+                select(InvestigationMaterial)
+                .where(InvestigationMaterial.task_id == task.task_id)
+                .order_by(InvestigationMaterial.material_id)
+            )
+        )
         delivery = cast(dict[str, Any], task.delivery or {})
         # Older snapshots retained notes in the original bundle but omitted them
         # from the materialized facts. Restore them in the read view only.
@@ -454,14 +465,10 @@ class InvestigationStore:
             "opportunities": delivery.get("opportunities"),
             "facts": facts,
             "report": delivery.get("report"),
-            "materials": [
-                m.metadata_snapshot
-                for m in session.scalars(
-                    select(InvestigationMaterial)
-                    .where(InvestigationMaterial.task_id == task.task_id)
-                    .order_by(InvestigationMaterial.material_id)
-                )
-            ],
+            "materials": [m.metadata_snapshot for m in materials],
+            "document_preparation": (
+                describe_documents(session, materials) if delivery and include_documents else None
+            ),
             "review": task.review,
             "execution": task.execution,
             "runtime_id": task.runtime_id,
@@ -476,10 +483,18 @@ class InvestigationStore:
         with self.factory() as session:
             return self._view(session, self._get(session, task_id))
 
+    def prepare_documents(
+        self, task_id: UUID, delivery_hash: str, principal: ReviewerPrincipal
+    ) -> dict[str, Any]:
+        from deepaha.investigations.documents import prepare_documents
+
+        prepare_documents(self, task_id, delivery_hash, principal)
+        return self.get(task_id)
+
     def list_tasks(self) -> list[dict[str, Any]]:
         with self.factory() as session:
             return [
-                self._view(session, task)
+                self._view(session, task, include_documents=False)
                 for task in session.scalars(
                     select(InvestigationTask)
                     .order_by(InvestigationTask.created_at.desc())

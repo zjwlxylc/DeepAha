@@ -38,6 +38,11 @@ class ReviewInvestigation(BaseModel):
     reason: str = Field(min_length=1, max_length=2000)
 
 
+class PrepareInvestigationDocuments(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    delivery_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
 def digest(value: object) -> str:
     return sha256(
         json.dumps(
