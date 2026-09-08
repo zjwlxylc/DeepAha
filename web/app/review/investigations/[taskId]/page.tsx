@@ -5,6 +5,7 @@ import { randomUUID } from "node:crypto";
 import InvestigationEvidence, { safeOfficialUrl } from "../../../../components/investigations/evidence";
 import InvestigationReviewForm from "../../../../components/investigations/review-form";
 import InvestigationDocuments from "../../../../components/investigations/documents";
+import InvestigationFactReview from "../../../../components/investigations/fact-review";
 import InvestigationBindings from "../../../../components/investigations/bindings";
 import { investigationFailureMessage, investigationStatus } from "../../../../components/investigations/status";
 import { getInvestigation, getInvestigationBindingTargets } from "../../../../lib/investigations";
@@ -29,6 +30,7 @@ export default async function InvestigationPage({ params }: { params: Promise<{ 
       <InvestigationEvidence task={task} />
       <InvestigationDocuments task={task} />
       <InvestigationBindings task={task} targets={targets} />
+      <InvestigationFactReview task={task} requestKey={randomUUID()} key={`${task.entity_binding?.binding_id}:${task.evidence_check?.check_id}`} />
       <section className="human-test-panel" aria-labelledby="investigation-review-title">
         <h2 id="investigation-review-title">内部材料审核</h2>
         {task.review ? <dl className="compact-facts"><div><dt>审核决定</dt><dd>{task.review.decision === "APPROVE" ? "批准内部材料" : "退回材料"}</dd></div><div><dt>核对理由</dt><dd>{task.review.reason}</dd></div><div><dt>记录时间</dt><dd>{formatDateTime(task.review.created_at)}</dd></div><div><dt>审核员标识</dt><dd>{task.review.reviewer_id}</dd></div></dl> : task.status === "PENDING_REVIEW" && task.delivery_hash ? <InvestigationReviewForm taskId={task.task_id} deliveryHash={task.delivery_hash} requestKey={randomUUID()} key={task.delivery_hash} /> : <p>当前材料尚不可审核。请先完成回收与核验；执行失败不会被当作已完成。</p>}

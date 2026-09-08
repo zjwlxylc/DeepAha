@@ -1,4 +1,4 @@
-import type { InvestigationTask, InvestigationBindingTarget, InvestigationEvidenceCheck } from "../lib/investigations";
+import type { InvestigationTask, InvestigationBindingTarget, InvestigationEvidenceCheck, InvestigationFactPreparation } from "../lib/investigations";
 
 export const bindingTarget: InvestigationBindingTarget = {
   opportunity_id: "019d0000-0000-7000-8000-000000000911", public_id: "opp_019d0000000070008000000000000911",
@@ -36,7 +36,7 @@ export const task: InvestigationTask = {
     opportunity_name: "示例招聘公告", publish_unit: "示例主管部门",
     units: [{ id: "unit-1", name: "示例学院", positions: [{ id: "position-1", name: "教学岗位", code: "P001" }] }],
   },
-  facts: [{ entity_id: "position-1", field: "education", value: "硕士及以上", status: "CONFIRMED",
+  facts: [{ entity_id: "position-1", field: "学历要求", value: "硕士及以上", status: "CONFIRMED",
     note: "示例疑点：应届毕业生的证书取得时间仍需核对。",
     evidence: [{ artifact_id: "attachment-1", quote: "学历要求：硕士及以上", locator: { sheet: "岗位表", row: 5, column: "D" }, sha256: "c".repeat(64), mechanically_verified: true }],
   }],
@@ -47,7 +47,7 @@ export const evidenceCheck: InvestigationEvidenceCheck = {
   check_id: "019d0000-0000-7000-8000-000000000920", input_hash: "a".repeat(64),
   result_hash: "d".repeat(64), delivery_hash: task.delivery_hash!, created_at: task.updated_at,
   scope: "MECHANICAL_EVIDENCE_ONLY", verdict: "PASS", counts: { PASS: 1, FAIL: 0, UNVERIFIED: 0 },
-  references: [{ fact_index: 0, reference_index: 0, entity_id: "position-1", field: "education",
+  references: [{ fact_index: 0, reference_index: 0, entity_id: "position-1", field: "学历要求",
     artifact_id: "attachment-1", verdict: "PASS", binding_reason: null,
     verification: {
       artifact_id: "attachment-1", artifact_sha256: "c".repeat(64), quote: task.facts[0].evidence[0].quote,
@@ -61,4 +61,20 @@ export const evidenceCheck: InvestigationEvidenceCheck = {
       parse_attempt_id: "019d0000-0000-7000-8000-000000000905", block_id: "019d0000-0000-7000-8000-000000000906",
       evidence_ref_id: "019d0000-0000-7000-8000-000000000907", evidence_binding_hash: "f".repeat(64) },
   }],
+};
+
+export const factPreparation: InvestigationFactPreparation = {
+  preparation_id: "019d0000-0000-7000-8000-000000000930", binding_id: "019d0000-0000-7000-8000-000000000921",
+  check_id: evidenceCheck.check_id, mapping_version: "direct-wma-field-mapping/2.0.0", result_hash: "a".repeat(64),
+  targets: [{ entity_id: "position-1", name: "教学岗位", target_scope: "UNIT", opportunity_id: bindingTarget.opportunity_id,
+    opportunity_version: 1, opportunity_unit_id: bindingTarget.positions[0].unit_id,
+    opportunity_unit_version_id: bindingTarget.positions[0].version_id, extraction_run_id: "019d0000-0000-7000-8000-000000000931" }],
+  rows: [{ source_index: 0, entity_id: "position-1", original: task.facts[0], original_field: "学历要求",
+    field_name: "education_requirements", raw_value: "硕士及以上", normalized_value_candidate: { minimum_level: "MASTER" },
+    abstained: false, candidate_id: "019d0000-0000-7000-8000-000000000932", issue_codes: [],
+    evidence: [{ reference: task.facts[0].evidence[0], check_reference: evidenceCheck.references[0],
+      binding: { block_id: evidenceCheck.references[0].persistent_binding!.block_id,
+        evidence_ref_id: evidenceCheck.references[0].persistent_binding!.evidence_ref_id,
+        block_text: "学历要求：硕士及以上", structural_locator: { kind: "reader_anchor", projection_id: "sheet/岗位表/D5" } } }],
+  }], decisions: {}, promotions: {}, active_fact_sets: {},
 };

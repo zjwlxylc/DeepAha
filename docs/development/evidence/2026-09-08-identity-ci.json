@@ -1,0 +1,101 @@
+{
+  "scope": "INTERNAL_IDENTITY_INTEGRATION",
+  "candidate": "9b4b5722ae1e32f80bf687ab0e846d735965b4ac",
+  "merge": "757fb3c0522b2092bbaa402e3e8ea3ea166d783f",
+  "candidate_and_merge_tree": "707e8c8e7dd37b85d9cb8f58c4573b434838b570",
+  "pr": "https://github.com/zjwlxylc/DeepAha/pull/14",
+  "ci": {
+    "run_id": 34222579486,
+    "number": 82,
+    "jobs": [
+      {
+        "id": 102048951966,
+        "name": "phase7-feedback-review",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102048952126,
+        "name": "phase5-public-trust",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102048952153,
+        "name": "integration",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102048952166,
+        "name": "phase8-deadline-reminder",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102048952176,
+        "name": "phase4-eligibility",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102048952197,
+        "name": "web-quality",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102048952302,
+        "name": "phase6-profile-action",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102048952319,
+        "name": "phase3-resolution",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 102048952352,
+        "name": "backend-quality",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "local": {
+    "backend_nonintegration": {
+      "passed": 1298,
+      "deselected": 532
+    },
+    "postgres_s3": {
+      "passed": 529,
+      "skipped": 3,
+      "deselected": 1298,
+      "duration_seconds": 422.68
+    },
+    "postgres_targeted": {
+      "passed": 51
+    },
+    "web_unit": {
+      "passed": 141
+    },
+    "browser_desktop_mobile": {
+      "passed": 14,
+      "after_checkbox_css": {
+        "passed": 4
+      }
+    },
+    "static": "ruff format/check; mypy Linux and Windows 422 files; web typecheck/lint/build; Alembic check"
+  },
+  "frozen_case": {
+    "passed": 94,
+    "failed": 0,
+    "unverified": 30,
+    "delivery": "UNVERIFIED",
+    "evidence": "2026-09-08-investigation-receipt-replay.json",
+    "reused": true
+  },
+  "production_release": false
+}

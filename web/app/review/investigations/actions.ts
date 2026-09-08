@@ -43,6 +43,9 @@ function failure(error: unknown, registration: boolean): InvestigationActionStat
   }
   if (error instanceof LocalHumanTestApiError && error.status === 409) {
     const identityMessages: Record<string, string> = {
+      FACT_EVIDENCE_CHECK_REFRESH_REQUIRED: "核验版本已变化，请重新准备文档证据，再整理字段候选。旧审核记录会保留。",
+      FACT_BINDING_DOCUMENTS_CHANGED: "当前解析版本与已确认来源不一致，请先重新确认材料归属。",
+      FACT_ALL_CANDIDATES_REQUIRE_DECISION: "此目标仍有候选字段尚未作出决定，或存在待裁决项。请先逐项核对。",
       REGISTRATION_EXISTING_IDENTITY_OR_REVIEW_REQUIRED: "检测到已有身份或可能重复的机会。请核对已有机会并使用关联入口；身份不明确时需先核对。",
       REGISTRATION_POSITION_INVALID: "岗位重复、已关联或属于单位分组，请核对勾选项。",
       REGISTRATION_POSITION_KEY_CONFLICT: "内部岗位识别键已被使用，请核对已有岗位并关联，或修正识别键。",
@@ -195,4 +198,35 @@ export async function registerInvestigationIdentityAction(
   return submit(`/investigations/${taskId}/identity`, { delivery_hash: deliveryHash,
     canonical_title: title, type, issuer_name: issuer, positions, reason,
   }, text(form, "request_key"), "内部机会身份已登记并关联材料，内容保持待核验，尚未公开发布。");
+}
+
+export async function investigationFactAction(
+  _state: InvestigationActionState, form: FormData,
+): Promise<InvestigationActionState> {
+  const taskId = text(form, "task_id"), deliveryHash = text(form, "delivery_hash"), bindingId = text(form, "binding_id");
+  if (!UUID.test(taskId) || !SHA256.test(deliveryHash) || !UUID.test(bindingId)) return invalid("材料或归属版本无效，请刷新详情。");
+  const checkId = text(form, "check_id");
+  if (!UUID.test(checkId)) return invalid("请先准备当前版本的文档核验回执。");
+  const body = { delivery_hash: deliveryHash, binding_id: bindingId, check_id: checkId };
+  const kind = text(form, "kind");
+  if (kind === "prepare") return submit(`/investigations/${taskId}/facts`, body, text(form, "request_key"), "候选字段已整理，请检查未定位、未绑定及未知项；尚未批准事实。");
+  const preparationId = text(form, "preparation_id"), reason = text(form, "reason");
+  if (!UUID.test(preparationId) || !reason || reason.length > 2000) return invalid("请选择当前候选清单，并填写 1–2000 个字符的审核依据。");
+  if (kind === "decision") {
+    const candidateId = text(form, "candidate_id"), decision = text(form, "decision");
+    const support = text(form, "evidence_support"), precedence = text(form, "precedence_check");
+    if (!UUID.test(candidateId) || !["APPROVE", "REJECT", "UNKNOWN", "NEEDS_ADJUDICATION"].includes(decision)
+      || !["SUPPORTED", "UNSUPPORTED", "UNKNOWN"].includes(support) || !["PASSED", "FAILED", "UNKNOWN"].includes(precedence)) return invalid("请逐项选择字段决定、原文支持情况及更正／例外核查结果。");
+    if (decision === "APPROVE" && (support !== "SUPPORTED" || precedence !== "PASSED")) return invalid("批准需要原文明确支持，并完成更正、适用范围及例外核查。");
+    return submit(`/investigations/${taskId}/facts/decisions`, { ...body, preparation_id: preparationId,
+      candidate_id: candidateId, decision, evidence_support: support, precedence_check: precedence, reason,
+    }, text(form, "request_key"), "独立字段审核已记录；资格结论及公开发布仍需后续处理。");
+  }
+  const entityId = text(form, "entity_id");
+  if (kind !== "promote" || !entityId || entityId.length > 256) return invalid("请选择明确的公告或岗位目标。");
+  const supersedes = text(form, "supersedes_id");
+  if (supersedes && !UUID.test(supersedes)) return invalid("被替代事实集的标识无效，请核对当前版本。");
+  return submit(`/investigations/${taskId}/facts/promotions`, { ...body, preparation_id: preparationId,
+    entity_id: entityId, supersedes_id: supersedes || null, reason,
+  }, text(form, "request_key"), "该目标的审核事实集已保存；未知及未接入条件继续保留，尚未形成完整资格结论。");
 }

@@ -23,18 +23,19 @@ from deepaha.investigations.models import (
     InvestigationTask,
 )
 
-CHECK_VERSION = "investigation-evidence-check/1"
+CHECK_VERSION = "investigation-evidence-check/2"
 
 
-def append_check(
+def evaluate_check(
     session: Session,
     objects: ObjectStore,
     task: InvestigationTask,
     materials: list[InvestigationMaterial],
-    checked_by: UUID,
-    created_at: datetime,
-) -> None:
-    """Caller holds the task lock and has rechecked authority, policy and bytes."""
+) -> dict[str, Any]:
+    """Replay a check without writes; caller supplies the frozen task/materials."""
+    materials = sorted(
+        materials, key=lambda material: (material.raw_artifact_id, material.material_id)
+    )
     registry = default_registry()
     verifier = EvidenceVerifier(registry)
     preparation = describe_documents(session, materials)
@@ -118,7 +119,13 @@ def append_check(
             }
             for m in materials
         ],
-        "documents": preparation["materials"],
+        # Source association may append a whole-file byte anchor without
+        # changing Reader inputs. All Reader blocks and their refs are replayed
+        # above; the total including unrelated legacy anchors is display data.
+        "documents": [
+            {key: value for key, value in row.items() if key != "evidence_ref_count"}
+            for row in preparation["materials"]
+        ],
     }
     payload: dict[str, Any] = {
         "inputs": inputs,
@@ -129,6 +136,20 @@ def append_check(
         else ("UNVERIFIED" if counts["UNVERIFIED"] or not references else "PASS"),
         "references": references,
     }
+    return payload
+
+
+def append_check(
+    session: Session,
+    objects: ObjectStore,
+    task: InvestigationTask,
+    materials: list[InvestigationMaterial],
+    checked_by: UUID,
+    created_at: datetime,
+) -> None:
+    """Caller holds the task lock and has rechecked authority, policy and bytes."""
+    payload = evaluate_check(session, objects, task, materials)
+    inputs = payload["inputs"]
     input_hash, result_hash = digest(inputs), digest(payload)
     existing = session.scalar(
         select(InvestigationEvidenceCheck).where(

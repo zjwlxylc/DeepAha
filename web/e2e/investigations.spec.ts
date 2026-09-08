@@ -191,3 +191,61 @@ for (const withInitialPost of [true, false]) {
     await expect(page.getByText(/字段内容仍是候选/)).toBeVisible();
   });
 }
+
+test("reviews field facts through the shared evidence receipt and retries each lost response", async ({ page, request }, testInfo) => {
+  await page.goto(`/review/investigations/${taskId}`);
+  await page.getByRole("button", { name: "准备文档证据" }).click();
+  await expect(page.getByText("1 / 1 份材料已完成文档证据准备。")).toBeVisible();
+  await page.getByRole("combobox", { name: "审核决定" }).selectOption("APPROVE");
+  await page.getByLabel("核对理由").fill("合成字段流程测试，非真实人工审批");
+  await page.getByRole("button", { name: "记录内部材料审核" }).click();
+  await page.getByText("首次登记新机会", { exact: true }).click();
+  await page.getByLabel("机会名称", { exact: true }).fill("合成字段审核机会");
+  await page.getByLabel("机会类别").selectOption("PUBLIC_INSTITUTION_JOB");
+  await page.getByLabel("官方发布单位").fill("合成发布单位");
+  await page.getByRole("checkbox", { name: "教学岗位", exact: true }).check();
+  await page.getByLabel("登记核对依据").fill("合成岗位，仅验证系统流程");
+  await page.getByRole("button", { name: "登记内部机会并关联材料" }).click();
+  const panel = page.getByRole("region", { name: "候选字段与独立审核" });
+  for (const kind of ["prepare", "pending", "decision", "promote"]) {
+    if (kind === "pending" || kind === "decision") {
+      await expect(panel.getByLabel("字段决定")).toHaveValue("");
+      await expect(panel.getByLabel("原文是否支持该规范值")).toHaveValue("");
+      await expect(panel.getByRole("button", { name: "保存审核事实集" })).toHaveCount(0);
+      await panel.getByLabel("字段决定").selectOption(kind === "pending" ? "NEEDS_ADJUDICATION" : "APPROVE");
+      await panel.getByLabel("原文是否支持该规范值").selectOption(kind === "pending" ? "UNKNOWN" : "SUPPORTED");
+      await panel.getByLabel("更正、适用范围与例外核查").selectOption(kind === "pending" ? "UNKNOWN" : "PASSED");
+      await panel.getByLabel("本次审核依据").fill("合成独立审核说明，非真实事实确认");
+    }
+    if (kind === "decision") {
+      await panel.getByText("查看准确位置和完整证据块").click();
+      await panel.getByText("核验依据与候选位置").click();
+      await expect(panel.getByText(/Reader：xlsx_literal/)).toBeVisible();
+    }
+    if (kind === "promote") await panel.getByLabel("本次审核依据").fill("保存合成已审核字段，不生成资格");
+    const name = kind === "prepare" ? "整理字段候选与证据" : kind === "promote" ? "保存审核事实集" : "记录字段审核";
+    const button = panel.getByRole("button", { name });
+    const form = panel.locator("form").filter({ has: page.getByRole("button", { name }) });
+    const key = await form.locator('input[name="request_key"]').inputValue();
+    await request.get("http://127.0.0.1:3097/drop-next-receipt");
+    await button.click();
+    await expect(form.getByRole("alert")).toBeVisible();
+    await expect(form.locator('input[name="request_key"]')).toHaveValue(key);
+    if (kind === "decision") {
+      await expect(panel.getByLabel("字段决定")).toHaveValue("APPROVE");
+      await expect(panel.getByLabel("本次审核依据")).toHaveValue("合成独立审核说明，非真实事实确认");
+      await panel.screenshot({ path: testInfo.outputPath("field-review-retry.png") });
+    }
+    if (kind === "promote") await expect(panel.getByLabel("本次审核依据")).toHaveValue("保存合成已审核字段，不生成资格");
+    await button.click();
+    if (kind === "prepare") await expect(panel.getByText(/共 1 个原始字段；1 个已接入审核/)).toBeVisible();
+    if (kind === "pending") await expect(panel.getByText(/审核：需要进一步裁决/)).toBeVisible();
+    if (kind === "decision") await expect(panel.getByText(/审核：批准字段/)).toBeVisible();
+    if (kind === "promote") await expect(panel.getByText(/已保存审核事实集，状态：ACTIVE/)).toBeVisible();
+  }
+  expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 7, posts: 11 });
+  await page.reload();
+  await expect(panel.getByText(/尚不代表完整资格判断/)).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await panel.screenshot({ path: testInfo.outputPath("field-review.png") });
+});

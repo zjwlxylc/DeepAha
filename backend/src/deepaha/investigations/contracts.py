@@ -87,6 +87,29 @@ class RegisterInvestigationPositions(BaseModel):
     reason: str = Field(min_length=1, max_length=2000)
 
 
+class PrepareInvestigationFacts(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    delivery_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+    binding_id: UUID
+    check_id: UUID
+
+
+class DecideInvestigationFact(PrepareInvestigationFacts):
+    preparation_id: UUID
+    candidate_id: UUID
+    decision: Literal["APPROVE", "REJECT", "UNKNOWN", "NEEDS_ADJUDICATION"]
+    evidence_support: Literal["SUPPORTED", "UNSUPPORTED", "UNKNOWN"]
+    precedence_check: Literal["PASSED", "FAILED", "UNKNOWN"]
+    reason: str = Field(min_length=1, max_length=2000)
+
+
+class PromoteInvestigationFacts(PrepareInvestigationFacts):
+    preparation_id: UUID
+    entity_id: str = Field(min_length=1, max_length=256)
+    supersedes_id: UUID | None = None
+    reason: str = Field(min_length=1, max_length=2000)
+
+
 def digest(value: object) -> str:
     return sha256(
         json.dumps(

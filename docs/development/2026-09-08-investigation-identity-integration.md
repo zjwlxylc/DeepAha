@@ -19,7 +19,8 @@
 - 前端：141 passed；typecheck、lint、production build 通过。
 - 浏览器：桌面 1280×900、移动 390×844 共 14 passed；包含新机会登记和补充岗位的回执丢失重试。视觉检查修正岗位勾选框布局后，新登记流程 4 passed，构建再次通过，截图检查无横向溢出。
 - 独立评审未发现 P2 及以上问题；独立运行 50 项 Resolver / versioning 测试、6 项身份 API 测试，以及两个 Action 的回执丢失重试检查。没有使用共享数据库或真实人工身份。
-- 完整数据库回归、远端候选 CI 与合并结果：待本批收尾记录。
+- 完整 PostgreSQL / S3 回归：529 passed / 3 skipped / 1298 deselected，422.68 秒；Alembic check 无新增迁移操作。
+- 候选 `9b4b5722ae1e32f80bf687ab0e846d735965b4ac` 的 CI #82（run 34222579486）9 项全部 success；PR #14 已合并为 `757fb3c0522b2092bbaa402e3e8ea3ea166d783f`。候选与合并代码树均为 `707e8c8e7dd37b85d9cb8f58c4573b434838b570`。结构化记录见 `evidence/2026-09-08-identity-ci.json`。
 
 测试入口：`backend/tests/integration/test_investigation_registration.py`、`backend/tests/api/test_investigations.py`、`web/tests/investigations-actions.test.ts`、`web/e2e/investigations.spec.ts`。
 

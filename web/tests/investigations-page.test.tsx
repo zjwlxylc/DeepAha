@@ -17,6 +17,7 @@ describe("investigation pages", () => {
     render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
     expect(screen.getByText(/旧版回执：机械核验通过/)).toBeVisible();
     expect(screen.queryByText(/内容：找到原文/)).not.toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "候选字段与独立审核" })).toBeVisible();
   });
   it("separates found text, unsupported locator and missing persistent evidence", async () => {
     const check = structuredClone(evidenceCheck);

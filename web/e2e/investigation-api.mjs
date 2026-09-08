@@ -1,6 +1,6 @@
 // Browser fixtures only. This process never calls an official source or WMA.
 import { createServer } from "node:http";
-import { source, task, preparedDocuments, bindingTarget, evidenceCheck } from "../tests/investigations-fixture.ts";
+import { source, task, preparedDocuments, bindingTarget, evidenceCheck, factPreparation } from "../tests/investigations-fixture.ts";
 
 let current = structuredClone(task);
 let dropNextReceipt = false;
@@ -63,6 +63,20 @@ const server = createServer(async (request, response) => {
         opportunity_title: prior?.opportunity_title ?? values.canonical_title, created_at: task.updated_at,
         unmapped_position_ids: positions.length ? [] : ["position-1"],
       } };
+    }
+    else if (path.endsWith("/facts")) {
+      current = { ...current, fact_review: { current: { ...structuredClone(factPreparation), binding_id: values.binding_id, check_id: values.check_id }, history: [] } };
+    }
+    else if (path.endsWith("/facts/decisions")) {
+      current.fact_review.current.decisions[values.candidate_id] = {
+        decision_id: `019d0000-0000-7000-8000-${String(receipts.size + 950).padStart(12, "0")}`,
+        decision: values.decision, reason: values.reason, reviewer_id: "synthetic-browser-reviewer", created_at: task.updated_at,
+      };
+    }
+    else if (path.endsWith("/facts/promotions")) {
+      current.fact_review.current.promotions[values.entity_id] = {
+        fact_set_id: "019d0000-0000-7000-8000-000000000933", status: "ACTIVE", reason: values.reason,
+      };
     }
     else if (path.endsWith("/review")) current = { ...current, status: values.decision === "APPROVE" ? "APPROVED" : "REJECTED", review: { ...values, reviewer_id: "synthetic-browser-reviewer", created_at: task.updated_at } };
     else current = { ...task, ...values, status: "QUEUED", opportunities: null, facts: [], materials: [], delivery_hash: null };
