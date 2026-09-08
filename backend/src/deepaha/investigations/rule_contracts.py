@@ -15,6 +15,10 @@ class PrepareInvestigationRules(PrepareInvestigationFacts):
     fact_set_id: UUID
 
 
+class MaterializeInvestigationUnitPlan(PrepareInvestigationRules):
+    rule_preparation_id: UUID
+
+
 class InvestigationRuleEvidence(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
     evidence_ref_id: UUID
