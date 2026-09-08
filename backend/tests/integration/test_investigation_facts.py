@@ -45,6 +45,8 @@ def _ready(
     two_materials: bool = False,
     field: str = "学历要求",
     status: str = "CONFIRMED",
+    announcement: bool = False,
+    duplicate_materials: int = 0,
 ) -> tuple[UUID, PrepareInvestigationFacts]:
     task_id, owner = _collecting(h)
     files, artifacts = _files(task_id)
@@ -60,6 +62,15 @@ def _ready(
         item["evidence"][0]["quote"] = "学历要求：硕士及以上"
         if human_verify:
             item["evidence"][0]["locator"]["human_verify"] = True
+    if announcement:
+        from copy import deepcopy
+
+        parent = deepcopy(opportunities["units"][0]["positions"][0]["facts"][0])
+        opportunities["announcement_level"] = [parent]
+        evidence["facts_flat"].append(
+            deepcopy(evidence["facts_flat"][0])
+            | {"entity_id": "announcement", "entity_kind": "announcement", "level": "announcement"}
+        )
     if two_materials:
         opportunities = json.loads(json.dumps(opportunities).replace('"notice"', '"z_notice"'))
         evidence = json.loads(json.dumps(evidence).replace('"notice"', '"z_notice"'))
@@ -73,6 +84,21 @@ def _ready(
                 "file_name": "attachment.html",
                 "remote_path": "/workspace/task/artifacts/attachment.html",
                 "sha256": sha256(artifacts["a_attachment"]).hexdigest(),
+            }
+        )
+    for copy_index in range(duplicate_materials):
+        from copy import deepcopy
+
+        material_id = f"notice-copy-{copy_index}"
+        artifacts[material_id] = content
+        evidence["artifacts"].append(
+            deepcopy(evidence["artifacts"][0])
+            | {
+                "artifact_id": material_id,
+                "source_url": f"https://example.gov/notice?copy={copy_index}",
+                "local_path": f"artifacts/{material_id}.html",
+                "file_name": f"{material_id}.html",
+                "remote_path": f"/workspace/task/artifacts/{material_id}.html",
             }
         )
     files["opportunities.json"] = json.dumps(opportunities).encode()

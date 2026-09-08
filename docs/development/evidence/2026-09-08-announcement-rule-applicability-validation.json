@@ -1,0 +1,210 @@
+{
+  "scope": "Synthetic engineering evidence; no actual human approvals or release qualification",
+  "verified_at": "2026-09-09T00:01:58.9590839+08:00",
+  "base_commit": "32983b69ba0e2d153b5e31e62d362492941f727b",
+  "backend_unit": {
+    "passed": 1428,
+    "seconds": 82.846,
+    "failures": 0
+  },
+  "integration": {
+    "failures": 0,
+    "errors": 0,
+    "new_cases": [
+      {
+        "name": "test_application_is_append_only_repeatable_and_does_not_change_plan",
+        "seconds": 3.593
+      },
+      {
+        "name": "test_rejects_stale_or_unbound_decisions[context]",
+        "seconds": 2.373
+      },
+      {
+        "name": "test_rejects_stale_or_unbound_decisions[foreign-block]",
+        "seconds": 2.58
+      },
+      {
+        "name": "test_rejects_stale_or_unbound_decisions[quote]",
+        "seconds": 2.616
+      },
+      {
+        "name": "test_rejects_stale_or_unbound_decisions[predecessor]",
+        "seconds": 2.393
+      },
+      {
+        "name": "test_rejects_stale_or_unbound_decisions[key]",
+        "seconds": 2.359
+      },
+      {
+        "name": "test_current_evidence_rechecked_even_for_identical_retry",
+        "seconds": 2.453
+      },
+      {
+        "name": "test_database_history_cannot_be_changed[UPDATE]",
+        "seconds": 2.16
+      },
+      {
+        "name": "test_database_history_cannot_be_changed[DELETE]",
+        "seconds": 2.23
+      },
+      {
+        "name": "test_concurrent_review_requires_current_predecessor[True]",
+        "seconds": 2.317
+      },
+      {
+        "name": "test_concurrent_review_requires_current_predecessor[False]",
+        "seconds": 2.38
+      },
+      {
+        "name": "test_no_cross_task_or_nonannouncement_source[task]",
+        "seconds": 1.791
+      },
+      {
+        "name": "test_no_cross_task_or_nonannouncement_source[candidate]",
+        "seconds": 2.057
+      },
+      {
+        "name": "test_no_cross_task_or_nonannouncement_source[source-scope]",
+        "seconds": 1.927
+      },
+      {
+        "name": "test_raw_sql_cannot_forge_required_review_fields[null-outcome]",
+        "seconds": 2.017
+      },
+      {
+        "name": "test_raw_sql_cannot_forge_required_review_fields[missing-quote]",
+        "seconds": 2.191
+      },
+      {
+        "name": "test_raw_sql_cannot_forge_required_review_fields[wrong-target]",
+        "seconds": 2.12
+      },
+      {
+        "name": "test_history_prevents_schema_downgrade",
+        "seconds": 2.228
+      },
+      {
+        "name": "test_revoked_reviewer_cannot_read_or_retry",
+        "seconds": 2.042
+      },
+      {
+        "name": "test_evidence_pagination_preserves_every_member_of_shared_blocks",
+        "seconds": 30.664
+      },
+      {
+        "name": "test_private_http_review_retries_once_and_revocation_is_forbidden",
+        "seconds": 2.634
+      }
+    ],
+    "skipped": 3,
+    "skip_reasons": [
+      {
+        "name": "test_phase6_browser_seed_refuses_a_nonempty_database",
+        "reason": "requires the exact disposable Phase 6 database"
+      },
+      {
+        "name": "test_phase8_browser_seed_is_synthetic_and_refuses_reuse",
+        "reason": "requires the exact disposable Phase 8 database"
+      },
+      {
+        "name": "test_real_s02_manifest_replays_stable_opportunity_identity",
+        "reason": "controlled real-source corpus is not mounted"
+      }
+    ],
+    "passed": 632,
+    "new_applicability_passed": 21,
+    "seconds": 726.128
+  },
+  "frontend": {
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "files": 39,
+    "passed": 222,
+    "new_applicability_tests": 40,
+    "production_build": "PASS"
+  },
+  "browser": {
+    "history_predecessors": "CHAINED",
+    "surfaces": [
+      "1280x900 desktop",
+      "390x844 mobile"
+    ],
+    "mutations": 3,
+    "initial_failure": "Label selectors matched both a history region and select; exact text label also included textarea content. Fixed test locators to semantic combobox/textbox roles.",
+    "new_scenarios_passed": 12,
+    "new_seconds": 19.622777000000003,
+    "posts": 4,
+    "existing_scenarios_passed": 20,
+    "stale_data_hidden": true,
+    "retained_business_assertions": true
+  },
+  "static": {
+    "mypy_linux_files": 448,
+    "mypy_win32_files": 448,
+    "format_files": 486,
+    "ruff": "PASS"
+  },
+  "migration": {
+    "head": "20260908_0043",
+    "alembic_check": "PASS",
+    "history_downgrade": "REFUSED as required",
+    "empty_roundtrip": "0043 -> 0042 -> 0043 PASS"
+  },
+  "independent_backend_review": {
+    "p1": 0,
+    "p2": 0,
+    "resolved_p2": "Shared block pagination: 52 materials * 3 blocks, old returned150 of156, composite block/member cursor returns156 without duplicates."
+  },
+  "screenshots": [
+    {
+      "path": "docs/development/evidence/2026-09-08-announcement-rule-applicability/desktop-final.png",
+      "sha256": "27738e022c87d8d4ed3545165d793abc398ab808de089c14fa3617a5f19e4ecf",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/development/evidence/2026-09-08-announcement-rule-applicability/desktop-initial.png",
+      "sha256": "8c4af4b316ca4b67aad4730e4c6d6422a903d9b62c9f1bffa3f98910c940167c",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/development/evidence/2026-09-08-announcement-rule-applicability/desktop-retry.png",
+      "sha256": "a1991ee0401e2bc48cef556c0b68ce89007fbf52162d455a30c121f2bf29325c",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/development/evidence/2026-09-08-announcement-rule-applicability/desktop-stale.png",
+      "sha256": "267b4ca84807531c4d367b79410f2fcc1beecdfe2bdd9e4c09fc64b84f5dba5f",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/development/evidence/2026-09-08-announcement-rule-applicability/mobile-final.png",
+      "sha256": "3fd6385410250b1c4cdca8ce8d1077c7e2e23f6bf7c7b195e2a5e2f3a70c634c",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/development/evidence/2026-09-08-announcement-rule-applicability/mobile-initial.png",
+      "sha256": "7b9ec054652567df48a5689925d663a6d7c92a153eea230d8e5e9b0a8731583e",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/development/evidence/2026-09-08-announcement-rule-applicability/mobile-retry.png",
+      "sha256": "dfd2525a0c04d100c134f36bb01d769032731cbcc079d64dd207a199fb017672",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/development/evidence/2026-09-08-announcement-rule-applicability/mobile-stale.png",
+      "sha256": "b8892b4cd15857069590b2ad54e900b799ad9a836d56593ddb10811957f0cf3e",
+      "visually_inspected": true
+    }
+  ],
+  "frozen_delivery": {
+    "prompt_changed": false,
+    "pass": 94,
+    "raw_artifacts_changed": false,
+    "wma_calls": 0,
+    "fail": 0,
+    "unverified_word": 30,
+    "candidate_facts_changed": false,
+    "verdict": "UNVERIFIED"
+  }
+}

@@ -17,6 +17,7 @@ from deepaha.artifacts.local_file import LocalFileObjectStore
 from deepaha.artifacts.models import RawArtifact
 from deepaha.core.settings import Settings, get_settings
 from deepaha.db.session import get_engine, session_factory
+from deepaha.investigations.applicability import DecideRuleApplicability
 from deepaha.investigations.contracts import (
     BindInvestigation,
     CreateInvestigation,
@@ -90,8 +91,16 @@ KeyDep = Annotated[str, Depends(require_local_idempotency_key)]
 
 def problem(error: Exception) -> HTTPException:
     code = getattr(error, "code", "INVESTIGATION_AUTHORITY_REQUIRED")
-    status = 404 if code in {"INVESTIGATION_NOT_FOUND", "UNIT_PLAN_NOT_FOUND"} else 409
-    if isinstance(error, (HumanReviewError, ReviewerAuthenticationError)):
+    status = (
+        404
+        if code
+        in {"INVESTIGATION_NOT_FOUND", "UNIT_PLAN_NOT_FOUND", "RULE_APPLICABILITY_SOURCE_NOT_FOUND"}
+        else 409
+    )
+    if (
+        isinstance(error, (HumanReviewError, ReviewerAuthenticationError))
+        or code == "HUMAN_VALIDATION_AUTHORITY_REQUIRED"
+    ):
         status = 403
     return HTTPException(
         status, detail={"code": code}, headers={"Cache-Control": "private, no-store"}
@@ -358,6 +367,44 @@ def read_unit_plan(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return load_unit_plan(store, task_id, plan_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/{task_id}/unit-plans/{plan_id}/rule-applicability/{source_id}/{candidate_id}")
+def read_rule_applicability(
+    task_id: UUID,
+    plan_id: UUID,
+    source_id: UUID,
+    candidate_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+    after: str | None = None,
+) -> dict[str, Any]:
+    from deepaha.investigations.applicability import read_rule_applicability as read
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return read(store, task_id, plan_id, source_id, candidate_id, principal, after=after)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/rule-applicability")
+def decide_rule_applicability(
+    task_id: UUID,
+    command: DecideRuleApplicability,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.applicability import save_rule_applicability
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return save_rule_applicability(store, task_id, command, principal, key)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 
