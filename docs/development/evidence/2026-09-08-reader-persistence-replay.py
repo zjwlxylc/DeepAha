@@ -28,7 +28,7 @@ from deepaha.documents.reader import ReaderDocumentParser
 from deepaha.documents.service import DocumentService, ParseDocumentCommand
 from deepaha.evidence_verification.adapters.defaults import default_registry
 from deepaha.evidence_verification.binding import PreparedDocumentEvidence
-from deepaha.investigations.delivery import preflight_manifest, validate_delivery
+from deepaha.investigations.delivery import preflight_manifest, validate_legacy_delivery
 from deepaha.sources.models import Source
 from tests.integration.test_p10b1_migration import temporary_database, drop_temporary_database
 
@@ -54,7 +54,7 @@ def hashes():
 before = hashes()
 baseline = json.loads(args.baseline.read_text(encoding="utf-8"))
 assert before == {k.replace("\\", "/"): v for k, v in baseline["original_file_hashes_before"].items()}
-delivery = validate_delivery(files, originals)
+delivery = validate_legacy_delivery(files, originals)
 registry = default_registry()
 temp_root = root / ".deepaha-local-manual"
 temp_root.mkdir(exist_ok=True)

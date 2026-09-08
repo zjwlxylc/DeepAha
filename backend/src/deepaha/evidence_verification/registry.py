@@ -10,6 +10,7 @@ class AdapterRegistry:
         self, active: Sequence[EvidenceAdapter], *, historical: Sequence[EvidenceAdapter] = ()
     ) -> None:
         self._active: dict[str, EvidenceAdapter] = {}
+        self.active_adapters = tuple(active)
         self._versions: dict[ReaderIdentity, EvidenceAdapter] = {}
         for adapter in active:
             for media in adapter.media_types:

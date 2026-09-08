@@ -84,7 +84,7 @@ def test_mixed_formats_report_unsupported_and_failed_materials(harness: StoreHar
     assert outcomes["legacy.doc"]["outcome"] == "UNSUPPORTED"
     assert outcomes["legacy.doc"]["parse_attempt_id"] is None
     assert outcomes["empty.pdf"]["outcome"] == "FAILED"
-    assert outcomes["empty.pdf"]["error_code"] == "PDF_TEXT_EMPTY"
+    assert outcomes["empty.pdf"]["error_code"] == "READER_NO_TEXT"
     for name in ("notice", "terms.pdf", "positions.xlsx", "terms.docx"):
         assert outcomes[name]["outcome"] == "SUCCEEDED" and outcomes[name]["block_count"] > 0
     assert h.store.prepare_documents(task_id, delivery_hash, h.principal) == result

@@ -42,7 +42,7 @@ expected = {
     for key, value in baseline["original_file_hashes_before"].items()
 }
 assert before == expected, "input differs from the frozen calibration"
-validated = delivery.validate_delivery(results, originals)
+validated = delivery.validate_legacy_delivery(results, originals)
 artifact_types = {item.artifact_id: item.media_type for item in validated.artifacts}
 rows = [
     {

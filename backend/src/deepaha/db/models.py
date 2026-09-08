@@ -15,6 +15,7 @@ from deepaha.feedback.models import (
 )
 from deepaha.investigations.models import (
     InvestigationEvent,
+    InvestigationEvidenceCheck,
     InvestigationMaterial,
     InvestigationTask,
 )
@@ -111,6 +112,7 @@ from deepaha.validation.models import (
 )
 
 __all__ = [
+    "InvestigationEvidenceCheck",
     "InvestigationEvent",
     "InvestigationMaterial",
     "InvestigationTask",

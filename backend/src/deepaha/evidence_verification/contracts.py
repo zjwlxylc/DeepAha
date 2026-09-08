@@ -9,6 +9,8 @@ type LocatorStatus = Literal["VERIFIED", "UNBOUND", "UNSUPPORTED", "INVALID", "M
 type BindingStatus = Literal["BOUND", "UNBOUND", "AMBIGUOUS"]
 type Precision = Literal["ARTIFACT", "SCOPE", "SPAN", "NONE"]
 
+VERIFIER_VERSION = "evidence-literal/1"
+
 
 @dataclass(frozen=True, slots=True)
 class ReaderIdentity:
@@ -167,7 +169,7 @@ class VerificationResult:
     verdict: Verdict
     matches: tuple[EvidenceMatch, ...]
     reason_codes: tuple[str, ...]
-    verifier_version: str = "evidence-literal/1"
+    verifier_version: str = VERIFIER_VERSION
 
 
 class EvidenceAdapter(Protocol):

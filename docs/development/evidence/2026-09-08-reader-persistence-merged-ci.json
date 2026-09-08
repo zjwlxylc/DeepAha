@@ -1,0 +1,66 @@
+{
+  "pull_request": "https://github.com/zjwlxylc/DeepAha/pull/12",
+  "candidate": "18a02d94e02a6b63848bd892791a19a18c667f65",
+  "merge_commit": "7d34ed711d525c75f258c637996a46887ac77933",
+  "candidate_tree": "e58c226092838c668b5e39b328795cc595017292",
+  "merge_tree": "e58c226092838c668b5e39b328795cc595017292",
+  "ci_run": 34216893603,
+  "jobs": [
+    {
+      "id": 102030668555,
+      "name": "phase3-resolution",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102030668607,
+      "name": "backend-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102030668701,
+      "name": "phase8-deadline-reminder",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102030668734,
+      "name": "integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102030668745,
+      "name": "web-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102030668753,
+      "name": "phase7-feedback-review",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102030668799,
+      "name": "phase5-public-trust",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102030668874,
+      "name": "phase4-eligibility",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 102030668909,
+      "name": "phase6-profile-action",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "deployment": false,
+  "root_user_checkout_changed": false
+}

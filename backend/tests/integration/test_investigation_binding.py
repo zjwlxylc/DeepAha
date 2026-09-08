@@ -427,8 +427,9 @@ def test_frozen_delivery_rejects_late_material_insertion(
 
 
 def test_downgrade_preserves_wma_binding_history(harness: StoreHarness) -> None:
-    from alembic import command
     from alembic.config import Config
+    from alembic.migration import MigrationContext
+    from alembic.operations import Operations
     from alembic.script import ScriptDirectory
 
     h = harness
@@ -436,8 +437,16 @@ def test_downgrade_preserves_wma_binding_history(harness: StoreHarness) -> None:
     binding = h.store.bind(task_id, _command(delivery, identity), h.principal, "one")[
         "entity_binding"
     ]
-    with pytest.raises(RuntimeError, match="Cannot remove WMA provenance"):
-        command.downgrade(Config("alembic.ini"), "20260907_0036")
+    # Exercise this historical guard directly: newer receipt/anchor migrations
+    # now correctly reject the end-to-end downgrade before reaching 0037.
+    revision = ScriptDirectory.from_config(Config("alembic.ini")).get_revision("20260907_0037")
+    assert revision is not None
+    with (
+        h.factory.begin() as session,
+        Operations.context(MigrationContext.configure(session.connection())),
+        pytest.raises(RuntimeError, match="Cannot remove WMA provenance"),
+    ):
+        revision.module.downgrade()
     assert h.store.get(task_id)["entity_binding"] == binding
     with h.factory() as session:
         assert (

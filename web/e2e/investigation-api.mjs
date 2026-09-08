@@ -1,6 +1,6 @@
 // Browser fixtures only. This process never calls an official source or WMA.
 import { createServer } from "node:http";
-import { source, task, preparedDocuments, bindingTarget } from "../tests/investigations-fixture.ts";
+import { source, task, preparedDocuments, bindingTarget, evidenceCheck } from "../tests/investigations-fixture.ts";
 
 let current = structuredClone(task);
 let dropNextReceipt = false;
@@ -35,7 +35,7 @@ const server = createServer(async (request, response) => {
     const values = JSON.parse(body);
     if (path.endsWith("/documents")) {
       if (values.delivery_hash !== current.delivery_hash) { response.writeHead(409); response.end("{}"); return; }
-      current = { ...current, document_preparation: preparedDocuments };
+      current = { ...current, document_preparation: preparedDocuments, evidence_check: evidenceCheck, evidence_check_history: [evidenceCheck] };
     }
     else if (path.endsWith("/bindings")) {
       if (current.status !== "APPROVED" || current.document_preparation?.status !== "PREPARED"
