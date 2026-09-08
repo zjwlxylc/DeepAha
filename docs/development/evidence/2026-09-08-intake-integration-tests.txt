@@ -17,9 +17,9 @@ object_store = <deepaha.artifacts.s3.S3ObjectStore object at 0x00000246FB0B1E00>
         artifact_id, raw_key, raw_sha = create_artifact(owned_session_factory, object_store)
         parser = FakeParser()
         service = service_for(owned_session_factory, object_store, parser)
-    
+
         result = service.parse(ParseDocumentCommand(artifact_id=artifact_id))
-    
+
         assert result.created is True
         assert result.outcome == "SUCCEEDED"
         assert result.document_id is not None
@@ -32,7 +32,7 @@ object_store = <deepaha.artifacts.s3.S3ObjectStore object at 0x00000246FB0B1E00>
         )
 >       assert result.extracted_text_uri == f"s3://deepaha-raw/{derived_key}"
 E       AssertionError: assert 's3://deepaha....2.0/text.txt' == 's3://deepaha....2.0/text.txt'
-E         
+E
 E         - s3://deepaha-raw/derived/documents/0ac135e9351e442b690dad4c7f16602ed0cfc73bfb0d6e914c6b8f30d535114f/html_fake/0.2.0/phase2-locator-contract-v0.2.0/text.txt
 E         ?                ^
 E         + s3://deepaha-intake-integration/derived/documents/0ac135e9351e442b690dad4c7f16602ed0cfc73bfb0d6e914c6b8f30d535114f/html_fake/0.2.0/phase2-locator-contract-v0.2.0/text.txt
