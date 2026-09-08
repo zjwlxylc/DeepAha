@@ -17,7 +17,6 @@ from typing import Any, NoReturn
 from urllib.parse import unquote, urlsplit
 
 from jsonschema import Draft7Validator
-from lxml import etree
 from openpyxl import load_workbook
 from openpyxl.utils.cell import column_index_from_string
 from pypdf import PdfReader
@@ -25,12 +24,21 @@ from pypdf import PdfReader
 from deepaha.documents.html import _parse_html_tree
 from deepaha.documents.parser import ExpectedParseError
 from deepaha.documents.pdf import MAX_PDF_PAGES
-from deepaha.documents.spreadsheet import (
-    _ignore_declared_dimensions,
-    _preflight_archive,
-    _preflight_loaded_worksheet,
+from deepaha.documents.spreadsheet_reading import (
+    SpreadsheetText as _SpreadsheetText,
 )
-from deepaha.documents.spreadsheet_limits import MAX_WORKSHEETS, WorksheetExpansionBudget
+from deepaha.documents.spreadsheet_reading import (
+    read_spreadsheet_text,
+)
+from deepaha.evidence_verification.adapters.html_text import (
+    HTML_QUOTE_CANONICALIZATION_VERSION as HTML_QUOTE_CANONICALIZATION_VERSION,
+)
+from deepaha.evidence_verification.adapters.html_text import (
+    _html_quote_text as _html_quote_text,
+)
+from deepaha.evidence_verification.adapters.projection import (
+    canonical_html_text as _canonical_html_text,
+)
 
 SCHEMA_SHA256 = {
     "opportunities": "fbbf3f83bd078ecffaa52ab8aa79743ada115c5d88918c3a5ea25245e0f6ccd5",
@@ -40,68 +48,12 @@ _FILES = {"opportunities.json", "evidence.json", "report.md"}
 _HASH = re.compile(r"[a-fA-F0-9]{64}\Z")
 _ARTIFACT_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,255}\Z")
 _RESERVED = re.compile(r"(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\..*)?\Z", re.I)
-HTML_QUOTE_CANONICALIZATION_VERSION = "html-quote-c14n/1"
-_HAN = r"[\u3400-\u4dbf\u4e00-\u9fff]"
-_HAN_FORMAT_MARKS = re.compile(rf"(?<={_HAN})[\u200b\ufeff]+(?={_HAN})")
-_HTML_TEXT_BOUNDARIES = frozenset(
-    [
-        "address",
-        "article",
-        "aside",
-        "blockquote",
-        "body",
-        "br",
-        "caption",
-        "dd",
-        "details",
-        "dialog",
-        "div",
-        "dl",
-        "dt",
-        "fieldset",
-        "figcaption",
-        "figure",
-        "footer",
-        "form",
-        "h1",
-        "h2",
-        "h3",
-        "h4",
-        "h5",
-        "h6",
-        "header",
-        "hgroup",
-        "hr",
-        "li",
-        "main",
-        "nav",
-        "ol",
-        "p",
-        "pre",
-        "section",
-        "summary",
-        "table",
-        "tbody",
-        "td",
-        "tfoot",
-        "th",
-        "thead",
-        "tr",
-        "ul",
-    ]
-)
 
 
 class DeliveryValidationError(ValueError):
     def __init__(self, code: str) -> None:
         self.code = code
         super().__init__(code)
-
-
-@dataclass(frozen=True, slots=True)
-class _SpreadsheetText:
-    rows: dict[str, dict[int, dict[int, str]]]
-    row_counts: dict[str, int]
 
 
 @dataclass(frozen=True, slots=True)
@@ -417,47 +369,6 @@ def _normalized(text: str) -> str:
     return " ".join(text.split())
 
 
-def _canonical_html_text(text: str) -> str:
-    # Whitespace is collapsed, not deleted. Keep Latin word separators, numeric
-    # boundaries, punctuation, ZWJ/ZWNJ and bidi controls. No Unicode folding.
-    return _normalized(_HAN_FORMAT_MARKS.sub("", text.strip().lstrip("\ufeff")))
-
-
-def _html_quote_text(root: etree._Element, *, join_cell_wraps: bool = False) -> str:
-    """Preserve inline text while separating paragraphs, rows and cells.
-
-    This checks source text structure, not CSS layout or the meaning of a fact.
-    The original artifact bytes remain untouched.
-    """
-    # Only an explicitly selected cell may join adjacent Han text across p/br
-    # layout boundaries. None records an extractor-generated separator; literal
-    # source whitespace and all row/cell/other block boundaries remain distinct.
-    cell_wraps = join_cell_wraps and root.tag in {"td", "th"}
-    parts: list[str | None] = []
-    for event, node in etree.iterwalk(root, events=("start", "end", "comment", "pi")):
-        if node.tag in _HTML_TEXT_BOUNDARIES:
-            parts.append(None if cell_wraps and node.tag in {"p", "br"} else " ")
-        if event == "start" and isinstance(node.tag, str) and node.text:
-            parts.append(node.text)
-        elif event != "start" and node is not root and node.tail:
-            parts.append(node.tail)
-    rendered: list[str] = []
-    pending_wrap = False
-    for part in parts:
-        if part is None:
-            pending_wrap = True
-        elif part:
-            if (
-                pending_wrap
-                and rendered
-                and not (re.fullmatch(_HAN, rendered[-1][-1]) and re.fullmatch(_HAN, part[0]))
-            ):
-                rendered.append(" ")
-            rendered.append(part)
-            pending_wrap = False
-    return "".join(rendered)
-
-
 def _quote_support(
     artifact: ValidatedArtifact,
     quote: str,
@@ -596,29 +507,12 @@ def _read_spreadsheet_text(content: bytes) -> _SpreadsheetText:
 
 
 def _bounded_spreadsheet_text(content: bytes) -> _SpreadsheetText:
-    _preflight_archive(content)
-    book = load_workbook(BytesIO(content), read_only=True, data_only=False, keep_links=False)
-    try:
-        if len(book.sheetnames) > MAX_WORKSHEETS:
-            _fail("EVIDENCE_RESOURCE_LIMIT_EXCEEDED")
-        sheets: dict[str, dict[int, dict[int, str]]] = {}
-        row_counts: dict[str, int] = {}
-        expansion = WorksheetExpansionBudget()
-        for worksheet in book.worksheets:
-            _preflight_loaded_worksheet(worksheet, expansion)
-            _ignore_declared_dimensions(worksheet)
-            rows = sheets[worksheet.title] = {}
-            row_counts[worksheet.title] = 0
-            for number, values in enumerate(worksheet.iter_rows(values_only=True), 1):
-                populated = {
-                    i: str(value) for i, value in enumerate(values, 1) if value is not None
-                }
-                if populated:
-                    rows[number] = populated
-                row_counts[worksheet.title] = number
-        return _SpreadsheetText(sheets, row_counts)
-    finally:
-        book.close()
+    return read_spreadsheet_text(
+        content,
+        open_workbook=lambda data: load_workbook(
+            BytesIO(data), read_only=True, data_only=False, keep_links=False
+        ),
+    )
 
 
 def validate_delivery(

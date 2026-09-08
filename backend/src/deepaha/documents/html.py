@@ -143,8 +143,10 @@ class P9BHtmlDocumentParser(LxmlHtmlParser):
     utf8_fallback = True
 
 
-def _parse_html_tree(content: bytes, *, utf8_fallback: bool = False) -> etree._Element:
-    tree = _read_html_tree(content)
+def _parse_html_tree(
+    content: bytes, *, utf8_fallback: bool = False, reject_incomplete: bool = False
+) -> etree._Element:
+    tree = _read_html_tree(content, reject_incomplete=reject_incomplete)
     if utf8_fallback and not _has_encoding_declaration(content, tree):
         # JSON-backed official pages often return a UTF-8 HTML fragment without a
         # head/meta element. Never let libxml2's Latin-1 fallback corrupt its blocks.
@@ -152,7 +154,7 @@ def _parse_html_tree(content: bytes, *, utf8_fallback: bool = False) -> etree._E
             content.decode("utf-8", errors="strict")
         except UnicodeDecodeError as error:
             raise ExpectedParseError("HTML_ENCODING_UNRESOLVED") from error
-        tree = _read_html_tree(content, encoding="utf-8")
+        tree = _read_html_tree(content, encoding="utf-8", reject_incomplete=reject_incomplete)
     _remove_excluded_nodes(tree)
     return tree
 
@@ -172,7 +174,9 @@ def _has_encoding_declaration(content: bytes, tree: etree._Element) -> bool:
     return False
 
 
-def _read_html_tree(content: bytes, *, encoding: str | None = None) -> etree._Element:
+def _read_html_tree(
+    content: bytes, *, encoding: str | None = None, reject_incomplete: bool = False
+) -> etree._Element:
     parser = etree.HTMLParser(encoding=encoding, no_network=True, recover=True, huge_tree=False)
     parser.resolvers.add(_RejectExternalResolver())
     try:
@@ -180,6 +184,15 @@ def _read_html_tree(content: bytes, *, encoding: str | None = None) -> etree._El
     except (etree.ParserError, etree.XMLSyntaxError) as error:
         code = "HTML_TEXT_EMPTY" if not content.strip() else "HTML_PARSE_FAILED"
         raise ExpectedParseError(code) from error
+    if reject_incomplete and any(
+        entry.level_name == "FATAL"
+        or entry.type_name
+        in {"ERR_INVALID_ENCODING", "ERR_UNSUPPORTED_ENCODING", "ERR_INVALID_CHAR"}
+        for entry in parser.error_log
+    ):
+        # Opt-in for the versioned literal Reader only. Legacy parse identities
+        # retain their historical recovery behavior.
+        raise ExpectedParseError("HTML_READING_INCOMPLETE")
     if tree is None:
         raise ExpectedParseError("HTML_TEXT_EMPTY")
     return tree
