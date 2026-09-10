@@ -1,6 +1,6 @@
 # GROUP 规则对岗位的适用决定持久化
 
-范围为内部后端服务与迁移 0049：独立保存 `APPLIES`、`DOES_NOT_APPLY`、`NEEDS_ADJUDICATION`。本批内部实现 IMPLEMENTED，本地定向验证通过，精确候选 CI 待检查。没有新增 API、表单、继承计划或资格放行；原只读页面仍显示尚未裁决，待后续专门接入决定服务。
+范围为内部后端服务与迁移 0049：独立保存 `APPLIES`、`DOES_NOT_APPLY`、`NEEDS_ADJUDICATION`。本批内部实现 IMPLEMENTED。PR #34 候选 `d8baaba` 的 CI #123 全部 9 个 job 成功，已合并为 `8a827e8`，候选与合并代码树一致；证据见 `evidence/2026-09-10-group-applicability-decisions-ci.json`。本批没有新增 API、表单、继承计划或资格放行；后续接口与表单接入见 `2026-09-10-group-applicability-review-ui.md`。
 
 每条决定绑定当前任务、官方材料包、组成员、组事实与规则审批、岗位版本和已保存岗位计划。明确适用或不适用必须提供官方段落中的精确引文；待裁决允许无引用。保存后记录原始请求、上下文、证据定位与摘要。更正采用追加记录及前序比较，同键同请求返回原回执，不同请求冲突；任务行锁串行化并发提交。写前、写后和读取均重新核对权限与实际上下文。
 

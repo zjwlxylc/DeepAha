@@ -35,6 +35,11 @@ from deepaha.investigations.group_applicability_contracts import (
     GroupApplicabilityContext,
     GroupApplicabilityView,
 )
+from deepaha.investigations.group_applicability_decision_contracts import (
+    GroupApplicabilityHistory,
+    GroupApplicabilityReceipt,
+)
+from deepaha.investigations.group_applicability_decisions import DecideGroupApplicability
 from deepaha.investigations.group_contracts import (
     GroupSourcePreview,
     GroupSourceRecord,
@@ -704,6 +709,50 @@ def list_group_rule_contexts(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return read(store, task_id, plan_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get(
+    "/{task_id}/unit-plans/{plan_id}/group-applicability-decisions/{source_id}/{candidate_id}",
+    response_model=GroupApplicabilityHistory,
+)
+def read_group_applicability_decisions(
+    task_id: UUID,
+    plan_id: UUID,
+    source_id: UUID,
+    candidate_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_applicability_decisions import (
+        load_group_applicability_decisions,
+    )
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return load_group_applicability_decisions(
+            store, task_id, plan_id, source_id, candidate_id, principal
+        )
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/group-applicability-decisions", response_model=GroupApplicabilityReceipt)
+def decide_group_applicability(
+    task_id: UUID,
+    command: DecideGroupApplicability,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_applicability_decisions import save_group_applicability
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return save_group_applicability(store, task_id, command, principal, key)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 
