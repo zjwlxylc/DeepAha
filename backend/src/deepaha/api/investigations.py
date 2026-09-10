@@ -42,6 +42,7 @@ from deepaha.investigations.group_fact_contracts import (
     PrepareGroupFacts,
     PromoteGroupFacts,
 )
+from deepaha.investigations.group_rule_contracts import GroupRulePreview
 from deepaha.investigations.models import InvestigationMaterial
 from deepaha.investigations.rule_contracts import (
     DecideInvestigationRule,
@@ -435,6 +436,25 @@ def read_group_fact_review(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return load_group_facts(store, task_id, preparation_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get(
+    "/{task_id}/group-facts/{preparation_id}/rules/preview", response_model=GroupRulePreview
+)
+def read_group_rule_preview(
+    task_id: UUID,
+    preparation_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_rules import preview_group_rules
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return preview_group_rules(store, task_id, preparation_id, principal)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 

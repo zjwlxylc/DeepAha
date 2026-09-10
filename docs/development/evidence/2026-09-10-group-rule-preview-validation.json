@@ -1,0 +1,70 @@
+{
+  "date": "2026-09-10",
+  "scope": "READ_ONLY_GROUP_RULE_PREVIEW",
+  "implementation_status": "IMPLEMENTED",
+  "base_sha": "548023ce30dfc562262eb2ec6795459693ae064c",
+  "branch": "codex/group-rule-preview",
+  "tests": {
+    "postgresql": {
+      "new": 19,
+      "existing": 2,
+      "passed": 21,
+      "command": "python -m pytest tests/integration/test_group_rule_preview.py tests/integration/test_group_facts.py -k 'preview or all_candidates_need_final_decisions or group_unknown_promotes_only_as_unknown' -m integration --strict-markers --tb=short -o addopts=''",
+      "duration_seconds": 32.21
+    },
+    "api": {
+      "new": 9,
+      "existing": 11,
+      "passed": 20,
+      "command": "python -m pytest tests/api/test_group_rule_preview.py tests/api/test_group_facts.py -q --strict-markers --tb=short"
+    },
+    "unique_passed": 41,
+    "final_interleaving_recheck": {
+      "passed": 1,
+      "deselected": 18,
+      "duration_seconds": 4.64
+    }
+  },
+  "checks": {
+    "ruff": "PASS (6 files)",
+    "format": "PASS (6 files)",
+    "mypy": "PASS (5 files)",
+    "git_diff_check": "PASS",
+    "frontend_tests": "REUSED prior PR28, no frontend changes",
+    "production_build": "REUSED prior PR28, no frontend changes",
+    "migration": "NOT_APPLICABLE"
+  },
+  "review": {
+    "scope": "bounded independent read-only review",
+    "initial_p2": "After initial integrity validation, a second transaction could append evidence consumed by later queries.",
+    "red": "Real PostgreSQL interleaving: DID NOT RAISE InvestigationError; all constraints enabled.",
+    "fix": "Recheck materialization after the final database read and before response assembly.",
+    "green": "Same interleaving rejected with GROUP_FACT_MATERIALIZATION_INTEGRITY_FAILED; 21 selected PG tests pass.",
+    "remaining_p1_p2": 0
+  },
+  "boundaries": {
+    "synthetic_accounts_are_human_acceptance": false,
+    "preview_persists_rules": false,
+    "preview_approves_facts_or_rules": false,
+    "inheritance_implemented": false,
+    "wma_calls": 0,
+    "official_downloads": 0,
+    "frozen_schema_changed": false,
+    "real_case": {
+      "pass": 94,
+      "fail": 0,
+      "word_unverified": 30,
+      "delivery_verdict": "UNVERIFIED",
+      "overall_eligibility": "UNCERTAIN"
+    }
+  },
+  "tested_working_files_sha256": {
+    "backend/src/deepaha/investigations/group_rules.py": "ed338c6e4dd468fc12d24c63b3da17b0943dad3bef949844d1d58e3113b4f2ab",
+    "backend/src/deepaha/investigations/group_rule_contracts.py": "112fe2461f304807eed4788e5635dac88685ee1996376afe82a6ea04ce591286",
+    "backend/src/deepaha/api/investigations.py": "87d75461f088a43124b6abf1d05ab8dd8a8ff2e571f014fe484d9f7a819cfb29",
+    "backend/tests/integration/test_group_rule_preview.py": "b72ce17cb251ab8f6c70da2c0638c93a6bd40961a766898b8a144aacd0a5fbc2",
+    "backend/tests/integration/test_group_facts.py": "64cf2a28fbf5617de305bf3e463a70601c6c4caedda0abda73fd9926b600ca99",
+    "backend/tests/api/test_group_rule_preview.py": "e5e239ddb4133b81d7aff8ab96699fb689934e420ba6f5c88fcd7ee63429dc63"
+  },
+  "next": "Check exact candidate CI, merge only if successful, then implement desktop-first read-only preview UI. Medium reasoning is a task-complexity judgment, not a measured model comparison."
+}
