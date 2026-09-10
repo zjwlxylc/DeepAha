@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="9" failures="0" errors="0" time="0.1299697">
+    <testsuite name="tests/relation-queue-actions.test.ts" timestamp="2026-09-10T21:51:06.191Z" hostname="DESKTOP-E631IGM" tests="7" failures="0" errors="0" skipped="0" time="0.004417">
+        <testcase classname="tests/relation-queue-actions.test.ts" name="accepts the real API queue and stale replay without rehashing raw sources" time="0.0022707">
+        </testcase>
+        <testcase classname="tests/relation-queue-actions.test.ts" name="rejects invalid queue target" time="0.0003267">
+        </testcase>
+        <testcase classname="tests/relation-queue-actions.test.ts" name="rejects invalid queue status" time="0.0001707">
+        </testcase>
+        <testcase classname="tests/relation-queue-actions.test.ts" name="rejects invalid queue safety" time="0.0001615">
+        </testcase>
+        <testcase classname="tests/relation-queue-actions.test.ts" name="rejects invalid queue cursor" time="0.0001657">
+        </testcase>
+        <testcase classname="tests/relation-queue-actions.test.ts" name="rejects invalid queue duplicate" time="0.0001689">
+        </testcase>
+        <testcase classname="tests/relation-queue-actions.test.ts" name="rejects invalid queue ownership" time="0.0001545">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/relation-queue.test.tsx" timestamp="2026-09-10T21:51:06.198Z" hostname="DESKTOP-E631IGM" tests="2" failures="0" errors="0" skipped="0" time="0.1255527">
+        <testcase classname="tests/relation-queue.test.tsx" name="filters only this page and keeps stable detail links and ownership visible" time="0.0902995">
+        </testcase>
+        <testcase classname="tests/relation-queue.test.tsx" name="hides outdated approval on failed reread and can retry the same page" time="0.0343708">
+        </testcase>
+    </testsuite>
+</testsuites>

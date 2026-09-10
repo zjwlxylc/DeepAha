@@ -1,0 +1,72 @@
+{
+  "current": {
+    "task_id": "01a08d4b-c354-7125-95cf-140c97f58dc0",
+    "target_plan_id": "01a08d4b-d002-743f-8fa4-5094f078c2f2",
+    "source_review_hash": "cb326287396908a048b3a4b153265496fbc6ee8cf9d4f0ad24980cb19adc6f67",
+    "read_at": "2026-09-07T10:00:00+00:00",
+    "executable": false,
+    "overall_qualification": "UNCERTAIN",
+    "proposals": [
+      {
+        "proposal_id": "01a08d4b-e99e-7763-bd61-149e85e3cba3",
+        "created_at": "2026-09-07T10:00:00+00:00",
+        "relation": "CUMULATIVE",
+        "reason": "Synthetic proposal, not verified human semantics",
+        "condition_ids": [
+          "source:0",
+          "source:2"
+        ],
+        "status": "APPROVED",
+        "is_own_proposal": true
+      },
+      {
+        "proposal_id": "01a08d4b-f4c5-7557-8103-021d526be5ac",
+        "created_at": "2026-09-07T10:00:00+00:00",
+        "relation": "CUMULATIVE",
+        "reason": "Synthetic proposal, not verified human semantics",
+        "condition_ids": [
+          "source:0",
+          "source:2"
+        ],
+        "status": "UNREVIEWED",
+        "is_own_proposal": true
+      }
+    ],
+    "next_after": null
+  },
+  "stale": {
+    "task_id": "01a08d4b-c354-7125-95cf-140c97f58dc0",
+    "target_plan_id": "01a08d4b-d002-743f-8fa4-5094f078c2f2",
+    "source_review_hash": "9d623ec3d4923d2990e2c8678582caed6c76dc61080bbdeef378e5ed7274a77e",
+    "read_at": "2026-09-07T10:00:00+00:00",
+    "executable": false,
+    "overall_qualification": "UNCERTAIN",
+    "proposals": [
+      {
+        "proposal_id": "01a08d4b-e99e-7763-bd61-149e85e3cba3",
+        "created_at": "2026-09-07T10:00:00+00:00",
+        "relation": "CUMULATIVE",
+        "reason": "Synthetic proposal, not verified human semantics",
+        "condition_ids": [
+          "source:0",
+          "source:2"
+        ],
+        "status": "STALE",
+        "is_own_proposal": false
+      },
+      {
+        "proposal_id": "01a08d4b-f4c5-7557-8103-021d526be5ac",
+        "created_at": "2026-09-07T10:00:00+00:00",
+        "relation": "CUMULATIVE",
+        "reason": "Synthetic proposal, not verified human semantics",
+        "condition_ids": [
+          "source:0",
+          "source:2"
+        ],
+        "status": "STALE",
+        "is_own_proposal": false
+      }
+    ],
+    "next_after": null
+  }
+}

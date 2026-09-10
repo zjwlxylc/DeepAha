@@ -4,12 +4,26 @@ import { readFileSync } from "node:fs";
 import { isDeepStrictEqual } from "node:util";
 const f = JSON.parse(readFileSync(new URL("../tests/relation-review-fixture.json", import.meta.url), "utf8"));
 const n = JSON.parse(readFileSync(new URL("../tests/relation-proposal-fixture.json", import.meta.url), "utf8"));
+const q = JSON.parse(readFileSync(new URL("../tests/relation-queue-fixture.json", import.meta.url), "utf8"));
+let queueState = "current";
 let current = f.saved;
 createServer(async (req, res) => {
   const url = new URL(req.url, "http://127.0.0.1:3099");
   res.setHeader("Content-Type", "application/json");
   res.setHeader("Cache-Control", "private, no-store");
   if (url.pathname === "/reset") { current = f.saved; res.end("{}"); return; }
+  if (url.pathname === "/queue-reset") { queueState = "current"; res.end("{}"); return; }
+  if (url.pathname === "/queue-stale") { queueState = "stale"; res.end("{}"); return; }
+  if (url.pathname === "/queue-forbidden") { queueState = "forbidden"; res.end("{}"); return; }
+  if (url.pathname.includes(q.current.task_id) && url.pathname.endsWith("/relation-queue")) {
+    if (queueState === "forbidden") { res.writeHead(403); res.end("{}"); return; }
+    res.end(JSON.stringify(q[queueState])); return;
+  }
+  if (url.pathname.includes(f.task) && url.pathname.endsWith("/relation-queue")) {
+    const p = current.package.proposal;
+    res.end(JSON.stringify({ task_id: f.task, target_plan_id: f.plan, source_review_hash: p.source_review_hash, read_at: p.created_at, executable: false, overall_qualification: "UNCERTAIN", next_after: null,
+      proposals: [{ proposal_id: p.proposal_id, created_at: p.created_at, relation: p.relation, reason: p.reason, condition_ids: p.condition_ids, status: current.review.status, is_own_proposal: false }] })); return;
+  }
   if (url.pathname === "/stale") { current = structuredClone(current); current.review.status = "STALE"; res.end("{}"); return; }
   if (url.pathname.includes(n.task)) {
     if (url.pathname.endsWith("/cross-level-preview")) { res.end(JSON.stringify(n.context.review)); return; }

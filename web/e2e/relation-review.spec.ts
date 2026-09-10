@@ -1,6 +1,27 @@
 import { expect, test } from "@playwright/test";
 import f from "../tests/relation-review-fixture.json";
 import n from "../tests/relation-proposal-fixture.json";
+import q from "../tests/relation-queue-fixture.json";
+test("queue filters current states and clears them on source change and auth failure", async ({ page, context, request }) => {
+  await request.get("http://127.0.0.1:3099/queue-reset");
+  await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true }]);
+  await page.goto(`/review/investigations/${q.current.task_id}/unit-plans/${q.current.target_plan_id}/relations`);
+  await expect(page.getByRole("heading", { name: "关系提案审核队列" })).toBeVisible();
+  await page.getByLabel("筛选本页审核状态").selectOption("UNREVIEWED");
+  await expect(page.getByRole("link", { name: "关系提案 1", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "关系提案 2", exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("article").getByText("关系提案审核通过", { exact: true })).toBeVisible();
+  await request.get("http://127.0.0.1:3099/queue-stale");
+  await page.getByRole("button", { name: "重新读取本页" }).click();
+  await expect(page.getByRole("article").getByText("依据已变化，旧决定失效", { exact: true })).toHaveCount(2);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: "output/playwright/relations/queue-stale.png", fullPage: true });
+  await request.get("http://127.0.0.1:3099/queue-forbidden");
+  await page.getByRole("button", { name: "重新读取本页" }).click();
+  await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.getByRole("link", { name: "关系提案 1", exact: true })).toHaveCount(0);
+});
 test("desktop creates from full conditions with literal evidence and refreshes stable detail", async ({ page, context }) => {
   await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true }]);
   const base = `/review/investigations/${n.task}/unit-plans/${n.plan}`;
