@@ -1,0 +1,42 @@
+{
+  "scope": "GROUP_APPLICABILITY_PRIVATE_API_UI",
+  "api_boundary_passed": 16,
+  "actual_postgresql_roundtrip_passed": 1,
+  "vitest_passed": 31,
+  "playwright": {
+    "group_tests_passed": 10,
+    "unit_snapshot_regression_passed": 2,
+    "final_layout_save_reload_stale_passed": 2,
+    "normal_save": {
+      "posts": 2,
+      "mutations": 2
+    },
+    "lost_receipt_retry": {
+      "posts": 3,
+      "mutations": 2
+    }
+  },
+  "ruff": "PASS",
+  "ruff_format": "PASS",
+  "mypy": "PASS",
+  "eslint": "PASS",
+  "typecheck": "PASS",
+  "production_build": "PASS",
+  "independent_review": "Selected rule ambiguity fixed; no remaining P1/P2",
+  "real_delivery": "UNVERIFIED",
+  "source_sha256": {
+    "backend/src/deepaha/api/investigations.py": "3034436249870aba96752bec7127bb9714288922278473e5ec2cb8935d647518",
+    "backend/src/deepaha/investigations/group_applicability_decision_contracts.py": "d1db40d6f43d372ee1cc4fb5fe8590038e34a68e3f1733eb40f179269c36dd6e",
+    "backend/tests/api/test_group_applicability.py": "135610c3f459e09fb18bcf856d5aa08bf161c0a399ef99ccddc09ac17b700d07",
+    "backend/tests/integration/test_group_applicability_api.py": "9b090f27199228046b5f36d27bf274c54c748fb6dc1468c7dcab12fb8b5f626c",
+    "web/components/investigations/group-applicability.tsx": "7db8aed256110a772de35ec86daf154d3fdc97c0fe807ee8f7d44125b2c0c38a",
+    "web/app/review/investigations/group-applicability-decision-actions.ts": "4a153855b9739273134d0cbb06f98d674bda3f63e1decf3415174e722430f672",
+    "web/lib/group-applicability-decisions.ts": "3b6def66905470ba921a35fa3966270ce0cf73badba6a25a60796587da4e8011",
+    "web/tests/group-applicability.test.tsx": "4ce2a90b110b8d7b21d7de19be6727f66b1efd5745a2f87816b6e42bc60e28a1",
+    "web/tests/group-applicability-decision-actions.test.ts": "6ed57a427771a5afbfff927f856fe247c2fb4be71a2f2d71cc93e0edbe03d669",
+    "web/tests/group-decisions-fixture.json": "3ef1b560dee4dc4ead5e9af355da1f946149bf773a0cb8c9b174469824318861",
+    "web/e2e/group-applicability-api.mjs": "11e52ebb98080b52fd4382acb6b5004de83e4edd8b1423ee9056e8b2e3cdd3f2",
+    "web/e2e/group-applicability.spec.ts": "114616e8331ad875518d11b07226389ba63a3f9cc44b904eaed8c45eff56aebc",
+    "web/app/review/investigations/[taskId]/unit-plans/[planId]/group-applicability/[sourcePreparationId]/[candidateId]/page.tsx": "e3897fb0ff6d7f0e6248e1771594546ff82c643f2ef075c35a7f93aedbb701e7"
+  }
+}
