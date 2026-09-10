@@ -47,6 +47,28 @@ def test_private_relation_roundtrip(
     base = f"/api/v1/local-human-test/investigations/{task}"
     with client:
         body = proposal.model_dump(mode="json")
+        context_url = f"{base}/unit-plans/{proposal.target_plan_id}/relation-proposal-context"
+        context_response = client.get(context_url)
+        assert context_response.status_code == 200, context_response.text
+        assert context_response.headers["cache-control"] == "private, no-store"
+        context = context_response.json()
+        assert context["review_hash"] == digest(context["review"]) == body["expected_review_hash"]
+        assert context["evidence_options"]
+        first_option = context["evidence_options"][0]
+        cursor = f"{first_option['block_id']}:{first_option['member_id']}"
+        following = client.get(context_url, params={"after": cursor})
+        assert following.status_code == 200
+        assert following.json()["review_hash"] == context["review_hash"]
+        assert first_option not in following.json()["evidence_options"]
+        assert client.get(context_url, params={"after": "bad-cursor"}).status_code == 409
+        assert any(
+            e["member_id"] == body["evidence"][0]["member_id"]
+            and e["block_id"] == body["evidence"][0]["block_id"]
+            and body["evidence"][0]["quote"] in e["text"]
+            for e in context["evidence_options"]
+        )
+        assert client.get(context_url.replace(str(task), str(uuid7()))).status_code == 404
+        body["expected_review_hash"] = context["review_hash"]
         assert client.post(f"{base}/relation-proposals", json=body).status_code == 400
         created = client.post(
             f"{base}/relation-proposals", json=body, headers={"Idempotency-Key": "proposal"}
@@ -98,6 +120,8 @@ def test_private_relation_roundtrip(
                 {
                     "task": str(task),
                     "plan": str(proposal.target_plan_id),
+                    "context": context,
+                    "command": body,
                     "saved": saved,
                     "approved": first.json(),
                     "rejected": second.json(),

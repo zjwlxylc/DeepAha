@@ -5,12 +5,18 @@ from typing import Any, Literal
 from uuid import UUID, uuid7
 
 from pydantic import Field, ValidationError
-from sqlalchemy import select
+from sqlalchemy import select, tuple_
 from sqlalchemy.orm import Session
 
 from deepaha.contracts.common import EntityId, Sha256
+from deepaha.documents.models import DocumentBlock
 from deepaha.investigations.adjudication_storage import freeze_adjudication, thaw_adjudication
-from deepaha.investigations.applicability import ApplicabilityEvidence, _bound_evidence
+from deepaha.investigations.applicability import (
+    ApplicabilityEvidence,
+    _blocks,
+    _bound_evidence,
+    _material_url,
+)
 from deepaha.investigations.bindings import _authorize
 from deepaha.investigations.contracts import InvestigationError, digest
 from deepaha.investigations.cross_level_adjudication import RelationProposal, replay_adjudication
@@ -19,6 +25,7 @@ from deepaha.investigations.group_contracts import GroupContract
 from deepaha.investigations.models import InvestigationRelationProposal
 from deepaha.investigations.store import InvestigationStore
 from deepaha.local_human_test.review import require_human_fact_reviewer, validate_idempotency_key
+from deepaha.p9b.models import SourceBundleMember
 from deepaha.review.auth import ReviewerPrincipal
 
 
@@ -35,6 +42,60 @@ class ProposeRelation(GroupContract):
     displaced_condition_ids: tuple[str, ...]
     reason: str = Field(min_length=1, max_length=2000)
     evidence: tuple[RelationEvidenceRequest, ...] = Field(max_length=200)
+
+
+def read_proposal_context(
+    store: InvestigationStore,
+    task: UUID,
+    plan: UUID,
+    principal: ReviewerPrincipal,
+    after: str | None = None,
+) -> dict[str, Any]:
+    """Return a server digest and paginated literal blocks from the current binding."""
+    require_human_fact_reviewer(principal)
+    with store.factory() as session, session.begin():
+        _authorize(session, principal)
+        current = _build(store, session, task, plan)
+        source = current["dependencies"]["group"]["dependencies"]["group_source"]["source"]
+        query = _blocks(session, source)
+        if after is not None:
+            try:
+                block_after, member_after = (UUID(part) for part in after.split(":"))
+            except ValueError as error:
+                raise InvestigationError("RELATION_PROPOSAL_CURSOR_INVALID") from error
+            query = query.where(
+                tuple_(DocumentBlock.block_id, SourceBundleMember.source_bundle_member_id)
+                > (block_after, member_after)
+            )
+        rows = list(
+            session.execute(
+                query.order_by(
+                    DocumentBlock.block_id, SourceBundleMember.source_bundle_member_id
+                ).limit(51)
+            )
+        )
+        options = [
+            {
+                "member_id": str(m.source_bundle_member_id),
+                "block_id": str(b.block_id),
+                "material_id": m.wma_material_id,
+                "source_url": _material_url(session, source, m),
+                "text": b.canonical_text_or_value,
+                "locator": b.structural_locator,
+            }
+            for m, b in rows[:50]
+        ]
+        _recheck(store, session, task, plan, principal, current)
+        return {
+            "task_id": str(task),
+            "target_plan_id": str(plan),
+            "review": current,
+            "review_hash": digest(current),
+            "evidence_options": options,
+            "next_cursor": f"{rows[49][1].block_id}:{rows[49][0].source_bundle_member_id}"
+            if len(rows) > 50
+            else None,
+        }
 
 
 def _evidence(

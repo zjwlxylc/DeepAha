@@ -173,6 +173,24 @@ def create_relation_proposal(
         raise problem(error) from None
 
 
+@router.get("/{task_id}/unit-plans/{plan_id}/relation-proposal-context")
+def read_relation_proposal_context(
+    task_id: UUID,
+    plan_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+    after: str | None = None,
+) -> dict[str, Any]:
+    from deepaha.investigations.relation_proposals import read_proposal_context
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return read_proposal_context(store, task_id, plan_id, principal, after)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
 @router.get("/{task_id}/unit-plans/{plan_id}/relation-proposals")
 def read_relation_proposal_index(
     task_id: UUID,
