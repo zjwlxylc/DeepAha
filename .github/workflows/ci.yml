@@ -6,6 +6,10 @@ on:
       [main, codex/phase-3-opportunity-resolution, codex/phase-4-rules-eligibility-evaluation, codex/phase-5-public-trust-layer, codex/phase-6-profile-match-personal-action, codex/phase-7-feedback-review-validation, codex/phase-8-deadline-change-reminders]
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
 
@@ -47,6 +51,16 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      # Archive before the relations dev-server checks can mutate .next.
+      - name: Package production build
+        run: tar -czf "$RUNNER_TEMP/next-build.tar.gz" --exclude=.next/cache .next
+      - uses: actions/upload-artifact@v4
+        with:
+          name: next-build-${{ github.sha }}
+          path: ${{ runner.temp }}/next-build.tar.gz
+          overwrite: true
+          retention-days: 1
+          if-no-files-found: error
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm exec playwright test --config playwright.investigations.config.ts
       - run: pnpm exec playwright test --config playwright.relations.config.ts
@@ -127,7 +141,7 @@ jobs:
           enable-cache: true
       - run: uv sync --locked --group dev
       - run: uv run alembic upgrade head
-      - run: uv run pytest -m integration --strict-markers
+      # Full integration coverage belongs to the integration job.
       - run: >-
           uv run pytest tests/contracts tests/opportunities
           -m "not integration and not live_source" --strict-markers
@@ -167,9 +181,6 @@ jobs:
           python-version: "3.14"
           enable-cache: true
       - run: uv sync --locked --group dev
-      - run: uv run ruff format --check .
-      - run: uv run ruff check .
-      - run: uv run mypy src tests
       - run: >-
           uv run pytest tests/contracts/test_phase4_contracts.py tests/rules
           tests/eligibility tests/evaluation tests/test_phase4_verifier_scope.py
@@ -267,14 +278,6 @@ jobs:
         with:
           python-version: "3.14"
           enable-cache: true
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10.15.0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-          cache: pnpm
-          cache-dependency-path: web/pnpm-lock.yaml
       - run: uv sync --locked --group dev
       - run: >-
           uv run pytest tests/contracts/test_phase6_contracts.py tests/personal
@@ -293,12 +296,6 @@ jobs:
       - run: uv run alembic downgrade 20260822_0005
       - run: uv run alembic upgrade head
       - run: uv run alembic check
-      - run: pnpm install --frozen-lockfile
-        working-directory: web
-      - run: pnpm test
-        working-directory: web
-      - run: pnpm build
-        working-directory: web
 
   phase7-feedback-review:
     runs-on: ubuntu-latest
@@ -333,14 +330,6 @@ jobs:
         with:
           python-version: "3.14"
           enable-cache: true
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10.15.0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-          cache: pnpm
-          cache-dependency-path: web/pnpm-lock.yaml
       - run: uv sync --locked --group dev
       - run: >-
           uv run pytest tests/contracts/test_phase1_contracts.py
@@ -367,17 +356,8 @@ jobs:
       - run: uv run alembic downgrade 20260822_0006
       - run: uv run alembic upgrade head
       - run: uv run alembic check
-      - run: pnpm install --frozen-lockfile
-        working-directory: web
-      - run: pnpm lint
-        working-directory: web
-      - run: pnpm typecheck
-        working-directory: web
-      - run: pnpm test
-        working-directory: web
-      - run: pnpm build
-        working-directory: web
   phase8-deadline-reminder:
+    needs: web-quality
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -445,14 +425,13 @@ jobs:
           PYTHONPATH: src
       - run: pnpm install --frozen-lockfile
         working-directory: web
-      - run: pnpm lint
-        working-directory: web
-      - run: pnpm typecheck
-        working-directory: web
-      - run: pnpm test
-        working-directory: web
-      - run: pnpm build
-        working-directory: web
+      - uses: actions/download-artifact@v5
+        with:
+          name: next-build-${{ github.sha }}
+          path: ${{ runner.temp }}/next-build
+      - name: Restore the tested production build
+        working-directory: .
+        run: tar -xzf "$RUNNER_TEMP/next-build/next-build.tar.gz" -C web
       - run: pnpm exec playwright install --with-deps chromium
         working-directory: web
       - run: pnpm exec playwright test e2e/phase8-reminder.spec.ts

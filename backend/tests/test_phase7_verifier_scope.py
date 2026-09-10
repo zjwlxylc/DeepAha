@@ -104,7 +104,7 @@ def test_ci_keeps_inherited_jobs_and_adds_scoped_phase7_job() -> None:
     ):
         assert f"  {inherited}" in ci
     assert "codex/phase-7-feedback-review-validation" in ci
-    job = ci[ci.index("  phase7-feedback-review:") :]
+    job = ci.split("  phase7-feedback-review:", 1)[1].split("\n  phase8-deadline-reminder:", 1)[0]
     for required in (
         '"55437:5432"',
         '"55005:5000"',
@@ -115,11 +115,10 @@ def test_ci_keeps_inherited_jobs_and_adds_scoped_phase7_job() -> None:
         "test_phase7_vertical_slice.py",
         "test_phase7_transaction_rollback.py",
         "alembic downgrade 20260822_0006",
-        "pnpm lint",
-        "pnpm typecheck",
-        "pnpm test",
-        "pnpm build",
     ):
         assert required in job
+    web_job = ci.split("  web-quality:", 1)[1].split("\n  integration:", 1)[0]
+    for command in ("pnpm lint", "pnpm typecheck", "pnpm test", "pnpm build"):
+        assert f"- run: {command}\n" in web_job
     for forbidden in (*PRIOR_PORTS, *PRIOR_PROJECTS, "live_source"):
         assert forbidden not in job.lower()

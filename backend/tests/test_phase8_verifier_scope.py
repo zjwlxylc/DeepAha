@@ -148,15 +148,17 @@ def test_ci_keeps_inherited_jobs_and_adds_scoped_phase8_job() -> None:
         "test_phase8_worker_recovery.py",
         "tests.notifications.seed_phase8_browser",
         "PYTHONPATH: src",
+        "needs: web-quality",
+        "actions/download-artifact@",
+        "Restore the tested production build",
         "alembic downgrade 20260822_0007",
-        "pnpm lint",
-        "pnpm typecheck",
-        "pnpm test",
-        "pnpm build",
         "pnpm exec playwright install --with-deps chromium",
         "pnpm exec playwright test e2e/phase8-reminder.spec.ts",
     ):
         assert required in job
+    web_job = ci.split("  web-quality:", 1)[1].split("\n  integration:", 1)[0]
+    for command in ("pnpm lint", "pnpm typecheck", "pnpm test", "pnpm build"):
+        assert f"- run: {command}\n" in web_job
     for forbidden in (*PRIOR_PORTS, *PRIOR_PROJECTS, "live_source"):
         assert forbidden not in job.lower()
 

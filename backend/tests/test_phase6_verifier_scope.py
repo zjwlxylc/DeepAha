@@ -76,7 +76,7 @@ def test_ci_keeps_inherited_jobs_and_adds_scoped_phase6_job() -> None:
     ):
         assert f"  {inherited}" in ci
     assert "codex/phase-6-profile-match-personal-action" in ci
-    job = ci[ci.index("  phase6-profile-action:") :]
+    job = ci.split("  phase6-profile-action:", 1)[1].split("\n  phase7-feedback-review:", 1)[0]
     for required in (
         '"55436:5432"',
         '"55004:5000"',
@@ -85,9 +85,10 @@ def test_ci_keeps_inherited_jobs_and_adds_scoped_phase6_job() -> None:
         "test_phase6_vertical_slice.py",
         "test_phase6_user_isolation.py",
         "alembic downgrade 20260822_0005",
-        "pnpm test",
-        "pnpm build",
     ):
         assert required in job
+    web_job = ci.split("  web-quality:", 1)[1].split("\n  integration:", 1)[0]
+    for command in ("pnpm lint", "pnpm typecheck", "pnpm test", "pnpm build"):
+        assert f"- run: {command}\n" in web_job
     for forbidden in (*PRIOR_PORTS, "live_source"):
         assert forbidden not in job.lower()
