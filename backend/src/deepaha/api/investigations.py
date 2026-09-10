@@ -31,6 +31,7 @@ from deepaha.investigations.contracts import (
     RegisterInvestigationPositions,
     ReviewInvestigation,
 )
+from deepaha.investigations.cross_level_review import CrossLevelReview
 from deepaha.investigations.group_applicability_contracts import (
     GroupApplicabilityContext,
     GroupApplicabilityView,
@@ -714,6 +715,32 @@ def read_group_inheritance_preview(
             "snapshot"
         ]["base_v2"]["plan_id"] != str(plan_id):
             raise InvestigationError("GROUP_INHERITANCE_IDENTITY_CONFLICT")
+        return result
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get(
+    "/{task_id}/unit-plans/{plan_id}/cross-level-preview",
+    response_model=CrossLevelReview,
+)
+def read_cross_level_preview(
+    task_id: UUID,
+    plan_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.cross_level_preview import preview_cross_level
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        result = preview_cross_level(store, task_id, plan_id, principal)
+        group = result["dependencies"]["group"]
+        if group["dependencies"]["group_source"]["source"]["task_id"] != str(task_id) or group[
+            "snapshot"
+        ]["base_v2"]["plan_id"] != str(plan_id):
+            raise InvestigationError("CROSS_LEVEL_IDENTITY_CONFLICT")
         return result
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None

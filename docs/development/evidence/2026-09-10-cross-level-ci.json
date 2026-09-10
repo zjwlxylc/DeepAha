@@ -1,0 +1,58 @@
+{
+  "repository": "zjwlxylc/DeepAha",
+  "pr": 38,
+  "ci_run_id": 34480414206,
+  "ci_run_number": 131,
+  "candidate_sha": "f02cca40d9f4d5aa2e4fc2cbbc62905a7af3b56b",
+  "merge_sha": "9638af9d6026cbd855de3bb9e1dfa70089d965b4",
+  "candidate_tree": "11be05351e8eb6e9e226adf1c149fd97c05679f6",
+  "merge_tree": "11be05351e8eb6e9e226adf1c149fd97c05679f6",
+  "jobs": [
+    {
+      "name": "phase4-eligibility",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "web-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase6-profile-action",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase8-deadline-reminder",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "backend-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase7-feedback-review",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase5-public-trust",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase3-resolution",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "next": "Private read-only API and desktop review page using the existing cross-level contract; no new adjudication or qualification execution."
+}
