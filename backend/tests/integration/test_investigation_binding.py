@@ -10,8 +10,10 @@ from sqlalchemy.exc import DBAPIError
 
 from deepaha.acquisition.models import AcquisitionEvaluation, AcquisitionRun
 from deepaha.documents.models import Document, EvidenceRef
+from deepaha.investigations.bindings import binding_targets
 from deepaha.investigations.contracts import BindInvestigation, InvestigationError
 from deepaha.investigations.delivery import ValidatedDelivery
+from deepaha.investigations.models import InvestigationBinding
 from deepaha.opportunities.models import Opportunity, OpportunityVersion
 from deepaha.p9b.identity import OpportunityUnitService, UnitSeed
 from deepaha.p9b.models import SourceBundleMember, SourceBundleRevision, VerifiedFact
@@ -134,6 +136,45 @@ def test_binding_freezes_real_wma_lineage_without_acquisition_or_fact_rows(
         h.store.bind(
             task_id, _command(delivery, identity, reason="Changed"), h.principal, "binding-one"
         )
+
+
+def test_group_is_not_a_position_target_or_accepted_position_binding(harness: StoreHarness) -> None:
+    h = harness
+    task_id, delivery, identity = _prepared(h)
+    first = h.store.bind(task_id, _command(delivery, identity), h.principal, "first")[
+        "entity_binding"
+    ]
+    with h.factory.begin() as session:
+        group = OpportunityUnitService(session).create_unit(
+            opportunity_id=identity,
+            opportunity_version=1,
+            source_bundle_revision_id=UUID(first["source_bundle_revision_id"]),
+            seed=UnitSeed("group:01", "GROUP", "Group", "b" * 64),
+            effective_from=NOW,
+        )
+        group_id, version_id = group.opportunity_unit_id, group.current_version_id
+    target = next(row for row in binding_targets(h.store) if row["opportunity_id"] == str(identity))
+    assert target["positions"] == []
+    with pytest.raises(InvestigationError, match="BINDING_POSITION_VERSION_CONFLICT"):
+        h.store.bind(
+            task_id,
+            _command(
+                delivery,
+                identity,
+                positions=[
+                    {
+                        "entity_id": "position",
+                        "opportunity_unit_id": str(group_id),
+                        "opportunity_unit_version_id": str(version_id),
+                    }
+                ],
+                previous_binding_id=first["binding_id"],
+            ),
+            h.principal,
+            "group-as-position",
+        )
+    with h.factory() as session:
+        assert _count(session, InvestigationBinding) == 1
 
 
 def test_binding_requires_intake_approval_and_exact_delivery(harness: StoreHarness) -> None:

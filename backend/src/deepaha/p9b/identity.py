@@ -226,6 +226,8 @@ class OpportunityUnitService:
             raise UnitConcurrencyConflict("OpportunityUnit current pointer changed")
         if len(units) < 2:
             raise UnitIdentityError("split requires at least two target units")
+        if any(seed.unit_kind == "GROUP" for seed in units):
+            raise UnitIdentityError("GROUP cannot participate in legacy unit lineage")
         if not reason_code.strip() or not actor_identity.strip():
             raise UnitIdentityError("split requires reason and accountable actor")
         self._require_evidence(evidence_ref_ids, source_bundle_revision_id)
@@ -300,6 +302,8 @@ class OpportunityUnitService:
             raise UnitIdentityError("merge requires reason and accountable actor")
         self._require_evidence(evidence_ref_ids, source_bundle_revision_id)
         sources = [self._require_unit(unit_id) for unit_id in opportunity_unit_ids]
+        if target.unit_kind == "GROUP" or any(unit.unit_kind == "GROUP" for unit in sources):
+            raise UnitIdentityError("GROUP cannot participate in legacy unit lineage")
         opportunity_ids = {unit.opportunity_id for unit in sources}
         opportunity_versions = {unit.opportunity_version for unit in sources}
         if (
@@ -420,6 +424,8 @@ class OpportunityUnitService:
         self._require_evidence(evidence_ref_ids, source_bundle_revision_id)
         unit = self._require_unit(opportunity_unit_id)
         normalized = normalize_unit_key(new_key)
+        if unit.unit_kind == "GROUP":
+            raise UnitIdentityError("GROUP cannot participate in legacy unit lineage")
         collision = self._session.scalar(
             select(OpportunityUnit.opportunity_unit_id).where(
                 OpportunityUnit.opportunity_id == unit.opportunity_id,
@@ -768,6 +774,7 @@ class OpportunityUnitService:
             "PROGRAM_TIER",
             "REGION_VARIANT",
             "DEFAULT_SINGLETON",
+            "GROUP",
         }:
             raise UnitIdentityError("unsupported OpportunityUnit kind")
         if not seed.canonical_label.strip():

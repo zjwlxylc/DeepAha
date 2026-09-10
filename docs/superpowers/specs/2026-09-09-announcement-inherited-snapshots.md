@@ -1,6 +1,6 @@
 # 公告继承条件的受信派生快照
 
-状态 IMPLEMENTED，承接 PR #22；本地验证见 `docs/development/2026-09-09-announcement-inherited-snapshots.md`，候选 CI 与合并待完成。只处理既有公告到精确岗位的适用记录，不扩单位组事实、完整范围签署或资格放行。
+状态 IMPLEMENTED，承接 PR #22；PR #23 已合并，候选 CI #101 九项全部通过且合并同树。验证见 `docs/development/2026-09-09-announcement-inherited-snapshots.md`。只处理既有公告到精确岗位的适用记录，不扩单位组事实、完整范围签署或资格放行。
 
 现有 unit-qualification/2.0.0 保持原义和原字节回放。新契约以已持久化 v2 plan_id 为 base_plan_id，并保留完整 base 快照及其摘要。它是当前来源和适用结果的派生审阅快照，不能提交给 v2 编译器。父级规则及 fact ID 保持公告身份，不伪造或复制成岗位事实；实际新版资格消费留给范围与例外之后的回放批。
 

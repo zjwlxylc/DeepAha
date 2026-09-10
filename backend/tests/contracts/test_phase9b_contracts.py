@@ -298,6 +298,12 @@ def test_v08_renderer_matches_checked_in_json_schemas() -> None:
         Draft202012Validator.check_schema(json.loads(content))
 
 
+def test_v08_unit_contract_does_not_accept_internal_group_identity() -> None:
+    example = json.loads(EXAMPLE_PATH.read_text("utf-8"))["opportunity_unit"]
+    with pytest.raises(ValidationError, match="unit_kind"):
+        OpportunityUnitSchemaV08.model_validate({**example, "unit_kind": "GROUP"})
+
+
 def test_v08_example_uses_composite_opportunity_version_and_valid_parse_identity() -> None:
     example = json.loads(EXAMPLE_PATH.read_text("utf-8"))
 
