@@ -16,4 +16,4 @@
 
 这些都是合成工程证据，fixture 审核身份只验证实际权限路径，不代表真人批准。冻结 WMA 样本继续为 94 PASS / 0 FAIL / 30 二进制 Word UNVERIFIED，Delivery UNVERIFIED。没有重新调用 WMA、改变提示词、扩大 Reader 范围或修改任何原始事实及证据。
 
-实现状态 IMPLEMENTED：本地必要验证已完成，候选 CI 与合并待完成。下一批按[既定顺序](../superpowers/plans/2026-09-08-unit-scope-integration-order.md)将适用性结果及父级来源绑定接入新版快照，并继续保留整体不确定。
+实现状态 IMPLEMENTED：PR #22 已合并。最终候选 `a4e11981f652e9a618cd1bc6938851909abd5f7e` 的 CI #99 九项全部通过，合并提交 `0d3260be7ffcb91ace4bfd022b4d94eb3c5ae96f` 与候选同树，主线 CI #100 成功；远程证据见 `evidence/2026-09-09-announcement-rule-applicability-ci.json`。下一批按[既定顺序](../superpowers/plans/2026-09-08-unit-scope-integration-order.md)将适用性结果及父级来源绑定接入新版快照，并继续保留整体不确定。
