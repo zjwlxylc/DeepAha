@@ -1,0 +1,60 @@
+{
+  "pr": 32,
+  "candidate_sha": "ba3a1b4a0b86dec02de3a607a8777f60f1678302",
+  "run_id": 34460518775,
+  "run_number": 119,
+  "jobs": [
+    {
+      "name": "phase3-resolution",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "backend-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase4-eligibility",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase6-profile-action",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase7-feedback-review",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "web-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase5-public-trust",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase8-deadline-reminder",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "merge": {
+    "sha": "2fc37ee3d8fab08a93e9a730a933ea7f80cb68af",
+    "merged": true,
+    "message": "Pull Request successfully merged"
+  },
+  "verified_candidate_tree": "4e25185cd60a750cbae1ad716d5c5578dadb48ff",
+  "verified_merge_tree": "4e25185cd60a750cbae1ad716d5c5578dadb48ff"
+}

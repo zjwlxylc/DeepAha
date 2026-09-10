@@ -1,0 +1,45 @@
+{
+  "scope": "GROUP_APPLICABILITY_CONTEXT_ONLY",
+  "backend_integration": {
+    "skipped": 0,
+    "passed": 15,
+    "failed": 0
+  },
+  "api": {
+    "passed": 8
+  },
+  "vitest": {
+    "passed": 26
+  },
+  "playwright": {
+    "unit_snapshot_regression_passed": 2,
+    "business_api_posts": 0,
+    "new_context_passed": 6
+  },
+  "ruff": "PASS",
+  "mypy": "PASS",
+  "eslint": "PASS",
+  "production_build": "PASS",
+  "independent_review": "P2 findings fixed; no remaining P1/P2",
+  "real_delivery": "UNVERIFIED",
+  "source_sha256": {
+    "backend/src/deepaha/investigations/group_applicability.py": "881ea95142d20b6b4d03271d9de34c2053b17c60f8a09dc59f6f7aadeac0bcf1",
+    "web/components/investigations/group-applicability.tsx": "03d46803ca1b87de606a294a1935117b473ca4a31098e20c09c282db4e1569ba",
+    "backend/tests/api/test_group_applicability.py": "758a0a579db322f3ede52228d5eefdeb2c7f2a821ad3c7d1d8db28cc898b6f68",
+    "web/e2e/investigation-api.mjs": "255896d49c1e817067a605b4e22e9c3fbea5418432109f0a591663a79aa6d0a5",
+    "web/tests/group-applicability-entry.test.tsx": "83295719435b0cb346f3cc9524337932da6cc3686ec379b9525b72c71ea88e03",
+    "backend/src/deepaha/api/investigations.py": "13dfb976b4174624dcf1b4b4cdc7f9f1e92358117a3765c7d956766cbb199abb",
+    "backend/tests/integration/test_group_rule_applicability.py": "aa04af2f0c5bab66a441891b0acf5623407202a95bf42663623dd74f34fc9b08",
+    "web/tests/group-applicability-fixture.json": "5ecff2c23950740a7c42d49506757e79092726277ab415a3f2683b8fd1732d55",
+    "web/e2e/group-applicability-api.mjs": "3b3089b0eea63f374cb8e2dfebba2ecab9e5d138f16eb963c599e47bec3167c5",
+    "web/playwright.investigations.config.ts": "c319ebd8f070fc697a0b2c58765c070ba9814bf4d4e0ecd074477ecf08892392",
+    "web/app/review/investigations/[taskId]/unit-plans/[planId]/group-applicability/[sourcePreparationId]/[candidateId]/page.tsx": "84914d168e4e9285734692b17276c1985863c0d6e06c93e73054e97af3612f09",
+    "web/e2e/group-applicability.spec.ts": "570586c25c5e62362180cf81a28874be9fa3332e261e1bd4069031c9278c8ac1",
+    "web/app/review/investigations/[taskId]/unit-plans/[planId]/page.tsx": "20ef85c4275268d103bce4dce6fce5c151c74527ee4d67f6a7bd0464a79e81e3",
+    "web/app/review/investigations/group-applicability-actions.ts": "f8d2720693147d0b2f298d397329f89802c69eb807a484e82543947069b9a06b",
+    "web/tests/group-applicability-actions.test.ts": "7440d9ed77ff6049a67558191bda84de40e5c99633202c94340498fafe92ef3e",
+    "web/lib/group-applicability.ts": "9ee0a2901af97272227df62ed58e72b767f691084b20979e1f8ac2d4c57ee7f1",
+    "web/tests/group-applicability.test.tsx": "4d45f19eb9326706d1958a707546f114565612e240cd41c7d3c716e3deacdc0a",
+    "backend/src/deepaha/investigations/group_applicability_contracts.py": "b47c0f865af060c232fcaaec3f6975476b1371aacd88eb5af46ac224b0351329"
+  }
+}

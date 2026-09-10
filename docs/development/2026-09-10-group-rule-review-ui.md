@@ -1,6 +1,6 @@
 # 单位组规则独立审核页面
 
-状态 IMPLEMENTED，本地定向验证通过；候选 CI 待运行。分支 `codex/group-rule-review-ui`，基于 PR #31 同树合并的 `d5f4f77617330dfb247ffb8f6efa895df650d70f`。本批为管理页面接入，不代表真实人工审核或发布资格已经通过。
+状态 IMPLEMENTED，本地定向验证通过；PR #32 候选 `ba3a1b4a0b86dec02de3a607a8777f60f1678302` 的 CI #119 全部 9 个作业通过，已合并为 `2fc37ee3d8fab08a93e9a730a933ea7f80cb68af`，候选与合并代码树一致。证据见 `evidence/2026-09-10-group-rule-review-ui-ci.json`。本批为管理页面接入，不代表真实人工审核或发布资格已经通过。
 
 只读预览新增“进入独立规则审核”链接。准备页地址 `/review/investigations/{taskId}/group-facts/{prepId}/rules/review`，明确保存候选后进入 `/review/investigations/{taskId}/group-rules/{preparationId}`。两条路由均动态读取，保留当前完整 GROUP 字段分母和排除项；未知、拒绝、未处理条件没有批准表单。
 
