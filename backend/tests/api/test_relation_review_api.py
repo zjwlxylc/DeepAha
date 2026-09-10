@@ -16,6 +16,7 @@ from tests.api.test_investigations import make_client
         ("post", "relation-proposals"),
         ("post", "relation-decisions"),
         ("get", f"relation-proposals/{uuid7()}"),
+        ("get", f"unit-plans/{uuid7()}/relation-proposals"),
     ],
 )
 @pytest.mark.parametrize("enabled", [False, True])
@@ -39,6 +40,7 @@ def test_relation_routes_respect_private_gate(
         ("post", "relation-proposals"),
         ("post", "relation-decisions"),
         ("get", f"relation-proposals/{uuid7()}"),
+        ("get", f"unit-plans/{uuid7()}/relation-proposals"),
     ],
 )
 def test_relation_routes_require_authentication(tmp_path: Path, method: str, suffix: str) -> None:

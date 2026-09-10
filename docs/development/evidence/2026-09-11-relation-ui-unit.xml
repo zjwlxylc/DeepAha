@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="7" failures="0" errors="0" time="0.1376857">
+    <testsuite name="tests/relation-review-actions.test.ts" timestamp="2026-09-10T16:14:52.600Z" hostname="DESKTOP-E631IGM" tests="4" failures="0" errors="0" skipped="0" time="0.0053144">
+        <testcase classname="tests/relation-review-actions.test.ts" name="keeps the plan index bound to the requested task and plan" time="0.0016711">
+        </testcase>
+        <testcase classname="tests/relation-review-actions.test.ts" name="accepts real saved and approved API exports without rehashing frozen JSON" time="0.0013342">
+        </testcase>
+        <testcase classname="tests/relation-review-actions.test.ts" name="binds a decision receipt to the submitted request and stable proposal hash" time="0.0009056">
+        </testcase>
+        <testcase classname="tests/relation-review-actions.test.ts" name="rejects the wrong plan before any decision POST" time="0.0005068">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/relation-review.test.tsx" timestamp="2026-09-10T16:14:52.601Z" hostname="DESKTOP-E631IGM" tests="3" failures="0" errors="0" skipped="0" time="0.1323713">
+        <testcase classname="tests/relation-review.test.tsx" name="hides old evidence on failed writes and retries the exact request and nonce" time="0.1121354">
+        </testcase>
+        <testcase classname="tests/relation-review.test.tsx" name="keeps stale history visible but removes decision controls" time="0.0074587">
+        </testcase>
+        <testcase classname="tests/relation-review.test.tsx" name="clears old content when current read fails" time="0.0117442">
+        </testcase>
+    </testsuite>
+</testsuites>

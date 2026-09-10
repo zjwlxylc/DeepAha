@@ -93,3 +93,17 @@ def test_private_relation_roundtrip(
         for response in (created, first, second, retry, self_review, wrong_task, missing):
             assert response.headers["cache-control"] == "private, no-store"
         assert wrong_task.status_code == missing.status_code == 404
+        (tmp_path / "relation-review-fixture.json").write_text(
+            json.dumps(
+                {
+                    "task": str(task),
+                    "plan": str(proposal.target_plan_id),
+                    "saved": saved,
+                    "approved": first.json(),
+                    "rejected": second.json(),
+                },
+                ensure_ascii=False,
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
