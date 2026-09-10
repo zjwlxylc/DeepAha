@@ -1,5 +1,6 @@
 // Browser fixtures only. This process never calls an official source or WMA.
 import { createServer } from "node:http";
+import { handleGroupApplicability } from "./group-applicability-api.mjs";
 import { source, task, preparedDocuments, bindingTarget, evidenceCheck, factPreparation, rulePreparation, ruleReadyTask, unitSnapshotFixture } from "../tests/investigations-fixture.ts";
 import { applicabilityViewFixture, applicabilityDecisionFixture, applicabilityIds } from "../tests/rule-applicability-fixture.ts";
 import { announcementSnapshotFixture, announcementRecordFixture } from "../tests/announcement-snapshot-fixture.ts";
@@ -30,6 +31,7 @@ const server = createServer(async (request, response) => {
   const url = new URL(request.url, "http://127.0.0.1:3097"), path = url.pathname;
   response.setHeader("Content-Type", "application/json");
   response.setHeader("Cache-Control", "private, no-store");
+  if (handleGroupApplicability(request, response, url)) return;
   if (path === "/reset") { resetGroups(); resetGroupFacts(); }
   if (path === "/seed-group-rules") { const data = seedGroupRules(); current = data.source.task; response.end(JSON.stringify({ task_id: current.task_id, preparation_id: data.record.preparation_id })); return; }
   if (path === "/seed-group-facts") { const data = seedGroupFacts(url.searchParams.has("legacy")); current = data.source.task; response.end(JSON.stringify({ task_id: current.task_id, group_id: data.source.preview.registration.group_binding_id })); return; }

@@ -1,9 +1,9 @@
 """Read-only exact GROUP-to-POSITION review context; no rule inheritance."""
 
-from typing import Any
+from typing import Any, cast
 from uuid import UUID
 
-from sqlalchemy import tuple_
+from sqlalchemy import select, tuple_
 from sqlalchemy.orm import Session
 
 from deepaha.documents.models import DocumentBlock
@@ -12,11 +12,16 @@ from deepaha.investigations.bindings import _authorize
 from deepaha.investigations.contracts import InvestigationError, digest
 from deepaha.investigations.group_applicability_contracts import GroupApplicabilityContext
 from deepaha.investigations.group_rule_review import _checked, _view
-from deepaha.investigations.models import InvestigationUnitPlan
+from deepaha.investigations.models import (
+    InvestigationGroupBinding,
+    InvestigationGroupFactPreparation,
+    InvestigationGroupRulePreparation,
+    InvestigationUnitPlan,
+)
 from deepaha.investigations.store import InvestigationStore
 from deepaha.investigations.unit_snapshots import _build, _checked_view
 from deepaha.local_human_test.review import require_human_fact_reviewer
-from deepaha.p9b.models import OpportunityUnit, SourceBundleMember
+from deepaha.p9b.models import OpportunityUnit, SourceBundleMember, VersionedVerifiedFactSet
 from deepaha.review.auth import ReviewerPrincipal
 
 
@@ -159,3 +164,75 @@ def read_group_rule_applicability(
             if len(blocks) > 50
             else None,
         }
+
+
+def list_group_rule_contexts(
+    store: InvestigationStore,
+    task_id: UUID,
+    plan_id: UUID,
+    principal: ReviewerPrincipal,
+) -> list[dict[str, Any]]:
+    """Discover saved approved sources, never infer that missing sources mean no conditions."""
+    require_human_fact_reviewer(principal)
+    with store.factory() as session, session.begin():
+        _authorize(session, principal)
+        task = store._get(session, task_id, lock=True)
+        record = session.get(InvestigationUnitPlan, plan_id)
+        if record is None:
+            raise InvestigationError("UNIT_PLAN_NOT_FOUND")
+        command = _command(session, task_id, record.rule_preparation_id)
+        plan, context = _build(store, session, task_id, command, plan_id)
+        _checked_view(record, plan, context)
+        evidence = cast(dict[str, Any], (task.delivery or {}).get("evidence", {}))
+        entities = cast(list[dict[str, Any]], evidence.get("entities", []))
+        target_entity = next((e for e in entities if e["id"] == command.entity_id), None)
+        if target_entity is None or target_entity["kind"] != "position":
+            raise InvestigationError("GROUP_APPLICABILITY_SOURCE_CONFLICT")
+        preparations = list(
+            session.scalars(
+                select(InvestigationGroupRulePreparation)
+                .join(
+                    InvestigationGroupFactPreparation,
+                    InvestigationGroupFactPreparation.preparation_id
+                    == InvestigationGroupRulePreparation.fact_preparation_id,
+                )
+                .join(
+                    InvestigationGroupBinding,
+                    InvestigationGroupBinding.group_binding_id
+                    == InvestigationGroupFactPreparation.group_binding_id,
+                )
+                .join(
+                    VersionedVerifiedFactSet,
+                    VersionedVerifiedFactSet.verified_fact_set_id
+                    == InvestigationGroupRulePreparation.fact_set_id,
+                )
+                .where(
+                    InvestigationGroupBinding.task_id == task_id,
+                    InvestigationGroupBinding.binding_id == command.binding_id,
+                    InvestigationGroupBinding.source_entity_id == target_entity["parent_id"],
+                    InvestigationGroupFactPreparation.check_id == command.check_id,
+                    VersionedVerifiedFactSet.status == "ACTIVE",
+                )
+                .order_by(InvestigationGroupRulePreparation.preparation_id)
+            )
+        )
+        contexts = []
+        for prep in preparations:
+            review = _view(store, session, _checked(store, session, task_id, prep.preparation_id))
+            source = review["result"]["preview"]["result"]["fact_review"]["result"]["group_source"][
+                "source"
+            ]
+            if not any(m["entity_id"] == command.entity_id for m in source["members"]):
+                continue
+            for row in review["result"]["rows"]:
+                candidate = row["rule_candidate_id"]
+                if (
+                    candidate
+                    and review["decisions"].get(candidate, {}).get("decision") == "APPROVE"
+                ):
+                    contexts.append(
+                        _context(
+                            store, session, task_id, plan_id, prep.preparation_id, UUID(candidate)
+                        )["context"]
+                    )
+        return contexts

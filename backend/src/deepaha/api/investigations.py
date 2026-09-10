@@ -31,6 +31,10 @@ from deepaha.investigations.contracts import (
     RegisterInvestigationPositions,
     ReviewInvestigation,
 )
+from deepaha.investigations.group_applicability_contracts import (
+    GroupApplicabilityContext,
+    GroupApplicabilityView,
+)
 from deepaha.investigations.group_contracts import (
     GroupSourcePreview,
     GroupSourceRecord,
@@ -657,6 +661,49 @@ def read_rule_applicability(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return read(store, task_id, plan_id, source_id, candidate_id, principal, after=after)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get(
+    "/{task_id}/unit-plans/{plan_id}/group-rule-applicability/{source_id}/{candidate_id}",
+    response_model=GroupApplicabilityView,
+)
+def read_group_rule_applicability(
+    task_id: UUID,
+    plan_id: UUID,
+    source_id: UUID,
+    candidate_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+    after: str | None = None,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_applicability import read_group_rule_applicability as read
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return read(store, task_id, plan_id, source_id, candidate_id, principal, after=after)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get(
+    "/{task_id}/unit-plans/{plan_id}/group-rule-contexts",
+    response_model=list[GroupApplicabilityContext],
+)
+def list_group_rule_contexts(
+    task_id: UUID,
+    plan_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> list[dict[str, Any]]:
+    from deepaha.investigations.group_applicability import list_group_rule_contexts as read
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return read(store, task_id, plan_id, principal)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 

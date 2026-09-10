@@ -1,7 +1,9 @@
 """Synthetic exact GROUP-to-POSITION context, not inherited eligibility."""
 
+import json
 from copy import deepcopy
 from datetime import timedelta
+from pathlib import Path
 from typing import Any
 from uuid import UUID, uuid7
 
@@ -16,7 +18,11 @@ from deepaha.investigations.contracts import (
     digest,
 )
 from deepaha.investigations.facts import act_on_facts, prepare_facts
-from deepaha.investigations.group_applicability import read_group_rule_applicability
+from deepaha.investigations.group_applicability import (
+    list_group_rule_contexts,
+    read_group_rule_applicability,
+)
+from deepaha.investigations.group_applicability_contracts import GroupApplicabilityView
 from deepaha.investigations.group_rule_review import decide_group_rule, prepare_group_rule_review
 from deepaha.investigations.models import InvestigationRuleApplicability
 from deepaha.investigations.rule_contracts import MaterializeInvestigationUnitPlan
@@ -40,6 +46,12 @@ def prepared(
     source_id = UUID(group["preparation_id"])
     source_cmd = group_decision(group, decision)
     decide_group_rule(h.store, task, source_id, source_cmd, h.principal, "group-rule")
+    return task, position_plan(h, task, group), source_id, source_cmd.rule_candidate_id
+
+
+def position_plan(
+    h: StoreHarness, task: UUID, group: dict[str, Any], supersedes: str | None = None
+) -> UUID:
     review = group["result"]["preview"]["result"]["fact_review"]
     source = review["result"]["group_source"]["source"]
     base = PrepareInvestigationFacts(
@@ -63,14 +75,16 @@ def prepared(
             }
         ),
         h.principal,
-        "position-fact",
+        "position-fact-" + str(base.binding_id),
     )
     promoted = act_on_facts(
         h.store,
         task,
-        PromoteInvestigationFacts.model_validate(common | {"entity_id": "position"}),
+        PromoteInvestigationFacts.model_validate(
+            common | {"entity_id": "position", "supersedes_id": supersedes}
+        ),
         h.principal,
-        "position-promote",
+        "position-promote-" + str(base.binding_id),
     )
     rules_cmd = MaterializeInvestigationUnitPlan.model_validate(
         base.model_dump()
@@ -85,9 +99,15 @@ def prepared(
     rules_cmd = rules_cmd.model_copy(
         update={"rule_preparation_id": UUID(rules["rule_preparation_id"])}
     )
-    decide_rule(h.store, task, _decision(rules_cmd, rules), h.principal, "position-rule")
+    decide_rule(
+        h.store,
+        task,
+        _decision(rules_cmd, rules),
+        h.principal,
+        "position-rule-" + str(base.binding_id),
+    )
     plan = materialize_unit_plan(h.store, task, rules_cmd, h.principal)
-    return task, UUID(plan["plan_id"]), source_id, source_cmd.rule_candidate_id
+    return UUID(plan["plan_id"])
 
 
 def test_exact_group_member_context_is_stable_read_only_and_preserves_denominator(
@@ -108,6 +128,7 @@ def test_exact_group_member_context_is_stable_read_only_and_preserves_denominato
     event.listen(engine, "before_cursor_execute", capture)
     try:
         result = read_group_rule_applicability(h.store, task, plan, source, candidate, h.principal)
+        assert list_group_rule_contexts(h.store, task, plan, h.principal) == [result["context"]]
         assert (
             read_group_rule_applicability(h.store, task, plan, source, candidate, h.principal)
             == result
@@ -133,6 +154,7 @@ def test_source_requires_actual_group_rule_approval(
 ) -> None:
     h = harness
     args = prepared(h, monkeypatch, decision=decision)
+    assert list_group_rule_contexts(h.store, args[0], args[1], h.principal) == []
     with pytest.raises(InvestigationError, match="GROUP_APPLICABILITY_SOURCE_NOT_APPROVED"):
         read_group_rule_applicability(h.store, *args, h.principal)
 
@@ -217,11 +239,12 @@ def test_policy_changed_during_evidence_read_cannot_return_old_context(
     assert changed
 
 
-@pytest.mark.parametrize("nonmember", [False, True])
+@pytest.mark.parametrize("nonmember,history", [(False, False), (True, False), (False, True)])
 def test_actual_source_membership_not_shared_opportunity_controls_context(
     harness: StoreHarness,
     monkeypatch: pytest.MonkeyPatch,
     nonmember: bool,
+    history: bool,
 ) -> None:
     from tests.integration import test_group_facts
     from tests.investigations.test_delivery import _sample
@@ -266,10 +289,14 @@ def test_actual_source_membership_not_shared_opportunity_controls_context(
     monkeypatch.setattr(test_group_facts, "_sample", sample)
     args = prepared(harness, monkeypatch)
     if nonmember:
+        assert list_group_rule_contexts(harness.store, args[0], args[1], harness.principal) == []
         with pytest.raises(InvestigationError, match="GROUP_APPLICABILITY_SOURCE_CONFLICT"):
             read_group_rule_applicability(harness.store, *args, harness.principal)
     else:
         result = read_group_rule_applicability(harness.store, *args, harness.principal)
+        assert list_group_rule_contexts(harness.store, args[0], args[1], harness.principal) == [
+            result["context"]
+        ]
         members = result["source_review"]["result"]["preview"]["result"]["fact_review"]["result"][
             "group_source"
         ]["source"]["members"]
@@ -277,3 +304,107 @@ def test_actual_source_membership_not_shared_opportunity_controls_context(
             ("position", "BOUND"),
             ("pending", "UNPROCESSED"),
         ]
+        if history:
+            check_rebound_history(harness, args, result)
+
+
+def check_rebound_history(
+    h: StoreHarness, old: tuple[UUID, UUID, UUID, UUID], result: dict[str, Any]
+) -> None:
+    from deepaha.investigations.contracts import RegisterInvestigationPositions
+    from deepaha.investigations.group_bindings import preview_group_source, register_group_source
+    from deepaha.investigations.group_fact_contracts import PrepareGroupFacts
+    from deepaha.investigations.group_facts import prepare_group_facts
+    from deepaha.investigations.group_rule_review_contracts import PrepareGroupRules
+    from deepaha.investigations.group_rules import preview_group_rules
+    from deepaha.investigations.registration import register_positions
+    from tests.integration.test_group_rule_preview import promote
+
+    task = old[0]
+    original = result["source_review"]["result"]["preview"]["result"]["fact_review"]["result"][
+        "group_source"
+    ]["source"]
+    h.clock.value += timedelta(seconds=1)
+    register_positions(
+        h.store,
+        task,
+        RegisterInvestigationPositions.model_validate(
+            {
+                "delivery_hash": original["delivery_hash"],
+                "previous_binding_id": original["binding_id"],
+                "positions": [{"entity_id": "pending", "unit_key": "P2", "label": "Pending"}],
+                "reason": "Synthetic complete second member",
+            }
+        ),
+        h.principal,
+        "second-member",
+    )
+    preview = preview_group_source(h.store, task, "unit", h.principal)
+    group = register_group_source(h.store, task, "unit", preview["source_hash"], h.principal)
+    facts = prepare_group_facts(
+        h.store,
+        task,
+        UUID(group["group_binding_id"]),
+        PrepareGroupFacts(
+            check_id=result["context"]["check_id"],
+            expected_source_hash=group["source_hash"],
+        ),
+        h.principal,
+    )
+    promote(h, task, facts, "APPROVE")
+    fact_id = UUID(facts["preparation_id"])
+    rule_preview = preview_group_rules(h.store, task, fact_id, h.principal)
+    review = prepare_group_rule_review(
+        h.store,
+        task,
+        fact_id,
+        PrepareGroupRules(expected_preview_hash=rule_preview["result_hash"]),
+        h.principal,
+    )
+    source_id = UUID(review["preparation_id"])
+    cmd = group_decision(review)
+    decide_group_rule(h.store, task, source_id, cmd, h.principal, "new-group-rule")
+    plan_id = position_plan(h, task, review, result["target_plan"]["context"]["fact_set_id"])
+    contexts = list_group_rule_contexts(h.store, task, plan_id, h.principal)
+    assert len(contexts) == 1 and contexts[0]["source_rule_preparation_id"] == str(source_id)
+    assert source_id != old[2]
+    with pytest.raises(InvestigationError):
+        read_group_rule_applicability(h.store, task, plan_id, old[2], old[3], h.principal)
+
+
+def test_private_api_validates_actual_context_and_rejects_rehashed_mismatch(
+    harness: StoreHarness,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    from pydantic import ValidationError
+
+    from tests.api.test_investigations import make_client
+
+    args = prepared(harness, monkeypatch)
+    result = read_group_rule_applicability(harness.store, *args, harness.principal)
+    GroupApplicabilityView.model_validate(result)
+    (tmp_path / "group-applicability.json").write_text(
+        json.dumps(result, ensure_ascii=False), encoding="utf-8"
+    )
+    client, _ = make_client(tmp_path)
+    monkeypatch.setattr(
+        "deepaha.investigations.group_applicability.read_group_rule_applicability",
+        lambda *a, **kw: result,
+    )
+    task, plan, source, candidate = args
+    with client:
+        response = client.get(
+            f"/api/v1/local-human-test/investigations/{task}/unit-plans/{plan}/group-rule-applicability/{source}/{candidate}"
+        )
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "private, no-store"
+    assert GroupApplicabilityView.model_validate(
+        response.json()
+    ) == GroupApplicabilityView.model_validate(result)
+    for field in ["target_plan_id", "source_rule_candidate_id", "source_rule_approval_id"]:
+        changed = deepcopy(result)
+        changed["context"][field] = str(uuid7())
+        changed["context_hash"] = digest(changed["context"])
+        with pytest.raises(ValidationError):
+            GroupApplicabilityView.model_validate(changed)
