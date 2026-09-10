@@ -4,7 +4,7 @@ import { source, task, preparedDocuments, bindingTarget, evidenceCheck, factPrep
 import { applicabilityViewFixture, applicabilityDecisionFixture, applicabilityIds } from "../tests/rule-applicability-fixture.ts";
 import { announcementSnapshotFixture, announcementRecordFixture } from "../tests/announcement-snapshot-fixture.ts";
 import { handleGroup, resetGroups, seedGroup } from "./group-source-api.mjs";
-import { handleGroupFacts, resetGroupFacts, seedGroupFacts } from "./group-fact-api.mjs";
+import { handleGroupFacts, resetGroupFacts, seedGroupFacts, seedGroupRules } from "./group-fact-api.mjs";
 
 let current = structuredClone(task);
 let dropNextReceipt = false;
@@ -31,6 +31,7 @@ const server = createServer(async (request, response) => {
   response.setHeader("Content-Type", "application/json");
   response.setHeader("Cache-Control", "private, no-store");
   if (path === "/reset") { resetGroups(); resetGroupFacts(); }
+  if (path === "/seed-group-rules") { const data = seedGroupRules(); current = data.source.task; response.end(JSON.stringify({ task_id: current.task_id, preparation_id: data.record.preparation_id })); return; }
   if (path === "/seed-group-facts") { const data = seedGroupFacts(url.searchParams.has("legacy")); current = data.source.task; response.end(JSON.stringify({ task_id: current.task_id, group_id: data.source.preview.registration.group_binding_id })); return; }
   if (await handleGroupFacts(request, response, url)) return;
   if (path === "/seed-group-source") { current = seedGroup(); response.end(JSON.stringify({ task_id: current.task_id, entity_id: "unit-1" })); return; }

@@ -1,0 +1,61 @@
+{
+  "date": "2026-09-10",
+  "base_sha": "78a1f9d5e5b566974d48aca75be8cbbfb24ba732",
+  "branch": "codex/group-rule-preview-ui",
+  "implementation_status": "IMPLEMENTED",
+  "scope": "READ_ONLY_GROUP_RULE_PREVIEW_UI",
+  "unit_tests": {
+    "passed": 33,
+    "new_actions": 17,
+    "new_component_and_page": 7,
+    "existing_group_fact_component_and_page": 9
+  },
+  "browser_tests": {
+    "passed": 20,
+    "new_preview": 8,
+    "existing_group_fact": 12,
+    "duration_seconds": 30.2,
+    "viewports": [
+      "1280x900",
+      "390x844"
+    ],
+    "command": "pnpm exec playwright test --config playwright.investigations.config.ts group-rules.spec.ts group-facts.spec.ts --output output/playwright/group-rule-preview-ui",
+    "preview_backend_posts": 0,
+    "preview_mutations": 0
+  },
+  "checks": {
+    "eslint": "PASS (12 files)",
+    "typecheck": "PASS",
+    "production_build": "PASS (new route)",
+    "whole_site_unit_tests": "NOT_REPEATED",
+    "screenshots": "2 inspected; no horizontal overflow or obstruction"
+  },
+  "review": {
+    "independent_read_only": true,
+    "remaining_p1_p2": 0
+  },
+  "real_case": {
+    "pass": 94,
+    "fail": 0,
+    "word_unverified": 30,
+    "delivery": "UNVERIFIED",
+    "overall_eligibility": "UNCERTAIN"
+  },
+  "wma_calls": 0,
+  "official_downloads": 0,
+  "synthetic_accounts_are_actual_human_approval": false,
+  "tested_working_file_sha256": {
+    "web/app/review/investigations/group-rule-actions.ts": "c8b8da84f4ac2a90a062b0a331b31bd0abfb84d9740218d63b1948a41eee3166",
+    "web/app/review/investigations/[taskId]/group-facts/[prepId]/rules/page.tsx": "d07c8c0c625d4e4c468feaa39ada7d3d9cf35f0efa926678ae32c9eff482f0d6",
+    "web/components/investigations/group-rule-preview.tsx": "70247dccc00e9fbbffa01bf03f8ea4bb1b2d55da6ecce56dadba7ebc42cf6f16",
+    "web/components/investigations/group-fact-review.tsx": "77f46c9daa2f3fadaa5cdef558acc4c04233d80797c3a30e45ab6f9658ccb666",
+    "web/lib/group-rules.ts": "2b0a1adefbc423dc6c8209df0c9bfab1f8acec891d5c2eb9e59e85651eeee112",
+    "web/tests/group-rule-actions.test.ts": "489477b5bbac17d7a1bd4801488951984cb6070925a58c4cd4e89010ec804db9",
+    "web/tests/group-rule-preview.test.tsx": "c69d5b236c99199dcc514c2e522219e206c46ab0218047f8b54e19f802fac1fd",
+    "web/tests/group-rule-fixture.ts": "b0c1ac863377cfa2ad93d708fc4e96ad5c6496d0e74c59b1e36649a255a1209f",
+    "web/e2e/group-rules.spec.ts": "8d60a72566d75807ffbf03fbd3d6d737532ddc23b85c969e1242c1e16e300670",
+    "web/e2e/group-fact-api.mjs": "5aa6bc69003229a9fdc0d0037f099b345ca5097c0669166cbf72dee6967b5c92",
+    "web/e2e/investigation-api.mjs": "cdc683a31b8b6f32a6e842dbfd9686d84da0a07b8df207d7897bf5e498688fe2",
+    "web/playwright.investigations.config.ts": "d693ee9985c98dcae6b1eadb128bb2050b23629a42b73d87773919d8839920bf"
+  }
+}

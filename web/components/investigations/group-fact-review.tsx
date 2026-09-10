@@ -5,6 +5,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { loadGroupFactStartAction, loadGroupFactRecordAction, submitGroupFactAction } from "../../app/review/investigations/group-fact-actions";
 import { groupFactRecordPath, type GroupFactResult, type GroupFactCommand, type GroupFactData } from "../../lib/group-facts";
 import { groupRecordPath } from "../../lib/group-sources";
+import { groupRulePath } from "../../lib/group-rules";
 import { EvidenceCheckDetail } from "./evidence-check";
 
 const labels = { APPROVE: "批准字段", REJECT: "拒绝候选", UNKNOWN: "保留未知", NEEDS_ADJUDICATION: "需要进一步裁决" };
@@ -46,6 +47,7 @@ export default function GroupFactReview({ taskId, groupId, prepId: initialPrepId
       <p className="investigation-hash">稳定组标识：{source.group_identity.public_id}</p>
       {!record ? <><p>准备会保留全部组字段和未处理项，不会自动批准。</p><button className="button button-primary" disabled={busy} onClick={() => void perform({ kind: "prepare", group_binding_id: source.group_binding_id, check_id: data.source.task.evidence_check!.check_id, expected_source_hash: source.source_hash })}>准备组字段候选</button></> : <>
         <Link prefetch={false} href={groupFactRecordPath(taskId, record.preparation_id)}>打开已保存审核记录</Link>
+        <Link prefetch={false} href={groupRulePath(taskId, record.preparation_id)}>查看组规则预览（只读）</Link>
         <p>组字段 {record.result.rows.length} 项；可审核 {candidates.length} 项；待处理 {record.result.rows.length - candidates.length} 项。其他层级 {record.result.excluded_rows.length} 项保留排除记录。</p>
       </>}
     </section> : null}
