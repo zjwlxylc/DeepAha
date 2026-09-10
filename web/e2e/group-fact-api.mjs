@@ -2,9 +2,12 @@
 import { groupFactFixture, fixtureHash } from "../tests/group-fact-fixture.ts";
 import { groupSourceFixture, groupRecordFixture } from "../tests/group-source-fixture.ts";
 import { ruleReadyTask } from "../tests/investigations-fixture.ts";
+import { groupRuleFixture } from "../tests/group-rule-fixture.ts";
+let rulePreview = null;
 let data = null, mode = "normal", prepared = false, drop = false, posts = 0;
 const receipts = new Map();
-export function resetGroupFacts() { data = null; mode = "normal"; prepared = false; drop = false; posts = 0; receipts.clear(); }
+export function resetGroupFacts() { data = null; rulePreview = null; mode = "normal"; prepared = false; drop = false; posts = 0; receipts.clear(); }
+export function seedGroupRules() { seedGroupFacts(); prepared = true; rulePreview = groupRuleFixture(data); return data; }
 export function seedGroupFacts(legacy = false) {
   resetGroupFacts(); const source = groupSourceFixture(ruleReadyTask()); data = groupFactFixture(source, groupRecordFixture(source));
   if (legacy) {
@@ -27,7 +30,8 @@ export async function handleGroupFacts(request, response, url) {
   if (status) { response.writeHead(status); response.end('{"detail":"synthetic private failure"}'); return true; }
   const root = `/api/v1/local-human-test/investigations/${data.source.task.task_id}`, group = data.source.preview.registration;
   if (request.method === "GET") {
-    if (path === `${root}/group-bindings/${group.group_binding_id}`) response.end(JSON.stringify(group));
+    if (rulePreview && path === `${root}/group-facts/${data.record.preparation_id}/rules/preview`) response.end(JSON.stringify(rulePreview));
+    else if (path === `${root}/group-bindings/${group.group_binding_id}`) response.end(JSON.stringify(group));
     else if (prepared && path === `${root}/group-facts/${data.record.preparation_id}`) response.end(JSON.stringify(data.record));
     else { response.writeHead(404); response.end("{}"); }
     return true;
