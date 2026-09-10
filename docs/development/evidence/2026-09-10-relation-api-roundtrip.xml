@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="25.373" timestamp="2026-09-10T23:48:22.206858+08:00" hostname="DESKTOP-E631IGM"><testcase classname="tests.integration.test_relation_review_api" name="test_private_relation_roundtrip" time="23.400" /></testsuite></testsuites>

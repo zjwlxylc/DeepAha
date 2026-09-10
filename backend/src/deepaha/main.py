@@ -99,6 +99,8 @@ def create_app() -> FastAPI:
         request_id = candidate if REQUEST_ID_PATTERN.fullmatch(candidate) else uuid4().hex
         started = perf_counter()
         response = await call_next(request)
+        if request.url.path.startswith("/api/v1/local-human-test/"):
+            response.headers["Cache-Control"] = "private, no-store"
         duration_ms = round((perf_counter() - started) * 1000, 2)
         response.headers["X-Request-ID"] = request_id
         logger.info(
