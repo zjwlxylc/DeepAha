@@ -24,6 +24,7 @@ export default function GroupRulePreview({ taskId, prepId, initialResult }: { ta
     <button className="button button-secondary" disabled={busy} onClick={() => void reload()}>{busy ? "正在核对…" : "重新读取当前预览"}</button>
     {data ? <>
       <section className="human-test-panel"><h2>{data.target.label}</h2><p>组版本 {data.target.version} · {data.target.public_id}</p>
+        {data.fact_review.fact_set ? <Link href={`/review/investigations/${encodeURIComponent(taskId)}/group-facts/${encodeURIComponent(prepId)}/rules/review`}>进入独立规则审核</Link> : null}
         <p>原组字段 {data.rows.length} 项 · 可预览规则 {data.rows.filter(row => row.proposed_rule_payload).length} 项 · 其他层级 {data.fact_review.result.excluded_rows.length} 项保留排除记录。</p>
         <p>{data.fact_review.fact_set ? `事实集已保存 · 版本 ${data.fact_review.fact_set.version}；规则仍需独立审核。` : "尚未保存正式事实集，当前只展示待处理条件。"}</p>
       </section>

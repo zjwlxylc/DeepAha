@@ -1,0 +1,66 @@
+{
+  "date": "2026-09-10",
+  "base_sha": "d5f4f77617330dfb247ffb8f6efa895df650d70f",
+  "branch": "codex/group-rule-review-ui",
+  "implementation_status": "IMPLEMENTED",
+  "scope": "GROUP_RULE_REVIEW_UI",
+  "candidate_ci": "NOT_YET_RUN",
+  "unit_tests": {
+    "passed": 49,
+    "new_actions": 17,
+    "new_component_and_route": 8,
+    "previous_preview": 24
+  },
+  "browser_tests": {
+    "passed": 32,
+    "new_review": 12,
+    "previous_preview": 8,
+    "previous_group_facts": 12,
+    "duration_seconds": 39.8,
+    "viewports": [
+      "1280x900",
+      "390x844"
+    ],
+    "command": "pnpm exec playwright test --config playwright.investigations.config.ts group-rule-review.spec.ts group-rules.spec.ts group-facts.spec.ts --output output/playwright/group-rule-review-verified",
+    "approval_posts": 2,
+    "approval_mutations": 2,
+    "lost_decision_posts": 3,
+    "lost_decision_mutations": 2,
+    "delayed_saved_route_locked": true
+  },
+  "checks": {
+    "eslint": "PASS (12 files)",
+    "typecheck": "PASS",
+    "production_build": "PASS (new routes; rebuilt after navigation fix)",
+    "whole_site_unit_tests": "NOT_REPEATED"
+  },
+  "review": {
+    "independent_read_only": true,
+    "p2_fixed": "Lock old start page until saved route mounts",
+    "remaining_p1_p2": 0
+  },
+  "real_case": {
+    "pass": 94,
+    "fail": 0,
+    "word_unverified": 30,
+    "delivery": "UNVERIFIED",
+    "overall_eligibility": "UNCERTAIN"
+  },
+  "wma_calls": 0,
+  "official_downloads": 0,
+  "synthetic_accounts_are_actual_human_approval": false,
+  "tested_working_file_sha256": {
+    "web/app/review/investigations/group-rule-review-actions.ts": "a22e885514d699f088bc5fe47a22972b6308af03fa196876e3ef620eb1fa632d",
+    "web/app/review/investigations/[taskId]/group-facts/[prepId]/rules/review/page.tsx": "d7259012cf2482b5365215fbb9018f21c6aeb1b4a234f85faf9911770ed2af9f",
+    "web/app/review/investigations/[taskId]/group-rules/[prepId]/page.tsx": "ddc2ccd8758c6415125edcaef0b748eca6eb3a9ba05c0d8831e9a9e2c734f5a3",
+    "web/components/investigations/group-rule-review.tsx": "66e90b3343f20754ac16914d3e65186fd5a960ee231a0b80453d10bf0321f6ef",
+    "web/components/investigations/group-rule-preview.tsx": "5f7060b5b59305c4fdb7c6a2128fb8757dcae30b0e8f0c98fa4809969b3fb215",
+    "web/lib/group-rule-review.ts": "f834918efbe53eeb7f6ea816f7e89c6030a28d628fba4c4eebeeb3522ab551a3",
+    "web/tests/group-rule-review-actions.test.ts": "04a8e116ccb9d3f7d6dddf75152482b07b7b90dcb070426e1857050655802aea",
+    "web/tests/group-rule-review.test.tsx": "fcfdbf0b8fd90a1e9f2c8270a343ab2f16e51496bd87c269a95fc8a7495876d0",
+    "web/tests/group-rule-review-fixture.ts": "2c2f1a8a4b79d746bebcc9b913c73f3cc2522ab50d53462717db78a698baf993",
+    "web/e2e/group-rule-review.spec.ts": "fb1c1ce4ed48f8e2e5982b4d5507e33f36d3e9916f2f34e87e05fe5525ac45a7",
+    "web/e2e/group-fact-api.mjs": "14df3219130eeab9c8d3a16439970a7f59c5d659217ba639b0980f833f0eaf98",
+    "web/playwright.investigations.config.ts": "a250bff8f5cc4b698c3996a5f8632223fbd42a05ce1f7ca0a9c770e7563c3127"
+  }
+}

@@ -3,10 +3,12 @@ import { groupFactFixture, fixtureHash } from "../tests/group-fact-fixture.ts";
 import { groupSourceFixture, groupRecordFixture } from "../tests/group-source-fixture.ts";
 import { ruleReadyTask } from "../tests/investigations-fixture.ts";
 import { groupRuleFixture } from "../tests/group-rule-fixture.ts";
+import { groupRuleReviewFixture } from "../tests/group-rule-review-fixture.ts";
+let ruleReview = null;
 let rulePreview = null;
 let data = null, mode = "normal", prepared = false, drop = false, posts = 0;
 const receipts = new Map();
-export function resetGroupFacts() { data = null; rulePreview = null; mode = "normal"; prepared = false; drop = false; posts = 0; receipts.clear(); }
+export function resetGroupFacts() { data = null; rulePreview = null; ruleReview = null; mode = "normal"; prepared = false; drop = false; posts = 0; receipts.clear(); }
 export function seedGroupRules() { seedGroupFacts(); prepared = true; rulePreview = groupRuleFixture(data); return data; }
 export function seedGroupFacts(legacy = false) {
   resetGroupFacts(); const source = groupSourceFixture(ruleReadyTask()); data = groupFactFixture(source, groupRecordFixture(source));
@@ -23,14 +25,15 @@ export async function handleGroupFacts(request, response, url) {
   const path = url.pathname;
   if (path === "/group-fact-mode") { mode = url.searchParams.get("kind"); if (mode === "drop") { drop = true; mode = "normal"; } response.end("{}"); return true; }
   if (path === "/group-fact-receipts") { response.end(JSON.stringify({ posts, mutations: receipts.size })); return true; }
-  if (!data || (!path.includes("/group-facts/") && !path.includes("/group-bindings/"))) return false;
+  if (!data || (!path.includes("/group-facts/") && !path.includes("/group-bindings/") && !path.includes("/group-rules/"))) return false;
   if (request.headers.authorization !== "Bearer synthetic-browser-reviewer") { response.writeHead(401); response.end("{}"); return true; }
   if (request.method === "POST") posts++;
   const status = { stale: 409, forbidden: 403, unavailable: 503 }[mode];
   if (status) { response.writeHead(status); response.end('{"detail":"synthetic private failure"}'); return true; }
   const root = `/api/v1/local-human-test/investigations/${data.source.task.task_id}`, group = data.source.preview.registration;
   if (request.method === "GET") {
-    if (rulePreview && path === `${root}/group-facts/${data.record.preparation_id}/rules/preview`) response.end(JSON.stringify(rulePreview));
+    if (ruleReview && path === `${root}/group-rules/${ruleReview.preparation_id}`) response.end(JSON.stringify(ruleReview));
+    else if (rulePreview && path === `${root}/group-facts/${data.record.preparation_id}/rules/preview`) response.end(JSON.stringify(rulePreview));
     else if (path === `${root}/group-bindings/${group.group_binding_id}`) response.end(JSON.stringify(group));
     else if (prepared && path === `${root}/group-facts/${data.record.preparation_id}`) response.end(JSON.stringify(data.record));
     else { response.writeHead(404); response.end("{}"); }
@@ -38,6 +41,23 @@ export async function handleGroupFacts(request, response, url) {
   }
   let raw = ""; for await (const chunk of request) raw += chunk;
   const body = JSON.parse(raw), key = request.headers["idempotency-key"];
+  if (rulePreview && (path === `${root}/group-facts/${data.record.preparation_id}/rules` || path.includes("/group-rules/"))) {
+    if (receipts.has(key)) {
+      if (receipts.get(key) !== raw) { response.writeHead(409); response.end("{}"); return true; }
+    } else if (path === `${root}/group-facts/${data.record.preparation_id}/rules`) {
+      if (body.expected_preview_hash !== rulePreview.result_hash) { response.writeHead(409); response.end("{}"); return true; }
+      ruleReview ??= groupRuleReviewFixture(rulePreview); receipts.set(key, raw);
+    } else if (ruleReview && path === `${root}/group-rules/${ruleReview.preparation_id}/decisions`) {
+      const candidate = ruleReview.result.rows.find(row => row.rule_candidate_id === body.rule_candidate_id);
+      if (!candidate || body.expected_preparation_hash !== ruleReview.result_hash || (ruleReview.decisions[body.rule_candidate_id] && ruleReview.decisions[body.rule_candidate_id].decision !== "NEEDS_ADJUDICATION")
+        || (body.decision === "APPROVE" && (body.evidence.length !== candidate.evidence_ref_ids.length || body.evidence.some(e => !candidate.evidence_ref_ids.includes(e.evidence_ref_id) || !e.authority || !e.relation || !e.effective_at || e.applicability !== "APPLIES_TO_EXACT_TARGET" || !e.reason.trim())))) { response.writeHead(409); response.end("{}"); return true; }
+      const decision = { decision_id: `019d0000-0000-7000-8000-${String(9000 + receipts.size).padStart(12, "0")}`, rule_candidate_id: body.rule_candidate_id, decision: body.decision, reason: body.reason,
+        evidence: body.evidence.map(e => ({ ...e, effective_at: e.effective_at?.replace(".000Z", "Z") ?? null })), reviewer_id: ruleReview.reviewer_id, created_at: ruleReview.created_at };
+      ruleReview.decisions[body.rule_candidate_id] = decision; ruleReview.history.push(decision); receipts.set(key, raw);
+    } else { response.writeHead(404); response.end("{}"); return true; }
+    if (drop) { drop = false; response.destroy(); return true; }
+    response.end(JSON.stringify(ruleReview)); return true;
+  }
   if (receipts.has(key)) {
     if (receipts.get(key) !== raw) { response.writeHead(409); response.end("{}"); return true; }
   } else if (path === `${root}/group-bindings/${group.group_binding_id}/facts`) {
