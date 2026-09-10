@@ -3,6 +3,7 @@ import { createServer } from "node:http";
 import { source, task, preparedDocuments, bindingTarget, evidenceCheck, factPreparation, rulePreparation, ruleReadyTask, unitSnapshotFixture } from "../tests/investigations-fixture.ts";
 import { applicabilityViewFixture, applicabilityDecisionFixture, applicabilityIds } from "../tests/rule-applicability-fixture.ts";
 import { announcementSnapshotFixture, announcementRecordFixture } from "../tests/announcement-snapshot-fixture.ts";
+import { handleGroup, resetGroups, seedGroup } from "./group-source-api.mjs";
 
 let current = structuredClone(task);
 let dropNextReceipt = false;
@@ -28,6 +29,9 @@ const server = createServer(async (request, response) => {
   const url = new URL(request.url, "http://127.0.0.1:3097"), path = url.pathname;
   response.setHeader("Content-Type", "application/json");
   response.setHeader("Cache-Control", "private, no-store");
+  if (path === "/reset") resetGroups();
+  if (path === "/seed-group-source") { current = seedGroup(); response.end(JSON.stringify({ task_id: current.task_id, entity_id: "unit-1" })); return; }
+  if (await handleGroup(request, response, url)) return;
   if (path === "/reset") { current = structuredClone(task); receipts.clear(); posts = 0; dropNextReceipt = false; unitSnapshot = null; staleSnapshot = false; applicability = null; applicabilityMode = null; announcement = null; announcementMode = null; announcementRecords.clear(); response.end("{}"); return; }
   if (path === "/seed-announcement-snapshot") {
     announcement = announcementSnapshotFixture(unitSnapshotFixture()); current = announcement.task; unitSnapshot = announcement.input.snapshot.base_v2;

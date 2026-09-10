@@ -1,0 +1,70 @@
+{
+  "date": "2026-09-10",
+  "scope": "GROUP_SOURCE_ASSOCIATION_ONLY management UI",
+  "base_sha": "ee96b8a2d2b7bc49ca330e532ae9444584c50ffa",
+  "targeted_tests": {
+    "passed": 55,
+    "new_cases": 32,
+    "failed": 0,
+    "files": [
+      "group-source-actions.test.ts",
+      "group-source-review.test.tsx",
+      "group-source-pages.test.tsx",
+      "investigations-page.test.tsx"
+    ]
+  },
+  "browser": {
+    "passed": 12,
+    "failed": 0,
+    "seconds": 14.0,
+    "desktop": 6,
+    "mobile": 6,
+    "command": "corepack pnpm exec playwright test --config playwright.investigations.config.ts group-sources.spec.ts",
+    "synthetic_only": true
+  },
+  "typecheck": "PASS",
+  "targeted_eslint": "PASS",
+  "production_build": "PASS",
+  "build_reason": "New routes and client component require a current browser candidate",
+  "local_full_suite_rerun": false,
+  "screenshots_visually_reviewed": [
+    {
+      "path": "docs/development/evidence/2026-09-10-group-source-ui/desktop-group-stale.png",
+      "sha256": "354251928818c7241a9d57f8bdce0ac2473bffbb449a0eefee868f874ffd3736"
+    },
+    {
+      "path": "docs/development/evidence/2026-09-10-group-source-ui/mobile-group-stale.png",
+      "sha256": "0e1ffd20e643fc8a0f923eeb712ac846072dc71d76097092f2b358bd06b3d0b3"
+    },
+    {
+      "path": "docs/development/evidence/2026-09-10-group-source-ui/desktop-group-preview.png",
+      "sha256": "f15f0821ef90da277211b9db3bac100fe8f1ddfb9bc7763dc2c527c1aa64566e"
+    },
+    {
+      "path": "docs/development/evidence/2026-09-10-group-source-ui/desktop-group-saved.png",
+      "sha256": "2460afcc3daa04d469660b23964bb8a69de58150ce358075c3d7e50a90d1fad4"
+    },
+    {
+      "path": "docs/development/evidence/2026-09-10-group-source-ui/mobile-group-preview.png",
+      "sha256": "1024f810a4dd38122388a84a179ccbd73473ffef4fda70afd70f857b8f0f22a3"
+    },
+    {
+      "path": "docs/development/evidence/2026-09-10-group-source-ui/mobile-group-saved.png",
+      "sha256": "5348ea48d6f1bb2784443b1e3737a8fe04e7749e9c8232bd5131f1f78c594d8f"
+    }
+  ],
+  "frozen_case": {
+    "references": 124,
+    "pass": 94,
+    "fail": 0,
+    "word_unverified": 30,
+    "delivery": "UNVERIFIED",
+    "overall_qualification": "UNCERTAIN",
+    "wma_calls": 0
+  },
+  "independent_review": {
+    "remaining_P1_P2": 0,
+    "method": "Read-only review of actions, pages, components, entry and tests",
+    "human_acceptance": false
+  }
+}

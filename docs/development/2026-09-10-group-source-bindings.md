@@ -1,6 +1,6 @@
 # 单位组来源关联：完整成员与稳定身份
 
-状态 IMPLEMENTED，后端服务、版本化契约、迁移和私有 API 的本地必要验证通过，候选 CI 与集成待完成；管理页面为下一批。承接已合并的 PR #24，不改变现有岗位绑定、字段映射、规则、v2 资格快照或公开入口。
+状态 IMPLEMENTED，PR #25 已合并为 `ee96b8a2d2b7bc49ca330e532ae9444584c50ffa`；候选 CI #105 九项通过，合并与候选同树，主线 CI #106 成功。证据见 `evidence/2026-09-10-group-source-bindings-ci.json`。管理页面在下一批单独验证，见 `2026-09-10-group-source-ui.md`。承接已合并的 PR #24，不改变现有岗位绑定、字段映射、规则、v2 资格快照或公开入口。
 
 `group-identity/1.0.0` 用严格的请求、来源、成员、组身份、预览及回执模型表达 `GROUP_SOURCE_ASSOCIATION_ONLY`。三个私有接口为 `GET /{task}/group-source-input?entity_id=...`、`POST /{task}/group-bindings` 和 `GET /{task}/group-bindings/{id}`，均位于既有调查审核 API 前缀下，返回 `private, no-store`。保存只接受 entity_id 和预览的 expected_source_hash；不接受自选成员、组 UUID 或 complete 开关。
 
