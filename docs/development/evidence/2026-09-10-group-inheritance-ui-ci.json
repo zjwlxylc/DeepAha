@@ -1,0 +1,60 @@
+{
+  "repository": "zjwlxylc/DeepAha",
+  "pr_number": 37,
+  "candidate_sha": "5f4796d2cfb44ee47023791d0cc392eaae9b4110",
+  "merge_sha": "60d891aeed0ea02ec78d7f2a04cb8b0099c4fe46",
+  "candidate_tree": "0c389d2366901142d92897e96ed012fe7535fa60",
+  "merge_tree": "0c389d2366901142d92897e96ed012fe7535fa60",
+  "run_id": 34475958719,
+  "run_number": 129,
+  "jobs": [
+    {
+      "name": "integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase8-deadline-reminder",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase3-resolution",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "backend-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase4-eligibility",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase6-profile-action",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase7-feedback-review",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase5-public-trust",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "web-quality",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "verified_date": "2026-09-10",
+  "visibility": "public",
+  "runner": "ubuntu-latest"
+}
