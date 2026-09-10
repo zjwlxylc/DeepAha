@@ -1,0 +1,58 @@
+{
+  "pr": 35,
+  "candidate_sha": "9c2cbdc2020e692596d47f052bc128bd1f7360ee",
+  "candidate_ci": {
+    "number": 125,
+    "run_id": 34471554269,
+    "jobs": [
+      {
+        "name": "phase3-resolution",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "phase4-eligibility",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "phase5-public-trust",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "phase7-feedback-review",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "phase8-deadline-reminder",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "integration",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "backend-quality",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "phase6-profile-action",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "web-quality",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "merge_sha": "81fd0706eb5b2458aa6deddfe493c68df8552400",
+  "candidate_and_merge_tree": "365d484447ad6bfcd7f0cb2097717f3ec6a60652",
+  "same_tree": true
+}
