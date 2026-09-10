@@ -60,6 +60,8 @@ from deepaha.investigations.group_rule_review_contracts import (
     PrepareGroupRules,
 )
 from deepaha.investigations.models import InvestigationMaterial
+from deepaha.investigations.relation_decisions import DecideRelation
+from deepaha.investigations.relation_proposals import ProposeRelation
 from deepaha.investigations.rule_contracts import (
     DecideInvestigationRule,
     MaterializeInvestigationUnitPlan,
@@ -132,12 +134,14 @@ def problem(error: Exception) -> HTTPException:
             "GROUP_FACT_SOURCE_NOT_FOUND",
             "GROUP_FACT_PREPARATION_NOT_FOUND",
             "GROUP_RULE_PREPARATION_NOT_FOUND",
+            "RELATION_PROPOSAL_NOT_FOUND",
         }
         else 409
     )
     if (
         isinstance(error, (HumanReviewError, ReviewerAuthenticationError))
         or code == "HUMAN_VALIDATION_AUTHORITY_REQUIRED"
+        or code == "RELATION_INDEPENDENT_REVIEW_REQUIRED"
     ):
         status = 403
     return HTTPException(
@@ -149,6 +153,59 @@ def problem(error: Exception) -> HTTPException:
 def list_tasks(store: StoreDep, principal: PrincipalDep, response: Response) -> dict[str, Any]:
     response.headers["Cache-Control"] = "private, no-store"
     return {"tasks": store.list_tasks()}
+
+
+@router.post("/{task_id}/relation-proposals")
+def create_relation_proposal(
+    task_id: UUID,
+    command: ProposeRelation,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.relation_proposals import save_relation_proposal
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return save_relation_proposal(store, task_id, command, principal, key)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/{task_id}/relation-proposals/{proposal_id}")
+def read_relation_proposal(
+    task_id: UUID,
+    proposal_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.relation_proposals import load_relation_proposal
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return load_relation_proposal(store, task_id, proposal_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/relation-decisions")
+def create_relation_decision(
+    task_id: UUID,
+    command: DecideRelation,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.relation_decisions import save_relation_decision
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return save_relation_decision(store, task_id, command, principal, key)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
 
 
 @router.get("/sources")
