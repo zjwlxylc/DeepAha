@@ -1,7 +1,9 @@
 // Real synthetic PostgreSQL exports; browser simulation never calls WMA.
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
+import { isDeepStrictEqual } from "node:util";
 const f = JSON.parse(readFileSync(new URL("../tests/relation-review-fixture.json", import.meta.url), "utf8"));
+const n = JSON.parse(readFileSync(new URL("../tests/relation-proposal-fixture.json", import.meta.url), "utf8"));
 let current = f.saved;
 createServer(async (req, res) => {
   const url = new URL(req.url, "http://127.0.0.1:3099");
@@ -9,6 +11,16 @@ createServer(async (req, res) => {
   res.setHeader("Cache-Control", "private, no-store");
   if (url.pathname === "/reset") { current = f.saved; res.end("{}"); return; }
   if (url.pathname === "/stale") { current = structuredClone(current); current.review.status = "STALE"; res.end("{}"); return; }
+  if (url.pathname.includes(n.task)) {
+    if (url.pathname.endsWith("/cross-level-preview")) { res.end(JSON.stringify(n.context.review)); return; }
+    if (url.pathname.endsWith("/relation-proposal-context")) { res.end(JSON.stringify(n.context)); return; }
+    if (url.pathname.endsWith("/relation-proposals") && req.method === "POST") {
+      let raw = ""; for await (const part of req) raw += part;
+      if (!req.headers["idempotency-key"] || !isDeepStrictEqual(JSON.parse(raw), n.command)) { res.writeHead(409); res.end("{}"); return; }
+      res.end(JSON.stringify(n.saved)); return;
+    }
+    if (url.pathname.endsWith(`/relation-proposals/${n.saved.proposal_id}`)) { res.end(JSON.stringify(n.saved)); return; }
+  }
   if (url.pathname.endsWith("/relation-decisions") && req.method === "POST") {
     let raw = ""; for await (const part of req) raw += part;
     const command = JSON.parse(raw);

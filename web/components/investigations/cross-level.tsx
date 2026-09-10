@@ -29,6 +29,7 @@ export default function CrossLevel({ taskId, planId, initialResult }: { taskId: 
     <button className="button button-secondary" disabled={busy} onClick={() => void reload()}>{busy ? "正在核对…" : "重新读取当前预览"}</button>
     {result && !result.ok ? <section className="human-test-panel" role="alert"><h2>当前预览不可用</h2><p>{result.error}</p></section> : null}
     {value ? <>
+      <Link className="button" prefetch={false} href={`${back}/relations/new`}>从当前条件新建关系提案</Link>
       <section className="human-test-panel"><h2>完整条件范围</h2>
         <p>全部条件 {value.snapshot.conditions.length} 项 · 岗位层 {value.snapshot.conditions.filter(r => r.disposition === "LOCAL").length} · 继承范围 {value.snapshot.conditions.filter(r => r.disposition === "INHERITED").length} · 明确不适用 {value.snapshot.conditions.filter(r => r.disposition === "EXCLUDED").length} · 待处理 {value.snapshot.conditions.filter(r => r.disposition === "UNRESOLVED").length}</p>
         <p>岗位层表示条件来源，不表示已经符合。排除一条条件不会排除同字段的其他条件。</p>

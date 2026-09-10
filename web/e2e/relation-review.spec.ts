@@ -1,5 +1,30 @@
 import { expect, test } from "@playwright/test";
 import f from "../tests/relation-review-fixture.json";
+import n from "../tests/relation-proposal-fixture.json";
+test("desktop creates from full conditions with literal evidence and refreshes stable detail", async ({ page, context }) => {
+  await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true }]);
+  const base = `/review/investigations/${n.task}/unit-plans/${n.plan}`;
+  await page.goto(`${base}/cross-level`);
+  await page.getByRole("link", { name: "从当前条件新建关系提案" }).click();
+  await expect(page.getByRole("heading", { name: "新建关系提案" })).toBeVisible();
+  for (const id of n.command.condition_ids) await page.getByLabel(`选择条件 ${id}`, { exact: true }).check();
+  await page.getByLabel("关系类型").selectOption(n.command.relation);
+  await page.getByLabel("提案理由").fill(n.command.reason);
+  for (const e of n.command.evidence) {
+    await page.getByLabel("官方原文块").selectOption(`${e.block_id}:${e.member_id}`);
+    await page.getByLabel("证据用途").selectOption(e.purpose);
+    if (e.purpose === "CONDITION") for (const id of e.condition_ids) await page.getByRole("group", { name: "此引文支持的条件" }).getByLabel(new RegExp(id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))).check();
+    await page.getByLabel("逐字引文").fill(e.quote);
+    await page.getByRole("button", { name: "添加证据", exact: true }).click();
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: "output/playwright/relations/desktop-proposal-form.png", fullPage: true });
+  await page.getByRole("button", { name: "保存关系提案" }).click();
+  await expect(page).toHaveURL(`http://127.0.0.1:3098${base}/relations?proposal=${n.saved.proposal_id}`);
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "待独立审核" })).toBeVisible();
+  await expect(page.getByText(n.command.reason, { exact: true })).toBeVisible();
+});
 test("desktop saved address, independent decision, refresh and stale state", async ({ page, context, request }) => {
   await request.get("http://127.0.0.1:3099/reset");
   await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true }]);
