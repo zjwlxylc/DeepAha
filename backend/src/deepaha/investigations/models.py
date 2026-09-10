@@ -4,11 +4,13 @@ from uuid import UUID
 
 from sqlalchemy import (
     CheckConstraint,
+    Computed,
     DateTime,
     ForeignKey,
     ForeignKeyConstraint,
     Integer,
     String,
+    Text,
     UniqueConstraint,
     Uuid,
 )
@@ -564,4 +566,37 @@ class InvestigationAnnouncementSnapshot(Base):
     snapshot: Mapped[dict[str, object]] = mapped_column(JSONB)
     snapshot_hash: Mapped[str] = mapped_column(String(64))
     reviewer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class InvestigationRelationProposal(Base):
+    __tablename__ = "investigation_relation_proposals"
+    __table_args__ = (
+        UniqueConstraint(
+            "target_plan_id", "producer_id", "request_key_hash", name="uq_relation_proposal_request"
+        ),
+        CheckConstraint(
+            "storage_version = 'adjudication-frozen-json/1.0.0'",
+            name="storage_version",
+        ),
+        CheckConstraint(
+            "payload_sha256 = encode(sha256(convert_to(payload_text,'UTF8')),'hex')",
+            name="payload_bytes",
+        ),
+    )
+    proposal_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    task_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("investigation_tasks.task_id"))
+    target_plan_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("investigation_unit_plans.plan_id")
+    )
+    producer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    request_key_hash: Mapped[str] = mapped_column(String(64))
+    request_hash: Mapped[str] = mapped_column(String(64))
+    request: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    storage_version: Mapped[str] = mapped_column(String(64))
+    payload_text: Mapped[str] = mapped_column(Text)
+    payload_sha256: Mapped[str] = mapped_column(String(64))
+    projection: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, Computed("payload_text::jsonb", persisted=True)
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
