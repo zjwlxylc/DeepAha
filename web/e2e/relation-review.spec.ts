@@ -1,0 +1,24 @@
+import { expect, test } from "@playwright/test";
+import f from "../tests/relation-review-fixture.json";
+test("desktop saved address, independent decision, refresh and stale state", async ({ page, context, request }) => {
+  await request.get("http://127.0.0.1:3099/reset");
+  await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true }]);
+  const path = `/review/investigations/${f.task}/unit-plans/${f.plan}/relations`;
+  await page.goto(path);
+  await page.getByRole("link", { name: "关系提案 1", exact: true }).click();
+  await expect(page).toHaveURL(`http://127.0.0.1:3098${path}?proposal=${f.saved.proposal_id}`);
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "待独立审核" })).toBeVisible();
+  await page.getByLabel("审核决定").selectOption("APPROVE");
+  await page.getByLabel("审核理由").fill(f.approved.decision.reason);
+  await page.getByRole("button", { name: "追加审核记录" }).click();
+  await expect(page.getByRole("heading", { name: "关系提案审核通过" })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "关系提案审核通过" })).toBeVisible();
+  await request.get("http://127.0.0.1:3099/stale");
+  await page.getByRole("button", { name: "重新读取当前状态" }).click();
+  await expect(page.getByRole("heading", { name: "依据已变化，旧决定失效" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "追加审核记录" })).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: "output/playwright/relations/desktop-stale.png", fullPage: true });
+});

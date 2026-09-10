@@ -1,0 +1,53 @@
+{
+  "candidate": "6e232cbd37321f843382d29b5315f0a362cb7196",
+  "merge": "f67114af91b3f742a2ae874ef7c4c11bb99f1165",
+  "tree": "ff9d0ed83658f26b75f08ab86a55698a43adb10b",
+  "run_id": 34498544535,
+  "jobs": [
+    {
+      "name": "phase8-deadline-reminder",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "backend-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase6-profile-action",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase5-public-trust",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase7-feedback-review",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase3-resolution",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase4-eligibility",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "web-quality",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}

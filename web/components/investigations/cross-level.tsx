@@ -24,6 +24,7 @@ export default function CrossLevel({ taskId, planId, initialResult }: { taskId: 
   return <main id="main-content" className="page-shell human-test-shell investigation-shell">
     <nav className="breadcrumbs" aria-label="面包屑"><Link prefetch={false} href={back}>返回岗位条件快照</Link></nav>
     <h1>公告、组与岗位条件总览</h1>
+    <Link prefetch={false} href={`${back}/relations`}>查看已保存的关系提案与审核历史</Link>
     <aside className="fixture-notice">本页只读，展示条件来源与适用范围，不是资格结论。整体资格仍为 UNCERTAIN（待确认），不能据此自动裁决。</aside>
     <button className="button button-secondary" disabled={busy} onClick={() => void reload()}>{busy ? "正在核对…" : "重新读取当前预览"}</button>
     {result && !result.ok ? <section className="human-test-panel" role="alert"><h2>当前预览不可用</h2><p>{result.error}</p></section> : null}
