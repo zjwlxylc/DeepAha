@@ -43,6 +43,11 @@ from deepaha.investigations.group_fact_contracts import (
     PromoteGroupFacts,
 )
 from deepaha.investigations.group_rule_contracts import GroupRulePreview
+from deepaha.investigations.group_rule_review_contracts import (
+    DecideGroupRule,
+    GroupRuleReviewRecord,
+    PrepareGroupRules,
+)
 from deepaha.investigations.models import InvestigationMaterial
 from deepaha.investigations.rule_contracts import (
     DecideInvestigationRule,
@@ -115,6 +120,7 @@ def problem(error: Exception) -> HTTPException:
             "GROUP_SOURCE_NOT_FOUND",
             "GROUP_FACT_SOURCE_NOT_FOUND",
             "GROUP_FACT_PREPARATION_NOT_FOUND",
+            "GROUP_RULE_PREPARATION_NOT_FOUND",
         }
         else 409
     )
@@ -455,6 +461,62 @@ def read_group_rule_preview(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return preview_group_rules(store, task_id, preparation_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/group-facts/{preparation_id}/rules", response_model=GroupRuleReviewRecord)
+def prepare_group_rules(
+    task_id: UUID,
+    preparation_id: UUID,
+    command: PrepareGroupRules,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_rule_review import prepare_group_rule_review
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return prepare_group_rule_review(store, task_id, preparation_id, command, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/{task_id}/group-rules/{preparation_id}", response_model=GroupRuleReviewRecord)
+def read_group_rules(
+    task_id: UUID,
+    preparation_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_rule_review import load_group_rule_review
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return load_group_rule_review(store, task_id, preparation_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post(
+    "/{task_id}/group-rules/{preparation_id}/decisions", response_model=GroupRuleReviewRecord
+)
+def decide_group_rules(
+    task_id: UUID,
+    preparation_id: UUID,
+    command: DecideGroupRule,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_rule_review import decide_group_rule
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return decide_group_rule(store, task_id, preparation_id, command, principal, key)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 

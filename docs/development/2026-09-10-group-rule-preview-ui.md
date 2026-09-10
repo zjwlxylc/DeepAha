@@ -1,6 +1,6 @@
 # 单位组规则预览管理页面
 
-状态 IMPLEMENTED，本地定向验证通过，候选 CI 尚待完成。分支 `codex/group-rule-preview-ui`，基于后端 PR #29 同树合并的主线 `78a1f9d5e5b566974d48aca75be8cbbfb24ba732`。
+状态 IMPLEMENTED。PR #30 候选 `032728b` 的 CI #115 全部 9 项通过，合并为主线 `8128fbf`，候选与合并代码树相同。精确回执见 `evidence/2026-09-10-group-rule-preview-ui-ci.json`。分支 `codex/group-rule-preview-ui` 基于后端 PR #29 同树合并的主线 `78a1f9d5e5b566974d48aca75be8cbbfb24ba732`。
 
 组字段审核记录新增只读预览入口，固定地址 `/review/investigations/{taskId}/group-facts/{prepId}/rules`。页面强制动态读取，服务器动作重新读取并检查当前组字段回执，与预览中的精确组身份、完整回执、全部字段索引、候选、事实状态、引用集合及摘要核对。没有新增后端写入；预览中未知、拒绝和未处理条件不能升级为可执行规则。
 
@@ -10,4 +10,4 @@
 
 独立只读评审未发现 P1/P2，详见 `evidence/2026-09-10-group-rule-preview-ui-validation.json`。浏览器 API 与审核账号均为合成测试，不是真实人工批准。本批未运行 WMA、未下载官方文件、未改冻结 Schema、CandidateFacts、原始 quote 或 locator。实际样本仍为 94 PASS / 0 FAIL / 30 Word UNVERIFIED；Delivery UNVERIFIED，整体资格 UNCERTAIN。
 
-安全恢复：先确认本批精确候选 CI，再合并并核对代码树。下一批是组规则候选持久化与独立规则批准，需要处理精确 GROUP 版本、正式事实与规则证据对应、幂等和数据库直接写入约束；建议在当前任务切回“高”档后开始。岗位适用范围与例外继承继续后置，不随规则批准自动放行。无需新任务窗口。
+本批 CI 与同树合并已完成。后续组规则持久化与独立审核见 `2026-09-10-group-rule-review.md`。岗位适用范围与例外继承继续后置，不随规则批准自动放行。无需新任务窗口。

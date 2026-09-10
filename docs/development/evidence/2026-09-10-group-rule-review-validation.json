@@ -1,0 +1,62 @@
+{
+  "date": "2026-09-10",
+  "base_sha": "8128fbf537984f792f2800fc6660da5aa93a7ef5",
+  "branch": "codex/group-rule-review",
+  "scope": "GROUP_RULE_REVIEW_ONLY",
+  "implementation_status": "IMPLEMENTED",
+  "candidate_ci": "NOT_YET_RUN",
+  "tests": {
+    "pg": {
+      "tests": "90",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "147.267",
+      "timestamp": "2026-09-10T16:57:36.376747+08:00"
+    },
+    "unit": {
+      "tests": "21",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "5.167",
+      "timestamp": "2026-09-10T16:58:25.384547+08:00"
+    }
+  },
+  "unique_tests_passed": 111,
+  "checks": {
+    "ruff_lint": "PASS (9 files)",
+    "ruff_format": "PASS (9 files)",
+    "mypy": "PASS (7 files)",
+    "alembic_round_trip_and_model_check": "PASS",
+    "frontend_suite_and_build": "NOT_REPEATED"
+  },
+  "review": {
+    "independent_read_only": true,
+    "p2_found_and_fixed": "PostgreSQL special or timezone-less assessment dates",
+    "remaining_p1_p2": 0
+  },
+  "real_case": {
+    "pass": 94,
+    "fail": 0,
+    "word_unverified": 30,
+    "delivery": "UNVERIFIED",
+    "overall_eligibility": "UNCERTAIN"
+  },
+  "wma_calls": 0,
+  "official_downloads": 0,
+  "synthetic_accounts_are_actual_human_approval": false,
+  "unit_rule_set_materialization": false,
+  "group_to_position_inheritance": false,
+  "working_file_sha256": {
+    "backend/migrations/versions/20260910_0048_group_rule_review.py": "d9e65fd34616799faa1b46cee054e34c5618c5e7ea9c2cb3a90b747921365186",
+    "backend/src/deepaha/investigations/group_rule_review.py": "9ade14e08175482d9a1229a2ff7fe5f82bee1bcbce3966cdf9ab8765fb05de2b",
+    "backend/src/deepaha/investigations/group_rule_review_contracts.py": "c21eb76b7d512effa01356eac7900eac04c1c029ae27680f9d4b19c4a6fbadf0",
+    "backend/src/deepaha/investigations/group_rules.py": "f997013a708d627d8ed8f98e0f5c34250ad8f5cf21a18fbb73bd624b04314bd0",
+    "backend/src/deepaha/investigations/models.py": "c85464fd620da23249295139f8e238879e349f4e2c13c46f51489c7085fd14ec",
+    "backend/src/deepaha/api/investigations.py": "a115714667f504d5d929f5e188b595366c38f96087fe9f9035cd17c31a66cf0a",
+    "backend/tests/integration/test_group_rule_review.py": "77af6c3296fdef3c738ec156a72af17e06bf99488410f0dbfa84c5c8a82d4705",
+    "backend/tests/integration/test_group_rule_review_migration.py": "a0476ecab01f6cbcd0a7810d124a8a344b633cde0a36a1b1100069bf084999ad",
+    "backend/tests/api/test_group_rule_review.py": "2a6ce0770e1649c9ac1ba982308f11394031680b04a36dfd40faca0474d94eae"
+  }
+}
