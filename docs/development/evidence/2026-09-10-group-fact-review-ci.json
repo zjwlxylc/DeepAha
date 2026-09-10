@@ -5,5 +5,5 @@
   "merge_sha": "2cad8b54e1073a97ccdbef79c49ee94d960b7f4e",
   "candidate_and_merge_tree": "e634a4b2b411c7dfe1600eca748724aeb0e97854",
   "same_tree": true,
-  "main_ci": {"number": 110, "run_id": 34451013378, "status": "in_progress", "conclusion": null}
+  "main_ci": {"number": 110, "run_id": 34451013378, "status": "completed", "conclusion": "success", "all_nine_jobs": "SUCCESS"}
 }

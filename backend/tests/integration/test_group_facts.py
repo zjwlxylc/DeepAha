@@ -82,7 +82,7 @@ def ready_group(
                 "value": None,
             }
             # A supported alias deliberately produces a second candidate; both need decisions.
-            other["field"] = "学历"
+            other["field"] = options.get("other_field", "学历")
             if options.get("two_evidence"):
                 other["evidence"][0]["artifact_id"] = "a_attachment"
                 other["evidence"][0]["quote"] = "Additional official material"

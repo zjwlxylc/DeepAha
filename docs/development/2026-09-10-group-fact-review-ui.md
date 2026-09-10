@@ -1,6 +1,6 @@
 # 单位组字段审核管理页面
 
-状态 IMPLEMENTED，本地定向验证通过，候选 CI 尚待完成。分支 `codex/group-fact-review-ui`，基于 PR #27 同树合并。后端的原件、冻结 Schema、字段事实和规则均未修改。
+状态 IMPLEMENTED，本地定向验证通过，PR #28 候选 CI #111 的 9 项作业全部通过并已合并。候选 `2eb49ce` 与主线合并 `548023c` 的树相同；后端 PR #27 的 main CI #110 也已确认全部通过。精确 SHA、树与 CI 回执见 `evidence/2026-09-10-group-fact-ui-ci.json`。后端的原件、冻结 Schema、字段事实和规则均未修改。
 
 已登记组来源新增“进入组字段审核”。准备页为 `/review/investigations/{taskId}/group-bindings/{recordId}/facts`；保存后使用固定地址 `/review/investigations/{taskId}/group-facts/{prepId}`。两个页面强制动态读取，GET 不自动写入。桌面原文/证据与审核表单并排，窄屏自然堆叠，原首页及公开页面保持不变。
 
@@ -16,4 +16,4 @@
 
 数据和审核账号均为合成工程场景，不是实际人工批准。真实案例仍为 94 PASS / 0 FAIL / 30 Word UNVERIFIED；Delivery UNVERIFIED，整体资格 UNCERTAIN。未调用 WMA，未下载官方原件。
 
-安全恢复顺序：先确认本批 PR 的精确候选 CI，以及后端 main CI #110；通过后按候选 SHA 合并并核对同树。下一批进入组规则目标及条件适用范围/继承设计，需重新处理跨层级证据和例外，适合切回“高”推理档位后开始。本批不预先实现这些语义。切换无需新任务窗口，继续当前工作区即可。
+原恢复点已完成：本批 PR 按精确候选 SHA 合并并核对同树，后端 main CI #110 通过。下一步已按风险拆分为只读组规则预览、预览页面、独立规则审核、逐岗位适用范围与继承；当前进展与安全切换点见 `2026-09-10-group-rule-preview.md`。组事实集保存不自动批准其中任何规则或岗位继承。
