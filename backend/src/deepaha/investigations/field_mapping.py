@@ -96,6 +96,18 @@ def map_field_candidate(
         scope = "UNIT"
     else:
         issues.append("UNKNOWN_ENTITY_GROUP_NOT_TARGETABLE")
+    return map_field_value(fact, scope=scope, issues=issues, mapping_version=FIELD_MAPPING_VERSION)
+
+
+def map_field_value(
+    fact: DeliveryFact,
+    *,
+    scope: Literal["OPPORTUNITY", "UNIT"] | None,
+    issues: list[str],
+    mapping_version: str,
+) -> MappedFieldCandidate:
+    """Normalize values after the caller establishes a versioned source target."""
+    issues = list(issues)
     field_name = _ALIASES.get(fact.field.strip())
     if field_name is None:
         issues.append("UNKNOWN_FIELD_UNSUPPORTED")
@@ -115,7 +127,7 @@ def map_field_candidate(
         entity_id=fact.entity_id,
         original_field=fact.field,
         original_status=fact.status,
-        mapping_version=FIELD_MAPPING_VERSION,
+        mapping_version=mapping_version,
         target_scope=scope,
         field_name=field_name,
         raw_value=fact.value,

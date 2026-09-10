@@ -1,0 +1,9 @@
+{
+  "pr": 26,
+  "candidate_sha": "ef5034edf493d7e66d619842effb4dd92362f5ca",
+  "candidate_ci": {"number": 107, "run_id": 34446231119, "all_nine_jobs": "SUCCESS"},
+  "merge_sha": "f8eb21afd7b62e45625310af897a9faa12801a53",
+  "candidate_and_merge_tree": "7ea360c7bf2ee7b2f5dc778c65265febe1af3e7b",
+  "same_tree": true,
+  "main_ci": {"number": 108, "run_id": 34447607150, "head_sha": "f8eb21afd7b62e45625310af897a9faa12801a53", "conclusion": "success"}
+}
