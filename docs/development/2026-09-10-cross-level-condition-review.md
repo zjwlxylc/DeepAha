@@ -1,6 +1,6 @@
 # 跨层级条件只读组合与回放
 
-本批内部服务与契约 IMPLEMENTED，本地定向验证通过，独立定向复核无剩余可复现 P1/P2；尚未接入接口、页面或持久化裁决，不表示跨层级资格执行完成。精确候选 CI 和合并需在本批提交后检查。
+本批内部服务与契约 IMPLEMENTED，本地定向验证通过，独立定向复核无剩余可复现 P1/P2。PR #38 精确候选 `f02cca4` 的 CI #131 全部 9 个任务成功，已合并为 `9638af9`，候选与合并树均为 `11be05351e8eb6e9e226adf1c149fd97c05679f6`，证据 `evidence/2026-09-10-cross-level-ci.json`。接口与页面后续交付见 `2026-09-10-cross-level-review-ui.md`；持久化裁决和跨层级资格执行尚未完成。
 
 新增 `cross-level-condition-review/1.0.0`，组合实际数据库中同一完整 v2 基础计划上的公告、GROUP 和 UNIT 条件。每个 manifest 条件恰有一行，保留来源定位指针和完整上游快照。LOCAL 仅表示岗位层来源；INHERITED / EXCLUDED / UNRESOLVED 只表示范围处理状态。
 
@@ -18,6 +18,6 @@
 
 ## 恢复顺序
 
-工作区 `D:\DeepAha\.worktrees\integration-wma-evidence`，分支 `codex/cross-level-condition-composition`。本批精确候选 CI 全成功后才合并，核对合并树。下一批按已经固定的契约接入私有只读接口和桌面审核页面，适合中档继续；无需重做契约设计或重跑前端旧基线。再后才设计人工关系裁决、持久化和新的执行契约，不能把组合预览直接交给 v2 编译器。
+本批 CI 与合并树核对已完成。沿用工作区 `D:\DeepAha\.worktrees\integration-wma-evidence`，接口与页面批次在分支 `codex/cross-level-review-ui`。再后才设计人工关系裁决、持久化和新的执行契约，不能把组合预览直接交给 v2 编译器。
 
 真实样本基线沿用前轮证据，本批没有实时重验：124 = 94 PASS / 0 FAIL / 30 Word UNVERIFIED；Delivery UNVERIFIED，资格 UNCERTAIN。无 WMA、LLM、官方下载、V3 Prompt、Candidate Facts、原始引用或 Evidence Gate 改动。
