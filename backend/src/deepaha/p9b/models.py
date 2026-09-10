@@ -467,7 +467,7 @@ class OpportunityUnit(Base):
         ),
         CheckConstraint(
             "unit_kind in ('POSITION', 'TRACK', 'PROGRAM_TIER', 'REGION_VARIANT', "
-            "'DEFAULT_SINGLETON')",
+            "'DEFAULT_SINGLETON', 'GROUP')",
             name="kind_values",
         ),
         CheckConstraint(

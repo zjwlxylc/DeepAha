@@ -1,0 +1,20 @@
+{
+  "date": "2026-09-10",
+  "base_sha": "0b0b53e52a1fcd3722f20f113f0d04fedc8a70a9",
+  "scope": "Internal GROUP identity and legacy lineage isolation only",
+  "initial_test_run": {"failed": 11, "reason": "GROUP unsupported and dedicated guards absent", "xml": ".deepaha-local-manual/group-identity-red.xml"},
+  "targeted_integration": {
+    "passed": 80, "failed": 0, "errors": 0, "skipped": 0, "junit_seconds": 44.083,
+    "files": ["tests/integration/test_group_identity.py", "tests/integration/test_group_identity_migration.py", "tests/integration/test_p9b_b0_persistence.py", "tests/integration/test_investigation_binding.py", "tests/integration/test_investigation_registration.py"],
+    "xml": ".deepaha-local-manual/group-identity-targeted.xml"
+  },
+  "additional_binding_isolation": {"passed": 1, "failed": 0, "deselected": 21, "seconds": 3.15, "test": "tests/integration/test_investigation_binding.py::test_group_is_not_a_position_target_or_accepted_position_binding", "xml": ".deepaha-local-manual/group-binding-isolation.xml"},
+  "new_integration_cases": 23,
+  "legacy_contracts": {"passed": 13, "seconds": 0.82, "file": "tests/contracts/test_phase9b_contracts.py", "includes": ["V08 GROUP rejection", "unchanged exported schema bytes"]},
+  "static": {"ruff": "PASS", "format_files": 7, "mypy_linux_files": 6, "mypy_win32_files": 6},
+  "migration": {"revision": "20260910_0045", "empty_round_trip": "PASS", "model_diff": "PASS", "group_history_downgrade_refusal": "PASS"},
+  "independent_review": {"method": "Read-only code review", "remaining_P1_P2": 0, "human_approval": false},
+  "web": {"local_suite_rerun": false, "local_build_rerun": false, "reason": "No frontend changes"},
+  "frozen_case": {"references": 124, "pass": 94, "fail": 0, "word_unverified": 30, "delivery": "UNVERIFIED", "overall_qualification": "UNCERTAIN", "wma_calls": 0},
+  "next": "Separate group source binding with server-derived full membership; no group fact or eligibility promotion in this batch"
+}

@@ -12,7 +12,7 @@
 
 本批是合成工程验证，不代表独立真人批准或真实资格。冻结 WMA 结果继续为 94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery UNVERIFIED；未重新调用 WMA、修改提示词、Candidate Facts、引文、原件或现有资格内核。
 
-状态 IMPLEMENTED，本地必要验证通过，候选 CI 与合并待完成。后端 1454 项非集成测试通过；完整 PostgreSQL/Moto 回归 661 passed / 3 skipped / 0 failed，其中新增 29 项全部通过。3 项既有环境跳过分别需要专用 Phase 6/8 数据库或未挂载的真实来源语料，不计为通过。Ruff、492 文件格式、Linux/Windows mypy（453 文件）、迁移空表往返、有历史拒绝降级及 Alembic 模型差异检查均通过。
+状态 IMPLEMENTED，PR #23 已合并，候选 CI #101 九项全部通过。合并提交 `0b0b53e52a1fcd3722f20f113f0d04fedc8a70a9` 与候选 `929a1fa7fa3b197b930692472e77634918fc69a9` 同树；主线 CI #102 成功，证据见 `evidence/2026-09-10-announcement-inherited-snapshots-ci.json`。后端 1454 项非集成测试通过；完整 PostgreSQL/Moto 回归 661 passed / 3 skipped / 0 failed，其中新增 29 项全部通过。3 项既有环境跳过分别需要专用 Phase 6/8 数据库或未挂载的真实来源语料，不计为通过。Ruff、492 文件格式、Linux/Windows mypy（453 文件）、迁移空表往返、有历史拒绝降级及 Alembic 模型差异检查均通过。
 
 整站 248 项测试（42 文件，新增 26 项）、lint、类型检查和生产构建通过。32 个既有浏览器场景通过，新增 12 个桌面/手机场景在修正跳转等待后全部通过。初始 4 次失败源于点击已保存链接后立即刷新，Next 路由尚未切换；测试现明确等待真实记录 href，再执行原保存和过期断言。恢复任务时已确认补丁先于成功结果落盘，只复跑受影响的 4 个场景，全部通过；没有重复整站测试与构建。
 
