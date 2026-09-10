@@ -31,6 +31,11 @@ from deepaha.investigations.contracts import (
     RegisterInvestigationPositions,
     ReviewInvestigation,
 )
+from deepaha.investigations.group_contracts import (
+    GroupSourcePreview,
+    GroupSourceRecord,
+    RegisterGroupSource,
+)
 from deepaha.investigations.models import InvestigationMaterial
 from deepaha.investigations.rule_contracts import (
     DecideInvestigationRule,
@@ -100,6 +105,7 @@ def problem(error: Exception) -> HTTPException:
             "UNIT_PLAN_NOT_FOUND",
             "RULE_APPLICABILITY_SOURCE_NOT_FOUND",
             "ANNOUNCEMENT_SNAPSHOT_NOT_FOUND",
+            "GROUP_SOURCE_NOT_FOUND",
         }
         else 409
     )
@@ -373,6 +379,55 @@ def read_unit_plan(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return load_unit_plan(store, task_id, plan_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/{task_id}/group-source-input", response_model=GroupSourcePreview)
+def group_source_input(
+    task_id: UUID, entity_id: str, store: StoreDep, principal: PrincipalDep, response: Response
+) -> dict[str, Any]:
+    from deepaha.investigations.group_bindings import preview_group_source
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return preview_group_source(store, task_id, entity_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/group-bindings", response_model=GroupSourceRecord)
+def create_group_source(
+    task_id: UUID,
+    command: RegisterGroupSource,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_bindings import register_group_source
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return register_group_source(
+            store, task_id, command.entity_id, command.expected_source_hash, principal
+        )
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/{task_id}/group-bindings/{group_binding_id}", response_model=GroupSourceRecord)
+def read_group_source(
+    task_id: UUID,
+    group_binding_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_bindings import load_group_source
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return load_group_source(store, task_id, group_binding_id, principal)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 

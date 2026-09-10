@@ -1,6 +1,7 @@
 import pytest
 from alembic import command
 from alembic.config import Config
+from alembic.script import ScriptDirectory
 from sqlalchemy import Engine, text
 from sqlalchemy.orm import Session
 
@@ -17,7 +18,10 @@ def test_group_migration_round_trip_and_model_match(migrated_engine: Engine) -> 
     command.upgrade(config, "head")
     command.check(config)
     with migrated_engine.connect() as connection:
-        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "20260910_0045"
+        assert (
+            connection.scalar(text("SELECT version_num FROM alembic_version"))
+            == ScriptDirectory.from_config(config).get_current_head()
+        )
 
 
 def test_group_history_refuses_downgrade(migrated_engine: Engine) -> None:
@@ -36,7 +40,10 @@ def test_group_history_refuses_downgrade(migrated_engine: Engine) -> None:
     with pytest.raises(RuntimeError, match="GROUP_IDENTITY_HISTORY_DOWNGRADE_REFUSED"):
         command.downgrade(Config("alembic.ini"), "20260909_0044")
     with migrated_engine.connect() as connection:
-        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "20260910_0045"
+        assert (
+            connection.scalar(text("SELECT version_num FROM alembic_version"))
+            == ScriptDirectory.from_config(Config("alembic.ini")).get_current_head()
+        )
         assert (
             connection.scalar(
                 text("SELECT unit_kind FROM opportunity_units WHERE opportunity_unit_id=:id"),
