@@ -1,0 +1,66 @@
+{
+  "scope": "Internal read-only GROUP inheritance preview, not executable eligibility",
+  "implementation": "IMPLEMENTED",
+  "candidate_ci": "PENDING",
+  "base_commit": "81fd0706eb5b2458aa6deddfe493c68df8552400",
+  "files_sha256": {
+    "backend/src/deepaha/investigations/group_inheritance.py": "afd95eacf87f3101398e027790f888ae7ec6265da76bf1ff74a023e13336662d",
+    "backend/tests/integration/test_group_inheritance_preview.py": "b1476b6a256db87c3b34cf2cb2ed74784b7e63e0f69c2f771c818aee5dc0bc43"
+  },
+  "postgres_integration": {
+    "tests": 16,
+    "failures": 0,
+    "errors": 0,
+    "cases": [
+      "test_current_decisions_preserve_denominator_and_base[APPLIES-INHERIT]",
+      "test_current_decisions_preserve_denominator_and_base[DOES_NOT_APPLY-EXCLUDE]",
+      "test_current_decisions_preserve_denominator_and_base[NEEDS_ADJUDICATION-UNRESOLVED]",
+      "test_unapproved_group_rule_is_not_an_exclusion[REJECT]",
+      "test_unapproved_group_rule_is_not_an_exclusion[NEEDS_ADJUDICATION]",
+      "test_projection_does_not_write",
+      "test_incomplete_group_pipeline_preserves_every_condition[registered-GROUP_FACTS_NOT_PREPARED]",
+      "test_incomplete_group_pipeline_preserves_every_condition[prepared-FACT_SET_NOT_SAVED]",
+      "test_incomplete_group_pipeline_preserves_every_condition[APPROVE-GROUP_RULE_REVIEW_NOT_PREPARED]",
+      "test_incomplete_group_pipeline_preserves_every_condition[UNKNOWN-FACT_UNKNOWN]",
+      "test_incomplete_group_pipeline_preserves_every_condition[REJECT-FACT_REJECTED]",
+      "test_changes_during_read_are_rejected_or_serialized[policy]",
+      "test_changes_during_read_are_rejected_or_serialized[authority]",
+      "test_unregistered_group_preserves_the_frozen_scope[False]",
+      "test_unregistered_group_preserves_the_frozen_scope[True]",
+      "test_changed_group_version_rejects_previous_approval_and_applicability"
+    ],
+    "junit": "2026-09-10-group-inheritance-preview.xml"
+  },
+  "static_checks": {
+    "ruff_format": "PASS",
+    "ruff_check": "PASS",
+    "mypy_affected_files": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "independent_review": {
+    "scope": "read-only static review; no PG execution",
+    "p1": 0,
+    "p2": 0
+  },
+  "real_evidence_baseline": {
+    "references": 124,
+    "pass": 94,
+    "fail": 0,
+    "unverified_word": 30,
+    "delivery": "UNVERIFIED",
+    "qualification": "UNCERTAIN"
+  },
+  "live_wma_calls": 0,
+  "model_calls": 0,
+  "official_downloads": 0,
+  "no_changes": [
+    "V3 Prompt",
+    "Candidate Facts",
+    "raw artifacts",
+    "Evidence Gate",
+    "qualification compiler",
+    "database schema",
+    "API",
+    "UI"
+  ]
+}

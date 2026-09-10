@@ -1,6 +1,6 @@
 # 组规则适用决定的私有 API 与审核界面
 
-本批 IMPLEMENTED，本地定向检查通过，精确候选 CI 待检查。前置 PR #34 已通过 CI #123 全部 9 个 job 并合并为 `8a827e8`，候选与合并树相同。本批在 `codex/group-applicability-review-ui` 接入已有决定服务，没有修改迁移 0049、资格判断或继承计划。
+本批 IMPLEMENTED，本地定向检查通过。PR #35 精确候选 `9c2cbdc` 的 CI #125 全部 9 个 job 成功，已合并为 `81fd070`；候选与合并树均为 `365d484447ad6bfcd7f0cb2097717f3ec6a60652`，证据为 `evidence/2026-09-10-group-applicability-review-ui-ci.json`。前置 PR #34 已通过 CI #123 全部 9 个 job 并合并为 `8a827e8`，候选与合并树相同。本批在 `codex/group-applicability-review-ui` 接入已有决定服务，没有修改迁移 0049、资格判断或继承计划。
 
 新增私有 GET `unit-plans/{plan}/group-applicability-decisions/{source}/{candidate}` 与 POST `group-applicability-decisions`。请求沿用已固定版本；响应严格核对上下文、请求和证据摘要、目标身份、原文引用与快照对应、前序顺序、最新记录，以及实际审核历史精确前缀。继续复用审核授权、幂等键和 `private, no-store`。
 
@@ -16,6 +16,6 @@
 
 ## 安全恢复点
 
-先检查当前 PR 精确候选的完整 CI，全部成功后合并并核对代码树。下一项是将明确适用、例外与冲突组织成可回放的继承计划；它涉及公告、组、岗位多个层级和资格不变量，应切到高档后再开始设计。不要把已有 APPLIES 记录直接当作岗位资格或全组继承。沿用当前任务窗口和工作区。
+本批 CI、合并及代码树核对已完成。下一项是将明确适用、例外与冲突组织成可回放的继承计划；它涉及公告、组、岗位多个层级和资格不变量。已在 `codex/group-inheritance-preview` 开始最小只读组条件投影，先核验完整条件、源身份与实际决定，再考虑持久化和执行。不要把已有 APPLIES 记录直接当作岗位资格或全组继承。沿用当前任务窗口和工作区。
 
 真实样本仍为 94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery UNVERIFIED，整体资格 UNCERTAIN。本轮无 WMA、模型调用或官方下载，未改 V3 Prompt、冻结 Candidate Facts、原件和 Evidence Gate。旧岗位快照的非 UTC 会话兼容问题继续保留在前批记录中；当前验证使用 UTC。
