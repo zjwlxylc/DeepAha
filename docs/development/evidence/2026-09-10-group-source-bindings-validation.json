@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-10",
+  "base_sha": "ab06b549dd113b12f4dc8d1e9cfec3e1656ab233",
+  "scope": "GROUP source identity association backend, strict contracts and private API only",
+  "unit_api": {"passed": 70, "failed": 0, "skipped": 0, "junit_seconds": 4.665, "new_cases": 29, "xml": ".deepaha-local-manual/group-source-api-unit.xml"},
+  "targeted_pg": {"passed": 22, "failed": 0, "skipped": 0, "junit_seconds": 22.969, "new_cases": 20, "xml": ".deepaha-local-manual/group-source-binding-targeted.xml"},
+  "unchanged_original_task_response": {"passed": 2, "seconds": 4.43, "note": "Reused two PG lifecycle cases with one additional compatibility assertion"},
+  "review_fixes": [
+    {"issue": "Cross-group identity borrowing", "red": "DID NOT RAISE DBAPIError with valid aliases, version, key and source", "green": "GROUP_SOURCE_IDENTITY_OWNERSHIP_CONFLICT; original owner remains readable", "red_xml": ".deepaha-local-manual/group-source-ownership-red.xml", "green_xml": ".deepaha-local-manual/group-source-ownership-green.xml"},
+    {"issue": "Nested null parent rejected despite frozen delivery compatibility", "red": "GROUP_SOURCE_INVALID", "green": "Pure and PG lifecycle pass while preserving raw null parent"}
+  ],
+  "static": {"ruff": "PASS", "format_files": 12, "mypy_linux_files": 11, "mypy_win32_files": 11},
+  "migration": {"revision": "20260910_0046", "empty_round_trip": "PASS", "model_diff": "PASS", "history_downgrade_refusal": "PASS"},
+  "independent_review": {"remaining_P1_P2": 0, "method": "Read-only review", "human_acceptance": false},
+  "web": {"changed": false, "local_full_suite_rerun": false, "local_build_rerun": false, "management_ui": "PLANNED"},
+  "frozen_case": {"references": 124, "pass": 94, "fail": 0, "word_unverified": 30, "delivery": "UNVERIFIED", "overall_qualification": "UNCERTAIN", "wma_calls": 0}
+}

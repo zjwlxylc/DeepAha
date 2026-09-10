@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy import (
@@ -164,6 +165,37 @@ class InvestigationBinding(Base):
     request_key_hash: Mapped[str] = mapped_column(String(64))
     request_hash: Mapped[str] = mapped_column(String(64))
     request: Mapped[dict[str, object]] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class InvestigationGroupBinding(Base):
+    """Complete source membership attached to a separate, stable GROUP identity."""
+
+    __tablename__ = "investigation_group_bindings"
+    __table_args__ = (
+        UniqueConstraint(
+            "task_id", "source_entity_id", "sequence", name="uq_investigation_group_sequence"
+        ),
+        UniqueConstraint(
+            "binding_id", "source_entity_id", name="uq_investigation_group_binding_entity"
+        ),
+        CheckConstraint("uuid_extract_version(group_binding_id) = 7", name="id_uuid7"),
+        CheckConstraint("sequence >= 1", name="positive_sequence"),
+        CheckConstraint("source_hash ~ '^[0-9a-f]{64}$'", name="hash_format"),
+        CheckConstraint("jsonb_typeof(source) = 'object'", name="source_object"),
+    )
+    group_binding_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    task_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("investigation_tasks.task_id"))
+    binding_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("investigation_bindings.binding_id"))
+    source_entity_id: Mapped[str] = mapped_column(String(256))
+    sequence: Mapped[int] = mapped_column(Integer)
+    unit_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("opportunity_units.opportunity_unit_id"))
+    unit_version_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("opportunity_unit_versions.opportunity_unit_version_id")
+    )
+    source: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    source_hash: Mapped[str] = mapped_column(String(64))
+    reviewer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
