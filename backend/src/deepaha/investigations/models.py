@@ -497,6 +497,50 @@ class InvestigationRuleApplicability(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class InvestigationGroupApplicability(Base):
+    __tablename__ = "investigation_group_applicability"
+    __table_args__ = (
+        UniqueConstraint(
+            "target_plan_id",
+            "source_rule_candidate_id",
+            "sequence",
+            name="uq_group_applicability_sequence",
+        ),
+        UniqueConstraint(
+            "target_plan_id",
+            "reviewer_id",
+            "request_key_hash",
+            name="uq_group_applicability_request",
+        ),
+    )
+    decision_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    target_plan_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("investigation_unit_plans.plan_id")
+    )
+    source_rule_preparation_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("investigation_group_rule_preparations.preparation_id")
+    )
+    source_rule_candidate_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("p9b_rule_candidates.rule_candidate_id")
+    )
+    source_rule_approval_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("investigation_group_rule_decisions.decision_id")
+    )
+    previous_decision_id: Mapped[UUID | None] = mapped_column(
+        Uuid, ForeignKey("investigation_group_applicability.decision_id")
+    )
+    sequence: Mapped[int] = mapped_column(Integer)
+    reviewer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    request_key_hash: Mapped[str] = mapped_column(String(64))
+    request_hash: Mapped[str] = mapped_column(String(64))
+    request: Mapped[dict[str, object]] = mapped_column(JSONB)
+    context: Mapped[dict[str, object]] = mapped_column(JSONB)
+    context_hash: Mapped[str] = mapped_column(String(64))
+    evidence_snapshot: Mapped[list[dict[str, object]]] = mapped_column(JSONB)
+    evidence_hash: Mapped[str] = mapped_column(String(64))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 class InvestigationAnnouncementSnapshot(Base):
     __tablename__ = "investigation_announcement_snapshots"
     __table_args__ = (

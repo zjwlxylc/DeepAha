@@ -1,0 +1,35 @@
+{
+  "scope": "INTERNAL_GROUP_APPLICABILITY_DECISIONS_ONLY",
+  "migration": "20260910_0049",
+  "final_postgresql": {
+    "passed": 58,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "initial_related_postgresql": {
+    "passed": 103,
+    "failed": 0,
+    "skipped": 0
+  },
+  "ruff": "PASS",
+  "ruff_format": "PASS",
+  "mypy": "PASS",
+  "independent_review": "P2 findings fixed; no remaining P1/P2 in reviewed changes",
+  "api_ui": "NOT_IMPLEMENTED_FOR_DECISIONS",
+  "qualification_inheritance": "NOT_IMPLEMENTED",
+  "real_delivery": "UNVERIFIED",
+  "real_evidence": {
+    "PASS": 94,
+    "FAIL": 0,
+    "UNVERIFIED": 30
+  },
+  "timezone_scope": "SQL review hash and valid insert tested in UTC and Asia/Shanghai; existing unit snapshot service has separate non-UTC context incompatibility",
+  "source_sha256": {
+    "backend/src/deepaha/investigations/models.py": "e877f5adf4516c0f0c81eda9773766a301aefbf3885d69d461424b8a2efb22cd",
+    "backend/src/deepaha/investigations/group_applicability_decisions.py": "f825ace5a3b6c110f830330a3fc97529d46db89efaa26feb74e9100af52c84c7",
+    "backend/migrations/versions/20260910_0049_group_applicability.py": "74417c85a35fc845c7c13af0f709d24eca17e760383d5dc6d3410506be7e178a",
+    "backend/tests/integration/test_group_applicability_decisions.py": "81a8592bcf92741a2cef8c930443b90a785ce7afcb13a4a3d9bfab422d91f9b2",
+    "backend/tests/integration/test_group_facts.py": "983b9ab8ad8fdb83e0d6140f8cf7128c66fcd954251d79a225b6678508545064"
+  }
+}
