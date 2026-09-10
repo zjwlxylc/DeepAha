@@ -1,0 +1,45 @@
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, expect, it, vi } from "vitest";
+import GroupInheritance from "../components/investigations/group-inheritance";
+import { loadGroupInheritanceAction } from "../app/review/investigations/group-inheritance-actions";
+import fixture from "./group-inheritance-fixture.json";
+import type { GroupInheritance as View } from "../lib/group-inheritance";
+import Page from "../app/review/investigations/[taskId]/unit-plans/[planId]/group-inheritance/page";
+vi.mock("../app/review/investigations/group-inheritance-actions", () => ({ loadGroupInheritanceAction: vi.fn() }));
+const value = fixture as View, taskId = value.dependencies.group_source.source.task_id, planId = value.snapshot.base_v2.plan_id;
+beforeEach(() => { vi.mocked(loadGroupInheritanceAction).mockReset(); });
+it("keeps inherited and unprocessed rows and evidence visible without mutation controls", () => {
+  render(<GroupInheritance taskId={taskId} planId={planId} initialResult={{ ok: true, value }} />);
+  expect(screen.getAllByRole("article")).toHaveLength(2);
+  expect(screen.getByText("原组条件 2 项 · 继承 1 · 不适用 0 · 待处理 1")).toBeVisible();
+  expect(screen.getByText("字段尚未处理")).toBeVisible();
+  expect(screen.getByText(/不是资格结论/)).toBeVisible();
+  expect(screen.getAllByRole("link", { name: /下载原件/ })).toHaveLength(2);
+  expect(screen.queryByRole("button", { name: /保存|批准|提交/ })).not.toBeInTheDocument();
+  expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
+});
+it("remounts on same-address server refresh failure and changed snapshot", async () => {
+  const params = Promise.resolve({ taskId, planId });
+  vi.mocked(loadGroupInheritanceAction).mockResolvedValue({ ok: true, value });
+  const { rerender } = render(await Page({ params }));
+  expect(screen.getAllByRole("article")).toHaveLength(2);
+  vi.mocked(loadGroupInheritanceAction).mockResolvedValue({ ok: false, kind: "forbidden", error: "撤权" });
+  rerender(await Page({ params }));
+  expect(screen.getByRole("alert")).toHaveTextContent("撤权");
+  expect(screen.queryByRole("article")).not.toBeInTheDocument();
+  const updated = structuredClone(value); updated.snapshot.group_conditions[0].disposition = "UNRESOLVED";
+  vi.mocked(loadGroupInheritanceAction).mockResolvedValue({ ok: true, value: updated });
+  rerender(await Page({ params }));
+  expect(screen.getByText("原组条件 2 项 · 继承 0 · 不适用 0 · 待处理 2")).toBeVisible();
+});
+it.each(["stale", "forbidden", "unavailable"] as const)("hides all old conditions during reload and after %s", async kind => {
+  vi.mocked(loadGroupInheritanceAction).mockResolvedValue({ ok: false, kind, error: "不可用" });
+  render(<GroupInheritance taskId={taskId} planId={planId} initialResult={{ ok: true, value }} />);
+  fireEvent.click(screen.getByRole("button", { name: "重新读取当前预览" }));
+  expect(screen.queryByRole("article")).not.toBeInTheDocument();
+  await waitFor(() => expect(screen.getByRole("alert")).toBeVisible());
+  expect(screen.queryByRole("article")).not.toBeInTheDocument();
+  vi.mocked(loadGroupInheritanceAction).mockResolvedValue({ ok: true, value });
+  fireEvent.click(screen.getByRole("button", { name: "重新读取当前预览" }));
+  await waitFor(() => expect(screen.getAllByRole("article")).toHaveLength(2));
+});

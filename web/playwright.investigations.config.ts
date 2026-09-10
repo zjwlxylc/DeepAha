@@ -2,7 +2,7 @@ import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: ["investigations.spec.ts", "announcement-snapshots.spec.ts", "group-sources.spec.ts", "group-facts.spec.ts", "group-rules.spec.ts", "group-rule-review.spec.ts", "group-applicability.spec.ts"],
+  testMatch: ["investigations.spec.ts", "announcement-snapshots.spec.ts", "group-sources.spec.ts", "group-facts.spec.ts", "group-rules.spec.ts", "group-rule-review.spec.ts", "group-applicability.spec.ts", "group-inheritance.spec.ts"],
   fullyParallel: false,
   workers: 1,
   retries: 0,

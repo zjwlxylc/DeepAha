@@ -51,6 +51,7 @@ from deepaha.investigations.group_fact_contracts import (
     PrepareGroupFacts,
     PromoteGroupFacts,
 )
+from deepaha.investigations.group_inheritance_contracts import GroupInheritancePreview
 from deepaha.investigations.group_rule_contracts import GroupRulePreview
 from deepaha.investigations.group_rule_review_contracts import (
     DecideGroupRule,
@@ -689,6 +690,31 @@ def read_group_rule_applicability(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return read(store, task_id, plan_id, source_id, candidate_id, principal, after=after)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get(
+    "/{task_id}/unit-plans/{plan_id}/group-inheritance-preview",
+    response_model=GroupInheritancePreview,
+)
+def read_group_inheritance_preview(
+    task_id: UUID,
+    plan_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_inheritance import preview_group_inheritance
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        result = preview_group_inheritance(store, task_id, plan_id, principal)
+        if result["dependencies"]["group_source"]["source"]["task_id"] != str(task_id) or result[
+            "snapshot"
+        ]["base_v2"]["plan_id"] != str(plan_id):
+            raise InvestigationError("GROUP_INHERITANCE_IDENTITY_CONFLICT")
+        return result
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 

@@ -1,0 +1,50 @@
+{
+  "scope": "Private read-only GROUP inheritance API and review UI",
+  "implementation": "IMPLEMENTED",
+  "candidate_ci": "PENDING",
+  "base_commit": "48f6d8b135398741341cf3d2f483418a850104eb",
+  "local_validation": {
+    "api_contract_tests": 14,
+    "postgres_api_roundtrips": 1,
+    "vitest": 25,
+    "browser_desktop_mobile": 6,
+    "final_reload_stale_rechecks": 2,
+    "ruff_format": "PASS",
+    "ruff": "PASS",
+    "mypy": "PASS",
+    "typescript": "PASS",
+    "eslint": "PASS",
+    "production_build": "PASS",
+    "visual_review": "desktop two columns, narrow viewport stacked, no horizontal overflow"
+  },
+  "files_sha256": {
+    "backend/src/deepaha/investigations/group_inheritance_contracts.py": "7b0f5d9d3327ef2027413d92ece75941d649a42646e36ff56a4c8cca8eba0e00",
+    "backend/src/deepaha/api/investigations.py": "4b43b118c325d0182ec54e283713539c64672cc8284b8e55e2950dd59c7dec47",
+    "web/app/review/investigations/group-inheritance-actions.ts": "33f4e3ff50fbed9bbf19d847fa3e2b1dec5ec873562729f47b6931060d2bb8a6",
+    "web/components/investigations/group-inheritance.tsx": "ef2bf0d5e9089452926de816ee2f1017d0c835c86e9f143097aa4a2aa744999a",
+    "web/tests/group-inheritance-fixture.json": "1399c44be5147e4cc3c640dad676de96813e6ac7df06ba0a0e76a8f00a22fd83"
+  },
+  "review": {
+    "remaining_p1": 0,
+    "remaining_p2": 0,
+    "scope": "independent read-only review; no PG or browser execution by reviewer"
+  },
+  "fixture_provenance": "Synthetic isolated PostgreSQL output; no real human approval",
+  "frozen_sample": {
+    "references": 124,
+    "pass": 94,
+    "fail": 0,
+    "word_unverified": 30,
+    "delivery": "UNVERIFIED",
+    "qualification": "UNCERTAIN"
+  },
+  "wma_calls": 0,
+  "official_downloads": 0,
+  "account_notice": {
+    "reported_by_user": "100 percent included Actions minutes used",
+    "verified_repo_visibility": "public",
+    "runner": "ubuntu-latest",
+    "does_not_establish_this_repo_consumed_account_minutes": true,
+    "billing_settings_changed": false
+  }
+}

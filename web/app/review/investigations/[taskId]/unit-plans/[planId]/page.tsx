@@ -6,6 +6,7 @@ import { humanTestFetch, LocalHumanTestApiError } from "../../../../../../lib/lo
 import type { InvestigationUnitSnapshot } from "../../../../../../lib/unit-snapshots";
 import { loadGroupApplicabilityEntries } from "../../../group-applicability-actions";
 import { groupApplicabilityPath } from "../../../../../../lib/group-applicability";
+import { groupInheritancePath } from "../../../../../../lib/group-inheritance";
 
 export const metadata: Metadata = { title: "内部条件快照" };
 export const dynamic = "force-dynamic";
@@ -31,7 +32,8 @@ export default async function UnitPlanPage({ params }: { params: Promise<{ taskI
   if (groups && !groups.ok) { data = null; failure = groups.error; }
   return <main id="main-content" className="page-shell human-test-shell investigation-shell"><nav className="breadcrumbs" aria-label="面包屑"><Link href={back}>返回调查任务</Link><span aria-hidden="true">/</span><span aria-current="page">条件快照</span></nav>
     {data ? <><UnitPlanView snapshot={data[0]} task={data[1]} /><section className="human-test-panel"><h2>组规则与本岗位</h2>
-      <p>这里只核对成员关系与依据，岗位适用尚未裁决。</p>
+      <p>逐条核对组规则的岗位适用范围；完整资格仍待确认。</p>
+      <Link prefetch={false} href={groupInheritancePath(taskId, planId)}>查看全部组条件的范围预览</Link>
       {groups?.ok ? (groups.value.length ? <ul>{groups.value.map(c => <li key={`${c.source_rule_preparation_id}:${c.source_rule_candidate_id}`}><Link prefetch={false} href={groupApplicabilityPath(c)}>{c.source_group.label} · 查看组规则依据</Link></li>)}</ul> : <p>当前没有可查看的已批准组规则记录。这不代表没有组条件。</p>) : <p role="alert">{groups && !groups.ok ? groups.error : "组规则入口暂不可用。"}</p>}
     </section></> : <section className="human-test-panel" role="alert"><h1>快照暂不可用</h1><p>{failure}</p></section>}
   </main>;
