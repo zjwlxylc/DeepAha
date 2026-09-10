@@ -2,6 +2,7 @@
 import { createServer } from "node:http";
 import { source, task, preparedDocuments, bindingTarget, evidenceCheck, factPreparation, rulePreparation, ruleReadyTask, unitSnapshotFixture } from "../tests/investigations-fixture.ts";
 import { applicabilityViewFixture, applicabilityDecisionFixture, applicabilityIds } from "../tests/rule-applicability-fixture.ts";
+import { announcementSnapshotFixture, announcementRecordFixture } from "../tests/announcement-snapshot-fixture.ts";
 
 let current = structuredClone(task);
 let dropNextReceipt = false;
@@ -11,6 +12,14 @@ let unitSnapshot = null;
 let staleSnapshot = false;
 let applicability = null;
 let applicabilityMode = null;
+let announcement = null;
+let announcementMode = null;
+const announcementRecords = new Map();
+function announcementFailure(response) {
+  const status = { stale: 409, forbidden: 403, unavailable: 503 }[announcementMode];
+  if (!status) return false;
+  response.writeHead(status); response.end(JSON.stringify({ detail: "synthetic private failure must not leak" })); return true;
+}
 function applicabilityOptions() {
   const first = applicability.view.evidence_options[0];
   return [first, { ...first, member_id: applicabilityIds.secondBlock, material_id: "attachment-second", source_url: "https://example.test/notices/copied-announcement.html" }];
@@ -19,7 +28,22 @@ const server = createServer(async (request, response) => {
   const url = new URL(request.url, "http://127.0.0.1:3097"), path = url.pathname;
   response.setHeader("Content-Type", "application/json");
   response.setHeader("Cache-Control", "private, no-store");
-  if (path === "/reset") { current = structuredClone(task); receipts.clear(); posts = 0; dropNextReceipt = false; unitSnapshot = null; staleSnapshot = false; applicability = null; applicabilityMode = null; response.end("{}"); return; }
+  if (path === "/reset") { current = structuredClone(task); receipts.clear(); posts = 0; dropNextReceipt = false; unitSnapshot = null; staleSnapshot = false; applicability = null; applicabilityMode = null; announcement = null; announcementMode = null; announcementRecords.clear(); response.end("{}"); return; }
+  if (path === "/seed-announcement-snapshot") {
+    announcement = announcementSnapshotFixture(unitSnapshotFixture()); current = announcement.task; unitSnapshot = announcement.input.snapshot.base_v2;
+    response.end(JSON.stringify({ task_id: current.task_id, base_plan_id: unitSnapshot.plan_id })); return;
+  }
+  if (path === "/announcement-snapshot-mode") {
+    announcementMode = url.searchParams.get("kind");
+    if (announcementMode === "changed" && announcement) {
+      const row = announcement.input.snapshot.announcement_conditions[0], app = row.applicability;
+      const previous = app.decision_id;
+      app.decision_id = "019d0000-0000-7000-8000-000000002900"; app.sequence = 2;
+      app.request = { ...app.request, previous_decision_id: previous, reason: "合成工程更正：最新决定明确排除", outcome: "DOES_NOT_APPLY" };
+      row.disposition = "EXCLUDED"; announcement.input.dependencies_hash = "e".repeat(64);
+    }
+    response.end("{}"); return;
+  }
   if (path === "/seed-rule-applicability") { applicability = applicabilityViewFixture(unitSnapshotFixture()); current = applicability.task; unitSnapshot = applicability.snapshot; response.end(JSON.stringify(applicability.identity)); return; }
   if (path === "/rule-applicability-mode") { applicabilityMode = url.searchParams.get("kind"); response.end("{}"); return; }
   if (path === "/applicability-records") { response.end(JSON.stringify(applicability?.view.history ?? [])); return; }
@@ -33,6 +57,18 @@ const server = createServer(async (request, response) => {
   }
   if (path.endsWith("/sources")) { response.end(JSON.stringify({ sources: [source] })); return; }
   if (path.endsWith("/binding-targets")) { response.end(JSON.stringify({ targets: [bindingTarget] })); return; }
+  if (request.method === "GET" && path.endsWith("/announcement-snapshot-input")) {
+    if (announcementFailure(response)) return;
+    if (!announcement || path !== `/api/v1/local-human-test/investigations/${current.task_id}/unit-plans/${unitSnapshot.plan_id}/announcement-snapshot-input`) { response.writeHead(404); response.end("{}"); return; }
+    response.end(JSON.stringify(announcement.input)); return;
+  }
+  if (request.method === "GET" && path.includes("/announcement-snapshots/")) {
+    if (announcementFailure(response)) return;
+    const record = announcementRecords.get(path.split("/").at(-1));
+    if (!record || !path.startsWith(`/api/v1/local-human-test/investigations/${current.task_id}/announcement-snapshots/`)) { response.writeHead(404); response.end("{}"); return; }
+    if (record.dependencies_hash !== announcement.input.dependencies_hash) { response.writeHead(409); response.end("{}"); return; }
+    response.end(JSON.stringify(record)); return;
+  }
   if (request.method === "GET" && path.includes("/rule-applicability/")) {
     const id = applicability?.identity;
     if (!id || path !== `/api/v1/local-human-test/investigations/${id.task_id}/unit-plans/${id.target_plan_id}/rule-applicability/${id.source_rule_preparation_id}/${id.source_rule_candidate_id}`) { response.writeHead(404); response.end("{}"); return; }
@@ -59,6 +95,25 @@ const server = createServer(async (request, response) => {
     for await (const chunk of request) body += chunk;
     posts += 1;
     const key = request.headers["idempotency-key"];
+    if (path.endsWith("/announcement-snapshots")) {
+      if (announcementFailure(response)) return;
+      const values = JSON.parse(body);
+      if (!announcement || path !== `/api/v1/local-human-test/investigations/${current.task_id}/unit-plans/${unitSnapshot.plan_id}/announcement-snapshots`
+        || values.expected_dependencies_hash !== announcement.input.dependencies_hash || Object.keys(values).length !== 1) {
+        response.writeHead(409); response.end("{}"); return;
+      }
+      // Match production's fresh dependency check before returning a cached receipt.
+      let record = [...announcementRecords.values()].find(item => item.dependencies_hash === values.expected_dependencies_hash);
+      if (!record) {
+        record = announcementRecordFixture(announcement.input);
+        record.snapshot_id = `019d0000-0000-7000-8000-${String(2001 + announcementRecords.size).padStart(12, "0")}`;
+        record.snapshot_hash = announcementRecords.size ? "b".repeat(64) : "a".repeat(64);
+        announcementRecords.set(record.snapshot_id, structuredClone(record));
+        receipts.set(key, { path, body, task: structuredClone(record) });
+      }
+      if (dropNextReceipt) { dropNextReceipt = false; response.destroy(); return; }
+      response.end(JSON.stringify(record)); return;
+    }
     if (receipts.has(key)) {
       const receipt = receipts.get(key);
       if (receipt.body !== body || receipt.path !== path) { response.writeHead(409); response.end("{}"); return; }

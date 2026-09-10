@@ -356,3 +356,29 @@ class InvestigationRuleApplicability(Base):
     evidence_snapshot: Mapped[list[dict[str, object]]] = mapped_column(JSONB)
     evidence_hash: Mapped[str] = mapped_column(String(64))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class InvestigationAnnouncementSnapshot(Base):
+    __tablename__ = "investigation_announcement_snapshots"
+    __table_args__ = (
+        UniqueConstraint(
+            "base_plan_id",
+            "contract_version",
+            "adapter_version",
+            "dependencies_hash",
+            name="uq_investigation_announcement_snapshot_inputs",
+        ),
+    )
+    snapshot_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    base_plan_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("investigation_unit_plans.plan_id"))
+    unit_version_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("opportunity_unit_versions.opportunity_unit_version_id")
+    )
+    contract_version: Mapped[str] = mapped_column(String(64))
+    adapter_version: Mapped[str] = mapped_column(String(128))
+    dependencies: Mapped[dict[str, object]] = mapped_column(JSONB)
+    dependencies_hash: Mapped[str] = mapped_column(String(64))
+    snapshot: Mapped[dict[str, object]] = mapped_column(JSONB)
+    snapshot_hash: Mapped[str] = mapped_column(String(64))
+    reviewer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

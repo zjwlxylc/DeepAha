@@ -1169,6 +1169,25 @@ code {
   overflow-wrap: anywhere;
 }
 
+.announcement-snapshot-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.announcement-snapshot-shell section,
+.announcement-condition {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .announcement-snapshot-actions .button {
+    width: 100%;
+  }
+}
+
 .human-test-shell {
   max-width: 82rem;
 }

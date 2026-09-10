@@ -1,0 +1,238 @@
+{
+  "scope": "Synthetic engineering only; no real human approvals or release qualification",
+  "verified_at": "2026-09-10T13:08:48.4378803+08:00",
+  "base_commit": "0d3260be7ffcb91ace4bfd022b4d94eb3c5ae96f",
+  "backend_unit": {
+    "failures": 0,
+    "seconds": 46.115,
+    "passed": 1454
+  },
+  "integration": {
+    "passed": 661,
+    "seconds": 746.137,
+    "failed": 0,
+    "new_cases": [
+      {
+        "seconds": 5.96,
+        "name": "test_announcement_snapshot_preserves_source_and_invalidates_after_correction"
+      },
+      {
+        "seconds": 1.782,
+        "name": "test_missing_or_rejected_source_is_preserved[not-reviewed-SOURCE_FACT_NOT_PROMOTED]"
+      },
+      {
+        "seconds": 1.773,
+        "name": "test_missing_or_rejected_source_is_preserved[not-promoted-SOURCE_FACT_NOT_PROMOTED]"
+      },
+      {
+        "seconds": 1.879,
+        "name": "test_missing_or_rejected_source_is_preserved[fact-rejected-SOURCE_FACT_REJECTED]"
+      },
+      {
+        "seconds": 2.156,
+        "name": "test_missing_or_rejected_source_is_preserved[fact-unknown-SOURCE_FACT_UNKNOWN]"
+      },
+      {
+        "seconds": 1.995,
+        "name": "test_missing_or_rejected_source_is_preserved[no-rule-preparation-SOURCE_RULE_PREPARATION_MISSING]"
+      },
+      {
+        "seconds": 2.257,
+        "name": "test_missing_or_rejected_source_is_preserved[rule-unreviewed-SOURCE_RULE_APPROVAL_REQUIRED]"
+      },
+      {
+        "seconds": 2.211,
+        "name": "test_missing_or_rejected_source_is_preserved[rule-rejected-SOURCE_RULE_REJECTED]"
+      },
+      {
+        "seconds": 2.294,
+        "name": "test_missing_or_rejected_source_is_preserved[rule-pending-SOURCE_RULE_GROUP_UNRESOLVED]"
+      },
+      {
+        "seconds": 1.489,
+        "name": "test_no_announcement_retains_full_base_and_cannot_enter_v2_compiler"
+      },
+      {
+        "seconds": 6.776,
+        "name": "test_every_latest_decision_even_same_outcome_invalidates_snapshot"
+      },
+      {
+        "seconds": 2.59,
+        "name": "test_concurrent_materialization_returns_one_record"
+      },
+      {
+        "seconds": 2.543,
+        "name": "test_cached_results_recheck_current_evidence_and_authority[verifier]"
+      },
+      {
+        "seconds": 2.236,
+        "name": "test_cached_results_recheck_current_evidence_and_authority[permission]"
+      },
+      {
+        "seconds": 2.332,
+        "name": "test_cached_results_recheck_current_evidence_and_authority[raw-bytes]"
+      },
+      {
+        "seconds": 2.768,
+        "name": "test_cached_results_recheck_current_evidence_and_authority[parent-dependency]"
+      },
+      {
+        "seconds": 2.608,
+        "name": "test_snapshot_is_append_only[UPDATE]"
+      },
+      {
+        "seconds": 2.243,
+        "name": "test_snapshot_is_append_only[DELETE]"
+      },
+      {
+        "seconds": 2.281,
+        "name": "test_history_refuses_downgrade"
+      },
+      {
+        "seconds": 2.095,
+        "name": "test_future_dated_announcement_fact_cannot_enter_inherited_snapshot"
+      },
+      {
+        "seconds": 2.635,
+        "name": "test_sql_rejects_forged_scope_even_with_recomputed_hashes[denominator]"
+      },
+      {
+        "seconds": 2.522,
+        "name": "test_sql_rejects_forged_scope_even_with_recomputed_hashes[rule]"
+      },
+      {
+        "seconds": 2.59,
+        "name": "test_sql_rejects_forged_scope_even_with_recomputed_hashes[target]"
+      },
+      {
+        "seconds": 2.678,
+        "name": "test_sql_rejects_forged_scope_even_with_recomputed_hashes[qualification]"
+      },
+      {
+        "seconds": 2.616,
+        "name": "test_trusted_read_rebuilds_content_instead_of_trusting_self_hash"
+      },
+      {
+        "seconds": 2.606,
+        "name": "test_source_rule_preparation_rebuild_rejects_rehashed_changes[text]"
+      },
+      {
+        "seconds": 2.628,
+        "name": "test_source_rule_preparation_rebuild_rejects_rehashed_changes[reference]"
+      },
+      {
+        "seconds": 2.509,
+        "name": "test_source_rule_preparation_rebuild_rejects_rehashed_changes[omit-row]"
+      },
+      {
+        "seconds": 3.849,
+        "name": "test_private_http_lifecycle_stale_forbidden_and_cross_task"
+      }
+    ],
+    "skipped": 3,
+    "errors": 0,
+    "skip_reasons": [
+      {
+        "reason": "requires the exact disposable Phase 6 database",
+        "name": "test_phase6_browser_seed_refuses_a_nonempty_database"
+      },
+      {
+        "reason": "requires the exact disposable Phase 8 database",
+        "name": "test_phase8_browser_seed_is_synthetic_and_refuses_reuse"
+      },
+      {
+        "reason": "controlled real-source corpus is not mounted",
+        "name": "test_real_s02_manifest_replays_stable_opportunity_identity"
+      }
+    ]
+  },
+  "static": {
+    "history_downgrade": "REFUSED as required",
+    "ruff": "PASS",
+    "mypy_linux_files": 453,
+    "mypy_windows_files": 453,
+    "empty_migration_roundtrip": "0044 -> 0043 -> 0044 PASS",
+    "formatted_files": 492,
+    "alembic_check": "PASS"
+  },
+  "web": {
+    "passed": 248,
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "test_files": 42,
+    "new_tests": 26,
+    "reused_on_resume": true,
+    "production_build": "PASS"
+  },
+  "browser": {
+    "resume_seconds": 22.153526000000003,
+    "initial_failure": "4 navigation timing failures: reload before Next route transition completed",
+    "resume_affected_scenarios_passed": 4,
+    "fix": "Assert the actual saved record href via toHaveURL before reload; preserve all save/stale assertions",
+    "new_seconds": 15.872489999999999,
+    "existing_scenarios_passed": 32,
+    "new_scenarios_passed": 12
+  },
+  "offline_profile_replay": {
+    "full_outputs": "UNCHANGED",
+    "scenarios": 5,
+    "database_writes": 0,
+    "overall": "UNCERTAIN",
+    "network_calls": 0
+  },
+  "review": {
+    "frontend": "No remaining P1/P2",
+    "fixed_issue": "Future-dated announcement fact approval accepted before fix; real PG before_insert regression failed then passed with decided_at <= current clock guard",
+    "backend": "No remaining P1/P2"
+  },
+  "frozen_case": {
+    "UNVERIFIED": 30,
+    "PASS": 94,
+    "FAIL": 0,
+    "delivery": "UNVERIFIED",
+    "references": 124,
+    "wma_calls": 0
+  },
+  "screenshots": [
+    {
+      "visual_check": "PASS",
+      "sha256": "565b6dd72399f2792b42bb5535ce50cd56fe5bade48a42ee2b2628893d0650f9",
+      "file": "desktop-initial-viewport.png"
+    },
+    {
+      "visual_check": "PASS",
+      "sha256": "b7e60ecb198a338a3253a1ba871fc57aab401d4fc7d540b47126b6f0fc0759a5",
+      "file": "desktop-lost-receipt.png"
+    },
+    {
+      "visual_check": "PASS",
+      "sha256": "cccf1599adc048e29a1707ff1d61fb5667b2388f08bb9e2c6ab875f95bb2b60e",
+      "file": "desktop-saved-viewport.png"
+    },
+    {
+      "visual_check": "PASS",
+      "sha256": "a3472bfa7dbddbcc60f320c5bf9c3a1ec72d2207d12fc320a02f19fbcb6efba4",
+      "file": "desktop-stale-record.png"
+    },
+    {
+      "visual_check": "PASS",
+      "sha256": "e692492db666cc08e7c96009432b4e77523c03814db4c099ef702f8503d47b9a",
+      "file": "mobile-initial-viewport.png"
+    },
+    {
+      "visual_check": "PASS",
+      "sha256": "b77de602b30fbd1647f1ee1b381094589d6dc63c6325c7a28577ed588b56ea65",
+      "file": "mobile-lost-receipt.png"
+    },
+    {
+      "visual_check": "PASS",
+      "sha256": "fad6762b1a31377c14d4a93515724b38ed8136dc8c9241db97989199c43f29bb",
+      "file": "mobile-saved-viewport.png"
+    },
+    {
+      "visual_check": "PASS",
+      "sha256": "0f896a3f57010612ad3bfdeba84a44aa70ec79806c4f2ad292a1670d82594ebc",
+      "file": "mobile-stale-record.png"
+    }
+  ]
+}

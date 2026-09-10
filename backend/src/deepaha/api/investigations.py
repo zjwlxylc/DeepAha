@@ -17,6 +17,7 @@ from deepaha.artifacts.local_file import LocalFileObjectStore
 from deepaha.artifacts.models import RawArtifact
 from deepaha.core.settings import Settings, get_settings
 from deepaha.db.session import get_engine, session_factory
+from deepaha.investigations.announcement_snapshots import MaterializeAnnouncementSnapshot
 from deepaha.investigations.applicability import DecideRuleApplicability
 from deepaha.investigations.contracts import (
     BindInvestigation,
@@ -94,7 +95,12 @@ def problem(error: Exception) -> HTTPException:
     status = (
         404
         if code
-        in {"INVESTIGATION_NOT_FOUND", "UNIT_PLAN_NOT_FOUND", "RULE_APPLICABILITY_SOURCE_NOT_FOUND"}
+        in {
+            "INVESTIGATION_NOT_FOUND",
+            "UNIT_PLAN_NOT_FOUND",
+            "RULE_APPLICABILITY_SOURCE_NOT_FOUND",
+            "ANNOUNCEMENT_SNAPSHOT_NOT_FOUND",
+        }
         else 409
     )
     if (
@@ -367,6 +373,52 @@ def read_unit_plan(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return load_unit_plan(store, task_id, plan_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/{task_id}/unit-plans/{plan_id}/announcement-snapshot-input")
+def announcement_snapshot_input(
+    task_id: UUID, plan_id: UUID, store: StoreDep, principal: PrincipalDep, response: Response
+) -> dict[str, Any]:
+    from deepaha.investigations.announcement_snapshots import preview_announcement_snapshot
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return preview_announcement_snapshot(store, task_id, plan_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/unit-plans/{plan_id}/announcement-snapshots")
+def create_announcement_snapshot(
+    task_id: UUID,
+    plan_id: UUID,
+    command: MaterializeAnnouncementSnapshot,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.announcement_snapshots import materialize_announcement_snapshot
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return materialize_announcement_snapshot(
+            store, task_id, plan_id, command.expected_dependencies_hash, principal
+        )
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/{task_id}/announcement-snapshots/{snapshot_id}")
+def read_announcement_snapshot(
+    task_id: UUID, snapshot_id: UUID, store: StoreDep, principal: PrincipalDep, response: Response
+) -> dict[str, Any]:
+    from deepaha.investigations.announcement_snapshots import load_announcement_snapshot
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return load_announcement_snapshot(store, task_id, snapshot_id, principal)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 
