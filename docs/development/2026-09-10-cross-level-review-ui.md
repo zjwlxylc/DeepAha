@@ -1,6 +1,6 @@
 # 跨层级条件私有接口与审核页面
 
-本批 IMPLEMENTED，本地定向验证通过，独立复核无剩余可复现 P1/P2；精确候选 CI 待提交后检查。不是人工关系裁决或可执行资格计划。
+本批 IMPLEMENTED，本地定向验证通过，独立复核无剩余可复现 P1/P2。PR #39 精确候选 `b22a97e` 的 CI #133 全部 9 个任务成功，已合并为 `49ec3e8`，候选与合并树同为 `f98fa32aee36d7253981e150f658ec9402a71f42`。证据见 `evidence/2026-09-10-cross-level-review-ui-ci.json`。不是人工关系裁决或可执行资格计划。
 
 私有 GET `/{task}/unit-plans/{plan}/cross-level-preview` 调用真实只读重建服务，使用既定 CrossLevelReview 响应契约，校验请求 task/plan 与返回身份，返回 private, no-store。完整原始输入、来源版本、审批关联和摘要校验仍在后端，不接受客户端提交的继承结果。
 
