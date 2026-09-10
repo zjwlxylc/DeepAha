@@ -8,6 +8,7 @@ import InvestigationDocuments from "../../../../components/investigations/docume
 import InvestigationFactReview from "../../../../components/investigations/fact-review";
 import InvestigationRuleReview from "../../../../components/investigations/rule-review";
 import InvestigationBindings from "../../../../components/investigations/bindings";
+import GroupSourceLinks from "../../../../components/investigations/group-source-links";
 import { investigationFailureMessage, investigationStatus } from "../../../../components/investigations/status";
 import { getInvestigation, getInvestigationBindingTargets } from "../../../../lib/investigations";
 import { formatDateTime } from "../../../../lib/public-opportunities";
@@ -31,6 +32,7 @@ export default async function InvestigationPage({ params }: { params: Promise<{ 
       <InvestigationEvidence task={task} />
       <InvestigationDocuments task={task} />
       <InvestigationBindings task={task} targets={targets} />
+      <GroupSourceLinks task={task} />
       <InvestigationFactReview task={task} requestKey={randomUUID()} key={`${task.entity_binding?.binding_id}:${task.evidence_check?.check_id}`} />
       <InvestigationRuleReview task={task} requestKey={randomUUID()} key={`rules:${task.entity_binding?.binding_id}:${task.evidence_check?.check_id}`} />
       <section className="human-test-panel" aria-labelledby="investigation-review-title">

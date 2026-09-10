@@ -2,7 +2,7 @@
 
 状态 IN_PROGRESS，承接公告继承快照 PR #23，属于既定顺序第 3 项的第一部分。先建立机会子项组的独立身份与来源关联，再接组级事实、规则和范围例外；本批不改变资格计算、完整范围批准或 Word 核验状态。
 
-身份底座已由 PR #24 合并，来源关联、新私有契约与后端 API 已 IMPLEMENTED 并完成本地定向验证，见 `docs/development/2026-09-10-group-source-bindings.md`；管理页面仍为 PLANNED，单独实现和验收。
+身份底座已由 PR #24 合并，来源关联、新私有契约与后端 API 已由 PR #25 合并，见 `docs/development/2026-09-10-group-source-bindings.md`；管理页面已 IMPLEMENTED 并完成本地定向验证，候选 CI 与集成待完成，见 `docs/development/2026-09-10-group-source-ui.md`。
 
 当前 WMA `kind=unit` 表示子项组，`kind=position` 才映射现有 POSITION。单位组不得借用任一岗位的 ID，也不能合并为公告级事实目标。内部 OpportunityUnit 可新增 GROUP 类型以复用稳定 ID、版本及来源包关联；新增私有 `group-identity/1.0.0` 契约承载 GROUP，旧 V08 枚举、导出 Schema、绑定的 positions、已存事实准备和 v2 快照保持原义。GROUP 仅是范围与来源身份，不能作为可申请岗位或最终资格结果公开。
 
