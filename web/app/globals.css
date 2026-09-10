@@ -1625,6 +1625,17 @@ code {
   overflow-wrap: anywhere;
 }
 
+.group-fact-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(18rem, 1fr);
+  gap: 2rem;
+  overflow-wrap: anywhere;
+}
+.group-fact-row > div { min-width: 0; }
+@media (max-width: 760px) {
+  .group-fact-row { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

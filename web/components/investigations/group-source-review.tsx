@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { loadGroupPreviewAction, loadGroupRecordAction, saveGroupSourceAction } from "../../app/review/investigations/group-source-actions";
 import { groupPreviewPath, groupRecordPath, type GroupSourceData, type GroupSourceResult } from "../../lib/group-sources";
 import { formatDateTime } from "../../lib/public-opportunities";
+import { groupFactStartPath } from "../../lib/group-facts";
 
 export default function GroupSourceReview({ taskId, entityId, recordId: initialRecordId, initialResult }: { taskId: string; entityId?: string; recordId?: string; initialResult: GroupSourceResult }) {
   const [data, setData] = useState<GroupSourceData | null>(initialResult.ok ? initialResult.value : null);
@@ -44,6 +45,7 @@ export default function GroupSourceReview({ taskId, entityId, recordId: initialR
       <section className="human-test-panel" aria-label="组来源记录">
         <h2>{record ? "已登记的组来源" : "当前组来源预览"}</h2>
         <p>来源组：{source.source_group.name ?? source.source_group.id}</p>
+        {record ? <Link prefetch={false} href={groupFactStartPath(taskId, record.group_binding_id)}>进入组字段审核</Link> : null}
         <p>所属机会：{data.task.entity_binding!.opportunity_title} · 机会版本 {source.opportunity_version}</p>
         <p>{record ? "本次打开已重新核对当前来源与身份。保存仅记录组与成员的来源关系。" : "预览不会自动登记。下列成员按原组完整保留，未处理成员也会保留在记录中。"}</p>
         {record ? <><dl className="compact-facts"><div><dt>稳定组标识</dt><dd>{record.group_identity.public_id}</dd></div><div><dt>组版本</dt><dd>{record.group_identity.version}</dd></div><div><dt>登记时间</dt><dd>{formatDateTime(record.created_at)}</dd></div></dl><Link prefetch={false} href={groupRecordPath(taskId, record.group_binding_id)}>打开已登记来源</Link></>
