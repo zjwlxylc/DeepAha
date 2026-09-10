@@ -36,6 +36,12 @@ from deepaha.investigations.group_contracts import (
     GroupSourceRecord,
     RegisterGroupSource,
 )
+from deepaha.investigations.group_fact_contracts import (
+    DecideGroupFact,
+    GroupFactRecord,
+    PrepareGroupFacts,
+    PromoteGroupFacts,
+)
 from deepaha.investigations.models import InvestigationMaterial
 from deepaha.investigations.rule_contracts import (
     DecideInvestigationRule,
@@ -106,6 +112,8 @@ def problem(error: Exception) -> HTTPException:
             "RULE_APPLICABILITY_SOURCE_NOT_FOUND",
             "ANNOUNCEMENT_SNAPSHOT_NOT_FOUND",
             "GROUP_SOURCE_NOT_FOUND",
+            "GROUP_FACT_SOURCE_NOT_FOUND",
+            "GROUP_FACT_PREPARATION_NOT_FOUND",
         }
         else 409
     )
@@ -392,6 +400,79 @@ def group_source_input(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return preview_group_source(store, task_id, entity_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/group-bindings/{group_binding_id}/facts", response_model=GroupFactRecord)
+def prepare_group_fact_review(
+    task_id: UUID,
+    group_binding_id: UUID,
+    command: PrepareGroupFacts,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_facts import prepare_group_facts
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return prepare_group_facts(store, task_id, group_binding_id, command, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/{task_id}/group-facts/{preparation_id}", response_model=GroupFactRecord)
+def read_group_fact_review(
+    task_id: UUID,
+    preparation_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_facts import load_group_facts
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return load_group_facts(store, task_id, preparation_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/group-facts/{preparation_id}/decisions", response_model=GroupFactRecord)
+def decide_group_fact_review(
+    task_id: UUID,
+    preparation_id: UUID,
+    command: DecideGroupFact,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_facts import act_on_group_facts
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return act_on_group_facts(store, task_id, preparation_id, command, principal, key)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/group-facts/{preparation_id}/promotions", response_model=GroupFactRecord)
+def promote_group_fact_review(
+    task_id: UUID,
+    preparation_id: UUID,
+    command: PromoteGroupFacts,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.group_facts import act_on_group_facts
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return act_on_group_facts(store, task_id, preparation_id, command, principal, key)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 

@@ -1,0 +1,80 @@
+{
+  "date": "2026-09-10",
+  "scope": "GROUP_FACT_REVIEW_ONLY",
+  "branch": "codex/group-fact-review",
+  "base_commit": "f8eb21afd7b62e45625310af897a9faa12801a53",
+  "local_verdict": "PASS",
+  "candidate_ci": "PENDING",
+  "test_evidence_mode": "targeted batches; unchanged passing cases reused",
+  "test_groups": [
+    {
+      "files": [
+        "backend/tests/integration/test_group_facts.py",
+        "backend/tests/integration/test_group_fact_migration.py"
+      ],
+      "passed": 34,
+      "details": "First 28 fact cases plus 2 migrations passed together; 4 later-added fact cases passed in targeted calls after fixture corrections."
+    },
+    {
+      "files": [
+        "backend/tests/integration/test_investigation_facts.py",
+        "backend/tests/integration/test_group_source_binding.py"
+      ],
+      "passed": 36
+    },
+    {
+      "files": [
+        "backend/tests/integration/test_p9b_fact_persistence.py"
+      ],
+      "passed": 3,
+      "initial_environment_error": "2 cases lacked local object store credentials; existing Moto container restarted, synthetic credentials supplied, all 3 cases passed."
+    },
+    {
+      "files": [
+        "backend/tests/api/test_group_facts.py",
+        "backend/tests/investigations/test_field_mapping.py",
+        "backend/tests/test_p9b_fact_chain_verifier_scope.py"
+      ],
+      "passed": 36
+    }
+  ],
+  "unique_tests_passed": 109,
+  "checks": {
+    "ruff_format_9_files": "PASS",
+    "ruff_check_9_files": "PASS",
+    "mypy_linux_7_files": "PASS",
+    "migration_round_trip_and_model_match": "PASS",
+    "nonempty_history_downgrade_refused": "PASS",
+    "read_only_review": "No remaining P1/P2; static review is not human acceptance"
+  },
+  "negative_reproduction": {
+    "materialized_value_swap": "Failed before fix: MASTER approved candidate materialized as BACHELOR; now rejected and rolled back",
+    "candidate_evidence_append": "Actual extra legal same-run evidence INSERT succeeds; subsequent read and same-key decision retry reject it",
+    "future_times": "Candidate, decision, fact, and fact-set cases rejected"
+  },
+  "unchanged": {
+    "wma_calls": 0,
+    "official_downloads": 0,
+    "frozen_prompt_schema_originals": "unchanged",
+    "real_case": {
+      "PASS": 94,
+      "FAIL": 0,
+      "UNVERIFIED": 30,
+      "delivery": "UNVERIFIED"
+    },
+    "eligibility": "UNCERTAIN",
+    "web_tests_and_build": "not rerun; backend-only change"
+  },
+  "sha256": {
+    "backend/src/deepaha/api/investigations.py": "1d01e999419bf6593527c6f5f6f3bc0998d73c80a003ced204d9e51d3bd91a47",
+    "backend/src/deepaha/investigations/field_mapping.py": "33232b028a71139858556ad4b0187741ae5f8a2742b2bfb3aa31553721d3d895",
+    "backend/src/deepaha/investigations/models.py": "2bdab9b0a7423bd929ebf985f6d8ed1ecaae6154024d90fc9829d0acfc5d661c",
+    "backend/src/deepaha/investigations/group_fact_contracts.py": "b1700126b2e23e8189b3bf121e87c536e1ef2c06318c5618080f17286c6ca366",
+    "backend/src/deepaha/investigations/group_facts.py": "b3d68b5cf8ff0842494dcc7b02e3b04a5eb135e4ec9b46cea80588af4597eebb",
+    "backend/migrations/versions/20260910_0047_group_fact_review.py": "45a9a714953026a6aaabb335abeb2fef9c8c5384a14460e72b0f97b23097bb75",
+    "backend/tests/api/test_group_facts.py": "6b7e2f9f07d51e5a9fa694f412e2b82b061e54fd75fc88c5a5626f5d23796fdd",
+    "backend/tests/integration/test_group_facts.py": "7885fc06d872ca2f6e6f66d9cf71f51f6722cb581884aab2055f8092e6e296e0",
+    "backend/tests/integration/test_group_fact_migration.py": "2db23e6b4744ba867f73ee51de453e617fd1ef1ac04e4ed1c9a82073d27051ef"
+  },
+  "sha256_format": "UTF-8 source bytes with CRLF normalized to LF"
+}

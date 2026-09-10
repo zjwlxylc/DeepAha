@@ -224,6 +224,63 @@ class InvestigationFactPreparation(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class InvestigationGroupFactPreparation(Base):
+    __tablename__ = "investigation_group_fact_preparations"
+    __table_args__ = (
+        UniqueConstraint(
+            "group_binding_id", "check_id", "mapping_version", name="uq_group_fact_preparation"
+        ),
+    )
+    preparation_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    group_binding_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("investigation_group_bindings.group_binding_id")
+    )
+    check_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("investigation_evidence_checks.check_id")
+    )
+    mapping_version: Mapped[str] = mapped_column(String(128))
+    result: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    result_hash: Mapped[str] = mapped_column(String(64))
+    reviewer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class InvestigationGroupFactAction(Base):
+    __tablename__ = "investigation_group_fact_actions"
+    __table_args__ = (
+        UniqueConstraint(
+            "preparation_id", "reviewer_id", "request_key_hash", name="uq_group_fact_request"
+        ),
+        UniqueConstraint("decision_id", name="uq_group_fact_decision"),
+        CheckConstraint(
+            "(kind = 'DECISION' and candidate_id is not null "
+            "and decision_id is not null and fact_set_id is null) or "
+            "(kind = 'PROMOTION' and candidate_id is null "
+            "and decision_id is null and fact_set_id is not null)",
+            name="action_shape",
+        ),
+    )
+    action_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    preparation_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("investigation_group_fact_preparations.preparation_id")
+    )
+    kind: Mapped[str] = mapped_column(String(16))
+    candidate_id: Mapped[UUID | None] = mapped_column(
+        Uuid, ForeignKey("extraction_candidates.candidate_id")
+    )
+    decision_id: Mapped[UUID | None] = mapped_column(
+        Uuid, ForeignKey("fact_verification_decisions.decision_id")
+    )
+    fact_set_id: Mapped[UUID | None] = mapped_column(
+        Uuid, ForeignKey("versioned_verified_fact_sets.verified_fact_set_id")
+    )
+    reviewer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    request_key_hash: Mapped[str] = mapped_column(String(64))
+    request_hash: Mapped[str] = mapped_column(String(64))
+    request: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 class InvestigationFactAction(Base):
     __tablename__ = "investigation_fact_actions"
     __table_args__ = (

@@ -1,6 +1,6 @@
 # 单位组来源管理入口
 
-状态 IMPLEMENTED，本地定向验证通过，候选 CI 与合并待完成。后端 PR #25 已合并为 `ee96b8a2d2b7bc49ca330e532ae9444584c50ffa`，候选 CI #105 九项通过，合并与候选同树，主线 CI #106 成功；证据见 `evidence/2026-09-10-group-source-bindings-ci.json`。
+状态 IMPLEMENTED，PR #26 已合并为 `f8eb21afd7b62e45625310af897a9faa12801a53`。候选 CI #107 九项通过，合并与候选同树，主线 CI #108 成功；证据见 `evidence/2026-09-10-group-source-ui-ci.json`。后端 PR #25 已合并为 `ee96b8a2d2b7bc49ca330e532ae9444584c50ffa`，候选 CI #105 九项通过，合并与候选同树，主线 CI #106 成功；证据见 `evidence/2026-09-10-group-source-bindings-ci.json`。
 
 本批为既有 `group-identity/1.0.0` 私有接口接入桌面优先管理页面。当前已批准且来源冻结的调查任务可按原单位组进入预览；页面保留原组全部成员与顺序，显示 BOUND / UNPROCESSED，空组明确显示 NO_MEMBERS。组登记只记录来源与身份，不生成事实、规则或资格批准。
 
@@ -14,4 +14,4 @@
 
 全部浏览器数据与审核账号为合成工程场景。真实案例仍为 94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery UNVERIFIED，整体资格 UNCERTAIN。未调用 WMA。
 
-恢复顺序：确认本批候选 CI，通过后按候选 SHA 合并并核对同树；再进入组级事实及规则目标的设计与实现。下一批涉及事实目标、证据批准、版本失效与旧契约兼容，适合切换到“高”推理档位后继续。它不包括自动批准完整范围、Word 机械核验放行或个人资格发布。
+后续已进入组级事实后端，见 `2026-09-10-group-fact-review.md`。组规则继承仍是后续独立任务；不包括自动批准完整范围、Word 机械核验放行或个人资格发布。
