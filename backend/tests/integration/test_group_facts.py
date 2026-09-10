@@ -83,6 +83,8 @@ def ready_group(
             }
             # A supported alias deliberately produces a second candidate; both need decisions.
             other["field"] = options.get("other_field", "学历")
+            if options.get("other_status") == "CONFIRMED":
+                other.update(status="CONFIRMED", value=options.get("other_value", fact["value"]))
             if options.get("two_evidence"):
                 other["evidence"][0]["artifact_id"] = "a_attachment"
                 other["evidence"][0]["quote"] = "Additional official material"

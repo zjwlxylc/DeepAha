@@ -19,6 +19,6 @@
 
 ## 下一安全恢复点
 
-确认本分支 PR 的精确候选 CI，全部通过后再合并并核对代码树。本地只读链路已经收敛，下一项是 GROUP 适用决定的独立持久化（官方精确引文、前序 CAS、幂等、不可变审计），随后才处理例外、冲突及继承计划。该工作涉及跨层写入与并发边界，建议切到高档后继续。保持当前任务窗口与工作区，无需重跑 WMA。
+PR #33 已合并。候选 `fef6951` 的 CI #121（run `34464433277`）全部 9 个 job 成功；合并提交 `7d34810` 与候选代码树一致，证据见 `evidence/2026-09-10-group-applicability-ui-ci.json`。后续 GROUP 适用决定独立持久化在 `codex/group-applicability-decisions` 推进；该步骤完成情况见 `2026-09-10-group-applicability-decisions.md`。保持当前任务窗口与工作区，无需重跑 WMA。
 
 真实样本仍为 94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery UNVERIFIED，整体资格 UNCERTAIN。未改 V3 Prompt、冻结 Candidate Facts、原件或证据 Gate。
