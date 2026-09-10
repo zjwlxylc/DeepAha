@@ -1,0 +1,54 @@
+{
+  "pr": 39,
+  "run_id": 34485346789,
+  "candidate_sha": "b22a97e4d0e802ba7c781968ecaff9e187802186",
+  "merge_sha": "49ec3e8f4c0da5b50eec7226051fd661e27f3f64",
+  "tree": "f98fa32aee36d7253981e150f658ec9402a71f42",
+  "jobs": [
+    {
+      "name": "backend-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase4-eligibility",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase3-resolution",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase6-profile-action",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase8-deadline-reminder",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "web-quality",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase5-public-trust",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "phase7-feedback-review",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}
