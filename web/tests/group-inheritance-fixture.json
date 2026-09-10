@@ -1,0 +1,2214 @@
+{
+  "dependencies": {
+    "contract_version": "group-inheritance-preview/1.0.0",
+    "base_v2": {
+      "plan_id": "01a08b2c-fe34-7353-aa92-b9a8afeac34f",
+      "plan": {
+        "qualification_plan_id": "01a08b2c-fe34-7353-aa92-b9a8afeac34f",
+        "version": 1,
+        "target": {
+          "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+          "opportunity_version": 1,
+          "unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+          "unit_version": 1,
+          "unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+        },
+        "manifest": {
+          "target": {
+            "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+            "opportunity_version": 1,
+            "unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+            "unit_version": 1,
+            "unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+          },
+          "preparation_id": "01a08b2c-fbd8-7649-b074-b13dd0796c52",
+          "preparation_sha256": "0e8c4adffa4c6fae49999c00add93d1bc9cdc9805f2438dfe79c3996b2b784d0",
+          "conditions": [
+            {
+              "condition_id": "source:0",
+              "scope": "EMPLOYER_GROUP",
+              "source_entity_id": "unit",
+              "source_index": 0,
+              "source_unit_id": null,
+              "source_unit_version": null,
+              "source_unit_version_id": null,
+              "field_name": "education_requirements",
+              "source_sha256": "ec7cb05152c00b5547ebbc2cfb775c751ca3a74b5ba3fe6e058a45ab1b55306e",
+              "state": "UNPROCESSED",
+              "fact_id": null,
+              "evidence_ref_ids": [
+                "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+              ]
+            },
+            {
+              "condition_id": "source:1",
+              "scope": "EMPLOYER_GROUP",
+              "source_entity_id": "unit",
+              "source_index": 1,
+              "source_unit_id": null,
+              "source_unit_version": null,
+              "source_unit_version_id": null,
+              "field_name": "尚未处理条件",
+              "source_sha256": "fc25f47d14822492247862aa99882cf46a0169f56a6ea2fb2cfba5a9c35cdecc",
+              "state": "UNKNOWN",
+              "fact_id": null,
+              "evidence_ref_ids": [
+                "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+              ]
+            },
+            {
+              "condition_id": "source:2",
+              "scope": "UNIT",
+              "source_entity_id": "position",
+              "source_index": 2,
+              "source_unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+              "source_unit_version": 1,
+              "source_unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c",
+              "field_name": "education_requirements",
+              "source_sha256": "91f8d2406c71d2ee80eafec47a4b5b312cd9216e4848be018d442e94f5039bbc",
+              "state": "KNOWN",
+              "fact_id": "01a08b2c-fce0-7364-a654-edcb0699138b",
+              "evidence_ref_ids": [
+                "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+              ]
+            }
+          ],
+          "upstream_blockers": [
+            "SOURCE_COMPLETENESS_UNVERIFIED"
+          ],
+          "coverage_policy_version": "unit-condition-coverage/2.0.0"
+        },
+        "manifest_sha256": "7c731e8a2023b6678becfd76b8b4744bbf475da900f671a963fbd5335cbc1bf9",
+        "dispositions": [
+          {
+            "condition_id": "source:0",
+            "kind": "UNRESOLVED",
+            "rule_ids": [],
+            "decision_id": null,
+            "reviewer_principal_id": null,
+            "reason": "CONDITION_REVIEW_REQUIRED"
+          },
+          {
+            "condition_id": "source:1",
+            "kind": "UNRESOLVED",
+            "rule_ids": [],
+            "decision_id": null,
+            "reviewer_principal_id": null,
+            "reason": "CONDITION_REVIEW_REQUIRED"
+          },
+          {
+            "condition_id": "source:2",
+            "kind": "RULE",
+            "rule_ids": [
+              "01a08b2c-fd70-7351-8b61-0f1e38a9a73b"
+            ],
+            "decision_id": "01a08b2c-fe1d-768a-91cf-f535fb940169",
+            "reviewer_principal_id": "human:01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+            "reason": "Synthetic independent rule review"
+          }
+        ],
+        "rules": [
+          {
+            "rule_id": "01a08b2c-fd70-7351-8b61-0f1e38a9a73b",
+            "code": "investigation-01a08b2c-fce0-7364-a654-edcb0699138b",
+            "operator": "GTE",
+            "field": "education_level",
+            "value_type": "STRING",
+            "value": "MASTER",
+            "operand_rule_ids": [],
+            "required": true,
+            "reason_template": "学历必须满足官方最低要求",
+            "evidence": [
+              {
+                "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+                "authority": "ORIGINAL_OFFICIAL_NOTICE",
+                "precedence": 400,
+                "relation": "SUPPORTS",
+                "effective_at": "2025-12-31T16:00:00Z",
+                "assertion_sha256": "0a64040fe4c0b97e37bfa01b19cb4352e971e4063636afd10f608cf89e6fb707"
+              }
+            ]
+          }
+        ],
+        "root_rule_ids": [
+          "01a08b2c-fd70-7351-8b61-0f1e38a9a73b"
+        ],
+        "admissions": [
+          {
+            "rule_id": "01a08b2c-fd70-7351-8b61-0f1e38a9a73b",
+            "target": {
+              "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+              "opportunity_version": 1,
+              "unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+              "unit_version": 1,
+              "unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+            },
+            "rule_sha256": "cd25b43bdca472d37ff5dc64ed2d9ddc4694193a53cc1a1f10366784b1f76be9",
+            "condition_ids": [
+              "source:2"
+            ],
+            "candidate_id": "01a08b2c-fd70-7351-8b61-0f1e38a9a73b",
+            "approval_decision_id": "01a08b2c-fe1d-768a-91cf-f535fb940169",
+            "producer_principal_id": "component:direct-wma-rule-bridge/2.0.0+deriver-1.0.1",
+            "reviewer_principal_id": "human:01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+            "reviewed_at": "2026-09-07T10:00:00Z",
+            "evidence_validity": [
+              {
+                "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                "valid_from": "2025-12-31T16:00:00Z",
+                "valid_until": null
+              }
+            ]
+          }
+        ],
+        "contract_version": "unit-qualification/2.0.0"
+      },
+      "plan_hash": "2c0939ce2bc7b0871a22f9d7911ecbb700a9a741f580f23c3ead769ada5ce541",
+      "context": {
+        "adapter_version": "investigation-unit-snapshot/1.0.0",
+        "rule_preparation_id": "01a08b2c-fd7c-728b-816e-ec95f9563c69",
+        "rule_preparation_hash": "c961a3b883abb0b1d53896867dfeb366997d12c58c0734f667fa2f0a0839b2cc",
+        "fact_preparation_hash": "0e8c4adffa4c6fae49999c00add93d1bc9cdc9805f2438dfe79c3996b2b784d0",
+        "check_id": "01a08b2c-f0a8-70ba-8435-a00bff70df10",
+        "binding_id": "01a08b2c-f1d0-74f5-a285-2afe0b5df241",
+        "delivery_hash": "0a0a85c75a72612b5bc2885095b89aac866e25ad94dfc250f7d47c067def9394",
+        "fact_set_id": "01a08b2c-fcd5-7394-a630-68900f1b715e",
+        "fact_set_version": 1,
+        "source_bundle_revision_id": "01a08b2c-f17d-7534-8685-078f6b259d4b",
+        "source_row_count": 3,
+        "excluded_source_rows": [],
+        "source_notes": [],
+        "evidence_reference_counts": {
+          "PASS": 3,
+          "FAIL": 0,
+          "UNVERIFIED": 0
+        },
+        "unresolved_source_references": [],
+        "rule_decisions": {
+          "01a08b2c-fd70-7351-8b61-0f1e38a9a73b": {
+            "decision_id": "01a08b2c-fe1d-768a-91cf-f535fb940169",
+            "request_hash": "66305bfeaca1be03ebfacaf492d60b016e0e034f0f8e913993a5512538e2d973",
+            "receipt_created_at": "2026-09-07T10:00:00+00:00"
+          }
+        },
+        "evidence_valid_until_policy": "NOT_ESTABLISHED"
+      },
+      "context_hash": "be0f064924f517d08361096379440357c530011ee4619c4ad6901c75ab42f40b",
+      "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+      "created_at": "2026-09-07T10:00:00+00:00"
+    },
+    "group_source": {
+      "entity_id": "unit",
+      "source": {
+        "contract_version": "group-identity/1.0.0",
+        "scope": "GROUP_SOURCE_ASSOCIATION_ONLY",
+        "task_id": "01a08b2c-ef44-7632-b793-66698e42667c",
+        "delivery_hash": "0a0a85c75a72612b5bc2885095b89aac866e25ad94dfc250f7d47c067def9394",
+        "binding_id": "01a08b2c-f1d0-74f5-a285-2afe0b5df241",
+        "binding_hash": "fb8fa8280dd1b0fb1da1654e69d80e37fafad6b07c53fb098c9dd5e860a7fb50",
+        "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+        "opportunity_version": 1,
+        "source_bundle_revision_id": "01a08b2c-f17d-7534-8685-078f6b259d4b",
+        "canonical_bundle_hash": "86577bc63175c67ceed8b97220584da18516ef1d3b74f0069ec4595adfa01338",
+        "source_snapshot_hash": "511da5a7971e651c7db5c8254d08b78229aabfd56a060b7e9bb7621506d3d8fc",
+        "source_group": {
+          "id": "unit",
+          "name": "Unit",
+          "parent_id": "announcement",
+          "positions": [
+            {
+              "id": "position",
+              "code": "P1",
+              "name": "Position",
+              "facts": [
+                {
+                  "field": "学历要求",
+                  "value": "硕士及以上",
+                  "status": "CONFIRMED",
+                  "evidence": [
+                    {
+                      "quote": "学历要求：硕士及以上",
+                      "locator": {
+                        "selector": "#terms"
+                      },
+                      "artifact_id": "notice"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "unit_level": [
+            {
+              "field": "学历要求",
+              "value": "硕士及以上",
+              "status": "CONFIRMED",
+              "evidence": [
+                {
+                  "quote": "学历要求：硕士及以上",
+                  "locator": {
+                    "selector": "#terms"
+                  },
+                  "artifact_id": "notice"
+                }
+              ]
+            },
+            {
+              "field": "尚未处理条件",
+              "value": null,
+              "status": "UNKNOWN",
+              "evidence": [
+                {
+                  "quote": "学历要求：硕士及以上",
+                  "locator": {
+                    "selector": "#terms"
+                  },
+                  "artifact_id": "notice"
+                }
+              ]
+            }
+          ]
+        },
+        "source_entity": {
+          "id": "unit",
+          "kind": "unit",
+          "name": "Unit",
+          "parent_id": "announcement"
+        },
+        "members": [
+          {
+            "entity_id": "position",
+            "state": "BOUND",
+            "position_binding": {
+              "entity_id": "position",
+              "opportunity_unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+              "opportunity_unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+            }
+          }
+        ],
+        "membership_status": "ALL_MEMBERS_BOUND"
+      },
+      "registration": {
+        "contract_version": "group-identity/1.0.0",
+        "scope": "GROUP_SOURCE_ASSOCIATION_ONLY",
+        "group_binding_id": "01a08b2c-f274-7598-933c-f543149f62e1",
+        "group_identity": {
+          "unit_kind": "GROUP",
+          "unit_id": "01a08b2c-f269-722b-a70e-be41ddb99efa",
+          "public_id": "unit_01a08b2cf269722ba70ebe41ddb99efa",
+          "unit_version_id": "01a08b2c-f26c-74ac-8bb0-705b60ba667f",
+          "version": 1,
+          "key": "group:b119e4431bab5ce91cb7e5f710aa64349fb4f2b77e20f004a12d30b7ea12032b",
+          "label": "Unit"
+        },
+        "source": {
+          "contract_version": "group-identity/1.0.0",
+          "scope": "GROUP_SOURCE_ASSOCIATION_ONLY",
+          "task_id": "01a08b2c-ef44-7632-b793-66698e42667c",
+          "delivery_hash": "0a0a85c75a72612b5bc2885095b89aac866e25ad94dfc250f7d47c067def9394",
+          "binding_id": "01a08b2c-f1d0-74f5-a285-2afe0b5df241",
+          "binding_hash": "fb8fa8280dd1b0fb1da1654e69d80e37fafad6b07c53fb098c9dd5e860a7fb50",
+          "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+          "opportunity_version": 1,
+          "source_bundle_revision_id": "01a08b2c-f17d-7534-8685-078f6b259d4b",
+          "canonical_bundle_hash": "86577bc63175c67ceed8b97220584da18516ef1d3b74f0069ec4595adfa01338",
+          "source_snapshot_hash": "511da5a7971e651c7db5c8254d08b78229aabfd56a060b7e9bb7621506d3d8fc",
+          "source_group": {
+            "id": "unit",
+            "name": "Unit",
+            "parent_id": "announcement",
+            "positions": [
+              {
+                "id": "position",
+                "code": "P1",
+                "name": "Position",
+                "facts": [
+                  {
+                    "field": "学历要求",
+                    "value": "硕士及以上",
+                    "status": "CONFIRMED",
+                    "evidence": [
+                      {
+                        "quote": "学历要求：硕士及以上",
+                        "locator": {
+                          "selector": "#terms"
+                        },
+                        "artifact_id": "notice"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "unit_level": [
+              {
+                "field": "学历要求",
+                "value": "硕士及以上",
+                "status": "CONFIRMED",
+                "evidence": [
+                  {
+                    "quote": "学历要求：硕士及以上",
+                    "locator": {
+                      "selector": "#terms"
+                    },
+                    "artifact_id": "notice"
+                  }
+                ]
+              },
+              {
+                "field": "尚未处理条件",
+                "value": null,
+                "status": "UNKNOWN",
+                "evidence": [
+                  {
+                    "quote": "学历要求：硕士及以上",
+                    "locator": {
+                      "selector": "#terms"
+                    },
+                    "artifact_id": "notice"
+                  }
+                ]
+              }
+            ]
+          },
+          "source_entity": {
+            "id": "unit",
+            "kind": "unit",
+            "name": "Unit",
+            "parent_id": "announcement"
+          },
+          "members": [
+            {
+              "entity_id": "position",
+              "state": "BOUND",
+              "position_binding": {
+                "entity_id": "position",
+                "opportunity_unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+                "opportunity_unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+              }
+            }
+          ],
+          "membership_status": "ALL_MEMBERS_BOUND"
+        },
+        "source_hash": "bab5da3d37f19e4bf2f57a9b1891de57980e519970bc4e250957f6e49a513e08",
+        "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+        "created_at": "2026-09-07T10:00:00Z"
+      },
+      "rule_preview": {
+        "result": {
+          "contract_version": "group-rule-preview/1.0.0",
+          "derivation_version": "1.0.1",
+          "scope": "READ_ONLY_GROUP_RULE_PREVIEW",
+          "target": {
+            "unit_kind": "GROUP",
+            "unit_id": "01a08b2c-f269-722b-a70e-be41ddb99efa",
+            "public_id": "unit_01a08b2cf269722ba70ebe41ddb99efa",
+            "unit_version_id": "01a08b2c-f26c-74ac-8bb0-705b60ba667f",
+            "version": 1,
+            "key": "group:b119e4431bab5ce91cb7e5f710aa64349fb4f2b77e20f004a12d30b7ea12032b",
+            "label": "Unit"
+          },
+          "fact_review": {
+            "preparation_id": "01a08b2c-f319-7290-86d4-cf1ee543abca",
+            "result": {
+              "contract_version": "group-fact-bridge/1.0.0",
+              "scope": "GROUP_FACT_REVIEW_ONLY",
+              "group_source": {
+                "contract_version": "group-identity/1.0.0",
+                "scope": "GROUP_SOURCE_ASSOCIATION_ONLY",
+                "group_binding_id": "01a08b2c-f274-7598-933c-f543149f62e1",
+                "group_identity": {
+                  "unit_kind": "GROUP",
+                  "unit_id": "01a08b2c-f269-722b-a70e-be41ddb99efa",
+                  "public_id": "unit_01a08b2cf269722ba70ebe41ddb99efa",
+                  "unit_version_id": "01a08b2c-f26c-74ac-8bb0-705b60ba667f",
+                  "version": 1,
+                  "key": "group:b119e4431bab5ce91cb7e5f710aa64349fb4f2b77e20f004a12d30b7ea12032b",
+                  "label": "Unit"
+                },
+                "source": {
+                  "contract_version": "group-identity/1.0.0",
+                  "scope": "GROUP_SOURCE_ASSOCIATION_ONLY",
+                  "task_id": "01a08b2c-ef44-7632-b793-66698e42667c",
+                  "delivery_hash": "0a0a85c75a72612b5bc2885095b89aac866e25ad94dfc250f7d47c067def9394",
+                  "binding_id": "01a08b2c-f1d0-74f5-a285-2afe0b5df241",
+                  "binding_hash": "fb8fa8280dd1b0fb1da1654e69d80e37fafad6b07c53fb098c9dd5e860a7fb50",
+                  "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+                  "opportunity_version": 1,
+                  "source_bundle_revision_id": "01a08b2c-f17d-7534-8685-078f6b259d4b",
+                  "canonical_bundle_hash": "86577bc63175c67ceed8b97220584da18516ef1d3b74f0069ec4595adfa01338",
+                  "source_snapshot_hash": "511da5a7971e651c7db5c8254d08b78229aabfd56a060b7e9bb7621506d3d8fc",
+                  "source_group": {
+                    "id": "unit",
+                    "name": "Unit",
+                    "parent_id": "announcement",
+                    "positions": [
+                      {
+                        "id": "position",
+                        "code": "P1",
+                        "name": "Position",
+                        "facts": [
+                          {
+                            "field": "学历要求",
+                            "value": "硕士及以上",
+                            "status": "CONFIRMED",
+                            "evidence": [
+                              {
+                                "quote": "学历要求：硕士及以上",
+                                "locator": {
+                                  "selector": "#terms"
+                                },
+                                "artifact_id": "notice"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "unit_level": [
+                      {
+                        "field": "学历要求",
+                        "value": "硕士及以上",
+                        "status": "CONFIRMED",
+                        "evidence": [
+                          {
+                            "quote": "学历要求：硕士及以上",
+                            "locator": {
+                              "selector": "#terms"
+                            },
+                            "artifact_id": "notice"
+                          }
+                        ]
+                      },
+                      {
+                        "field": "尚未处理条件",
+                        "value": null,
+                        "status": "UNKNOWN",
+                        "evidence": [
+                          {
+                            "quote": "学历要求：硕士及以上",
+                            "locator": {
+                              "selector": "#terms"
+                            },
+                            "artifact_id": "notice"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "source_entity": {
+                    "id": "unit",
+                    "kind": "unit",
+                    "name": "Unit",
+                    "parent_id": "announcement"
+                  },
+                  "members": [
+                    {
+                      "entity_id": "position",
+                      "state": "BOUND",
+                      "position_binding": {
+                        "entity_id": "position",
+                        "opportunity_unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+                        "opportunity_unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+                      }
+                    }
+                  ],
+                  "membership_status": "ALL_MEMBERS_BOUND"
+                },
+                "source_hash": "bab5da3d37f19e4bf2f57a9b1891de57980e519970bc4e250957f6e49a513e08",
+                "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+                "created_at": "2026-09-07T10:00:00Z"
+              },
+              "check_id": "01a08b2c-f0a8-70ba-8435-a00bff70df10",
+              "check_hash": "b37610e74d499d9b9f06c823f64a7dbdffa9a04561ebfa09819809caca2c99c0",
+              "source_row_count": 3,
+              "rows": [
+                {
+                  "source_index": 0,
+                  "original": {
+                    "note": null,
+                    "field": "学历要求",
+                    "value": "硕士及以上",
+                    "status": "CONFIRMED",
+                    "evidence": [
+                      {
+                        "quote": "学历要求：硕士及以上",
+                        "sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                        "locator": {
+                          "selector": "#terms"
+                        },
+                        "artifact_id": "notice",
+                        "verification": {
+                          "quote": "学历要求：硕士及以上",
+                          "reader": {
+                            "name": "html_lxml_literal",
+                            "version": "1",
+                            "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                            "comparison_version": "html-quote-c14n/1"
+                          },
+                          "binding": "BOUND",
+                          "matches": [
+                            {
+                              "source_spans": [
+                                {
+                                  "end": 10,
+                                  "start": 0,
+                                  "origin_id": "/html/body/p::text"
+                                }
+                              ],
+                              "projection_id": "/html/body/p",
+                              "projection_end": 10,
+                              "projection_start": 0,
+                              "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                            }
+                          ],
+                          "verdict": "PASS",
+                          "precision": "SCOPE",
+                          "artifact_id": "notice",
+                          "reason_codes": [],
+                          "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                          "content_support": "FOUND",
+                          "declared_locator": "VERIFIED",
+                          "original_locator": {
+                            "selector": "#terms"
+                          },
+                          "verifier_version": "evidence-literal/1",
+                          "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                        },
+                        "mechanically_verified": true
+                      }
+                    ],
+                    "entity_id": "unit"
+                  },
+                  "entity_id": "unit",
+                  "original_field": "学历要求",
+                  "original_status": "CONFIRMED",
+                  "mapping_version": "group-fact-bridge/1.0.0",
+                  "target_scope": "UNIT",
+                  "field_name": "education_requirements",
+                  "raw_value": "硕士及以上",
+                  "normalized_value_candidate": {
+                    "minimum_level": "MASTER"
+                  },
+                  "confidence": null,
+                  "abstained": false,
+                  "candidate_reason_code": "WMA_CANDIDATE_MAPPED",
+                  "issue_codes": [],
+                  "ready_for_persistence": true,
+                  "candidate_id": "01a08b2c-f30a-7089-a593-d4eb021bf10d",
+                  "evidence": [
+                    {
+                      "reference": {
+                        "quote": "学历要求：硕士及以上",
+                        "sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                        "locator": {
+                          "selector": "#terms"
+                        },
+                        "artifact_id": "notice",
+                        "verification": {
+                          "quote": "学历要求：硕士及以上",
+                          "reader": {
+                            "name": "html_lxml_literal",
+                            "version": "1",
+                            "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                            "comparison_version": "html-quote-c14n/1"
+                          },
+                          "binding": "BOUND",
+                          "matches": [
+                            {
+                              "source_spans": [
+                                {
+                                  "end": 10,
+                                  "start": 0,
+                                  "origin_id": "/html/body/p::text"
+                                }
+                              ],
+                              "projection_id": "/html/body/p",
+                              "projection_end": 10,
+                              "projection_start": 0,
+                              "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                            }
+                          ],
+                          "verdict": "PASS",
+                          "precision": "SCOPE",
+                          "artifact_id": "notice",
+                          "reason_codes": [],
+                          "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                          "content_support": "FOUND",
+                          "declared_locator": "VERIFIED",
+                          "original_locator": {
+                            "selector": "#terms"
+                          },
+                          "verifier_version": "evidence-literal/1",
+                          "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                        },
+                        "mechanically_verified": true
+                      },
+                      "check_reference": {
+                        "field": "学历要求",
+                        "verdict": "PASS",
+                        "entity_id": "unit",
+                        "fact_index": 0,
+                        "artifact_id": "notice",
+                        "verification": {
+                          "quote": "学历要求：硕士及以上",
+                          "reader": {
+                            "name": "html_lxml_literal",
+                            "version": "1",
+                            "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                            "comparison_version": "html-quote-c14n/1"
+                          },
+                          "binding": "BOUND",
+                          "matches": [
+                            {
+                              "source_spans": [
+                                {
+                                  "end": 10,
+                                  "start": 0,
+                                  "origin_id": "/html/body/p::text"
+                                }
+                              ],
+                              "projection_id": "/html/body/p",
+                              "projection_end": 10,
+                              "projection_start": 0,
+                              "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                            }
+                          ],
+                          "verdict": "PASS",
+                          "precision": "SCOPE",
+                          "artifact_id": "notice",
+                          "reason_codes": [],
+                          "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                          "content_support": "FOUND",
+                          "declared_locator": "VERIFIED",
+                          "original_locator": {
+                            "selector": "#terms"
+                          },
+                          "verifier_version": "evidence-literal/1",
+                          "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                        },
+                        "binding_reason": null,
+                        "reference_index": 0,
+                        "persistent_binding": {
+                          "block_id": "01a08b2c-f062-71c4-9e08-da9272e1811c",
+                          "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+                          "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                          "parse_attempt_id": "01a08b2c-f06d-73d8-bfcb-b635c13aec93",
+                          "document_parse_key": "332a59a85651a801a167eb81c2f712f066a22cac0ac888266cafe68cbcd5acd9",
+                          "evidence_binding_hash": "d978d3888d45bbba1d0a1972bfa41178210754d76e2ff9c73ef98eacf476d95a"
+                        }
+                      },
+                      "binding": {
+                        "block_id": "01a08b2c-f062-71c4-9e08-da9272e1811c",
+                        "block_text": "学历要求：硕士及以上",
+                        "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+                        "material_id": "notice",
+                        "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                        "parse_attempt_id": "01a08b2c-f06d-73d8-bfcb-b635c13aec93",
+                        "document_parse_key": "332a59a85651a801a167eb81c2f712f066a22cac0ac888266cafe68cbcd5acd9",
+                        "structural_locator": {
+                          "kind": "reader_anchor",
+                          "reader": {
+                            "name": "html_lxml_literal",
+                            "version": "1",
+                            "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                            "comparison_version": "html-quote-c14n/1"
+                          },
+                          "text_end": 10,
+                          "text_start": 0,
+                          "anchor_schema": "reader-projection/1",
+                          "projection_id": "/html/body/p",
+                          "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                          "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681",
+                          "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                        },
+                        "evidence_binding_hash": "d978d3888d45bbba1d0a1972bfa41178210754d76e2ff9c73ef98eacf476d95a"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "source_index": 1,
+                  "original": {
+                    "note": null,
+                    "field": "尚未处理条件",
+                    "value": null,
+                    "status": "UNKNOWN",
+                    "evidence": [
+                      {
+                        "quote": "学历要求：硕士及以上",
+                        "sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                        "locator": {
+                          "selector": "#terms"
+                        },
+                        "artifact_id": "notice",
+                        "verification": {
+                          "quote": "学历要求：硕士及以上",
+                          "reader": {
+                            "name": "html_lxml_literal",
+                            "version": "1",
+                            "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                            "comparison_version": "html-quote-c14n/1"
+                          },
+                          "binding": "BOUND",
+                          "matches": [
+                            {
+                              "source_spans": [
+                                {
+                                  "end": 10,
+                                  "start": 0,
+                                  "origin_id": "/html/body/p::text"
+                                }
+                              ],
+                              "projection_id": "/html/body/p",
+                              "projection_end": 10,
+                              "projection_start": 0,
+                              "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                            }
+                          ],
+                          "verdict": "PASS",
+                          "precision": "SCOPE",
+                          "artifact_id": "notice",
+                          "reason_codes": [],
+                          "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                          "content_support": "FOUND",
+                          "declared_locator": "VERIFIED",
+                          "original_locator": {
+                            "selector": "#terms"
+                          },
+                          "verifier_version": "evidence-literal/1",
+                          "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                        },
+                        "mechanically_verified": true
+                      }
+                    ],
+                    "entity_id": "unit"
+                  },
+                  "entity_id": "unit",
+                  "original_field": "尚未处理条件",
+                  "original_status": "UNKNOWN",
+                  "mapping_version": "group-fact-bridge/1.0.0",
+                  "target_scope": "UNIT",
+                  "field_name": null,
+                  "raw_value": null,
+                  "normalized_value_candidate": null,
+                  "confidence": null,
+                  "abstained": true,
+                  "candidate_reason_code": "UNKNOWN_FIELD_UNSUPPORTED",
+                  "issue_codes": [
+                    "UNKNOWN_FIELD_UNSUPPORTED",
+                    "UNKNOWN_WMA_UNKNOWN",
+                    "UNKNOWN_VALUE_MISSING"
+                  ],
+                  "ready_for_persistence": false,
+                  "candidate_id": null,
+                  "evidence": [
+                    {
+                      "reference": {
+                        "quote": "学历要求：硕士及以上",
+                        "sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                        "locator": {
+                          "selector": "#terms"
+                        },
+                        "artifact_id": "notice",
+                        "verification": {
+                          "quote": "学历要求：硕士及以上",
+                          "reader": {
+                            "name": "html_lxml_literal",
+                            "version": "1",
+                            "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                            "comparison_version": "html-quote-c14n/1"
+                          },
+                          "binding": "BOUND",
+                          "matches": [
+                            {
+                              "source_spans": [
+                                {
+                                  "end": 10,
+                                  "start": 0,
+                                  "origin_id": "/html/body/p::text"
+                                }
+                              ],
+                              "projection_id": "/html/body/p",
+                              "projection_end": 10,
+                              "projection_start": 0,
+                              "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                            }
+                          ],
+                          "verdict": "PASS",
+                          "precision": "SCOPE",
+                          "artifact_id": "notice",
+                          "reason_codes": [],
+                          "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                          "content_support": "FOUND",
+                          "declared_locator": "VERIFIED",
+                          "original_locator": {
+                            "selector": "#terms"
+                          },
+                          "verifier_version": "evidence-literal/1",
+                          "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                        },
+                        "mechanically_verified": true
+                      },
+                      "check_reference": {
+                        "field": "尚未处理条件",
+                        "verdict": "PASS",
+                        "entity_id": "unit",
+                        "fact_index": 1,
+                        "artifact_id": "notice",
+                        "verification": {
+                          "quote": "学历要求：硕士及以上",
+                          "reader": {
+                            "name": "html_lxml_literal",
+                            "version": "1",
+                            "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                            "comparison_version": "html-quote-c14n/1"
+                          },
+                          "binding": "BOUND",
+                          "matches": [
+                            {
+                              "source_spans": [
+                                {
+                                  "end": 10,
+                                  "start": 0,
+                                  "origin_id": "/html/body/p::text"
+                                }
+                              ],
+                              "projection_id": "/html/body/p",
+                              "projection_end": 10,
+                              "projection_start": 0,
+                              "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                            }
+                          ],
+                          "verdict": "PASS",
+                          "precision": "SCOPE",
+                          "artifact_id": "notice",
+                          "reason_codes": [],
+                          "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                          "content_support": "FOUND",
+                          "declared_locator": "VERIFIED",
+                          "original_locator": {
+                            "selector": "#terms"
+                          },
+                          "verifier_version": "evidence-literal/1",
+                          "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                        },
+                        "binding_reason": null,
+                        "reference_index": 0,
+                        "persistent_binding": {
+                          "block_id": "01a08b2c-f062-71c4-9e08-da9272e1811c",
+                          "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+                          "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                          "parse_attempt_id": "01a08b2c-f06d-73d8-bfcb-b635c13aec93",
+                          "document_parse_key": "332a59a85651a801a167eb81c2f712f066a22cac0ac888266cafe68cbcd5acd9",
+                          "evidence_binding_hash": "d978d3888d45bbba1d0a1972bfa41178210754d76e2ff9c73ef98eacf476d95a"
+                        }
+                      },
+                      "binding": {
+                        "block_id": "01a08b2c-f062-71c4-9e08-da9272e1811c",
+                        "block_text": "学历要求：硕士及以上",
+                        "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+                        "material_id": "notice",
+                        "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                        "parse_attempt_id": "01a08b2c-f06d-73d8-bfcb-b635c13aec93",
+                        "document_parse_key": "332a59a85651a801a167eb81c2f712f066a22cac0ac888266cafe68cbcd5acd9",
+                        "structural_locator": {
+                          "kind": "reader_anchor",
+                          "reader": {
+                            "name": "html_lxml_literal",
+                            "version": "1",
+                            "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                            "comparison_version": "html-quote-c14n/1"
+                          },
+                          "text_end": 10,
+                          "text_start": 0,
+                          "anchor_schema": "reader-projection/1",
+                          "projection_id": "/html/body/p",
+                          "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                          "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681",
+                          "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                        },
+                        "evidence_binding_hash": "d978d3888d45bbba1d0a1972bfa41178210754d76e2ff9c73ef98eacf476d95a"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "excluded_rows": [
+                {
+                  "source_index": 2,
+                  "entity_id": "position",
+                  "source_hash": "cfd96cd1b7372b49d648efbb46653d63e7b1824882a513cc33ea7c824061dba5",
+                  "reason": "DIFFERENT_ENTITY_SCOPE"
+                }
+              ],
+              "extraction_run_id": "01a08b2c-f2f7-72fa-8516-8e3d72fb330e"
+            },
+            "result_hash": "82a410a6d697c3e35f585766ffeb30595ed3bdb9c10321b9501697fe7f8ce87d",
+            "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+            "created_at": "2026-09-07T10:00:00Z",
+            "decisions": {
+              "01a08b2c-f30a-7089-a593-d4eb021bf10d": {
+                "decision_id": "01a08b2c-f40e-72f4-8eab-de9af982e399",
+                "candidate_id": "01a08b2c-f30a-7089-a593-d4eb021bf10d",
+                "decision": "APPROVE",
+                "reason": "Synthetic independent field review",
+                "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+                "created_at": "2026-09-07T10:00:00+00:00"
+              }
+            },
+            "history": [
+              {
+                "decision_id": "01a08b2c-f40e-72f4-8eab-de9af982e399",
+                "candidate_id": "01a08b2c-f30a-7089-a593-d4eb021bf10d",
+                "decision": "APPROVE",
+                "reason": "Synthetic independent field review",
+                "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+                "created_at": "2026-09-07T10:00:00+00:00"
+              }
+            ],
+            "fact_set": {
+              "fact_set_id": "01a08b2c-f4c3-7369-98ea-cfbbca4dc96e",
+              "status": "ACTIVE",
+              "version": 1,
+              "reason": "Synthetic review"
+            }
+          },
+          "rows": [
+            {
+              "source_index": 0,
+              "candidate_id": "01a08b2c-f30a-7089-a593-d4eb021bf10d",
+              "verified_fact_id": "01a08b2c-f4e2-7148-99cc-7754e54faed9",
+              "fact_state": "KNOWN",
+              "normalized_value": {
+                "minimum_level": "MASTER"
+              },
+              "proposed_rule_payload": {
+                "code": "group-preview-01a08b2c-f4e2-7148-99cc-7754e54faed9",
+                "operator": "GTE",
+                "field": "education_level",
+                "value_type": "STRING",
+                "value": "MASTER",
+                "required": true,
+                "reason_template": "学历必须满足官方最低要求"
+              },
+              "evidence_ref_ids": [
+                "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+              ],
+              "reason_code": "INDEPENDENT_RULE_REVIEW_REQUIRED"
+            },
+            {
+              "source_index": 1,
+              "candidate_id": null,
+              "verified_fact_id": null,
+              "fact_state": null,
+              "normalized_value": null,
+              "proposed_rule_payload": null,
+              "evidence_ref_ids": [],
+              "reason_code": "GROUP_FIELD_UNPROCESSED"
+            }
+          ]
+        },
+        "result_hash": "b7ee0f565e88e3f2f53f04c97735c8987e93693f452f4d4881a90672a5c78891"
+      },
+      "rule_review": {
+        "preparation_id": "01a08b2c-f684-732b-8d8c-3384b08cf946",
+        "fact_preparation_id": "01a08b2c-f319-7290-86d4-cf1ee543abca",
+        "fact_set_id": "01a08b2c-f4c3-7369-98ea-cfbbca4dc96e",
+        "result": {
+          "contract_version": "group-rule-review/1.0.0+deriver-1.0.1",
+          "scope": "GROUP_RULE_REVIEW_ONLY",
+          "preview": {
+            "result": {
+              "contract_version": "group-rule-preview/1.0.0",
+              "derivation_version": "1.0.1",
+              "scope": "READ_ONLY_GROUP_RULE_PREVIEW",
+              "target": {
+                "unit_kind": "GROUP",
+                "unit_id": "01a08b2c-f269-722b-a70e-be41ddb99efa",
+                "public_id": "unit_01a08b2cf269722ba70ebe41ddb99efa",
+                "unit_version_id": "01a08b2c-f26c-74ac-8bb0-705b60ba667f",
+                "version": 1,
+                "key": "group:b119e4431bab5ce91cb7e5f710aa64349fb4f2b77e20f004a12d30b7ea12032b",
+                "label": "Unit"
+              },
+              "fact_review": {
+                "preparation_id": "01a08b2c-f319-7290-86d4-cf1ee543abca",
+                "result": {
+                  "contract_version": "group-fact-bridge/1.0.0",
+                  "scope": "GROUP_FACT_REVIEW_ONLY",
+                  "group_source": {
+                    "contract_version": "group-identity/1.0.0",
+                    "scope": "GROUP_SOURCE_ASSOCIATION_ONLY",
+                    "group_binding_id": "01a08b2c-f274-7598-933c-f543149f62e1",
+                    "group_identity": {
+                      "unit_kind": "GROUP",
+                      "unit_id": "01a08b2c-f269-722b-a70e-be41ddb99efa",
+                      "public_id": "unit_01a08b2cf269722ba70ebe41ddb99efa",
+                      "unit_version_id": "01a08b2c-f26c-74ac-8bb0-705b60ba667f",
+                      "version": 1,
+                      "key": "group:b119e4431bab5ce91cb7e5f710aa64349fb4f2b77e20f004a12d30b7ea12032b",
+                      "label": "Unit"
+                    },
+                    "source": {
+                      "contract_version": "group-identity/1.0.0",
+                      "scope": "GROUP_SOURCE_ASSOCIATION_ONLY",
+                      "task_id": "01a08b2c-ef44-7632-b793-66698e42667c",
+                      "delivery_hash": "0a0a85c75a72612b5bc2885095b89aac866e25ad94dfc250f7d47c067def9394",
+                      "binding_id": "01a08b2c-f1d0-74f5-a285-2afe0b5df241",
+                      "binding_hash": "fb8fa8280dd1b0fb1da1654e69d80e37fafad6b07c53fb098c9dd5e860a7fb50",
+                      "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+                      "opportunity_version": 1,
+                      "source_bundle_revision_id": "01a08b2c-f17d-7534-8685-078f6b259d4b",
+                      "canonical_bundle_hash": "86577bc63175c67ceed8b97220584da18516ef1d3b74f0069ec4595adfa01338",
+                      "source_snapshot_hash": "511da5a7971e651c7db5c8254d08b78229aabfd56a060b7e9bb7621506d3d8fc",
+                      "source_group": {
+                        "id": "unit",
+                        "name": "Unit",
+                        "parent_id": "announcement",
+                        "positions": [
+                          {
+                            "id": "position",
+                            "code": "P1",
+                            "name": "Position",
+                            "facts": [
+                              {
+                                "field": "学历要求",
+                                "value": "硕士及以上",
+                                "status": "CONFIRMED",
+                                "evidence": [
+                                  {
+                                    "quote": "学历要求：硕士及以上",
+                                    "locator": {
+                                      "selector": "#terms"
+                                    },
+                                    "artifact_id": "notice"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "unit_level": [
+                          {
+                            "field": "学历要求",
+                            "value": "硕士及以上",
+                            "status": "CONFIRMED",
+                            "evidence": [
+                              {
+                                "quote": "学历要求：硕士及以上",
+                                "locator": {
+                                  "selector": "#terms"
+                                },
+                                "artifact_id": "notice"
+                              }
+                            ]
+                          },
+                          {
+                            "field": "尚未处理条件",
+                            "value": null,
+                            "status": "UNKNOWN",
+                            "evidence": [
+                              {
+                                "quote": "学历要求：硕士及以上",
+                                "locator": {
+                                  "selector": "#terms"
+                                },
+                                "artifact_id": "notice"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "source_entity": {
+                        "id": "unit",
+                        "kind": "unit",
+                        "name": "Unit",
+                        "parent_id": "announcement"
+                      },
+                      "members": [
+                        {
+                          "entity_id": "position",
+                          "state": "BOUND",
+                          "position_binding": {
+                            "entity_id": "position",
+                            "opportunity_unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+                            "opportunity_unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+                          }
+                        }
+                      ],
+                      "membership_status": "ALL_MEMBERS_BOUND"
+                    },
+                    "source_hash": "bab5da3d37f19e4bf2f57a9b1891de57980e519970bc4e250957f6e49a513e08",
+                    "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+                    "created_at": "2026-09-07T10:00:00Z"
+                  },
+                  "check_id": "01a08b2c-f0a8-70ba-8435-a00bff70df10",
+                  "check_hash": "b37610e74d499d9b9f06c823f64a7dbdffa9a04561ebfa09819809caca2c99c0",
+                  "source_row_count": 3,
+                  "rows": [
+                    {
+                      "source_index": 0,
+                      "original": {
+                        "note": null,
+                        "field": "学历要求",
+                        "value": "硕士及以上",
+                        "status": "CONFIRMED",
+                        "evidence": [
+                          {
+                            "quote": "学历要求：硕士及以上",
+                            "sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                            "locator": {
+                              "selector": "#terms"
+                            },
+                            "artifact_id": "notice",
+                            "verification": {
+                              "quote": "学历要求：硕士及以上",
+                              "reader": {
+                                "name": "html_lxml_literal",
+                                "version": "1",
+                                "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                                "comparison_version": "html-quote-c14n/1"
+                              },
+                              "binding": "BOUND",
+                              "matches": [
+                                {
+                                  "source_spans": [
+                                    {
+                                      "end": 10,
+                                      "start": 0,
+                                      "origin_id": "/html/body/p::text"
+                                    }
+                                  ],
+                                  "projection_id": "/html/body/p",
+                                  "projection_end": 10,
+                                  "projection_start": 0,
+                                  "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                                }
+                              ],
+                              "verdict": "PASS",
+                              "precision": "SCOPE",
+                              "artifact_id": "notice",
+                              "reason_codes": [],
+                              "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                              "content_support": "FOUND",
+                              "declared_locator": "VERIFIED",
+                              "original_locator": {
+                                "selector": "#terms"
+                              },
+                              "verifier_version": "evidence-literal/1",
+                              "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                            },
+                            "mechanically_verified": true
+                          }
+                        ],
+                        "entity_id": "unit"
+                      },
+                      "entity_id": "unit",
+                      "original_field": "学历要求",
+                      "original_status": "CONFIRMED",
+                      "mapping_version": "group-fact-bridge/1.0.0",
+                      "target_scope": "UNIT",
+                      "field_name": "education_requirements",
+                      "raw_value": "硕士及以上",
+                      "normalized_value_candidate": {
+                        "minimum_level": "MASTER"
+                      },
+                      "confidence": null,
+                      "abstained": false,
+                      "candidate_reason_code": "WMA_CANDIDATE_MAPPED",
+                      "issue_codes": [],
+                      "ready_for_persistence": true,
+                      "candidate_id": "01a08b2c-f30a-7089-a593-d4eb021bf10d",
+                      "evidence": [
+                        {
+                          "reference": {
+                            "quote": "学历要求：硕士及以上",
+                            "sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                            "locator": {
+                              "selector": "#terms"
+                            },
+                            "artifact_id": "notice",
+                            "verification": {
+                              "quote": "学历要求：硕士及以上",
+                              "reader": {
+                                "name": "html_lxml_literal",
+                                "version": "1",
+                                "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                                "comparison_version": "html-quote-c14n/1"
+                              },
+                              "binding": "BOUND",
+                              "matches": [
+                                {
+                                  "source_spans": [
+                                    {
+                                      "end": 10,
+                                      "start": 0,
+                                      "origin_id": "/html/body/p::text"
+                                    }
+                                  ],
+                                  "projection_id": "/html/body/p",
+                                  "projection_end": 10,
+                                  "projection_start": 0,
+                                  "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                                }
+                              ],
+                              "verdict": "PASS",
+                              "precision": "SCOPE",
+                              "artifact_id": "notice",
+                              "reason_codes": [],
+                              "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                              "content_support": "FOUND",
+                              "declared_locator": "VERIFIED",
+                              "original_locator": {
+                                "selector": "#terms"
+                              },
+                              "verifier_version": "evidence-literal/1",
+                              "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                            },
+                            "mechanically_verified": true
+                          },
+                          "check_reference": {
+                            "field": "学历要求",
+                            "verdict": "PASS",
+                            "entity_id": "unit",
+                            "fact_index": 0,
+                            "artifact_id": "notice",
+                            "verification": {
+                              "quote": "学历要求：硕士及以上",
+                              "reader": {
+                                "name": "html_lxml_literal",
+                                "version": "1",
+                                "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                                "comparison_version": "html-quote-c14n/1"
+                              },
+                              "binding": "BOUND",
+                              "matches": [
+                                {
+                                  "source_spans": [
+                                    {
+                                      "end": 10,
+                                      "start": 0,
+                                      "origin_id": "/html/body/p::text"
+                                    }
+                                  ],
+                                  "projection_id": "/html/body/p",
+                                  "projection_end": 10,
+                                  "projection_start": 0,
+                                  "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                                }
+                              ],
+                              "verdict": "PASS",
+                              "precision": "SCOPE",
+                              "artifact_id": "notice",
+                              "reason_codes": [],
+                              "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                              "content_support": "FOUND",
+                              "declared_locator": "VERIFIED",
+                              "original_locator": {
+                                "selector": "#terms"
+                              },
+                              "verifier_version": "evidence-literal/1",
+                              "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                            },
+                            "binding_reason": null,
+                            "reference_index": 0,
+                            "persistent_binding": {
+                              "block_id": "01a08b2c-f062-71c4-9e08-da9272e1811c",
+                              "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+                              "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                              "parse_attempt_id": "01a08b2c-f06d-73d8-bfcb-b635c13aec93",
+                              "document_parse_key": "332a59a85651a801a167eb81c2f712f066a22cac0ac888266cafe68cbcd5acd9",
+                              "evidence_binding_hash": "d978d3888d45bbba1d0a1972bfa41178210754d76e2ff9c73ef98eacf476d95a"
+                            }
+                          },
+                          "binding": {
+                            "block_id": "01a08b2c-f062-71c4-9e08-da9272e1811c",
+                            "block_text": "学历要求：硕士及以上",
+                            "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+                            "material_id": "notice",
+                            "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                            "parse_attempt_id": "01a08b2c-f06d-73d8-bfcb-b635c13aec93",
+                            "document_parse_key": "332a59a85651a801a167eb81c2f712f066a22cac0ac888266cafe68cbcd5acd9",
+                            "structural_locator": {
+                              "kind": "reader_anchor",
+                              "reader": {
+                                "name": "html_lxml_literal",
+                                "version": "1",
+                                "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                                "comparison_version": "html-quote-c14n/1"
+                              },
+                              "text_end": 10,
+                              "text_start": 0,
+                              "anchor_schema": "reader-projection/1",
+                              "projection_id": "/html/body/p",
+                              "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                              "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681",
+                              "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                            },
+                            "evidence_binding_hash": "d978d3888d45bbba1d0a1972bfa41178210754d76e2ff9c73ef98eacf476d95a"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "source_index": 1,
+                      "original": {
+                        "note": null,
+                        "field": "尚未处理条件",
+                        "value": null,
+                        "status": "UNKNOWN",
+                        "evidence": [
+                          {
+                            "quote": "学历要求：硕士及以上",
+                            "sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                            "locator": {
+                              "selector": "#terms"
+                            },
+                            "artifact_id": "notice",
+                            "verification": {
+                              "quote": "学历要求：硕士及以上",
+                              "reader": {
+                                "name": "html_lxml_literal",
+                                "version": "1",
+                                "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                                "comparison_version": "html-quote-c14n/1"
+                              },
+                              "binding": "BOUND",
+                              "matches": [
+                                {
+                                  "source_spans": [
+                                    {
+                                      "end": 10,
+                                      "start": 0,
+                                      "origin_id": "/html/body/p::text"
+                                    }
+                                  ],
+                                  "projection_id": "/html/body/p",
+                                  "projection_end": 10,
+                                  "projection_start": 0,
+                                  "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                                }
+                              ],
+                              "verdict": "PASS",
+                              "precision": "SCOPE",
+                              "artifact_id": "notice",
+                              "reason_codes": [],
+                              "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                              "content_support": "FOUND",
+                              "declared_locator": "VERIFIED",
+                              "original_locator": {
+                                "selector": "#terms"
+                              },
+                              "verifier_version": "evidence-literal/1",
+                              "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                            },
+                            "mechanically_verified": true
+                          }
+                        ],
+                        "entity_id": "unit"
+                      },
+                      "entity_id": "unit",
+                      "original_field": "尚未处理条件",
+                      "original_status": "UNKNOWN",
+                      "mapping_version": "group-fact-bridge/1.0.0",
+                      "target_scope": "UNIT",
+                      "field_name": null,
+                      "raw_value": null,
+                      "normalized_value_candidate": null,
+                      "confidence": null,
+                      "abstained": true,
+                      "candidate_reason_code": "UNKNOWN_FIELD_UNSUPPORTED",
+                      "issue_codes": [
+                        "UNKNOWN_FIELD_UNSUPPORTED",
+                        "UNKNOWN_WMA_UNKNOWN",
+                        "UNKNOWN_VALUE_MISSING"
+                      ],
+                      "ready_for_persistence": false,
+                      "candidate_id": null,
+                      "evidence": [
+                        {
+                          "reference": {
+                            "quote": "学历要求：硕士及以上",
+                            "sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                            "locator": {
+                              "selector": "#terms"
+                            },
+                            "artifact_id": "notice",
+                            "verification": {
+                              "quote": "学历要求：硕士及以上",
+                              "reader": {
+                                "name": "html_lxml_literal",
+                                "version": "1",
+                                "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                                "comparison_version": "html-quote-c14n/1"
+                              },
+                              "binding": "BOUND",
+                              "matches": [
+                                {
+                                  "source_spans": [
+                                    {
+                                      "end": 10,
+                                      "start": 0,
+                                      "origin_id": "/html/body/p::text"
+                                    }
+                                  ],
+                                  "projection_id": "/html/body/p",
+                                  "projection_end": 10,
+                                  "projection_start": 0,
+                                  "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                                }
+                              ],
+                              "verdict": "PASS",
+                              "precision": "SCOPE",
+                              "artifact_id": "notice",
+                              "reason_codes": [],
+                              "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                              "content_support": "FOUND",
+                              "declared_locator": "VERIFIED",
+                              "original_locator": {
+                                "selector": "#terms"
+                              },
+                              "verifier_version": "evidence-literal/1",
+                              "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                            },
+                            "mechanically_verified": true
+                          },
+                          "check_reference": {
+                            "field": "尚未处理条件",
+                            "verdict": "PASS",
+                            "entity_id": "unit",
+                            "fact_index": 1,
+                            "artifact_id": "notice",
+                            "verification": {
+                              "quote": "学历要求：硕士及以上",
+                              "reader": {
+                                "name": "html_lxml_literal",
+                                "version": "1",
+                                "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                                "comparison_version": "html-quote-c14n/1"
+                              },
+                              "binding": "BOUND",
+                              "matches": [
+                                {
+                                  "source_spans": [
+                                    {
+                                      "end": 10,
+                                      "start": 0,
+                                      "origin_id": "/html/body/p::text"
+                                    }
+                                  ],
+                                  "projection_id": "/html/body/p",
+                                  "projection_end": 10,
+                                  "projection_start": 0,
+                                  "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681"
+                                }
+                              ],
+                              "verdict": "PASS",
+                              "precision": "SCOPE",
+                              "artifact_id": "notice",
+                              "reason_codes": [],
+                              "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                              "content_support": "FOUND",
+                              "declared_locator": "VERIFIED",
+                              "original_locator": {
+                                "selector": "#terms"
+                              },
+                              "verifier_version": "evidence-literal/1",
+                              "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                            },
+                            "binding_reason": null,
+                            "reference_index": 0,
+                            "persistent_binding": {
+                              "block_id": "01a08b2c-f062-71c4-9e08-da9272e1811c",
+                              "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+                              "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                              "parse_attempt_id": "01a08b2c-f06d-73d8-bfcb-b635c13aec93",
+                              "document_parse_key": "332a59a85651a801a167eb81c2f712f066a22cac0ac888266cafe68cbcd5acd9",
+                              "evidence_binding_hash": "d978d3888d45bbba1d0a1972bfa41178210754d76e2ff9c73ef98eacf476d95a"
+                            }
+                          },
+                          "binding": {
+                            "block_id": "01a08b2c-f062-71c4-9e08-da9272e1811c",
+                            "block_text": "学历要求：硕士及以上",
+                            "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+                            "material_id": "notice",
+                            "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                            "parse_attempt_id": "01a08b2c-f06d-73d8-bfcb-b635c13aec93",
+                            "document_parse_key": "332a59a85651a801a167eb81c2f712f066a22cac0ac888266cafe68cbcd5acd9",
+                            "structural_locator": {
+                              "kind": "reader_anchor",
+                              "reader": {
+                                "name": "html_lxml_literal",
+                                "version": "1",
+                                "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                                "comparison_version": "html-quote-c14n/1"
+                              },
+                              "text_end": 10,
+                              "text_start": 0,
+                              "anchor_schema": "reader-projection/1",
+                              "projection_id": "/html/body/p",
+                              "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                              "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681",
+                              "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                            },
+                            "evidence_binding_hash": "d978d3888d45bbba1d0a1972bfa41178210754d76e2ff9c73ef98eacf476d95a"
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "excluded_rows": [
+                    {
+                      "source_index": 2,
+                      "entity_id": "position",
+                      "source_hash": "cfd96cd1b7372b49d648efbb46653d63e7b1824882a513cc33ea7c824061dba5",
+                      "reason": "DIFFERENT_ENTITY_SCOPE"
+                    }
+                  ],
+                  "extraction_run_id": "01a08b2c-f2f7-72fa-8516-8e3d72fb330e"
+                },
+                "result_hash": "82a410a6d697c3e35f585766ffeb30595ed3bdb9c10321b9501697fe7f8ce87d",
+                "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+                "created_at": "2026-09-07T10:00:00Z",
+                "decisions": {
+                  "01a08b2c-f30a-7089-a593-d4eb021bf10d": {
+                    "reason": "Synthetic independent field review",
+                    "decision": "APPROVE",
+                    "created_at": "2026-09-07T10:00:00+00:00",
+                    "decision_id": "01a08b2c-f40e-72f4-8eab-de9af982e399",
+                    "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+                    "candidate_id": "01a08b2c-f30a-7089-a593-d4eb021bf10d"
+                  }
+                },
+                "history": [
+                  {
+                    "reason": "Synthetic independent field review",
+                    "decision": "APPROVE",
+                    "created_at": "2026-09-07T10:00:00+00:00",
+                    "decision_id": "01a08b2c-f40e-72f4-8eab-de9af982e399",
+                    "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+                    "candidate_id": "01a08b2c-f30a-7089-a593-d4eb021bf10d"
+                  }
+                ],
+                "fact_set": {
+                  "reason": "Synthetic review",
+                  "status": "ACTIVE",
+                  "version": 1,
+                  "fact_set_id": "01a08b2c-f4c3-7369-98ea-cfbbca4dc96e"
+                }
+              },
+              "rows": [
+                {
+                  "source_index": 0,
+                  "candidate_id": "01a08b2c-f30a-7089-a593-d4eb021bf10d",
+                  "verified_fact_id": "01a08b2c-f4e2-7148-99cc-7754e54faed9",
+                  "fact_state": "KNOWN",
+                  "normalized_value": {
+                    "minimum_level": "MASTER"
+                  },
+                  "proposed_rule_payload": {
+                    "code": "group-preview-01a08b2c-f4e2-7148-99cc-7754e54faed9",
+                    "operator": "GTE",
+                    "field": "education_level",
+                    "value_type": "STRING",
+                    "value": "MASTER",
+                    "required": true,
+                    "reason_template": "学历必须满足官方最低要求"
+                  },
+                  "evidence_ref_ids": [
+                    "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+                  ],
+                  "reason_code": "INDEPENDENT_RULE_REVIEW_REQUIRED"
+                },
+                {
+                  "source_index": 1,
+                  "candidate_id": null,
+                  "verified_fact_id": null,
+                  "fact_state": null,
+                  "normalized_value": null,
+                  "proposed_rule_payload": null,
+                  "evidence_ref_ids": [],
+                  "reason_code": "GROUP_FIELD_UNPROCESSED"
+                }
+              ]
+            },
+            "result_hash": "b7ee0f565e88e3f2f53f04c97735c8987e93693f452f4d4881a90672a5c78891"
+          },
+          "rows": [
+            {
+              "source_index": 0,
+              "candidate_id": "01a08b2c-f30a-7089-a593-d4eb021bf10d",
+              "verified_fact_id": "01a08b2c-f4e2-7148-99cc-7754e54faed9",
+              "fact_state": "KNOWN",
+              "normalized_value": {
+                "minimum_level": "MASTER"
+              },
+              "proposed_rule_payload": {
+                "code": "group-preview-01a08b2c-f4e2-7148-99cc-7754e54faed9",
+                "operator": "GTE",
+                "field": "education_level",
+                "value_type": "STRING",
+                "value": "MASTER",
+                "required": true,
+                "reason_template": "学历必须满足官方最低要求"
+              },
+              "evidence_ref_ids": [
+                "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+              ],
+              "reason_code": "INDEPENDENT_RULE_REVIEW_REQUIRED",
+              "rule_candidate_id": "01a08b2c-f670-737c-9e55-a65ef0aae644"
+            },
+            {
+              "source_index": 1,
+              "candidate_id": null,
+              "verified_fact_id": null,
+              "fact_state": null,
+              "normalized_value": null,
+              "proposed_rule_payload": null,
+              "evidence_ref_ids": [],
+              "reason_code": "GROUP_FIELD_UNPROCESSED",
+              "rule_candidate_id": null
+            }
+          ]
+        },
+        "result_hash": "3fa61a75d1ce5f096f644b350dbc96c3872ef50e6d22a5894e21be076ef19cfe",
+        "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+        "created_at": "2026-09-07T10:00:00Z",
+        "decisions": {
+          "01a08b2c-f670-737c-9e55-a65ef0aae644": {
+            "decision_id": "01a08b2c-fa0a-72a9-abf1-d87e2ca436d1",
+            "rule_candidate_id": "01a08b2c-f670-737c-9e55-a65ef0aae644",
+            "decision": "APPROVE",
+            "reason": "Synthetic independent rule review",
+            "evidence": [
+              {
+                "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                "authority": "FORMAL_OFFICIAL_ATTACHMENT",
+                "relation": "SUPPORTS",
+                "effective_at": "2026-09-01T00:00:00Z",
+                "applicability": "APPLIES_TO_EXACT_TARGET",
+                "reason": "Synthetic original assessed"
+              }
+            ],
+            "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+            "created_at": "2026-09-07T10:00:00Z"
+          }
+        },
+        "history": [
+          {
+            "decision_id": "01a08b2c-fa0a-72a9-abf1-d87e2ca436d1",
+            "rule_candidate_id": "01a08b2c-f670-737c-9e55-a65ef0aae644",
+            "decision": "APPROVE",
+            "reason": "Synthetic independent rule review",
+            "evidence": [
+              {
+                "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                "authority": "FORMAL_OFFICIAL_ATTACHMENT",
+                "relation": "SUPPORTS",
+                "effective_at": "2026-09-01T00:00:00Z",
+                "applicability": "APPLIES_TO_EXACT_TARGET",
+                "reason": "Synthetic original assessed"
+              }
+            ],
+            "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+            "created_at": "2026-09-07T10:00:00Z"
+          }
+        ]
+      },
+      "applicability_histories": {
+        "01a08b2c-f670-737c-9e55-a65ef0aae644": [
+          {
+            "decision_id": "01a08b2d-0410-77d6-9147-0b596d810e13",
+            "sequence": 1,
+            "request": {
+              "reason": "Synthetic scope review",
+              "outcome": "APPLIES",
+              "evidence": [
+                {
+                  "quote": "学历要求：硕士及以上",
+                  "block_id": "01a08b2c-f062-71c4-9e08-da90fd6732ab",
+                  "member_id": "01a08b2c-f18c-74d1-9c9c-85061207f5ea"
+                }
+              ],
+              "context_hash": "9d8e8f213912a5ffa8ffbfcbdafc25051703a0515bc717668f13c13ed28f687a",
+              "target_plan_id": "01a08b2c-fe34-7353-aa92-b9a8afeac34f",
+              "contract_version": "group-applicability-decision/1.0.0",
+              "previous_decision_id": null,
+              "source_rule_candidate_id": "01a08b2c-f670-737c-9e55-a65ef0aae644",
+              "source_rule_preparation_id": "01a08b2c-f684-732b-8d8c-3384b08cf946"
+            },
+            "request_hash": "32c8bcd606948b55bab6eb3c730955f5f3dd2fb2afae6c02d26eb2977200e66d",
+            "context": {
+              "member": {
+                "state": "BOUND",
+                "entity_id": "position",
+                "position_binding": {
+                  "entity_id": "position",
+                  "opportunity_unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+                  "opportunity_unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+                }
+              },
+              "target": {
+                "unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+                "unit_version": 1,
+                "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+                "unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c",
+                "opportunity_version": 1
+              },
+              "task_id": "01a08b2c-ef44-7632-b793-66698e42667c",
+              "check_id": "01a08b2c-f0a8-70ba-8435-a00bff70df10",
+              "binding_id": "01a08b2c-f1d0-74f5-a285-2afe0b5df241",
+              "source_group": {
+                "key": "group:b119e4431bab5ce91cb7e5f710aa64349fb4f2b77e20f004a12d30b7ea12032b",
+                "label": "Unit",
+                "unit_id": "01a08b2c-f269-722b-a70e-be41ddb99efa",
+                "version": 1,
+                "public_id": "unit_01a08b2cf269722ba70ebe41ddb99efa",
+                "unit_kind": "GROUP",
+                "unit_version_id": "01a08b2c-f26c-74ac-8bb0-705b60ba667f"
+              },
+              "target_plan_id": "01a08b2c-fe34-7353-aa92-b9a8afeac34f",
+              "contract_version": "group-rule-applicability-context/1.0.0",
+              "group_binding_id": "01a08b2c-f274-7598-933c-f543149f62e1",
+              "target_entity_id": "position",
+              "target_plan_hash": "2c0939ce2bc7b0871a22f9d7911ecbb700a9a741f580f23c3ead769ada5ce541",
+              "group_source_hash": "bab5da3d37f19e4bf2f57a9b1891de57980e519970bc4e250957f6e49a513e08",
+              "source_review_hash": "6742b7b73050a4fe35303ba4544229d76c3ec98d824ec23a89c3298eb925b261",
+              "source_rule_approval_id": "01a08b2c-fa0a-72a9-abf1-d87e2ca436d1",
+              "source_rule_candidate_id": "01a08b2c-f670-737c-9e55-a65ef0aae644",
+              "target_plan_context_hash": "be0f064924f517d08361096379440357c530011ee4619c4ad6901c75ab42f40b",
+              "source_bundle_revision_id": "01a08b2c-f17d-7534-8685-078f6b259d4b",
+              "source_rule_approval_hash": "c22f46d95ce387048192efd3e97986c7f5243cf86779a037b36e03cf42c96f4e",
+              "source_rule_preparation_id": "01a08b2c-f684-732b-8d8c-3384b08cf946",
+              "source_rule_preparation_hash": "3fa61a75d1ce5f096f644b350dbc96c3872ef50e6d22a5894e21be076ef19cfe"
+            },
+            "context_hash": "9d8e8f213912a5ffa8ffbfcbdafc25051703a0515bc717668f13c13ed28f687a",
+            "evidence_snapshot": [
+              {
+                "member_id": "01a08b2c-f18c-74d1-9c9c-85061207f5ea",
+                "block_id": "01a08b2c-f062-71c4-9e08-da90fd6732ab",
+                "quote": "学历要求：硕士及以上",
+                "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+                "material_id": "notice",
+                "source_url": "https://example.gov/notice",
+                "evidence_ref_id": "01a08b2c-f062-71c4-9e08-da9396f04242",
+                "block_hash": "42bf6db294b734861055df1c8bad16484f4408a8202db8d34e095a3d108edf21",
+                "binding_hash": "9d0db938ed1504914f92cff5e824d8ca90164e02ccc8242d7bcb62b091d9b62a",
+                "locator": {
+                  "kind": "reader_anchor",
+                  "reader": {
+                    "name": "html_lxml_literal",
+                    "version": "1",
+                    "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                    "comparison_version": "html-quote-c14n/1"
+                  },
+                  "text_end": 10,
+                  "text_start": 0,
+                  "anchor_schema": "reader-projection/1",
+                  "projection_id": "/html",
+                  "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                  "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681",
+                  "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+                }
+              }
+            ],
+            "evidence_hash": "6d716f0e8aa58533628665c0018b8b9d8a9e70ac102fceb3aa0bcc2dfc8401d4",
+            "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+            "created_at": "2026-09-07T10:00:00+00:00"
+          }
+        ]
+      }
+    }
+  },
+  "dependencies_hash": "14333022ce31fadc26b9170b10521375353904a09d751d4a7a6f45b469296ab7",
+  "snapshot": {
+    "contract_version": "group-inheritance-preview/1.0.0",
+    "scope": "GROUP_INHERITANCE_PREVIEW_ONLY",
+    "base_v2": {
+      "plan_id": "01a08b2c-fe34-7353-aa92-b9a8afeac34f",
+      "plan": {
+        "qualification_plan_id": "01a08b2c-fe34-7353-aa92-b9a8afeac34f",
+        "version": 1,
+        "target": {
+          "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+          "opportunity_version": 1,
+          "unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+          "unit_version": 1,
+          "unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+        },
+        "manifest": {
+          "target": {
+            "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+            "opportunity_version": 1,
+            "unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+            "unit_version": 1,
+            "unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+          },
+          "preparation_id": "01a08b2c-fbd8-7649-b074-b13dd0796c52",
+          "preparation_sha256": "0e8c4adffa4c6fae49999c00add93d1bc9cdc9805f2438dfe79c3996b2b784d0",
+          "conditions": [
+            {
+              "condition_id": "source:0",
+              "scope": "EMPLOYER_GROUP",
+              "source_entity_id": "unit",
+              "source_index": 0,
+              "source_unit_id": null,
+              "source_unit_version": null,
+              "source_unit_version_id": null,
+              "field_name": "education_requirements",
+              "source_sha256": "ec7cb05152c00b5547ebbc2cfb775c751ca3a74b5ba3fe6e058a45ab1b55306e",
+              "state": "UNPROCESSED",
+              "fact_id": null,
+              "evidence_ref_ids": [
+                "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+              ]
+            },
+            {
+              "condition_id": "source:1",
+              "scope": "EMPLOYER_GROUP",
+              "source_entity_id": "unit",
+              "source_index": 1,
+              "source_unit_id": null,
+              "source_unit_version": null,
+              "source_unit_version_id": null,
+              "field_name": "尚未处理条件",
+              "source_sha256": "fc25f47d14822492247862aa99882cf46a0169f56a6ea2fb2cfba5a9c35cdecc",
+              "state": "UNKNOWN",
+              "fact_id": null,
+              "evidence_ref_ids": [
+                "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+              ]
+            },
+            {
+              "condition_id": "source:2",
+              "scope": "UNIT",
+              "source_entity_id": "position",
+              "source_index": 2,
+              "source_unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+              "source_unit_version": 1,
+              "source_unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c",
+              "field_name": "education_requirements",
+              "source_sha256": "91f8d2406c71d2ee80eafec47a4b5b312cd9216e4848be018d442e94f5039bbc",
+              "state": "KNOWN",
+              "fact_id": "01a08b2c-fce0-7364-a654-edcb0699138b",
+              "evidence_ref_ids": [
+                "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+              ]
+            }
+          ],
+          "upstream_blockers": [
+            "SOURCE_COMPLETENESS_UNVERIFIED"
+          ],
+          "coverage_policy_version": "unit-condition-coverage/2.0.0"
+        },
+        "manifest_sha256": "7c731e8a2023b6678becfd76b8b4744bbf475da900f671a963fbd5335cbc1bf9",
+        "dispositions": [
+          {
+            "condition_id": "source:0",
+            "kind": "UNRESOLVED",
+            "rule_ids": [],
+            "decision_id": null,
+            "reviewer_principal_id": null,
+            "reason": "CONDITION_REVIEW_REQUIRED"
+          },
+          {
+            "condition_id": "source:1",
+            "kind": "UNRESOLVED",
+            "rule_ids": [],
+            "decision_id": null,
+            "reviewer_principal_id": null,
+            "reason": "CONDITION_REVIEW_REQUIRED"
+          },
+          {
+            "condition_id": "source:2",
+            "kind": "RULE",
+            "rule_ids": [
+              "01a08b2c-fd70-7351-8b61-0f1e38a9a73b"
+            ],
+            "decision_id": "01a08b2c-fe1d-768a-91cf-f535fb940169",
+            "reviewer_principal_id": "human:01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+            "reason": "Synthetic independent rule review"
+          }
+        ],
+        "rules": [
+          {
+            "rule_id": "01a08b2c-fd70-7351-8b61-0f1e38a9a73b",
+            "code": "investigation-01a08b2c-fce0-7364-a654-edcb0699138b",
+            "operator": "GTE",
+            "field": "education_level",
+            "value_type": "STRING",
+            "value": "MASTER",
+            "operand_rule_ids": [],
+            "required": true,
+            "reason_template": "学历必须满足官方最低要求",
+            "evidence": [
+              {
+                "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+                "authority": "ORIGINAL_OFFICIAL_NOTICE",
+                "precedence": 400,
+                "relation": "SUPPORTS",
+                "effective_at": "2025-12-31T16:00:00Z",
+                "assertion_sha256": "0a64040fe4c0b97e37bfa01b19cb4352e971e4063636afd10f608cf89e6fb707"
+              }
+            ]
+          }
+        ],
+        "root_rule_ids": [
+          "01a08b2c-fd70-7351-8b61-0f1e38a9a73b"
+        ],
+        "admissions": [
+          {
+            "rule_id": "01a08b2c-fd70-7351-8b61-0f1e38a9a73b",
+            "target": {
+              "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+              "opportunity_version": 1,
+              "unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+              "unit_version": 1,
+              "unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+            },
+            "rule_sha256": "cd25b43bdca472d37ff5dc64ed2d9ddc4694193a53cc1a1f10366784b1f76be9",
+            "condition_ids": [
+              "source:2"
+            ],
+            "candidate_id": "01a08b2c-fd70-7351-8b61-0f1e38a9a73b",
+            "approval_decision_id": "01a08b2c-fe1d-768a-91cf-f535fb940169",
+            "producer_principal_id": "component:direct-wma-rule-bridge/2.0.0+deriver-1.0.1",
+            "reviewer_principal_id": "human:01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+            "reviewed_at": "2026-09-07T10:00:00Z",
+            "evidence_validity": [
+              {
+                "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+                "valid_from": "2025-12-31T16:00:00Z",
+                "valid_until": null
+              }
+            ]
+          }
+        ],
+        "contract_version": "unit-qualification/2.0.0"
+      },
+      "plan_hash": "2c0939ce2bc7b0871a22f9d7911ecbb700a9a741f580f23c3ead769ada5ce541",
+      "context": {
+        "adapter_version": "investigation-unit-snapshot/1.0.0",
+        "rule_preparation_id": "01a08b2c-fd7c-728b-816e-ec95f9563c69",
+        "rule_preparation_hash": "c961a3b883abb0b1d53896867dfeb366997d12c58c0734f667fa2f0a0839b2cc",
+        "fact_preparation_hash": "0e8c4adffa4c6fae49999c00add93d1bc9cdc9805f2438dfe79c3996b2b784d0",
+        "check_id": "01a08b2c-f0a8-70ba-8435-a00bff70df10",
+        "binding_id": "01a08b2c-f1d0-74f5-a285-2afe0b5df241",
+        "delivery_hash": "0a0a85c75a72612b5bc2885095b89aac866e25ad94dfc250f7d47c067def9394",
+        "fact_set_id": "01a08b2c-fcd5-7394-a630-68900f1b715e",
+        "fact_set_version": 1,
+        "source_bundle_revision_id": "01a08b2c-f17d-7534-8685-078f6b259d4b",
+        "source_row_count": 3,
+        "excluded_source_rows": [],
+        "source_notes": [],
+        "evidence_reference_counts": {
+          "PASS": 3,
+          "FAIL": 0,
+          "UNVERIFIED": 0
+        },
+        "unresolved_source_references": [],
+        "rule_decisions": {
+          "01a08b2c-fd70-7351-8b61-0f1e38a9a73b": {
+            "decision_id": "01a08b2c-fe1d-768a-91cf-f535fb940169",
+            "request_hash": "66305bfeaca1be03ebfacaf492d60b016e0e034f0f8e913993a5512538e2d973",
+            "receipt_created_at": "2026-09-07T10:00:00+00:00"
+          }
+        },
+        "evidence_valid_until_policy": "NOT_ESTABLISHED"
+      },
+      "context_hash": "be0f064924f517d08361096379440357c530011ee4619c4ad6901c75ab42f40b",
+      "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+      "created_at": "2026-09-07T10:00:00+00:00"
+    },
+    "group_conditions": [
+      {
+        "condition": {
+          "condition_id": "source:0",
+          "scope": "EMPLOYER_GROUP",
+          "source_entity_id": "unit",
+          "source_index": 0,
+          "source_unit_id": null,
+          "source_unit_version": null,
+          "source_unit_version_id": null,
+          "field_name": "education_requirements",
+          "source_sha256": "ec7cb05152c00b5547ebbc2cfb775c751ca3a74b5ba3fe6e058a45ab1b55306e",
+          "state": "UNPROCESSED",
+          "fact_id": null,
+          "evidence_ref_ids": [
+            "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+          ]
+        },
+        "disposition": "INHERIT",
+        "reason": "GROUP_APPLICABILITY_APPLIES",
+        "source_rule": {
+          "source_index": 0,
+          "candidate_id": "01a08b2c-f30a-7089-a593-d4eb021bf10d",
+          "verified_fact_id": "01a08b2c-f4e2-7148-99cc-7754e54faed9",
+          "fact_state": "KNOWN",
+          "normalized_value": {
+            "minimum_level": "MASTER"
+          },
+          "proposed_rule_payload": {
+            "code": "group-preview-01a08b2c-f4e2-7148-99cc-7754e54faed9",
+            "operator": "GTE",
+            "field": "education_level",
+            "value_type": "STRING",
+            "value": "MASTER",
+            "required": true,
+            "reason_template": "学历必须满足官方最低要求"
+          },
+          "evidence_ref_ids": [
+            "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+          ],
+          "reason_code": "INDEPENDENT_RULE_REVIEW_REQUIRED",
+          "rule_candidate_id": "01a08b2c-f670-737c-9e55-a65ef0aae644"
+        },
+        "approval": {
+          "decision_id": "01a08b2c-fa0a-72a9-abf1-d87e2ca436d1",
+          "rule_candidate_id": "01a08b2c-f670-737c-9e55-a65ef0aae644",
+          "decision": "APPROVE",
+          "reason": "Synthetic independent rule review",
+          "evidence": [
+            {
+              "evidence_ref_id": "01a08b2c-f063-76c3-a805-ecad22ae45c8",
+              "authority": "FORMAL_OFFICIAL_ATTACHMENT",
+              "relation": "SUPPORTS",
+              "effective_at": "2026-09-01T00:00:00Z",
+              "applicability": "APPLIES_TO_EXACT_TARGET",
+              "reason": "Synthetic original assessed"
+            }
+          ],
+          "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+          "created_at": "2026-09-07T10:00:00Z"
+        },
+        "applicability": {
+          "decision_id": "01a08b2d-0410-77d6-9147-0b596d810e13",
+          "sequence": 1,
+          "request": {
+            "reason": "Synthetic scope review",
+            "outcome": "APPLIES",
+            "evidence": [
+              {
+                "quote": "学历要求：硕士及以上",
+                "block_id": "01a08b2c-f062-71c4-9e08-da90fd6732ab",
+                "member_id": "01a08b2c-f18c-74d1-9c9c-85061207f5ea"
+              }
+            ],
+            "context_hash": "9d8e8f213912a5ffa8ffbfcbdafc25051703a0515bc717668f13c13ed28f687a",
+            "target_plan_id": "01a08b2c-fe34-7353-aa92-b9a8afeac34f",
+            "contract_version": "group-applicability-decision/1.0.0",
+            "previous_decision_id": null,
+            "source_rule_candidate_id": "01a08b2c-f670-737c-9e55-a65ef0aae644",
+            "source_rule_preparation_id": "01a08b2c-f684-732b-8d8c-3384b08cf946"
+          },
+          "request_hash": "32c8bcd606948b55bab6eb3c730955f5f3dd2fb2afae6c02d26eb2977200e66d",
+          "context": {
+            "member": {
+              "state": "BOUND",
+              "entity_id": "position",
+              "position_binding": {
+                "entity_id": "position",
+                "opportunity_unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+                "opportunity_unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c"
+              }
+            },
+            "target": {
+              "unit_id": "01a08b2c-f1b4-72e4-9986-60f6ba74dbe1",
+              "unit_version": 1,
+              "opportunity_id": "01a08b2c-f150-7445-b49f-3a7f41f31611",
+              "unit_version_id": "01a08b2c-f1bc-712d-9434-a56390c8e60c",
+              "opportunity_version": 1
+            },
+            "task_id": "01a08b2c-ef44-7632-b793-66698e42667c",
+            "check_id": "01a08b2c-f0a8-70ba-8435-a00bff70df10",
+            "binding_id": "01a08b2c-f1d0-74f5-a285-2afe0b5df241",
+            "source_group": {
+              "key": "group:b119e4431bab5ce91cb7e5f710aa64349fb4f2b77e20f004a12d30b7ea12032b",
+              "label": "Unit",
+              "unit_id": "01a08b2c-f269-722b-a70e-be41ddb99efa",
+              "version": 1,
+              "public_id": "unit_01a08b2cf269722ba70ebe41ddb99efa",
+              "unit_kind": "GROUP",
+              "unit_version_id": "01a08b2c-f26c-74ac-8bb0-705b60ba667f"
+            },
+            "target_plan_id": "01a08b2c-fe34-7353-aa92-b9a8afeac34f",
+            "contract_version": "group-rule-applicability-context/1.0.0",
+            "group_binding_id": "01a08b2c-f274-7598-933c-f543149f62e1",
+            "target_entity_id": "position",
+            "target_plan_hash": "2c0939ce2bc7b0871a22f9d7911ecbb700a9a741f580f23c3ead769ada5ce541",
+            "group_source_hash": "bab5da3d37f19e4bf2f57a9b1891de57980e519970bc4e250957f6e49a513e08",
+            "source_review_hash": "6742b7b73050a4fe35303ba4544229d76c3ec98d824ec23a89c3298eb925b261",
+            "source_rule_approval_id": "01a08b2c-fa0a-72a9-abf1-d87e2ca436d1",
+            "source_rule_candidate_id": "01a08b2c-f670-737c-9e55-a65ef0aae644",
+            "target_plan_context_hash": "be0f064924f517d08361096379440357c530011ee4619c4ad6901c75ab42f40b",
+            "source_bundle_revision_id": "01a08b2c-f17d-7534-8685-078f6b259d4b",
+            "source_rule_approval_hash": "c22f46d95ce387048192efd3e97986c7f5243cf86779a037b36e03cf42c96f4e",
+            "source_rule_preparation_id": "01a08b2c-f684-732b-8d8c-3384b08cf946",
+            "source_rule_preparation_hash": "3fa61a75d1ce5f096f644b350dbc96c3872ef50e6d22a5894e21be076ef19cfe"
+          },
+          "context_hash": "9d8e8f213912a5ffa8ffbfcbdafc25051703a0515bc717668f13c13ed28f687a",
+          "evidence_snapshot": [
+            {
+              "member_id": "01a08b2c-f18c-74d1-9c9c-85061207f5ea",
+              "block_id": "01a08b2c-f062-71c4-9e08-da90fd6732ab",
+              "quote": "学历要求：硕士及以上",
+              "document_id": "01a08b2c-f05c-74c8-af5d-b4296e08883f",
+              "material_id": "notice",
+              "source_url": "https://example.gov/notice",
+              "evidence_ref_id": "01a08b2c-f062-71c4-9e08-da9396f04242",
+              "block_hash": "42bf6db294b734861055df1c8bad16484f4408a8202db8d34e095a3d108edf21",
+              "binding_hash": "9d0db938ed1504914f92cff5e824d8ca90164e02ccc8242d7bcb62b091d9b62a",
+              "locator": {
+                "kind": "reader_anchor",
+                "reader": {
+                  "name": "html_lxml_literal",
+                  "version": "1",
+                  "parse_contract": "html-text-node/1;lxml=(6, 1, 2, 0);libxml=(2, 11, 9)",
+                  "comparison_version": "html-quote-c14n/1"
+                },
+                "text_end": 10,
+                "text_start": 0,
+                "anchor_schema": "reader-projection/1",
+                "projection_id": "/html",
+                "artifact_sha256": "9e715df9eda8b68f29071ea8a0f540ed043bc7f36d67b7edd7fa13725d5828b6",
+                "projection_sha256": "13216345fc8468e8501da48447dab6654a73de137bb78e3466145b657d124681",
+                "representation_sha256": "a82ed4d979cd3dd340757b353fa1b5a7f6a0e43c68add5a456c5830dc5a43bb8"
+              }
+            }
+          ],
+          "evidence_hash": "6d716f0e8aa58533628665c0018b8b9d8a9e70ac102fceb3aa0bcc2dfc8401d4",
+          "reviewer_id": "01a08b2c-eec4-741b-bd2d-6b3d254525f4",
+          "created_at": "2026-09-07T10:00:00+00:00"
+        }
+      },
+      {
+        "condition": {
+          "condition_id": "source:1",
+          "scope": "EMPLOYER_GROUP",
+          "source_entity_id": "unit",
+          "source_index": 1,
+          "source_unit_id": null,
+          "source_unit_version": null,
+          "source_unit_version_id": null,
+          "field_name": "尚未处理条件",
+          "source_sha256": "fc25f47d14822492247862aa99882cf46a0169f56a6ea2fb2cfba5a9c35cdecc",
+          "state": "UNKNOWN",
+          "fact_id": null,
+          "evidence_ref_ids": [
+            "01a08b2c-f063-76c3-a805-ecad22ae45c8"
+          ]
+        },
+        "disposition": "UNRESOLVED",
+        "reason": "GROUP_FIELD_UNPROCESSED",
+        "source_rule": null,
+        "approval": null,
+        "applicability": null
+      }
+    ],
+    "overall_qualification": "UNCERTAIN"
+  },
+  "snapshot_hash": "63deec60ab888aae1cc11c7235990bf90e292830450d14b8b60a2a301b14a9d6"
+}
