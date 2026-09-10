@@ -1,0 +1,34 @@
+{
+  "scope": "READ_ONLY_ISOLATED_POSTGRES_PREFLIGHT",
+  "candidate_sha": "aef1705fd80d6f361b8fc8e8087e11b32e1d4b2b",
+  "python_serializer": "json.dumps(sort_keys=True, ensure_ascii=False, separators=(',', ':'), allow_nan=False)",
+  "postgres_serializer": "p9b_canonical_json(CAST(:payload AS jsonb))",
+  "cases": [
+    {
+      "name": "frozen_cross_level_fixture",
+      "input": "web/tests/cross-level-fixture.json",
+      "equal": true,
+      "python_sha256": "a3bacd737dfdb8d9016e50cc2ecd2080473d6f52f019c82bd0daf9706a0ed421",
+      "postgres_sha256": "a3bacd737dfdb8d9016e50cc2ecd2080473d6f52f019c82bd0daf9706a0ed421"
+    },
+    {
+      "name": "float_one",
+      "python": "{\"weight\":1.0}",
+      "postgres": "{\"weight\":1.0}",
+      "equal": true,
+      "python_sha256": "08c907ffdc660c41b3981e67377c5ec73e1ff1c9b3cba2715689635cd0b7a51e",
+      "postgres_sha256": "08c907ffdc660c41b3981e67377c5ec73e1ff1c9b3cba2715689635cd0b7a51e"
+    },
+    {
+      "name": "synthetic_exponent",
+      "python": "{\"weight\":1e-07}",
+      "postgres": "{\"weight\":0.0000001}",
+      "equal": false,
+      "python_sha256": "c793d252b39f6e3298e9ff3bcef88067dc624636c066ad1eb0d965abd44d4a93",
+      "postgres_sha256": "13f923151ef53a7225196e21f75528455365f4f315ea5caa0e8936462d652ec7"
+    }
+  ],
+  "writes_performed": false,
+  "migration_created": false,
+  "meaning": "Do not assume JSONB canonical serialization equals frozen Python JSON bytes for every admissible nested number. Current fixture remains valid."
+}
