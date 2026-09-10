@@ -569,6 +569,38 @@ class InvestigationAnnouncementSnapshot(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class InvestigationRelationDecision(Base):
+    __tablename__ = "investigation_relation_decisions"
+    __table_args__ = (
+        UniqueConstraint("proposal_id", "sequence", name="uq_relation_decision_sequence"),
+        UniqueConstraint(
+            "proposal_id", "reviewer_id", "request_key_hash", name="uq_relation_decision_request"
+        ),
+        CheckConstraint(
+            "payload_sha256 = encode(sha256(convert_to(payload_text,'UTF8')),'hex')",
+            name="payload_bytes",
+        ),
+    )
+    decision_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    proposal_id: Mapped[UUID] = mapped_column(
+        Uuid, ForeignKey("investigation_relation_proposals.proposal_id")
+    )
+    previous_decision_id: Mapped[UUID | None] = mapped_column(
+        Uuid, ForeignKey("investigation_relation_decisions.decision_id")
+    )
+    sequence: Mapped[int] = mapped_column(Integer)
+    reviewer_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
+    request_key_hash: Mapped[str] = mapped_column(String(64))
+    request_hash: Mapped[str] = mapped_column(String(64))
+    request: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    payload_text: Mapped[str] = mapped_column(Text)
+    payload_sha256: Mapped[str] = mapped_column(String(64))
+    projection: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, Computed("payload_text::jsonb", persisted=True)
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 class InvestigationRelationProposal(Base):
     __tablename__ = "investigation_relation_proposals"
     __table_args__ = (

@@ -103,6 +103,7 @@ def _describe(
         raise InvestigationError("RELATION_PROPOSAL_INTEGRITY_FAILED") from exc
     return {
         "proposal_id": str(row.proposal_id),
+        "proposal_payload_sha256": row.payload_sha256,
         "payload_sha256": row.payload_sha256,
         "package": package,
         "review": result,
@@ -197,6 +198,8 @@ def save_relation_proposal(
 def load_relation_proposal(
     store: InvestigationStore, task: UUID, proposal_id: UUID, principal: ReviewerPrincipal
 ) -> dict[str, Any]:
+    from deepaha.investigations.relation_decisions import _history
+
     require_human_fact_reviewer(principal)
     with store.factory() as session, session.begin():
         _authorize(session, principal)
@@ -205,6 +208,6 @@ def load_relation_proposal(
         if row is None or row.task_id != task:
             raise InvestigationError("RELATION_PROPOSAL_NOT_FOUND")
         current = _build(store, session, task, row.target_plan_id)
-        result = _describe(store, session, row, current)
+        result = _history(store, session, row, current)
         _recheck(store, session, task, row.target_plan_id, principal, current)
         return result
