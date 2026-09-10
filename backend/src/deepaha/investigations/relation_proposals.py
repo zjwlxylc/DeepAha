@@ -211,3 +211,33 @@ def load_relation_proposal(
         result = _history(store, session, row, current)
         _recheck(store, session, task, row.target_plan_id, principal, current)
         return result
+
+
+def list_relation_proposals(
+    store: InvestigationStore, task: UUID, plan: UUID, principal: ReviewerPrincipal
+) -> dict[str, Any]:
+    """Return navigation identities only; current verdict comes from the detail read."""
+    require_human_fact_reviewer(principal)
+    with store.factory() as session, session.begin():
+        _authorize(session, principal)
+        current = _build(store, session, task, plan)
+        rows = session.scalars(
+            select(InvestigationRelationProposal)
+            .where(
+                InvestigationRelationProposal.task_id == task,
+                InvestigationRelationProposal.target_plan_id == plan,
+            )
+            .order_by(
+                InvestigationRelationProposal.created_at, InvestigationRelationProposal.proposal_id
+            )
+        )
+        proposals = [
+            {
+                "proposal_id": str(row.proposal_id),
+                "producer_id": str(row.producer_id),
+                "created_at": row.created_at.isoformat(),
+            }
+            for row in rows
+        ]
+        _recheck(store, session, task, plan, principal, current)
+        return {"task_id": str(task), "target_plan_id": str(plan), "proposals": proposals}
