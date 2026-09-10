@@ -1,6 +1,6 @@
 # 单位组字段事实独立审核后端
 
-状态 IMPLEMENTED，本地定向验证与只读复核通过，候选 CI 尚待执行完成。分支 `codex/group-fact-review`，基于 PR #26 合并后的 main，工作区为 `D:\DeepAha\.worktrees\integration-wma-evidence`。
+状态 IMPLEMENTED，PR #27 候选 CI #109 九项全部成功，已合并为 `2cad8b54e1073a97ccdbef79c49ee94d960b7f4e`，候选与合并同树。主线 CI #110 最后观察仍在运行；证据见 `evidence/2026-09-10-group-fact-review-ci.json`。分支 `codex/group-fact-review`，工作区为 `D:\DeepAha\.worktrees\integration-wma-evidence`。
 
 组来源登记现在可进入独立事实准备：服务器保留全部原始组字段、不可处理项及其他层级的排除索引，以精确 GROUP Unit/Version 持久化候选。准备本身不批准事实；独立审核人逐字段给出 APPROVE / REJECT / UNKNOWN / NEEDS_ADJUDICATION，全部可处理候选终局裁决后才能保存事实集。未知只能保存 UNKNOWN。旧公告/岗位事实桥、旧 V08 UnitKind 与规则入口保持原义，组事实不冒充岗位事实。
 
@@ -19,4 +19,4 @@
 
 所有数据为合成工程场景。没有 WMA 调用、官方原件下载、Prompt/冻结 Schema/原始 CandidateFacts 修改。真实案例仍为 94 PASS / 0 FAIL / 30 Word UNVERIFIED，Delivery UNVERIFIED，整体资格 UNCERTAIN。
 
-安全恢复点：本批提交并创建 PR 后，可切到“中”档。下一步先检查精确候选 CI，全部通过后合并并核对同树，再为这四个接口接入桌面优先的组事实审核页面，覆盖已保存地址、刷新、过期与错误状态。组规则目标及继承/例外语义须后续单独设计；若进入这类高风险决策，先在安全节点提示切回“高”。当前不扩大到组规则、资格放行或发布。
+后续已进入桌面优先审核页面，记录见 `2026-09-10-group-fact-review-ui.md`。组规则目标及继承/例外语义须后续单独设计；进入这类高风险决策前，在安全节点提示切回“高”。当前不扩大到组规则、资格放行或发布。

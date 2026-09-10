@@ -1,0 +1,71 @@
+{
+  "date": "2026-09-10",
+  "scope": "GROUP_FACT_REVIEW_UI_ONLY",
+  "base_commit": "2cad8b54e1073a97ccdbef79c49ee94d960b7f4e",
+  "local_verdict": "PASS",
+  "candidate_ci": "PENDING",
+  "unit_tests": {
+    "new_actions": 22,
+    "new_component": 7,
+    "new_routes": 2,
+    "existing_group_source": 12,
+    "total_unique_passed": 43
+  },
+  "browser": {
+    "viewports": [
+      "1280x900",
+      "390x844"
+    ],
+    "new_group_fact_cases": 12,
+    "existing_group_source_cases": 12,
+    "total_unique_passed": 24,
+    "final_batch_passed": 16,
+    "earlier_unaffected_passes_reused": 8,
+    "failed_locator_diagnosis": "Exact getByLabel included select option text; changed to observed combobox accessible name. Both complete workflows then passed.",
+    "legacy_note_red_green": "2 legitimate legacy-note cases failed before compatibility fix and passed afterward; changed existing note remains rejected.",
+    "same_request_replay": {
+      "posts": 6,
+      "mutations": 4
+    },
+    "screenshots": [
+      "docs/development/evidence/2026-09-10-group-fact-ui/desktop-review.png",
+      "docs/development/evidence/2026-09-10-group-fact-ui/desktop-saved.png",
+      "docs/development/evidence/2026-09-10-group-fact-ui/mobile-review.png",
+      "docs/development/evidence/2026-09-10-group-fact-ui/mobile-saved.png"
+    ],
+    "visual_review": "desktop side-by-side, narrow viewport stacked; no horizontal overflow"
+  },
+  "checks": {
+    "typecheck": "PASS",
+    "eslint_14_files": "PASS",
+    "production_build": "PASS; rebuilt only after server action compatibility fix",
+    "review": "no remaining P1/P2; static review is not human acceptance"
+  },
+  "wma_calls": 0,
+  "official_downloads": 0,
+  "real_case": {
+    "PASS": 94,
+    "FAIL": 0,
+    "UNVERIFIED": 30,
+    "delivery": "UNVERIFIED",
+    "eligibility": "UNCERTAIN"
+  },
+  "source_hash_format": "UTF-8 source bytes with CRLF normalized to LF",
+  "sha256": {
+    "web/app/globals.css": "087e43c715dd0db8051600117a4db433dc5f6615393563a50e801e2a2a9bbc02",
+    "web/app/review/investigations/[taskId]/group-bindings/[recordId]/facts/page.tsx": "8289ee77832ed4fb22bd0262f6e90fb5c30efbf5cf2904182558c8bb5589c723",
+    "web/app/review/investigations/[taskId]/group-facts/[prepId]/page.tsx": "f5263289fbd0347239c0a8c6380d4d5bf29da2219e644154fb9bcedb2170132e",
+    "web/app/review/investigations/group-fact-actions.ts": "ae5d292cbcce4f8ba5b64a9d12d7554aa4d230799c5209ef5bf83a10c1d845fb",
+    "web/components/investigations/group-fact-review.tsx": "899bc6605f7cdb8abd77e0448a2acf180f0bb8d71dc7bf9db13b72b7840f4b13",
+    "web/components/investigations/group-source-review.tsx": "ee9cb7ba9117ed634fff366ecc64f2e41241d32a1756766e9820400a14821917",
+    "web/e2e/group-fact-api.mjs": "7fb15fcbec0b0eefa7779eb40196bc094e3e8d50776e1aa64f8a36cccb760cf2",
+    "web/e2e/group-facts.spec.ts": "54651d7c5f81fa7bb74c15396816c8abdeb5b0fb909b7697b5fcd1972a29c59a",
+    "web/e2e/investigation-api.mjs": "9da58fa458e9d564d192f81d9004d521a6363af4d2064efebf84595a2df3d3a5",
+    "web/lib/group-facts.ts": "f9f4bf7632f2e0140c4648daf2d0b704bde4d2db4d26c7abaca231002113cdcc",
+    "web/playwright.investigations.config.ts": "c05de6e888226a75ac9253991530f4b92e9e3b8d6ee3a7cc9542e348e6d0f387",
+    "web/tests/group-fact-actions.test.ts": "8c6fd4079f9445d111df0fac0982e0ea11759a3a36b17f9959d22b1ef1038110",
+    "web/tests/group-fact-fixture.ts": "06998097e61ecfa64b4a501f7e12998276b58910a4b627f63827718e7aeea600",
+    "web/tests/group-fact-pages.test.tsx": "fac5fa20d0146df8943e76a05ef580b26e3d5727e105cea1e9c12c3a03d2081b",
+    "web/tests/group-fact-review.test.tsx": "12f95262cab5029f54975cb660847c100d287d0d5a2bca7fe9d7a815c1abdd4b"
+  }
+}
