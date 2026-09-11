@@ -1,5 +1,6 @@
 """Read-only authenticated preflight against real synthetic DB records."""
 
+import json
 from dataclasses import replace
 from pathlib import Path
 from typing import cast
@@ -80,6 +81,10 @@ def test_scope_preflight_reads_all_relations_and_rechecks_sources(
         stale = client.get(url).json()
         assert [r["status"] for r in stale["relations"]] == ["STALE", "STALE"]
         assert stale["source_review_hash"] != data["source_review_hash"]
+        (tmp_path / "scope-preflight-fixture.json").write_text(
+            json.dumps({"current": data, "stale": stale}, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
         app.dependency_overrides[require_local_test_principal] = lambda: replace(
             h.principal, synthetic=True
         )

@@ -5,12 +5,19 @@ import { isDeepStrictEqual } from "node:util";
 const f = JSON.parse(readFileSync(new URL("../tests/relation-review-fixture.json", import.meta.url), "utf8"));
 const n = JSON.parse(readFileSync(new URL("../tests/relation-proposal-fixture.json", import.meta.url), "utf8"));
 const q = JSON.parse(readFileSync(new URL("../tests/relation-queue-fixture.json", import.meta.url), "utf8"));
+const scope = JSON.parse(readFileSync(new URL("../tests/scope-preflight-fixture.json", import.meta.url), "utf8"));
+let scopeState = "current";
 let queueState = "current";
 let current = f.saved;
 createServer(async (req, res) => {
   const url = new URL(req.url, "http://127.0.0.1:3099");
   res.setHeader("Content-Type", "application/json");
   res.setHeader("Cache-Control", "private, no-store");
+  if (url.pathname.startsWith("/scope-")) { scopeState = url.pathname.slice(7); res.end("{}"); return; }
+  if (url.pathname.includes(scope.current.task_id) && url.pathname.endsWith("/scope-preflight")) {
+    if (scopeState === "forbidden") { res.writeHead(403); res.end("{}"); return; }
+    res.end(JSON.stringify(scope[scopeState])); return;
+  }
   if (url.pathname === "/reset") { current = f.saved; res.end("{}"); return; }
   if (url.pathname === "/queue-reset") { queueState = "current"; res.end("{}"); return; }
   if (url.pathname === "/queue-stale") { queueState = "stale"; res.end("{}"); return; }
