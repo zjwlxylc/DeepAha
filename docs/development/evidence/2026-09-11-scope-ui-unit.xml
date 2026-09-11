@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="27" failures="0" errors="0" time="1.2671635">
+    <testsuite name="tests/cross-level.test.tsx" timestamp="2026-09-11T01:04:12.683Z" hostname="DESKTOP-E631IGM" tests="6" failures="0" errors="0" skipped="0" time="0.5673917">
+        <testcase classname="tests/cross-level.test.tsx" name="keeps distinct original conditions and quotes attached to their source scope" time="0.2371626">
+        </testcase>
+        <testcase classname="tests/cross-level.test.tsx" name="shows all three scopes, excluded and unresolved rows, evidence and no approval controls" time="0.0915969">
+        </testcase>
+        <testcase classname="tests/cross-level.test.tsx" name="hides old conditions and review groups during reload and after stale" time="0.0984162">
+        </testcase>
+        <testcase classname="tests/cross-level.test.tsx" name="hides old conditions and review groups during reload and after forbidden" time="0.0602145">
+        </testcase>
+        <testcase classname="tests/cross-level.test.tsx" name="hides old conditions and review groups during reload and after unavailable" time="0.0566408">
+        </testcase>
+        <testcase classname="tests/cross-level.test.tsx" name="remounts after same-address server refresh and removes stale content" time="0.0211695">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/relation-queue.test.tsx" timestamp="2026-09-11T01:04:12.694Z" hostname="DESKTOP-E631IGM" tests="2" failures="0" errors="0" skipped="0" time="0.2880623">
+        <testcase classname="tests/relation-queue.test.tsx" name="filters only this page and keeps stable detail links and ownership visible" time="0.2221112">
+        </testcase>
+        <testcase classname="tests/relation-queue.test.tsx" name="hides outdated approval on failed reread and can retry the same page" time="0.064162">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/scope-preflight-actions.test.ts" timestamp="2026-09-11T01:04:12.696Z" hostname="DESKTOP-E631IGM" tests="16" failures="0" errors="0" skipped="0" time="0.015272">
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="accepts current and stale actual synthetic API exports" time="0.005673">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="refuses invalid target" time="0.0014599">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="refuses invalid safety" time="0.0004341">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="refuses invalid version" time="0.0004813">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="refuses invalid count" time="0.0004162">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="refuses invalid duplicate" time="0.0004126">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="refuses invalid pair" time="0.0003787">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="refuses invalid time" time="0.0003863">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="refuses invalid unknown-state" time="0.0005751">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="refuses invalid missing-blocker" time="0.0003989">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="refuses invalid inconsistent-time" time="0.000285">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="returns recoverable failure for HTTP 401" time="0.0008665">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="returns recoverable failure for HTTP 403" time="0.0002998">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="returns recoverable failure for HTTP 404" time="0.0003639">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="returns recoverable failure for HTTP 409" time="0.0002143">
+        </testcase>
+        <testcase classname="tests/scope-preflight-actions.test.ts" name="returns recoverable failure for HTTP 500" time="0.000364">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/scope-preflight.test.tsx" timestamp="2026-09-11T01:04:12.702Z" hostname="DESKTOP-E631IGM" tests="3" failures="0" errors="0" skipped="0" time="0.3964375">
+        <testcase classname="tests/scope-preflight.test.tsx" name="shows all conditions, missing boundaries and exact review links without claiming eligibility" time="0.2794197">
+        </testcase>
+        <testcase classname="tests/scope-preflight.test.tsx" name="clears old results while loading, hides them on failure and supports recovery" time="0.091955">
+        </testcase>
+        <testcase classname="tests/scope-preflight.test.tsx" name="empty sections keep uncertainty instead of presenting a passed check" time="0.023103">
+        </testcase>
+    </testsuite>
+</testsuites>

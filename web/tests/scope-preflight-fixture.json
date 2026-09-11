@@ -1,0 +1,231 @@
+{
+  "current": {
+    "task_id": "01a08df4-e4f9-7280-9bd6-4b9e2fe29971",
+    "target_plan_id": "01a08df4-f377-720c-9285-603c058f2c39",
+    "contract_version": "unit-scope-preflight/1.0.0",
+    "source_review_hash": "267fb9690560fbdf15d759484614c433bab26144f3766d9933347a0a792c3841",
+    "as_of": "2026-09-07T10:00:00+00:00",
+    "target": {
+      "opportunity_id": "01a08df4-e79d-76c5-b859-82aad94bfafd",
+      "opportunity_version": 1,
+      "unit_id": "01a08df4-e815-73b2-b9ac-fa196e9136d3",
+      "unit_version": 1,
+      "unit_version_id": "01a08df4-e820-709b-aff2-fdaf7c276776"
+    },
+    "source_row_count": 3,
+    "conditions": [
+      {
+        "condition_id": "source:0",
+        "scope": "EMPLOYER_GROUP",
+        "field_name": "education_requirements",
+        "state": "UNPROCESSED",
+        "disposition": "INHERITED",
+        "source_pointer": "/dependencies/group/snapshot/group_conditions/0",
+        "issues": []
+      },
+      {
+        "condition_id": "source:1",
+        "scope": "EMPLOYER_GROUP",
+        "field_name": "尚未处理条件",
+        "state": "UNKNOWN",
+        "disposition": "UNRESOLVED",
+        "source_pointer": "/dependencies/group/snapshot/group_conditions/1",
+        "issues": [
+          "APPLICABILITY_UNRESOLVED"
+        ]
+      },
+      {
+        "condition_id": "source:2",
+        "scope": "UNIT",
+        "field_name": "education_requirements",
+        "state": "KNOWN",
+        "disposition": "LOCAL",
+        "source_pointer": "/dependencies/group/snapshot/base_v2/plan/manifest/conditions/2",
+        "issues": []
+      }
+    ],
+    "excluded_source_rows": [],
+    "source_notes": [],
+    "unresolved_source_references": [],
+    "relations": [
+      {
+        "proposal_id": "01a08df5-0b8e-7486-b2e9-145a3cd5e9d0",
+        "status": "APPROVED",
+        "relation": "CUMULATIVE",
+        "condition_ids": [
+          "source:0",
+          "source:2"
+        ],
+        "payload_sha256": "246eaeabb14b304017e68bf0afd673d36cb873426df56983dd5dab04634b0690"
+      },
+      {
+        "proposal_id": "01a08df5-159f-7566-a5c0-d0bf64e4813b",
+        "status": "UNREVIEWED",
+        "relation": "CUMULATIVE",
+        "condition_ids": [
+          "source:0",
+          "source:2"
+        ],
+        "payload_sha256": "d557cb58ef86d66094ca3d8f93a05a11d50bd4facb285efbc9214a7fc744bbd8"
+      }
+    ],
+    "uncovered_condition_pairs": [],
+    "overlapping_relation_pairs": [],
+    "local_evidence_validity": [
+      {
+        "rule_id": "01a08df4-f2d3-77f8-bc49-062a10c2a2a5",
+        "evidence_ref_id": "01a08df4-e666-713c-a8b9-d6dc0135529c",
+        "valid_from": "2025-12-31T16:00:00Z",
+        "valid_until": null,
+        "status": "END_NOT_ESTABLISHED"
+      }
+    ],
+    "local_kernel_blockers": [
+      {
+        "code": "HUMAN_SCOPE_REVIEW_UNVERIFIED",
+        "condition_id": null,
+        "rule_id": null
+      },
+      {
+        "code": "SOURCE_COMPLETENESS_UNVERIFIED",
+        "condition_id": null,
+        "rule_id": null
+      },
+      {
+        "code": "SCOPE_NOT_SUPPORTED",
+        "condition_id": "source:0",
+        "rule_id": null
+      },
+      {
+        "code": "SCOPE_NOT_SUPPORTED",
+        "condition_id": "source:1",
+        "rule_id": null
+      }
+    ],
+    "blockers": [
+      "APPLICABILITY_UNRESOLVED",
+      "CROSS_LEVEL_SEMANTICS_NOT_REVIEWED",
+      "EVIDENCE_TIME_BOUNDARIES_NOT_ESTABLISHED",
+      "HUMAN_SCOPE_REVIEW_UNVERIFIED",
+      "INHERITED_TIME_BOUNDARIES_NOT_REVIEWED",
+      "SCOPE_PREFLIGHT_REVIEW_ONLY",
+      "SOURCE_COMPLETENESS_UNVERIFIED"
+    ],
+    "executable": false,
+    "overall_qualification": "UNCERTAIN"
+  },
+  "stale": {
+    "task_id": "01a08df4-e4f9-7280-9bd6-4b9e2fe29971",
+    "target_plan_id": "01a08df4-f377-720c-9285-603c058f2c39",
+    "contract_version": "unit-scope-preflight/1.0.0",
+    "source_review_hash": "f612cba60ef0e2a72de6b74a3331dc65ca06f94b730672527b6a699d395cddfa",
+    "as_of": "2026-09-07T10:00:00+00:00",
+    "target": {
+      "opportunity_id": "01a08df4-e79d-76c5-b859-82aad94bfafd",
+      "opportunity_version": 1,
+      "unit_id": "01a08df4-e815-73b2-b9ac-fa196e9136d3",
+      "unit_version": 1,
+      "unit_version_id": "01a08df4-e820-709b-aff2-fdaf7c276776"
+    },
+    "source_row_count": 3,
+    "conditions": [
+      {
+        "condition_id": "source:0",
+        "scope": "EMPLOYER_GROUP",
+        "field_name": "education_requirements",
+        "state": "UNPROCESSED",
+        "disposition": "EXCLUDED",
+        "source_pointer": "/dependencies/group/snapshot/group_conditions/0",
+        "issues": []
+      },
+      {
+        "condition_id": "source:1",
+        "scope": "EMPLOYER_GROUP",
+        "field_name": "尚未处理条件",
+        "state": "UNKNOWN",
+        "disposition": "UNRESOLVED",
+        "source_pointer": "/dependencies/group/snapshot/group_conditions/1",
+        "issues": [
+          "APPLICABILITY_UNRESOLVED"
+        ]
+      },
+      {
+        "condition_id": "source:2",
+        "scope": "UNIT",
+        "field_name": "education_requirements",
+        "state": "KNOWN",
+        "disposition": "LOCAL",
+        "source_pointer": "/dependencies/group/snapshot/base_v2/plan/manifest/conditions/2",
+        "issues": []
+      }
+    ],
+    "excluded_source_rows": [],
+    "source_notes": [],
+    "unresolved_source_references": [],
+    "relations": [
+      {
+        "proposal_id": "01a08df5-0b8e-7486-b2e9-145a3cd5e9d0",
+        "status": "STALE",
+        "relation": "CUMULATIVE",
+        "condition_ids": [
+          "source:0",
+          "source:2"
+        ],
+        "payload_sha256": "246eaeabb14b304017e68bf0afd673d36cb873426df56983dd5dab04634b0690"
+      },
+      {
+        "proposal_id": "01a08df5-159f-7566-a5c0-d0bf64e4813b",
+        "status": "STALE",
+        "relation": "CUMULATIVE",
+        "condition_ids": [
+          "source:0",
+          "source:2"
+        ],
+        "payload_sha256": "d557cb58ef86d66094ca3d8f93a05a11d50bd4facb285efbc9214a7fc744bbd8"
+      }
+    ],
+    "uncovered_condition_pairs": [],
+    "overlapping_relation_pairs": [],
+    "local_evidence_validity": [
+      {
+        "rule_id": "01a08df4-f2d3-77f8-bc49-062a10c2a2a5",
+        "evidence_ref_id": "01a08df4-e666-713c-a8b9-d6dc0135529c",
+        "valid_from": "2025-12-31T16:00:00Z",
+        "valid_until": null,
+        "status": "END_NOT_ESTABLISHED"
+      }
+    ],
+    "local_kernel_blockers": [
+      {
+        "code": "HUMAN_SCOPE_REVIEW_UNVERIFIED",
+        "condition_id": null,
+        "rule_id": null
+      },
+      {
+        "code": "SOURCE_COMPLETENESS_UNVERIFIED",
+        "condition_id": null,
+        "rule_id": null
+      },
+      {
+        "code": "SCOPE_NOT_SUPPORTED",
+        "condition_id": "source:0",
+        "rule_id": null
+      },
+      {
+        "code": "SCOPE_NOT_SUPPORTED",
+        "condition_id": "source:1",
+        "rule_id": null
+      }
+    ],
+    "blockers": [
+      "APPLICABILITY_UNRESOLVED",
+      "CROSS_LEVEL_SEMANTICS_NOT_REVIEWED",
+      "EVIDENCE_TIME_BOUNDARIES_NOT_ESTABLISHED",
+      "HUMAN_SCOPE_REVIEW_UNVERIFIED",
+      "SCOPE_PREFLIGHT_REVIEW_ONLY",
+      "SOURCE_COMPLETENESS_UNVERIFIED"
+    ],
+    "executable": false,
+    "overall_qualification": "UNCERTAIN"
+  }
+}

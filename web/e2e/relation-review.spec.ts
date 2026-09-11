@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import f from "../tests/relation-review-fixture.json";
 import n from "../tests/relation-proposal-fixture.json";
 import q from "../tests/relation-queue-fixture.json";
+import scope from "../tests/scope-preflight-fixture.json";
 test("queue filters current states and clears them on source change and auth failure", async ({ page, context, request }) => {
   await request.get("http://127.0.0.1:3099/queue-reset");
   await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true }]);
@@ -67,4 +68,29 @@ test("desktop saved address, independent decision, refresh and stale state", asy
   await expect(page.getByRole("button", { name: "追加审核记录" })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: "output/playwright/relations/desktop-stale.png", fullPage: true });
+});
+
+for (const width of [1440, 390]) test(`scope preflight at ${width}px preserves boundaries and clears stale results`, async ({ page, context, request }) => {
+  await request.get("http://127.0.0.1:3099/scope-current");
+  await page.setViewportSize({ width, height: 900 });
+  await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true }]);
+  const v = scope.current;
+  await page.goto(`/review/investigations/${v.task_id}/unit-plans/${v.target_plan_id}/scope-preflight`);
+  await expect(page.getByRole("heading", { name: "条件范围预检", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "查看条件原文与依据" })).toHaveCount(v.conditions.length);
+  await expect(page.getByText("关系提案审核通过", { exact: true })).toBeVisible();
+  await expect(page.getByText(/不能视为永久有效/)).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: `output/playwright/relations/scope-${width}.png`, fullPage: true });
+  await request.get("http://127.0.0.1:3099/scope-stale");
+  const reload = page.getByRole("button", { name: "重新读取预检" });
+  await reload.focus(); await page.keyboard.press("Enter");
+  await expect(page.getByText("依据已变化，旧决定失效", { exact: true })).toHaveCount(2);
+  await request.get("http://127.0.0.1:3099/scope-forbidden");
+  await reload.click();
+  await expect(page.getByRole("alert").filter({ hasText: "没有查看权限" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "关系提案 1", exact: true })).toHaveCount(0);
+  await request.get("http://127.0.0.1:3099/scope-current");
+  await reload.click();
+  await expect(page.getByText("关系提案审核通过", { exact: true })).toBeVisible();
 });
