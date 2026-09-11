@@ -191,6 +191,23 @@ def read_relation_proposal_context(
         raise problem(error) from None
 
 
+@router.get("/{task_id}/unit-plans/{plan_id}/scope-preflight")
+def read_unit_scope_preflight(
+    task_id: UUID,
+    plan_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+) -> dict[str, Any]:
+    from deepaha.investigations.scope_preflight import read_scope_preflight
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return read_scope_preflight(store, task_id, plan_id, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
 @router.get("/{task_id}/unit-plans/{plan_id}/relation-queue")
 def read_relation_queue_page(
     task_id: UUID,
