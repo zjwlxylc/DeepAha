@@ -71,6 +71,10 @@ HTML 优先用 `{"selector":"实际 CSS 选择器"}` 定位具体段落、表格
 
 `evidence.json.artifacts[]` 只登记已保存的真实原件，每项包含唯一 `artifact_id`、真实 `source_url`、`local_path`（`artifacts/...` 相对路径）、`file_name`、`media_type`、由原字节计算的 `sha256`。每个原件使用不同 ID、路径和文件名；不能将错误页、下载失败记录、OCR 文本或转换副本冒充官方原件。
 
+`local_path` 的末段就是该原件的文件名，必须是安全且唯一的：位于 `artifacts/` 之下，不含路径逃逸、编码斜杠、Windows 保留设备名，也不以点或空格结尾。
+
+**`file_name` 必须与 `local_path` 末段逐字相同**（若另写 `remote_path`，其末段也必须与之一致）。因此不要用 ASCII 转写名保存文件、却在 `file_name` 里填官方原始中文名——接收器会据此拒绝整包。要保留官方原始文件名，就让 `local_path` 直接使用它，例如 `artifacts/附件1_报名登记表.doc`。
+
 当前招聘摄取只接收一个公告根及其 unit/position 子树。`entities` 的父子 ID 与机会树一致；`facts_flat` 与嵌套 facts 的实体、字段、值、状态、证据一一一致，不得仅在报告中补关键字段。未知值不能代替证据；没有可用原件或没有事实时明确交付失败，不输出“全量完成”。材料、单位、岗位及 Sheet 的已知总数、已处理数、未处理项和原因写入报告，分母未知就标未知。
 
 ## 七、纪律（不可违反）

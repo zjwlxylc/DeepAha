@@ -5,7 +5,7 @@ from hashlib import sha256
 from typing import Any, cast
 from uuid import UUID, uuid7
 
-from sqlalchemy import func, select, text
+from sqlalchemy import and_, func, or_, select, text
 from sqlalchemy.orm import Session
 
 from deepaha.artifacts.object_store import ObjectStore
@@ -25,6 +25,7 @@ from deepaha.investigations.models import (
     InvestigationTask,
 )
 from deepaha.investigations.prompt import frozen_contract, require_recovery_contract
+from deepaha.investigations.source_policy import allowed_intake_source
 from deepaha.local_human_test.review import require_human_fact_reviewer, validate_idempotency_key
 from deepaha.review.auth import (
     OPPORTUNITY_FACT_VALIDATION_PURPOSE,
@@ -38,6 +39,17 @@ from deepaha.sources.models import Source, SourceEndpoint
 
 def utc_now() -> datetime:
     return datetime.now(UTC)
+
+
+# Statuses that may be resumed by downloading existing remote material only. A
+# recovery candidate must also carry both remote identifiers (see ``claim``).
+RECOVERY_STATES = (
+    "INVESTIGATING",
+    "EXECUTION_UNCERTAIN",
+    "COLLECTING",
+    "COLLECTION_RETRYABLE",
+    "EXPIRED",
+)
 
 
 class InvestigationStore:
@@ -91,7 +103,7 @@ class InvestigationStore:
             or not source.active
             or not endpoint.active
             or endpoint.source_id != source.source_id
-            or source.tier != "OFFICIAL_PRIMARY"
+            or not allowed_intake_source(source, endpoint, command.notice_url)
             or endpoint.robots_decision not in ("ALLOWED", "NOT_APPLICABLE")
             or endpoint.content_use_basis not in ("OFFICIAL_PUBLIC_ACCESS", "OPEN_LICENSE")
         ):
@@ -156,6 +168,166 @@ class InvestigationStore:
             session.flush()
             self._event(session, task, "QUEUED")
             return task.task_id
+
+    def request_dispatch(
+        self,
+        task_id: UUID,
+        principal: ReviewerPrincipal,
+        *,
+        configuration_revision: str | None = None,
+        request_key: str | None = None,
+        configuration_agent_id: str | None = None,
+        configuration_source_app: str | None = None,
+    ) -> dict[str, Any]:
+        """Persist one explicit new execution or download-only recovery request."""
+        require_reviewer_authority(
+            principal, ReviewerRole.LOCAL_TEST_OPERATOR, OPPORTUNITY_FACT_VALIDATION_PURPOSE
+        )
+        if principal.synthetic:
+            raise InvestigationError("REAL_OPERATOR_REQUIRED")
+        key_hash = (
+            None
+            if request_key is None
+            else sha256(validate_idempotency_key(request_key).encode()).hexdigest()
+        )
+        with self.factory() as session, session.begin():
+            account = session.get(ReviewerAccountModel, principal.reviewer_id)
+            if account is None or not account.active or account.synthetic:
+                raise InvestigationError("REAL_OPERATOR_REQUIRED")
+            require_reviewer_authority(
+                ReviewerPrincipal(
+                    account.reviewer_id,
+                    frozenset(ReviewerRole(role) for role in account.roles),
+                    frozenset(account.allowed_purposes),
+                    account.synthetic,
+                ),
+                ReviewerRole.LOCAL_TEST_OPERATOR,
+                OPPORTUNITY_FACT_VALIDATION_PURPOSE,
+            )
+            task = self._get(session, task_id, lock=True)
+            previous = task.dispatch_context or {}
+            history = list(previous.get("history", []))
+            if key_hash and any(
+                row.get("request_key_hash") == key_hash for row in [previous, *history]
+            ):
+                return self._view(session, task)
+            # Legacy intents may be explicitly bound by a fresh page request.
+            if (
+                task.dispatch_requested_at is not None
+                and not previous.get("finished_at")
+                and (previous or configuration_revision is None)
+            ):
+                return self._view(session, task)
+            recover = task.status in RECOVERY_STATES
+            if task.status != "QUEUED" and not recover:
+                raise InvestigationError("TASK_NOT_DISPATCHABLE")
+            now = self.clock()
+            if task.lease_until is not None and now <= task.lease_until:
+                raise InvestigationError("TASK_ALREADY_RUNNING")
+            if (
+                recover
+                and not previous.get("configuration_revision")
+                and task.execution.get("mode") == "LIVE"
+                and (
+                    task.execution.get("agent_id") != configuration_agent_id
+                    or task.execution.get("source_app") != configuration_source_app
+                )
+            ):
+                raise InvestigationError("WMA_RECOVERY_BINDING_MISMATCH")
+            if recover and (not task.runtime_id or not task.remote_session_id):
+                raise InvestigationError("TASK_NOT_RECOVERABLE")
+            if previous:
+                history.append({key: value for key, value in previous.items() if key != "history"})
+            task.dispatch_requested_at = now
+            task.dispatch_context = {
+                "intent_id": str(uuid7()),
+                "configuration_revision": previous.get("configuration_revision")
+                if recover and previous.get("configuration_revision")
+                else configuration_revision,
+                "operator_id": str(principal.reviewer_id),
+                "requested_at": now.isoformat(),
+                "request_key_hash": key_hash,
+                "kind": "RECOVER" if recover else "NEW",
+                "history": history,
+            }
+            session.flush()
+            return self._view(session, task)
+
+    def finish_dispatch(self, task_id: UUID, intent_id: str, code: str | None = None) -> None:
+        """Finish only this intent; replaying its receipt never triggers another attempt."""
+        with self.factory() as session, session.begin():
+            task = self._get(session, task_id, lock=True)
+            context = task.dispatch_context or {}
+            if task.lease_until is not None and self.clock() <= task.lease_until:
+                return
+            if context.get("intent_id") == intent_id and not context.get("finished_at"):
+                task.dispatch_context = context | {"finished_at": self.clock().isoformat()}
+                if code is not None:
+                    self._event(session, task, task.status, code)
+
+    def list_dispatchable(self, now: datetime) -> list[dict[str, Any]]:
+        """Return queued tasks with an intent plus resumable remote tasks.
+
+        Kept deliberately lightweight (no ``_view``) because the worker polls it
+        every cycle. Recovery candidates must carry both remote identifiers, which
+        ``claim(recover=True)`` requires anyway.
+        """
+        with self.factory() as session:
+            rows = session.execute(
+                select(
+                    InvestigationTask.task_id,
+                    InvestigationTask.status,
+                    InvestigationTask.created_by,
+                    InvestigationTask.dispatch_requested_at,
+                    InvestigationTask.dispatch_context,
+                )
+                .where(
+                    InvestigationTask.dispatch_requested_at.is_not(None),
+                    InvestigationTask.dispatch_context["finished_at"].astext.is_(None),
+                    or_(
+                        and_(
+                            InvestigationTask.status == "QUEUED",
+                            InvestigationTask.dispatch_requested_at.is_not(None),
+                        ),
+                        and_(
+                            InvestigationTask.status.in_(RECOVERY_STATES),
+                            InvestigationTask.runtime_id.is_not(None),
+                            InvestigationTask.remote_session_id.is_not(None),
+                        ),
+                    ),
+                    or_(
+                        InvestigationTask.lease_until.is_(None),
+                        InvestigationTask.lease_until < now,
+                    ),
+                )
+                .order_by(InvestigationTask.created_at.asc())
+                .limit(20)
+            )
+            return [
+                {
+                    "task_id": task_id,
+                    "status": status,
+                    "created_by": created_by,
+                    "dispatch_requested_at": dispatch_requested_at,
+                    "kind": "NEW" if status == "QUEUED" else "RECOVER",
+                    "dispatch_intent": dispatch_context,
+                }
+                for task_id, status, created_by, dispatch_requested_at, dispatch_context in rows
+            ]
+
+    def cancel_dispatch(self, task_id: UUID, code: str) -> None:
+        """Clear a pre-claim dispatch intent and record its safe failure code.
+
+        The status stays ``QUEUED`` (a legal event value), the lease is left
+        untouched to avoid clearing a live owner's lease, and the operator may
+        request dispatch again.
+        """
+        with self.factory() as session, session.begin():
+            task = self._get(session, task_id, lock=True)
+            if task.dispatch_requested_at is None or task.status != "QUEUED":
+                return
+            task.dispatch_requested_at = None
+            self._event(session, task, "QUEUED", code)
 
     def claim(
         self, task_id: UUID, owner: UUID, execution: dict[str, object], *, recover: bool = False
@@ -477,6 +649,14 @@ class InvestigationStore:
             "error_code": task.error_code,
             "created_at": task.created_at.astimezone(UTC).isoformat(),
             "updated_at": task.updated_at.astimezone(UTC).isoformat(),
+            "dispatch_pending": bool(
+                task.dispatch_requested_at and not task.dispatch_context.get("finished_at")
+            ),
+            "dispatch_requested_at": (
+                None
+                if task.dispatch_requested_at is None
+                else task.dispatch_requested_at.astimezone(UTC).isoformat()
+            ),
             "contract_hash": task.contract_hash,
             "delivery_hash": task.delivery_hash,
             "issues": delivery.get("issues", []),

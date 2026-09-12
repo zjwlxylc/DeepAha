@@ -5,6 +5,8 @@ import { cookies } from "next/headers";
 import { humanTestFetch, LocalHumanTestApiError } from "./local-human-test";
 
 export interface InvestigationSource {
+  usage_note?: string;
+  sample?: { title?: string; brief?: string; expected_artifact_urls?: string[] };
   source_id: string;
   endpoint_id: string;
   authority_name: string;
@@ -75,6 +77,11 @@ export interface InvestigationTask {
   created_at: string;
   updated_at: string;
   error_code: string | null;
+  dispatch_pending?: boolean;
+  dispatch_requested_at?: string | null;
+  runtime_id?: string | null;
+  remote_session_id?: string | null;
+  deadline_at?: string | null;
   calibration: boolean;
   contract_hash: string;
   delivery_hash: string | null;
@@ -83,6 +90,7 @@ export interface InvestigationTask {
   facts: InvestigationFact[];
   materials: {
     artifact_id: string;
+    remote_path?: string;
     url: string;
     sha256: string;
     media_type: string;
@@ -94,6 +102,11 @@ export interface InvestigationTask {
     status: string;
     material_count: number;
     prepared_count: number;
+    // Exclusion counters and per-material exclusion state are absent from
+    // payloads written before the exclusion flow existed, so they stay optional
+    // instead of making older cached preparation reads unrepresentable.
+    excluded_count?: number;
+    unsupported_count?: number;
     materials: {
       material_id: string;
       outcome: string;
@@ -105,6 +118,9 @@ export interface InvestigationTask {
       parse_contract_version: string | null;
       block_count: number;
       evidence_ref_count: number;
+      excluded?: boolean;
+      evidence_mode?: "TEXT" | "OPAQUE_NO_TEXT" | null;
+      exclusion?: { reason: string; excluded_by: string; excluded_at: string } | null;
     }[];
   } | null;
 }
@@ -164,6 +180,20 @@ const registrationConflictCodes = new Set([
   "APPROVED_SOURCE_REQUIRED", "NOTICE_OUTSIDE_APPROVED_HOSTS", "IDEMPOTENCY_CONFLICT",
 ]);
 
+// 409 codes a dispatch request can return. Kept separate from registration conflicts
+// so the shared `postInvestigation` reader can surface them without widening the
+// registration-specific list.
+const dispatchConflictCodes = new Set(["TASK_NOT_DISPATCHABLE", "TASK_ALREADY_RUNNING"]);
+
+// 409 codes the document-exclusion endpoints return. They need their own list so
+// the shared `postInvestigation` reader keeps the code: without it the operator
+// only sees the generic "refresh the page" copy for a reason they can act on.
+const documentExclusionConflictCodes = new Set([
+  "DOCUMENT_EXCLUSION_REASON_REQUIRED", "DOCUMENT_EXCLUSION_NOT_UNSUPPORTED", "DOCUMENT_EXCLUSION_NOT_ALLOWED",
+  "DOCUMENT_EXCLUSION_ALREADY_PRESENT", "DOCUMENT_EXCLUSION_NOT_FOUND", "DOCUMENT_EXCLUSION_DELIVERY_CONFLICT",
+  "DOCUMENT_EXCLUSION_MATERIAL_NOT_FOUND",
+]);
+
 export class InvestigationApiError extends LocalHumanTestApiError {
   constructor(status: number, public readonly code: string | null) { super(status); }
 }
@@ -185,7 +215,8 @@ export async function postInvestigation<T = InvestigationTask>(path: string, bod
     if (response.status === 409) {
       const detail = await response.json().catch(() => null);
       const candidate: unknown = detail?.detail?.code;
-      if (typeof candidate === "string" && registrationConflictCodes.has(candidate)) code = candidate;
+      if (typeof candidate === "string" && (registrationConflictCodes.has(candidate)
+        || dispatchConflictCodes.has(candidate) || documentExclusionConflictCodes.has(candidate))) code = candidate;
     }
     throw new InvestigationApiError(response.status, code);
   }

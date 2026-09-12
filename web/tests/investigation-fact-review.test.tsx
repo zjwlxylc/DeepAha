@@ -34,7 +34,7 @@ describe("independent field review", () => {
     row.evidence[0].check_reference.persistent_binding = null;
     render(<InvestigationFactReview task={current} requestKey={taskId} />);
     expect(screen.getByText(/0 个已接入审核，1 个仍待处理/)).toBeVisible();
-    expect(screen.getByText("持久证据：尚未关联 · 待核验")).toBeVisible();
+    expect(screen.getByText("原文记录：尚未关联 · 待核验")).toBeVisible();
     expect(screen.getByText(/尚未接入审核，保留原始状态/)).toBeVisible();
     expect(screen.queryByRole("button", { name: "记录字段审核" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "保存审核事实集" })).not.toBeInTheDocument();

@@ -1,0 +1,181 @@
+{
+  "schema_version": "0.2.0",
+  "sources": [
+    {
+      "source": {
+        "source_id": "01a08e78-07a5-7596-9ca8-14b5048c9763",
+        "public_id": "src_01a08e7807a575969ca814b5048c9763",
+        "canonical_url": "https://www.zjhr.com/",
+        "authority_name": "浙江省公共就业服务平台",
+        "tier": "OFFICIAL_AGGREGATOR",
+        "jurisdiction": "浙江",
+        "active": true,
+        "created_at": "2026-09-11T03:15:46Z",
+        "updated_at": "2026-09-11T03:15:46Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "01a08e78-07a5-7596-9ca8-14b600b9784e",
+          "source_id": "01a08e78-07a5-7596-9ca8-14b5048c9763",
+          "url": "https://www.zjhr.com/010/client/index6.jsp?column1=8a1293669fcdab3c019feff272232edc",
+          "allowed_hosts": [
+            "www.zjhr.com",
+            "rlsbt.zj.gov.cn"
+          ],
+          "expected_media_types": [
+            "text/html"
+          ],
+          "browser_policy": "FALLBACK",
+          "minimum_interval_seconds": 60,
+          "timeout_seconds": 30,
+          "max_attempts": 1,
+          "robots_url": "https://www.zjhr.com/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-09-11T03:15:46Z",
+          "content_use_basis": "OFFICIAL_PUBLIC_ACCESS",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "浙江省公共就业服务平台；浙江省人力资源和社会保障厅、浙江省职业介绍服务指导中心",
+          "fixture_storage_allowed": false,
+          "usage_note": "用户于2026-09-11明确批准本条公告用于内部调查体验。政府主办的官方聚合平台，不自动等于一手原公告。保留发布单位、转载和材料缺口，不进入报名系统、不采集个人名单、不绕过访问限制。公开访问不等于开放许可，不公开复制全文，不把原件写入Git。",
+          "policy_version": "2026-09-11.direct-wma-zjhr.1",
+          "active": true,
+          "verified_at": "2026-09-11T03:15:46Z",
+          "created_at": "2026-09-11T03:15:46Z",
+          "updated_at": "2026-09-11T03:15:46Z"
+        },
+        {
+          "endpoint_id": "01a08e78-07a5-7596-9ca8-14b79ba2a459",
+          "source_id": "01a08e78-07a5-7596-9ca8-14b5048c9763",
+          "url": "https://www.zjhr.com/010/client/index6.jsp?column1=8a1293669fa8afb0019fb0b9eae175bb",
+          "allowed_hosts": [
+            "www.zjhr.com"
+          ],
+          "expected_media_types": [
+            "text/html"
+          ],
+          "browser_policy": "FALLBACK",
+          "minimum_interval_seconds": 60,
+          "timeout_seconds": 30,
+          "max_attempts": 1,
+          "robots_url": "https://www.zjhr.com/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-09-11T03:15:46Z",
+          "content_use_basis": "OFFICIAL_PUBLIC_ACCESS",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "浙江省公共就业服务平台；浙江省人力资源和社会保障厅、浙江省职业介绍服务指导中心",
+          "fixture_storage_allowed": false,
+          "usage_note": "用户于2026-09-11明确批准本条公告用于内部调查体验。政府主办的官方聚合平台，不自动等于一手原公告。保留发布单位、转载和材料缺口，不进入报名系统、不采集个人名单、不绕过访问限制。公开访问不等于开放许可，不公开复制全文，不把原件写入Git。",
+          "policy_version": "2026-09-11.direct-wma-zjhr.1",
+          "active": true,
+          "verified_at": "2026-09-11T03:15:46Z",
+          "created_at": "2026-09-11T03:15:46Z",
+          "updated_at": "2026-09-11T03:15:46Z"
+        },
+        {
+          "endpoint_id": "01a08e78-07a5-7596-9ca8-14b8e0d0317b",
+          "source_id": "01a08e78-07a5-7596-9ca8-14b5048c9763",
+          "url": "https://www.zjhr.com/010/client/index6.jsp?column1=8a1293669f3aeabe019f3ba379600ce2",
+          "allowed_hosts": [
+            "www.zjhr.com"
+          ],
+          "expected_media_types": [
+            "text/html"
+          ],
+          "browser_policy": "FALLBACK",
+          "minimum_interval_seconds": 60,
+          "timeout_seconds": 30,
+          "max_attempts": 1,
+          "robots_url": "https://www.zjhr.com/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-09-11T03:15:46Z",
+          "content_use_basis": "OFFICIAL_PUBLIC_ACCESS",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "浙江省公共就业服务平台；浙江省人力资源和社会保障厅、浙江省职业介绍服务指导中心",
+          "fixture_storage_allowed": false,
+          "usage_note": "用户于2026-09-11明确批准本条公告用于内部调查体验。政府主办的官方聚合平台，不自动等于一手原公告。保留发布单位、转载和材料缺口，不进入报名系统、不采集个人名单、不绕过访问限制。公开访问不等于开放许可，不公开复制全文，不把原件写入Git。",
+          "policy_version": "2026-09-11.direct-wma-zjhr.1",
+          "active": true,
+          "verified_at": "2026-09-11T03:15:46Z",
+          "created_at": "2026-09-11T03:15:46Z",
+          "updated_at": "2026-09-11T03:15:46Z"
+        },
+        {
+          "endpoint_id": "01a08e78-07a5-7596-9ca8-14b9d2a25335",
+          "source_id": "01a08e78-07a5-7596-9ca8-14b5048c9763",
+          "url": "https://www.zjhr.com/010/client/index6.jsp?column1=8a1293669eeadd5b019eee652bb35788",
+          "allowed_hosts": [
+            "www.zjhr.com"
+          ],
+          "expected_media_types": [
+            "text/html"
+          ],
+          "browser_policy": "FALLBACK",
+          "minimum_interval_seconds": 60,
+          "timeout_seconds": 30,
+          "max_attempts": 1,
+          "robots_url": "https://www.zjhr.com/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-09-11T03:15:46Z",
+          "content_use_basis": "OFFICIAL_PUBLIC_ACCESS",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "浙江省公共就业服务平台；浙江省人力资源和社会保障厅、浙江省职业介绍服务指导中心",
+          "fixture_storage_allowed": false,
+          "usage_note": "用户于2026-09-11明确批准本条公告用于内部调查体验。政府主办的官方聚合平台，不自动等于一手原公告。保留发布单位、转载和材料缺口，不进入报名系统、不采集个人名单、不绕过访问限制。公开访问不等于开放许可，不公开复制全文，不把原件写入Git。",
+          "policy_version": "2026-09-11.direct-wma-zjhr.1",
+          "active": true,
+          "verified_at": "2026-09-11T03:15:46Z",
+          "created_at": "2026-09-11T03:15:46Z",
+          "updated_at": "2026-09-11T03:15:46Z"
+        }
+      ]
+    },
+    {
+      "source": {
+        "source_id": "01a08f03-991f-7368-8d87-ca813a1b267b",
+        "public_id": "src_01a08f03991f73688d87ca813a1b267b",
+        "canonical_url": "https://rlsbt.zj.gov.cn/col/col1229743683/index.html",
+        "authority_name": "浙江省人力资源和社会保障厅",
+        "tier": "OFFICIAL_PRIMARY",
+        "jurisdiction": "浙江省",
+        "active": true,
+        "created_at": "2026-09-11T04:00:00Z",
+        "updated_at": "2026-09-11T04:00:00Z"
+      },
+      "endpoints": [
+        {
+          "endpoint_id": "01a08f03-991f-7368-8d87-ca82caf08586",
+          "source_id": "01a08f03-991f-7368-8d87-ca813a1b267b",
+          "url": "https://rlsbt.zj.gov.cn/col/col1229743683/art/2026/art_99f2702a91aa43edaab3ef5037d8d0ad.html",
+          "allowed_hosts": [
+            "rlsbt.zj.gov.cn"
+          ],
+          "expected_media_types": [
+            "text/html"
+          ],
+          "browser_policy": "NEVER",
+          "minimum_interval_seconds": 21600,
+          "timeout_seconds": 30,
+          "max_attempts": 1,
+          "robots_url": "https://rlsbt.zj.gov.cn/robots.txt",
+          "robots_decision": "NOT_APPLICABLE",
+          "robots_checked_at": "2026-09-11T04:00:00Z",
+          "content_use_basis": "OFFICIAL_PUBLIC_ACCESS",
+          "license_name": null,
+          "license_url": null,
+          "attribution": "浙江省人力资源和社会保障厅",
+          "fixture_storage_allowed": false,
+          "usage_note": "用户于2026-09-11明确批准本条一手官方公告用于内部调查体验。浙江省人力资源和社会保障厅为公告发布主体，属一手官方来源，不自动等同转载聚合。以页面正常匿名加载取得正文；外域附件若403须记录缺失，不绕过、不猜测、不宣称完整取得。不进入报名系统、不提交报名、不采集个人名单。公开访问不等于开放许可，不公开复制全文，不把原件写入Git。",
+          "policy_version": "2026-09-11.direct-wma-rlsbt.1",
+          "active": true,
+          "verified_at": "2026-09-11T04:00:00Z",
+          "created_at": "2026-09-11T04:00:00Z",
+          "updated_at": "2026-09-11T04:00:00Z"
+        }
+      ]
+    }
+  ]
+}

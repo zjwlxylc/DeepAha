@@ -18,6 +18,7 @@ from deepaha.contracts.phase2 import (
     LegacyEvidenceLocator,
 )
 from deepaha.documents.blocks import (
+    OPAQUE_BLOCK_TYPE,
     ParsedBlock,
     validate_parsed_blocks,
 )
@@ -284,7 +285,12 @@ class DocumentService:
 
     @staticmethod
     def _validate_parsed(parsed: ParsedDocument) -> tuple[EvidenceLocatorV02, ...]:
-        if not parsed.normalized_text:
+        opaque_only = bool(parsed.blocks) and all(
+            block.block_type == OPAQUE_BLOCK_TYPE for block in parsed.blocks
+        )
+        # An excluded binary legitimately has no extracted text; every other parser must
+        # still produce normalized text.
+        if not parsed.normalized_text and not opaque_only:
             raise ValueError("parser returned empty normalized text")
         if normalize_text(parsed.normalized_text) != parsed.normalized_text:
             raise ValueError("parser returned text that is not normalized")

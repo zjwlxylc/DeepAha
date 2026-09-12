@@ -7,7 +7,7 @@ import { announcementPreviewPath, announcementRecordPath, announcementReasons, t
 import { applicabilityOutcomes } from "../../lib/rule-applicability";
 import { formatDateTime } from "../../lib/public-opportunities";
 import { currentSnapshotSource } from "../../lib/unit-snapshots";
-import { materialPath, safeOfficialUrl } from "./evidence";
+import { materialPath, safeOfficialUrl } from "../../lib/investigation-evidence-links";
 import UnitPlanView from "./unit-plan-view";
 
 const groups = { INHERITED: "继承的公告条件", EXCLUDED: "明确排除的公告条件", UNRESOLVED: "仍待处理的公告条件" } as const;

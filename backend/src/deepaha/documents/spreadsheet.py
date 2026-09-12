@@ -230,17 +230,22 @@ def _ignore_declared_dimensions(worksheet: object) -> None:
     worksheet.reset_dimensions()
 
 
-def _preflight_loaded_worksheet(worksheet: object, budget: WorksheetExpansionBudget) -> None:
+def _preflight_loaded_worksheet(
+    worksheet: object, budget: WorksheetExpansionBudget
+) -> tuple[str, ...]:
     # Resolve exactly what openpyxl will read, including non-.xml relationship
     # targets and aliases. Repeated physical parts count once per logical sheet.
+    # The merge refs are collected on the same pass that charges the budget.
     if not isinstance(worksheet, ReadOnlyWorksheet):
         raise RuntimeError("XLSX parser requires a read-only worksheet")
     archive = getattr(worksheet.parent, "_archive", None)
     path = getattr(worksheet, "_worksheet_path", None)
     if not isinstance(archive, ZipFile) or not isinstance(path, str):
         raise RuntimeError("XLSX reader did not expose its worksheet source")
+    merges: list[str] = []
     with archive.open(path) as source:
-        preflight_worksheet(source, budget, required=True)
+        preflight_worksheet(source, budget, required=True, merges=merges)
+    return tuple(merges)
 
 
 def _normalize_cell_value(value: object) -> str:

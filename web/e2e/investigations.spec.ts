@@ -13,6 +13,20 @@ test.beforeEach(async ({ context, request }) => {
   await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true, sameSite: "Lax" }]);
 });
 
+test("new entry explains missing browser session and shows actual readiness after login", async ({ page, context }) => {
+  await context.clearCookies();
+  await page.goto("/review/investigations");
+  await expect(page.getByRole("heading", { name: "需要本地审核登录" })).toBeVisible();
+  await expect(page.getByRole("alert").filter({ hasText: "一键启动入口" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "登记调查任务" })).toHaveCount(0);
+  await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true, sameSite: "Lax" }]);
+  await page.reload();
+  await expect(page.getByTestId("investigation-runtime")).toBeVisible();
+  await expect(page.getByText("调查处理进程运行中", { exact: true })).toBeVisible();
+  await expect(page.getByText("未配置", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "检查 WMA 发布连接" })).toBeDisabled();
+});
+
 for (const operation of ["registration", "review"] as const) {
   test(`retries ${operation} after a lost receipt without changing the form or duplicating a write`, async ({ page, request }) => {
     await page.goto(operation === "registration" ? "/review/investigations" : `/review/investigations/${taskId}`);
@@ -40,7 +54,7 @@ for (const operation of ["registration", "review"] as const) {
     } else await expect(page.getByRole("combobox", { name: "审核决定" })).toHaveValue("APPROVE");
     expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 1, posts: 1 });
     await button.click();
-    if (operation === "registration") await expect(page.getByRole("status")).toContainText("调查任务已登记");
+    if (operation === "registration") await expect(page.locator("#new-investigation").getByRole("status")).toContainText("调查任务已登记");
     else await expect(page.getByText("批准内部材料", { exact: true })).toBeVisible();
     expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 1, posts: 2 });
   });
@@ -230,7 +244,7 @@ test("registers without execution, reads evidence, downloads privately and recor
   await expect(page.getByText("1 / 1 份材料已完成文档证据准备。")).toBeVisible();
   await expect(page.getByText("文档证据已准备，语义待核对")).toBeVisible();
   await expect(page.getByText("内容：找到原文 · 定位：声明定位成立")).toBeVisible();
-  await expect(page.getByText("持久证据：已关联 EvidenceRef · 通过")).toBeVisible();
+  await expect(page.getByText("原文记录：已保存可追溯位置 · 通过")).toBeVisible();
   await page.getByText("核验依据与候选位置").click();
   await expect(page.getByText(/Reader：xlsx_literal/)).toBeVisible();
   await page.reload();
@@ -263,7 +277,7 @@ test("registers without execution, reads evidence, downloads privately and recor
   await page.getByLabel("明确公告地址").fill(`${source.url}/1`);
   await page.getByLabel("调查说明").fill("只登记合成测试任务");
   await page.getByRole("button", { name: "登记调查任务" }).click();
-  await expect(page.getByRole("status")).toContainText("调查任务已登记");
+  await expect(page.locator("#new-investigation").getByRole("status")).toContainText("调查任务已登记");
   await page.getByRole("link", { name: "查看已登记任务" }).click();
   await expect(page.getByText("已登记，等待执行", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: /执行|恢复|开始调查/ })).toHaveCount(0);
@@ -316,7 +330,7 @@ for (const withInitialPost of [true, false]) {
     expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations, posts: mutations + 1 });
     await page.reload();
     await expect(page.getByText(`当前关联：合成内部机会 · 机会版本 1 · 归属修订 ${withInitialPost ? 1 : 2}`)).toBeVisible();
-    await expect(page.getByText(/字段内容仍是候选/)).toBeVisible();
+    await expect(page.getByRole("region", { name: "机会与岗位归属", exact: true }).getByText(/字段内容仍是候选/)).toBeVisible();
   });
 }
 

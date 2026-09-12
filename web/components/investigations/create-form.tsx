@@ -13,20 +13,26 @@ export default function InvestigationCreateForm({ sources, requestKey }: { sourc
   const [formKey] = useState(requestKey);
   const [values, setValues] = useState({ source_key: "", notice_url: "", brief: "", expected_artifact_urls: "", expected_entity_keys: "", wall_time_seconds: "600", calibration: true });
   const field = (key: Exclude<keyof typeof values, "calibration">) => ({ value: values[key], onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setValues({ ...values, [key]: event.target.value }) });
+  const selected = sources.find((item) => `${item.source_id}/${item.endpoint_id}` === values.source_key);
   return (
     <section className="human-test-panel" aria-labelledby="investigation-create-title">
       <h2 id="investigation-create-title">登记一项明确的公告调查</h2>
-      <p className="field-help">登记不会访问官网或调用调查服务。执行由获授权的运维人员另行安排。</p>
+      <p className="field-help">登记不会访问官网或调用调查服务。登记后进入任务详情，明确点击“发起调查”才会执行。</p>
       <form className="human-test-form" action={action} onReset={(event) => event.preventDefault()}>
         <input type="hidden" name="request_key" value={formKey} />
         <label>已批准来源
-          <select name="source_key" {...field("source_key")} required>
+          <select name="source_key" {...field("source_key")} onChange={(event) => {
+            const source = sources.find((item) => `${item.source_id}/${item.endpoint_id}` === event.target.value);
+            setValues({ ...values, source_key: event.target.value, notice_url: source?.url ?? "", brief: source?.sample?.brief ?? values.brief, expected_artifact_urls: source?.sample?.expected_artifact_urls?.join("\n") ?? "" });
+          }} required>
             <option value="" disabled>请选择来源</option>
-            {sources.map((source) => <option key={`${source.source_id}/${source.endpoint_id}`} value={`${source.source_id}/${source.endpoint_id}`}>{source.authority_name} · {source.url}</option>)}
+            {sources.map((source) => <option key={`${source.source_id}/${source.endpoint_id}`} value={`${source.source_id}/${source.endpoint_id}`}>{source.sample?.title ? `${source.sample.title} · ${source.authority_name}` : `${source.authority_name} · ${source.url}`}</option>)}
           </select>
         </label>
+        {selected?.usage_note ? <p className="risk-note">{selected.usage_note}</p> : null}
         <label>明确公告地址<input name="notice_url" type="url" {...field("notice_url")} required placeholder="https://官方站点/具体公告" /></label>
-        <p className="field-help">公告和附件仅支持所选来源已批准域名的 HTTPS 地址。</p>
+        <p className="field-help">请使用已批准范围内的具体公告地址。官方聚合来源只允许登记已批准的那一页；附件只接受所选来源已批准域名的 HTTPS 地址。</p>
+        {selected && values.notice_url && values.notice_url !== selected.url ? <p className="risk-note" role="alert">当前地址与所选样本不同，请核对授权范围；官方聚合来源须使用已批准地址：{selected.url}</p> : null}
         <label>调查说明<textarea name="brief" rows={5} maxLength={12000} {...field("brief")} required placeholder="说明需要调查的机会、全部子项和需要核对的条件。" /></label>
         <div className="human-test-form-grid">
           <label>预期官方附件地址（可选，每行一个）<textarea name="expected_artifact_urls" rows={4} {...field("expected_artifact_urls")} /></label>

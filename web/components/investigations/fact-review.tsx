@@ -69,13 +69,15 @@ export default function InvestigationFactReview({ task, requestKey }: { task: In
   const name = (entityId: string) => task.binding_entities?.find(e => e.id === entityId)?.name ?? entityId;
   return <section className="human-test-panel" aria-labelledby="investigation-field-review-title">
     <h2 id="investigation-field-review-title">候选字段与独立审核</h2>
-    <p>公告通用条件、单位分组条件和岗位条件分别保留。精确引用只证明文字的位置；审核员还需核对含义、适用范围、更正与例外。</p>
+    <p>请逐项确认“原文说了什么、适用于谁”。公告对所有岗位的共同要求、单位的要求和单个岗位的要求会分别保留；找到原文不代表已经理解正确。</p>
     {!preparation ? canPrepare ? <FactForm requestKey={requestKey} task={task} kind="prepare" /> : <p>完成内部材料审核、文档准备及身份归属后，可整理候选字段。</p> : <>
       {!ready && canPrepare ? <><p className="risk-note">当前核验回执已变化，旧清单保留供追溯。请先重新整理候选，再作出决定。</p><FactForm requestKey={requestKey} task={task} kind="prepare" /></> : null}
       <p>共 {preparation.rows.length} 个原始字段；{preparation.rows.filter(r => r.candidate_id).length} 个已接入审核，{preparation.rows.filter(r => !r.candidate_id).length} 个仍待处理。未知字段与未接入条件不会因保存事实集而消失。</p>
       {preparation.rows.map(row => {
         const decision = row.candidate_id ? preparation.decisions[row.candidate_id] : null;
-        return <article className="human-test-panel" key={row.source_index}>
+        return <details className="review-condition-details" key={row.source_index} open={preparation.rows.length <= 6}>
+          <summary>{name(row.entity_id)} · {row.original_field} · {decision ? decisions[decision.decision] ?? "已记录" : "等待核对"}</summary>
+          <article>
           <h3>{name(row.entity_id)} · {row.original_field}</h3>
           <p>原始候选：{row.raw_value ?? "未披露"}</p>
           <p>原始调查状态：{row.original.status}；规范候选：{!row.candidate_id ? "尚未接入审核，保留原始状态与待处理原因" : row.abstained ? "未知，保留原文待核对" : JSON.stringify(row.normalized_value_candidate)}</p>
@@ -93,7 +95,7 @@ export default function InvestigationFactReview({ task, requestKey }: { task: In
           {decision ? <p>审核：{decisions[decision.decision] ?? decision.decision}。依据：{decision.reason}</p> : null}
           {row.candidate_id && ready && (!decision || decision.decision === "NEEDS_ADJUDICATION") ?
             <FactForm key={`${row.candidate_id}:${decision?.decision_id ?? "initial"}`} requestKey={requestKey} task={task} kind="decision" preparation={preparation} candidate={row} /> : null}
-        </article>;
+        </article></details>;
       })}
       {preparation.targets.filter(t => t.extraction_run_id).map(target => {
         const promotion = preparation.promotions[target.entity_id];

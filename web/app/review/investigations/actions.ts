@@ -4,7 +4,9 @@ import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 
 import { getInvestigationSources, InvestigationApiError, postInvestigation } from "../../../lib/investigations";
+import { investigationDispatchPath } from "../../../lib/investigation-dispatch";
 import { LocalHumanTestApiError } from "../../../lib/local-human-test";
+import { investigationLoginHelp } from "../../../lib/investigation-runtime";
 import { isExplicitRuleTime, ruleAuthorities, ruleRelations, ruleApplicability, ruleDecisions } from "../../../lib/investigation-rule-options";
 
 export interface InvestigationActionState {
@@ -38,9 +40,9 @@ function invalid(message: string): InvestigationActionState {
   return { error: message, message: null, taskId: null };
 }
 
-function failure(error: unknown, registration: boolean): InvestigationActionState {
+function failure(error: unknown, registration: boolean, loginMessage = "当前审核身份没有操作权限。请使用已授权的真人审核会话。"): InvestigationActionState {
   if (error instanceof LocalHumanTestApiError && [401, 403].includes(error.status)) {
-    return invalid("当前审核身份没有操作权限。请使用已授权的真人审核会话。");
+    return invalid(loginMessage);
   }
   if (error instanceof LocalHumanTestApiError && error.status === 409) {
     const identityMessages: Record<string, string> = {
@@ -53,6 +55,17 @@ function failure(error: unknown, registration: boolean): InvestigationActionStat
       REGISTRATION_EXISTING_IDENTITY_OR_REVIEW_REQUIRED: "检测到已有身份或可能重复的机会。请核对已有机会并使用关联入口；身份不明确时需先核对。",
       REGISTRATION_POSITION_INVALID: "岗位重复、已关联或属于单位分组，请核对勾选项。",
       REGISTRATION_POSITION_KEY_CONFLICT: "内部岗位识别键已被使用，请核对已有岗位并关联，或修正识别键。",
+      TASK_NOT_DISPATCHABLE: "本任务当前不在可发起状态（可能已被处理或状态已变化）。请刷新详情后核对。",
+      TASK_ALREADY_RUNNING: "已有一个执行中的租约，暂时无需重复发起。请稍后刷新详情查看进度。",
+      // Document exclusion: each code names the one thing the operator can still
+      // do, so a rejected exclusion never falls back to a generic refresh hint.
+      DOCUMENT_EXCLUSION_REASON_REQUIRED: "排除或撤销理由需填写 8–2000 个字符，请补充具体依据后重新提交。",
+      DOCUMENT_EXCLUSION_NOT_UNSUPPORTED: "只有「格式尚不支持」的材料才能排除；此材料当前状态不允许排除，请刷新后核对材料状态。",
+      DOCUMENT_EXCLUSION_NOT_ALLOWED: "当前任务状态不允许排除或撤销材料，请刷新详情并确认任务仍待处理或已批准。",
+      DOCUMENT_EXCLUSION_ALREADY_PRESENT: "此材料已经排除过，无需重复排除；如需恢复解析，请改用「撤销排除」。",
+      DOCUMENT_EXCLUSION_NOT_FOUND: "没有找到可撤销的排除记录，该材料可能已恢复解析；请刷新详情后确认。",
+      DOCUMENT_EXCLUSION_DELIVERY_CONFLICT: "材料版本已变化，请刷新详情后重新排除或撤销。",
+      DOCUMENT_EXCLUSION_MATERIAL_NOT_FOUND: "找不到该材料，它可能已不在本次回收结果中；请刷新详情后核对材料清单。",
     };
     if (error instanceof InvestigationApiError && error.code && identityMessages[error.code]) return invalid(identityMessages[error.code]);
     if (registration) {
@@ -69,7 +82,7 @@ function failure(error: unknown, registration: boolean): InvestigationActionStat
   return invalid("操作未完成。请核对来源、任务状态和材料后重试。");
 }
 
-async function submit(path: string, body: object, requestKey: string, message: string): Promise<InvestigationActionState> {
+async function submit(path: string, body: object, requestKey: string, message: string, loginMessage?: string): Promise<InvestigationActionState> {
   if (!UUID.test(requestKey)) return invalid("表单已失效，请刷新页面后重新填写。");
   // The form identity exists before the first POST, so a lost API/action response
   // can be replayed. Changed content is a different intent, not a conflicting retry.
@@ -80,7 +93,7 @@ async function submit(path: string, body: object, requestKey: string, message: s
     revalidatePath(`/review/investigations/${task.task_id}`);
     return { error: null, message, taskId: task.task_id };
   } catch (error) {
-    return failure(error, path === "/investigations");
+    return failure(error, path === "/investigations", loginMessage);
   }
 }
 
@@ -146,6 +159,54 @@ export async function prepareInvestigationDocumentsAction(
   return submit(`/investigations/${taskId}/documents`, { delivery_hash: deliveryHash },
     text(form, "request_key"),
     "文档准备结果已更新，请逐项查看未支持或需复核的材料；事实仍待人工审核。");
+}
+
+/**
+ * Hands one material to the opaque parser. The material keeps a document so the
+ * flow can advance, but no block carries quotable text — so it must never back a
+ * block-level field decision. That boundary is repeated in the success copy.
+ */
+export async function excludeInvestigationDocumentAction(
+  _state: InvestigationActionState,
+  form: FormData,
+): Promise<InvestigationActionState> {
+  const taskId = text(form, "task_id");
+  const deliveryHash = text(form, "delivery_hash");
+  const materialId = text(form, "material_id");
+  const reason = text(form, "reason");
+  if (!UUID.test(taskId) || !SHA256.test(deliveryHash) || !materialId || materialId.length > 512) {
+    return invalid("当前任务、材料版本或材料标识不可操作，请刷新详情。");
+  }
+  // The backend requires 8–2000 characters; validating the same lower bound here
+  // turns a 7-character reason into a local hint instead of a server conflict.
+  if (reason.length < 8 || reason.length > 2000) return invalid("请填写 8–2000 个字符的排除理由，说明为何不解析此材料。");
+  return submit(`/investigations/${taskId}/document-exclusions`, {
+    delivery_hash: deliveryHash, material_id: materialId, reason,
+  }, text(form, "request_key"),
+    "已记录排除：此材料改用无文本证据块的解析器，不计入已核对，其字段不得作为块级依据，仅保留原件整文件引用。");
+}
+
+/**
+ * Undoes {@link excludeInvestigationDocumentAction}. The material returns to be
+ * parsed, so every derived document and field stays unverified until the
+ * operator re-runs document preparation.
+ */
+export async function revokeInvestigationDocumentAction(
+  _state: InvestigationActionState,
+  form: FormData,
+): Promise<InvestigationActionState> {
+  const taskId = text(form, "task_id");
+  const deliveryHash = text(form, "delivery_hash");
+  const materialId = text(form, "material_id");
+  const reason = text(form, "reason");
+  if (!UUID.test(taskId) || !SHA256.test(deliveryHash) || !materialId || materialId.length > 512) {
+    return invalid("当前任务、材料版本或材料标识不可操作，请刷新详情。");
+  }
+  if (reason.length < 8 || reason.length > 2000) return invalid("请填写 8–2000 个字符的撤销依据，说明为何恢复解析此材料。");
+  return submit(`/investigations/${taskId}/document-exclusions/revoke`, {
+    delivery_hash: deliveryHash, material_id: materialId, reason,
+  }, text(form, "request_key"),
+    "已撤销排除：该材料恢复为待解析，需重新准备文档证据后再核对；撤销同样不等于已核对。");
 }
 
 export async function bindInvestigationAction(
@@ -263,4 +324,23 @@ export async function investigationFactAction(
   return submit(`/investigations/${taskId}/facts/promotions`, { ...body, preparation_id: preparationId,
     entity_id: entityId, supersedes_id: supersedes || null, reason,
   }, text(form, "request_key"), "该目标的审核事实集已保存；未知及未接入条件继续保留，尚未形成完整资格结论。");
+}
+
+/**
+ * Records an explicit operator intent to run a queued investigation. Reuses the
+ * shared {@link submit} idempotency key and 401/403/409 classification, so a
+ * lost receipt can be replayed without writing a second intent. This action
+ * never runs automatically — it only fires when the operator clicks "发起调查".
+ */
+export async function requestInvestigationDispatchAction(
+  _state: InvestigationActionState,
+  form: FormData,
+): Promise<InvestigationActionState> {
+  const taskId = text(form, "task_id");
+  if (!UUID.test(taskId)) return invalid("当前任务标识无效，请刷新详情后重试。");
+  return submit(investigationDispatchPath(taskId), {}, text(form, "request_key"),
+    text(form, "kind") === "recover"
+      ? "材料回收请求已记录；本次只下载已有远端材料，不会重新发出调查请求。"
+      : "已发起调查。处理进程会在就绪后安排执行；发起失败会在任务上标记原因，不会自动重试多次。",
+    investigationLoginHelp);
 }

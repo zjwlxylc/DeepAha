@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { registerInvestigationIdentityAction, bindInvestigationAction, createInvestigationAction, prepareInvestigationDocumentsAction, reviewInvestigationAction } from "../app/review/investigations/actions";
+import { registerInvestigationIdentityAction, bindInvestigationAction, createInvestigationAction, prepareInvestigationDocumentsAction, reviewInvestigationAction, excludeInvestigationDocumentAction, revokeInvestigationDocumentAction } from "../app/review/investigations/actions";
 import { source, task, taskId } from "./investigations-fixture";
 
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: () => ({ value: "synthetic-reviewer-session" }) }) }));
@@ -104,6 +104,75 @@ describe("investigation actions", () => {
     expect(keys[0]).toBe(keys[1]);
     vi.mocked(fetch).mockClear(); data.delete("request_key");
     expect((await prepareInvestigationDocumentsAction(empty, data)).error).toBeTruthy();
+    expect(submissions()).toHaveLength(0);
+  });
+
+  it("excludes and revokes one material with an explicit reason and an honest boundary", async () => {
+    const data = new FormData();
+    data.set("request_key", "11111111-1111-4111-8111-111111111111");
+    data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+    data.set("material_id", "legacy.doc"); data.set("reason", "老式 .doc 没有可用解析器");
+    const excluded = await excludeInvestigationDocumentAction(empty, data);
+    expect(excluded.message).toMatch(/不计入已核对/);
+    expect(excluded.message).toMatch(/不得作为块级依据/);
+    let [path, request] = submissions()[0];
+    expect(String(path)).toMatch(new RegExp(`/investigations/${taskId}/document-exclusions$`));
+    expect(JSON.parse(String(request?.body))).toEqual({ delivery_hash: task.delivery_hash,
+      material_id: "legacy.doc", reason: "老式 .doc 没有可用解析器" });
+    vi.mocked(fetch).mockClear();
+    const revoked = await revokeInvestigationDocumentAction(empty, data);
+    expect(revoked.message).toMatch(/需重新准备文档证据/);
+    expect(revoked.message).toMatch(/不等于已核对/);
+    [path, request] = submissions()[0];
+    expect(String(path)).toMatch(new RegExp(`/investigations/${taskId}/document-exclusions/revoke$`));
+    expect(JSON.parse(String(request?.body))).toEqual({ delivery_hash: task.delivery_hash,
+      material_id: "legacy.doc", reason: "老式 .doc 没有可用解析器" });
+  });
+
+  it("rejects an exclusion reason shorter than the backend minimum before submitting", async () => {
+    const data = new FormData();
+    data.set("request_key", "11111111-1111-4111-8111-111111111111");
+    data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+    data.set("material_id", "legacy.doc"); data.set("reason", "七个字不够呀");
+    expect((await excludeInvestigationDocumentAction(empty, data)).error).toMatch(/8–2000/);
+    expect((await revokeInvestigationDocumentAction(empty, data)).error).toMatch(/8–2000/);
+    expect(submissions()).toHaveLength(0);
+  });
+
+  it.each([
+    ["DOCUMENT_EXCLUSION_REASON_REQUIRED", /8–2000/],
+    ["DOCUMENT_EXCLUSION_NOT_UNSUPPORTED", /格式尚不支持/],
+    ["DOCUMENT_EXCLUSION_NOT_ALLOWED", /不允许排除或撤销/],
+    ["DOCUMENT_EXCLUSION_ALREADY_PRESENT", /已经排除过/],
+    ["DOCUMENT_EXCLUSION_NOT_FOUND", /没有找到可撤销/],
+    ["DOCUMENT_EXCLUSION_DELIVERY_CONFLICT", /材料版本已变化/],
+    ["DOCUMENT_EXCLUSION_MATERIAL_NOT_FOUND", /找不到该材料/],
+  ])("explains exclusion conflict %s with an actionable next step", async (code, expected) => {
+    vi.mocked(fetch).mockImplementation(async () => Response.json(
+      { detail: { code, private_value: "private-upstream-secret" } }, { status: 409 },
+    ));
+    const data = new FormData();
+    data.set("request_key", "11111111-1111-4111-8111-111111111111");
+    data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+    data.set("material_id", "legacy.doc"); data.set("reason", "老式 .doc 没有可用解析器，无法产出可引用文本");
+    const result = await excludeInvestigationDocumentAction(empty, data);
+    expect(result.error).toMatch(expected);
+    // Never the generic refresh fallback, and never the raw backend code.
+    expect(result.error).not.toMatch(/请刷新详情后重新核对。/);
+    expect(result.error).not.toMatch(/DOCUMENT_EXCLUSION_|private-upstream-secret/);
+  });
+
+  it.each([
+    ["task_id", "not-a-uuid"], ["delivery_hash", "not-a-hash"], ["material_id", ""],
+    ["reason", ""], ["reason", "理由太短"], ["reason", "x".repeat(2001)],
+  ])("rejects material exclusion when %s is invalid before submitting", async (field, value) => {
+    const data = new FormData();
+    data.set("request_key", "11111111-1111-4111-8111-111111111111");
+    data.set("task_id", taskId); data.set("delivery_hash", task.delivery_hash!);
+    data.set("material_id", "legacy.doc"); data.set("reason", "老式 .doc 没有可用解析器");
+    data.set(field, value);
+    expect((await excludeInvestigationDocumentAction(empty, data)).error).toBeTruthy();
+    expect((await revokeInvestigationDocumentAction(empty, data)).error).toBeTruthy();
     expect(submissions()).toHaveLength(0);
   });
 

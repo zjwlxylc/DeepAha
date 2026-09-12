@@ -46,6 +46,28 @@ def test_preloaded_contract_uses_real_remaining_deadline_and_existing_schema_pat
     )
 
 
+def test_sop_requires_file_name_to_match_the_artifact_path_basename() -> None:
+    """Guard the contract handed to the agent.
+
+    A real run (task 01a08fc1-ce83-7473-afc3-4c3ad6931ff6) ended in
+    ARTIFACT_PATH_INVALID because the agent stored ``artifacts/jihua.xlsx`` but
+    declared ``file_name`` as the original Chinese filename. The receiver is
+    correct to reject that; the SOP simply never stated the rule.
+    """
+    task_id = UUID(int=1)
+    prepared = datetime(2026, 9, 7, tzinfo=UTC)
+    files, _prompt = prepare_input(
+        task_id,
+        command(),
+        ["example.gov"],
+        prepared_at=prepared,
+        deadline_at=prepared + timedelta(seconds=150),
+    )
+    sop = files[f"{task_root(task_id)}/investigator-sop.md"].decode("utf-8")
+    assert "`file_name` 必须与 `local_path` 末段逐字相同" in sop
+    assert "不要用 ASCII 转写名保存文件" in sop
+
+
 def test_expired_task_does_not_receive_a_fresh_full_investigation_budget() -> None:
     now = datetime(2026, 9, 7, tzinfo=UTC)
     with pytest.raises(InvestigationError, match="INVALID_INVESTIGATION_BUDGET"):

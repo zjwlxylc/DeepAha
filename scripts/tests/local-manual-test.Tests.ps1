@@ -204,7 +204,7 @@ if ($launcherSource -match 'down\s+--volumes') {
 if ($launcherSource -notmatch 'DEEPAHA_LOCAL_HUMAN_TEST_ENABLED') {
     throw "Launcher must explicitly enable only the local human-test surface"
 }
-if ($launcherSource -notmatch 'deepaha\.local_human_test\.runtime') {
+if ($launcherSource -notmatch 'deepaha\.investigations\.runtime') {
     throw "Launcher must start the recoverable local human-test worker"
 }
 
@@ -222,7 +222,7 @@ if ($composeSource -notmatch 'postgres_data:/var/lib/postgresql(?:\s|$)' -or
 $browserSource = Get-Content -LiteralPath (
     Join-Path $repositoryRoot "web/scripts/open-local-manual-browser.mjs"
 ) -Raw -Encoding UTF8
-if ($browserSource -notmatch '/review/human-test') {
+if ($browserSource -notmatch '/review/investigations') {
     throw "Browser launcher must open the local human-test control console"
 }
 if ($browserSource -match 'deepaha_phase6_session') {

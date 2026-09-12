@@ -17,6 +17,8 @@ type StructuralLocator = dict[str, object]
 _LOCATOR_ADAPTER: TypeAdapter[DocumentBlockLocatorSchemaV08] = TypeAdapter(
     DocumentBlockLocatorSchemaV08
 )
+OPAQUE_BLOCK_TYPE = "OPAQUE_BINARY"
+OPAQUE_LOCATOR_KIND = "opaque_whole_file"
 _LOCATOR_FOR_BLOCK_TYPE = {
     "HTML_SECTION": "html_element_span",
     "HTML_ELEMENT": "html_element_span",
@@ -26,6 +28,7 @@ _LOCATOR_FOR_BLOCK_TYPE = {
     "SPREADSHEET_RANGE": "spreadsheet_range",
     "DOCX_PARAGRAPH": "docx_paragraph",
     "DOCX_TABLE_CELL": "docx_table_cell",
+    OPAQUE_BLOCK_TYPE: OPAQUE_LOCATOR_KIND,
 }
 
 
@@ -64,9 +67,14 @@ def validate_parsed_blocks(blocks: tuple[ParsedBlock, ...]) -> tuple[ParsedBlock
         expected_kind = _LOCATOR_FOR_BLOCK_TYPE.get(block.block_type)
         if expected_kind is None:
             raise ValueError("unsupported DocumentBlock type")
-        if not block.canonical_text_or_value.strip():
+        if block.block_type == OPAQUE_BLOCK_TYPE:
+            # An excluded binary carries no quotable text at all: the block cites the whole
+            # file by digest instead. Every other block type keeps the existing rules.
+            if block.canonical_text_or_value:
+                raise ValueError("opaque DocumentBlock must not carry text")
+        elif not block.canonical_text_or_value.strip():
             raise ValueError("DocumentBlock value must not be empty")
-        if normalize_text(block.canonical_text_or_value) != block.canonical_text_or_value:
+        elif normalize_text(block.canonical_text_or_value) != block.canonical_text_or_value:
             raise ValueError("DocumentBlock value must be normalized")
         locator = _LOCATOR_ADAPTER.validate_python(block.structural_locator)
         if locator.kind != expected_kind:
@@ -192,6 +200,8 @@ def replay_block_value(
 
 
 __all__ = [
+    "OPAQUE_BLOCK_TYPE",
+    "OPAQUE_LOCATOR_KIND",
     "ParsedBlock",
     "StructuralLocator",
     "block_hash",

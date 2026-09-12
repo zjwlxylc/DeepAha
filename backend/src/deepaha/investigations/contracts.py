@@ -45,6 +45,23 @@ class PrepareInvestigationDocuments(BaseModel):
     delivery_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
 
 
+class ExcludeInvestigationDocument(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    delivery_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+    material_id: str = Field(min_length=1, max_length=256)
+    # Length is not enforced here on purpose: the business layer owns
+    # ``EXCLUSION_REASON_MIN_LENGTH`` / ``EXCLUSION_REASON_MAX_LENGTH`` so the caller gets the
+    # named code ``DOCUMENT_EXCLUSION_REASON_REQUIRED`` instead of a schema error.
+    reason: str = Field(min_length=1, max_length=4000)
+
+
+class RevokeInvestigationDocument(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    delivery_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+    material_id: str = Field(min_length=1, max_length=256)
+    reason: str = Field(min_length=1, max_length=4000)
+
+
 class InvestigationPositionBinding(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     entity_id: str = Field(min_length=1, max_length=256)

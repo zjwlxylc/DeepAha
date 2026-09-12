@@ -631,6 +631,14 @@ class DocxTableCellLocatorSchemaV08(Phase9BContractModel):
     column_index: Annotated[int, Field(ge=1)]
 
 
+class OpaqueWholeFileLocatorSchemaV08(Phase9BContractModel):
+    """Locator for a block that cites an excluded binary as a whole, without any text."""
+
+    kind: Literal["opaque_whole_file"]
+    value_sha256: Sha256
+    byte_size: Annotated[int, Field(ge=0)]
+
+
 DocumentBlockLocatorSchemaV08 = Annotated[
     HtmlElementSpanLocatorSchemaV08
     | PdfTextSpanLocatorSchemaV08
@@ -638,7 +646,8 @@ DocumentBlockLocatorSchemaV08 = Annotated[
     | SpreadsheetCellLocatorSchemaV08
     | SpreadsheetRangeBlockLocatorSchemaV08
     | DocxParagraphLocatorSchemaV08
-    | DocxTableCellLocatorSchemaV08,
+    | DocxTableCellLocatorSchemaV08
+    | OpaqueWholeFileLocatorSchemaV08,
     Field(discriminator="kind"),
 ]
 
@@ -1476,6 +1485,7 @@ __all__ = [
     "ExtractionRunStatus",
     "ExtractionTargetScope",
     "ExtractorKind",
+    "OpaqueWholeFileLocatorSchemaV08",
     "FactVerificationDecision",
     "FactVerificationDecisionSchemaV08",
     "GoldAnnotationSubmissionSchemaV08",

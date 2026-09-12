@@ -21,3 +21,11 @@ const failures: Record<string, string> = {
 export function investigationFailureMessage(code: string): string {
   return failures[code] ?? "本次任务未完成，请先核对运行记录和已有材料。";
 }
+
+export function investigationIssueMessage(issue: string): string {
+  const code = issue.split(":")[0];
+  if (code === "EVIDENCE_FORMAT_REVIEW_REQUIRED") return "这种文件格式还不能自动核对，请下载原件检查。";
+  if (code === "EVIDENCE_LOCATOR_REVIEW_REQUIRED") return "引用的位置还需核对，请对照原文确认对应内容。";
+  if (code === "EVIDENCE_CONTENT_REVIEW_REQUIRED") return "系统尚不能确认引用内容，请查看原件。";
+  return /^[A-Z][A-Z_0-9]+(?::|$)/.test(issue) ? "有一项检查需要进一步处理，具体记录可在下方展开查看。" : issue;
+}
