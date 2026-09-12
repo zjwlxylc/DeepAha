@@ -395,6 +395,28 @@ function Invoke-LocalManualStop {
     Write-Host "DeepAha 本地人工测试已安全停止。"
 }
 
+function Resolve-LocalManualDocReaderImage {
+    param([Parameter(Mandatory = $true)][string]$ProjectRoot)
+
+    # Bump this version deliberately when changing the converter. Rebuilding
+    # unchanged layers can still change the provenance manifest and reader ID.
+    $imageTag = 'deepaha-doc-reader:antiword-0.37-v1'
+    $imageId = (& docker image ls --no-trunc --quiet --filter "reference=$imageTag" | Out-String).Trim()
+    if ($LASTEXITCODE -ne 0) { throw "无法查询旧版 Word 阅读工具，请检查 Docker。" }
+    if (-not $imageId) {
+        $docReaderContext = Join-Path $ProjectRoot "infra/doc-reader"
+        Invoke-NativeChecked "旧版 Word 阅读工具准备" {
+            docker build --pull=false --provenance=false --quiet --tag $imageTag $docReaderContext
+        } | Out-Host
+        $imageId = (& docker image inspect --format '{{.Id}}' $imageTag | Out-String).Trim()
+        if ($LASTEXITCODE -ne 0) { throw "无法确认旧版 Word 阅读工具版本。" }
+    }
+    if ($imageId -cnotmatch '^sha256:[0-9a-f]{64}$') {
+        throw "旧版 Word 阅读工具版本不明确，请检查 Docker 镜像记录。"
+    }
+    return $imageId
+}
+
 function Invoke-LocalManualStart {
     param([Parameter(Mandatory = $true)][string]$ProjectRoot)
     $projectInfo = Get-LocalManualProjectInfo -ProjectRoot $ProjectRoot
@@ -445,6 +467,9 @@ function Invoke-LocalManualStart {
         finally { Pop-Location }
 
         Write-Host "[3/8] 正在启动持久化隔离数据库……"
+        Write-Host "正在准备旧版 Word 阅读工具（首次需要下载，之后复用缓存）……"
+        $docReaderImage = Resolve-LocalManualDocReaderImage -ProjectRoot $projectInfo.ProjectRoot
+        $env:DEEPAHA_DOC_READER_IMAGE = $docReaderImage
         Invoke-NativeChecked "隔离服务启动" {
             docker compose --project-name $projectInfo.ProjectName --file $composeFile up -d --wait
         }
@@ -482,6 +507,7 @@ function Invoke-LocalManualStart {
         $escapedRoot = $projectInfo.ProjectRoot.Replace("'", "''")
         $escapedDataRoot = $projectInfo.DataRoot.Replace("'", "''")
         $serviceEnvironment = "`$env:DEEPAHA_DATABASE_URL='postgresql+psycopg://deepaha:deepaha_local_manual_only@127.0.0.1:55439/deepaha'; " +
+            "`$env:DEEPAHA_DOC_READER_IMAGE='$docReaderImage'; " +
             "`$env:DEEPAHA_ENVIRONMENT='development'; " +
             "`$env:DEEPAHA_REVIEWER_AUTH_MODE='fixture'; " +
             "`$env:DEEPAHA_LOCAL_HUMAN_TEST_ENABLED='true'; " +

@@ -230,3 +230,37 @@ if ($browserSource -match 'deepaha_phase6_session') {
 }
 
 Write-Host "本地人工测试启动器单元测试：PASS"
+
+$script:DocReaderMockCalls = [Collections.Generic.List[string]]::new()
+function docker {
+    $script:DocReaderMockCalls.Add(($args -join ' '))
+    $global:LASTEXITCODE = 0
+    return ('sha256:' + ('a' * 64))
+}
+try {
+    $firstReader = Resolve-LocalManualDocReaderImage -ProjectRoot $repositoryRoot
+    $secondReader = Resolve-LocalManualDocReaderImage -ProjectRoot $repositoryRoot
+    Assert-Equal $firstReader $secondReader "Repeated startup must keep the same reader identity"
+    Assert-Equal $script:DocReaderMockCalls.Count 2 "Cached reader only needs image lookup"
+    if ($script:DocReaderMockCalls | Where-Object { $_ -match '^build ' }) {
+        throw "Cached reader must not rebuild a new image identity"
+    }
+}
+finally { Remove-Item Function:docker }
+Write-Host "旧版 Word 阅读镜像复用测试：PASS"
+
+$script:DocReaderMockCalls.Clear()
+function docker {
+    $script:DocReaderMockCalls.Add(($args -join ' '))
+    $global:LASTEXITCODE = 0
+    if ($args[0] -eq 'build') { return 'build progress must not become the image ID' }
+    if ($args[1] -eq 'inspect') { return ('sha256:' + ('b' * 64)) }
+}
+try {
+    $builtReader = Resolve-LocalManualDocReaderImage -ProjectRoot $repositoryRoot
+    Assert-Equal @($builtReader).Count 1 "First startup must return only one image ID"
+    Assert-Equal $builtReader ('sha256:' + ('b' * 64)) "Use the inspected immutable identity"
+    Assert-Equal $script:DocReaderMockCalls.Count 3 "Missing reader builds once then inspects"
+}
+finally { Remove-Item Function:docker }
+Write-Host "旧版 Word 阅读镜像首次准备测试：PASS"

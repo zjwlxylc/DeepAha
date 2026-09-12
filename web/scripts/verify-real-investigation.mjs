@@ -50,7 +50,15 @@ export async function verifyRealInvestigation(page, readyPath) {
         await page.getByRole("heading", { name: "文档证据准备", exact: true }).scrollIntoViewIfNeeded();
         await page.screenshot({ path: join(directory, "real-investigation-delivered.png") });
         record({ verification_step: "DOCUMENT_PREPARATION" });
+        const preparationResponse = page.waitForResponse(
+          response => response.request().method() === "POST" && response.url() === page.url(),
+          { timeout: 90000 },
+        );
         await page.getByRole("button", { name: "准备文档证据", exact: true }).click();
+        await (await preparationResponse).finished();
+        // The old count is already visible before submission. Read the saved
+        // result only after the action completes, rather than accepting it.
+        await page.reload({ timeout: 30000 });
         const documents = page.getByRole("region", { name: "文档证据准备", exact: true });
         await expect(documents.getByText(/份材料已完成文档证据准备|已准备 \d+\/\d+ 份/)).toBeVisible({ timeout: 90000 });
         const needsAttention = await documents.getByText("仍有未准备、需复核或不支持的材料，请逐项处理。", { exact: true }).isVisible();
