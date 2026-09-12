@@ -445,6 +445,16 @@ function Invoke-LocalManualStart {
         finally { Pop-Location }
 
         Write-Host "[3/8] 正在启动持久化隔离数据库……"
+        Write-Host "正在准备旧版 Word 阅读工具（首次需要下载，之后复用缓存）……"
+        $docReaderContext = Join-Path $projectInfo.ProjectRoot "infra/doc-reader"
+        Invoke-NativeChecked "旧版 Word 阅读工具准备" {
+            docker build --pull=false --quiet --tag deepaha-doc-reader:antiword-0.37-v1 $docReaderContext
+        }
+        $docReaderImage = (& docker image inspect --format '{{.Id}}' deepaha-doc-reader:antiword-0.37-v1).Trim()
+        if ($LASTEXITCODE -ne 0 -or $docReaderImage -cnotmatch '^sha256:[0-9a-f]{64}$') {
+            throw "无法确认旧版 Word 阅读工具版本，请查看 Docker 日志后重试。"
+        }
+        $env:DEEPAHA_DOC_READER_IMAGE = $docReaderImage
         Invoke-NativeChecked "隔离服务启动" {
             docker compose --project-name $projectInfo.ProjectName --file $composeFile up -d --wait
         }
@@ -482,6 +492,7 @@ function Invoke-LocalManualStart {
         $escapedRoot = $projectInfo.ProjectRoot.Replace("'", "''")
         $escapedDataRoot = $projectInfo.DataRoot.Replace("'", "''")
         $serviceEnvironment = "`$env:DEEPAHA_DATABASE_URL='postgresql+psycopg://deepaha:deepaha_local_manual_only@127.0.0.1:55439/deepaha'; " +
+            "`$env:DEEPAHA_DOC_READER_IMAGE='$docReaderImage'; " +
             "`$env:DEEPAHA_ENVIRONMENT='development'; " +
             "`$env:DEEPAHA_REVIEWER_AUTH_MODE='fixture'; " +
             "`$env:DEEPAHA_LOCAL_HUMAN_TEST_ENABLED='true'; " +

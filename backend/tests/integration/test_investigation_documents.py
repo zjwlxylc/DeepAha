@@ -115,6 +115,28 @@ def test_interrupted_preparation_resumes_without_duplicate_versions(harness: Sto
         assert session.scalar(select(func.count()).select_from(ParseAttempt)) == 2
 
 
+def test_notice_json_prepares_once_without_approving_or_rewriting_delivery(
+    harness: StoreHarness,
+) -> None:
+    content = json.dumps({"rows": [{"column13": "<p>Degree: doctorate.</p>"}]}).encode()
+    task_id, delivery_hash = _with_extras(harness, {"notice.json": ("application/json", content)})
+    before = harness.store.get(task_id)
+    first = harness.store.prepare_documents(task_id, delivery_hash, harness.principal)
+    assert harness.store.prepare_documents(task_id, delivery_hash, harness.principal) == first
+    assert first["status"] == "PENDING_REVIEW" and first["review"] is None
+    assert first["facts"] == before["facts"] and first["delivery_hash"] == delivery_hash
+    row = next(
+        row
+        for row in first["document_preparation"]["materials"]
+        if row["material_id"] == "notice.json"
+    )
+    assert row["outcome"] == "SUCCEEDED" and row["block_count"] > 0
+    with harness.factory() as session:
+        assert session.scalar(select(func.count()).select_from(ParseAttempt)) == 2
+        for forbidden in (SourceBundle, ExtractionCandidate, VerifiedFact):
+            assert session.scalar(select(func.count()).select_from(forbidden)) == 0
+
+
 def test_prepare_reuses_documents_and_preserves_frozen_candidate(harness: StoreHarness) -> None:
     h = harness
     task_id, delivery, _ = _pending(h)
@@ -139,6 +161,24 @@ def test_prepare_reuses_documents_and_preserves_frozen_candidate(harness: StoreH
         assert session.get(EvidenceRef, block.evidence_ref_id) is not None
         for forbidden in (SourceBundle, ExtractionCandidate, VerifiedFact):
             assert session.scalar(select(func.count()).select_from(forbidden)) == 0
+
+
+def test_configured_doc_reader_prepares_without_approving_original_material(
+    harness: StoreHarness,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("DEEPAHA_DOC_READER_IMAGE", "sha256:" + "1" * 64)
+    content = bytes.fromhex("d0cf11e0a1b11ae1") + bytes(504)
+    task_id, delivery_hash = _with_extras(harness, {"guide.doc": ("application/msword", content)})
+    with patch(
+        "deepaha.evidence_verification.adapters.legacy_doc.convert_doc",
+        return_value=b"<book><chapter><para>Read the official guide.</para></chapter></book>",
+    ):
+        result = harness.store.prepare_documents(task_id, delivery_hash, harness.principal)
+        assert result["document_preparation"]["status"] == "PREPARED"
+        assert result["status"] == "PENDING_REVIEW" and result["review"] is None
+        assert result["delivery_hash"] == delivery_hash
+        assert harness.store.prepare_documents(task_id, delivery_hash, harness.principal) == result
 
 
 def test_preparation_rejects_stale_hash_before_any_parse(harness: StoreHarness) -> None:
