@@ -23,6 +23,7 @@ from deepaha.investigations.contracts import (
     BindInvestigation,
     CreateInvestigation,
     DecideInvestigationFact,
+    ExcludeInvestigationDocument,
     InvestigationError,
     PrepareInvestigationDocuments,
     PrepareInvestigationFacts,
@@ -30,6 +31,7 @@ from deepaha.investigations.contracts import (
     RegisterInvestigationIdentity,
     RegisterInvestigationPositions,
     ReviewInvestigation,
+    RevokeInvestigationDocument,
 )
 from deepaha.investigations.cross_level_review import CrossLevelReview
 from deepaha.investigations.group_applicability_contracts import (
@@ -67,6 +69,7 @@ from deepaha.investigations.rule_contracts import (
     MaterializeInvestigationUnitPlan,
     PrepareInvestigationRules,
 )
+from deepaha.investigations.source_policy import allowed_intake_source, sample_defaults
 from deepaha.investigations.store import InvestigationStore
 from deepaha.local_human_test.review import HumanReviewError
 from deepaha.review.auth import (
@@ -135,6 +138,7 @@ def problem(error: Exception) -> HTTPException:
             "GROUP_FACT_PREPARATION_NOT_FOUND",
             "GROUP_RULE_PREPARATION_NOT_FOUND",
             "RELATION_PROPOSAL_NOT_FOUND",
+            "DOCUMENT_EXCLUSION_MATERIAL_NOT_FOUND",
         }
         else 409
     )
@@ -142,6 +146,7 @@ def problem(error: Exception) -> HTTPException:
         isinstance(error, (HumanReviewError, ReviewerAuthenticationError))
         or code == "HUMAN_VALIDATION_AUTHORITY_REQUIRED"
         or code == "RELATION_INDEPENDENT_REVIEW_REQUIRED"
+        or code == "REAL_OPERATOR_REQUIRED"
     ):
         status = 403
     return HTTPException(
@@ -288,7 +293,7 @@ def list_sources(store: StoreDep, principal: PrincipalDep, response: Response) -
             .where(
                 Source.active.is_(True),
                 SourceEndpoint.active.is_(True),
-                Source.tier == "OFFICIAL_PRIMARY",
+                Source.tier.in_(("OFFICIAL_PRIMARY", "OFFICIAL_AGGREGATOR")),
                 SourceEndpoint.robots_decision.in_(("ALLOWED", "NOT_APPLICABLE")),
                 SourceEndpoint.content_use_basis.in_(("OFFICIAL_PUBLIC_ACCESS", "OPEN_LICENSE")),
             )
@@ -301,8 +306,11 @@ def list_sources(store: StoreDep, principal: PrincipalDep, response: Response) -
                     "authority_name": source.authority_name,
                     "url": endpoint.url,
                     "allowed_hosts": endpoint.allowed_hosts,
+                    "usage_note": endpoint.usage_note,
+                    "sample": sample_defaults(endpoint),
                 }
                 for source, endpoint in rows
+                if allowed_intake_source(source, endpoint)
             ]
         }
 
@@ -966,6 +974,63 @@ def prepare_documents(
     response.headers["Cache-Control"] = "private, no-store"
     try:
         return store.prepare_documents(task_id, command.delivery_hash, principal)
+    except (InvestigationError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/document-exclusions")
+def exclude_document_material(
+    task_id: UUID,
+    command: ExcludeInvestigationDocument,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    # The key is accepted because the header is mandatory for every Local Human Test write,
+    # but it is not forwarded: ``exclude_document`` has no idempotency slot, and the partial
+    # unique index on ``investigation_document_exclusions`` already guarantees a replay creates
+    # no second row (it answers 409 DOCUMENT_EXCLUSION_ALREADY_PRESENT instead).
+    from deepaha.investigations.document_exclusions import exclude_document
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return exclude_document(
+            store,
+            task_id,
+            command.delivery_hash,
+            command.material_id,
+            command.reason,
+            principal,
+        )
+    except (InvestigationError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.post("/{task_id}/document-exclusions/revoke")
+def revoke_document_exclusion(
+    task_id: UUID,
+    command: RevokeInvestigationDocument,
+    store: StoreDep,
+    principal: PrincipalDep,
+    key: KeyDep,
+    response: Response,
+) -> dict[str, Any]:
+    # The mandatory key is not forwarded either; see ``exclude_document_material`` above.
+    # A replay is answered by the domain layer (409 DOCUMENT_EXCLUSION_NOT_FOUND) instead of
+    # by a stored response.
+    from deepaha.investigations.document_exclusions import revoke_exclusion
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return revoke_exclusion(
+            store,
+            task_id,
+            command.delivery_hash,
+            command.material_id,
+            command.reason,
+            principal,
+        )
     except (InvestigationError, ReviewerAuthenticationError) as error:
         raise problem(error) from None
 

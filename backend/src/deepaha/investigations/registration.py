@@ -168,7 +168,7 @@ def _register(
             resolution = ResolutionDocument(
                 document_id=primary.document_id,
                 source_id=source_command.source_id,
-                source_tier=SourceTier.OFFICIAL_PRIMARY,
+                source_tier=SourceTier(str(task.source_snapshot["tier"])),
                 evidence_ref_id=primary.evidence_ref_id,
                 role=OpportunityDocumentRole.PRIMARY_NOTICE,
                 canonical_url=source_command.notice_url,

@@ -63,6 +63,12 @@ def bootstrap_local_human_test(
     try:
         with Session(engine) as session:
             import_registry(session, load_registry_manifest(registry_path))
+            import_registry(
+                session,
+                load_registry_manifest(
+                    Path(__file__).resolve().parents[3] / "config/sources/direct-wma-local.json"
+                ),
+            )
             reviewer = session.get(ReviewerAccountModel, LOCAL_REVIEWER_ID)
             expected_roles = [
                 ReviewerRole.LOCAL_TEST_OPERATOR.value,

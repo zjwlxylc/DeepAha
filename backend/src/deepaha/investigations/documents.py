@@ -1,5 +1,6 @@
 """Prepare existing document evidence without creating facts or acquisition history."""
 
+from datetime import UTC
 from typing import TYPE_CHECKING, Any
 from uuid import UUID
 
@@ -10,12 +11,17 @@ from deepaha.artifacts.models import RawArtifact
 from deepaha.artifacts.object_store import ObjectIntegrityError
 from deepaha.documents.docx import DeterministicDocxParser
 from deepaha.documents.models import DocumentBlock, EvidenceRef, ParseAttempt
+from deepaha.documents.opaque import OpaqueBinaryParser
 from deepaha.documents.parser import DocumentParser
 from deepaha.documents.reader import ReaderDocumentParser
 from deepaha.documents.service import DocumentService, ParseDocumentCommand
 from deepaha.evidence_verification.adapters.defaults import default_registry
 from deepaha.investigations.contracts import CreateInvestigation, InvestigationError, digest
-from deepaha.investigations.models import InvestigationMaterial
+from deepaha.investigations.models import (
+    InvestigationDocumentExclusion,
+    InvestigationMaterial,
+    InvestigationTask,
+)
 from deepaha.review.auth import (
     OPPORTUNITY_FACT_VALIDATION_PURPOSE,
     ReviewerPrincipal,
@@ -42,11 +48,97 @@ def _parser_for(media_type: str, parsers: tuple[DocumentParser, ...]) -> Documen
     return matched[0] if matched else None
 
 
+# Task statuses in which a reviewer may still decide about material preparation. Every
+# other status is terminal for the collection itself, so touching evidence then would
+# silently rewrite an already adjudicated delivery.
+EXCLUSION_ALLOWED_STATUSES = ("PENDING_REVIEW", "APPROVED")
+# Mirrors the ``reason_length`` / ``revoked_reason`` CHECK constraints on
+# ``investigation_document_exclusions``. The business layer rejects first so the caller
+# gets a named code instead of a database error.
+EXCLUSION_REASON_MIN_LENGTH = 8
+EXCLUSION_REASON_MAX_LENGTH = 2000
+
+# ``evidence_mode`` describes evidence that really exists, not the intent: ``null`` means
+# "there is nothing here yet" (unsupported, unparsed, failed, or parsed without blocks),
+# ``TEXT`` means quotable blocks, ``OPAQUE_NO_TEXT`` means one text-free opaque block.
+EVIDENCE_MODE_TEXT = "TEXT"
+EVIDENCE_MODE_OPAQUE = "OPAQUE_NO_TEXT"
+
+
+def exclusion_reason_or_raise(value: str) -> str:
+    """Validate and normalize a free-text reviewer reason.
+
+    Args:
+        value: Raw reason as submitted by the caller.
+
+    Returns:
+        The reason with surrounding whitespace removed, which is what gets persisted and
+        what the database CHECK measures.
+
+    Raises:
+        InvestigationError: ``DOCUMENT_EXCLUSION_REASON_REQUIRED`` when the trimmed reason
+            is shorter than :data:`EXCLUSION_REASON_MIN_LENGTH` or longer than
+            :data:`EXCLUSION_REASON_MAX_LENGTH`.
+    """
+    reason = value.strip()
+    if not EXCLUSION_REASON_MIN_LENGTH <= len(reason) <= EXCLUSION_REASON_MAX_LENGTH:
+        raise InvestigationError("DOCUMENT_EXCLUSION_REASON_REQUIRED")
+    return reason
+
+
+def active_exclusions(
+    session: Session, task_id: UUID, delivery_hash: str
+) -> dict[str, InvestigationDocumentExclusion]:
+    """Return the effective exclusions of one delivery keyed by ``material_id``.
+
+    Args:
+        session: Open ORM session.
+        task_id: Owning investigation task.
+        delivery_hash: Delivery digest the rows are bound to. Rows of earlier deliveries
+            are never returned, so re-collected material starts with no exclusion.
+
+    Returns:
+        A mapping for every material with a non-revoked exclusion. Revoked rows stay in the
+        table as history and are deliberately skipped.
+    """
+    return {
+        row.material_id: row
+        for row in session.scalars(
+            select(InvestigationDocumentExclusion).where(
+                InvestigationDocumentExclusion.task_id == task_id,
+                InvestigationDocumentExclusion.delivery_hash == delivery_hash,
+                InvestigationDocumentExclusion.revoked_at.is_(None),
+            )
+        )
+    }
+
+
+def _current_exclusions(
+    session: Session, materials: list[InvestigationMaterial]
+) -> dict[str, InvestigationDocumentExclusion]:
+    """Resolve the exclusions that apply to the materials' own task and delivery."""
+    if not materials:
+        return {}
+    task = session.get(InvestigationTask, materials[0].task_id)
+    if task is None or not task.delivery_hash:
+        return {}
+    return active_exclusions(session, task.task_id, task.delivery_hash)
+
+
 def describe_documents(session: Session, materials: list[InvestigationMaterial]) -> dict[str, Any]:
     parsers = document_parsers()
+    exclusions = _current_exclusions(session, materials)
     rows: list[dict[str, Any]] = []
     for material in materials:
-        parser = _parser_for(str(material.metadata_snapshot["media_type"]), parsers)
+        media_type = str(material.metadata_snapshot["media_type"])
+        exclusion = exclusions.get(material.material_id)
+        parser = _parser_for(media_type, parsers)
+        if parser is None and exclusion is not None:
+            # Excluded material: it has an opaque block (or will get one from
+            # ``prepare_documents``), so describe it with the parser that produced it
+            # instead of leaving it UNSUPPORTED forever. Adding the parser only when no
+            # registry parser matches keeps ``_parser_for`` unambiguous.
+            parser = OpaqueBinaryParser(frozenset({media_type}))
         row: dict[str, Any] = {
             "material_id": material.material_id,
             "outcome": "UNSUPPORTED" if parser is None else "NOT_PREPARED",
@@ -59,6 +151,9 @@ def describe_documents(session: Session, materials: list[InvestigationMaterial])
             "parse_contract_version": None if parser is None else parser.parse_contract_version,
             "block_count": 0,
             "evidence_ref_count": 0,
+            "excluded": exclusion is not None,
+            "evidence_mode": None,
+            "exclusion": None,
         }
         if parser is not None:
             attempt = session.scalar(
@@ -96,6 +191,23 @@ def describe_documents(session: Session, materials: list[InvestigationMaterial])
                     )
                 if row["outcome"] == "SUCCEEDED" and not row["block_count"]:
                     row.update(outcome="NEEDS_REVIEW", error_code="DOCUMENT_BLOCKS_MISSING")
+        if exclusion is not None:
+            row["exclusion"] = {
+                "reason": exclusion.reason,
+                "excluded_by": str(exclusion.excluded_by),
+                "excluded_at": exclusion.excluded_at.astimezone(UTC).isoformat(),
+            }
+        # Computed after the NEEDS_REVIEW downgrade above: a material stays ``null`` unless
+        # a real parse produced blocks, so UNSUPPORTED / NOT_PREPARED / FAILED / NEEDS_REVIEW
+        # never claim to hold text. Whether the text came from an exclusion is decided by the
+        # parser that produced it, not by the exclusion row, because a later deployment may
+        # well parse an excluded file with a real parser.
+        if row["outcome"] == "SUCCEEDED":
+            row["evidence_mode"] = (
+                EVIDENCE_MODE_OPAQUE
+                if isinstance(parser, OpaqueBinaryParser)
+                else EVIDENCE_MODE_TEXT
+            )
         rows.append(row)
     prepared = sum(row["outcome"] == "SUCCEEDED" for row in rows)
     if not rows or all(row["outcome"] == "NOT_PREPARED" for row in rows):
@@ -109,6 +221,8 @@ def describe_documents(session: Session, materials: list[InvestigationMaterial])
         "status": status,
         "material_count": len(rows),
         "prepared_count": prepared,
+        "excluded_count": sum(row["excluded"] for row in rows),
+        "unsupported_count": sum(row["outcome"] == "UNSUPPORTED" for row in rows),
         "materials": rows,
     }
 
@@ -165,6 +279,7 @@ def prepare_documents(
             object_store=store.objects,
             parsers=parsers,
         )
+        exclusions = active_exclusions(session, task_id, task.delivery_hash)
         for material in materials:
             raw = session.get(RawArtifact, material.raw_artifact_id)
             if (
@@ -173,15 +288,27 @@ def prepare_documents(
                 or raw.media_type != material.metadata_snapshot["media_type"]
             ):
                 raise InvestigationError("STORED_MATERIAL_INTEGRITY_FAILED")
+            target = service
             if _parser_for(raw.media_type, parsers) is None:
-                continue
+                exclusion = exclusions.get(material.material_id)
+                if exclusion is None:
+                    continue
+                # Excluded material: no registered parser can read it, so it is parsed once
+                # by a service whose single parser claims exactly this media type. The
+                # result is one opaque text-free block, which lets the denominator reach
+                # PREPARED without ever offering quotable text for an adjudication.
+                target = DocumentService(
+                    session_factory=sessionmaker(session.get_bind(), expire_on_commit=False),
+                    object_store=store.objects,
+                    parsers=(OpaqueBinaryParser(frozenset({raw.media_type})),),
+                )
             # All tasks lock shared originals in the same order. DocumentService
             # commits each parse separately, so interrupted preparation can resume.
             session.execute(
                 text("SELECT pg_advisory_xact_lock(:key)"),
                 {"key": int(digest(["investigation-document", str(raw.artifact_id)])[:15], 16)},
             )
-            service.parse(ParseDocumentCommand(artifact_id=raw.artifact_id))
+            target.parse(ParseDocumentCommand(artifact_id=raw.artifact_id))
         from deepaha.investigations.evidence_checks import append_check
 
         append_check(session, store.objects, task, materials, principal.reviewer_id, store.clock())

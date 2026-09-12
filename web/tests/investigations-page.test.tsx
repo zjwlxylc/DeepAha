@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import InvestigationsPage from "../app/review/investigations/page";
 import InvestigationPage from "../app/review/investigations/[taskId]/page";
 import { getInvestigations, getInvestigationSources, getInvestigation, getInvestigationBindingTargets } from "../lib/investigations";
+import { humanTestFetch } from "../lib/local-human-test";
 import { source, task, taskId, preparedDocuments, bindingTarget, evidenceCheck } from "./investigations-fixture";
 
 vi.mock("../lib/investigations", async (original) => ({
@@ -11,6 +12,12 @@ vi.mock("../lib/investigations", async (original) => ({
   getInvestigations: vi.fn(), getInvestigationSources: vi.fn(), getInvestigation: vi.fn(), getInvestigationBindingTargets: vi.fn(),
 }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
+// The list page reads runtime readiness through the authenticated local API, so
+// it must be stubbed here exactly like the other local-human-test page suites.
+vi.mock("../lib/local-human-test", () => ({
+  humanTestFetch: vi.fn(),
+  LocalHumanTestApiError: class extends Error { constructor(public status: number) { super(); } },
+}));
 
 describe("investigation pages", () => {
   it("does not invent new verification dimensions from a historical boolean", async () => {
@@ -37,6 +44,14 @@ describe("investigation pages", () => {
     vi.mocked(getInvestigationSources).mockResolvedValue({ sources: [source] });
     vi.mocked(getInvestigation).mockResolvedValue(task);
     vi.mocked(getInvestigationBindingTargets).mockResolvedValue({ targets: [bindingTarget] });
+    // Not dispatch-ready: the list page must still register tasks without ever
+    // offering a live execution control.
+    vi.mocked(humanTestFetch).mockResolvedValue({
+      login: "已登录", database: "已连接", source_count: 1,
+      worker: { state: "OFFLINE", updated_at: null },
+      wma: { state: "NOT_CONFIGURED" },
+      dispatch_enabled: false,
+    });
   });
   it("requires explicit identity selection after intake approval and full document preparation", async () => {
     vi.mocked(getInvestigation).mockResolvedValue({ ...task, status: "APPROVED", document_preparation: preparedDocuments });
@@ -70,6 +85,70 @@ describe("investigation pages", () => {
     expect(screen.getByText("解析失败")).toBeVisible();
     expect(screen.getByText(/仍有未准备、需复核或不支持/)).toBeVisible();
     expect(screen.getByRole("button", { name: "记录内部材料审核" })).toBeVisible();
+  });
+  it("keeps the original count wording when no material is excluded", async () => {
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, document_preparation: { ...preparedDocuments, excluded_count: 0 } });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByText("1 / 1 份材料已完成文档证据准备。")).toBeVisible();
+    expect(screen.queryByText(/存在已排除材料/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "撤销排除" })).not.toBeInTheDocument();
+  });
+  it("marks excluded materials as opaque and offers exclusion only for unsupported ones", async () => {
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, document_preparation: {
+      ...preparedDocuments, status: "NEEDS_ATTENTION", material_count: 4, prepared_count: 3, excluded_count: 1,
+      materials: [{ ...preparedDocuments.materials[0], excluded: false, evidence_mode: "TEXT" },
+        { ...preparedDocuments.materials[0], material_id: "legacy.doc", outcome: "UNSUPPORTED", block_count: 0,
+          error_code: "DOCUMENT_FORMAT_UNSUPPORTED", excluded: true, evidence_mode: "OPAQUE_NO_TEXT",
+          exclusion: { reason: "老式 .doc 没有可用解析器", excluded_by: "reviewer-1", excluded_at: "2026-09-07T09:30:00Z" } },
+        { ...preparedDocuments.materials[0], material_id: "scan.pdf", outcome: "UNSUPPORTED", block_count: 0,
+          error_code: "DOCUMENT_FORMAT_UNSUPPORTED", excluded: false },
+        { ...preparedDocuments.materials[0], material_id: "empty.pdf", outcome: "FAILED", block_count: 0,
+          error_code: "PDF_TEXT_EMPTY", excluded: false }],
+    } });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByText("已准备 3/4 份，其中 1 份为无文本证据块的排除材料")).toBeVisible();
+    expect(screen.getByText("存在已排除材料：其字段不得作为块级依据，仅保留原件整文件引用。")).toBeVisible();
+    expect(screen.getByText("无文本证据块")).toBeVisible();
+    expect(screen.getByText(/排除理由：老式 \.doc 没有可用解析器/)).toBeVisible();
+    expect(screen.getByText(/操作人：reviewer-1/)).toBeVisible();
+    expect(screen.getAllByRole("button", { name: "撤销排除" })).toHaveLength(1);
+    // Only the still-unsupported scan.pdf can be excluded: neither the failed
+    // material nor the already excluded one offers the action again.
+    expect(screen.getAllByRole("button", { name: "排除此材料（无机器证据块）" })).toHaveLength(1);
+    expect(screen.queryByText("已排除材料占比超过三分之一，请确认范围是否仍然合理。")).not.toBeInTheDocument();
+  });
+  it("warns when excluded materials exceed one third of the delivery", async () => {
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, document_preparation: {
+      ...preparedDocuments, status: "NEEDS_ATTENTION", material_count: 3, prepared_count: 2, excluded_count: 2,
+      materials: [{ ...preparedDocuments.materials[0], excluded: false, evidence_mode: "TEXT" },
+        { ...preparedDocuments.materials[0], material_id: "legacy.doc", outcome: "UNSUPPORTED", block_count: 0,
+          error_code: "DOCUMENT_FORMAT_UNSUPPORTED", excluded: true, evidence_mode: "OPAQUE_NO_TEXT",
+          exclusion: { reason: "老式 .doc 没有可用解析器", excluded_by: "reviewer-1", excluded_at: "2026-09-07T09:30:00Z" } },
+        { ...preparedDocuments.materials[0], material_id: "scan.pdf", outcome: "UNSUPPORTED", block_count: 0,
+          error_code: "DOCUMENT_FORMAT_UNSUPPORTED", excluded: true, evidence_mode: "OPAQUE_NO_TEXT",
+          exclusion: { reason: "扫描件没有文本层", excluded_by: "reviewer-1", excluded_at: "2026-09-07T09:40:00Z" } }],
+    } });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByText("已准备 2/3 份，其中 2 份为无文本证据块的排除材料")).toBeVisible();
+    expect(screen.getByText("已排除材料占比超过三分之一，请确认范围是否仍然合理。")).toBeVisible();
+    expect(screen.getAllByRole("button", { name: "撤销排除" })).toHaveLength(2);
+    expect(screen.queryByRole("button", { name: "排除此材料（无机器证据块）" })).not.toBeInTheDocument();
+  });
+  it("keeps excluded materials visible without offering exclusion controls outside reviewable states", async () => {
+    vi.mocked(getInvestigation).mockResolvedValue({ ...task, status: "REJECTED", document_preparation: {
+      ...preparedDocuments, status: "NEEDS_ATTENTION", material_count: 2, prepared_count: 1, excluded_count: 1,
+      materials: [{ ...preparedDocuments.materials[0], material_id: "legacy.doc", outcome: "UNSUPPORTED", block_count: 0,
+        error_code: "DOCUMENT_FORMAT_UNSUPPORTED", excluded: true, evidence_mode: "OPAQUE_NO_TEXT",
+        exclusion: { reason: "老式 .doc 没有可用解析器", excluded_by: "reviewer-1", excluded_at: "2026-09-07T09:30:00Z" } },
+        { ...preparedDocuments.materials[0], material_id: "scan.pdf", outcome: "UNSUPPORTED", block_count: 0,
+          error_code: "DOCUMENT_FORMAT_UNSUPPORTED", excluded: false }],
+    } });
+    render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
+    expect(screen.getByText("存在已排除材料：其字段不得作为块级依据，仅保留原件整文件引用。")).toBeVisible();
+    expect(screen.getByText("无文本证据块")).toBeVisible();
+    expect(screen.queryByRole("button", { name: "排除此材料（无机器证据块）" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "撤销排除" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "准备文档证据" })).not.toBeInTheDocument();
   });
   it.each(["QUEUED", "REJECTED", "EXPIRED"])("does not offer document preparation in %s", async (status) => {
     vi.mocked(getInvestigation).mockResolvedValue({ ...task, status });

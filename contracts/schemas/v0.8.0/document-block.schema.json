@@ -114,6 +114,34 @@
       "title": "HtmlElementSpanLocatorSchemaV08",
       "type": "object"
     },
+    "OpaqueWholeFileLocatorSchemaV08": {
+      "additionalProperties": false,
+      "description": "Locator for a block that cites an excluded binary as a whole, without any text.",
+      "properties": {
+        "byte_size": {
+          "minimum": 0,
+          "title": "Byte Size",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "opaque_whole_file",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Value Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value_sha256",
+        "byte_size"
+      ],
+      "title": "OpaqueWholeFileLocatorSchemaV08",
+      "type": "object"
+    },
     "PdfTableCellLocatorSchemaV08": {
       "additionalProperties": false,
       "properties": {
@@ -347,6 +375,7 @@
           "docx_paragraph": "#/$defs/DocxParagraphLocatorSchemaV08",
           "docx_table_cell": "#/$defs/DocxTableCellLocatorSchemaV08",
           "html_element_span": "#/$defs/HtmlElementSpanLocatorSchemaV08",
+          "opaque_whole_file": "#/$defs/OpaqueWholeFileLocatorSchemaV08",
           "pdf_table_cell": "#/$defs/PdfTableCellLocatorSchemaV08",
           "pdf_text_span": "#/$defs/PdfTextSpanLocatorSchemaV08",
           "spreadsheet_cell": "#/$defs/SpreadsheetCellLocatorSchemaV08",
@@ -375,6 +404,9 @@
         },
         {
           "$ref": "#/$defs/DocxTableCellLocatorSchemaV08"
+        },
+        {
+          "$ref": "#/$defs/OpaqueWholeFileLocatorSchemaV08"
         }
       ],
       "title": "Structural Locator"

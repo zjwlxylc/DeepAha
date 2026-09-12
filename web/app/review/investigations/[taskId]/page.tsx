@@ -9,8 +9,13 @@ import InvestigationFactReview from "../../../../components/investigations/fact-
 import InvestigationRuleReview from "../../../../components/investigations/rule-review";
 import InvestigationBindings from "../../../../components/investigations/bindings";
 import GroupSourceLinks from "../../../../components/investigations/group-source-links";
+import DispatchButton from "../../../../components/investigations/dispatch-button";
+import NextSteps from "../../../../components/investigations/next-steps";
 import { investigationFailureMessage, investigationStatus } from "../../../../components/investigations/status";
 import { getInvestigation, getInvestigationBindingTargets } from "../../../../lib/investigations";
+import { investigationRecoveryAvailability } from "../../../../lib/investigation-dispatch";
+import type { InvestigationRuntime } from "../../../../lib/investigation-runtime";
+import { humanTestFetch } from "../../../../lib/local-human-test";
 import { formatDateTime } from "../../../../lib/public-opportunities";
 
 export const metadata: Metadata = { title: "调查材料与内部审核" };
@@ -21,13 +26,34 @@ export default async function InvestigationPage({ params }: { params: Promise<{ 
   const title = task.opportunities?.opportunity_name;
   const targets = task.status === "APPROVED" && task.document_preparation?.status === "PREPARED"
     ? (await getInvestigationBindingTargets()).targets : [];
+  // The dispatch control is only meaningful once the worker/WMA readiness flag is
+  // true. Readiness is fetched defensively: a missing session or an unready
+  // subsystem degrades to "no dispatch control" and never triggers a check.
+  let dispatchEnabled = false;
+  try {
+    dispatchEnabled = (await humanTestFetch<InvestigationRuntime>("/investigation-runtime")).dispatch_enabled;
+  } catch {
+    dispatchEnabled = false;
+  }
+  const recovery = investigationRecoveryAvailability(task);
   return (
-    <main id="main-content" className="page-shell human-test-shell investigation-shell">
+    <main id="main-content" data-investigation-status={task.status} className="page-shell human-test-shell investigation-shell">
       <nav className="breadcrumbs" aria-label="面包屑"><Link href="/review/investigations">官方机会调查</Link><span aria-hidden="true">/</span><span aria-current="page">材料与审核</span></nav>
       <header className="human-test-hero"><div><p className="eyebrow">调查材料 · 内部核对</p><h1>{typeof title === "string" && title ? title : "调查任务详情"}</h1><p>{task.brief}</p><span className="status-badge">{investigationStatus(task.status)}</span>{task.calibration ? <p>校准样本：不计为隐藏盲测。</p> : null}</div></header>
       <aside className="fixture-notice" aria-label="内部审核边界">内部审核不等于正式机会、资格规则或公开目录发布。字段依据仍需本人核对，未披露或冲突的信息保持未知。</aside>
       <p>{safeOfficialUrl(task.notice_url) ? <a href={safeOfficialUrl(task.notice_url)} target="_blank" rel="noopener noreferrer">查看原始官方公告</a> : "官方公告地址不可用"} · 更新于 {formatDateTime(task.updated_at)}</p>
-      {task.status === "QUEUED" ? <p className="risk-note">任务已登记，后续由获授权的运维人员安排执行。本页不会自动开始调查。</p> : null}
+      {task.status === "QUEUED" && !task.dispatch_pending ? <p className="risk-note">任务已登记，尚未发起。请使用下方“发起调查”入口明确发起；本页不会自动开始调查。</p> : null}
+      <NextSteps task={task} />
+      <section className="human-test-panel" id="investigation-dispatch" aria-labelledby="investigation-dispatch-title">
+        <h2 id="investigation-dispatch-title">发起调查与处理进度</h2>
+        <p>当前阶段：<strong>{investigationStatus(task.status)}</strong> · 更新于 {formatDateTime(task.updated_at)}</p>
+        {task.error_code
+          ? <p className="risk-note">本任务已记录安全失败原因（诊断编号 {task.error_code}），完整说明见下方「待处理问题」。</p>
+          : <p className="field-help">尚未记录失败原因。</p>}
+        <DispatchButton task={task} dispatchEnabled={dispatchEnabled} requestKey={randomUUID()} />
+        {recovery.visible ? <div className="risk-note" data-testid="recovery-entry"><strong>恢复材料</strong><p>{recovery.reason}</p></div> : null}
+        <p className="field-help">是否发起由你明确点击决定；页面加载或刷新不会自动发起，未就绪时不会显示发起按钮。</p>
+      </section>
       {task.issues.length || task.error_code ? <section className="human-test-panel" aria-labelledby="investigation-issues-title"><h2 id="investigation-issues-title">待处理问题</h2>{task.error_code ? <><p>{investigationFailureMessage(task.error_code)}</p><p>系统不会自动重新调查。已有材料需完成回收与核验后，才能提交审核。</p></> : <p>这些问题需处理并重新核对，不能据此认定调查完整。</p>}<ul>{task.issues.map((issue, index) => <li key={index}>{issue}</li>)}</ul>{task.error_code ? <details><summary>故障标识（供排查）</summary><code>{task.error_code}</code></details> : null}</section> : null}
       <InvestigationEvidence task={task} />
       <InvestigationDocuments task={task} />

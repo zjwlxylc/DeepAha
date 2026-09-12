@@ -484,6 +484,53 @@ def test_xlsx_numeric_column_locator_checks_exact_cell(col: int, quote: str, val
             module._quote_support(artifact, quote, {"sheet": "Sheet", "row": 1, "col": col}, set())
 
 
+def _merged_cell_workbook() -> bytes:
+    book = Workbook()
+    sheet = book.active
+    assert sheet is not None
+    sheet["A1"] = "中共浙江省纪浙江省监委"
+    sheet.merge_cells("A1:A2")
+    output = BytesIO()
+    book.save(output)
+    book.close()
+    return output.getvalue()
+
+
+def test_xlsx_quote_inside_a_merged_range_reads_the_anchor_value() -> None:
+    o, e, artifacts = _sample()
+    artifacts["notice"] = _merged_cell_workbook()
+    e["artifacts"][0].update(
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        local_path="artifacts/notice.xlsx",
+        remote_path="/workspace/task/artifacts/notice.xlsx",
+        file_name="notice.xlsx",
+        sha256=sha256(artifacts["notice"]).hexdigest(),
+    )
+    for fact in (_fact(o), e["facts_flat"][0]):
+        fact["evidence"][0].update(
+            quote="中共浙江省纪浙江省监委", locator={"sheet": "Sheet", "row": 2, "col": 1}
+        )
+    result = _validate(o, e, artifacts)
+
+    assert result.facts[0].evidence[0].mechanically_verified
+
+
+def test_xlsx_merged_range_locator_still_rejects_another_quote() -> None:
+    module = _delivery_module()
+    content = _merged_cell_workbook()
+    artifact = module.ValidatedArtifact(
+        "table",
+        "https://example.gov/table.xlsx",
+        "artifacts/table.xlsx",
+        sha256(content).hexdigest(),
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        content,
+    )
+
+    with pytest.raises(module.DeliveryValidationError, match="EVIDENCE_QUOTE_MISMATCH"):
+        module._quote_support(artifact, "其他单位", {"sheet": "Sheet", "row": 2, "col": 1}, set())
+
+
 def test_utf8_fragment_is_validated_with_same_text_as_document_parser() -> None:
     o, e, artifacts = _sample()
     artifacts["notice"] = '<p id="terms">报考要求：<strong>本科</strong>及以上。</p>'.encode()
@@ -555,6 +602,47 @@ def test_preflight_returns_only_validated_task_relative_artifact_paths() -> None
     files["evidence.json"] = json.dumps(e).encode()
     with pytest.raises(module.DeliveryValidationError, match="ARTIFACT_PATH_INVALID"):
         preflight(files)
+
+
+def test_ascii_storage_path_with_a_declared_original_name_is_rejected() -> None:
+    """Real failure shape, task 01a08fc1-ce83-7473-afc3-4c3ad6931ff6.
+
+    The agent stored ``artifacts/jihua.xlsx`` but declared ``file_name`` as the
+    official Chinese name. The receiver must reject that: the SOP now states the
+    rule, and this keeps the rejection itself under test.
+    """
+    o, e, _ = _sample()
+    module = _delivery_module()
+    artifact = e["artifacts"][0]
+    artifact["local_path"] = "artifacts/jihua.xlsx"
+    artifact.pop("remote_path", None)
+    artifact["file_name"] = "浙江省省属事业单位2026下半年集中公开招聘计划表.xlsx"
+    with pytest.raises(module.DeliveryValidationError, match="ARTIFACT_PATH_INVALID"):
+        module.preflight_manifest(
+            {
+                "opportunities.json": json.dumps(o).encode(),
+                "evidence.json": json.dumps(e).encode(),
+                "report.md": b"report",
+            }
+        )
+
+
+def test_original_chinese_name_is_accepted_when_the_path_carries_it_too() -> None:
+    """Same material, accepted: the original name is used as the path basename."""
+    o, e, _ = _sample()
+    module = _delivery_module()
+    name = "浙江省省属事业单位2026下半年集中公开招聘计划表.xlsx"
+    artifact = e["artifacts"][0]
+    artifact["local_path"] = f"artifacts/{name}"
+    artifact.pop("remote_path", None)
+    artifact["file_name"] = name
+    assert module.preflight_manifest(
+        {
+            "opportunities.json": json.dumps(o).encode(),
+            "evidence.json": json.dumps(e).encode(),
+            "report.md": b"report",
+        }
+    ) == (("notice", f"artifacts/{name}"),)
 
 
 def test_preflight_requires_nonempty_manifest_before_any_download() -> None:

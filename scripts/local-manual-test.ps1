@@ -1,6 +1,8 @@
 ﻿param(
     [ValidateSet("Library", "Start", "Stop", "Status")]
-    [string]$Action = "Library"
+    [string]$Action = "Library",
+    [switch]$VerifyEntry,
+    [switch]$VerifyInvestigation
 )
 
 $ErrorActionPreference = "Stop"
@@ -53,7 +55,7 @@ function Assert-RuntimeStateOwnership {
         [IO.Path]::GetFullPath([string]$State.data_root) -eq $ProjectInfo.DataRoot
     )
     if (
-        $schemaVersion -notin @("1.0", "1.1") -or
+        $schemaVersion -notin @("1.0", "1.1", "1.2") -or
         $State.project_root -ne $ProjectInfo.ProjectRoot -or
         $State.project_hash -ne $ProjectInfo.ProjectHash -or
         $State.compose_project -ne $ProjectInfo.ProjectName -or
@@ -77,6 +79,7 @@ function Test-RecordedProcessOwnership {
     $fixedMarkers = @{
         api = "deepaha.main:app"
         worker = "deepaha.local_human_test.runtime"
+        investigation_worker = "deepaha.investigations.runtime"
         web = "pnpm start"
         browser = "open-local-manual-browser.mjs"
     }
@@ -245,7 +248,7 @@ function Wait-LocalManualBrowserReady {
     param(
         [Parameter(Mandatory = $true)][string]$MarkerPath,
         [Parameter(Mandatory = $true)][int]$HostProcessId,
-        [int]$TimeoutMilliseconds = 30000
+        [int]$TimeoutMilliseconds = 120000
     )
     $watch = [Diagnostics.Stopwatch]::StartNew()
     while ($watch.ElapsedMilliseconds -lt $TimeoutMilliseconds) {
@@ -401,7 +404,7 @@ function Invoke-LocalManualStart {
     $existing = Get-LocalManualRuntimeState -StatePath $statePath
     if ($null -ne $existing) {
         Assert-RuntimeStateOwnership -State $existing -ProjectInfo $projectInfo
-        if ([string]$existing.schema_version -eq "1.0") {
+        if ([string]$existing.schema_version -in @("1.0", "1.1")) {
             Write-Host "检测到旧版本地测试运行，正在安全停止后升级……"
             Invoke-LocalManualStop -ProjectRoot $projectInfo.ProjectRoot
         }
@@ -431,7 +434,7 @@ function Invoke-LocalManualStart {
     try {
         Write-Host "[2/8] 正在准备本地依赖（首次可能需要几分钟）……"
         Push-Location (Join-Path $projectInfo.ProjectRoot "backend")
-        try { Invoke-NativeChecked "后端依赖准备" { uv sync --locked --group dev } }
+        try { Invoke-NativeChecked "后端依赖准备" { uv sync --locked --group dev --extra wma } }
         finally { Pop-Location }
         Push-Location (Join-Path $projectInfo.ProjectRoot "web")
         try {
@@ -486,24 +489,24 @@ function Invoke-LocalManualStart {
             "`$env:DEEPAHA_LOCAL_HUMAN_TEST_BIND_HOST='127.0.0.1'; " +
             "`$env:DEEPAHA_LOCAL_HUMAN_TEST_WORKER_ID='local-human-test-worker'; "
         $apiCommand = $serviceEnvironment + "Set-Location -LiteralPath '$escapedRoot\backend'; " +
-            "uv run uvicorn --app-dir '$escapedRoot\backend\src' deepaha.main:app " +
+            "uv run --extra wma uvicorn --app-dir '$escapedRoot\backend\src' deepaha.main:app " +
             "--host 127.0.0.1 --port 8009"
-        $workerCommand = $serviceEnvironment + "Set-Location -LiteralPath '$escapedRoot\backend'; " +
-            "uv run python -m deepaha.local_human_test.runtime --poll-seconds 0.5"
+        $workerCommand = $serviceEnvironment + "`$env:PYTHONPATH='$escapedRoot\backend\src'; " + "Set-Location -LiteralPath '$escapedRoot\backend'; " +
+            "uv run --extra wma python -m deepaha.investigations.runtime"
         $webCommand = "Set-Location -LiteralPath '$escapedRoot\web'; " +
             "`$env:DEEPAHA_API_BASE_URL='http://127.0.0.1:8009'; " +
             "corepack pnpm start --hostname 127.0.0.1 --port 3089"
         $processes.Add((Start-LocalManualProcess -Role "api" -CommandMarker "deepaha.main:app" `
             -Command $apiCommand -WorkingDirectory $projectInfo.ProjectRoot -LogDirectory $logDirectory))
-        $processes.Add((Start-LocalManualProcess -Role "worker" `
-            -CommandMarker "deepaha.local_human_test.runtime" -Command $workerCommand `
+        $processes.Add((Start-LocalManualProcess -Role "investigation_worker" `
+            -CommandMarker "deepaha.investigations.runtime" -Command $workerCommand `
             -WorkingDirectory $projectInfo.ProjectRoot -LogDirectory $logDirectory))
         $processes.Add((Start-LocalManualProcess -Role "web" -CommandMarker "pnpm start" `
             -Command $webCommand -WorkingDirectory $projectInfo.ProjectRoot -LogDirectory $logDirectory))
 
         Write-Host "[7/8] 正在确认服务可用……"
         Wait-LocalManualReady -Url "http://127.0.0.1:8009/api/v1/health/ready" -Name "API"
-        Wait-LocalManualReady -Url "http://127.0.0.1:3089/review/human-test" -Name "Web"
+        Wait-LocalManualReady -Url "http://127.0.0.1:3089/review/investigations" -Name "Web"
 
         Write-Host "[8/8] 正在打开已准备身份的测试浏览器……"
         Remove-Item -LiteralPath $browserReadyPath -Force -ErrorAction SilentlyContinue
@@ -513,6 +516,8 @@ function Invoke-LocalManualStart {
             "--profile '$escapedDataRoot\browser-profile' " +
             "--identity '$escapedRoot\.deepaha-local-manual\identity.json' " +
             "--ready '$escapedRoot\.deepaha-local-manual\browser-ready.json'"
+        if ($VerifyEntry) { $browserCommand += " --verify-entry" }
+        if ($VerifyInvestigation) { $browserCommand += " --verify-investigation" }
         $browserRecord = Start-LocalManualProcess -Role "browser" `
             -CommandMarker "open-local-manual-browser.mjs" -Command $browserCommand `
             -WorkingDirectory $projectInfo.ProjectRoot -LogDirectory $logDirectory
@@ -521,7 +526,7 @@ function Invoke-LocalManualStart {
             -HostProcessId $browserRecord.pid
 
         $state = [ordered]@{
-            schema_version = "1.1"
+            schema_version = "1.2"
             project_root = $projectInfo.ProjectRoot
             project_hash = $projectInfo.ProjectHash
             compose_project = $projectInfo.ProjectName
@@ -532,8 +537,8 @@ function Invoke-LocalManualStart {
         }
         Write-LocalManualState -StatePath $statePath -State $state
         Write-Host ""
-        Write-Host "DeepAha 本地人工测试已启动。浏览器已打开受控人工体验控制台。"
-        Write-Host "启动本身外部调用为 0；仅在页面确认真实运行后采集官网并调用已配置模型。"
+        Write-Host "DeepAha 本地人工测试已启动。浏览器已打开官方机会调查。请查看页面的来源、处理进程和 WMA 就绪状态。"
+        Write-Host "启动本身外部调用为 0；登记不执行；仅在具体任务中明确发起后才运行已发布 WMA。"
         Write-Host "数据库、人工决定、审计证据和加密 Provider 配置会在正常停止后保留。"
         Write-Host "使用“停止 DeepAha 本地人工测试”入口结束本轮环境。"
     }

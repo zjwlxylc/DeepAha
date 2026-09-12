@@ -31,6 +31,7 @@ function applicabilityOptions() {
 }
 const server = createServer(async (request, response) => {
   const url = new URL(request.url, "http://127.0.0.1:3097"), path = url.pathname;
+  if (path === "/api/v1/local-human-test/investigation-runtime") { response.setHeader("Content-Type", "application/json"); response.end(JSON.stringify({ login: "AUTHENTICATED", database: "CONNECTED", source_count: 1, worker: { state: "RUNNING" }, wma: { state: "NOT_CONFIGURED", sdk_available: true }, dispatch_enabled: false })); return; }
   response.setHeader("Content-Type", "application/json");
   response.setHeader("Cache-Control", "private, no-store");
   if (handleGroupInheritance(request, response, url)) return;

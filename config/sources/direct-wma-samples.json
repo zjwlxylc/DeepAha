@@ -1,0 +1,36 @@
+[
+  {
+    "endpoint_id": "01a08e78-07a5-7596-9ca8-14b600b9784e",
+    "title": "浙江省省属事业单位2026年下半年集中公开招聘人员公告",
+    "brief": "调查具体公告和其招聘计划表、应聘指南两个附件。外域附件若403须记录缺失，不绕过、不猜测。 本次为用户指定的历史操作样本，不表示当前可报名。仅处理此页及明确引用的公开材料，不进入报名系统、不提交报名、不扩展个人名单。静态GET是页面壳，需按页面正常匿名加载逻辑取得真实正文；不得将空壳视为完整回收。",
+    "expected_artifact_urls": []
+  },
+  {
+    "endpoint_id": "01a08e78-07a5-7596-9ca8-14b79ba2a459",
+    "title": "快来报名！浙江多家事业单位发布招聘公告",
+    "brief": "调查官方平台转载的多单位汇总，回收正文及7张岗位图片，按单位分别组织机会，缺失原公告保持候选。 本次为用户指定的历史操作样本，不表示当前可报名。仅处理此页及明确引用的公开材料，不进入报名系统、不提交报名、不扩展个人名单。静态GET是页面壳，需按页面正常匿名加载逻辑取得真实正文；不得将空壳视为完整回收。",
+    "expected_artifact_urls": []
+  },
+  {
+    "endpoint_id": "01a08e78-07a5-7596-9ca8-14b8e0d0317b",
+    "title": "2026年浙江省高校毕业生“三支一扶”计划招募公告",
+    "brief": "调查这份三支一扶公告，回收实际正文和同页内嵌300岗位表（含表头301行），不虚构独立附件。区分7月6日落款与7月7日平台发布时间，保留省三支一扶项目办主体及转载证据限制。 本次为用户指定的历史操作样本，不表示当前可报名。仅处理此页及明确引用的公开材料，不进入报名系统、不提交报名、不扩展个人名单。静态GET是页面壳，需按页面正常匿名加载逻辑取得真实正文；不得将空壳视为完整回收。",
+    "expected_artifact_urls": []
+  },
+  {
+    "endpoint_id": "01a08e78-07a5-7596-9ca8-14b9d2a25335",
+    "title": "浙江一批事业单位公开招聘，有你心仪的岗位吗？",
+    "brief": "调查多单位汇总，回收正文及11张岗位图片，分别组织各单位，保留各自报名期限和原公告缺口。 本次为用户指定的历史操作样本，不表示当前可报名。仅处理此页及明确引用的公开材料，不进入报名系统、不提交报名、不扩展个人名单。静态GET是页面壳，需按页面正常匿名加载逻辑取得真实正文；不得将空壳视为完整回收。",
+    "expected_artifact_urls": []
+  },
+  {
+    "endpoint_id": "01a08f03-991f-7368-8d87-ca82caf08586",
+    "title": "浙江省省属事业单位2026年下半年集中公开招聘人员公告",
+    "brief": "调查浙江省人社厅一手发布的省属事业单位2026年下半年集中公开招聘公告正文，以及同页引用的《招聘计划表》xlsx 与《应聘指南》doc 两个官方附件。一手官方网站，正文可正常匿名读取；外域附件若403须如实记录缺失，不绕过、不猜测、不宣称完整取得。本次为用户指定的历史操作样本，不表示当前可报名。仅处理此页及明确引用的公开材料，不进入报名系统、不提交报名、不扩展个人名单。",
+    "expected_artifact_urls": [
+      "https://rlsbt.zj.gov.cn/col/col1229743683/art/2026/art_99f2702a91aa43edaab3ef5037d8d0ad.html",
+      "https://rlsbt.zj.gov.cn/api-gateway/jpaas-web-server/front/document/download?fileUrl=YW5UzzlvCwcM%2FNHHX%2FtT6L0844lzo%2BBb9iPQwtvXwCL0wEBbv8Jojq%2BRcG9FMwCRjXLnSgGDtCOkpwPCGUVfbxjaNXCp6M1PJYGWbyzmv2bo2me4FAC2UnFgdfHkH9lPxirjiBwBIUkWjHS45onNBGAUQBJnlzlC1FLF%2B3NPR1I%3D&fileName=%E6%B5%99%E6%B1%9F%E7%9C%81%E7%9C%81%E5%B1%9E%E4%BA%8B%E4%B8%9A%E5%8D%95%E4%BD%8D2026%E4%B8%8B%E5%8D%8A%E5%B9%B4%E9%9B%86%E4%B8%AD%E5%85%AC%E5%BC%80%E6%8B%9B%E8%81%98%E8%AE%A1%E5%88%92%E8%A1%A8.xlsx",
+      "https://rlsbt.zj.gov.cn/api-gateway/jpaas-web-server/front/document/download?fileUrl=YW5UzzlvCwcM%2FNHHX%2FtT6L0844lzo%2BBb9iPQwtvXwCLYh01H5yYubAnEnZJAPud7VkzjMJhFI%2BTTYLI6LMgcsFYpyfxioYGfcS9sddfrvZ6sQvHskvedaUsvZU608RaAiEUMy10uFsQ0Kr6BP131VKHrYlzwo%2FetiR6zrsCgfcc%3D&fileName=%E5%BA%94%E8%81%98%E6%8C%87%E5%8D%97.doc"
+    ]
+  }
+]

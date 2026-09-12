@@ -8,11 +8,13 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     ForeignKeyConstraint,
+    Index,
     Integer,
     String,
     Text,
     UniqueConstraint,
     Uuid,
+    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
@@ -73,6 +75,12 @@ class InvestigationTask(Base):
     lease_owner: Mapped[UUID | None] = mapped_column(Uuid)
     deadline_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Persistent operator dispatch intent. Never a status; only a queued task may
+    # carry it, and it is cleared when a pre-claim dispatch attempt fails.
+    dispatch_requested_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    dispatch_context: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, default=dict, server_default=text("'{}'::jsonb")
+    )
     error_code: Mapped[str | None] = mapped_column(String(128))
     delivery_hash: Mapped[str | None] = mapped_column(String(64))
     delivery: Mapped[dict[str, object] | None] = mapped_column(JSONB)
@@ -130,6 +138,81 @@ class InvestigationEvidenceCheck(Base):
     payload: Mapped[dict[str, object]] = mapped_column(JSONB)
     checked_by: Mapped[UUID] = mapped_column(Uuid, ForeignKey("reviewer_accounts.reviewer_id"))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class InvestigationDocumentExclusion(Base):
+    """Revocable reviewer exclusion of a material no parser can consume.
+
+    The exclusion is stored as its own append-only row instead of a column on
+    ``investigation_materials`` so that "who excluded what, when and why" and
+    the later revocation both survive as history. ``raw_artifact_id`` and
+    ``media_type`` are frozen snapshots: they record which original object was
+    excluded and why it was unsupported at that moment. ``delivery_hash`` binds
+    the exclusion to a single delivery, so a re-collected task needs a fresh
+    decision.
+    """
+
+    __tablename__ = "investigation_document_exclusions"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["task_id"],
+            ["investigation_tasks.task_id"],
+            name="fk_investigation_document_exclusions_task",
+        ),
+        ForeignKeyConstraint(
+            ["task_id", "material_id"],
+            ["investigation_materials.task_id", "investigation_materials.material_id"],
+            name="fk_investigation_document_exclusions_material",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["excluded_by"],
+            ["reviewer_accounts.reviewer_id"],
+            name="fk_investigation_document_exclusions_excluded_by",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["revoked_by"],
+            ["reviewer_accounts.reviewer_id"],
+            name="fk_investigation_document_exclusions_revoked_by",
+            ondelete="RESTRICT",
+        ),
+        # Partial unique index instead of a table-wide constraint: one effective
+        # exclusion per delivery, while revoked rows remain as history.
+        Index(
+            "uq_investigation_document_exclusions_active",
+            "task_id",
+            "material_id",
+            "delivery_hash",
+            unique=True,
+            postgresql_where=text("revoked_at is null"),
+        ),
+        Index(
+            "ix_investigation_document_exclusions_task_id_delivery_hash",
+            "task_id",
+            "delivery_hash",
+        ),
+        CheckConstraint("uuid_extract_version(exclusion_id) = 7", name="id_uuid7"),
+        CheckConstraint("delivery_hash ~ '^[0-9a-f]{64}$'", name="hash_format"),
+        CheckConstraint("length(btrim(reason)) between 8 and 2000", name="reason_length"),
+        CheckConstraint(
+            "revoked_at is null or (revoked_reason is not null "
+            "and length(btrim(revoked_reason)) between 8 and 2000)",
+            name="revoked_reason",
+        ),
+    )
+    exclusion_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    task_id: Mapped[UUID] = mapped_column(Uuid)
+    material_id: Mapped[str] = mapped_column(String(256))
+    raw_artifact_id: Mapped[UUID] = mapped_column(Uuid)
+    media_type: Mapped[str] = mapped_column(String(256))
+    delivery_hash: Mapped[str] = mapped_column(String(64))
+    reason: Mapped[str] = mapped_column(Text)
+    excluded_by: Mapped[UUID] = mapped_column(Uuid)
+    excluded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    revoked_by: Mapped[UUID | None] = mapped_column(Uuid)
+    revoked_reason: Mapped[str | None] = mapped_column(Text)
 
 
 class InvestigationBinding(Base):

@@ -15,7 +15,12 @@ from deepaha.review.auth import ReviewerPrincipal, ReviewerRole
 
 
 def make_client(
-    tmp_path: Path, *, enabled: bool = True, roles: frozenset[ReviewerRole] | None = None
+    tmp_path: Path,
+    *,
+    enabled: bool = True,
+    roles: frozenset[ReviewerRole] | None = None,
+    purposes: frozenset[str] | None = None,
+    synthetic: bool = True,
 ) -> tuple[TestClient, Mock]:
     app = create_app()
     store = Mock()
@@ -26,8 +31,8 @@ def make_client(
     app.dependency_overrides[require_local_test_principal] = lambda: ReviewerPrincipal(
         uuid7(),
         roles if roles is not None else frozenset({ReviewerRole.LOCAL_TEST_OPERATOR}),
-        frozenset({"OPPORTUNITY_FACT_VALIDATION"}),
-        True,
+        purposes if purposes is not None else frozenset({"OPPORTUNITY_FACT_VALIDATION"}),
+        synthetic,
     )
     return TestClient(app, base_url="http://127.0.0.1"), store
 

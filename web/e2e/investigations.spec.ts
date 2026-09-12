@@ -13,6 +13,20 @@ test.beforeEach(async ({ context, request }) => {
   await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true, sameSite: "Lax" }]);
 });
 
+test("new entry explains missing browser session and shows actual readiness after login", async ({ page, context }) => {
+  await context.clearCookies();
+  await page.goto("/review/investigations");
+  await expect(page.getByRole("heading", { name: "需要本地审核登录" })).toBeVisible();
+  await expect(page.getByRole("alert").filter({ hasText: "一键启动入口" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "登记调查任务" })).toHaveCount(0);
+  await context.addCookies([{ name: "deepaha_phase7_reviewer_session", value: "synthetic-browser-reviewer", domain: "127.0.0.1", path: "/", httpOnly: true, sameSite: "Lax" }]);
+  await page.reload();
+  await expect(page.getByTestId("investigation-runtime")).toBeVisible();
+  await expect(page.getByText("调查处理进程运行中", { exact: true })).toBeVisible();
+  await expect(page.getByText("未配置", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "检查 WMA 发布连接" })).toBeDisabled();
+});
+
 for (const operation of ["registration", "review"] as const) {
   test(`retries ${operation} after a lost receipt without changing the form or duplicating a write`, async ({ page, request }) => {
     await page.goto(operation === "registration" ? "/review/investigations" : `/review/investigations/${taskId}`);
