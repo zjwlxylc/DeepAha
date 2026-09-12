@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { loadRuleApplicabilityAction, saveRuleApplicabilityAction } from "../../app/review/investigations/rule-applicability-actions";
 import { applicabilityOutcomes, type ApplicabilityEvidence, type ApplicabilityIdentity, type ApplicabilityOutcome, type ApplicabilityRequest, type ApplicabilitySelection, type ApplicabilityView } from "../../lib/rule-applicability";
-import { materialPath, safeOfficialUrl } from "./evidence";
+import { materialPath, safeOfficialUrl } from "../../lib/investigation-evidence-links";
 
 const evidenceKey = (item: Pick<ApplicabilityEvidence, "member_id" | "block_id">) => `${item.member_id}:${item.block_id}`;
 const unavailable = "暂未取得最新回执。请重试原请求，或重新读取最新状态后再修改。";

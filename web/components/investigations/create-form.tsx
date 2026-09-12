@@ -31,8 +31,8 @@ export default function InvestigationCreateForm({ sources, requestKey }: { sourc
         </label>
         {selected?.usage_note ? <p className="risk-note">{selected.usage_note}</p> : null}
         <label>明确公告地址<input name="notice_url" type="url" {...field("notice_url")} required placeholder="https://官方站点/具体公告" /></label>
-        <p className="field-help">该地址必须与所选来源的公告地址<strong>完全一致</strong>；同一域名下的其它公告不在已批准范围内，会被拒绝。附件地址同样只接受所选来源已批准域名的 HTTPS 地址。</p>
-        {selected && values.notice_url && values.notice_url !== selected.url ? <p className="risk-note" role="alert">当前地址与所选来源的公告地址不一致，提交会被拒绝。请改回 {selected.url}</p> : null}
+        <p className="field-help">请使用已批准范围内的具体公告地址。官方聚合来源只允许登记已批准的那一页；附件只接受所选来源已批准域名的 HTTPS 地址。</p>
+        {selected && values.notice_url && values.notice_url !== selected.url ? <p className="risk-note" role="alert">当前地址与所选样本不同，请核对授权范围；官方聚合来源须使用已批准地址：{selected.url}</p> : null}
         <label>调查说明<textarea name="brief" rows={5} maxLength={12000} {...field("brief")} required placeholder="说明需要调查的机会、全部子项和需要核对的条件。" /></label>
         <div className="human-test-form-grid">
           <label>预期官方附件地址（可选，每行一个）<textarea name="expected_artifact_urls" rows={4} {...field("expected_artifact_urls")} /></label>

@@ -68,6 +68,12 @@ describe("investigationNextSteps", () => {
     expect(stepFor(ready, "scope-preflight").reason).toBeNull();
   });
 
+  it("directs a prepared but unreviewed delivery to internal review before binding", () => {
+    const unreviewed: InvestigationTask = { ...base, document_preparation: preparedDocuments };
+    expect(stepFor(unreviewed, "bindings")).toMatchObject({ status: "WAITING", anchor: "#investigation-review-title" });
+    expect(stepFor(unreviewed, "bindings").reason).toMatch(/内部材料审核/);
+  });
+
   it("does not label a failed investigation as completed", () => {
     const failed: InvestigationTask = { ...base, status: "FAILED_VALIDATION" };
     expect(stepFor(failed, "dispatch").status).toBe("BLOCKED");

@@ -90,6 +90,7 @@ export interface InvestigationTask {
   facts: InvestigationFact[];
   materials: {
     artifact_id: string;
+    remote_path?: string;
     url: string;
     sha256: string;
     media_type: string;

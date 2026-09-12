@@ -22,7 +22,7 @@ vi.mock("../lib/local-human-test", () => ({
 describe("investigation pages", () => {
   it("does not invent new verification dimensions from a historical boolean", async () => {
     render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
-    expect(screen.getByText(/旧版回执：机械核验通过/)).toBeVisible();
+    expect(screen.getByText(/旧检查曾通过/)).toBeVisible();
     expect(screen.queryByText(/内容：找到原文/)).not.toBeInTheDocument();
     expect(screen.getByRole("region", { name: "候选字段与独立审核" })).toBeVisible();
   });
@@ -35,9 +35,9 @@ describe("investigation pages", () => {
     vi.mocked(getInvestigation).mockResolvedValue({ ...task, evidence_check: check });
     render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
     expect(screen.getByText("内容：找到原文 · 定位：定位方式未支持")).toBeVisible();
-    expect(screen.getByText("持久证据：尚未关联 · 待核验")).toBeVisible();
+    expect(screen.getByText("原文记录：尚未关联 · 待核验")).toBeVisible();
     expect(screen.getByText(/通过 0 \/ 失败 0 \/ 待核验 1/)).toBeVisible();
-    expect(screen.queryByText(/旧版回执：机械核验通过/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/旧检查曾通过/)).not.toBeInTheDocument();
   });
   beforeEach(() => {
     vi.mocked(getInvestigations).mockResolvedValue({ tasks: [] });
@@ -70,7 +70,7 @@ describe("investigation pages", () => {
   it("offers explicit local evidence preparation with an honest boundary", async () => {
     render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
     expect(screen.getByRole("button", { name: "准备文档证据" })).toBeVisible();
-    expect(screen.getByText(/只解析已回收的原件/)).toBeVisible();
+    expect(screen.getByText(/把已保存的附件整理成可核对的文字和表格/)).toBeVisible();
   });
   it("keeps failed and unsupported documents visible in the denominator", async () => {
     vi.mocked(getInvestigation).mockResolvedValue({ ...task, document_preparation: {
@@ -114,7 +114,7 @@ describe("investigation pages", () => {
     expect(screen.getAllByRole("button", { name: "撤销排除" })).toHaveLength(1);
     // Only the still-unsupported scan.pdf can be excluded: neither the failed
     // material nor the already excluded one offers the action again.
-    expect(screen.getAllByRole("button", { name: "排除此材料（无机器证据块）" })).toHaveLength(1);
+    expect(screen.getAllByRole("button", { name: "仅保留原件，暂不解析" })).toHaveLength(1);
     expect(screen.queryByText("已排除材料占比超过三分之一，请确认范围是否仍然合理。")).not.toBeInTheDocument();
   });
   it("warns when excluded materials exceed one third of the delivery", async () => {
@@ -132,7 +132,7 @@ describe("investigation pages", () => {
     expect(screen.getByText("已准备 2/3 份，其中 2 份为无文本证据块的排除材料")).toBeVisible();
     expect(screen.getByText("已排除材料占比超过三分之一，请确认范围是否仍然合理。")).toBeVisible();
     expect(screen.getAllByRole("button", { name: "撤销排除" })).toHaveLength(2);
-    expect(screen.queryByRole("button", { name: "排除此材料（无机器证据块）" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "仅保留原件，暂不解析" })).not.toBeInTheDocument();
   });
   it("keeps excluded materials visible without offering exclusion controls outside reviewable states", async () => {
     vi.mocked(getInvestigation).mockResolvedValue({ ...task, status: "REJECTED", document_preparation: {
@@ -146,7 +146,7 @@ describe("investigation pages", () => {
     render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
     expect(screen.getByText("存在已排除材料：其字段不得作为块级依据，仅保留原件整文件引用。")).toBeVisible();
     expect(screen.getByText("无文本证据块")).toBeVisible();
-    expect(screen.queryByRole("button", { name: "排除此材料（无机器证据块）" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "仅保留原件，暂不解析" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "撤销排除" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "准备文档证据" })).not.toBeInTheDocument();
   });
@@ -186,7 +186,7 @@ describe("investigation pages", () => {
     expect(screen.getByText("调查备注（待人工核对）")).toBeVisible();
     expect(screen.getByText(note)).toBeVisible();
     expect(screen.getByText(note).querySelector("script")).toBeNull();
-    expect(screen.getByText("候选认为有依据")).toBeVisible();
+    expect(screen.getByText("系统找到依据，待你确认")).toBeVisible();
     expect(screen.getByText("学历要求：硕士及以上")).toBeVisible();
   });
   it.each([null, undefined, ""])("does not invent a note when absent (%s)", async (note) => {

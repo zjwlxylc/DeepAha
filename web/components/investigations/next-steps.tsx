@@ -28,19 +28,23 @@ export default function NextSteps({ task }: { task: InvestigationTask }) {
   return (
     <section className="human-test-panel" aria-labelledby="investigation-next-steps-title">
       <h2 id="investigation-next-steps-title">下一步该做什么</h2>
-      <p>按当前实际状态列出可执行步骤；等待、需要处理或已完成的步骤会说明原因。全程无需手动填写内部标识。</p>
       <p data-testid="next-step-summary" role="status">{actionable
         ? `当前下一步：${actionable.label}。`
-        : "当前没有可执行的下一步；请先按下列原因处理或等待处理进程。"}</p>
+        : task.status === "PENDING_REVIEW" ? "材料等待人工核对，请查看原文后记录决定。" : "请查看任务状态；已完成的步骤不需要重复操作。"}</p>
+      {actionable ? <a className="button button-primary" href={actionable.href ?? actionable.anchor}>继续：{actionable.label}</a>
+        : task.status === "PENDING_REVIEW" ? <a className="button button-primary" href="#investigation-review-title">前往内部材料审核</a> : null}
+      <details>
+      <summary>查看完整流程与各步进度</summary>
       <ol className="human-test-run-list">
         {steps.map((current, index) => <li key={current.key} data-testid={`next-step-${current.key}`} data-status={current.status}>
           <div><span className="status-badge">{labels[current.status]}</span> <strong>{index + 1}. {current.label}</strong></div>
           {current.reason ? <p className="field-help">{current.reason}</p> : <p className="field-help">可点击下方入口继续，无需填写内部标识。</p>}
-          {current.status !== "WAITING"
-            ? <a href={current.href ?? current.anchor}>{current.href ? `查看${current.label}` : anchorText[current.key] ?? "前往对应区块"}</a>
+          {current.status !== "WAITING" || current.anchor === "#investigation-review-title"
+            ? <a href={current.href ?? current.anchor}>{current.anchor === "#investigation-review-title" ? "前往内部材料审核" : current.href ? `查看${current.label}` : anchorText[current.key] ?? "前往对应区块"}</a>
             : null}
         </li>)}
       </ol>
+      </details>
       <details>
         <summary>如何进入范围预检</summary>
         <p>请先在规则审核区整理条件快照，再点击“查看条件快照”，进入跨层条件与范围预检。尚未完成的审核和未知条件会继续保留。</p>

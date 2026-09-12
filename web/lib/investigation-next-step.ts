@@ -108,6 +108,9 @@ export function investigationNextSteps(task: InvestigationTask): InvestigationNe
   if (!documentPrepared) {
     steps.push(step("bindings", "绑定身份/岗位", "WAITING",
       "需先完成文档准备，才能登记身份/岗位。", ANCHORS.bindings));
+  } else if (task.status !== "APPROVED") {
+    steps.push(step("bindings", "绑定身份/岗位", "WAITING",
+      "需先完成内部材料审核，批准材料后才能登记身份/岗位。", "#investigation-review-title"));
   } else if (task.entity_binding) {
     steps.push(step("bindings", "绑定身份/岗位", "DONE",
       "已完成机会与岗位归属确认；字段内容仍是候选。", ANCHORS.bindings));

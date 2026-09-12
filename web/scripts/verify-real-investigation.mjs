@@ -14,6 +14,7 @@ export async function verifyRealInvestigation(page, readyPath) {
     writeFileSync(receiptPath, JSON.stringify(receipt, null, 2));
   };
   try {
+    await page.emulateMedia({ reducedMotion: "reduce" });
     if (!receipt.task_path) {
       if (receipt.phase) throw new Error("REGISTRATION_OUTCOME_REQUIRES_INSPECTION");
       await page.getByRole("button", { name: "检查 WMA 发布连接", exact: true }).click();
@@ -42,21 +43,33 @@ export async function verifyRealInvestigation(page, readyPath) {
       const status = await page.locator("main[data-investigation-status]").getAttribute("data-investigation-status");
       if (status !== receipt.task_status) record({ task_status: status });
       if (["PENDING_REVIEW", "APPROVED"].includes(status)) {
+        record({ verification_step: "DOCUMENT_ENTRY" });
         await expect(page.getByRole("heading", { name: "文档证据准备", exact: true })).toBeVisible();
-        await page.screenshot({ path: join(directory, "real-investigation-delivered.png"), fullPage: true });
+        record({ verification_step: "DELIVERY_SCREENSHOT" });
+        await page.bringToFront();
+        await page.getByRole("heading", { name: "文档证据准备", exact: true }).scrollIntoViewIfNeeded();
+        await page.screenshot({ path: join(directory, "real-investigation-delivered.png") });
+        record({ verification_step: "DOCUMENT_PREPARATION" });
+        await page.getByRole("button", { name: "准备文档证据", exact: true }).click();
+        const documents = page.getByRole("region", { name: "文档证据准备", exact: true });
+        await expect(documents.getByText(/份材料已完成文档证据准备|已准备 \d+\/\d+ 份/)).toBeVisible({ timeout: 90000 });
+        const needsAttention = await documents.getByText("仍有未准备、需复核或不支持的材料，请逐项处理。", { exact: true }).isVisible();
+        await documents.getByRole("heading", { name: "文档证据准备", exact: true }).scrollIntoViewIfNeeded();
+        await page.screenshot({ path: join(directory, "real-investigation-documents.png") });
+        record({ document_preparation: needsAttention ? "NEEDS_ATTENTION" : "PREPARED", verification_step: "INTERNAL_REVIEW_BOUNDARY" });
         record({ phase: "DELIVERED", independent_review: "NOT_PERFORMED_BY_VERIFIER" });
         return;
       }
       if (["FAILED_PREPARATION", "FAILED_VALIDATION", "EXECUTION_UNCERTAIN", "COLLECTION_RETRYABLE", "EXPIRED", "REJECTED"].includes(status)) {
-        await page.screenshot({ path: join(directory, "real-investigation-needs-attention.png"), fullPage: true });
+        await page.screenshot({ path: join(directory, "real-investigation-needs-attention.png") });
         record({ phase: "NEEDS_ATTENTION" });
         return;
       }
       await new Promise(resolve => setTimeout(resolve, 15000));
     }
     record({ phase: "WAIT_EXPIRED" });
-  } catch {
-    record({ phase: "UI_ACCEPTANCE_FAILED", failed_at_phase: receipt.phase ?? "READINESS" });
+  } catch (error) {
+    record({ phase: "UI_ACCEPTANCE_FAILED", failed_at_phase: receipt.phase ?? "READINESS", error_name: error?.name ?? "Error" });
     // Leave the actual browser available to inspect the existing task, never retry.
   }
 }

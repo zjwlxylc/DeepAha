@@ -11,10 +11,10 @@ const initialState: InvestigationActionState = { error: null, message: null, tas
 const modes = {
   exclude: {
     action: excludeInvestigationDocumentAction,
-    label: "排除理由",
-    hint: "排除不是已核对：此材料会改用无文本证据块的解析器，其字段不得作为块级依据，仅保留原件整文件引用。理由需填写 8–2000 个字符。",
-    placeholder: "写明为何不解析此材料，例如格式没有可用解析器。",
-    submit: "排除此材料（无机器证据块）",
+    label: "为什么暂不解析",
+    hint: "文件会完整保留并可下载，但其中的文字不能作为系统确认条件的依据。这不表示附件已经审核通过，也不会消除其中可能存在的要求。请填写 8–2000 字的实际原因。",
+    placeholder: "例如：系统暂不支持该格式，需要人工阅读原件。",
+    submit: "仅保留原件，暂不解析",
     pending: "正在记录排除…",
   },
   revoke: {
