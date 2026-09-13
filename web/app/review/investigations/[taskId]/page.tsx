@@ -52,6 +52,7 @@ export default async function InvestigationPage({ params, searchParams }: { para
       <aside className="fixture-notice" aria-label="内部审核边界">内部审核不等于正式机会、资格规则或公开目录发布。字段依据仍需本人核对，未披露或冲突的信息保持未知。</aside>
       <p>{safeOfficialUrl(task.notice_url) ? <a href={safeOfficialUrl(task.notice_url)} target="_blank" rel="noopener noreferrer">查看原始官方公告</a> : "官方公告地址不可用"} · 更新于 {formatDateTime(task.updated_at)}</p>
       {task.status === "QUEUED" && !task.dispatch_pending ? <p className="risk-note">任务已登记，尚未发起。请使用下方“发起调查”入口明确发起；本页不会自动开始调查。</p> : null}
+      {task.status === "APPROVED" ? <section className="human-test-panel"><h2>下一步：确认单位和岗位</h2><p>材料决定已保存，请按实际对象继续身份、字段和规则核对。</p><Link className="button button-primary" href={`/review/investigations/${task.task_id}/workbench?queue=${encodeURIComponent(safeQueue.toString())}`}>进入对象工作台</Link></section> : null}
       <NextSteps task={task} />
       {task.delivery_hash ? <nav className="review-workbench-nav" aria-label="审核工作台导航">
         <a href="#investigation-facts-title">对照原文</a><a href="#investigation-documents-title">整理附件</a>
@@ -71,15 +72,15 @@ export default async function InvestigationPage({ params, searchParams }: { para
       {task.issues.length || task.error_code ? <section className="human-test-panel" aria-labelledby="investigation-issues-title"><h2 id="investigation-issues-title">待处理问题</h2>{task.error_code ? <><p>{investigationFailureMessage(task.error_code)}</p><p>系统不会自动重新调查。已有材料需完成回收与核验后，才能提交审核。</p></> : <p>这些问题需处理并重新核对，不能据此认定调查完整。</p>}<ul>{task.issues.map((issue, index) => <li key={index}>{(() => { const material = task.materials.find(item => item.artifact_id === issue.split(":")[1]); return <>{material ? <strong>{materialName(material)}： </strong> : null}{investigationIssueMessage(issue)}<details><summary>查看检查记录</summary><code>{issue}</code></details></>; })()}</li>)}</ul>{task.error_code ? <details><summary>故障标识（供排查）</summary><code>{task.error_code}</code></details> : null}</section> : null}
       <InvestigationEvidence task={task} />
       <InvestigationDocuments task={task} />
-      <InvestigationBindings task={task} targets={targets} />
-      <GroupSourceLinks task={task} />
-      <InvestigationFactReview task={task} requestKey={randomUUID()} key={`${task.entity_binding?.binding_id}:${task.evidence_check?.check_id}`} />
-      <InvestigationRuleReview task={task} requestKey={randomUUID()} key={`rules:${task.entity_binding?.binding_id}:${task.evidence_check?.check_id}`} />
       <section className="human-test-panel review-decision-panel" aria-labelledby="investigation-review-title">
         <h2 id="investigation-review-title">内部材料审核</h2>
         <p>这一环只决定这批材料能否继续用于后续核对。确认材料可用后，还要逐项审核条件，不会立即发布给用户。</p>
         {task.review ? <dl className="compact-facts"><div><dt>审核决定</dt><dd>{task.review.decision === "APPROVE" ? "批准内部材料" : "退回材料"}</dd></div><div><dt>核对理由</dt><dd>{task.review.reason}</dd></div><div><dt>记录时间</dt><dd>{formatDateTime(task.review.created_at)}</dd></div><div><dt>审核员标识</dt><dd>{task.review.reviewer_id}</dd></div></dl> : task.status === "PENDING_REVIEW" && task.delivery_hash ? <InvestigationReviewForm taskId={task.task_id} deliveryHash={task.delivery_hash} requestKey={randomUUID()} key={task.delivery_hash} /> : <p>当前材料尚不可审核。请先完成回收与核验；执行失败不会被当作已完成。</p>}
       </section>
+      <InvestigationBindings task={task} targets={targets} />
+      <GroupSourceLinks task={task} />
+      <InvestigationFactReview task={task} requestKey={randomUUID()} key={`${task.entity_binding?.binding_id}:${task.evidence_check?.check_id}`} />
+      <InvestigationRuleReview task={task} requestKey={randomUUID()} key={`rules:${task.entity_binding?.binding_id}:${task.evidence_check?.check_id}`} />
       <details className="human-test-panel"><summary>任务版本与原始候选（补充核对）</summary><dl className="compact-facts"><div><dt>任务标识</dt><dd>{task.task_id}</dd></div><div><dt>调查约定版本</dt><dd className="investigation-hash">{task.contract_hash}</dd></div><div><dt>材料版本</dt><dd className="investigation-hash">{task.delivery_hash ?? "尚未交付"}</dd></div><div><dt>登记时间</dt><dd>{formatDateTime(task.created_at)}</dd></div></dl><pre className="investigation-json">{JSON.stringify(task.opportunities, null, 2)}</pre></details>
     </main>
   );

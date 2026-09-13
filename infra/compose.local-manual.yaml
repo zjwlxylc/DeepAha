@@ -17,3 +17,5 @@ services:
 
 volumes:
   postgres_data:
+    name: ${DEEPAHA_LOCAL_MANUAL_DATA_VOLUME:-${COMPOSE_PROJECT_NAME}_postgres_data}
+    external: ${DEEPAHA_LOCAL_MANUAL_EXTERNAL_VOLUME:-false}

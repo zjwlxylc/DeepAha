@@ -86,6 +86,22 @@ def test_queue_rejects_unrelated_role(tmp_path: Path) -> None:
     assert not store.mock_calls
 
 
+def test_workbench_keeps_object_selection_explicit(tmp_path: Path) -> None:
+    client, store = make_client(tmp_path)
+    task_id = uuid7()
+    store.get_workbench.return_value = {"task_id": str(task_id), "facts": []}
+    with client:
+        response = client.get(f"/api/v1/local-human-test/investigations/{task_id}/workbench")
+        assert response.status_code == 200
+        assert response.headers["cache-control"] == "private, no-store"
+        store.get_workbench.assert_called_once_with(task_id, entity_id=None, offset=0)
+        response = client.get(
+            f"/api/v1/local-human-test/investigations/{task_id}/workbench?offset=-1"
+        )
+        assert response.status_code == 400
+    store.get.assert_not_called()
+
+
 def test_registration_requires_idempotency_and_never_dispatches(tmp_path: Path) -> None:
     client, store = make_client(tmp_path)
     payload: dict[str, Any] = {

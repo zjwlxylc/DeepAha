@@ -603,7 +603,14 @@ class InvestigationStore:
             task.result_objects = keys
 
     def _view(
-        self, session: Session, task: InvestigationTask, *, include_documents: bool = True
+        self,
+        session: Session,
+        task: InvestigationTask,
+        *,
+        include_documents: bool = True,
+        workbench: bool = False,
+        entity_id: str | None = None,
+        offset: int = 0,
     ) -> dict[str, Any]:
         from deepaha.investigations.bindings import describe_bindings
         from deepaha.investigations.documents import describe_documents
@@ -633,17 +640,29 @@ class InvestigationStore:
         from deepaha.investigations.rules import describe_rules
 
         fact_review = (
-            describe_facts(session, task.task_id, UUID(bindings[0]["binding_id"]))
+            describe_facts(
+                session,
+                task.task_id,
+                UUID(bindings[0]["binding_id"]),
+                entity_id=entity_id,
+                offset=offset if workbench else None,
+            )
             if bindings
             else {"current": None, "history": []}
         )
         checks = describe_checks(session, task) if include_documents else []
         rule_review = (
-            describe_rules(session, task.task_id, UUID(bindings[0]["binding_id"]))
+            describe_rules(
+                session,
+                task.task_id,
+                UUID(bindings[0]["binding_id"]),
+                scoped=workbench,
+                entity_id=entity_id,
+            )
             if bindings
             else {"current": [], "history": []}
         )
-        return dict(task.request) | {
+        view = dict(task.request) | {
             "task_id": str(task.task_id),
             "status": task.status,
             "error_code": task.error_code,
@@ -685,10 +704,33 @@ class InvestigationStore:
             ),
             "source_snapshot": task.source_snapshot,
         }
+        if workbench:
+            from deepaha.investigations.workbench import select_workbench
+
+            return select_workbench(view, entity_id, offset)
+        return view
 
     def get(self, task_id: UUID) -> dict[str, Any]:
         with self.factory() as session:
             return self._view(session, self._get(session, task_id))
+
+    def get_workbench(
+        self,
+        task_id: UUID,
+        *,
+        entity_id: str | None = None,
+        offset: int = 0,
+    ) -> dict[str, Any]:
+        if offset < 0:
+            raise InvestigationError("INVALID_WORKBENCH_OFFSET")
+        with self.factory() as session:
+            return self._view(
+                session,
+                self._get(session, task_id),
+                workbench=True,
+                entity_id=entity_id,
+                offset=offset,
+            )
 
     def prepare_documents(
         self, task_id: UUID, delivery_hash: str, principal: ReviewerPrincipal

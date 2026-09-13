@@ -452,3 +452,44 @@ test("queue filters persist through detail and keyboard navigation", async ({ pa
   await page.getByRole("button", { name: "筛选任务" }).click();
   await expect(page.getByText("没有符合筛选的任务")).toBeVisible();
 });
+
+
+test("object workbench chooses two synthetic positions without mixing fields", async ({ page, request }) => {
+  expect((await request.get("http://127.0.0.1:3097/seed-workbench")).ok()).toBe(true);
+  await page.goto(`/review/investigations/${taskId}/workbench?step=facts`);
+  await expect(page.getByText(/系统不会自动替你选择/)).toBeVisible();
+  await page.getByRole("link", { name: "教学岗位（P001）", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "候选字段与独立审核" })).toBeVisible();
+  await expect(page.getByText(/当前对象：教学岗位/).first()).toBeVisible();
+  await page.getByRole("link", { name: "合成第二岗位（P002）", exact: true }).click();
+  await expect(page.getByText(/尚无此对象的候选清单/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "记录字段决定" })).toHaveCount(0);
+  await page.getByRole("link", { name: "材料", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "已保存的材料决定" })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+
+test("workbench preserves field drafts and resolves a lost receipt without a second POST", async ({ page, request }, testInfo) => {
+  expect((await request.get("http://127.0.0.1:3097/seed-workbench")).ok()).toBe(true);
+  await page.goto(`/review/investigations/${taskId}/workbench?step=facts&entity_id=position-1`);
+  await page.getByRole("combobox", { name: "字段决定", exact: true }).selectOption("NEEDS_ADJUDICATION");
+  await page.getByLabel("原文是否支持该规范值").selectOption("UNKNOWN");
+  await page.getByLabel("更正、适用范围与例外核查").selectOption("UNKNOWN");
+  await page.getByLabel("本次审核依据").fill("合成草稿：保留未知，非真人签署");
+  const key = await page.locator('input[name="request_key"]').first().inputValue();
+  await page.getByRole("link", { name: "合成第二岗位（P002）", exact: true }).click();
+  await page.getByRole("link", { name: "教学岗位（P001）", exact: true }).click();
+  await expect(page.getByLabel("本次审核依据")).toHaveValue("合成草稿：保留未知，非真人签署");
+  await expect(page.getByRole("combobox", { name: "字段决定", exact: true })).toHaveValue("NEEDS_ADJUDICATION");
+  await expect(page.locator('input[name="request_key"]').first()).toHaveValue(key);
+  await request.get("http://127.0.0.1:3097/drop-next-receipt");
+  await page.getByRole("button", { name: "记录字段审核", exact: true }).click();
+  await expect(page.getByText("审核：需要进一步裁决。依据：合成草稿：保留未知，非真人签署")).toBeVisible();
+  expect(await (await request.get("http://127.0.0.1:3097/receipts")).json()).toEqual({ mutations: 1, posts: 1 });
+  await page.reload();
+  await expect(page.getByText("审核：需要进一步裁决。依据：合成草稿：保留未知，非真人签署")).toBeVisible();
+  if (testInfo.project.name === "desktop") await page.evaluate(() => { document.body.style.zoom = "2"; });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath("workbench.png"), fullPage: true });
+});
