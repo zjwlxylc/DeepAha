@@ -155,7 +155,7 @@ export interface InvestigationRuleDecision {
 }
 
 export interface InvestigationRulePreparation {
-  slice?: { offset: number; total: number };
+  slice?: { offset: number; total: number; unresolved_total?: number };
   rule_preparation_id: string; fact_preparation_id: string; fact_set_id: string; entity_id: string;
   binding_id: string; delivery_hash: string; check_id: string; compiler_version: string; result_hash: string;
   fact_preparation_hash: string; fact_set_version: number; source_bundle_revision_id: string; scope_status: string;

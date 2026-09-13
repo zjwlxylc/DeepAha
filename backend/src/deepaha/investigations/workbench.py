@@ -43,7 +43,16 @@ def select_workbench(view: dict[str, Any], entity_id: str | None, offset: int) -
         prep for prep in view["rule_review"]["current"] if prep["entity_id"] == entity_id
     ]
     for prep in view["rule_review"]["current"]:
-        prep["slice"] = {"offset": offset, "total": len(prep["rows"])}
+        unresolved = sum(
+            prep["decisions"].get(row["rule_candidate_id"], {}).get("decision")
+            not in ("APPROVE", "REJECT")
+            for row in prep["rows"]
+        )
+        prep["slice"] = {
+            "offset": offset,
+            "total": len(prep["rows"]),
+            "unresolved_total": unresolved,
+        }
         prep["rows"] = prep["rows"][offset : offset + 1]
         candidates = {row["candidate_id"] for row in prep["rows"]}
         prep["source_rows"] = [

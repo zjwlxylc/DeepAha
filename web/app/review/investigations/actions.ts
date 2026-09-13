@@ -11,6 +11,7 @@ import { isExplicitRuleTime, ruleAuthorities, ruleRelations, ruleApplicability, 
 
 export interface InvestigationActionState {
   error: string | null;
+  errorCode?: string;
   message: string | null;
   taskId: string | null;
 }
@@ -52,9 +53,9 @@ function failure(error: unknown, registration: boolean, loginMessage = "当前�
       FACT_EVIDENCE_CHECK_REFRESH_REQUIRED: "核验版本已变化，请重新准备文档证据，再整理字段候选。旧审核记录会保留。",
       FACT_BINDING_DOCUMENTS_CHANGED: "当前解析版本与已确认来源不一致，请先重新确认材料归属。",
       FACT_ALL_CANDIDATES_REQUIRE_DECISION: "此目标仍有候选字段尚未作出决定，或存在待裁决项。请先逐项核对。",
-      REGISTRATION_EXISTING_IDENTITY_OR_REVIEW_REQUIRED: "检测到已有身份或可能重复的机会。请核对已有机会并使用关联入口；身份不明确时需先核对。",
+      REGISTRATION_EXISTING_IDENTITY_OR_REVIEW_REQUIRED: "这份公告可能已经登记过，本次没有新建记录。请在下方查看已有公告，确认是否为同一份，再继续核对岗位。",
       REGISTRATION_POSITION_INVALID: "岗位重复、已关联或属于单位分组，请核对勾选项。",
-      REGISTRATION_POSITION_KEY_CONFLICT: "内部岗位识别键已被使用，请核对已有岗位并关联，或修正识别键。",
+      REGISTRATION_POSITION_KEY_CONFLICT: "所填岗位编号已有记录，本次没有新建岗位。请查看已有岗位，确认是否为同一个；不要为继续操作随意改编号。",
       TASK_NOT_DISPATCHABLE: "本任务当前不在可发起状态（可能已被处理或状态已变化）。请刷新详情后核对。",
       TASK_ALREADY_RUNNING: "已有一个执行中的租约，暂时无需重复发起。请稍后刷新详情查看进度。",
       // Document exclusion: each code names the one thing the operator can still
@@ -67,7 +68,7 @@ function failure(error: unknown, registration: boolean, loginMessage = "当前�
       DOCUMENT_EXCLUSION_DELIVERY_CONFLICT: "材料版本已变化，请刷新详情后重新排除或撤销。",
       DOCUMENT_EXCLUSION_MATERIAL_NOT_FOUND: "找不到该材料，它可能已不在本次回收结果中；请刷新详情后核对材料清单。",
     };
-    if (error instanceof InvestigationApiError && error.code && identityMessages[error.code]) return invalid(identityMessages[error.code]);
+    if (error instanceof InvestigationApiError && error.code && identityMessages[error.code]) return { ...invalid(identityMessages[error.code]), errorCode: error.code };
     if (registration) {
       const messages: Record<string, string> = {
         APPROVED_SOURCE_REQUIRED: "所选来源当前未获批准。请刷新来源列表后重新选择。",
@@ -95,6 +96,7 @@ async function submit(path: string, body: object, requestKey: string, message: s
     revalidatePath("/review/investigations");
     revalidatePath(`/review/investigations/${taskId}`);
     revalidatePath(`/review/investigations/${taskId}/workbench`);
+    revalidatePath(`/review/investigations/${taskId}/check`);
     return { error: null, message, taskId };
   };
   if (receipt) {

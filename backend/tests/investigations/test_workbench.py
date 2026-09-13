@@ -31,3 +31,32 @@ def test_large_synthetic_delivery_is_not_transferred_to_workbench() -> None:
     assert "facts" not in result["opportunities"]["units"][0]
     assert "facts" not in result["opportunities"]["units"][0]["positions"][0]
     assert "report" not in result
+
+
+def test_rule_pending_count_uses_whole_object_not_visible_page() -> None:
+    view = {
+        "binding_entities": [{"id": "position"}],
+        "opportunities": {},
+        "facts": [],
+        "evidence_check_history": [],
+        "rule_review": {
+            "current": [
+                {
+                    "entity_id": "position",
+                    "rows": [
+                        {"candidate_id": "a", "rule_candidate_id": "r1"},
+                        {"candidate_id": "b", "rule_candidate_id": None},
+                        {"candidate_id": "c", "rule_candidate_id": "r3"},
+                    ],
+                    "source_rows": [],
+                    "decisions": {
+                        "r1": {"decision": "APPROVE"},
+                        "r3": {"decision": "NEEDS_ADJUDICATION"},
+                    },
+                }
+            ],
+        },
+    }
+    prep = select_workbench(view, "position", 0)["rule_review"]["current"][0]
+    assert len(prep["rows"]) == 1
+    assert prep["slice"] == {"offset": 0, "total": 3, "unresolved_total": 2}

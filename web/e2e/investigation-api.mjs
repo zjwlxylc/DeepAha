@@ -10,6 +10,8 @@ import { handleGroup, resetGroups, seedGroup } from "./group-source-api.mjs";
 import { handleGroupFacts, resetGroupFacts, seedGroupFacts, seedGroupRules } from "./group-fact-api.mjs";
 
 let current = structuredClone(task);
+let guided = false;
+let identityConflict = false;
 let dropNextReceipt = false;
 const receipts = new Map();
 let posts = 0;
@@ -37,7 +39,8 @@ const server = createServer(async (request, response) => {
   if (handleGroupInheritance(request, response, url)) return;
   if (handleCrossLevel(request, response, url)) return;
   if (handleGroupApplicability(request, response, url)) return;
-  if (path === "/reset") { resetGroups(); resetGroupFacts(); }
+  if (path === "/reset") { resetGroups(); resetGroupFacts(); guided = false; identityConflict = false; }
+  if (path === "/identity-conflict") { identityConflict = true; response.end("{}"); return; }
   if (path === "/seed-group-rules") { const data = seedGroupRules(); current = data.source.task; response.end(JSON.stringify({ task_id: current.task_id, preparation_id: data.record.preparation_id })); return; }
   if (path === "/seed-group-facts") { const data = seedGroupFacts(url.searchParams.has("legacy")); current = data.source.task; response.end(JSON.stringify({ task_id: current.task_id, group_id: data.source.preview.registration.group_binding_id })); return; }
   if (await handleGroupFacts(request, response, url)) return;
@@ -73,6 +76,14 @@ const server = createServer(async (request, response) => {
     current.opportunities.units[0].positions.push({ id: "position-2", name: "合成第二岗位", code: "P002" });
     response.end("{}"); return;
   }
+  if (path === "/seed-guided") {
+    guided = true;
+    current = { ...structuredClone(task), status: "APPROVED", document_preparation: structuredClone(preparedDocuments), evidence_check: structuredClone(evidenceCheck), evidence_check_history: [structuredClone(evidenceCheck)] };
+    current.binding_entities.push({ id: "position-2", name: "合成第二岗位", kind: "position", code: "P002" });
+    current.opportunities.units[0].positions.push({ id: "position-2", name: "合成第二岗位", code: "P002" });
+    current.facts.push({ ...structuredClone(current.facts[0]), entity_id: "position-2" });
+    response.end("{}"); return;
+  }
   if (request.headers.authorization !== "Bearer synthetic-browser-reviewer") {
     response.writeHead(401); response.end("{}"); return;
   }
@@ -93,15 +104,19 @@ const server = createServer(async (request, response) => {
     const prep = view.fact_review?.current;
     if (prep) {
       const candidates = prep.rows.filter(row => row.entity_id === entity);
-      prep.slice = { entity_id: entity, offset, total: candidates.length, candidate_total: candidates.filter(row => row.candidate_id).length, can_promote: false };
+      const decisions = candidates.map(row => prep.decisions[row.candidate_id]?.decision);
+      const attention = candidates.map((row, i) => !["APPROVE", "REJECT"].includes(decisions[i]) ? i : null).filter(i => i !== null);
+      prep.slice = { entity_id: entity, offset, total: candidates.length, candidate_total: candidates.filter(row => row.candidate_id).length,
+        attention_total: attention.length, next_attention_offset: attention[0] ?? null, can_promote: guided && decisions.length > 0 && decisions.every(d => d && d !== "NEEDS_ADJUDICATION") && decisions.some(d => ["APPROVE", "UNKNOWN"].includes(d)) };
       prep.rows = candidates.slice(offset, offset + 1);
       prep.targets = prep.targets.filter(target => target.entity_id === entity);
     }
-    view.rule_review = { current: [], history: [] };
+    view.rule_review = { current: guided ? (view.rule_review?.current ?? []).filter(p => p.entity_id === entity).map(p => ({ ...p,
+      slice: { offset, total: p.rows.length, unresolved_total: p.rows.filter(row => !["APPROVE", "REJECT"].includes(p.decisions[row.rule_candidate_id]?.decision)).length }, rows: p.rows.slice(offset, offset + 1) })) : [], history: [] };
     response.end(JSON.stringify(view)); return;
   }
   if (path.endsWith("/sources")) { response.end(JSON.stringify({ sources: [source] })); return; }
-  if (path.endsWith("/binding-targets")) { response.end(JSON.stringify({ targets: [bindingTarget] })); return; }
+  if (path.endsWith("/binding-targets")) { response.end(JSON.stringify({ targets: [{ ...bindingTarget, ...(identityConflict ? { title: current.opportunities.opportunity_name } : {}) }] })); return; }
   if (request.method === "GET" && path.endsWith("/announcement-snapshot-input")) {
     if (announcementFailure(response)) return;
     if (!announcement || path !== `/api/v1/local-human-test/investigations/${current.task_id}/unit-plans/${unitSnapshot.plan_id}/announcement-snapshot-input`) { response.writeHead(404); response.end("{}"); return; }
@@ -213,6 +228,7 @@ const server = createServer(async (request, response) => {
       } };
     }
     else if (path.endsWith("/identity") || path.endsWith("/positions")) {
+      if (identityConflict && path.endsWith("/identity")) { response.writeHead(409); response.end(JSON.stringify({ detail: { code: "REGISTRATION_EXISTING_IDENTITY_OR_REVIEW_REQUIRED" } })); return; }
       const prior = current.entity_binding;
       const positions = [...(prior?.positions ?? []), ...values.positions.map(p => ({
         entity_id: p.entity_id, opportunity_unit_id: bindingTarget.positions[0].unit_id,
@@ -230,6 +246,11 @@ const server = createServer(async (request, response) => {
     }
     else if (path.endsWith("/facts")) {
       current = { ...current, fact_review: { current: { ...structuredClone(factPreparation), binding_id: values.binding_id, check_id: values.check_id }, history: [] } };
+      if (guided) {
+        const prep = current.fact_review.current;
+        prep.rows.push({ ...structuredClone(prep.rows[0]), entity_id: "position-2", source_index: 1, candidate_id: "019d0000-0000-7000-8000-000000003932", original: current.facts[1] });
+        prep.targets.push({ ...structuredClone(prep.targets[0]), entity_id: "position-2", name: "合成第二岗位" });
+      }
     }
     else if (path.endsWith("/facts/decisions")) {
       current.fact_review.current.decisions[values.candidate_id] = {
@@ -244,10 +265,18 @@ const server = createServer(async (request, response) => {
       current.fact_review.current.active_fact_sets[values.entity_id] = { fact_set_id: "019d0000-0000-7000-8000-000000000933", version: 1, source_bundle_revision_id: rulePreparation.source_bundle_revision_id };
     }
     else if (path.endsWith("/rules")) {
-      current.rule_review = { current: [{ ...structuredClone(rulePreparation), binding_id: values.binding_id, check_id: values.check_id }], history: [] };
+      const prep = { ...structuredClone(rulePreparation), binding_id: values.binding_id, check_id: values.check_id };
+      if (guided) {
+        const source = current.fact_review.current.rows.find(row => row.entity_id === values.entity_id);
+        prep.entity_id = values.entity_id; prep.target = current.fact_review.current.targets.find(t => t.entity_id === values.entity_id);
+        prep.rule_preparation_id = values.entity_id === "position-2" ? "019d0000-0000-7000-8000-000000003940" : prep.rule_preparation_id;
+        prep.source_rows = [structuredClone(source)]; prep.rows[0].candidate_id = source.candidate_id;
+        if (values.entity_id === "position-2") prep.rows[0].rule_candidate_id = "019d0000-0000-7000-8000-000000003942";
+      }
+      current.rule_review = { current: [...(current.rule_review?.current ?? []).filter(p => p.entity_id !== prep.entity_id), prep], history: [] };
     }
     else if (path.endsWith("/rules/decisions")) {
-      const prep = current.rule_review.current[0];
+      const prep = current.rule_review.current.find(p => p.rule_preparation_id === values.rule_preparation_id);
       const decision = { decision_id: `019d0000-0000-7000-8000-${String(receipts.size + 970).padStart(12, "0")}`,
         rule_candidate_id: values.rule_candidate_id, decision: values.decision, evidence: values.evidence,
         reason: values.reason, reviewer_id: "synthetic-browser-reviewer", created_at: task.updated_at };
