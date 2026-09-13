@@ -1,11 +1,17 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import WorkbenchShell from "../components/investigations/workbench-shell";
-import { factPreparation, task } from "./investigations-fixture";
+import { bindingTarget, preparedDocuments, ruleReadyTask, factPreparation, task } from "./investigations-fixture";
 
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
 describe("object workbench", () => {
+  it("does not replace a whole binding from a single-object form", () => {
+    render(<WorkbenchShell task={{ ...ruleReadyTask(), document_preparation: preparedDocuments, workbench: { entity_id: "position-1", offset: 0, total: 1 } }} step="identity" queue="" targets={[bindingTarget]} />);
+    expect(screen.queryByRole("combobox", { name: "关联到已有机会" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "修订完整岗位归属" })).toHaveAttribute("href", `/review/investigations/${task.task_id}#investigation-binding-title`);
+    expect(screen.getByText("登记尚无身份的岗位")).toBeInTheDocument();
+  });
   it("requires an explicit object without defaulting to the first position", () => {
     render(<WorkbenchShell task={{ ...task, workbench: { entity_id: null, offset: 0, total: 0 }, facts: [] }} step="facts" queue="q=notice" targets={[]} />);
     expect(screen.getByText(/系统不会自动替你选择/)).toBeVisible();
