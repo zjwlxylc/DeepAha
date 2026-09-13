@@ -1,11 +1,11 @@
 from collections.abc import Iterator
 from hashlib import sha256
 from pathlib import PurePosixPath
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 from urllib.parse import urlsplit
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Response
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, Response
 from sqlalchemy import select
 
 from deepaha.api.local_human_test import (
@@ -370,6 +370,45 @@ def bind_task(
     try:
         return store.bind(task_id, command, principal, key)
     except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/{task_id}/review-receipts")
+def get_review_receipt(
+    task_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+    kind: Literal["FACT", "RULE"],
+    preparation_id: UUID,
+    request_key: Annotated[str, Query(pattern=r"^[0-9a-f]{64}$")],
+) -> dict[str, Any]:
+    from deepaha.investigations.review_receipts import read_review_receipt
+
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return read_review_receipt(store, task_id, kind, preparation_id, request_key, principal)
+    except (InvestigationError, HumanReviewError, ReviewerAuthenticationError) as error:
+        raise problem(error) from None
+
+
+@router.get("/{task_id}/workbench")
+def get_workbench(
+    task_id: UUID,
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+    entity_id: Annotated[str | None, Query(max_length=256)] = None,
+    offset: Annotated[int, Query(ge=0, le=100000)] = 0,
+    authorization: Annotated[str | None, Header()] = None,
+) -> dict[str, Any]:
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        view = store.get_workbench(task_id, entity_id=entity_id, offset=offset)
+        # Opaque session binding only, never an authentication credential.
+        view["draft_scope"] = sha256(authorization.encode()).hexdigest() if authorization else None
+        return view
+    except InvestigationError as error:
         raise problem(error) from None
 
 

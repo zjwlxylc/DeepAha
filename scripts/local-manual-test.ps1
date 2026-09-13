@@ -1,6 +1,7 @@
 ﻿param(
     [ValidateSet("Library", "Start", "Stop", "Status")]
     [string]$Action = "Library",
+    [string]$ExistingDataVolume = "",
     [switch]$VerifyEntry,
     [switch]$VerifyInvestigation
 )
@@ -417,8 +418,48 @@ function Resolve-LocalManualDocReaderImage {
     return $imageId
 }
 
+function Set-LocalManualDataVolume {
+    param([Parameter(Mandatory = $true)]$ProjectInfo, [string]$ExistingDataVolume = "")
+    $directory = Join-Path $ProjectInfo.ProjectRoot '.deepaha-local-manual'
+    $path = Join-Path $directory 'data-volume.json'
+    if (Test-Path -LiteralPath $path -PathType Leaf) {
+        $saved = Get-Content -LiteralPath $path -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($saved.project_root -ne $ProjectInfo.ProjectRoot -or $saved.schema_version -ne '1.0') {
+            throw '持久卷配置不属于当前工作树，已拒绝启动。'
+        }
+        if ($ExistingDataVolume -and $ExistingDataVolume -cne $saved.volume_name) {
+            throw '不能覆盖当前工作树的持久卷引用。请先核对已有数据。'
+        }
+        $ExistingDataVolume = [string]$saved.volume_name
+        if (-not $ExistingDataVolume) { throw '持久卷引用为空，已拒绝创建替代数据库。' }
+    }
+    $env:DEEPAHA_LOCAL_MANUAL_DATA_VOLUME = $ProjectInfo.ProjectName + '_postgres_data'
+    $env:DEEPAHA_LOCAL_MANUAL_EXTERNAL_VOLUME = 'false'
+    if (-not $ExistingDataVolume) { return }
+    if ($ExistingDataVolume -cnotmatch '^deepaha-local-manual-[0-9a-f]{12}_postgres_data$') {
+        throw '只允许接续已命名的 DeepAha 本地人工测试持久卷。'
+    }
+    $raw = & docker volume inspect $ExistingDataVolume
+    if ($LASTEXITCODE -ne 0) { throw '指定持久卷不存在，已拒绝创建替代数据库。' }
+    $volume = @($raw | ConvertFrom-Json)[0]
+    if ($volume.Name -cne $ExistingDataVolume -or $volume.Driver -ne 'local' -or
+        $volume.Labels.'com.docker.compose.volume' -ne 'postgres_data' -or
+        $volume.Labels.'com.docker.compose.project' -cne $ExistingDataVolume.Replace('_postgres_data', '')) {
+        throw '指定持久卷的所有权标签不符。'
+    }
+    $users = @(& docker ps --filter "volume=$ExistingDataVolume" --format '{{.ID}}')
+    if ($LASTEXITCODE -ne 0 -or @($users | Where-Object { $_ }).Count -gt 0) {
+        throw '指定持久卷仍被运行容器使用，必须先安全停止原实例。'
+    }
+    New-Item -ItemType Directory -Path $directory -Force | Out-Null
+    [ordered]@{ schema_version = '1.0'; project_root = $ProjectInfo.ProjectRoot; volume_name = $ExistingDataVolume } |
+        ConvertTo-Json | Set-Content -LiteralPath $path -Encoding UTF8
+    $env:DEEPAHA_LOCAL_MANUAL_DATA_VOLUME = $ExistingDataVolume
+    $env:DEEPAHA_LOCAL_MANUAL_EXTERNAL_VOLUME = 'true'
+}
+
 function Invoke-LocalManualStart {
-    param([Parameter(Mandatory = $true)][string]$ProjectRoot)
+    param([Parameter(Mandatory = $true)][string]$ProjectRoot, [string]$ExistingDataVolume = "")
     $projectInfo = Get-LocalManualProjectInfo -ProjectRoot $ProjectRoot
     $runtimeDirectory = Join-Path $projectInfo.ProjectRoot ".deepaha-local-manual"
     $statePath = Join-Path $runtimeDirectory "runtime.json"
@@ -445,6 +486,8 @@ function Invoke-LocalManualStart {
     $nodeMajor = [int]((& node --version).TrimStart('v').Split('.')[0])
     if ($nodeMajor -ne 24) { throw "需要 Node.js 24 LTS，当前版本不符合要求。" }
     Assert-LocalManualPortsFree
+
+    Set-LocalManualDataVolume -ProjectInfo $projectInfo -ExistingDataVolume $ExistingDataVolume
 
     New-Item -ItemType Directory -Path $runtimeDirectory -Force | Out-Null
     $logDirectory = Join-Path $runtimeDirectory "logs"
@@ -558,6 +601,7 @@ function Invoke-LocalManualStart {
             compose_project = $projectInfo.ProjectName
             compose_file = [IO.Path]::GetFullPath($composeFile)
             data_root = $projectInfo.DataRoot
+            data_volume = $env:DEEPAHA_LOCAL_MANUAL_DATA_VOLUME
             started_at = [DateTimeOffset]::UtcNow.ToString("o")
             processes = @($processes)
         }
@@ -598,7 +642,7 @@ if ($MyInvocation.InvocationName -ne '.') {
     $root = Split-Path -Parent $PSScriptRoot
     try {
         switch ($Action) {
-            "Start" { Invoke-LocalManualStart -ProjectRoot $root }
+            "Start" { Invoke-LocalManualStart -ProjectRoot $root -ExistingDataVolume $ExistingDataVolume }
             "Stop" { Invoke-LocalManualStop -ProjectRoot $root }
             "Status" { Invoke-LocalManualStatus -ProjectRoot $root }
             default { throw "必须指定 Start、Stop 或 Status。" }

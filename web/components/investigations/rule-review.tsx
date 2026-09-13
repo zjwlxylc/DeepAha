@@ -1,10 +1,12 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import Link from "next/link";
+import { useActionState } from "react";
 import { investigationRuleAction, type InvestigationActionState } from "../../app/review/investigations/actions";
 import type { InvestigationFactPreparation, InvestigationRulePreparation, InvestigationTask } from "../../lib/investigations";
 import { ruleAuthorities, ruleRelations, ruleApplicability, ruleDecisions } from "../../lib/investigation-rule-options";
 import { EvidenceCheckDetail } from "./evidence-check";
+import { useReviewDraft } from "../../lib/use-review-draft";
 import UnitPlanForm from "./unit-plan-form";
 
 const initial: InvestigationActionState = { error: null, message: null, taskId: null };
@@ -30,9 +32,10 @@ function RuleForm({ task, facts, entityId, factSetId, preparation, row, requestK
   task: InvestigationTask; facts: InvestigationFactPreparation; entityId: string; factSetId: string;
   preparation?: InvestigationRulePreparation; row?: RuleRow; requestKey: string;
 }) {
-  const [formKey] = useState(requestKey);
   const [state, action, pending] = useActionState(investigationRuleAction, initial);
-  return <form action={action} className="review-form" onReset={event => event.preventDefault()}>
+  const { ref: formRef, requestKey: formKey } = useReviewDraft(task.draft_scope ? JSON.stringify([task.draft_scope, task.task_id, task.delivery_hash, facts.binding_id, facts.preparation_id, preparation?.rule_preparation_id, row?.rule_candidate_id, row?.rule_candidate_id ? preparation?.decisions[row.rule_candidate_id]?.decision_id : null, entityId, factSetId]) : null, requestKey, !!state.message);
+  return <form ref={formRef} action={action} className="review-form" onReset={event => event.preventDefault()}>
+    <input type="hidden" name="workbench" value={task.workbench ? "1" : ""} />
     {Object.entries({ request_key: formKey, task_id: task.task_id, delivery_hash: task.delivery_hash ?? "",
       binding_id: facts.binding_id, check_id: facts.check_id, fact_preparation_id: facts.preparation_id,
       entity_id: entityId, fact_set_id: factSetId, kind: row ? "decision" : "prepare",
@@ -123,6 +126,7 @@ export default function InvestigationRuleReview({ task, requestKey }: { task: In
               row={row} entityId={prep.entity_id} factSetId={prep.fact_set_id} requestKey={requestKey} /> : null}
           </div>;
         })}
+        {prep.slice ? <p>当前仅展示一个条件。完整范围与快照请在<Link href={`/review/investigations/${task.task_id}#investigation-rule-review-title`}>完整规则记录</Link>核对，不能用当前字段代替全部条件。</p> : null}
         {prep.decision_history.length ? <details><summary>历次规则审核与证据判断</summary>{prep.decision_history.map(record => <div key={record.decision_id}>
           <p>{record.created_at} · {ruleDecisions[record.decision as keyof typeof ruleDecisions]} · {record.reason} · 审核员 {record.reviewer_id}</p>
           <pre className="investigation-json">{JSON.stringify(record.evidence, null, 2)}</pre>
@@ -130,7 +134,7 @@ export default function InvestigationRuleReview({ task, requestKey }: { task: In
         <details><summary>规则来源与版本</summary><p>{prep.compiler_version}</p><p className="investigation-hash">{prep.result_hash}</p>
           <p>事实集版本 {prep.fact_set_version} · {prep.fact_set_id}</p><p>来源包：{prep.source_bundle_revision_id}</p>
         </details>
-        {current ? <UnitPlanForm task={task} prep={prep} requestKey={requestKey} /> : null}
+        {current && !prep.slice ? <UnitPlanForm task={task} prep={prep} requestKey={requestKey} /> : null}
       </article>;
     })}
     {task.rule_review?.history.length ? <details><summary>历次规则候选清单</summary><ul>{task.rule_review.history.map(p => <li key={p.rule_preparation_id}>{p.created_at} · {p.entity_id} · {p.compiler_version}</li>)}</ul></details> : null}
