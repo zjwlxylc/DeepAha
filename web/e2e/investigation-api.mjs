@@ -11,6 +11,7 @@ import { handleGroupFacts, resetGroupFacts, seedGroupFacts, seedGroupRules } fro
 
 let current = structuredClone(task);
 let guided = false;
+let identityConflict = false;
 let dropNextReceipt = false;
 const receipts = new Map();
 let posts = 0;
@@ -38,7 +39,8 @@ const server = createServer(async (request, response) => {
   if (handleGroupInheritance(request, response, url)) return;
   if (handleCrossLevel(request, response, url)) return;
   if (handleGroupApplicability(request, response, url)) return;
-  if (path === "/reset") { resetGroups(); resetGroupFacts(); guided = false; }
+  if (path === "/reset") { resetGroups(); resetGroupFacts(); guided = false; identityConflict = false; }
+  if (path === "/identity-conflict") { identityConflict = true; response.end("{}"); return; }
   if (path === "/seed-group-rules") { const data = seedGroupRules(); current = data.source.task; response.end(JSON.stringify({ task_id: current.task_id, preparation_id: data.record.preparation_id })); return; }
   if (path === "/seed-group-facts") { const data = seedGroupFacts(url.searchParams.has("legacy")); current = data.source.task; response.end(JSON.stringify({ task_id: current.task_id, group_id: data.source.preview.registration.group_binding_id })); return; }
   if (await handleGroupFacts(request, response, url)) return;
@@ -114,7 +116,7 @@ const server = createServer(async (request, response) => {
     response.end(JSON.stringify(view)); return;
   }
   if (path.endsWith("/sources")) { response.end(JSON.stringify({ sources: [source] })); return; }
-  if (path.endsWith("/binding-targets")) { response.end(JSON.stringify({ targets: [bindingTarget] })); return; }
+  if (path.endsWith("/binding-targets")) { response.end(JSON.stringify({ targets: [{ ...bindingTarget, ...(identityConflict ? { title: current.opportunities.opportunity_name } : {}) }] })); return; }
   if (request.method === "GET" && path.endsWith("/announcement-snapshot-input")) {
     if (announcementFailure(response)) return;
     if (!announcement || path !== `/api/v1/local-human-test/investigations/${current.task_id}/unit-plans/${unitSnapshot.plan_id}/announcement-snapshot-input`) { response.writeHead(404); response.end("{}"); return; }
@@ -226,6 +228,7 @@ const server = createServer(async (request, response) => {
       } };
     }
     else if (path.endsWith("/identity") || path.endsWith("/positions")) {
+      if (identityConflict && path.endsWith("/identity")) { response.writeHead(409); response.end(JSON.stringify({ detail: { code: "REGISTRATION_EXISTING_IDENTITY_OR_REVIEW_REQUIRED" } })); return; }
       const prior = current.entity_binding;
       const positions = [...(prior?.positions ?? []), ...values.positions.map(p => ({
         entity_id: p.entity_id, opportunity_unit_id: bindingTarget.positions[0].unit_id,

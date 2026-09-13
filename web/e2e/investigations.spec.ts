@@ -553,3 +553,35 @@ test("guided review completes two synthetic positions with plain questions and h
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("guided-summary.png"), fullPage: true });
 });
+
+test("guided review recovers from an existing announcement without duplicate creation", async ({ page, request }, testInfo) => {
+  await request.get("http://127.0.0.1:3097/seed-guided");
+  await request.get("http://127.0.0.1:3097/identity-conflict");
+  await page.goto(`/review/investigations/${taskId}/check?position=position-1&position=position-2`);
+  await expect(page.getByText("系统中已有同名公告，请先核对是否为同一份")).toBeVisible();
+  await page.getByLabel("这是什么类型的机会？").selectOption("PUBLIC_INSTITUTION_JOB");
+  await page.getByLabel("你核对了原件哪里？").fill("合成复现：同一份公告已登记，不是真人签署");
+  await page.getByRole("checkbox", { name: "我已对照原件，确认这些单位、岗位名称和编号对应正确" }).check();
+  await page.getByRole("button", { name: "确认这两个岗位，开始逐条核对" }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "本次没有新建记录" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "使用已有公告，继续核对这两个岗位" })).toBeVisible();
+  await expect(page.getByLabel("选择已有公告")).toHaveValue("");
+  await page.getByLabel("选择已有公告").selectOption(`${bindingTarget.opportunity_id}/1`);
+  await page.getByLabel(/教学岗位.*对应哪条已有岗位/).selectOption(`${bindingTarget.positions[0].unit_id}/${bindingTarget.positions[0].version_id}`);
+  await page.getByLabel(/合成第二岗位.*对应哪条已有岗位/).selectOption("new");
+  await page.getByRole("region", { name: "使用已有公告，继续核对这两个岗位" }).getByLabel("你核对了原件哪里？").fill("合成复现：原公告一致，第一个已有岗位与原件对应");
+  await page.getByRole("checkbox", { name: "我已对照原件，确认所选公告及岗位对应正确" }).check();
+  await page.screenshot({ path: testInfo.outputPath("guided-existing-recovery.png"), fullPage: true });
+  await page.getByRole("button", { name: "确认使用已有记录，继续" }).click();
+  await expect(page.getByRole("region", { name: "使用已有公告，继续核对这两个岗位" })).toHaveCount(0);
+  await expect(page.getByLabel("岗位名称", { exact: true })).toHaveValue("合成第二岗位");
+  await expect(page.getByLabel("这是什么类型的机会？")).toHaveCount(0);
+  await page.getByLabel("你核对了原件哪里？").fill("合成复现：第二岗位尚未登记，确认岗位表第二行");
+  await page.getByRole("checkbox", { name: "我已对照原件，确认这些单位、岗位名称和编号对应正确" }).check();
+  await page.getByRole("button", { name: "确认这两个岗位，开始逐条核对" }).click();
+  await expect(page.getByRole("button", { name: "准备核对内容" })).toBeVisible();
+  const response = await request.get(`http://127.0.0.1:3097/api/v1/investigations/${taskId}`, { headers: { Authorization: "Bearer synthetic-browser-reviewer" } });
+  const data = await response.json();
+  expect(data.entity_binding.positions.map((p: { entity_id: string }) => p.entity_id)).toEqual(["position-1", "position-2"]);
+  expect(data.entity_binding.opportunity_id).toBe(bindingTarget.opportunity_id);
+});

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { randomUUID } from "node:crypto";
-import { getInvestigationWorkbench } from "../../../../../lib/investigations";
+import { getInvestigationBindingTargets, getInvestigationWorkbench } from "../../../../../lib/investigations";
 import { LocalHumanTestApiError } from "../../../../../lib/local-human-test";
 import { reviewHref, selectedPositions } from "../../../../../lib/guided-review";
 import GuidedSelection from "../../../../../components/investigations/guided-selection";
@@ -26,6 +26,7 @@ export default async function GuidedReviewPage({ params, searchParams }: { param
   const bothBound = positions.length === 2 && positions.every(e => base.entity_binding?.positions.some(p => p.entity_id === e.id));
   const ready = base.status === "APPROVED" && base.document_preparation?.status === "PREPARED"
     && (!base.entity_binding || base.entity_binding.bundle_status === "FROZEN");
+  const targets = ready && positions.length === 2 && !bothBound ? (await getInvestigationBindingTargets()).targets : [];
   let task = base;
   if (bothBound && stage !== "summary") task = await getInvestigationWorkbench(taskId, new URLSearchParams({ entity_id: entity, offset: String(offset) }));
   const prep = task.fact_review?.current, rules = task.rule_review?.current[0];
@@ -48,7 +49,7 @@ export default async function GuidedReviewPage({ params, searchParams }: { param
     <p className="guided-notice-title">{String(base.opportunities?.opportunity_name ?? "岗位核对")}</p>
     {!ready ? <section className="guided-card"><h1>先准备好这份公告</h1><p>目前材料尚未批准，或附件文字没有准备好。请先处理材料；这里不会重新发起调查。</p><Link className="button button-primary" href={`/review/investigations/${taskId}#investigation-documents-title`}>查看材料准备情况</Link></section>
       : ids.length !== 2 ? <GuidedSelection task={base} queue={queue} />
-        : !bothBound ? <GuidedIdentity key={`${base.entity_binding?.binding_id ?? base.delivery_hash}:${ids.join()}`} task={base} ids={ids} requestKey={randomUUID()} />
+        : !bothBound ? <GuidedIdentity key={`${base.entity_binding?.binding_id ?? base.delivery_hash}:${ids.join()}`} task={base} ids={ids} targets={targets} requestKey={randomUUID()} />
           : stage === "summary" ? <section className="guided-card"><h1>这次核对记录</h1><p>下面显示当前保存的状态。待处理可以保留，不需要为了结束本轮而批准。</p>
             {summaries.map((s, i) => <article className="guided-summary-row" key={s.task_id + ids[i]}><h2>{positions[i].name} · {positions[i].code}</h2><p>{unitName(ids[i])} · 岗位已确认</p><p>{s.fact_review?.current ? `原始内容 ${s.fact_review.current.slice?.total ?? 0} 条 · 仍需处理 ${s.fact_review.current.slice?.attention_total ?? "待统计"} 条` : "尚未开始内容核对"}</p>
               <p>{s.fact_review?.current?.promotions[ids[i]] ? "内容已归入岗位记录" : "内容尚未归入岗位记录，待处理不等于批准"}</p>

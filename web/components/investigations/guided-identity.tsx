@@ -2,20 +2,28 @@
 
 import { useActionState, useState } from "react";
 import Link from "next/link";
-import type { InvestigationTask } from "../../lib/investigations";
+import type { InvestigationBindingTarget, InvestigationTask } from "../../lib/investigations";
 import { registerInvestigationIdentityAction } from "../../app/review/investigations/actions";
 import { selectedPositions } from "../../lib/guided-review";
+import GuidedExisting from "./guided-existing";
 
-export default function GuidedIdentity({ task, ids, requestKey }: { task: InvestigationTask; ids: string[]; requestKey: string }) {
+export default function GuidedIdentity({ task, ids, requestKey, targets = [] }: { task: InvestigationTask; ids: string[]; requestKey: string; targets?: InvestigationBindingTarget[] }) {
   const [state, action, pending] = useActionState(registerInvestigationIdentityAction, { error: null, message: null, taskId: null });
   const [key] = useState(requestKey);
+  const [existing, setExisting] = useState(false);
+  const conflict = state.errorCode === "REGISTRATION_EXISTING_IDENTITY_OR_REVIEW_REQUIRED" || state.errorCode === "REGISTRATION_POSITION_KEY_CONFLICT";
+  const showExisting = existing || conflict;
+  const sameTitle = !task.entity_binding && targets.some(t => t.title.trim() === String(task.opportunities?.opportunity_name ?? "").trim());
   const positions = selectedPositions(task, ids).filter(e => !task.entity_binding?.positions.some(p => p.entity_id === e.id));
   const units = (task.opportunities?.units ?? []) as { name: string; positions: { id: string }[] }[];
   return <section className="guided-card"><p className="eyebrow">第 2 步，共 3 步 · 确认选对岗位</p>
     <h1>这两个岗位与原件一致吗？</h1>
     <p>先核对名称、单位和编号。已有岗位关联会保留；这一步只记录你选择的对象。</p>
     <div className="guided-source-links"><a href={task.notice_url} target="_blank" rel="noreferrer">打开官方公告 ↗</a>{task.materials.map((m, i) => <a key={m.artifact_id} href={`/review/investigations/${task.task_id}/materials/${encodeURIComponent(m.artifact_id)}`}>打开附件 {i + 1}</a>)}</div>
-    <form action={action} className="review-form" onReset={e => e.preventDefault()}>
+    {sameTitle && !showExisting ? <aside className="guided-limits"><strong>系统中已有同名公告，请先核对是否为同一份</strong><p>同一份公告可以继续使用已有记录，无需重复新建。</p></aside> : null}
+    {!showExisting && targets.length ? <button type="button" className="button button-secondary" onClick={() => setExisting(true)}>查看已有公告并继续</button> : null}
+    {showExisting ? <>{state.error ? <p role="alert">{state.error}</p> : null}<GuidedExisting task={task} ids={ids} targets={targets} requestKey={key} />{!conflict ? <button type="button" className="guided-back" onClick={() => setExisting(false)}>返回新建信息</button> : null}</> : null}
+    <form action={action} className="review-form" hidden={showExisting} style={showExisting ? { display: "none" } : undefined} onReset={e => e.preventDefault()}>
       <input type="hidden" name="request_key" value={key} /><input type="hidden" name="task_id" value={task.task_id} /><input type="hidden" name="delivery_hash" value={task.delivery_hash ?? ""} /><input type="hidden" name="previous_binding_id" value={task.entity_binding?.binding_id ?? ""} />
       <fieldset disabled={pending}>
         {!task.entity_binding ? <details open><summary>公告名称与发布单位 · 请对照原件</summary>
