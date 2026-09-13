@@ -279,7 +279,7 @@ test("registers without execution, reads evidence, downloads privately and recor
   await page.getByRole("button", { name: "登记调查任务" }).click();
   await expect(page.locator("#new-investigation").getByRole("status")).toContainText("调查任务已登记");
   await page.getByRole("link", { name: "查看已登记任务" }).click();
-  await expect(page.getByText("已登记，等待执行", { exact: true })).toBeVisible();
+  await expect(page.locator(".status-badge").filter({ hasText: "已登记，等待执行" })).toBeVisible();
   await expect(page.getByRole("button", { name: /执行|恢复|开始调查/ })).toHaveCount(0);
 });
 
@@ -433,4 +433,22 @@ test("reviews field facts through the shared evidence receipt and retries each l
   await expect(panel.getByText(/尚不代表完整资格判断/)).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await panel.screenshot({ path: testInfo.outputPath("field-review.png") });
+});
+
+
+test("queue filters persist through detail and keyboard navigation", async ({ page }) => {
+  await page.goto("/review/investigations");
+  await page.getByLabel("任务状态").selectOption("PENDING_REVIEW");
+  await page.getByRole("button", { name: "筛选任务" }).click();
+  await expect(page).toHaveURL(/status=PENDING_REVIEW/);
+  await page.getByRole("link", { name: "开始核对", exact: true }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/queue=/);
+  await page.getByRole("link", { name: "官方机会调查", exact: true }).click();
+  await expect(page.getByLabel("任务状态")).toHaveValue("PENDING_REVIEW");
+  await expect(page.getByText("本页待审核", { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.getByLabel("搜索公告").fill("synthetic-no-match");
+  await page.getByRole("button", { name: "筛选任务" }).click();
+  await expect(page.getByText("没有符合筛选的任务")).toBeVisible();
 });
