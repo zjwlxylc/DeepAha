@@ -5,7 +5,7 @@ from typing import Annotated, Any
 from urllib.parse import urlsplit
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy import select
 
 from deepaha.api.local_human_test import (
@@ -62,6 +62,7 @@ from deepaha.investigations.group_rule_review_contracts import (
     PrepareGroupRules,
 )
 from deepaha.investigations.models import InvestigationMaterial
+from deepaha.investigations.queue_query import QueueQuery, read_queue
 from deepaha.investigations.relation_decisions import DecideRelation
 from deepaha.investigations.relation_proposals import ProposeRelation
 from deepaha.investigations.rule_contracts import (
@@ -158,6 +159,24 @@ def problem(error: Exception) -> HTTPException:
 def list_tasks(store: StoreDep, principal: PrincipalDep, response: Response) -> dict[str, Any]:
     response.headers["Cache-Control"] = "private, no-store"
     return {"tasks": store.list_tasks()}
+
+
+@router.get("/queue")
+def list_queue(
+    store: StoreDep,
+    principal: PrincipalDep,
+    response: Response,
+    query: Annotated[QueueQuery, Query()],
+) -> dict[str, Any]:
+    response.headers["Cache-Control"] = "private, no-store"
+    try:
+        return read_queue(store, query)
+    except ValueError:
+        raise HTTPException(
+            400,
+            detail={"code": "INVALID_QUEUE_CURSOR"},
+            headers={"Cache-Control": "private, no-store"},
+        ) from None
 
 
 @router.post("/{task_id}/relation-proposals")

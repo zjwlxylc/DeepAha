@@ -37,7 +37,9 @@ def make_client(
     return TestClient(app, base_url="http://127.0.0.1"), store
 
 
-@pytest.mark.parametrize("suffix", ["", "/sources", "/binding-targets", "/" + str(uuid7())])
+@pytest.mark.parametrize(
+    "suffix", ["", "/queue", "/sources", "/binding-targets", "/" + str(uuid7())]
+)
 def test_disabled_intake_stays_hidden(tmp_path: Path, suffix: str) -> None:
     client, store = make_client(tmp_path, enabled=False)
     with client:
@@ -51,6 +53,36 @@ def test_unrelated_reviewer_cannot_read_intake(tmp_path: Path) -> None:
     with client:
         response = client.get("/api/v1/local-human-test/investigations")
     assert response.status_code == 403
+    assert not store.mock_calls
+
+
+def test_queue_query_route_and_invalid_cursor(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    reader = Mock(return_value={"tasks": [], "next_cursor": None})
+    monkeypatch.setattr("deepaha.api.investigations.read_queue", reader)
+    client, store = make_client(tmp_path)
+    with client:
+        response = client.get("/api/v1/local-human-test/investigations/queue?q=notice&limit=7")
+        assert response.status_code == 200
+        assert response.headers["cache-control"] == "private, no-store"
+        assert reader.call_args.args[1].limit == 7
+        assert reader.call_args.args[1].q == "notice"
+        assert (
+            client.get("/api/v1/local-human-test/investigations/queue?limit=101").status_code == 400
+        )
+        reader.side_effect = ValueError("INVALID_QUEUE_CURSOR")
+        assert (
+            client.get("/api/v1/local-human-test/investigations/queue?cursor=broken").status_code
+            == 400
+        )
+    store.list_tasks.assert_not_called()
+
+
+def test_queue_rejects_unrelated_role(tmp_path: Path) -> None:
+    client, store = make_client(tmp_path, roles=frozenset({ReviewerRole.FEEDBACK_REVIEWER}))
+    with client:
+        assert client.get("/api/v1/local-human-test/investigations/queue").status_code == 403
     assert not store.mock_calls
 
 

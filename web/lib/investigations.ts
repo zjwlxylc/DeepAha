@@ -234,3 +234,11 @@ export function getInvestigationSources(): Promise<{ sources: InvestigationSourc
 export function getInvestigation(taskId: string): Promise<InvestigationTask> {
   return humanTestFetch(`/investigations/${encodeURIComponent(taskId)}`);
 }
+
+export interface InvestigationQueueItem extends Pick<InvestigationTask, "task_id" | "source_id" | "status" | "created_at" | "updated_at" | "error_code" | "notice_url" | "calibration" | "dispatch_pending" | "dispatch_requested_at" | "runtime_id" | "remote_session_id"> {
+  title: string; material_count: number; next_step: string;
+}
+export interface InvestigationQueuePage { tasks: InvestigationQueueItem[]; next_cursor: string | null }
+export function getInvestigationQueue(params: URLSearchParams): Promise<InvestigationQueuePage> {
+  return humanTestFetch(`/investigations/queue?${params.toString()}`);
+}

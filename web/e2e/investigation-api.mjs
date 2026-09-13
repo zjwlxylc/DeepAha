@@ -70,6 +70,10 @@ const server = createServer(async (request, response) => {
   if (request.headers.authorization !== "Bearer synthetic-browser-reviewer") {
     response.writeHead(401); response.end("{}"); return;
   }
+  if (path.endsWith("/investigations/queue")) {
+    const matches = (!url.searchParams.get("status") || current.status === url.searchParams.get("status")) && (!url.searchParams.get("q") || current.brief.includes(url.searchParams.get("q")));
+    response.end(JSON.stringify({ tasks: matches ? [{ task_id: current.task_id, source_id: current.source_id, title: current.opportunities?.opportunity_name ?? current.brief, status: current.status, notice_url: current.notice_url, created_at: current.created_at, updated_at: current.updated_at, error_code: current.error_code, calibration: current.calibration, material_count: current.materials.length, next_step: "核对材料" }] : [], next_cursor: null })); return;
+  }
   if (path.endsWith("/sources")) { response.end(JSON.stringify({ sources: [source] })); return; }
   if (path.endsWith("/binding-targets")) { response.end(JSON.stringify({ targets: [bindingTarget] })); return; }
   if (request.method === "GET" && path.endsWith("/announcement-snapshot-input")) {

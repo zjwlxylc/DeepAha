@@ -21,8 +21,16 @@ import { formatDateTime } from "../../../../lib/public-opportunities";
 
 export const metadata: Metadata = { title: "调查材料与内部审核" };
 
-export default async function InvestigationPage({ params }: { params: Promise<{ taskId: string }> }) {
+export default async function InvestigationPage({ params, searchParams }: { params: Promise<{ taskId: string }>; searchParams?: Promise<Record<string, string | string[] | undefined>> }) {
   const { taskId } = await params;
+  const queueValue = (await searchParams)?.queue;
+  const queueParams = new URLSearchParams(typeof queueValue === "string" ? queueValue : "");
+  const safeQueue = new URLSearchParams();
+  for (const key of ["status", "source", "q", "cursor", "limit"]) {
+    const value = queueParams.get(key);
+    if (value) safeQueue.set(key, value);
+  }
+  const queueUrl = `/review/investigations${safeQueue.size ? `?${safeQueue}` : ""}`;
   const task = await getInvestigation(taskId);
   const title = task.opportunities?.opportunity_name;
   const targets = task.status === "APPROVED" && task.document_preparation?.status === "PREPARED"
@@ -39,7 +47,7 @@ export default async function InvestigationPage({ params }: { params: Promise<{ 
   const recovery = investigationRecoveryAvailability(task);
   return (
     <main id="main-content" data-investigation-status={task.status} className="page-shell human-test-shell investigation-shell">
-      <nav className="breadcrumbs" aria-label="面包屑"><Link href="/review/investigations">官方机会调查</Link><span aria-hidden="true">/</span><span aria-current="page">材料与审核</span></nav>
+      <nav className="breadcrumbs" aria-label="面包屑"><Link href={queueUrl}>官方机会调查</Link><span aria-hidden="true">/</span><span aria-current="page">材料与审核</span></nav>
       <header className="human-test-hero"><div><p className="eyebrow">调查材料 · 内部核对</p><h1>{typeof title === "string" && title ? title : "调查任务详情"}</h1><details><summary>查看调查范围与原始说明</summary><p>{task.brief}</p></details><span className="status-badge">{investigationStatus(task.status)}</span>{task.calibration ? <p>内部体验样本，不作为正式效果证据。</p> : null}</div></header>
       <aside className="fixture-notice" aria-label="内部审核边界">内部审核不等于正式机会、资格规则或公开目录发布。字段依据仍需本人核对，未披露或冲突的信息保持未知。</aside>
       <p>{safeOfficialUrl(task.notice_url) ? <a href={safeOfficialUrl(task.notice_url)} target="_blank" rel="noopener noreferrer">查看原始官方公告</a> : "官方公告地址不可用"} · 更新于 {formatDateTime(task.updated_at)}</p>
