@@ -13,7 +13,7 @@ export default function ReviewQueue({ tasks, dispatchEnabled, requestKeys, filte
   const params = new URLSearchParams(filters);
   const next = new URLSearchParams(filters);
   if (nextCursor) next.set("cursor", nextCursor);
-  const detailUrl = (task: InvestigationQueueItem) => `/review/investigations/${encodeURIComponent(task.task_id)}${task.status === "APPROVED" ? "/workbench" : ""}?queue=${encodeURIComponent(filters)}`;
+  const detailUrl = (task: InvestigationQueueItem) => `/review/investigations/${encodeURIComponent(task.task_id)}${task.status === "APPROVED" ? "/check" : ""}?queue=${encodeURIComponent(filters)}`;
   const pending = tasks.filter(task => task.status === "PENDING_REVIEW").length;
   const failures = tasks.filter(task => task.error_code).length;
   return <section className="human-test-panel" aria-labelledby="investigation-list-title">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import WorkbenchShell from "../../../../../components/investigations/workbench-shell";
 import { getInvestigationWorkbench, getInvestigationBindingTargets } from "../../../../../lib/investigations";
 import { LocalHumanTestApiError } from "../../../../../lib/local-human-test";
@@ -8,6 +9,11 @@ export default async function WorkbenchPage({ params, searchParams }: {
 }) {
   const { taskId } = await params;
   const input = await searchParams ?? {};
+  if (!input.entity_id && !input.step && input.view !== "advanced") {
+    const q = new URLSearchParams();
+    if (typeof input.queue === "string") q.set("queue", input.queue);
+    redirect(`/review/investigations/${taskId}/check?${q}`);
+  }
   const query = new URLSearchParams();
   for (const key of ["entity_id", "offset"]) if (typeof input[key] === "string") query.set(key, input[key]);
   const step = typeof input.step === "string" && ["materials", "identity", "facts", "rules"].includes(input.step) ? input.step : "identity";

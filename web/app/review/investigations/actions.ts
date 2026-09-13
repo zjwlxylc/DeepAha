@@ -95,6 +95,7 @@ async function submit(path: string, body: object, requestKey: string, message: s
     revalidatePath("/review/investigations");
     revalidatePath(`/review/investigations/${taskId}`);
     revalidatePath(`/review/investigations/${taskId}/workbench`);
+    revalidatePath(`/review/investigations/${taskId}/check`);
     return { error: null, message, taskId };
   };
   if (receipt) {

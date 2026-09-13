@@ -1694,3 +1694,57 @@ code {
 .workbench-step-tabs { position: sticky; top: .5rem; z-index: 5; display: flex; flex-wrap: wrap; gap: .5rem; padding: .75rem; margin-block: 1rem; border: 1px solid var(--border); border-radius: .75rem; background: var(--paper); }
 .workbench-step-tabs a { padding: .45rem .8rem; border-radius: .5rem; background: var(--blue-soft); }
 .workbench-step-tabs a[aria-current="step"] { color: var(--paper); background: var(--navy); }
+
+/* Guided review: one question, readable source, no overlaying task controls. */
+.guided-review { max-width: 1120px; margin-inline: auto; padding-block: 1.5rem 3rem; }
+.guided-top, .guided-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin-block: 1rem; }
+.guided-notice-title, .guided-footnote { color: var(--ink-muted); font-size: .9rem; }
+.guided-card { background: var(--paper); border: 1px solid var(--border); border-radius: 1rem; padding: clamp(1.25rem, 3vw, 2.5rem); margin-block: 1.25rem; box-shadow: var(--shadow); }
+.guided-card h1, .guided-current h1 { font-size: clamp(1.55rem, 3vw, 2rem); line-height: 1.35; margin-block: .5rem 1rem; }
+.guided-card h2, .guided-comparison h2 { font-size: 1.25rem; line-height: 1.5; }
+.guided-review input:not([type=hidden]):not([type=checkbox]):not([type=radio]), .guided-review select, .guided-review textarea { width: 100%; min-height: 48px; padding: .75rem; border: 1px solid var(--border); border-radius: .6rem; background: var(--paper); color: var(--ink); font: inherit; }
+.guided-review label { display: block; margin-block: .8rem; }
+.guided-review fieldset { min-width: 0; border: 0; padding: 0; margin-block: 1rem; }
+.guided-review button, .guided-review .button { min-height: 48px; white-space: normal; }
+.guided-search { max-width: 650px; }
+.guided-picked { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin-block: 1rem; }
+.guided-picked button { background: var(--blue-soft); color: var(--navy); border: 1px solid var(--border); border-radius: .6rem; padding: .5rem .75rem; }
+.guided-continue { position: sticky; top: 0; z-index: 2; background: var(--paper); padding-block: .65rem; }
+.guided-position, .guided-choice { display: flex !important; gap: .9rem; align-items: flex-start; padding: 1rem; border: 1px solid var(--border); border-radius: .75rem; background: var(--paper); cursor: pointer; }
+.guided-position:has(:checked), .guided-choice:has(:checked) { border-color: var(--blue); background: var(--blue-soft); }
+.guided-position:has(:disabled) { opacity: .55; }
+.guided-position input, .guided-choice input { width: 1.25rem; height: 1.25rem; flex-shrink: 0; margin-top: .2rem; accent-color: var(--blue); }
+.guided-position strong, .guided-position span span { display: block; }
+.guided-position span span { font-size: .9rem; color: var(--ink-muted); }
+.guided-identity-row { border-block-start: 1px solid var(--border); padding-block: .5rem; }
+.guided-source-links { display: flex; flex-wrap: wrap; gap: 1rem; }
+.guided-current nav { display: flex; flex-wrap: wrap; gap: .75rem; }
+.guided-current nav a { padding: .65rem 1rem; border: 1px solid var(--border); border-radius: 2rem; background: var(--paper); }
+.guided-current nav a[aria-current=page] { color: var(--paper); background: var(--navy); }
+.guided-comparison { display: grid; grid-template-columns: 1.15fr 1fr; gap: 1rem; align-items: start; }
+.guided-source, .guided-proposal { min-width: 0; border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; background: var(--paper); overflow-wrap: anywhere; }
+.guided-proposal { background: var(--blue-soft); }
+.guided-value { font-size: 1.25rem; font-weight: 650; line-height: 1.65; }
+.guided-source blockquote { margin: 1rem 0; padding: .5rem 1rem; border-inline-start: 3px solid var(--orange); white-space: pre-wrap; line-height: 1.9; }
+.guided-question legend { font-size: 1.2rem; font-weight: 650; }
+.guided-back { display: inline-block; margin: .75rem .75rem .25rem 0; padding: .65rem 1rem; border: 1px solid var(--border); border-radius: .6rem; color: var(--blue); background: var(--paper); }
+.guided-trace { padding: 1rem; color: var(--ink-muted); }
+.guided-trace pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .8rem; }
+.guided-summary-row { padding-block: 1rem; border-block-start: 1px solid var(--border); }
+.guided-limits { padding: 1rem; margin-block: 1rem; background: var(--orange-soft); border-radius: .6rem; }
+@media (max-width: 700px) { .guided-comparison { grid-template-columns: 1fr; } .guided-review { padding-inline: 1rem; } .guided-card, .guided-source, .guided-proposal { padding: 1.1rem; } .guided-review .button { width: 100%; } .guided-current nav a { flex: 1; text-align: center; } }
+.guided-question-layout { display: grid; grid-template-columns: 1.1fr 1fr; align-items: start; gap: 1rem; }
+.guided-question-layout .guided-comparison { display: contents; }
+.guided-question-layout .guided-source { grid-column: 1; grid-row: 1 / span 2; }
+.guided-question-layout .guided-proposal { grid-column: 2; grid-row: 1; }
+.guided-question-layout .guided-card { grid-column: 2; grid-row: 2; margin: 0; padding: 1.25rem; }
+.guided-question-layout .guided-trace { grid-column: 1 / -1; }
+.guided-question-layout .guided-card .guided-choice { margin-block: .6rem; padding: .8rem; }
+.guided-question-layout .guided-card fieldset { margin-block: 0; }
+.guided-question-layout .guided-proposal p, .guided-question-layout .guided-proposal h2 { margin-block: .6rem; }
+.guided-question-layout .guided-proposal { padding: 1rem 1.5rem; }
+.guided-review .guided-top { margin-block: .5rem; }
+.guided-current h1 { margin-block: .3rem .35rem; font-size: 1.6rem; }
+.guided-current > p { margin-block: .35rem; }
+.guided-review .guided-notice-title { margin-block: .5rem; }
+@media (max-width: 700px) { .guided-question-layout { display: block; } .guided-question-layout .guided-source, .guided-question-layout .guided-proposal, .guided-question-layout .guided-card { margin-block: 1rem; } }
