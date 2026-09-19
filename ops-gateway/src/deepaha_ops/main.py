@@ -276,6 +276,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             request_id=request.state.request_id,
             params=payload,
         )
+        if not created and (item.action != action or item.params != payload):
+            raise HTTPException(
+                status_code=409,
+                detail={"code": "IDEMPOTENCY_CONFLICT"},
+            )
         if created:
             audit.append(
                 AuditEvent(
