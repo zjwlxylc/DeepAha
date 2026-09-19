@@ -6,7 +6,7 @@ from sqlalchemy import select
 from .models import Account, LoginSession, LoginAttempt, Audit, now
 from .errors import Problem
 
-ROLES={'user','reviewer','operator'}
+ROLES={'user','reviewer','operator','admin'}
 def digest(value):return hashlib.sha256(value.encode()).hexdigest()
 def aware(value):return value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value
 

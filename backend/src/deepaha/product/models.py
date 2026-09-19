@@ -47,6 +47,34 @@ class LoginAttempt(Base):
     count: Mapped[int]=mapped_column(Integer,default=0)
     since: Mapped[datetime]=mapped_column(DateTime(timezone=True),default=now)
 
+class Invitation(Base):
+    __tablename__='product_invitations'
+    id: Mapped[str]=mapped_column(String(36),primary_key=True,default=uid)
+    code_hash: Mapped[str]=mapped_column(String(64),unique=True)
+    label: Mapped[str]=mapped_column(String(120))
+    max_uses: Mapped[int]=mapped_column(Integer)
+    used_count: Mapped[int]=mapped_column(Integer,default=0)
+    expires_at: Mapped[datetime]=mapped_column(DateTime(timezone=True))
+    revoked: Mapped[bool]=mapped_column(Boolean,default=False)
+    created_by: Mapped[str]=mapped_column(String(80))
+    created_at: Mapped[datetime]=mapped_column(DateTime(timezone=True),default=now)
+
+class InvitationRedemption(Base):
+    __tablename__='product_invitation_redemptions'
+    account_id: Mapped[str]=mapped_column(ForeignKey('product_accounts.id'),primary_key=True)
+    invitation_id: Mapped[str]=mapped_column(ForeignKey('product_invitations.id'),index=True)
+    notice_version: Mapped[str]=mapped_column(String(64))
+    created_at: Mapped[datetime]=mapped_column(DateTime(timezone=True),default=now)
+
+class PasswordReset(Base):
+    __tablename__='product_password_resets'
+    token_hash: Mapped[str]=mapped_column(String(64),primary_key=True)
+    account_id: Mapped[str]=mapped_column(ForeignKey('product_accounts.id'),index=True)
+    expires_at: Mapped[datetime]=mapped_column(DateTime(timezone=True))
+    used: Mapped[bool]=mapped_column(Boolean,default=False)
+
+ACCESS_TABLE_NAMES={'product_invitations','product_invitation_redemptions','product_password_resets'}
+
 class Source(Base):
     __tablename__='sources'
     source_id: Mapped[str]=mapped_column(Uuid(as_uuid=False),primary_key=True,default=uid)

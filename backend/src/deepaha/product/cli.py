@@ -21,6 +21,8 @@ def main(argv=None):
     ap=argparse.ArgumentParser(prog='deepaha',description='DeepAha 机会星图：初始化、账号、采集、导入和备份')
     sub=ap.add_subparsers(dest='command',required=True)
     sub.add_parser('init',help='仅新增当前产品所需数据表，不改写旧表')
+    sub.add_parser('upgrade-access',help='已完成宿主备份后，显式新增邀请码表；不改现有业务表')
+    admin=sub.add_parser('access-admin');admin.add_argument('username',help='显式授予已有账号admin角色')
     upgrade=sub.add_parser('upgrade',help='备份并补齐rc2来源资产表，保留所有原有数据');upgrade.add_argument('--backup',type=Path)
     sg1=sub.add_parser('upgrade-sg1',help='备份并升级为SG1岗位/赛道级机会总览');sg1.add_argument('--backup',type=Path)
     sg51=sub.add_parser('upgrade-sg5-1',help='备份并刷新SG5.1证据支持的时间节点，不重新调用WMA');sg51.add_argument('--backup',type=Path)
@@ -56,6 +58,21 @@ def main(argv=None):
                 password=getpass.getpass('密码（至少12个字符）: ')
                 if getpass.getpass('再次输入密码: ')!=password:raise Problem('两次密码不一致')
                 output(p.create_account(name,password,['user','reviewer','operator']))
+        elif args.command=='upgrade-access':
+            from .models import Base,ACCESS_TABLE_NAMES
+            Base.metadata.create_all(p.db.engine,tables=[t for t in Base.metadata.sorted_tables if t.name in ACCESS_TABLE_NAMES])
+            output({'access_schema':'1','added_tables':sorted(ACCESS_TABLE_NAMES),'existing_business_rows_changed':False})
+        elif args.command=='access-admin':
+            from sqlalchemy import select
+            from .models import Account
+            from .access import _revoke_sessions
+            with p.db.tx() as s:
+                account=s.scalar(select(Account).where(Account.username==args.username,Account.active.is_(True)))
+                if not account:raise Problem('指定账号不存在或已停用',404)
+                account.roles=list(dict.fromkeys([*account.roles,'admin']))
+                _revoke_sessions(s,account.id)
+                p._audit(s,'SYSTEM_CLI','ACCESS_ADMIN_BOOTSTRAP',account.id,'显式授予账号管理权限')
+            output({'admin_granted':True})
         elif args.command=='upgrade':
             from .upgrade import upgrade_source_intake
             from .models import now

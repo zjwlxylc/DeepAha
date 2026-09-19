@@ -56,6 +56,7 @@ function workspaceEntry(){
  if(reviewer&&operator)return ['/review/overview','desktop','工作台'];
  if(reviewer)return ['/review/overview','inbox','审核工作台'];
  if(operator)return ['/manage','settings','系统管理'];
+ if(has('admin'))return ['/manage/invitations','user','邀请与用户'];
  return null;
 }
 function shell(body,path,narrow=false,actions=''){
@@ -161,7 +162,7 @@ export async function renderUser(path,params){
  }else if(path==='/app/me'){
   if(!state.user)throw Object.assign(new Error('请先登录'),{status:401});
   const p=await api('/api/me/profile');narrow=true;
-  body=`<div class="row gap16 mb16"><span class="avatar large">${e((p.display_name||state.user.username).slice(0,1))}</span><div><h1>${e(p.display_name||state.user.username)}</h1><p class="muted small mt8">我的机会，由我选择。</p></div></div><div class="menu-list mt24">${[['/app/profile','user','我的关注方向'],['/app/star','spark','我的机会星图'],['/app/actions','bookmark','收藏与行动'],['/app/lab','spark','机会共创实验'],['/app/notifications','bell','消息与提醒'],['/app/privacy','lock','数据与隐私']].map(([u,i,t])=>`<a href="${u}" data-nav><span class="label">${icon(i)}${t}</span>${icon('chevron','sm')}</a>`).join('')}${workspaceEntry()?`<a href="${workspaceEntry()[0]}" data-nav><span class="label">${icon(workspaceEntry()[1])}${e(workspaceEntry()[2])}</span>${icon('chevron','sm')}</a>`:''}<button id="logout"><span class="label">${icon('back')}退出登录</span></button></div>`;
+  body=`<div class="row gap16 mb16"><span class="avatar large">${e((p.display_name||state.user.username).slice(0,1))}</span><div><h1>${e(p.display_name||state.user.username)}</h1><p class="muted small mt8">我的机会，由我选择。</p></div></div><div class="menu-list mt24">${[['/app/profile','user','我的关注方向'],['/app/star','spark','我的机会星图'],['/app/actions','bookmark','收藏与行动'],['/app/lab','spark','机会共创实验'],['/app/notifications','bell','消息与提醒'],['/app/privacy','lock','数据与隐私'],['/account/security','lock','账号安全']].map(([u,i,t])=>`<a href="${u}" data-nav><span class="label">${icon(i)}${t}</span>${icon('chevron','sm')}</a>`).join('')}${workspaceEntry()?`<a href="${workspaceEntry()[0]}" data-nav><span class="label">${icon(workspaceEntry()[1])}${e(workspaceEntry()[2])}</span>${icon('chevron','sm')}</a>`:''}<button id="logout"><span class="label">${icon('back')}退出登录</span></button></div>`;
   after=()=>bind('#logout','click',async()=>{await api('/api/auth/logout',{method:'POST'});state.user=null;state.csrf='';go('/');});
  }else if(path==='/app/privacy'){
   if(!state.user)throw Object.assign(new Error('请先登录'),{status:401});narrow=true;

@@ -1,0 +1,7 @@
+{
+  "invite_create": true,
+  "mobile_registration": true,
+  "ordinary_user_admin_forbidden": true,
+  "reset_and_login": true,
+  "javascript_errors": []
+}

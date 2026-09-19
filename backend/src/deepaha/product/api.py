@@ -28,6 +28,10 @@ class Strict(BaseModel):model_config=ConfigDict(extra='forbid')
 class Login(Strict):
     username:str=Field(min_length=3,max_length=80)
     password:str=Field(min_length=1,max_length=256)
+class Registration(Login):
+    password:str=Field(min_length=12,max_length=256)
+    invite_code:str=Field(min_length=1,max_length=128)
+    accepted:bool
 class Decide(Strict):
     decision:Literal['APPROVE','REJECT']
     preview_hash:str=Field(pattern=r'^[0-9a-f]{64}$')
@@ -106,6 +110,9 @@ def create_app(settings=None,product=None):
         if not inspect(p.db.engine).has_table('product_meta'):
             raise RuntimeError('Database not initialized. Run: python -m deepaha.product.cli init')
         tables=set(inspect(p.db.engine).get_table_names())
+        from .models import ACCESS_TABLE_NAMES
+        if not ACCESS_TABLE_NAMES.issubset(tables):
+            raise RuntimeError('邀请码结构尚未升级；备份后运行 python -m deepaha.product.cli upgrade-access')
         if not SCOUT_TABLE_NAMES.issubset(tables):
             raise RuntimeError('来源资产数据结构尚未升级。停服务后运行：python -m deepaha.product.cli upgrade')
         if not ACTIONABLE_TABLE_NAMES.issubset(tables):
@@ -176,7 +183,7 @@ def create_app(settings=None,product=None):
         res.set_cookie('deepaha_session',data['token'],max_age=43200,httponly=True,secure=settings.secure_cookie,samesite='lax',path='/')
         res.set_cookie('deepaha_csrf',data['csrf'],max_age=43200,httponly=False,secure=settings.secure_cookie,samesite='lax',path='/')
     @app.get('/api/site')
-    def site():return {'name':'机会星图','public_catalog':settings.public_catalog,'registration':settings.allow_registration}
+    def site():return {'name':'机会星图','public_catalog':settings.public_catalog,'registration':settings.allow_registration,'registration_mode':'invite' if settings.allow_registration else 'closed','access_notice_version':'beta-access-v1'}
     @app.get('/health/live')
     def live():return {'live':True,'version':'3.8.0-rc1'}
     @app.get('/health/ready')
@@ -190,9 +197,9 @@ def create_app(settings=None,product=None):
         auth_cookies(res,value)
         return {k:value[k] for k in ['username','roles','csrf']}
     @app.post('/api/auth/register')
-    def register(data:Login,req:Request,res:Response):
+    def register(data:Registration,req:Request,res:Response):
         if not settings.allow_registration:raise Problem('当前未开放自助注册',403)
-        p.create_account(data.username,data.password,['user'])
+        p.register_invited(data.username,data.password,data.invite_code,accepted=data.accepted,ip=req.client.host if req.client else 'unknown')
         value=p.login(data.username,data.password,req.client.host if req.client else 'unknown');auth_cookies(res,value)
         return {k:value[k] for k in ['username','roles','csrf']}
     @app.get('/api/auth/me')
@@ -204,6 +211,8 @@ def create_app(settings=None,product=None):
         user(req,write=True);p.logout(req.cookies['deepaha_session'])
         res.delete_cookie('deepaha_session',path='/');res.delete_cookie('deepaha_csrf',path='/')
         return {'logged_out':True}
+    from .access_api import mount_access
+    mount_access(app,p,user)
     @app.get('/api/catalog')
     def catalog(req:Request,q:str=Query('',max_length=300),kind:str=Query('',max_length=100),region:str=Query('',max_length=100),offset:int=Query(0,ge=0,le=1_000_000),limit:int=Query(20,ge=1,le=50),read_version:int|None=None):
         reader(req);return p.catalog(q,kind,region,offset,limit,read_version)

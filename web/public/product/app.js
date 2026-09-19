@@ -1,3 +1,4 @@
+import {renderAccess} from './access-ui.js';
 import {state,$,e,brand,icon,api,bind,toast,go,empty} from './core.js';
 import {renderUser} from './user.js';
 import {renderWork} from './workbench.js';
@@ -18,16 +19,15 @@ function enhanceControls(){
 }
 async function loginView(params){
  const next=params.get('next')||'/app/overview';
- return {html:`<main id="main-content" class="login-page"><div class="login-card">${brand()}<h1>登录机会星图</h1><form id="login-form"><div class="form-field"><label for="username">账号</label><input id="username" name="username" required minlength="3" maxlength="80" autocomplete="username"></div><div class="form-field"><label for="password">密码</label><input id="password" type="password" name="password" required maxlength="256" autocomplete="current-password"></div><button class="btn primary wide" type="submit">登录</button>${state.site.registration?'<button id="register" type="button" class="btn wide">注册新账号</button>':''}</form><a class="back-link" href="/" data-nav>返回首页</a></div></main>`,after:()=>{
+ return {html:`<main id="main-content" class="login-page"><div class="login-card">${brand()}<h1>登录机会星图</h1><form id="login-form"><div class="form-field"><label for="username">账号</label><input id="username" name="username" required minlength="3" maxlength="80" autocomplete="username"></div><div class="form-field"><label for="password">密码</label><input id="password" type="password" name="password" required maxlength="256" autocomplete="current-password"></div><button class="btn primary wide" type="submit">登录</button>${state.site.registration?'<a href="/register" data-nav class="btn wide">使用邀请码注册</a>':''}</form><a class="back-link" href="/reset-password" data-nav>忘记密码 / 使用重置码</a><a class="back-link" href="/" data-nav>返回首页</a></div></main>`,after:()=>{
   bind('#login-form','submit',async(_,f)=>{const r=await api('/api/auth/login',{method:'POST',data:Object.fromEntries(new FormData(f))});state.user=r;state.csrf=r.csrf;go(next,true);});
-  bind('#register','click',async()=>{const f=$('#login-form');if(!f.reportValidity())return;const r=await api('/api/auth/register',{method:'POST',data:Object.fromEntries(new FormData(f))});state.user=r;state.csrf=r.csrf;go('/app/profile');});
  }};
 }
 async function render(){
  const current=++generation,path=location.pathname,params=new URLSearchParams(location.search),app=$('#app');
  document.body.classList.add('route-loading');app?.setAttribute('aria-busy','true');
  try{
-  let page=path==='/login'?await loginView(params):path.startsWith('/review')||path.startsWith('/manage')?await renderWork(path,params):await renderUser(path,params);
+  let page=['/register','/reset-password','/account/security'].includes(path)?await renderAccess(path):path==='/login'?await loginView(params):path.startsWith('/review')||path.startsWith('/manage')?await renderWork(path,params):await renderUser(path,params);
   if(current!==generation)return;
   $('#app').innerHTML=page.html;page.after();enhanceControls();window.scrollTo(0,0);
   document.title=($('#main-content h1')?.textContent||'机会星图')+' · DeepAha';

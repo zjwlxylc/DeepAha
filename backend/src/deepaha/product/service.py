@@ -11,8 +11,9 @@ from .action_loop import ActionLoopMixin
 from .tasks import TasksMixin
 from .scout import ScoutMixin
 from .lab import LabMixin
+from .access import AccessMixin
 
-class Product(AuthMixin,SourcesMixin,IntakeMixin,CatalogMixin,ActionLoopMixin,PersonalMixin,TasksMixin,ScoutMixin,LabMixin):
+class Product(AccessMixin,AuthMixin,SourcesMixin,IntakeMixin,CatalogMixin,ActionLoopMixin,PersonalMixin,TasksMixin,ScoutMixin,LabMixin):
     def __init__(self,database_url,object_root):
         self.database_url=database_url;self.object_root=Path(object_root)
         self.db=Database(database_url);self.store=ArchiveStore(self.object_root)

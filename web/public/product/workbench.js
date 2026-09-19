@@ -1,3 +1,4 @@
+import {renderAccessManage} from './access-ui.js';
 import {renderScout} from './scout.js';
 import {renderLabManage} from './lab-ui.js';
 import {state,$,$$,e,icon,brand,has,time,types,statusText,tag,outside,go,api,bind,toast,modal,empty,pagination,card,fields,child,prepareReviewPaging} from './core.js';
@@ -5,11 +6,12 @@ import {state,$,$$,e,icon,brand,has,time,types,statusText,tag,outside,go,api,bin
 function shell(body,path,footer=''){
  const reviewNav=has('reviewer')?[['/review/overview','inbox','审核收件箱'],['/review/catalog','grid','收录管理']]:[];
  const manageNav=has('operator')?[['/manage','settings','运行与连接'],['/manage/sources','globe','来源管理'],['/manage/source-imports','upload','来源资产'],['/manage/tasks','layers','任务管理'],['/manage/lab','spark','机会实验室'],['/manage/feedback','message','反馈样本'],['/manage/history','history','操作记录']]:[];
- const nav=[...reviewNav,...manageNav],active=(u)=>u==='/manage'?path==='/manage':path.startsWith(u);
+ const adminNav=has('admin')?[['/manage/invitations','user','邀请与用户'],['/manage/users','user','用户管理'],['/manage/access-audit','history','账号记录']]:[];
+ const nav=[...reviewNav,...manageNav,...adminNav],active=(u)=>u==='/manage'?path==='/manage':path.startsWith(u);
  const title=nav.find(([u])=>active(u))?.[2]||(path.startsWith('/review/packet/')?'整体审核':has('reviewer')&&!has('operator')?'审核工作台':has('operator')&&!has('reviewer')?'系统管理':'工作台');
  const section=(label,items)=>items.length?`<div class="workspace-section-label">${label}</div>${items.map(([u,i,t])=>`<a href="${u}" data-nav class="${active(u)?'active':''}"${active(u)?' aria-current="page"':''}>${icon(i)}<span>${t}</span></a>`).join('')}`:'';
- const roles=[has('reviewer')?'审核员':'',has('operator')?'维护员':''].filter(Boolean);
- return `<aside class="work-sidebar">${brand()}<nav aria-label="工作台导航">${section('内容审核',reviewNav)}${section('系统管理',manageNav)}</nav><div class="sidebar-bottom row gap12"><span class="avatar">${e(state.user.username.slice(0,1).toUpperCase())}</span><div class="grow"><strong class="small">${e(state.user.username)}</strong><div class="muted tiny mt8">${roles.map(x=>e(x)).join(' · ')}</div></div><button id="work-logout" class="icon-btn" aria-label="退出登录">${icon('back','sm')}</button></div></aside><header class="work-top"><div class="breadcrumb"><span>DeepAha</span>${icon('chevron','sm')}<strong>${e(title)}</strong></div><div class="row gap8"><a class="btn sm" href="/app/actions" data-nav>${icon('bookmark','sm')}收藏与行动</a><a class="btn sm" href="/app/overview" data-nav>${icon('external','sm')}返回用户端</a></div></header><main id="main-content" tabindex="-1" class="work-main-current">${body}</main>${footer?`<div class="review-decisions">${footer}</div>`:''}<div class="work-mobile-message">${brand()}<h2>请在电脑浏览器打开工作台</h2><p class="muted">审核与系统管理面向桌面端；个人机会、收藏和行动可继续在当前设备查看。</p><a class="btn primary" href="/app/actions" data-nav>查看收藏与行动</a></div>`;
+ const roles=[has('admin')?'账号管理员':'',has('reviewer')?'审核员':'',has('operator')?'维护员':''].filter(Boolean);
+ return `<aside class="work-sidebar">${brand()}<nav aria-label="工作台导航">${section('内容审核',reviewNav)}${section('系统管理',manageNav)}${section('账号管理',adminNav)}</nav><div class="sidebar-bottom row gap12"><span class="avatar">${e(state.user.username.slice(0,1).toUpperCase())}</span><div class="grow"><strong class="small">${e(state.user.username)}</strong><div class="muted tiny mt8">${roles.map(x=>e(x)).join(' · ')}</div></div><button id="work-logout" class="icon-btn" aria-label="退出登录">${icon('back','sm')}</button></div></aside><header class="work-top"><div class="breadcrumb"><span>DeepAha</span>${icon('chevron','sm')}<strong>${e(title)}</strong></div><div class="row gap8"><a class="btn sm" href="/app/actions" data-nav>${icon('bookmark','sm')}收藏与行动</a><a class="btn sm" href="/app/overview" data-nav>${icon('external','sm')}返回用户端</a></div></header><main id="main-content" tabindex="-1" class="work-main-current">${body}</main>${footer?`<div class="review-decisions">${footer}</div>`:''}<div class="work-mobile-message">${brand()}<h2>请在电脑浏览器打开工作台</h2><p class="muted">审核与系统管理面向桌面端；个人机会、收藏和行动可继续在当前设备查看。</p><a class="btn primary" href="/app/actions" data-nav>查看收藏与行动</a></div>`;
 }
 
 function title(text,sub='',buttons=''){return `<div class="work-title"><div><h1>${e(text)}</h1>${sub?`<p>${e(sub)}</p>`:''}</div><div class="row gap8 wrap">${buttons}</div></div>`;}
@@ -29,7 +31,9 @@ async function newTask(){
 export async function renderWork(path,params){
  if(!state.user)throw Object.assign(new Error('请先登录'),{status:401});
  let body='',footer='',after=()=>{};
- if(path.startsWith('/manage/source-imports')){
+ if(['/manage/invitations','/manage/users','/manage/access-audit'].includes(path)){
+  const view=await renderAccessManage(path,params);body=view.body;after=view.after;
+ }else if(path.startsWith('/manage/source-imports')){
   const view=await renderScout(path,params);body=view.body;after=view.after;
  }else if(path==='/manage/lab'){
   const view=await renderLabManage();body=view.body;after=view.after;

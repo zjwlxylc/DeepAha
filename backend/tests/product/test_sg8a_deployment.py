@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 import os
 import subprocess
+import shutil
 import sys
 
 import pytest
@@ -90,7 +91,11 @@ def test_sg8a_server_assets_are_safe_and_versioned(tmp_path):
     ]
     assert all(path.exists() for path in required)
     for script in (ROOT/'ops/sg8a').glob('*.sh'):
-        subprocess.run(['bash','-n',str(script)],check=True)
+        # Resolve PATH explicitly: Windows CreateProcess otherwise prefers System32's
+        # WSL launcher even when a working Git Bash is first on PATH.
+        bash=shutil.which('bash')
+        assert bash, 'A working Bash is required for deployment script validation'
+        subprocess.run([bash,'-n',str(script)],check=True)
     compatibility=json.loads((ROOT/'RELEASE_COMPATIBILITY.json').read_text(encoding='utf-8'))
     assert compatibility['release']=='3.8.0-rc1'
     assert compatibility['schema_change_in_release'] is False
