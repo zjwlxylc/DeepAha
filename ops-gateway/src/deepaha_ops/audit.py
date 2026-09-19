@@ -10,12 +10,8 @@ from pathlib import Path
 from threading import Lock
 from typing import Any
 
-_AUTH_BEARER_PATTERN = re.compile(
-    r"(?i)(authorization\s*[:=]\s*bearer)\s+[^\s,;]+"
-)
-_SECRET_PATTERN = re.compile(
-    r"(?i)(api[_-]?key|password|secret|token)\s*[:=]\s*([^\s,;]+)"
-)
+_AUTH_BEARER_PATTERN = re.compile(r"(?i)(authorization\s*[:=]\s*bearer)\s+[^\s,;]+")
+_SECRET_PATTERN = re.compile(r"(?i)(api[_-]?key|password|secret|token)\s*[:=]\s*([^\s,;]+)")
 
 
 def redact_text(value: str) -> str:
@@ -71,9 +67,7 @@ class AuditLog:
                 separators=(",", ":"),
                 ensure_ascii=False,
             )
-            digest = hashlib.sha256(
-                (self._previous_hash + canonical).encode("utf-8")
-            ).hexdigest()
+            digest = hashlib.sha256((self._previous_hash + canonical).encode("utf-8")).hexdigest()
             record = {
                 **payload,
                 "previous_hash": self._previous_hash,
@@ -100,8 +94,7 @@ class AuditLog:
             return {
                 key: (
                     "[REDACTED]"
-                    if key.lower()
-                    in {"token", "authorization", "password", "secret"}
+                    if key.lower() in {"token", "authorization", "password", "secret"}
                     else self._redact(item)
                 )
                 for key, item in value.items()
