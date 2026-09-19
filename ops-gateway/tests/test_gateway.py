@@ -160,6 +160,27 @@ def test_idempotency_returns_same_operation(
     assert second.json()["idempotent_replay"] is True
 
 
+def test_idempotency_conflict_is_rejected(tmp_path: Path) -> None:
+    headers = {
+        **auth(),
+        "Idempotency-Key": "deploy-conflict-same-1",
+    }
+    with TestClient(create_app(settings(tmp_path))) as client:
+        first = client.post(
+            "/v1/deploy",
+            headers=headers,
+            json={"environment": "staging", "commit_sha": "d" * 40},
+        )
+        conflict = client.post(
+            "/v1/deploy",
+            headers=headers,
+            json={"environment": "staging", "commit_sha": "e" * 40},
+        )
+    assert first.status_code == 202
+    assert conflict.status_code == 409
+    assert conflict.json()["detail"]["code"] == "IDEMPOTENCY_CONFLICT"
+
+
 def test_mutations_disabled_fail_closed(
     tmp_path: Path,
 ) -> None:
