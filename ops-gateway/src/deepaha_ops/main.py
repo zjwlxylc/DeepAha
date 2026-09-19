@@ -422,4 +422,3 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
 
     return app
-
