@@ -43,21 +43,29 @@ class AuditLog:
 
     def _load_tail_hash(self) -> None:
         if not self.path.exists():
+            if self._previous_hash != "0" * 64:
+                raise ValueError("AUDIT_CHAIN_REMOVED")
             return
-        try:
-            with self.path.open("rb") as handle:
-                lines = handle.readlines()
-            if not lines:
-                return
-            record = json.loads(lines[-1])
-            digest = record.get("hash")
-            if isinstance(digest, str) and len(digest) == 64:
-                self._previous_hash = digest
-        except (OSError, json.JSONDecodeError):
-            self._previous_hash = "0" * 64
+        previous = "0" * 64
+        with self.path.open("r", encoding="utf-8") as handle:
+            for line in handle:
+                record = json.loads(line)
+                digest = record.pop("hash")
+                if record.pop("previous_hash") != previous:
+                    raise ValueError("AUDIT_CHAIN_CORRUPTED")
+                canonical = json.dumps(
+                    record, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+                )
+                if hashlib.sha256((previous + canonical).encode()).hexdigest() != digest:
+                    raise ValueError("AUDIT_CHAIN_CORRUPTED")
+                previous = digest
+        if previous == "0" * 64 and self._previous_hash != previous:
+            raise ValueError("AUDIT_CHAIN_TRUNCATED")
+        self._previous_hash = previous
 
     def append(self, event: AuditEvent) -> str:
         with self._lock:
+            self._load_tail_hash()
             self.path.parent.mkdir(parents=True, exist_ok=True)
             payload = asdict(event)
             payload["details"] = self._redact(payload["details"])
