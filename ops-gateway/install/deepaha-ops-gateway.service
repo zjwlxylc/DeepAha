@@ -21,7 +21,6 @@ ProtectControlGroups=true
 RestrictSUIDSGID=true
 LockPersonality=true
 RestrictRealtime=true
-MemoryDenyWriteExecute=true
 UMask=0077
 
 [Install]
