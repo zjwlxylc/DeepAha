@@ -1,0 +1,4 @@
+# Validate with visudo -cf before enabling.
+# The adapter must be root:root and not writable by deepaha-ops.
+Cmnd_Alias DEEPAHA_OPS_ADAPTER = /usr/local/sbin/deepaha-ops-adapter *
+deepaha-ops ALL=(root) NOPASSWD: DEEPAHA_OPS_ADAPTER
