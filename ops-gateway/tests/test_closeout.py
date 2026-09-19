@@ -138,3 +138,39 @@ def test_restart_is_unknown_not_rolled_back(tmp_path):
     )
     s.mark_running(op.id)
     assert OperationStore(path).get(op.id).status == "UNKNOWN"
+
+
+def test_runner_interruption_never_replays_on_restart(tmp_path, monkeypatch):
+    import asyncio
+    import time
+
+    settings = configured(tmp_path)
+    settings.queue_limit = 1
+    app = create_app(settings)
+    calls = []
+
+    async def blocked(args):
+        calls.append(args)
+        await asyncio.Event().wait()
+
+    monkeypatch.setattr(app.state.runner, "_run", blocked)
+    with TestClient(app) as c:
+        first = c.post("/v1/restart", json=payload(), headers=headers()).json()
+        for _ in range(100):
+            if calls:
+                break
+            time.sleep(0.01)
+        assert len(calls) == 1
+        second = c.post(
+            "/v1/restart", json=payload(idempotency_key="queue-second"), headers=headers()
+        )
+        assert second.status_code == 202
+        full = c.post("/v1/restart", json=payload(idempotency_key="queue-third"), headers=headers())
+        assert full.status_code == 503
+    restarted = create_app(settings)
+    with TestClient(restarted) as c:
+        result = c.get("/v1/operations/" + first["id"], headers=headers()).json()
+        assert result["status"] == "UNKNOWN"
+        replay = c.post("/v1/restart", json=payload(), headers=headers()).json()
+        assert replay["id"] == first["id"] and replay["status"] == "UNKNOWN"
+        assert len(calls) == 1
