@@ -35,9 +35,7 @@ class DeployRequest(BaseModel):
     def validate_sha(cls, value: str) -> str:
         value = value.lower()
         if not COMMIT_RE.fullmatch(value):
-            raise ValueError(
-                "commit_sha must be a full 40-character lowercase hexadecimal SHA"
-            )
+            raise ValueError("commit_sha must be a full 40-character lowercase hexadecimal SHA")
         return value
 
 
@@ -55,9 +53,7 @@ class RollbackRequest(BaseModel):
     def validate_target(cls, value: str) -> str:
         value = value.lower()
         if value != "previous" and not COMMIT_RE.fullmatch(value):
-            raise ValueError(
-                "target must be 'previous' or a full 40-character commit SHA"
-            )
+            raise ValueError("target must be 'previous' or a full 40-character commit SHA")
         return value
 
 
@@ -83,12 +79,7 @@ class BetaUserRequest(BaseModel):
         if len(value) > 254 or value.count("@") != 1:
             raise ValueError("invalid email")
         local, domain = value.split("@", 1)
-        if (
-            not local
-            or not domain
-            or "." not in domain
-            or any(char.isspace() for char in value)
-        ):
+        if not local or not domain or "." not in domain or any(char.isspace() for char in value):
             raise ValueError("invalid email")
         return value
 
@@ -196,9 +187,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             )
         return {
             "adapter_status": output,
-            "recent_operations": [
-                op.public() for op in store.list_recent(5)
-            ],
+            "recent_operations": [op.public() for op in store.list_recent(5)],
         }
 
     @app.get("/v1/logs")
@@ -213,9 +202,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 status_code=422,
                 detail={"code": "LOG_LINE_LIMIT_EXCEEDED"},
             )
-        code, output = await runner.direct(
-            ["logs", service, str(lines)]
-        )
+        code, output = await runner.direct(["logs", service, str(lines)])
         audit.append(
             AuditEvent(
                 timestamp=now_iso(),
@@ -245,11 +232,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         limit: Annotated[int, Query(ge=1, le=100)] = 20,
         _principal: Principal = Depends(require_scope("read")),
     ) -> dict[str, object]:
-        return {
-            "operations": [
-                op.public() for op in store.list_recent(limit)
-            ]
-        }
+        return {"operations": [op.public() for op in store.list_recent(limit)]}
 
     @app.get("/v1/operations/{operation_id}")
     async def operation(
@@ -277,20 +260,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 status_code=503,
                 detail={"code": "MUTATIONS_DISABLED"},
             )
-        if (
-            idempotency_key is None
-            or not IDEMPOTENCY_RE.fullmatch(idempotency_key)
-        ):
+        if idempotency_key is None or not IDEMPOTENCY_RE.fullmatch(idempotency_key):
             raise HTTPException(
                 status_code=400,
                 detail={"code": "IDEMPOTENCY_KEY_REQUIRED"},
             )
         environment = payload.get("environment")
-        target = (
-            payload.get("target")
-            or payload.get("commit_sha")
-            or payload.get("username")
-        )
+        target = payload.get("target") or payload.get("commit_sha") or payload.get("username")
         item, created = store.create(
             action=action,
             environment=str(environment) if environment else None,
@@ -333,10 +309,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             Header(alias="Idempotency-Key"),
         ] = None,
     ) -> dict[str, object]:
-        if (
-            body.environment == "production"
-            and body.confirmation != "DEPLOY_PRODUCTION"
-        ):
+        if body.environment == "production" and body.confirmation != "DEPLOY_PRODUCTION":
             raise HTTPException(
                 status_code=400,
                 detail={"code": "PRODUCTION_CONFIRMATION_REQUIRED"},
@@ -386,11 +359,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             Header(alias="Idempotency-Key"),
         ] = None,
     ) -> dict[str, object]:
-        required = (
-            "ROLLBACK_PRODUCTION"
-            if body.environment == "production"
-            else "ROLLBACK_STAGING"
-        )
+        required = "ROLLBACK_PRODUCTION" if body.environment == "production" else "ROLLBACK_STAGING"
         if body.confirmation != required:
             raise HTTPException(
                 status_code=400,
@@ -435,9 +404,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def create_beta_user(
         body: BetaUserRequest,
         request: Request,
-        principal: Principal = Depends(
-            require_scope("user_admin")
-        ),
+        principal: Principal = Depends(require_scope("user_admin")),
         idempotency_key: Annotated[
             str | None,
             Header(alias="Idempotency-Key"),
