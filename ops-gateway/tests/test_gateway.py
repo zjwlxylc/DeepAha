@@ -34,10 +34,10 @@ def token_map() -> str:
 def make_adapter(path: Path) -> None:
     path.write_text(
         "#!/bin/sh\n"
-        "case \"$1\" in\n"
-        " status) echo '{\"release\":\"abc\"}' ;;\n"
-        " logs) echo \"log $2 $3\" ;;\n"
-        " *) echo \"action:$*\" ;;\n"
+        'case "$1" in\n'
+        ' status) echo \'{"release":"abc"}\' ;;\n'
+        ' logs) echo "log $2 $3" ;;\n'
+        ' *) echo "action:$*" ;;\n'
         "esac\n",
         encoding="utf-8",
     )
@@ -163,9 +163,7 @@ def test_idempotency_returns_same_operation(
 def test_mutations_disabled_fail_closed(
     tmp_path: Path,
 ) -> None:
-    with TestClient(
-        create_app(settings(tmp_path, mutations=False))
-    ) as client:
+    with TestClient(create_app(settings(tmp_path, mutations=False))) as client:
         response = client.post(
             "/v1/restart",
             headers={
@@ -175,10 +173,7 @@ def test_mutations_disabled_fail_closed(
             json={"target": "web"},
         )
     assert response.status_code == 503
-    assert (
-        response.json()["detail"]["code"]
-        == "MUTATIONS_DISABLED"
-    )
+    assert response.json()["detail"]["code"] == "MUTATIONS_DISABLED"
 
 
 def test_logs_are_allowlisted_and_bounded(
@@ -235,10 +230,7 @@ def test_audit_does_not_record_bearer_token(
     tmp_path: Path,
 ) -> None:
     secret = "super-secret-token-value"
-    text = (
-        f"Authorization: Bearer {secret} "
-        f"token={secret} password={secret}"
-    )
+    text = f"Authorization: Bearer {secret} token={secret} password={secret}"
     redacted = redact_text(text)
     assert secret not in redacted
     assert redacted.count("[REDACTED]") == 3
