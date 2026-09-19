@@ -46,6 +46,11 @@ def load(path):
     return json.loads(trusted(path).read_text())
 
 
+def file_hash(path):
+    with path.open("rb") as handle:
+        return hashlib.file_digest(handle, "sha256").hexdigest()
+
+
 def host_event(event, details):
     """Fail closed for privileged CLI too; local chain does not defeat a root attacker."""
     with open("/run/lock/deepaha-ops-host-audit.lock", "w") as lock:
@@ -161,7 +166,10 @@ def healthy(binding):
 
 
 def release(binding, sha, old, environment):
-    manifest = load(REGISTRY / "releases" / f"{sha}.json")
+    path = REGISTRY / "releases" / f"{sha}.json"
+    if not path.exists():
+        reject("RELEASE_NOT_APPROVED")
+    manifest = load(path)
     if (
         manifest["sha"] != sha
         or manifest["repository"] != binding["repository"]
@@ -187,7 +195,7 @@ def release(binding, sha, old, environment):
                 reject("RELEASE_SYMLINK")
             continue
         if p.is_file():
-            files[rel] = hashlib.sha256(trusted(p).read_bytes()).hexdigest()
+            files[rel] = file_hash(trusted(p))
         elif p.stat().st_uid != 0 or p.stat().st_mode & 0o022:
             reject("UNTRUSTED_RELEASE_DIRECTORY")
     if files != manifest["files"]:
@@ -262,11 +270,13 @@ def backup(binding, sha):
             "scope": ["database including accounts and sessions", "objects"],
             "secrets": "excluded; provision independently",
             "consistency": "API and Worker stopped during both captures",
-            "files": {
-                p.name: hashlib.sha256(p.read_bytes()).hexdigest()
-                for p in directory.iterdir()
-                if p.is_file()
-            },
+            "database_locale": json.loads(
+                sql(
+                    binding,
+                    "SELECT json_build_object('collate',datcollate,'ctype',datctype) FROM pg_database WHERE datname=current_database()",
+                )
+            ),
+            "files": {p.name: file_hash(p) for p in directory.iterdir() if p.is_file()},
         }
         (directory / "manifest.json").write_text(json.dumps(metadata, sort_keys=True))
         return {"backup_id": backup_id, "integrity": "VERIFIED", "consistency": "QUIESCED"}
