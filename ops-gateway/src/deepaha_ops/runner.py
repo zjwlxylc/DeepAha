@@ -22,7 +22,9 @@ class OperationRunner:
         self.settings = settings
         self.store = store
         self.audit = audit
-        self.queue: asyncio.Queue[str] = asyncio.Queue()
+        self.queue: asyncio.Queue[str] = asyncio.Queue(maxsize=settings.queue_limit)
+        self.failed = False
+        self._direct_limit = asyncio.Semaphore(2)
         self._worker: asyncio.Task[None] | None = None
 
     async def start(self) -> None:
@@ -47,6 +49,14 @@ class OperationRunner:
             operation_id = await self.queue.get()
             try:
                 await self._execute(operation_id)
+            except Exception:
+                self.failed = True
+                self.store._update(
+                    operation_id,
+                    status="UNKNOWN",
+                    output="Reconciliation required; runner failed closed",
+                )
+                return
             finally:
                 self.queue.task_done()
 
@@ -54,7 +64,6 @@ class OperationRunner:
         operation = self.store.get(operation_id)
         if operation is None:
             return
-        self.store.mark_running(operation_id)
         args = self._adapter_args(operation.action, operation.params)
         self.audit.append(
             AuditEvent(
@@ -68,12 +77,8 @@ class OperationRunner:
                 },
             )
         )
+        self.store.mark_running(operation_id)
         exit_code, output = await self._run(args)
-        self.store.finish(
-            operation_id,
-            exit_code=exit_code,
-            output=output,
-        )
         self.audit.append(
             AuditEvent(
                 timestamp=now_iso(),
@@ -87,9 +92,16 @@ class OperationRunner:
                 },
             )
         )
+        self.store.finish(operation_id, exit_code=exit_code, output=output)
+        if exit_code in (124, 125):
+            self.store._update(operation_id, status="UNKNOWN")
 
     async def direct(self, args: Sequence[str]) -> tuple[int, str]:
-        return await self._run([*args])
+        async with self._direct_limit:
+            try:
+                return await asyncio.wait_for(self._run([*args]), timeout=25)
+            except TimeoutError:
+                return 124, "Read timed out"
 
     async def _run(self, adapter_args: Sequence[str]) -> tuple[int, str]:
         adapter = str(self.settings.adapter_path)
@@ -107,11 +119,19 @@ class OperationRunner:
             )
         except OSError as exc:
             return 126, f"adapter unavailable: {exc.__class__.__name__}"
+        output = bytearray()
+        truncated = False
+
+        async def drain():
+            nonlocal truncated
+            while chunk := await process.stdout.read(4096):
+                remaining = self.settings.max_output_bytes - len(output)
+                output.extend(chunk[:remaining])
+                truncated |= len(chunk) > remaining
+            await process.wait()
+
         try:
-            stdout, _ = await asyncio.wait_for(
-                process.communicate(),
-                timeout=self.settings.command_timeout_seconds,
-            )
+            await asyncio.wait_for(drain(), timeout=self.settings.command_timeout_seconds)
         except TimeoutError:
             os.killpg(process.pid, signal.SIGKILL)
             await process.wait()
@@ -124,11 +144,11 @@ class OperationRunner:
                 os.killpg(process.pid, signal.SIGKILL)
                 await process.wait()
             raise
-        raw = stdout[: self.settings.max_output_bytes].decode(
+        raw = output.decode(
             "utf-8",
             errors="replace",
         )
-        if len(stdout) > self.settings.max_output_bytes:
+        if truncated:
             raw += "\n[OUTPUT_TRUNCATED]"
         return int(process.returncode or 0), redact_text(raw)
 
@@ -137,26 +157,12 @@ class OperationRunner:
         action: str,
         params: dict[str, object],
     ) -> list[str]:
-        if action == "deploy":
+        if action in ("deploy", "backup", "rollback", "restart"):
             return [
-                "deploy",
+                action,
                 str(params["environment"]),
-                str(params["commit_sha"]),
-            ]
-        if action == "backup":
-            return ["backup", str(params["environment"])]
-        if action == "rollback":
-            return [
-                "rollback",
-                str(params["environment"]),
-                str(params["target"]),
-            ]
-        if action == "restart":
-            return ["restart", str(params["target"])]
-        if action == "create_beta_user":
-            return [
-                "create-beta-user",
-                str(params["username"]),
-                str(params["email"]),
+                str(params["expected_current"]),
+                str(params.get("commit_sha") or params.get("target") or "-"),
+                str(params.get("approval_id") or "-"),
             ]
         raise ValueError(f"unsupported action: {action}")

@@ -9,13 +9,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ALL_SCOPES = frozenset(
     {
-        "read",
-        "deploy",
-        "backup",
-        "rollback",
-        "restart",
-        "user_admin",
+        f"{env}:{action}"
+        for env in ("staging", "production")
+        for action in ("read", "deploy", "backup", "rollback", "restart")
     }
+    | {"gateway:read"}
 )
 
 
@@ -26,13 +24,20 @@ class Settings(BaseSettings):
     host: str = "127.0.0.1"
     port: int = 8765
     mutations_enabled: bool = False
+    staging_mutations_enabled: bool = False
+    queue_limit: int = Field(default=16, ge=1, le=64)
+    oauth_issuer: str = ""
+    oauth_resource: str = "https://ops.deepaha.com/mcp"
+    oauth_introspection_url: str = ""
+    oauth_client_id: str = "deepaha-ops-resource"
+    oauth_client_secret_file: Path | None = None
     adapter_path: Path = Path("/usr/local/sbin/deepaha-ops-adapter")
     adapter_use_sudo: bool = True
     state_dir: Path = Path("/var/lib/deepaha-ops")
     audit_log: Path = Path("/var/log/deepaha-ops/audit.jsonl")
     command_timeout_seconds: int = Field(default=1800, ge=10, le=7200)
-    max_output_bytes: int = Field(default=131_072, ge=4096, le=1_048_576)
-    max_log_lines: int = Field(default=500, ge=20, le=2000)
+    max_output_bytes: int = Field(default=16_000, ge=4096, le=16_000)
+    max_log_lines: int = Field(default=500, ge=20, le=500)
     trusted_hosts: list[str] = Field(
         default_factory=lambda: ["ops.deepaha.com", "localhost", "127.0.0.1"]
     )

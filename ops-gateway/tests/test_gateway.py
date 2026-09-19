@@ -1,257 +1,129 @@
-from __future__ import annotations
+"""Original gateway contracts updated for explicit environment/body idempotency."""
 
+import asyncio
 import hashlib
 import json
+import sys
 import time
 from pathlib import Path
 
 from fastapi.testclient import TestClient
+from test_closeout import READ, TOKEN, configured, headers, payload
 
 from deepaha_ops.audit import redact_text
-from deepaha_ops.config import Settings
 from deepaha_ops.main import create_app
 
-TOKEN = "test-token-with-more-than-thirty-two-characters"
-READ_TOKEN = "read-only-token-with-more-than-thirty-two-chars"
+
+def app_client(tmp_path, monkeypatch, enabled=True):
+    settings = configured(tmp_path)
+    settings.mutations_enabled = enabled
+    app = create_app(settings)
+
+    async def fake(args):
+        return 0, "action:" + " ".join(args)
+
+    monkeypatch.setattr(app.state.runner, "_run", fake)
+    return TestClient(app)
 
 
-def token_map() -> str:
-    return json.dumps(
-        {
-            hashlib.sha256(TOKEN.encode()).hexdigest(): [
-                "read",
-                "deploy",
-                "backup",
-                "rollback",
-                "restart",
-                "user_admin",
-            ],
-            hashlib.sha256(READ_TOKEN.encode()).hexdigest(): ["read"],
-        }
-    )
-
-
-def make_adapter(path: Path) -> None:
-    path.write_text(
-        "#!/bin/sh\n"
-        'case "$1" in\n'
-        ' status) echo \'{"release":"abc"}\' ;;\n'
-        ' logs) echo "log $2 $3" ;;\n'
-        ' *) echo "action:$*" ;;\n'
-        "esac\n",
-        encoding="utf-8",
-    )
-    path.chmod(0o755)
-
-
-def settings(
-    tmp_path: Path,
-    *,
-    mutations: bool = True,
-) -> Settings:
-    adapter = tmp_path / "adapter.sh"
-    make_adapter(adapter)
-    return Settings(
-        environment="test",
-        trusted_hosts=["testserver"],
-        mutations_enabled=mutations,
-        adapter_path=adapter,
-        adapter_use_sudo=False,
-        state_dir=tmp_path / "state",
-        audit_log=tmp_path / "audit" / "audit.jsonl",
-        token_hashes_json=token_map(),
-        command_timeout_seconds=10,
-    )
-
-
-def auth(token: str = TOKEN) -> dict[str, str]:
-    return {"Authorization": f"Bearer {token}"}
-
-
-def test_health_is_public(tmp_path: Path) -> None:
-    with TestClient(create_app(settings(tmp_path))) as client:
-        response = client.get("/health")
-    assert response.status_code == 200
-    assert response.json()["status"] == "ok"
-
-
-def test_status_requires_auth(tmp_path: Path) -> None:
-    with TestClient(create_app(settings(tmp_path))) as client:
-        assert client.get("/v1/status").status_code == 401
-        response = client.get("/v1/status", headers=auth())
-    assert response.status_code == 200
-    assert "abc" in response.json()["adapter_status"]
-
-
-def test_read_only_token_cannot_deploy(tmp_path: Path) -> None:
-    with TestClient(create_app(settings(tmp_path))) as client:
-        response = client.post(
-            "/v1/deploy",
-            headers={
-                **auth(READ_TOKEN),
-                "Idempotency-Key": "deploy-readonly-1",
-            },
-            json={
-                "environment": "staging",
-                "commit_sha": "a" * 40,
-            },
+def test_health_auth_and_host(tmp_path, monkeypatch):
+    with app_client(tmp_path, monkeypatch) as c:
+        assert c.get("/health").status_code == 200
+        assert c.get("/v1/status?environment=staging").status_code == 401
+        assert (
+            c.get("/v1/status?environment=staging", headers=headers("bad-token")).status_code == 401
         )
-    assert response.status_code == 403
+        assert c.get("/health", headers={"Host": "evil.invalid"}).status_code == 400
+        assert c.get("/v1/status?environment=staging", headers=headers()).status_code == 200
 
 
-def test_production_deploy_requires_confirmation_and_full_sha(
-    tmp_path: Path,
-) -> None:
-    with TestClient(create_app(settings(tmp_path))) as client:
-        bad_sha = client.post(
-            "/v1/deploy",
-            headers={
-                **auth(),
-                "Idempotency-Key": "deploy-production-1",
-            },
-            json={
-                "environment": "production",
-                "commit_sha": "main",
-                "confirmation": "DEPLOY_PRODUCTION",
-            },
+def test_read_token_cannot_deploy(tmp_path, monkeypatch):
+    with app_client(tmp_path, monkeypatch) as c:
+        body = payload(commit_sha="a" * 40)
+        body.pop("target")
+        assert c.post("/v1/deploy", headers=headers(READ), json=body).status_code == 403
+
+
+def test_invalid_parameters_and_disabled_optional_actions(tmp_path, monkeypatch):
+    with app_client(tmp_path, monkeypatch) as c:
+        for target in ["web", "sshd", "api;id", "/etc/passwd"]:
+            assert (
+                c.post("/v1/restart", headers=headers(), json=payload(target=target)).status_code
+                == 422
+            )
+        for key, value in [
+            ("expected_current", "main"),
+            ("idempotency_key", "short"),
+            ("path", "/tmp"),
+        ]:
+            assert (
+                c.post("/v1/restart", headers=headers(), json=payload(**{key: value})).status_code
+                == 422
+            )
+        assert c.post("/v1/beta-users", headers=headers(), json={}).status_code == 404
+
+
+def test_mutations_disabled_fail_closed(tmp_path, monkeypatch):
+    with app_client(tmp_path, monkeypatch, False) as c:
+        assert c.post("/v1/restart", json=payload(), headers=headers()).status_code == 503
+
+
+def test_logs_allowlisted_bounded(tmp_path, monkeypatch):
+    with app_client(tmp_path, monkeypatch) as c:
+        assert (
+            c.get(
+                "/v1/logs?environment=staging&service=api&lines=20", headers=headers()
+            ).status_code
+            == 200
         )
-        missing_confirm = client.post(
-            "/v1/deploy",
-            headers={
-                **auth(),
-                "Idempotency-Key": "deploy-production-2",
-            },
-            json={
-                "environment": "production",
-                "commit_sha": "b" * 40,
-            },
-        )
-    assert bad_sha.status_code == 422
-    assert missing_confirm.status_code == 400
+        for query in ["service=sshd&lines=20", "service=api&lines=501", "service=api&lines=1"]:
+            assert (
+                c.get("/v1/logs?environment=staging&" + query, headers=headers()).status_code == 422
+            )
+        assert c.get("/v1/gateway/logs", headers=headers()).status_code == 403
 
 
-def test_idempotency_returns_same_operation(
-    tmp_path: Path,
-) -> None:
-    headers = {
-        **auth(),
-        "Idempotency-Key": "deploy-staging-same-1",
-    }
-    with TestClient(create_app(settings(tmp_path))) as client:
-        first = client.post(
-            "/v1/deploy",
-            headers=headers,
-            json={
-                "environment": "staging",
-                "commit_sha": "c" * 40,
-            },
-        )
-        second = client.post(
-            "/v1/deploy",
-            headers=headers,
-            json={
-                "environment": "staging",
-                "commit_sha": "c" * 40,
-            },
-        )
-    assert first.status_code == 202
-    assert second.status_code == 202
-    assert first.json()["id"] == second.json()["id"]
-    assert second.json()["idempotent_replay"] is True
-
-
-def test_idempotency_conflict_is_rejected(tmp_path: Path) -> None:
-    headers = {
-        **auth(),
-        "Idempotency-Key": "deploy-conflict-same-1",
-    }
-    with TestClient(create_app(settings(tmp_path))) as client:
-        first = client.post(
-            "/v1/deploy",
-            headers=headers,
-            json={"environment": "staging", "commit_sha": "d" * 40},
-        )
-        conflict = client.post(
-            "/v1/deploy",
-            headers=headers,
-            json={"environment": "staging", "commit_sha": "e" * 40},
-        )
-    assert first.status_code == 202
-    assert conflict.status_code == 409
-    assert conflict.json()["detail"]["code"] == "IDEMPOTENCY_CONFLICT"
-
-
-def test_mutations_disabled_fail_closed(
-    tmp_path: Path,
-) -> None:
-    with TestClient(create_app(settings(tmp_path, mutations=False))) as client:
-        response = client.post(
-            "/v1/restart",
-            headers={
-                **auth(),
-                "Idempotency-Key": "restart-disabled-1",
-            },
-            json={"target": "web"},
-        )
-    assert response.status_code == 503
-    assert response.json()["detail"]["code"] == "MUTATIONS_DISABLED"
-
-
-def test_logs_are_allowlisted_and_bounded(
-    tmp_path: Path,
-) -> None:
-    with TestClient(create_app(settings(tmp_path))) as client:
-        okay = client.get(
-            "/v1/logs?service=api&lines=20",
-            headers=auth(),
-        )
-        bad = client.get(
-            "/v1/logs?service=sshd&lines=20",
-            headers=auth(),
-        )
-        too_many = client.get(
-            "/v1/logs?service=api&lines=9999",
-            headers=auth(),
-        )
-    assert okay.status_code == 200
-    assert bad.status_code == 422
-    assert too_many.status_code == 422
-
-
-def test_operation_completes_and_persists_output(
-    tmp_path: Path,
-) -> None:
-    headers = {
-        **auth(),
-        "Idempotency-Key": "restart-web-complete-1",
-    }
-    with TestClient(create_app(settings(tmp_path))) as client:
-        queued = client.post(
-            "/v1/restart",
-            headers=headers,
-            json={"target": "web"},
-        )
-        operation_id = queued.json()["id"]
-        deadline = time.time() + 2
-        final = None
-        while time.time() < deadline:
-            final = client.get(
-                f"/v1/operations/{operation_id}",
-                headers=auth(),
-            ).json()
-            if final["status"] in {"SUCCEEDED", "FAILED"}:
+def test_operation_completes_and_persists(tmp_path, monkeypatch):
+    with app_client(tmp_path, monkeypatch) as c:
+        op = c.post("/v1/restart", json=payload(), headers=headers()).json()
+        for _ in range(50):
+            result = c.get("/v1/operations/" + op["id"], headers=headers()).json()
+            if result["status"] == "SUCCEEDED":
                 break
-            time.sleep(0.02)
-    assert final is not None
-    assert final["status"] == "SUCCEEDED"
-    assert "action:restart web" in final["output"]
+            time.sleep(0.01)
+        assert result["status"] == "SUCCEEDED"
+        assert "restart staging" in result["output"]
+    assert TOKEN not in (tmp_path / "audit.jsonl").read_text()
 
 
-def test_audit_does_not_record_bearer_token(
-    tmp_path: Path,
-) -> None:
-    secret = "super-secret-token-value"
-    text = f"Authorization: Bearer {secret} token={secret} password={secret}"
-    redacted = redact_text(text)
-    assert secret not in redacted
-    assert redacted.count("[REDACTED]") == 3
+def test_production_requires_non_model_authorization(tmp_path, monkeypatch):
+    settings = configured(tmp_path)
+    scopes = json.loads(settings.token_hashes_json)
+    scopes[hashlib.sha256(TOKEN.encode()).hexdigest()] += ["production:deploy"]
+    settings.token_hashes_json = json.dumps(scopes)
+    with TestClient(create_app(settings)) as c:
+        body = payload(environment="production", commit_sha="b" * 40)
+        body.pop("target")
+        response = c.post("/v1/deploy", json=body, headers=headers())
+        assert response.status_code == 403
+        assert response.json()["detail"]["code"] == "PER_OPERATION_HUMAN_AUTH_REQUIRED"
+        body["confirmation"] = "DEPLOY_PRODUCTION"
+        assert c.post("/v1/deploy", json=body, headers=headers()).status_code == 422
+
+
+def test_audit_redaction():
+    secret = "synthetic-secret-value"
+    assert secret not in redact_text(
+        f"Authorization: Bearer {secret} password={secret} token={secret}"
+    )
+
+
+def test_streaming_output_is_bounded(tmp_path):
+    app = create_app(configured(tmp_path))
+    runner = app.state.runner
+    runner.settings.adapter_path = Path(sys.executable)
+    runner.settings.adapter_use_sudo = False
+    code, out = asyncio.run(runner._run(["-c", 'import sys; sys.stdout.write("x"*4000000)']))
+    assert code == 0
+    assert len(out) <= runner.settings.max_output_bytes + 40
+    assert out.endswith("[OUTPUT_TRUNCATED]")

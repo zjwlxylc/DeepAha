@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from contextlib import contextmanager
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -40,10 +41,15 @@ class OperationStore:
         self._lock = Lock()
         self._initialize()
 
-    def _connect(self) -> sqlite3.Connection:
+    @contextmanager
+    def _connect(self):
         connection = sqlite3.connect(self.db_path)
         connection.row_factory = sqlite3.Row
-        return connection
+        try:
+            with connection:
+                yield connection
+        finally:
+            connection.close()
 
     def _initialize(self) -> None:
         with self._connect() as connection:
@@ -78,8 +84,9 @@ class OperationStore:
         now = datetime.now(UTC).isoformat()
         with self._connect() as connection:
             connection.execute(
-                "UPDATE operations SET status='ABORTED', finished_at=?, "
-                "output=COALESCE(output, 'gateway restarted before completion') "
+                "UPDATE operations SET status='UNKNOWN', finished_at=?, "
+                "output=COALESCE(output, 'gateway restarted; "
+                "reconcile host state before any retry') "
                 "WHERE status IN ('QUEUED','RUNNING')",
                 (now,),
             )
@@ -156,11 +163,11 @@ class OperationStore:
             ).fetchone()
         return self._row(row) if row else None
 
-    def list_recent(self, limit: int = 20) -> list[Operation]:
+    def list_recent(self, limit: int = 20, environment: str | None = None) -> list[Operation]:
         with self._connect() as connection:
             rows = connection.execute(
-                "SELECT * FROM operations ORDER BY created_at DESC LIMIT ?",
-                (limit,),
+                "SELECT * FROM operations WHERE environment=? ORDER BY created_at DESC LIMIT ?",
+                (environment, limit),
             ).fetchall()
         return [self._row(row) for row in rows]
 

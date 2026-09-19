@@ -1,12 +1,14 @@
 [project]
 name = "deepaha-ops-gateway"
-version = "1.0.0"
+version = "1.1.0"
 description = "Least-privilege operations gateway for DeepAha"
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.115,<1",
   "pydantic-settings>=2.10,<3",
-  "uvicorn[standard]>=0.35,<1",
+  "uvicorn>=0.35,<1",
+  "mcp==1.30.0",
+  "httpx>=0.28,<1",
 ]
 
 [dependency-groups]

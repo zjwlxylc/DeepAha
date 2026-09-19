@@ -1,429 +1,192 @@
-from __future__ import annotations
-
-import re
 from contextlib import asynccontextmanager
 from typing import Annotated, Literal
 from uuid import uuid4
 
-from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request, status
+from fastapi import Depends, FastAPI, Query, Request
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, ConfigDict, Field
 
-from deepaha_ops import __version__
-from deepaha_ops.audit import AuditEvent, AuditLog, now_iso
-from deepaha_ops.auth import Principal, require_scope
-from deepaha_ops.config import Settings, get_settings
-from deepaha_ops.runner import OperationRunner
-from deepaha_ops.store import OperationStore
+from .auth import Principal, authenticate
+from .config import Settings, get_settings
+from .core import GatewayCore
 
-COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
-IDEMPOTENCY_RE = re.compile(r"^[A-Za-z0-9._:-]{8,128}$")
-USERNAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{2,63}$")
-
-EnvironmentName = Literal["staging", "production"]
-RestartTarget = Literal["api", "web", "worker", "all"]
-LogTarget = Literal["gateway", "api", "web", "worker"]
+Environment = Literal["staging", "production"]
+SHA = Annotated[str, Field(pattern=r"^[0-9a-f]{40}$")]
 
 
-class DeployRequest(BaseModel):
-    environment: EnvironmentName
-    commit_sha: str
-    confirmation: str | None = None
-
-    @field_validator("commit_sha")
-    @classmethod
-    def validate_sha(cls, value: str) -> str:
-        value = value.lower()
-        if not COMMIT_RE.fullmatch(value):
-            raise ValueError("commit_sha must be a full 40-character lowercase hexadecimal SHA")
-        return value
+class Mutation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    environment: Environment
+    expected_current: SHA
+    idempotency_key: str = Field(pattern=r"^[A-Za-z0-9._:-]{8,128}$")
+    approval_id: str | None = Field(default=None, pattern=r"^[0-9a-f]{32}$")
 
 
-class BackupRequest(BaseModel):
-    environment: EnvironmentName = "production"
+class DeployRequest(Mutation):
+    commit_sha: SHA
 
 
-class RollbackRequest(BaseModel):
-    environment: EnvironmentName
-    target: str = "previous"
-    confirmation: str | None = None
-
-    @field_validator("target")
-    @classmethod
-    def validate_target(cls, value: str) -> str:
-        value = value.lower()
-        if value != "previous" and not COMMIT_RE.fullmatch(value):
-            raise ValueError("target must be 'previous' or a full 40-character commit SHA")
-        return value
+class RollbackRequest(Mutation):
+    target: SHA
 
 
-class RestartRequest(BaseModel):
-    target: RestartTarget
+class RestartRequest(Mutation):
+    target: Literal["api", "worker", "all"]
 
 
-class BetaUserRequest(BaseModel):
-    username: str
-    email: str
-
-    @field_validator("username")
-    @classmethod
-    def validate_username(cls, value: str) -> str:
-        if not USERNAME_RE.fullmatch(value):
-            raise ValueError("invalid username")
-        return value
-
-    @field_validator("email")
-    @classmethod
-    def validate_email(cls, value: str) -> str:
-        value = value.strip().lower()
-        if len(value) > 254 or value.count("@") != 1:
-            raise ValueError("invalid email")
-        local, domain = value.split("@", 1)
-        if not local or not domain or "." not in domain or any(char.isspace() for char in value):
-            raise ValueError("invalid email")
-        return value
-
-
-def _components(
-    settings: Settings,
-) -> tuple[OperationStore, AuditLog, OperationRunner]:
-    store = OperationStore(settings.state_dir / "state.sqlite3")
-    audit = AuditLog(settings.audit_log)
-    runner = OperationRunner(settings, store, audit)
-    return store, audit, runner
+class BackupRequest(Mutation):
+    pass
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or get_settings()
-    store, audit, runner = _components(settings)
+    core = GatewayCore(settings)
+    mcp = None
+    if settings.oauth_issuer:
+        from .mcp_server import build_mcp
+
+        mcp = build_mcp(core, settings)
+        mcp_app = mcp.streamable_http_app()
 
     @asynccontextmanager
-    async def lifespan(_app: FastAPI):
-        await runner.start()
+    async def lifespan(app):
+        await core.runner.start()
         try:
-            yield
+            if mcp:
+                async with mcp.session_manager.run():
+                    yield
+            else:
+                yield
         finally:
-            await runner.stop()
+            await core.runner.stop()
 
     app = FastAPI(
         title="DeepAha Ops Gateway",
-        version=__version__,
+        version="1.1.0",
         docs_url=None,
         redoc_url=None,
         openapi_url=None,
         lifespan=lifespan,
     )
     app.state.settings = settings
-    app.state.store = store
-    app.state.audit = audit
-    app.state.runner = runner
-    if settings.trusted_hosts:
-        app.add_middleware(
-            TrustedHostMiddleware,
-            allowed_hosts=settings.trusted_hosts,
-        )
+    app.state.core = core
+    app.state.store, app.state.audit, app.state.runner = core.store, core.audit, core.runner
+    app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.trusted_hosts)
 
     @app.middleware("http")
-    async def request_context(request: Request, call_next):
-        request_id = request.headers.get("X-Request-ID") or uuid4().hex
-        request.state.request_id = request_id[:128]
+    async def context(request: Request, call_next):
+        request.state.request_id = uuid4().hex
         response = await call_next(request)
-        response.headers["X-Request-ID"] = request.state.request_id
-        response.headers["Cache-Control"] = "no-store"
-        response.headers["X-Content-Type-Options"] = "nosniff"
-        response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers.update(
+            {
+                "X-Request-ID": request.state.request_id,
+                "Cache-Control": "no-store",
+                "X-Content-Type-Options": "nosniff",
+                "Referrer-Policy": "no-referrer",
+            }
+        )
         return response
 
     @app.get("/health")
-    async def health() -> dict[str, str]:
-        return {
-            "status": "ok",
-            "service": "deepaha-ops-gateway",
-            "version": __version__,
-        }
+    async def health():
+        return {"status": "ok", "service": "deepaha-ops-gateway", "version": "1.1.0"}
 
     @app.get("/v1/capabilities")
-    async def capabilities(
-        _principal: Principal = Depends(require_scope("read")),
-    ) -> dict[str, object]:
+    async def capabilities(principal: Principal = Depends(authenticate)):
         return {
-            "version": __version__,
+            "scopes": sorted(principal.scopes),
             "mutations_enabled": settings.mutations_enabled,
-            "actions": [
-                "deploy",
-                "backup",
-                "rollback",
-                "restart",
-                "create_beta_user",
-            ],
-            "read_actions": ["status", "logs", "operations"],
-            "safety": {
-                "arbitrary_shell": False,
-                "arbitrary_paths": False,
-                "git_refs": "full_commit_sha_only",
-                "mutations_serialized": True,
-            },
+            "staging_mutations_enabled": settings.staging_mutations_enabled,
+            "production": "PER_OPERATION_HUMAN_AUTH_REQUIRED",
+            "schema_policy": "NO_SCHEMA_CHANGE",
         }
 
     @app.get("/v1/status")
-    async def gateway_status(
-        request: Request,
-        principal: Principal = Depends(require_scope("read")),
-    ) -> dict[str, object]:
-        code, output = await runner.direct(["status"])
-        audit.append(
-            AuditEvent(
-                timestamp=now_iso(),
-                event="status_read",
-                request_id=request.state.request_id,
-                principal=principal.token_fingerprint,
-                details={"exit_code": code},
-            )
-        )
-        if code != 0:
-            raise HTTPException(
-                status_code=503,
-                detail={"code": "ADAPTER_STATUS_FAILED"},
-            )
-        return {
-            "adapter_status": output,
-            "recent_operations": [op.public() for op in store.list_recent(5)],
-        }
+    async def status(
+        request: Request, environment: Environment, principal: Principal = Depends(authenticate)
+    ):
+        return await core.status(principal, environment, request.state.request_id)
 
     @app.get("/v1/logs")
     async def logs(
         request: Request,
-        service: LogTarget,
-        lines: Annotated[int, Query(ge=20, le=2000)] = 200,
-        principal: Principal = Depends(require_scope("read")),
-    ) -> dict[str, object]:
-        if lines > settings.max_log_lines:
-            raise HTTPException(
-                status_code=422,
-                detail={"code": "LOG_LINE_LIMIT_EXCEEDED"},
-            )
-        code, output = await runner.direct(["logs", service, str(lines)])
-        audit.append(
-            AuditEvent(
-                timestamp=now_iso(),
-                event="logs_read",
-                request_id=request.state.request_id,
-                principal=principal.token_fingerprint,
-                details={
-                    "service": service,
-                    "lines": lines,
-                    "exit_code": code,
-                },
-            )
-        )
-        if code != 0:
-            raise HTTPException(
-                status_code=503,
-                detail={"code": "LOG_READ_FAILED"},
-            )
-        return {
-            "service": service,
-            "lines": lines,
-            "output": output,
-        }
+        environment: Environment,
+        service: Literal["api", "worker"],
+        lines: Annotated[int, Query(ge=20, le=500)] = 100,
+        principal: Principal = Depends(authenticate),
+    ):
+        return await core.logs(principal, environment, service, lines, request.state.request_id)
+
+    @app.get("/v1/gateway/logs")
+    async def gateway_logs(
+        request: Request,
+        lines: Annotated[int, Query(ge=20, le=500)] = 100,
+        principal: Principal = Depends(authenticate),
+    ):
+        return await core.logs(principal, "gateway", "gateway", lines, request.state.request_id)
 
     @app.get("/v1/operations")
     async def operations(
+        environment: Environment,
         limit: Annotated[int, Query(ge=1, le=100)] = 20,
-        _principal: Principal = Depends(require_scope("read")),
-    ) -> dict[str, object]:
-        return {"operations": [op.public() for op in store.list_recent(limit)]}
+        principal: Principal = Depends(authenticate),
+    ):
+        return core.operations(principal, environment, limit)
 
     @app.get("/v1/operations/{operation_id}")
-    async def operation(
-        operation_id: str,
-        _principal: Principal = Depends(require_scope("read")),
-    ) -> dict[str, object]:
-        item = store.get(operation_id)
-        if item is None:
-            raise HTTPException(
-                status_code=404,
-                detail={"code": "OPERATION_NOT_FOUND"},
-            )
-        return item.public()
+    async def operation(operation_id: str, principal: Principal = Depends(authenticate)):
+        return core.operation(principal, operation_id)
 
-    async def submit(
-        *,
-        action: str,
-        payload: dict[str, object],
-        principal: Principal,
-        request: Request,
-        idempotency_key: str | None,
-    ) -> dict[str, object]:
-        if not settings.mutations_enabled:
-            raise HTTPException(
-                status_code=503,
-                detail={"code": "MUTATIONS_DISABLED"},
-            )
-        if idempotency_key is None or not IDEMPOTENCY_RE.fullmatch(idempotency_key):
-            raise HTTPException(
-                status_code=400,
-                detail={"code": "IDEMPOTENCY_KEY_REQUIRED"},
-            )
-        environment = payload.get("environment")
-        target = payload.get("target") or payload.get("commit_sha") or payload.get("username")
-        item, created = store.create(
-            action=action,
-            environment=str(environment) if environment else None,
-            target=str(target) if target else None,
-            idempotency_key=idempotency_key,
-            requested_by=principal.token_fingerprint,
-            request_id=request.state.request_id,
-            params=payload,
-        )
-        if not created and (item.action != action or item.params != payload):
-            raise HTTPException(
-                status_code=409,
-                detail={"code": "IDEMPOTENCY_CONFLICT"},
-            )
-        if created:
-            audit.append(
-                AuditEvent(
-                    timestamp=now_iso(),
-                    event="operation_queued",
-                    request_id=request.state.request_id,
-                    principal=principal.token_fingerprint,
-                    details={
-                        "operation_id": item.id,
-                        "action": action,
-                        "params": payload,
-                    },
-                )
-            )
-            await runner.enqueue(item.id)
-        return {
-            **item.public(),
-            "idempotent_replay": not created,
-        }
-
-    @app.post(
-        "/v1/deploy",
-        status_code=status.HTTP_202_ACCEPTED,
-    )
+    @app.post("/v1/deploy", status_code=202, openapi_extra={"x-openai-isConsequential": True})
     async def deploy(
-        body: DeployRequest,
-        request: Request,
-        principal: Principal = Depends(require_scope("deploy")),
-        idempotency_key: Annotated[
-            str | None,
-            Header(alias="Idempotency-Key"),
-        ] = None,
-    ) -> dict[str, object]:
-        if body.environment == "production" and body.confirmation != "DEPLOY_PRODUCTION":
-            raise HTTPException(
-                status_code=400,
-                detail={"code": "PRODUCTION_CONFIRMATION_REQUIRED"},
-            )
-        return await submit(
-            action="deploy",
-            payload={
-                "environment": body.environment,
-                "commit_sha": body.commit_sha,
-            },
-            principal=principal,
-            request=request,
-            idempotency_key=idempotency_key,
+        body: DeployRequest, request: Request, principal: Principal = Depends(authenticate)
+    ):
+        return await core.submit(
+            "deploy", body.model_dump(exclude_none=True), principal, request.state.request_id
         )
 
-    @app.post(
-        "/v1/backup",
-        status_code=status.HTTP_202_ACCEPTED,
-    )
+    @app.post("/v1/backup", status_code=202, openapi_extra={"x-openai-isConsequential": True})
     async def backup(
-        body: BackupRequest,
-        request: Request,
-        principal: Principal = Depends(require_scope("backup")),
-        idempotency_key: Annotated[
-            str | None,
-            Header(alias="Idempotency-Key"),
-        ] = None,
-    ) -> dict[str, object]:
-        return await submit(
-            action="backup",
-            payload={"environment": body.environment},
-            principal=principal,
-            request=request,
-            idempotency_key=idempotency_key,
+        body: BackupRequest, request: Request, principal: Principal = Depends(authenticate)
+    ):
+        return await core.submit(
+            "backup", body.model_dump(exclude_none=True), principal, request.state.request_id
         )
 
-    @app.post(
-        "/v1/rollback",
-        status_code=status.HTTP_202_ACCEPTED,
-    )
+    @app.post("/v1/rollback", status_code=202, openapi_extra={"x-openai-isConsequential": True})
     async def rollback(
-        body: RollbackRequest,
-        request: Request,
-        principal: Principal = Depends(require_scope("rollback")),
-        idempotency_key: Annotated[
-            str | None,
-            Header(alias="Idempotency-Key"),
-        ] = None,
-    ) -> dict[str, object]:
-        required = "ROLLBACK_PRODUCTION" if body.environment == "production" else "ROLLBACK_STAGING"
-        if body.confirmation != required:
-            raise HTTPException(
-                status_code=400,
-                detail={"code": "ROLLBACK_CONFIRMATION_REQUIRED"},
-            )
-        return await submit(
-            action="rollback",
-            payload={
-                "environment": body.environment,
-                "target": body.target,
-            },
-            principal=principal,
-            request=request,
-            idempotency_key=idempotency_key,
+        body: RollbackRequest, request: Request, principal: Principal = Depends(authenticate)
+    ):
+        return await core.submit(
+            "rollback", body.model_dump(exclude_none=True), principal, request.state.request_id
         )
 
-    @app.post(
-        "/v1/restart",
-        status_code=status.HTTP_202_ACCEPTED,
-    )
+    @app.post("/v1/restart", status_code=202, openapi_extra={"x-openai-isConsequential": True})
     async def restart(
-        body: RestartRequest,
-        request: Request,
-        principal: Principal = Depends(require_scope("restart")),
-        idempotency_key: Annotated[
-            str | None,
-            Header(alias="Idempotency-Key"),
-        ] = None,
-    ) -> dict[str, object]:
-        return await submit(
-            action="restart",
-            payload={"target": body.target},
-            principal=principal,
-            request=request,
-            idempotency_key=idempotency_key,
+        body: RestartRequest, request: Request, principal: Principal = Depends(authenticate)
+    ):
+        return await core.submit(
+            "restart", body.model_dump(exclude_none=True), principal, request.state.request_id
         )
 
-    @app.post(
-        "/v1/beta-users",
-        status_code=status.HTTP_202_ACCEPTED,
-    )
-    async def create_beta_user(
-        body: BetaUserRequest,
-        request: Request,
-        principal: Principal = Depends(require_scope("user_admin")),
-        idempotency_key: Annotated[
-            str | None,
-            Header(alias="Idempotency-Key"),
-        ] = None,
-    ) -> dict[str, object]:
-        return await submit(
-            action="create_beta_user",
-            payload={
-                "username": body.username,
-                "email": body.email,
-            },
-            principal=principal,
-            request=request,
-            idempotency_key=idempotency_key,
-        )
+    if mcp:
 
+        @app.get("/.well-known/oauth-protected-resource/mcp")
+        async def protected_resource():
+            return {
+                "resource": settings.oauth_resource,
+                "authorization_servers": [settings.oauth_issuer],
+                "scopes_supported": [
+                    "openid",
+                    "offline_access",
+                    "staging:read",
+                    "staging:deploy",
+                    "staging:backup",
+                    "staging:rollback",
+                    "staging:restart",
+                ],
+                "bearer_methods_supported": ["header"],
+            }
+
+        app.mount("/", mcp_app)
     return app

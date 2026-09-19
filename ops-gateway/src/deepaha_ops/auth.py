@@ -38,7 +38,7 @@ def authenticate(request: Request) -> Principal:
             break
     if match_scopes is None:
         raise HTTPException(status_code=401, detail={"code": "AUTH_INVALID"})
-    return Principal(token_fingerprint=digest[:12], scopes=match_scopes)
+    return Principal(token_fingerprint=digest, scopes=match_scopes)
 
 
 def require_scope(scope: str):
