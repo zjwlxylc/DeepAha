@@ -1,0 +1,12 @@
+usage: launch_product.py [-h] [--install] [--stop] [--status] [--no-browser]
+                         [--port PORT]
+
+DeepAha 本地启动器
+
+options:
+  -h, --help    show this help message and exit
+  --install     准备专用Python环境及依赖
+  --stop
+  --status
+  --no-browser
+  --port PORT

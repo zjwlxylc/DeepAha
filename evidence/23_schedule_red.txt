@@ -1,0 +1,31 @@
+.....FF                                                                  [100%]
+=================================== FAILURES ===================================
+______________ test_source_schedule_remembers_authorized_operator ______________
+
+svc = <deepaha.product.service.Product object at 0x7f8eb54fd5b0>
+
+    def test_source_schedule_remembers_authorized_operator(svc):
+        from datetime import timedelta
+        from deepaha.product.models import SourceProfile,now
+        from deepaha.product.worker import schedule_due
+        svc.schedule_source(svc.test_source,6,actor='operator')
+        with svc.db.tx() as s:s.get(SourceProfile,svc.test_source).next_due=now()-timedelta(seconds=5)
+>       assert schedule_due(svc)==1
+               ^^^^^^^^^^^^^^^^^
+E       TypeError: schedule_due() missing 1 required positional argument: 'actor'
+
+tests/product/test_operations.py:85: TypeError
+__________ test_unrecognized_source_asset_is_not_reported_as_imported __________
+
+svc = <deepaha.product.service.Product object at 0x7f8eb47355b0>
+
+    def test_unrecognized_source_asset_is_not_reported_as_imported(svc):
+>       with pytest.raises(Problem):svc.import_sources({'not_sources':[{'name':'unexpected'}]},actor='operator')
+             ^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'deepaha.product.errors.Problem'>
+
+tests/product/test_operations.py:94: Failed
+=========================== short test summary info ============================
+FAILED tests/product/test_operations.py::test_source_schedule_remembers_authorized_operator - TypeError: schedule_due() missing 1 required positional argument: 'actor'
+FAILED tests/product/test_operations.py::test_unrecognized_source_asset_is_not_reported_as_imported - Failed: DID NOT RAISE <class 'deepaha.product.errors.Problem'>
+2 failed, 5 passed in 2.38s

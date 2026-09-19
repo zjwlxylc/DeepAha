@@ -1,0 +1,11 @@
+test_cancel (tests.test_cli.CLITests.test_cancel) ... ok
+test_demo_complete_and_repeat (tests.test_cli.CLITests.test_demo_complete_and_repeat) ... ok
+test_help (tests.test_cli.CLITests.test_help) ... ok
+test_preview_and_separate_commit (tests.test_cli.CLITests.test_preview_and_separate_commit) ... ok
+test_validate_without_database (tests.test_cli.CLITests.test_validate_without_database) ... ok
+test_wrong_confirmation (tests.test_cli.CLITests.test_wrong_confirmation) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 4.696s
+
+OK

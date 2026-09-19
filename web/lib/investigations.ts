@@ -55,8 +55,6 @@ export interface InvestigationEvidenceCheck {
 }
 
 export interface InvestigationTask {
-  draft_scope?: string | null;
-  workbench?: { entity_id: string | null; offset: number; total: number };
   rule_review?: { current: InvestigationRulePreparation[]; history: { rule_preparation_id: string; entity_id: string; fact_set_id: string; compiler_version: string; created_at: string }[] };
   fact_review?: { current: InvestigationFactPreparation | null; history: { preparation_id: string; binding_id: string; mapping_version: string; created_at: string }[] };
   evidence_check?: InvestigationEvidenceCheck | null;
@@ -128,7 +126,6 @@ export interface InvestigationTask {
 }
 
 export interface InvestigationFactPreparation {
-  slice?: { entity_id: string | null; offset: number; total: number; candidate_total: number; can_promote: boolean; attention_total?: number; next_attention_offset?: number | null; unknown_total?: number; next_unknown_offset?: number | null };
   preparation_id: string; binding_id: string; check_id: string; mapping_version: string; result_hash: string;
   targets: { entity_id: string; entity_kind?: string; name: string; target_scope: "OPPORTUNITY" | "UNIT";
     opportunity_id: string; opportunity_version: number; opportunity_unit_id: string | null;
@@ -155,7 +152,6 @@ export interface InvestigationRuleDecision {
 }
 
 export interface InvestigationRulePreparation {
-  slice?: { offset: number; total: number };
   rule_preparation_id: string; fact_preparation_id: string; fact_set_id: string; entity_id: string;
   binding_id: string; delivery_hash: string; check_id: string; compiler_version: string; result_hash: string;
   fact_preparation_hash: string; fact_set_version: number; source_bundle_revision_id: string; scope_status: string;
@@ -237,23 +233,4 @@ export function getInvestigationSources(): Promise<{ sources: InvestigationSourc
 
 export function getInvestigation(taskId: string): Promise<InvestigationTask> {
   return humanTestFetch(`/investigations/${encodeURIComponent(taskId)}`);
-}
-
-export interface InvestigationQueueItem extends Pick<InvestigationTask, "task_id" | "source_id" | "status" | "created_at" | "updated_at" | "error_code" | "notice_url" | "calibration" | "dispatch_pending" | "dispatch_requested_at" | "runtime_id" | "remote_session_id"> {
-  title: string; material_count: number; next_step: string;
-}
-export interface InvestigationQueuePage { tasks: InvestigationQueueItem[]; next_cursor: string | null }
-export function getInvestigationQueue(params: URLSearchParams): Promise<InvestigationQueuePage> {
-  return humanTestFetch(`/investigations/queue?${params.toString()}`);
-}
-
-export function getInvestigationWorkbench(taskId: string, params: URLSearchParams): Promise<InvestigationTask> {
-  return humanTestFetch(`/investigations/${encodeURIComponent(taskId)}/workbench?${params}`);
-}
-
-export async function getInvestigationReviewReceipt(taskId: string, kind: "FACT" | "RULE", preparationId: string, requestKey: string): Promise<{ task_id: string; committed: boolean; receipt_id: string | null }> {
-  const query = new URLSearchParams({ kind, preparation_id: preparationId, request_key: requestKey });
-  const value = await humanTestFetch<{ task_id: string; committed: boolean; receipt_id: string | null }>(`/investigations/${encodeURIComponent(taskId)}/review-receipts?${query}`);
-  if (value.task_id !== taskId || typeof value.committed !== "boolean" || (value.committed && (typeof value.receipt_id !== "string" || !value.receipt_id))) throw new Error("INVALID_REVIEW_RECEIPT");
-  return value;
 }

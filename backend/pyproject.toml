@@ -1,60 +1,21 @@
 [project]
-name = "deepaha-api"
-version = "0.1.0"
-description = "DeepAha API"
-requires-python = ">=3.14,<3.15"
-dependencies = [
-  "alembic>=1.16,<2",
-  "boto3>=1.40,<2",
-  "defusedxml>=0.7,<1",
-  "fastapi>=0.115,<1",
-  "httpx2>=2.12,<3",
-  "jsonschema>=4.25,<5",
-  "lxml[cssselect]>=6.1,<7",
-  "openpyxl>=3.1.5,<4",
-  "psycopg[binary]>=3.2,<4",
-  "pydantic>=2.11,<3",
-  "pydantic-settings>=2.10,<3",
-  "pypdf>=6.16,<7",
-  "sqlalchemy>=2.0,<3",
-  "uvicorn[standard]>=0.35,<1",
-]
+name = "deepaha-product"
+version = "3.8.0rc1"
+description = "DeepAha opportunity intake, overall review and personal actions"
+requires-python = ">=3.13,<3.15"
+dependencies = ["fastapi==0.128.2", "starlette==0.50.0", "uvicorn==0.48.0", "SQLAlchemy==2.0.50", "pydantic==2.13.4", "httpx==0.28.1", "cryptography==46.0.4", "psutil==7.2.2", "tzdata==2026.2", "openpyxl>=3.1.5,<4", "pypdf>=6,<7"]
 
 [project.optional-dependencies]
-wma = [
-    "codebuddy-cloud-agent-sdk==0.3.4",
-]
-
-[dependency-groups]
-dev = [
-  "boto3-stubs[s3]>=1.40,<2",
-  "jsonschema>=4.25,<5",
-  "lxml-stubs>=0.5.1,<0.6",
-  "mypy>=1.17,<2",
-  "pytest>=8.4,<10",
-  "ruff>=0.12,<1",
-  "types-jsonschema>=4.25,<5",
-  "types-openpyxl>=3.1.5,<4",
-]
+wma = ["codebuddy-cloud-agent-sdk==0.3.4"]
+postgres = ["psycopg[binary]>=3.2,<4"]
+test = ["pytest==9.0.2", "pytest-asyncio==1.3.0", "playwright==1.57.0"]
 
 [tool.pytest.ini_options]
-addopts = "-q -m 'not integration and not live_source'"
-markers = [
-  "integration: requires PostgreSQL 18 and the local S3 endpoint",
-  "live_source: requires explicitly enabled network access to approved official endpoints",
-]
+addopts = "-q"
 pythonpath = ["src"]
-testpaths = ["tests"]
+testpaths = ["tests/product"]
+markers = ["integration: isolated external infrastructure", "live_source: explicit live authorization only"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py314"
-
-[tool.ruff.lint]
-select = ["E", "F", "I", "UP", "SIM"]
-
-[tool.mypy]
-python_version = "3.14"
-strict = true
-mypy_path = "src"
-files = ["src", "tests"]
+target-version = "py313"

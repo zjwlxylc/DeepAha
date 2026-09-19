@@ -97,7 +97,7 @@ def _json(content: bytes) -> dict[str, Any]:
         if not isinstance(value, dict):
             _fail("DELIVERY_JSON_INVALID")
         return dict(value)
-    except UnicodeError, ValueError, RecursionError:
+    except (UnicodeError, ValueError, RecursionError):
         raise DeliveryValidationError("DELIVERY_JSON_INVALID") from None
 
 

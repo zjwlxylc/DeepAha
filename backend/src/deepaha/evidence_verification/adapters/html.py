@@ -84,7 +84,7 @@ class HtmlAdapter:
                 return ScopeResolution("INVALID", (), "NONE")
             try:
                 nodes = root.cssselect(selector)
-            except SelectorError, etree.XPathError:
+            except (SelectorError, etree.XPathError):
                 return ScopeResolution("INVALID", (), "NONE")
             if not nodes:
                 return ScopeResolution("MISMATCH", (), "NONE")

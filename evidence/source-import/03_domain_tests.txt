@@ -1,0 +1,30 @@
+..F.................                                                     [100%]
+=================================== FAILURES ===================================
+_________________ test_approve_freezes_brief_and_no_auto_task __________________
+
+svc = <deepaha.product.service.Product object at 0x7ff9a928b390>
+exported = (<deepaha_importer.research.workspace.Workspace object at 0x7ff9a928bed0>, {'analysis': {'analyzed_at': '2026-09-16T17...\x00\x00originals/0001/Handoff.jsonPK\x05\x06\x00\x00\x00\x00\x07\x00\x07\x00\xb8\x01\x00\x00\xfa\x16\x00\x00\x00\x00')
+
+    def test_approve_freezes_brief_and_no_auto_task(svc,exported):
+        _,_,raw=exported;p,r,g=prepare_receive(svc,raw)
+        a=approve(svc,g)
+        assert not a['enabled'] and a['tasks_created']==0
+        src=next(s for s in svc.list_sources(actor='operator') if s['id']==a['system_source_id'])
+        assert '先查看研究助理' in src['brief']
+        assert svc.tasks(actor='operator')==[]
+        with pytest.raises(Exception):svc.create_task(src['id'],src['url'],actor='operator',request_key='disabled')
+        svc.source_status(src['id'],True,'手动启用',actor='operator',expected_version=src['policy_version'])
+        t=svc.create_task(src['id'],src['url'],actor='operator',request_key='explicit-wma')
+>       assert 'source_context' in svc.task_detail(t['id'],actor='operator'), '任务必须绑定来源与Brief版本'
+E       AssertionError: 任务必须绑定来源与Brief版本
+E       assert 'source_context' in {'attempts': 0, 'budget_seconds': 1200, 'created_at': '2026-09-16T17:34:52.260662', 'error_code': None, ...}
+E        +  where {'attempts': 0, 'budget_seconds': 1200, 'created_at': '2026-09-16T17:34:52.260662', 'error_code': None, ...} = task_detail('01a0ab49-2364-7e86-a430-a90b4a9788cc', actor='operator')
+E        +    where task_detail = <deepaha.product.service.Product object at 0x7ff9a928b390>.task_detail
+
+tests/product/test_scout_import.py:98: AssertionError
+=========================== short test summary info ============================
+FAILED tests/product/test_scout_import.py::test_approve_freezes_brief_and_no_auto_task - AssertionError: 任务必须绑定来源与Brief版本
+assert 'source_context' in {'attempts': 0, 'budget_seconds': 1200, 'created_at': '2026-09-16T17:34:52.260662', 'error_code': None, ...}
+ +  where {'attempts': 0, 'budget_seconds': 1200, 'created_at': '2026-09-16T17:34:52.260662', 'error_code': None, ...} = task_detail('01a0ab49-2364-7e86-a430-a90b4a9788cc', actor='operator')
+ +    where task_detail = <deepaha.product.service.Product object at 0x7ff9a928b390>.task_detail
+1 failed, 19 passed in 10.14s

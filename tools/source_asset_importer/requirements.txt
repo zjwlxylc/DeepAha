@@ -1,0 +1,3 @@
+# Core, desktop client, CLI and SQLite rehearsal use only Python's standard library.
+# No packages are required for those paths.
+# Optional host FastAPI / PostgreSQL dependencies are in pyproject.toml extras.

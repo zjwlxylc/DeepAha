@@ -1,37 +1,16 @@
 {
-  "name": "deepaha-web",
-  "version": "0.1.0",
+  "name": "deepaha-product-web",
+  "version": "3.8.0-rc1",
   "private": true,
-  "packageManager": "pnpm@10.15.0",
+  "type": "module",
   "engines": {
-    "node": ">=24 <25"
+    "node": ">=22"
   },
   "scripts": {
-    "dev": "next dev",
-    "start": "next start",
-    "build": "next build",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run"
-  },
-  "dependencies": {
-    "next": "16.3.2",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "server-only": "0.0.1"
-  },
-  "devDependencies": {
-    "@playwright/test": "1.62.1",
-    "@testing-library/jest-dom": "^6.8.0",
-    "@testing-library/react": "^16.3.0",
-    "@types/node": "^24.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "eslint": "^9.0.0",
-    "eslint-config-next": "16.3.2",
-    "jsdom": "^26.0.0",
-    "typescript": "^5.9.0",
-    "vitest": "^3.2.0"
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "check": "node scripts/check-product.mjs && node scripts/check-sg7-2.mjs",
+    "build": "node scripts/check-product.mjs && node scripts/check-sg7-2.mjs",
+    "test": "node scripts/check-product.mjs && node scripts/check-sg7-2.mjs"
   }
 }

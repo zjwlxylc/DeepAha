@@ -1,0 +1,95 @@
+....................FFFF.                                                [100%]
+=================================== FAILURES ===================================
+__________ test_recompressed_identical_export_reuses_canonical_batch ___________
+
+svc = <deepaha.product.service.Product object at 0x7f29a417c290>
+exported = (<deepaha_importer.research.workspace.Workspace object at 0x7f29a44a68d0>, {'analysis': {'analyzed_at': '2026-09-16T17...\x00\x00originals/0001/Handoff.jsonPK\x05\x06\x00\x00\x00\x00\x07\x00\x07\x00\xb8\x01\x00\x00\x00\x17\x00\x00\x00\x00')
+
+    def test_recompressed_identical_export_reuses_canonical_batch(svc,exported):
+        _,_,raw=exported
+        p,r,g=prepare_receive(svc,raw)
+        with zipfile.ZipFile(io.BytesIO(raw)) as z:entries={n:z.read(n) for n in z.namelist()}
+        buf=io.BytesIO()
+        with zipfile.ZipFile(buf,'w',zipfile.ZIP_STORED) as z:
+            for n,b in reversed(list(entries.items())):z.writestr('外层/'+n,b)
+        p2=svc.scout_prepare(buf.getvalue(),'repacked.zip',actor='operator')
+>       assert p2['id']==p['id']
+E       AssertionError: assert '01a0ab4e-c45...-4e04331f1f78' == '01a0ab4e-c43...-c361eebaf508'
+E         
+E         - 01a0ab4e-c432-7696-97ca-c361eebaf508
+E         + 01a0ab4e-c454-773d-a5af-4e04331f1f78
+
+backend/tests/product/test_scout_import.py:246: AssertionError
+__________________ test_overlong_research_identity_is_bounded __________________
+
+svc = <deepaha.product.service.Product object at 0x7f2997585f50>
+
+    def test_overlong_research_identity_is_bounded(svc):
+        data=handoff(key='x'*3000)
+        p=svc.scout_prepare(json.dumps(data).encode(),'Handoff.json',actor='operator')
+>       assert p['status']=='INVALID'
+E       AssertionError: assert 'PREPARED' == 'INVALID'
+E         
+E         - INVALID
+E         + PREPARED
+
+backend/tests/product/test_scout_import.py:253: AssertionError
+________________ test_existing_source_detail_is_self_contained _________________
+
+svc = <deepaha.product.service.Product object at 0x7f29974eee50>
+
+    def test_existing_source_detail_is_self_contained(svc):
+        p,r,g=prepare_receive(svc);a=approve(svc,g)
+        p2,r2,g2=prepare_receive(svc,json.dumps(handoff(run='20260917-0900-0001')).encode())
+>       assert g2['existing_sources'][0]['tier']=='OFFICIAL_PRIMARY'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'tier'
+
+backend/tests/product/test_scout_import.py:260: KeyError
+__________ test_worker_consumes_bound_brief_and_returns_run_feedback ___________
+
+svc = <deepaha.product.service.Product object at 0x7f2996454d50>
+
+    def test_worker_consumes_bound_brief_and_returns_run_feedback(svc):
+        import asyncio
+        from .test_contract import packet
+        from deepaha.product.storage import unpack
+        from deepaha.product.worker import run_once
+        p,r,g=prepare_receive(svc);a=approve(svc,g,enabled=True)
+        task=svc.create_task(a['system_source_id'],g['seed_urls'][0],actor='operator',request_key='run-feedback')
+        class Fake:
+            def __init__(self):self.uploads={};self.prompts=[]
+            async def create(self,id,checkpoint):checkpoint('test-runtime','test-session')
+            def binding_evidence(self):return {'type':'ISOLATED_TEST'}
+            async def upload(self,path,raw):self.uploads[path]=raw
+            async def prompt(self,prompt,timeout_seconds):self.prompts.append(prompt);return 'end_turn'
+            async def download(self,path,max_bytes):return unpack(packet())[path.split('/result/',1)[-1]]
+            async def aclose(self):pass
+        f=Fake();out=asyncio.run(run_once(svc,client_factory=lambda:f))
+        assert out['state']=='READY',out
+        sent=json.loads(next(b for n,b in f.uploads.items() if n.endswith('/task.json')))
+        assert sent['source_intelligence']['candidate_revision_id']==g['observation_id']
+        assert '先查看研究助理' in sent['source_brief']
+        assert len(f.prompts)==1
+        fb=svc.scout_feedback(p['id'],actor='operator')
+>       assert fb['events'][-1]['type']=='PRODUCTION_RUN_COMPLETED'
+E       AssertionError: assert 'SOURCE_APPROVED' == 'PRODUCTION_RUN_COMPLETED'
+E         
+E         - PRODUCTION_RUN_COMPLETED
+E         + SOURCE_APPROVED
+
+backend/tests/product/test_scout_import.py:286: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_scout_import.py::test_recompressed_identical_export_reuses_canonical_batch - AssertionError: assert '01a0ab4e-c45...-4e04331f1f78' == '01a0ab4e-c43...-c361eebaf508'
+  
+  - 01a0ab4e-c432-7696-97ca-c361eebaf508
+  + 01a0ab4e-c454-773d-a5af-4e04331f1f78
+FAILED backend/tests/product/test_scout_import.py::test_overlong_research_identity_is_bounded - AssertionError: assert 'PREPARED' == 'INVALID'
+  
+  - INVALID
+  + PREPARED
+FAILED backend/tests/product/test_scout_import.py::test_existing_source_detail_is_self_contained - KeyError: 'tier'
+FAILED backend/tests/product/test_scout_import.py::test_worker_consumes_bound_brief_and_returns_run_feedback - AssertionError: assert 'SOURCE_APPROVED' == 'PRODUCTION_RUN_COMPLETED'
+  
+  - PRODUCTION_RUN_COMPLETED
+  + SOURCE_APPROVED

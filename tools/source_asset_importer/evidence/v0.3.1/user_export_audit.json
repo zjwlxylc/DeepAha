@@ -1,0 +1,132 @@
+{
+  "input_file": "DeepAha_Research_99762cfa35a48bfe_r58.zip",
+  "input_sha256": "ab08525c0e66d8ee6f7521c942f36b5a483424962c015ada916e5e7966d5540b",
+  "scope": "USER_PROVIDED_EXPORT_ONLY_NO_LIVE_SYSTEM_OR_CODEX_LOGS",
+  "zip_crc": "PASS",
+  "manifest_entries": [
+    {
+      "path": "Audit.json",
+      "size_bytes": 2091539,
+      "sha256": "41d789638c459bfa9fa8ae7660f563cec7fe73d903899da6ea3a4baaca46e245",
+      "matches": true
+    },
+    {
+      "path": "Decisions.json",
+      "size_bytes": 56903,
+      "sha256": "651a75dccb5790fd94262104eae874ddd41f4e061784f9d6afa012dc2e5a6d18",
+      "matches": true
+    },
+    {
+      "path": "FeedbackDeclarations.json",
+      "size_bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "matches": true
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 514,
+      "sha256": "b6a5e55b34f34bcf21c32e52a98a6e7358d8d46baa52f4efe2b5fdaf5e4d784e",
+      "matches": true
+    },
+    {
+      "path": "ResearchHandoff.json",
+      "size_bytes": 28417,
+      "sha256": "9088fe0c64ca1098edd0b2eed8d920000e8691ea6bdea4e413f3200b05a4ca26",
+      "matches": true
+    },
+    {
+      "path": "originals/0001/WB-scout.zip",
+      "size_bytes": 17032873,
+      "sha256": "087dae925b1919f8db731b65afa7de81644aaa34fc72b7fb1513033206244191",
+      "matches": true
+    }
+  ],
+  "manifest_covers_every_non_manifest_file": true,
+  "bundle_id_matches": true,
+  "summary": {
+    "input_originals": 1,
+    "files": 107,
+    "batches": 18,
+    "duplicate_handoff_files": 0,
+    "run_conflicts": 0,
+    "source_versions": 72,
+    "candidate_groups": 52,
+    "repeated_identity_versions": 20,
+    "brief_versions": 74,
+    "evidence_records": 212,
+    "public_evidence_urls": 164,
+    "attachment_files": 33,
+    "attachment_references": 30,
+    "legacy_profile_compatible_batches": 0,
+    "same_endpoint_pairs": 0,
+    "blocked_sources": 4,
+    "issue_count": 39,
+    "timeline_anomalies": 0
+  },
+  "decision_counts": {
+    "PROPOSE_STAGING": 48,
+    "DEFER": 4
+  },
+  "review_revision": 58,
+  "event_count": 58,
+  "event_types": {
+    "DECISION": 58
+  },
+  "event_replay_matches": true,
+  "event_errors": [],
+  "decisions_cover_all_sources": true,
+  "proposals_match_decisions": true,
+  "blocked_sources_proposed": 0,
+  "proposed_with_remaining_issues": 23,
+  "proposed_with_unacknowledged_issues": 0,
+  "issue_codes": {
+    "SCORE_ARITHMETIC_MISMATCH": 8,
+    "SEED_CHANGED_ACROSS_VERSIONS": 5,
+    "FIRST_SEEN_CHANGED": 2,
+    "REFERENCE_TEXT_NORMALIZATION_PROPOSAL": 7,
+    "MULTIPLE_SEEDS": 7,
+    "INVALID_SEED": 4,
+    "SEED_NORMALIZATION_PROPOSAL": 3,
+    "ATTACHMENT_SIZE_CLAIM_MISMATCH": 3
+  },
+  "deferred": [
+    {
+      "source_name": "24365 省级就业节点网络（持续枚举，本轮 14 省探针）",
+      "reason": "找不到入口"
+    },
+    {
+      "source_name": "大学生实习‘扬帆计划’（共青团中央品牌实践育人/就业赋能项目）",
+      "reason": "找不到入口"
+    },
+    {
+      "source_name": "绍兴组织工作网（绍兴市委组织部官方门户：通知公告／干部工作／人才工作）",
+      "reason": "核实入口"
+    },
+    {
+      "source_name": "选调生信息(全国分散 + 聚合站 selecte.com.cn)",
+      "reason": "打不开网站"
+    }
+  ],
+  "handoff_status": {
+    "schema_version": "deepaha.research-handoff.v1",
+    "submission_status": "NOT_SUBMITTED",
+    "delivery_mode": "MANUAL_EXPORT_ONLY",
+    "readiness": "REVIEWED_CANDIDATES_ONLY",
+    "integration_status": "REQUIRES_DEEPAHA_STAGING_ADAPTER_NOT_LEGACY_IMPORT_PROFILE_V1"
+  },
+  "no_system_source_ids": true,
+  "no_collection_enabled": true,
+  "feedback_files": 0,
+  "timestamp_check": {
+    "created_at": "2026-09-13T01:28:53.840382+00:00",
+    "analyzed_at": "2026-09-13T01:28:53.840382+00:00",
+    "last_reviewed_at": "2026-09-13T06:25:04.354856+00:00",
+    "created_at_before_last_review": true
+  },
+  "limitations": [
+    "The package does not contain the failing Codex process log.",
+    "An actor string and a review reason do not prove authenticated server-side approval.",
+    "This audit does not query DeepAha production or start WMA.",
+    "Matching hashes do not verify the semantic correctness of source research."
+  ]
+}

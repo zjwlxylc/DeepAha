@@ -1,0 +1,335 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_______ test_older_pending_packet_cannot_replace_newer_received_content ________
+
+svc = <deepaha.product.service.Product object at 0x7f1eea3742f0>
+
+    def test_older_pending_packet_cannot_replace_newer_received_content(svc):
+        a=svc.ingest(svc.test_source,packet(),actor='operator')
+        b=svc.ingest(svc.test_source,packet(extra={'announcement_level':[{'field':'最低服务期','value':'新版本最低服务期三年'}]}),actor='operator')
+        assert a['id']!=b['id']
+>       with pytest.raises(Problem) as e:
+             ^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'deepaha.product.errors.Problem'>
+
+tests/product/test_delivery_quality.py:19: Failed
+______________ test_invalid_json_does_not_crash_private_endpoint _______________
+
+client = <starlette.testclient.TestClient object at 0x7f1ee94b6a50>
+
+    def test_invalid_json_does_not_crash_private_endpoint(client):
+        login(client,'reader')
+>       r=client.put('/api/me/profile',content=b'{broken',headers={'Content-Type':'application/json'})
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/product/test_delivery_quality.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/pyvenv/lib/python3.13/site-packages/starlette/testclient.py:577: in put
+    return super().put(
+/opt/pyvenv/lib/python3.13/site-packages/httpx/_client.py:1181: in put
+    return self.request(
+/opt/pyvenv/lib/python3.13/site-packages/starlette/testclient.py:445: in request
+    return super().request(
+/opt/pyvenv/lib/python3.13/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/pyvenv/lib/python3.13/site-packages/httpx/_client.py:914: in send
+    response = self._send_handling_auth(
+/opt/pyvenv/lib/python3.13/site-packages/httpx/_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+/opt/pyvenv/lib/python3.13/site-packages/httpx/_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/pyvenv/lib/python3.13/site-packages/httpx/_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/pyvenv/lib/python3.13/site-packages/starlette/testclient.py:348: in handle_request
+    raise exc
+/opt/pyvenv/lib/python3.13/site-packages/starlette/testclient.py:345: in handle_request
+    portal.call(self.app, scope, receive, send)
+/opt/pyvenv/lib/python3.13/site-packages/anyio/from_thread.py:334: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/opt/pyvenv/lib/python3.13/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/applications.py:1138: in __call__
+    await super().__call__(scope, receive, send)
+/opt/pyvenv/lib/python3.13/site-packages/starlette/applications.py:107: in __call__
+    await self.middleware_stack(scope, receive, send)
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/base.py:191: in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+                                   ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/contextlib.py:162: in __exit__
+    self.gen.throw(value)
+/opt/pyvenv/lib/python3.13/site-packages/starlette/_utils.py:85: in collapse_excgroups
+    raise exc
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/base.py:193: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/deepaha/product/api.py:107: in protect
+    res=await call_next(req)
+        ^^^^^^^^^^^^^^^^^^^^
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/base.py:168: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/base.py:144: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/trustedhost.py:51: in __call__
+    await self.app(scope, receive, send)
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+/opt/pyvenv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/opt/pyvenv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+/opt/pyvenv/lib/python3.13/site-packages/starlette/routing.py:716: in __call__
+    await self.middleware_stack(scope, receive, send)
+/opt/pyvenv/lib/python3.13/site-packages/starlette/routing.py:736: in app
+    await route.handle(scope, receive, send)
+/opt/pyvenv/lib/python3.13/site-packages/starlette/routing.py:290: in handle
+    await self.app(scope, receive, send)
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:115: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+/opt/pyvenv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/opt/pyvenv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:101: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:355: in app
+    raw_response = await run_endpoint_function(
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:243: in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/deepaha/product/api.py:252: in update_profile
+    async def update_profile(req:Request):return p.set_profile(await req.json(),actor=user(req,write=True))
+                                                               ^^^^^^^^^^^^^^^^
+/opt/pyvenv/lib/python3.13/site-packages/starlette/requests.py:251: in json
+    self._json = json.loads(body)
+                 ^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/json/decoder.py:345: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.decoder.JSONDecoder object at 0x7f1f09496120>, s = '{broken'
+idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+>           obj, end = self.scan_once(s, idx)
+                       ^^^^^^^^^^^^^^^^^^^^^^
+E           json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+
+/usr/lib/python3.13/json/decoder.py:361: JSONDecodeError
+___________ test_full_text_is_reachable_without_huge_first_response ____________
+
+client = <starlette.testclient.TestClient object at 0x7f1ed77ee210>
+svc = <deepaha.product.service.Product object at 0x7f1eea2a5810>
+
+    def test_full_text_is_reachable_without_huge_first_response(client,svc):
+        long='完整的复杂申请条件；'*1500
+        public_id,_=accept(svc,packet(extra={'announcement_level':[{'field':'服务期','value':long}]}))
+        c=client.get('/api/catalog/'+public_id).json()
+        f=c['fields'][0]
+>       assert len(f['value'])<=6000
+E       AssertionError: assert 15000 <= 6000
+E        +  where 15000 = len('完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请...的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；')
+
+tests/product/test_delivery_quality.py:36: AssertionError
+_____________ test_catalog_text_search_and_paging_are_sql_bounded ______________
+
+svc = <deepaha.product.service.Product object at 0x7f1ee93c9ba0>
+
+    def test_catalog_text_search_and_paging_are_sql_bounded(svc):
+        public_id,r=accept(svc)
+        original=svc._public;calls=[]
+        def wrapped(s,p,o):calls.append(p.id);return original(s,p,o)
+        svc._public=wrapped
+        assert svc.catalog(q='服务期')['total']==1
+        assert len(calls)==1
+        assert svc.catalog(q='不存在的词语')['total']==0
+>       assert len(calls)==1
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(['01a0ab0d-e0a2-70c9-b6f7-e65b8a7ba74f', '01a0ab0d-e0a2-70c9-b6f7-e65b8a7ba74f'])
+
+tests/product/test_delivery_quality.py:51: AssertionError
+_________________ test_future_notices_do_not_hide_due_notices __________________
+
+svc = <deepaha.product.service.Product object at 0x7f1ed7704510>
+
+    def test_future_notices_do_not_hide_due_notices(svc):
+        from deepaha.product.models import Notice,now
+        with svc.db.tx() as s:
+            a=svc._account(s,'reader')
+            for i in range(60):s.add(Notice(account_id=a.id,dedupe_key='future-'+str(i),title='未来',body='',due_at=now()+timedelta(days=30)))
+            s.add(Notice(account_id=a.id,dedupe_key='due',title='当前提醒',body='',due_at=now()-timedelta(minutes=1),created_at=now()-timedelta(days=1)))
+>       assert [x['title'] for x in svc.notifications(actor='reader')]==['当前提醒']
+E       AssertionError: assert ['未来', '未来', ...来', '未来', ...] == ['当前提醒']
+E         
+E         At index 0 diff: '未来' != '当前提醒'
+E         Left contains 49 more items, first extra item: '未来'
+E         
+E         Full diff:
+E           [
+E         -     '当前提醒',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E         +     '未来',
+E           ]
+
+tests/product/test_delivery_quality.py:60: AssertionError
+____________________ test_legacy_history_requires_operator _____________________
+
+client = <starlette.testclient.TestClient object at 0x7f1ed7930690>
+
+    def test_legacy_history_requires_operator(client):
+        login(client,'reader')
+>       assert client.get('/api/manage/legacy').status_code==403
+E       AssertionError: assert 404 == 403
+E        +  where 404 = <Response [404 Not Found]>.status_code
+E        +    where <Response [404 Not Found]> = get('/api/manage/legacy')
+E        +      where get = <starlette.testclient.TestClient object at 0x7f1ed7930690>.get
+
+tests/product/test_delivery_quality.py:65: AssertionError
+=========================== short test summary info ============================
+FAILED tests/product/test_delivery_quality.py::test_older_pending_packet_cannot_replace_newer_received_content - Failed: DID NOT RAISE <class 'deepaha.product.errors.Problem'>
+FAILED tests/product/test_delivery_quality.py::test_invalid_json_does_not_crash_private_endpoint - json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+FAILED tests/product/test_delivery_quality.py::test_full_text_is_reachable_without_huge_first_response - AssertionError: assert 15000 <= 6000
+ +  where 15000 = len('完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请...的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；完整的复杂申请条件；')
+FAILED tests/product/test_delivery_quality.py::test_catalog_text_search_and_paging_are_sql_bounded - AssertionError: assert 2 == 1
+ +  where 2 = len(['01a0ab0d-e0a2-70c9-b6f7-e65b8a7ba74f', '01a0ab0d-e0a2-70c9-b6f7-e65b8a7ba74f'])
+FAILED tests/product/test_delivery_quality.py::test_future_notices_do_not_hide_due_notices - AssertionError: assert ['未来', '未来', ...来', '未来', ...] == ['当前提醒']
+  
+  At index 0 diff: '未来' != '当前提醒'
+  Left contains 49 more items, first extra item: '未来'
+  
+  Full diff:
+    [
+  -     '当前提醒',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+  +     '未来',
+    ]
+FAILED tests/product/test_delivery_quality.py::test_legacy_history_requires_operator - AssertionError: assert 404 == 403
+ +  where 404 = <Response [404 Not Found]>.status_code
+ +    where <Response [404 Not Found]> = get('/api/manage/legacy')
+ +      where get = <starlette.testclient.TestClient object at 0x7f1ed7930690>.get
+6 failed in 3.52s

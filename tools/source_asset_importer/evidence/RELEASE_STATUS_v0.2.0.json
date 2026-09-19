@@ -1,0 +1,20 @@
+{
+  "artifact_version": "0.2.0",
+  "baseline_version": "0.1.0",
+  "date": "2026-09-06",
+  "implementation_status": "SOURCE_IMPLEMENTED",
+  "test_status": "NOT_RUN_USER_REQUEST",
+  "unit_tests": "NOT_RUN",
+  "regression_tests": "NOT_RUN",
+  "gui": "NOT_RUN",
+  "source_execution": "NOT_RUN",
+  "live_codex_cli": "NOT_RUN",
+  "live_chatgpt_library": "NOT_VERIFIED",
+  "windows_native": "NOT_RUN",
+  "deepaha_integration": "NOT_INTEGRATED",
+  "database_write": "NOT_ATTEMPTED",
+  "deployment": "NOT_ATTEMPTED",
+  "historical_evidence_note": "evidence/final_verification.* and old GUI images describe v0.1.0 only.",
+  "feature": "Application invokes Codex CLI to list and export selected ChatGPT Library raw files; then existing importer workflow.",
+  "external_requirement": "The local Codex instance must actually provide authorized raw-file access to the target personal Library. No credentials or connector are created by this package."
+}

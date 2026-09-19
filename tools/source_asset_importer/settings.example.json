@@ -1,0 +1,8 @@
+{
+  "base_url": "",
+  "expected_environment": "STAGING",
+  "expected_target_id": null,
+  "allow_http_loopback": false,
+  "timeout_seconds": 45,
+  "ca_file": null
+}

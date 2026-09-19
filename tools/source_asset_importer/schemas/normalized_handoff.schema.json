@@ -1,0 +1,263 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:deepaha:source-intelligence:normalized-import-profile:v1",
+  "title": "Normalized Handoff v2.2; runtime additionally validates references, versions and dependencies",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_metadata",
+    "source_candidates",
+    "agent_acquisition_briefs",
+    "research_evidence",
+    "source_graph_delta",
+    "demand_map",
+    "demand_delta",
+    "lifecycle_delta",
+    "pattern_delta",
+    "blind_spots",
+    "next_exploration_queue",
+    "manual_review_manifest",
+    "state_snapshot_ref",
+    "metrics",
+    "warnings"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "deepaha.source-intelligence.run.v2.2"
+    },
+    "run_metadata": {
+      "type": "object",
+      "required": [
+        "baseline_refs",
+        "delivery_mode",
+        "generated_at",
+        "import_receipt_ref",
+        "limitations",
+        "package_complete",
+        "prior_run_at",
+        "prior_state_ref",
+        "prompt_version",
+        "result_status",
+        "run_key",
+        "run_mode",
+        "state_inheritance",
+        "state_scope",
+        "submission_status",
+        "system_feedback"
+      ],
+      "properties": {
+        "run_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,119}$"
+        },
+        "delivery_mode": {
+          "const": "MANUAL_EXPORT_ONLY"
+        },
+        "submission_status": {
+          "const": "NOT_SUBMITTED"
+        },
+        "package_complete": {
+          "const": true
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "run_mode_reason"
+          ]
+        },
+        {
+          "required": [
+            "reason"
+          ]
+        }
+      ]
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "warnings": {
+      "type": "array"
+    },
+    "state_snapshot_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "authority_assessment",
+          "candidate_key",
+          "demand_themes",
+          "evidence_refs",
+          "first_seen_at",
+          "institution",
+          "last_checked_at",
+          "legacy_id",
+          "opportunity_types",
+          "proposed_operation",
+          "recommendation",
+          "recommended_seed",
+          "recon_status",
+          "score_breakdown",
+          "score_total",
+          "source_name",
+          "source_role",
+          "system_source_id",
+          "target_youth",
+          "uncertainties",
+          "value_assessment"
+        ],
+        "properties": {
+          "candidate_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "institution": {
+            "type": "string",
+            "minLength": 1
+          },
+          "recommended_seed": {
+            "type": "string",
+            "format": "uri"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "minItems": 1
+          },
+          "score_breakdown": {
+            "type": "object"
+          },
+          "score_total": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 100
+          }
+        }
+      }
+    },
+    "agent_acquisition_briefs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "agent_capability_needs",
+          "attachment_pattern",
+          "base_revision",
+          "brief_key",
+          "change_pattern",
+          "discovery_strategy",
+          "evidence_hotspots",
+          "expected_candidate_evidence_package",
+          "known_obstacles",
+          "last_checked_at",
+          "navigation_advice",
+          "observed_access_shape",
+          "opportunity_pattern",
+          "recommended_seed",
+          "recon_evidence",
+          "revision",
+          "scout_confidence",
+          "source_network",
+          "source_ref",
+          "source_topology",
+          "stop_escalation_rule",
+          "suggested_revisit_pattern"
+        ],
+        "anyOf": [
+          {
+            "required": [
+              "source_role",
+              "authority"
+            ]
+          },
+          {
+            "required": [
+              "source_role_authority"
+            ]
+          }
+        ]
+      }
+    },
+    "research_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "evidence_key",
+          "url",
+          "title",
+          "checked_at",
+          "observation",
+          "locator"
+        ]
+      }
+    },
+    "source_graph_delta": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "demand_map": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "demand_delta": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "lifecycle_delta": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "pattern_delta": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "blind_spots": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ]
+      }
+    },
+    "next_exploration_queue": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ]
+      }
+    },
+    "manual_review_manifest": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

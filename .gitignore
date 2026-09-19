@@ -1,34 +1,31 @@
-# Secrets and local configuration
+.venv-product/
+__pycache__/
+.pytest_cache/
+*.pyc
 .env
 .env.*
 !.env.example
-
-# Python
-__pycache__/
-*.py[cod]
-.mypy_cache/
-.pytest_cache/
-.ruff_cache/
-.venv/
-dist/
-
-# Node and Next.js
+*.db
+*.db-*
+*.sqlite
+*.enc
+.credential-key
 node_modules/
 .next/
-coverage/
-*.tsbuildinfo
-
-# Editors and operating systems
-.idea/
-.vscode/
+runtime.json
 .DS_Store
-Thumbs.db
 
-# Local linked worktrees
-.worktrees/
-
-# Disposable local manual-test runtime
-.deepaha-local-manual/
-
-# Reproducible investigation browser evidence (retained locally)
-web/output/playwright/investigations/
+# 凭据与密钥：任何位置、任何命名都不得进入版本库
+# 本目录当前未初始化 git；以下规则为预防，避免日后 git init 或整体拷贝时误提交
+*AIP.txt
+*AIP*.txt
+*API-Key*
+*API-KEY*
+LLM-API*.txt
+*密钥*
+*凭据*
+*.credential
+*.credential-key
+secrets/
+*.pem
+*.key

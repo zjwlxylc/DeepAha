@@ -1,0 +1,55 @@
+FFFFF.
+======================================================================
+FAIL: test_cancel (tests.test_cli.CLITests.test_cancel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_cli.py", line 45, in test_cancel
+    self.assertEqual(r.returncode, 0, r.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : /opt/pyvenv/bin/python: No module named deepaha_importer.__main__; 'deepaha_importer' is a package and cannot be directly executed
+
+
+======================================================================
+FAIL: test_demo_complete_and_repeat (tests.test_cli.CLITests.test_demo_complete_and_repeat)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_cli.py", line 35, in test_demo_complete_and_repeat
+    self.assertEqual(a.returncode, 0, a.stderr); self.assertEqual(b.returncode, 0, b.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : /opt/pyvenv/bin/python: No module named deepaha_importer.__main__; 'deepaha_importer' is a package and cannot be directly executed
+
+
+======================================================================
+FAIL: test_help (tests.test_cli.CLITests.test_help)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_cli.py", line 24, in test_help
+    r = self.run_cli('--help'); self.assertEqual(r.returncode, 0, r.stderr)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : /opt/pyvenv/bin/python: No module named deepaha_importer.__main__; 'deepaha_importer' is a package and cannot be directly executed
+
+
+======================================================================
+FAIL: test_preview_and_separate_commit (tests.test_cli.CLITests.test_preview_and_separate_commit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_cli.py", line 52, in test_preview_and_separate_commit
+    self.assertEqual(r.returncode, 0, r.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : /opt/pyvenv/bin/python: No module named deepaha_importer.__main__; 'deepaha_importer' is a package and cannot be directly executed
+
+
+======================================================================
+FAIL: test_validate_without_database (tests.test_cli.CLITests.test_validate_without_database)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_cli.py", line 29, in test_validate_without_database
+    self.assertEqual(r.returncode, 0, r.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : /opt/pyvenv/bin/python: No module named deepaha_importer.__main__; 'deepaha_importer' is a package and cannot be directly executed
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 4.183s
+
+FAILED (failures=5)

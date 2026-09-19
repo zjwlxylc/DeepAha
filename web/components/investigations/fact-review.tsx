@@ -1,10 +1,9 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { investigationFactAction, type InvestigationActionState } from "../../app/review/investigations/actions";
 import type { InvestigationFactPreparation, InvestigationTask } from "../../lib/investigations";
 
-import { useReviewDraft } from "../../lib/use-review-draft";
 import { EvidenceCheckDetail } from "./evidence-check";
 
 const initial: InvestigationActionState = { error: null, message: null, taskId: null };
@@ -13,10 +12,9 @@ const decisions: Record<string, string> = { APPROVE: "批准字段", REJECT: "�
 function FactForm({ task, kind, preparation, candidate, entityId, requestKey }: { requestKey: string; task: InvestigationTask;
   kind: "prepare" | "decision" | "promote"; preparation?: InvestigationFactPreparation;
   candidate?: InvestigationFactPreparation["rows"][number]; entityId?: string }) {
+  const [formKey] = useState(requestKey);
   const [state, action, pending] = useActionState(investigationFactAction, initial);
-  const { ref: formRef, requestKey: formKey } = useReviewDraft(task.draft_scope ? JSON.stringify([task.draft_scope, task.task_id, task.delivery_hash, task.entity_binding?.binding_id, preparation?.preparation_id, candidate?.candidate_id, candidate?.candidate_id ? preparation?.decisions[candidate.candidate_id]?.decision_id : null, entityId, kind]) : null, requestKey, !!state.message);
-  return <form ref={formRef} action={action} className="review-form" onReset={event => event.preventDefault()}>
-    <input type="hidden" name="workbench" value={task.workbench ? "1" : ""} />
+  return <form action={action} className="review-form" onReset={event => event.preventDefault()}>
     <input type="hidden" name="request_key" value={formKey} />
     <input type="hidden" name="check_id" value={preparation?.check_id ?? task.evidence_check?.check_id ?? ""} />
     <input type="hidden" name="task_id" value={task.task_id} />
@@ -74,7 +72,7 @@ export default function InvestigationFactReview({ task, requestKey }: { task: In
     <p>请逐项确认“原文说了什么、适用于谁”。公告对所有岗位的共同要求、单位的要求和单个岗位的要求会分别保留；找到原文不代表已经理解正确。</p>
     {!preparation ? canPrepare ? <FactForm requestKey={requestKey} task={task} kind="prepare" /> : <p>完成内部材料审核、文档准备及身份归属后，可整理候选字段。</p> : <>
       {!ready && canPrepare ? <><p className="risk-note">当前核验回执已变化，旧清单保留供追溯。请先重新整理候选，再作出决定。</p><FactForm requestKey={requestKey} task={task} kind="prepare" /></> : null}
-      <p>共 {preparation.slice?.total ?? preparation.rows.length} 个原始字段；{preparation.slice?.candidate_total ?? preparation.rows.filter(r => r.candidate_id).length} 个已接入审核，{preparation.slice ? preparation.slice.total - preparation.slice.candidate_total : preparation.rows.filter(r => !r.candidate_id).length} 个仍待处理。未知字段与未接入条件不会因保存事实集而消失。</p>
+      <p>共 {preparation.rows.length} 个原始字段；{preparation.rows.filter(r => r.candidate_id).length} 个已接入审核，{preparation.rows.filter(r => !r.candidate_id).length} 个仍待处理。未知字段与未接入条件不会因保存事实集而消失。</p>
       {preparation.rows.map(row => {
         const decision = row.candidate_id ? preparation.decisions[row.candidate_id] : null;
         return <details className="review-condition-details" key={row.source_index} open={preparation.rows.length <= 6}>
@@ -103,7 +101,7 @@ export default function InvestigationFactReview({ task, requestKey }: { task: In
         const promotion = preparation.promotions[target.entity_id];
         const targetRows = preparation.rows.filter(row => row.entity_id === target.entity_id && row.candidate_id);
         const targetDecisions = targetRows.map(row => preparation.decisions[row.candidate_id!]?.decision);
-        const canSave = preparation.slice ? preparation.slice.can_promote : targetDecisions.length > 0 && targetDecisions.every(value => value && value !== "NEEDS_ADJUDICATION")
+        const canSave = targetDecisions.length > 0 && targetDecisions.every(value => value && value !== "NEEDS_ADJUDICATION")
           && targetDecisions.some(value => value === "APPROVE" || value === "UNKNOWN");
         return <div className="human-test-panel" key={target.entity_id}>
           <h3>{target.name} · {target.target_scope === "UNIT" ? "岗位" : "公告"}事实集</h3>

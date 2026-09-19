@@ -1,0 +1,23 @@
+{
+  "database": "COPY_OF_USER_MULTI_WMA_DATA",
+  "wma_called": false,
+  "target": {
+    "id": "unit_01a0b45c18f3778b9ad21919a44aff1d",
+    "title": "河北省行唐县分公司-金融柜员、理财经理岗",
+    "safe_deadline": "2026-10-31"
+  },
+  "checks": [
+    "notification_preferences_saved",
+    "saved_creates_safe_deadline_schedule",
+    "action_timeline_persists",
+    "outcome_advances_action_and_stops_application_deadline_reminders",
+    "feedback_is_deidentified_offline_candidate",
+    "weekly_digest_reads_action_loop",
+    "personal_export_contains_action_history",
+    "weekly_scheduler_is_deduplicated",
+    "periodic_source_monitoring_creates_recheck_without_wma_execution"
+  ],
+  "weekly_scheduler_created_first": 2,
+  "weekly_scheduler_created_second": 0,
+  "periodic_recheck_tasks_created": 1
+}

@@ -1,0 +1,125 @@
+{
+  "transport": "EXPLICIT_TEST_HTTP_BRIDGE",
+  "mocked_business_data": false,
+  "checks": [
+    "authenticated_login",
+    "actual_exporter_file_upload",
+    "explicit_receive_persisted",
+    "full_candidate_brief_materials",
+    "explicit_source_approval_no_dispatch",
+    "feedback_readback_matches_committed_events",
+    "zero_automatic_tasks",
+    "desktop_200percent_equivalent_reflow",
+    "mobile_catalog_no_overflow"
+  ],
+  "page_errors": [],
+  "http_calls": [
+    {
+      "method": "GET",
+      "path": "/api/site",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review?status=PENDING&q=&offset=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/scout/batches?offset=0",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/manage/scout/previews?filename=DeepAha_Research_8cf33405ef268bf5_r1.zip",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/scout/batches/01a0ab5b-3f2f-77d0-abcb-2cf4a514f0eb",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/scout/batches/01a0ab5b-3f2f-77d0-abcb-2cf4a514f0eb/candidates?offset=0&q=&limit=50",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/manage/scout/batches/01a0ab5b-3f2f-77d0-abcb-2cf4a514f0eb/receive",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/scout/batches/01a0ab5b-3f2f-77d0-abcb-2cf4a514f0eb",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/scout/batches/01a0ab5b-3f2f-77d0-abcb-2cf4a514f0eb/candidates?offset=0&q=&limit=50",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/scout/batches/01a0ab5b-3f2f-77d0-abcb-2cf4a514f0eb/candidates/src-427e0f756f24f73cfc1e",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/scout/batches/01a0ab5b-3f2f-77d0-abcb-2cf4a514f0eb",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/manage/scout/observations/01a0ab5b-40bb-7aa4-b5d6-b9ce61e96ec1/approve",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/sources?offset=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/scout/batches?offset=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/scout/batches/01a0ab5b-3f2f-77d0-abcb-2cf4a514f0eb",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/scout/batches/01a0ab5b-3f2f-77d0-abcb-2cf4a514f0eb/candidates?offset=0&q=&limit=50",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/tasks?offset=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/scout/batches?offset=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200
+    }
+  ],
+  "real_wma_called": false,
+  "test_only_uuid_shim": true
+}

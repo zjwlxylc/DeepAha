@@ -1,0 +1,74 @@
+{
+  "transport": "EXPLICIT_TEST_HTTP_BRIDGE",
+  "native_browser_network": "BLOCKED_BY_ADMINISTRATOR",
+  "database": "ISOLATED_FICTIONAL_SG2_EXAMPLES",
+  "checks": [
+    "authenticated_isolated_multitype_database",
+    "five_category_filters_visible",
+    "competition_track_vocabulary_and_scope",
+    "rolling_policy_no_fake_deadline",
+    "unknown_scholarship_field_searchable",
+    "postgrad_program_tiers_visible",
+    "no_overflow_360",
+    "no_overflow_390",
+    "no_overflow_430"
+  ],
+  "page_errors": [],
+  "http_calls": [
+    {
+      "method": "GET",
+      "path": "/api/site",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review?status=PENDING&q=&offset=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog?q=&kind=COMPETITION&region=&offset=0&limit=20",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog/unit_01a0b386c0377322a71210ef1183ad57",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog?q=&kind=YOUTH_POLICY_BENEFIT&region=&offset=0&limit=20",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog/unit_01a0b386c0467e6cb1d51e245fb7aede",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog?q=%E5%85%AC%E7%9B%8A&kind=SCHOLARSHIP&region=&offset=0&limit=20",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog?q=&kind=POSTGRAD_RECOMMENDATION&region=&offset=0&limit=20",
+      "status": 200
+    }
+  ]
+}

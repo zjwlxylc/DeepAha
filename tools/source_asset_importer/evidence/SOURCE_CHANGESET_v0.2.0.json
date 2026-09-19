@@ -1,0 +1,123 @@
+{
+  "baseline_zip_sha256": "0bd5137dd901b12d5ea25f4e3737f14ccaad19da8be59d188ccfaae08f5e6143",
+  "version": "0.2.0",
+  "changes": [
+    {
+      "path": ".gitignore",
+      "change": "modified",
+      "sha256": "a5f9e7b1000456c4ca072ddce86b87b1b814670f3c5a2500de5281f3b55485db"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "added",
+      "sha256": "6b400a656b6e447ba33c24bebc0a2fffd094a1fba46b8138a13e77aae9d85930"
+    },
+    {
+      "path": "README.md",
+      "change": "modified",
+      "sha256": "f651d1c8c04b7d660e4aa1abd32cf47eb59a1a116a0bfb966ab2d1bc5fcd4958"
+    },
+    {
+      "path": "codex-library.settings.example.json",
+      "change": "added",
+      "sha256": "57a9edca9a1830350fc625d8331a78f96e9d12fd0236cbb763e0721b5a7e4be5"
+    },
+    {
+      "path": "deepaha_importer/__init__.py",
+      "change": "modified",
+      "sha256": "1375e4908fe6a5569c967d36c1da2be85d2ac1fc1c739680f8790109b5039ffc"
+    },
+    {
+      "path": "deepaha_importer/cli.py",
+      "change": "modified",
+      "sha256": "2ad8c89463878ec945abee42658c2dfb483c9defe639010acc16517b0e456865"
+    },
+    {
+      "path": "deepaha_importer/client.py",
+      "change": "modified",
+      "sha256": "09c498e1609daa12e73f98ba68c747254933f9502cd53f5f215d721de340122a"
+    },
+    {
+      "path": "deepaha_importer/codex_process.py",
+      "change": "added",
+      "sha256": "8d7458b466a0b2aebe4d66778da7ef3b86c313688b4cf6576b5b9be263efe73b"
+    },
+    {
+      "path": "deepaha_importer/gui.py",
+      "change": "modified",
+      "sha256": "092519b0c86a587ace2f081d2012ecd7cef86ced9b8d6c2634fcbe43ddf64773"
+    },
+    {
+      "path": "deepaha_importer/library_pull.py",
+      "change": "added",
+      "sha256": "c639db5181884af4f9488b73873138f301331dafd057a22433eb26f85870ac79"
+    },
+    {
+      "path": "deepaha_importer/library_window.py",
+      "change": "added",
+      "sha256": "8f8f19debce3b309412891bf9b1e88b55887e1f1f79f5e32f5ec14d7624493a2"
+    },
+    {
+      "path": "docs/CODEX_HANDOFF.md",
+      "change": "modified",
+      "sha256": "e529771aef19410121b2985424f728b656714e8951fa022c8ef6a14b21e6e23f"
+    },
+    {
+      "path": "docs/CONTRACT.md",
+      "change": "modified",
+      "sha256": "e898f4f9298e8f60f5a6456f5e83a483352204929716294ddb3c9b35f62d6a14"
+    },
+    {
+      "path": "docs/IMPLEMENTATION_STATUS.md",
+      "change": "modified",
+      "sha256": "1462fac8699634fde9e1c2712f3bf65f3d342bcf9fa0eb583da5c8164351f022"
+    },
+    {
+      "path": "docs/LIBRARY_PULL.md",
+      "change": "added",
+      "sha256": "65f1a373d13478abd5ba5824d239f7207648219dcc14529796e9f37027bf49f5"
+    },
+    {
+      "path": "docs/SECURITY_AND_LIMITS.md",
+      "change": "modified",
+      "sha256": "4b875178edf351b1f55f4adb7163406f4bcecefd64fdc37c7b21322a9740fb37"
+    },
+    {
+      "path": "docs/baseline/IMPLEMENTATION_STATUS_v0.1.0.md",
+      "change": "added",
+      "sha256": "0d6a1f8078f5935e4a4c9ec346fa52f0aff74cc1868d55913a3f15b0cd6ca24b"
+    },
+    {
+      "path": "docs/baseline/README_v0.1.0.md",
+      "change": "added",
+      "sha256": "9137e0c5bd540dfdb7524bd594d6d900b9062a70ffd1af142c39443e87f6e0bd"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-06-library-pull.md",
+      "change": "added",
+      "sha256": "9a5aaac0ca97282757acfab086cb50442c720daf5a32bf309fd49db99df60831"
+    },
+    {
+      "path": "evidence/RELEASE_STATUS_v0.2.0.json",
+      "change": "added",
+      "sha256": "ece1af01784c8e12ca95f5e967582c434ab65112ad41cdfa412f50346d509f72"
+    },
+    {
+      "path": "pyproject.toml",
+      "change": "modified",
+      "sha256": "2d4b5159b36d3525ae98ad55e7f1685a15d0df745ca7609c46924b46ac7d65a0"
+    },
+    {
+      "path": "scripts/package_source.py",
+      "change": "modified",
+      "sha256": "e3de780960d3e540c4a522184ec5ecffcb9b9ebca22cbe03bd85ae540f1e6fbb"
+    },
+    {
+      "path": "scripts/verify.py",
+      "change": "modified",
+      "sha256": "966c0f06a1b571f3a9f9cfe949c2f023492a69d8a9b2314c671132ce7908b034"
+    }
+  ],
+  "tests_executed": false,
+  "note": "Source byte comparison only; no application, CLI, GUI, database or tests executed."
+}

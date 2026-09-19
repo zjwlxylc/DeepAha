@@ -1,0 +1,1 @@
+Product JavaScript syntax, no-fixture, and SG1 actionable UI checks passed

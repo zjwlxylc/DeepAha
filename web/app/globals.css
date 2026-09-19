@@ -1689,8 +1689,3 @@ code {
     animation-iteration-count: 1 !important;
   }
 }
-
-
-.workbench-step-tabs { position: sticky; top: .5rem; z-index: 5; display: flex; flex-wrap: wrap; gap: .5rem; padding: .75rem; margin-block: 1rem; border: 1px solid var(--border); border-radius: .75rem; background: var(--paper); }
-.workbench-step-tabs a { padding: .45rem .8rem; border-radius: .5rem; background: var(--blue-soft); }
-.workbench-step-tabs a[aria-current="step"] { color: var(--paper); background: var(--navy); }

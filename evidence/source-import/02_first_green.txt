@@ -1,0 +1,73 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+_________________ test_actual_export_preview_commit_roundtrip __________________
+
+raw = b'{"schema_version": "deepaha.scout-feedback.v1", "issuer": "DeepAha", "instance_id": "01a0ab48-92dd-7fce-9872-70d6713...ICATED_SYSTEM_READBACK; OFFLINE_FILE_IS_NOT_A_SIGNATURE", "source_receipt_id": "01a0ab48-9430-7d1d-8b05-5bc206abe472"}'
+expected_bundle_ids = ['5bd9403ea2cd52d3762b275eed8f8c6b137232f23803130b4e62fd151c49ffdf']
+
+    def inspect_feedback(raw,expected_bundle_ids=()):
+        value=parse_json(raw,8*1024*1024)
+        if not isinstance(value,dict) or value.get('schema_version')!='deepaha.scout-feedback.v1':
+            raise ImporterError('FEEDBACK_SCHEMA','请提供 deepaha.scout-feedback.v1 系统反馈文件；旧回执请使用兼容窗口。')
+        required={'issuer','instance_id','environment','feedback_id','bundle_id','observed_at','events'}
+        if required-set(value):raise ImporterError('FEEDBACK_FIELDS','反馈缺少发行系统、实例、环境、包标识、时间或事件。')
+        for key in ('issuer','instance_id','feedback_id'):
+            if not isinstance(value[key],str) or not 0<len(value[key])<=240:raise ImporterError('FEEDBACK_FIELDS','反馈身份字段无效。')
+        if value['environment'] not in {'DEMO','TEST','STAGING','PRODUCTION'}:raise ImporterError('FEEDBACK_ENV','反馈环境无效。')
+        if not isinstance(value['bundle_id'],str) or not re.fullmatch('[0-9a-f]{64}',value['bundle_id']):raise ImporterError('FEEDBACK_BUNDLE','反馈包标识无效。')
+        try:
+            stamp=datetime.fromisoformat(value['observed_at'].replace('Z','+00:00'))
+>           if stamp.tzinfo is None:raise ValueError()
+                                    ^^^^^^^^^^^^^^^^^^
+E           ValueError
+
+../tools/source_asset_importer/deepaha_importer/research/feedback.py:23: ValueError
+
+During handling of the above exception, another exception occurred:
+
+svc = <deepaha.product.service.Product object at 0x7f85e5dbe5d0>
+exported = (<deepaha_importer.research.workspace.Workspace object at 0x7f85e6a541a0>, {'analysis': {'analyzed_at': '2026-09-16T17...\x00\x00originals/0001/Handoff.jsonPK\x05\x06\x00\x00\x00\x00\x07\x00\x07\x00\xb8\x01\x00\x00\x00\x17\x00\x00\x00\x00')
+
+    def test_actual_export_preview_commit_roundtrip(svc,exported):
+        w,s,raw=exported
+        assert hasattr(svc,'scout_prepare'), 'rc1只有简化来源JSON，没有研究ZIP适配'
+        p=svc.scout_prepare(raw,'研究交接.zip',actor='operator')
+        assert p['bundle_id']==s['export_history'][0]['bundle_id'] if s['export_history'] else p['format']=='deepaha.research-handoff.v1'
+        groups=svc.scout_items(p['id'],actor='operator')['items'];assert len(groups)==1
+        before=len(svc.list_sources(actor='operator'))
+        r=svc.scout_commit(p['id'],p['preview_hash'],[g['id'] for g in groups],'commit-1',actor='operator')
+        assert r['sources_created']==r['tasks_created']==0
+        assert len(svc.list_sources(actor='operator'))==before
+        assert svc.scout_commit(p['id'],p['preview_hash'],[g['id'] for g in groups],'commit-1',actor='operator')==r
+        fb=svc.scout_feedback(p['id'],actor='operator')
+        from deepaha_importer.research.feedback import inspect_feedback
+>       check=inspect_feedback(json.dumps(fb).encode(),[p['bundle_id']])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/product/test_scout_import.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+raw = b'{"schema_version": "deepaha.scout-feedback.v1", "issuer": "DeepAha", "instance_id": "01a0ab48-92dd-7fce-9872-70d6713...ICATED_SYSTEM_READBACK; OFFLINE_FILE_IS_NOT_A_SIGNATURE", "source_receipt_id": "01a0ab48-9430-7d1d-8b05-5bc206abe472"}'
+expected_bundle_ids = ['5bd9403ea2cd52d3762b275eed8f8c6b137232f23803130b4e62fd151c49ffdf']
+
+    def inspect_feedback(raw,expected_bundle_ids=()):
+        value=parse_json(raw,8*1024*1024)
+        if not isinstance(value,dict) or value.get('schema_version')!='deepaha.scout-feedback.v1':
+            raise ImporterError('FEEDBACK_SCHEMA','请提供 deepaha.scout-feedback.v1 系统反馈文件；旧回执请使用兼容窗口。')
+        required={'issuer','instance_id','environment','feedback_id','bundle_id','observed_at','events'}
+        if required-set(value):raise ImporterError('FEEDBACK_FIELDS','反馈缺少发行系统、实例、环境、包标识、时间或事件。')
+        for key in ('issuer','instance_id','feedback_id'):
+            if not isinstance(value[key],str) or not 0<len(value[key])<=240:raise ImporterError('FEEDBACK_FIELDS','反馈身份字段无效。')
+        if value['environment'] not in {'DEMO','TEST','STAGING','PRODUCTION'}:raise ImporterError('FEEDBACK_ENV','反馈环境无效。')
+        if not isinstance(value['bundle_id'],str) or not re.fullmatch('[0-9a-f]{64}',value['bundle_id']):raise ImporterError('FEEDBACK_BUNDLE','反馈包标识无效。')
+        try:
+            stamp=datetime.fromisoformat(value['observed_at'].replace('Z','+00:00'))
+            if stamp.tzinfo is None:raise ValueError()
+>       except (ValueError,AttributeError,TypeError):raise ImporterError('FEEDBACK_TIME','反馈时间须为含时区的ISO时间。')
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       deepaha_importer.errors.ImporterError: 反馈时间须为含时区的ISO时间。
+
+../tools/source_asset_importer/deepaha_importer/research/feedback.py:24: ImporterError
+=========================== short test summary info ============================
+FAILED tests/product/test_scout_import.py::test_actual_export_preview_commit_roundtrip - deepaha_importer.errors.ImporterError: 反馈时间须为含时区的ISO时间。
+1 failed, 1 passed in 1.64s

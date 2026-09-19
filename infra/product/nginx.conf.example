@@ -1,0 +1,30 @@
+# Integrate with the existing server block. Install valid TLS certificates separately.
+# Do not overwrite the current deepaha.com site without a backup and explicit rollout.
+server {
+    listen 443 ssl;
+    server_name deepaha.com www.deepaha.com;
+    ssl_certificate /etc/letsencrypt/live/deepaha.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/deepaha.com/privkey.pem;
+    client_max_body_size 33m;
+    # Matches the research upload API's 100MiB bound; other routes keep 33MiB.
+    location = /api/manage/scout/previews {
+        client_max_body_size 101m;
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_read_timeout 180s;
+    }
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_read_timeout 60s;
+    }
+}
+server {
+    listen 80;
+    server_name deepaha.com www.deepaha.com;
+    return 301 https://$host$request_uri;
+}

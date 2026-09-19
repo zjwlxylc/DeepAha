@@ -1,0 +1,7 @@
+{
+  "release": "3.8.0-rc1",
+  "database_generation": "deepaha-product-v1-actionable2-actionloop1-lab2",
+  "code_rollback_compatible_with": ["3.7.2-rc1", "3.7.1-rc1"],
+  "schema_change_in_release": false,
+  "automatic_database_rollback": false
+}

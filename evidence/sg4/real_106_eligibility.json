@@ -1,0 +1,71 @@
+{
+  "result": "PASS",
+  "upgrade": {
+    "actionable_schema_version": "2",
+    "backup": "/mnt/data/sg4_real_regression/deepaha-data/backups/sg4-real-before-sg1.zip",
+    "backup_verified": true,
+    "already_current": false,
+    "existing_rows_preserved": true,
+    "catalog_targets_created": 106,
+    "catalog_targets": 106
+  },
+  "second_upgrade": {
+    "already_current": true,
+    "actionable_schema_version": "2",
+    "catalog_targets": 106,
+    "data_modified": false
+  },
+  "catalog_total": 106,
+  "active_targets": 106,
+  "unit_kinds": {
+    "GROUP": 58,
+    "POSITION": 106
+  },
+  "sample_target": {
+    "id": "unit_01a0b450bac07f2f8ae72933050c9a02",
+    "title": "综合管理",
+    "code": "1"
+  },
+  "profile": {
+    "education": "本科",
+    "major": "广告学",
+    "major_code": "050303",
+    "birth_date": "1985-01-01"
+  },
+  "fit_status": "INELIGIBLE",
+  "hard_conflict_types": [
+    "BIRTH_DATE_MIN",
+    "EDUCATION_MIN",
+    "MAJOR_CODE_SET"
+  ],
+  "education_evidence": [
+    {
+      "artifact_id": "art_plan_xlsx",
+      "quote": "硕士研究生以上",
+      "locator": {
+        "sheet": "岗位信息表",
+        "row": "5",
+        "column": "K"
+      },
+      "url": "https://rlsbt.zj.gov.cn/api-gateway/jpaas-web-server/front/document/download?fileUrl=YW5UzzlvCwcM%2FNHHX%2FtT6L0844lzo%2BBb9iPQwtvXwCL0wEBbv8Jojq%2BRcG9FMwCRjXLnSgGDtCOkpwPCGUVfbxjaNXCp6M1PJYGWbyzmv2bo2me4FAC2UnFgdfHkH9lPxirjiBwBIUkWjHS45onNBGAUQBJnlzlC1FLF%2B3NPR1I%3D&fileName=%E6%B5%99%E6%B1%9F%E7%9C%81%E7%9C%81%E5%B1%9E%E4%BA%8B%E4%B8%9A%E5%8D%95%E4%BD%8D2026%E4%B8%8B%E5%8D%8A%E5%B9%B4%E9%9B%86%E4%B8%AD%E5%85%AC%E5%BC%80%E6%8B%9B%E8%81%98%E8%AE%A1%E5%88%92%E8%A1%A8.xlsx",
+      "verification": "XLSX_CELL_MATCH",
+      "located": true
+    }
+  ],
+  "major_evidence": [
+    {
+      "artifact_id": "art_plan_xlsx",
+      "quote": "理学（07）、工学（08）",
+      "locator": {
+        "sheet": "岗位信息表",
+        "row": "5",
+        "column": "M"
+      },
+      "url": "https://rlsbt.zj.gov.cn/api-gateway/jpaas-web-server/front/document/download?fileUrl=YW5UzzlvCwcM%2FNHHX%2FtT6L0844lzo%2BBb9iPQwtvXwCL0wEBbv8Jojq%2BRcG9FMwCRjXLnSgGDtCOkpwPCGUVfbxjaNXCp6M1PJYGWbyzmv2bo2me4FAC2UnFgdfHkH9lPxirjiBwBIUkWjHS45onNBGAUQBJnlzlC1FLF%2B3NPR1I%3D&fileName=%E6%B5%99%E6%B1%9F%E7%9C%81%E7%9C%81%E5%B1%9E%E4%BA%8B%E4%B8%9A%E5%8D%95%E4%BD%8D2026%E4%B8%8B%E5%8D%8A%E5%B9%B4%E9%9B%86%E4%B8%AD%E5%85%AC%E5%BC%80%E6%8B%9B%E8%81%98%E8%AE%A1%E5%88%92%E8%A1%A8.xlsx",
+      "verification": "XLSX_CELL_MATCH",
+      "located": true
+    }
+  ],
+  "legacy_tables_unchanged": true,
+  "objects_unchanged": true
+}

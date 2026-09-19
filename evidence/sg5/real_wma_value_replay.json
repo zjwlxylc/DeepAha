@@ -1,0 +1,438 @@
+{
+  "stats": {
+    "product_tasks": 9,
+    "product_result_snapshots": 7,
+    "product_overview_revisions": 6,
+    "product_overview_decisions": 6,
+    "product_overview_publications": 6,
+    "product_opportunity_identity": 6,
+    "product_opportunity_units": 425,
+    "product_catalog_targets": 328
+  },
+  "target_type_counts": [
+    {
+      "type": "PUBLIC_INSTITUTION_JOB",
+      "count": 300
+    },
+    {
+      "type": "COMPETITION",
+      "count": 21
+    },
+    {
+      "type": "YOUTH_POLICY_BENEFIT",
+      "count": 7
+    }
+  ],
+  "task_status_stage_counts": [
+    {
+      "status": "CANCELLED",
+      "stage": "CREATING",
+      "count": 1
+    },
+    {
+      "status": "NEEDS_RECOVERY",
+      "stage": "COLLECTING",
+      "count": 1
+    },
+    {
+      "status": "READY",
+      "stage": "DONE",
+      "count": 6
+    },
+    {
+      "status": "RUNNING",
+      "stage": "PROJECTING",
+      "count": 1
+    }
+  ],
+  "schema_unchanged_by_sg5_initialize": true,
+  "database_sha256_before_profile_calibration": "401375392a4165792cbdcff16d5a5f429ee04b762ab405920c650f543aa1de66",
+  "objects_before": {
+    "files": 252,
+    "bytes": 35658553,
+    "tree_sha256": "3a6a65a223ce371d80976fddcb6efcc3ea80f4b063fb4cd4780efe307778ff54"
+  },
+  "objects_after": {
+    "files": 252,
+    "bytes": 35658553,
+    "tree_sha256": "3a6a65a223ce371d80976fddcb6efcc3ea80f4b063fb4cd4780efe307778ff54"
+  },
+  "objects_unchanged": true,
+  "scenarios": {
+    "existing_minimal": {
+      "basis": "LOCAL_VALUE_PRIORITY_V1",
+      "llm_used": false,
+      "candidate_count": 67,
+      "evaluated_count": 67,
+      "excluded_ineligible": 0,
+      "inferred_opportunity_types": [
+        "YOUTH_POLICY_BENEFIT"
+      ],
+      "featured": [
+        {
+          "title": "情形1：来自城乡居民最低生活保障家庭",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN",
+          "why_for_you": [
+            "你填写的关注方向与人才政策类机会直接相关。",
+            "内容与你的兴趣“政策”有直接关联。",
+            "这类人才政策与你填写的关注方向相关。"
+          ],
+          "why_now": "时间节点尚未明确，先确认当前官方安排。",
+          "risks": [
+            "仍有资格条件不能安全自动判断，需查看官方条件。",
+            "当前材料没有明确可用于排序的地区信息。",
+            "当前没有可靠的精确截止时间。"
+          ]
+        },
+        {
+          "title": "教师岗位2",
+          "type": "PUBLIC_INSTITUTION_JOB",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN",
+          "why_for_you": [
+            "地点与你关注的宁波有关。",
+            "内容与你的兴趣“政策”有直接关联。"
+          ],
+          "why_now": "时间节点尚未明确，先确认当前官方安排。",
+          "risks": [
+            "仍有资格条件不能安全自动判断，需查看官方条件。",
+            "当前没有可靠的精确截止时间。"
+          ]
+        },
+        {
+          "title": "情形5：来自贫困残疾人家庭（城乡低保边缘家庭且毕业生父母其中一方为持证残疾人）",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN",
+          "why_for_you": [
+            "你填写的关注方向与人才政策类机会直接相关。",
+            "内容与你的兴趣“政策”有直接关联。",
+            "这类人才政策与你填写的关注方向相关。"
+          ],
+          "why_now": "时间节点尚未明确，先确认当前官方安排。",
+          "risks": [
+            "仍有资格条件不能安全自动判断，需查看官方条件。",
+            "当前材料没有明确可用于排序的地区信息。",
+            "当前没有可靠的精确截止时间。"
+          ]
+        }
+      ],
+      "top12": [
+        {
+          "title": "情形1：来自城乡居民最低生活保障家庭",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形5：来自贫困残疾人家庭（城乡低保边缘家庭且毕业生父母其中一方为持证残疾人）",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形2：孤儿",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形4：在学期间已获得校园地或生源地国家助学贷款",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形3：持证残疾人",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形7：来自零就业家庭",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形6：来自防止返贫监测对象家庭",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "教师岗位2",
+          "type": "PUBLIC_INSTITUTION_JOB",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "教师岗位3",
+          "type": "PUBLIC_INSTITUTION_JOB",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "教师岗位1",
+          "type": "PUBLIC_INSTITUTION_JOB",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "教师岗位4",
+          "type": "PUBLIC_INSTITUTION_JOB",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "审判辅助1",
+          "type": "PUBLIC_INSTITUTION_JOB",
+          "priority_band": "RELEVANT",
+          "eligibility_status": "UNCERTAIN"
+        }
+      ]
+    },
+    "explicit_policy": {
+      "basis": "LOCAL_VALUE_PRIORITY_V1",
+      "llm_used": false,
+      "candidate_count": 7,
+      "evaluated_count": 7,
+      "excluded_ineligible": 0,
+      "inferred_opportunity_types": [],
+      "featured": [
+        {
+          "title": "情形1：来自城乡居民最低生活保障家庭",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN",
+          "why_for_you": [
+            "这是你主动关注的人才政策类机会。",
+            "内容与你的当前目标“求职”有直接关联。",
+            "内容与你的兴趣“政策”有直接关联。"
+          ],
+          "why_now": "时间节点尚未明确，先确认当前官方安排。",
+          "risks": [
+            "仍有资格条件不能安全自动判断，需查看官方条件。",
+            "当前材料没有明确可用于排序的地区信息。",
+            "当前没有可靠的精确截止时间。"
+          ]
+        },
+        {
+          "title": "情形5：来自贫困残疾人家庭（城乡低保边缘家庭且毕业生父母其中一方为持证残疾人）",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN",
+          "why_for_you": [
+            "这是你主动关注的人才政策类机会。",
+            "内容与你的当前目标“求职”有直接关联。",
+            "内容与你的兴趣“政策”有直接关联。"
+          ],
+          "why_now": "时间节点尚未明确，先确认当前官方安排。",
+          "risks": [
+            "仍有资格条件不能安全自动判断，需查看官方条件。",
+            "当前材料没有明确可用于排序的地区信息。",
+            "当前没有可靠的精确截止时间。"
+          ]
+        },
+        {
+          "title": "情形2：孤儿",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN",
+          "why_for_you": [
+            "这是你主动关注的人才政策类机会。",
+            "内容与你的当前目标“求职”有直接关联。",
+            "内容与你的兴趣“政策”有直接关联。"
+          ],
+          "why_now": "时间节点尚未明确，先确认当前官方安排。",
+          "risks": [
+            "仍有资格条件不能安全自动判断，需查看官方条件。",
+            "当前材料没有明确可用于排序的地区信息。",
+            "当前没有可靠的精确截止时间。"
+          ]
+        }
+      ],
+      "top12": [
+        {
+          "title": "情形1：来自城乡居民最低生活保障家庭",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形5：来自贫困残疾人家庭（城乡低保边缘家庭且毕业生父母其中一方为持证残疾人）",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形2：孤儿",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形4：在学期间已获得校园地或生源地国家助学贷款",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形3：持证残疾人",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形7：来自零就业家庭",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "情形6：来自防止返贫监测对象家庭",
+          "type": "YOUTH_POLICY_BENEFIT",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        }
+      ]
+    },
+    "ai_competition": {
+      "basis": "LOCAL_VALUE_PRIORITY_V1",
+      "llm_used": false,
+      "candidate_count": 21,
+      "evaluated_count": 21,
+      "excluded_ineligible": 0,
+      "inferred_opportunity_types": [],
+      "featured": [
+        {
+          "title": "基于国产信创开源鸿蒙AI+边缘智能应用系统设计",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN",
+          "why_for_you": [
+            "这是你主动关注的竞赛类机会。",
+            "地点与你关注的浙江有关。",
+            "内容与你的当前目标“项目”有直接关联。",
+            "内容与你的发展方向“AI”有直接关联。"
+          ],
+          "why_now": "时间节点尚未明确，先确认当前官方安排。",
+          "risks": [
+            "仍有资格条件不能安全自动判断，需查看官方条件。",
+            "当前没有可靠的精确截止时间。"
+          ]
+        },
+        {
+          "title": "工业图像异常检测与定位算法挑战赛",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN",
+          "why_for_you": [
+            "这是你主动关注的竞赛类机会。",
+            "地点与你关注的浙江有关。",
+            "内容与你的发展方向“AI”有直接关联。",
+            "内容与你的发展方向“产品”有直接关联。"
+          ],
+          "why_now": "时间节点尚未明确，先确认当前官方安排。",
+          "risks": [
+            "仍有资格条件不能安全自动判断，需查看官方条件。",
+            "当前没有可靠的精确截止时间。"
+          ]
+        },
+        {
+          "title": "基于面向智慧零售的可控自主服务机器人研发与应用",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN",
+          "why_for_you": [
+            "这是你主动关注的竞赛类机会。",
+            "地点与你关注的浙江有关。",
+            "内容与你的当前目标“项目”有直接关联。",
+            "内容与你的发展方向“AI”有直接关联。"
+          ],
+          "why_now": "时间节点尚未明确，先确认当前官方安排。",
+          "risks": [
+            "仍有资格条件不能安全自动判断，需查看官方条件。",
+            "当前没有可靠的精确截止时间。"
+          ]
+        }
+      ],
+      "top12": [
+        {
+          "title": "基于国产信创开源鸿蒙AI+边缘智能应用系统设计",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "工业图像异常检测与定位算法挑战赛",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "基于面向智慧零售的可控自主服务机器人研发与应用",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "面向跨器官语义对齐的眼表图像颈动脉超声报告生成",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "监控场景的火情识别算法设计和实现",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "基于SOC日志网络安全威胁检测算法设计与实现",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "面向浙江文旅传播的AIGC城市短视频自动生成系统",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "四足机器人复杂场景中的综合应用",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "多模态K12人工智能通识课教学助手对话智能体",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "院校智能辅助场景（基于AI Coding或OpenClaw引擎规范）",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "文旅智能辅助场景（基于AI Coding或OpenClaw引擎规范）",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        },
+        {
+          "title": "“AI+信息素养”专项赛（即浙江省大学生“AI+信息素养”大赛）",
+          "type": "COMPETITION",
+          "priority_band": "HIGH",
+          "eligibility_status": "UNCERTAIN"
+        }
+      ]
+    }
+  }
+}

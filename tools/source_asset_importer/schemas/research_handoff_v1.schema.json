@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:deepaha:research-handoff:v1",
+  "title": "Offline research review handoff — not a production receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "bundle_id",
+    "review_revision",
+    "submission_status",
+    "readiness",
+    "staging_proposals",
+    "original_inventory"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "deepaha.research-handoff.v1"
+    },
+    "bundle_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "review_revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "submission_status": {
+      "const": "NOT_SUBMITTED"
+    },
+    "delivery_mode": {
+      "const": "MANUAL_EXPORT_ONLY"
+    },
+    "readiness": {
+      "enum": [
+        "REVIEWED_CANDIDATES_ONLY",
+        "UNFINISHED_REVIEW_NOT_FOR_APPROVAL"
+      ]
+    },
+    "staging_proposals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "review_source_id",
+          "namespace",
+          "candidate_key",
+          "system_source_id",
+          "collection_enabled"
+        ],
+        "properties": {
+          "review_source_id": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "candidate_key": {
+            "type": "string"
+          },
+          "system_source_id": {
+            "type": "null"
+          },
+          "collection_enabled": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    "original_inventory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "sha256",
+          "size_bytes"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "analyzed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "exported_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_reviewed_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "generator_version": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

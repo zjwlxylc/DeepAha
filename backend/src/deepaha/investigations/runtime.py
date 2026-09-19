@@ -1,3 +1,6 @@
+if __name__ == "__main__":
+    raise SystemExit("旧运行入口已退役。请运行 python -m deepaha.product.cli worker")
+
 """Local investigation process. Startup never starts a remote investigation."""
 
 import asyncio
@@ -56,7 +59,7 @@ def worker_status(root: Path, database_url: str, now: datetime) -> dict[str, Any
             and 0 <= age <= 30
         ):
             return {"state": "RUNNING", "updated_at": row["updated_at"]}
-    except OSError, ValueError, KeyError, TypeError:
+    except (OSError, ValueError, KeyError, TypeError):
         pass
     return {"state": "OFFLINE", "updated_at": None}
 
@@ -132,6 +135,3 @@ async def _dispatch_loop(settings: Settings, engine: Engine) -> None:
         await asyncio.sleep(DISPATCH_INTERVAL_SECONDS)
 
 
-if __name__ == "__main__":
-    with suppress(KeyboardInterrupt):
-        asyncio.run(serve(Settings()))

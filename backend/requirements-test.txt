@@ -1,0 +1,4 @@
+-r requirements-product.txt
+pytest==9.0.2
+pytest-asyncio==1.3.0
+playwright==1.57.0

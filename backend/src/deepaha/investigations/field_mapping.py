@@ -161,7 +161,7 @@ def _normalize_value(field_name: str, value: str) -> JsonValue | None:
                 return {"allowed_codes": sorted(codes)}
     try:
         structured = json.loads(value, object_pairs_hook=_unique_object)
-    except ValueError, RecursionError:
+    except (ValueError, RecursionError):
         return None
     if not isinstance(structured, dict):
         return None

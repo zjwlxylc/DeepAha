@@ -1,0 +1,27 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_original_export_custom_research_namespace_preserved ___________
+
+svc = <deepaha.product.service.Product object at 0x7f315bdc0440>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-10/test_original_export_custom_re0')
+
+    def test_original_export_custom_research_namespace_preserved(svc,tmp_path):
+        from deepaha_importer.research.workspace import Workspace
+        f=tmp_path/'Handoff.json';f.write_text(json.dumps(handoff()),encoding='utf8')
+        w=Workspace(tmp_path/'custom');x=w.create([f],namespace='research-team-a');g=x['analysis']['sources'][0]
+        x=w.decide(x['id'],g['id'],'PROPOSE_STAGING','待系统接收','测试操作者',0,acknowledge_issues=True)
+        out=w.export(x['id'],x['revision']);p=svc.scout_prepare(Path(out['path']).read_bytes(),'Research.zip',actor='operator')
+        row=svc.scout_items(p['id'],actor='operator')['items'][0]
+>       assert row['namespace']=='research-team-a' and row['suggested']
+E       AssertionError: assert ('chatgpt-scout' == 'research-team-a'
+E         
+E         - research-team-a
+E         + chatgpt-scout)
+
+backend/tests/product/test_scout_import.py:347: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_scout_import.py::test_original_export_custom_research_namespace_preserved - AssertionError: assert ('chatgpt-scout' == 'research-team-a'
+  
+  - research-team-a
+  + chatgpt-scout)
+1 failed, 28 deselected in 0.98s

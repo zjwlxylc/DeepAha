@@ -1,0 +1,102 @@
+{
+  "transport": "EXPLICIT_TEST_HTTP_BRIDGE",
+  "native_browser_network": "BLOCKED_BY_ADMINISTRATOR",
+  "checks": [
+    "login_and_database_inbox",
+    "review_contents_and_fixed_decision",
+    "single_approval_persisted_then_public_detail_and_favorite",
+    "private_action_persisted",
+    "catalog_no_overflow_360",
+    "catalog_no_overflow_390",
+    "catalog_no_overflow_430",
+    "catalog_no_overflow_768",
+    "profile_form_rendered",
+    "/manage_rendered",
+    "/manage/sources_rendered",
+    "/manage/tasks_rendered",
+    "/manage/history_rendered"
+  ],
+  "page_errors": [],
+  "http_calls": [
+    {
+      "method": "GET",
+      "path": "/api/site",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review?status=PENDING&q=&offset=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/01a0ab07-3883-7fe9-ba9a-b0f32179634c?item=0",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/review/01a0ab07-3883-7fe9-ba9a-b0f32179634c/decision",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/01a0ab07-3883-7fe9-ba9a-b0f32179634c?item=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog/opp_01a0ab286b49741f9a157c9fe6a2d7bd",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/me/actions/opp_01a0ab286b49741f9a157c9fe6a2d7bd",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/actions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/profile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/sources?offset=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/tasks?offset=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/history?offset=0",
+      "status": 200
+    }
+  ]
+}

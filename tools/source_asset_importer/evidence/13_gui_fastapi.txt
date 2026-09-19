@@ -1,0 +1,27 @@
+test_cancel_has_no_receipt (tests.test_gui.GUITests.test_cancel_has_no_receipt) ... ok
+test_initial_confirmation_disabled (tests.test_gui.GUITests.test_initial_confirmation_disabled) ... ok
+test_real_confirm_writes_receipt (tests.test_gui.GUITests.test_real_confirm_writes_receipt) ... invalid command name "140395279671936_poll"
+    while executing
+"140395279671936_poll"
+    ("after" script)
+invalid command name "140395280153408_poll"
+    while executing
+"140395280153408_poll"
+    ("after" script)
+ok
+test_real_preview_populates_table (tests.test_gui.GUITests.test_real_preview_populates_table) ... invalid command name "140395356523072_poll"
+    while executing
+"140395356523072_poll"
+    ("after" script)
+ok
+test_target_change_invalidates_preview (tests.test_gui.GUITests.test_target_change_invalidates_preview) ... invalid command name "140395280209472_poll"
+    while executing
+"140395280209472_poll"
+    ("after" script)
+ok
+test_existing_app_mount_and_real_import (tests.test_fastapi_optional.FastAPITests.test_existing_app_mount_and_real_import) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.685s
+
+OK

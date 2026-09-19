@@ -1,0 +1,24 @@
+[Unit]
+Description=DeepAha product API and web
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=deepaha
+Group=deepaha
+WorkingDirectory=/opt/deepaha/backend
+Environment=PYTHONPATH=/opt/deepaha/backend/src
+EnvironmentFile=/etc/deepaha/product.env
+ExecStart=/opt/deepaha/.venv-product/bin/python -m deepaha.product.cli serve --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/deepaha
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

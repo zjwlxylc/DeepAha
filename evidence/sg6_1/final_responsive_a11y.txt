@@ -1,0 +1,11 @@
+{
+  "transport": "FRONTEND_ONLY_MOCK_API",
+  "checks": [
+    "user_desktop_tablet_no_overflow_768_1024_1440_1920",
+    "user_mobile_nav_and_touch_targets_360_390_430",
+    "skip_link_focusable_and_visible",
+    "prefers_reduced_motion_honored",
+    "aria_current_present"
+  ],
+  "page_errors": []
+}

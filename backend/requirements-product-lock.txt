@@ -1,0 +1,25 @@
+# Exact environment closure observed during local Linux tests; not a cross-platform wheel bundle.
+fastapi==0.128.2
+starlette==0.50.0
+uvicorn==0.48.0
+SQLAlchemy==2.0.50
+pydantic==2.13.4
+httpx==0.28.1
+cryptography==46.0.4
+psutil==7.2.2
+tzdata==2026.2
+anyio==4.13.0
+typing-extensions==4.16.0
+annotated-types==0.7.0
+typing-inspection==0.4.2
+pydantic-core==2.46.4
+greenlet==3.5.1
+h11==0.16.0
+httpcore==1.0.9
+certifi==2026.5.20
+idna==3.17
+cffi==2.0.0
+pycparser==3.0
+click==8.1.8
+openpyxl==3.1.5
+et-xmlfile==2.0.0

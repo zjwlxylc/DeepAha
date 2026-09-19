@@ -1,0 +1,31 @@
+=== backend/tests/product/test_actionable_granularity.py ===
+.............                                                            [100%]
+EXIT=0 ASSERTIONS=13
+=== backend/tests/product/test_api.py ===
+.....                                                                    [100%]
+EXIT=0 ASSERTIONS=5
+=== backend/tests/product/test_contract.py ===
+.....................                                                    [100%]
+EXIT=0 ASSERTIONS=21
+=== backend/tests/product/test_currentness.py ===
+............                                                             [100%]
+EXIT=0 ASSERTIONS=12
+=== backend/tests/product/test_currentness_api.py ===
+..                                                                       [100%]
+EXIT=0 ASSERTIONS=2
+=== backend/tests/product/test_delivery_quality.py ===
+.............                                                            [100%]
+EXIT=0 ASSERTIONS=13
+=== backend/tests/product/test_multitype_opportunity_core.py ===
+..........                                                               [100%]
+EXIT=0 ASSERTIONS=10
+=== backend/tests/product/test_operations.py ===
+.........                                                                [100%]
+EXIT=0 ASSERTIONS=9
+=== backend/tests/product/test_scout_import.py ===
+.............................                                            [100%]
+EXIT=0 ASSERTIONS=29
+=== backend/tests/product/test_worker.py ===
+...                                                                      [100%]
+EXIT=0 ASSERTIONS=3
+TOTAL_ASSERTIONS=117 FAILED=0 ALL_FILES_EXIT_0=True FILES=10

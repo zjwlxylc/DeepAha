@@ -1,0 +1,2 @@
+Product JavaScript syntax and no-fixture checks passed
+Core rendering checks passed: missing/invalid/known dates and text escaping

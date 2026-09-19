@@ -1,0 +1,11 @@
+{
+  "checked_at": "2026-09-19",
+  "exact_user_wma_api_key_plain_hits": 0,
+  "exact_user_wma_agent_id_plain_hits": 0,
+  "local_wma_secret_files": 0,
+  "nested_archive_exact_api_key_hits": 0,
+  "nested_archive_exact_agent_id_hits": 0,
+  "nested_archive_sensitive_filename_hits": 0,
+  "heuristic_note": "Known sk-/AIza/AKIA strings in contracts/tests are deliberate invalid-value fixtures; ck_* matches are SQL check-constraint names.",
+  "delivery_contains_credentials": false
+}

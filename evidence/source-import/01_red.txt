@@ -1,0 +1,36 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_______________ test_rebuild_exposes_actual_source_import_route ________________
+
+client = <starlette.testclient.TestClient object at 0x7fcc10b71fd0>
+
+    def test_rebuild_exposes_actual_source_import_route(client):
+        login(client,'operator')
+        r=client.get('/api/manage/scout/capabilities')
+>       assert r.status_code==200, 'rc1缺少研究交接包接口'
+E       AssertionError: rc1缺少研究交接包接口
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/product/test_scout_import.py:48: AssertionError
+_________________ test_actual_export_preview_commit_roundtrip __________________
+
+svc = <deepaha.product.service.Product object at 0x7fcc10c57890>
+exported = (<deepaha_importer.research.workspace.Workspace object at 0x7fcc10b72e40>, {'analysis': {'analyzed_at': '2026-09-16T17...\x00\x00originals/0001/Handoff.jsonPK\x05\x06\x00\x00\x00\x00\x07\x00\x07\x00\xb8\x01\x00\x00\xfd\x16\x00\x00\x00\x00')
+
+    def test_actual_export_preview_commit_roundtrip(svc,exported):
+        w,s,raw=exported
+>       assert hasattr(svc,'scout_prepare'), 'rc1只有简化来源JSON，没有研究ZIP适配'
+E       AssertionError: rc1只有简化来源JSON，没有研究ZIP适配
+E       assert False
+E        +  where False = hasattr(<deepaha.product.service.Product object at 0x7fcc10c57890>, 'scout_prepare')
+
+tests/product/test_scout_import.py:54: AssertionError
+=========================== short test summary info ============================
+FAILED tests/product/test_scout_import.py::test_rebuild_exposes_actual_source_import_route - AssertionError: rc1缺少研究交接包接口
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/product/test_scout_import.py::test_actual_export_preview_commit_roundtrip - AssertionError: rc1只有简化来源JSON，没有研究ZIP适配
+assert False
+ +  where False = hasattr(<deepaha.product.service.Product object at 0x7fcc10c57890>, 'scout_prepare')
+2 failed in 1.58s

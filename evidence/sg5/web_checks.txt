@@ -1,0 +1,6 @@
+=== check-product.mjs ===
+Product JavaScript syntax, no-fixture, SG1 actionable, SG2 multi-type, SG3 currentness, and SG4 eligibility UI checks passed
+RC=0
+=== check-sg5.mjs ===
+SG5_FRONTEND_CONTRACT=PASS
+RC=0

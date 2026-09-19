@@ -1,0 +1,108 @@
+.........FFFF                                                            [100%]
+=================================== FAILURES ===================================
+___________________ test_nested_internal_keys_are_not_public ___________________
+
+svc = <deepaha.product.service.Product object at 0x7f48342be150>
+
+    def test_nested_internal_keys_are_not_public(svc):
+        r=svc.ingest(svc.test_source,packet(extra={'支持详情':{'amount':'每年最高5万元','internal_note':'PRIVATE_MARKER_847','nested':[{'api_key':'SECRET_MARKER_374','条件':'须满足考核'}]}}),actor='operator')
+        svc.decide(r['id'],'APPROVE',r['preview_hash'],'','nested-private',actor='reviewer')
+        out=json.dumps(svc.catalog(),ensure_ascii=False)
+        oid=svc.catalog()['items'][0]['id'];out+=json.dumps(svc.detail(oid),ensure_ascii=False)
+>       assert 'PRIVATE_MARKER_847' not in out and 'SECRET_MARKER_374' not in out
+E       assert ('PRIVATE_MARKER_847' not in '{"items": [...:53.513813"}'
+E         
+E         'PRIVATE_MARKER_847' is contained here:
+E           _note\":\"PRIVATE_MARKER_847\",\"nested\":[{\"api_key\":\"SECRET_MARKER_374\",\"条件\":\"须满足考核\"}]}", "state": "UNKNOWN", "section": "支持与回报", "notes": ["尚未在已保存原件中定位此项引用。"], "evidence": [], "quote_located": false, "usage": {"display": true, "qualification": false, "date_action": false}, "target": "root-0"}], "children": [{"id": "6cb348920e53c8c96a98eecb", "name": "科研部", "kind": "GROUP", "parent_id": null, "code": "", "fields": []}, {"id": "cd58989995564222b555909c", "name": "研究助理", "kind": "POSITION", "parent_id": "6cb348920e53c8c96a98eecb", "code": "", "fields": [{"id": "42638a21ed3cda7adb560912", "label": "学历", "value": "硕士研究生以上", "state": "UNKNOWN", "section": "条件与限制", "notes": ["尚未在已保存原件中定位此项引用。"], "evidence": [], "quote_located": false, "usage": {"display": true, "qualification": false, "date_action": false}, "target": "root-0/units/0/0/p1"}]}], "notes": ["本份返回有2项共同内容尚未定位引用，原文与对应备注已保留。", "部分内容附有材料备注。"], "id": "opp_01a0ab1ff50972f5a2168b91963ca479", "publication_id": "01a0ab1f-f569-7f87-9151-80b22489018f", "version": "01a0ab1f-f4f6-7f95-99fa-988e2fefede6", "status": "CURRENT", "updated_at": "2026-09-16T16:49:53.513813"}
+E         ?           ++++++++++++++++++)
+
+tests/product/test_delivery_quality.py:127: AssertionError
+________________ test_deep_child_content_keeps_text_accessible _________________
+
+svc = <deepaha.product.service.Product object at 0x7f48343732f0>
+
+    def test_deep_child_content_keeps_text_accessible(svc):
+        node={'id':'deep','name':'深层条目','fields':[{'field':'特殊条件','value':'DEEP_REQUIRED_TEXT_284'}]}
+        for n in range(7):node={'id':str(n),'name':str(n),'children':[node]}
+        r=svc.ingest(svc.test_source,packet(extra={'units':[node]}),actor='operator')
+        svc.decide(r['id'],'APPROVE',r['preview_hash'],'','deep-text',actor='reviewer')
+>       assert 'DEEP_REQUIRED_TEXT_284' in json.dumps(svc.detail(svc.catalog()['items'][0]['id']))
+E       assert 'DEEP_REQUIRED_TEXT_284' in '{"title": "\\u79d1\\u7814\\u9879\\u76ee\\u52a9\\u7406\\u62db\\u52df", "type": "RESEARCH_PROGRAM", "issuer": "\\u6d77\...", "version": "01a0ab1f-f6f4-7eba-88d4-94975f6902ae", "status": "CURRENT", "updated_at": "2026-09-16T16:49:53.933910"}'
+E        +  where '{"title": "\\u79d1\\u7814\\u9879\\u76ee\\u52a9\\u7406\\u62db\\u52df", "type": "RESEARCH_PROGRAM", "issuer": "\\u6d77\...", "version": "01a0ab1f-f6f4-7eba-88d4-94975f6902ae", "status": "CURRENT", "updated_at": "2026-09-16T16:49:53.933910"}' = <function dumps at 0x7f485055f2e0>({'application_url': None, 'children': [{'code': '', 'fields': [], 'id': '420055fe03dee11aabbafd62', 'kind': 'GROUP', ....d861e910384554ba894c9', 'kind': 'DEFAULT_SINGLETON', ...}], 'deadline': '2026-12-20', 'deadline_precision': 'day', ...})
+E        +    where <function dumps at 0x7f485055f2e0> = json.dumps
+E        +    and   {'application_url': None, 'children': [{'code': '', 'fields': [], 'id': '420055fe03dee11aabbafd62', 'kind': 'GROUP', ....d861e910384554ba894c9', 'kind': 'DEFAULT_SINGLETON', ...}], 'deadline': '2026-12-20', 'deadline_precision': 'day', ...} = detail('opp_01a0ab1ff70974179d15f5d886e1bf75')
+E        +      where detail = <deepaha.product.service.Product object at 0x7f48343732f0>.detail
+
+tests/product/test_delivery_quality.py:136: AssertionError
+___________________ test_notification_opt_out_covers_changes ___________________
+
+svc = <deepaha.product.service.Product object at 0x7f48351c9130>
+
+    def test_notification_opt_out_covers_changes(svc):
+        r=svc.ingest(svc.test_source,packet(),actor='operator');svc.decide(r['id'],'APPROVE',r['preview_hash'],'','n1',actor='reviewer')
+        oid=svc.catalog()['items'][0]['id'];svc.set_action(oid,'SAVED',actor='reader')
+        svc.set_profile({'notification_enabled':False},actor='reader')
+        svc.withdraw(oid,'来源撤回',actor='reviewer')
+>       assert svc.notifications(actor='reader')==[]
+E       AssertionError: assert [{'body': '此机...CHANGE', ...}] == []
+E         
+E         Left contains one more item: {'body': '此机会已撤回，原行动提醒已取消。', 'created_at': '2026-09-16T16:49:54.308110', 'id': '01a0ab1f-f884-74e9-aa8b-1a633d2a2d59', 'kind': 'CHANGE', ...}
+E         
+E         Full diff:
+E         - []
+E         + [
+E         +     {
+E         +         'body': '此机会已撤回，原行动提醒已取消。',
+E         +         'created_at': '2026-09-16T16:49:54.308110',
+E         +         'id': '01a0ab1f-f884-74e9-aa8b-1a633d2a2d59',
+E         +         'kind': 'CHANGE',
+E         +         'opportunity_id': 'opp_01a0ab1ff86f7fa08e1bff1e3d0745cb',
+E         +         'state': 'UNREAD',
+E         +         'title': '关注的机会有变化',
+E         +     },
+E         + ]
+
+tests/product/test_delivery_quality.py:144: AssertionError
+____________ test_controlled_legacy_identity_adoption_preserves_id _____________
+
+svc = <deepaha.product.service.Product object at 0x7f48342f6b30>
+
+    def test_controlled_legacy_identity_adoption_preserves_id(svc):
+        from deepaha.product.models import Opportunity,uid
+        old_id=uid();public_id='opp_'+old_id.replace('-','')
+        with svc.db.tx() as s:s.add(Opportunity(opportunity_id=old_id,public_id=public_id,type='RESEARCH_PROGRAM',canonical_title='旧项目',issuer_name='海湾研究中心'))
+>       assert svc.adopt_identity(svc.test_source,'https://research.example.org/notices/101',public_id,actor='operator')['published'] is False
+               ^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Product' object has no attribute 'adopt_identity'
+
+tests/product/test_delivery_quality.py:151: AttributeError
+=========================== short test summary info ============================
+FAILED tests/product/test_delivery_quality.py::test_nested_internal_keys_are_not_public - assert ('PRIVATE_MARKER_847' not in '{"items": [...:53.513813"}'
+  
+  'PRIVATE_MARKER_847' is contained here:
+    _note\":\"PRIVATE_MARKER_847\",\"nested\":[{\"api_key\":\"SECRET_MARKER_374\",\"条件\":\"须满足考核\"}]}", "state": "UNKNOWN", "section": "支持与回报", "notes": ["尚未在已保存原件中定位此项引用。"], "evidence": [], "quote_located": false, "usage": {"display": true, "qualification": false, "date_action": false}, "target": "root-0"}], "children": [{"id": "6cb348920e53c8c96a98eecb", "name": "科研部", "kind": "GROUP", "parent_id": null, "code": "", "fields": []}, {"id": "cd58989995564222b555909c", "name": "研究助理", "kind": "POSITION", "parent_id": "6cb348920e53c8c96a98eecb", "code": "", "fields": [{"id": "42638a21ed3cda7adb560912", "label": "学历", "value": "硕士研究生以上", "state": "UNKNOWN", "section": "条件与限制", "notes": ["尚未在已保存原件中定位此项引用。"], "evidence": [], "quote_located": false, "usage": {"display": true, "qualification": false, "date_action": false}, "target": "root-0/units/0/0/p1"}]}], "notes": ["本份返回有2项共同内容尚未定位引用，原文与对应备注已保留。", "部分内容附有材料备注。"], "id": "opp_01a0ab1ff50972f5a2168b91963ca479", "publication_id": "01a0ab1f-f569-7f87-9151-80b22489018f", "version": "01a0ab1f-f4f6-7f95-99fa-988e2fefede6", "status": "CURRENT", "updated_at": "2026-09-16T16:49:53.513813"}
+  ?           ++++++++++++++++++)
+FAILED tests/product/test_delivery_quality.py::test_deep_child_content_keeps_text_accessible - assert 'DEEP_REQUIRED_TEXT_284' in '{"title": "\\u79d1\\u7814\\u9879\\u76ee\\u52a9\\u7406\\u62db\\u52df", "type": "RESEARCH_PROGRAM", "issuer": "\\u6d77\...", "version": "01a0ab1f-f6f4-7eba-88d4-94975f6902ae", "status": "CURRENT", "updated_at": "2026-09-16T16:49:53.933910"}'
+ +  where '{"title": "\\u79d1\\u7814\\u9879\\u76ee\\u52a9\\u7406\\u62db\\u52df", "type": "RESEARCH_PROGRAM", "issuer": "\\u6d77\...", "version": "01a0ab1f-f6f4-7eba-88d4-94975f6902ae", "status": "CURRENT", "updated_at": "2026-09-16T16:49:53.933910"}' = <function dumps at 0x7f485055f2e0>({'application_url': None, 'children': [{'code': '', 'fields': [], 'id': '420055fe03dee11aabbafd62', 'kind': 'GROUP', ....d861e910384554ba894c9', 'kind': 'DEFAULT_SINGLETON', ...}], 'deadline': '2026-12-20', 'deadline_precision': 'day', ...})
+ +    where <function dumps at 0x7f485055f2e0> = json.dumps
+ +    and   {'application_url': None, 'children': [{'code': '', 'fields': [], 'id': '420055fe03dee11aabbafd62', 'kind': 'GROUP', ....d861e910384554ba894c9', 'kind': 'DEFAULT_SINGLETON', ...}], 'deadline': '2026-12-20', 'deadline_precision': 'day', ...} = detail('opp_01a0ab1ff70974179d15f5d886e1bf75')
+ +      where detail = <deepaha.product.service.Product object at 0x7f48343732f0>.detail
+FAILED tests/product/test_delivery_quality.py::test_notification_opt_out_covers_changes - AssertionError: assert [{'body': '此机...CHANGE', ...}] == []
+  
+  Left contains one more item: {'body': '此机会已撤回，原行动提醒已取消。', 'created_at': '2026-09-16T16:49:54.308110', 'id': '01a0ab1f-f884-74e9-aa8b-1a633d2a2d59', 'kind': 'CHANGE', ...}
+  
+  Full diff:
+  - []
+  + [
+  +     {
+  +         'body': '此机会已撤回，原行动提醒已取消。',
+  +         'created_at': '2026-09-16T16:49:54.308110',
+  +         'id': '01a0ab1f-f884-74e9-aa8b-1a633d2a2d59',
+  +         'kind': 'CHANGE',
+  +         'opportunity_id': 'opp_01a0ab1ff86f7fa08e1bff1e3d0745cb',
+  +         'state': 'UNREAD',
+  +         'title': '关注的机会有变化',
+  +     },
+  + ]
+FAILED tests/product/test_delivery_quality.py::test_controlled_legacy_identity_adoption_preserves_id - AttributeError: 'Product' object has no attribute 'adopt_identity'
+4 failed, 9 passed in 6.18s

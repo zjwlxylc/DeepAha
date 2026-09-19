@@ -1,0 +1,27 @@
+tests/product/test_action_loop.py: 11
+tests/product/test_action_loop_api.py: 1
+tests/product/test_actionable_granularity.py: 13
+tests/product/test_api.py: 6
+tests/product/test_contract.py: 21
+tests/product/test_currentness.py: 12
+tests/product/test_currentness_api.py: 2
+tests/product/test_delivery_quality.py: 13
+tests/product/test_eligibility.py: 17
+tests/product/test_milestones_management.py: 12
+tests/product/test_multitype_opportunity_core.py: 10
+tests/product/test_operations.py: 9
+tests/product/test_personal_value.py: 13
+tests/product/test_qualification_compiler.py: 19
+tests/product/test_scout_import.py: 29
+tests/product/test_sg5_1_frontend_contract.py: 2
+tests/product/test_sg6_2_frontend_contract.py: 3
+tests/product/test_sg6_2_upgrade.py: 3
+tests/product/test_sg6_frontend_contract.py: 2
+tests/product/test_sg6_upgrade.py: 1
+tests/product/test_sg7_api.py: 2
+tests/product/test_sg7_founding_users.py: 3
+tests/product/test_sg7_frontend_contract.py: 2
+tests/product/test_sg7_lab.py: 5
+tests/product/test_sg7_upgrade.py: 2
+tests/product/test_worker.py: 3
+

@@ -3,7 +3,7 @@
 import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 
-import { getInvestigationSources, getInvestigationReviewReceipt, InvestigationApiError, postInvestigation } from "../../../lib/investigations";
+import { getInvestigationSources, InvestigationApiError, postInvestigation } from "../../../lib/investigations";
 import { investigationDispatchPath } from "../../../lib/investigation-dispatch";
 import { LocalHumanTestApiError } from "../../../lib/local-human-test";
 import { investigationLoginHelp } from "../../../lib/investigation-runtime";
@@ -82,40 +82,17 @@ function failure(error: unknown, registration: boolean, loginMessage = "当前�
   return invalid("操作未完成。请核对来源、任务状态和材料后重试。");
 }
 
-async function submit(path: string, body: object, requestKey: string, message: string, loginMessage?: string, checkReceipt = false): Promise<InvestigationActionState> {
+async function submit(path: string, body: object, requestKey: string, message: string, loginMessage?: string): Promise<InvestigationActionState> {
   if (!UUID.test(requestKey)) return invalid("表单已失效，请刷新页面后重新填写。");
   // The form identity exists before the first POST, so a lost API/action response
   // can be replayed. Changed content is a different intent, not a conflicting retry.
   const key = createHash("sha256").update(JSON.stringify([requestKey, path, body])).digest("hex");
-  const scope = path.match(/^\/investigations\/([^/]+)\/(facts|rules)\/(decisions|promotions)$/);
-  const payload = body as Record<string, unknown>;
-  const preparationId = payload[scope?.[2] === "rules" ? "rule_preparation_id" : "preparation_id"];
-  const receipt = checkReceipt && scope && typeof preparationId === "string" ? () => getInvestigationReviewReceipt(scope[1], scope[2] === "rules" ? "RULE" : "FACT", preparationId, key) : null;
-  const success = (taskId: string): InvestigationActionState => {
-    revalidatePath("/review/investigations");
-    revalidatePath(`/review/investigations/${taskId}`);
-    revalidatePath(`/review/investigations/${taskId}/workbench`);
-    return { error: null, message, taskId };
-  };
-  if (receipt) {
-    try {
-      const existing = await receipt();
-      if (existing.committed) return success(existing.task_id);
-    } catch (error) {
-      if (error instanceof LocalHumanTestApiError && error.status === 401) return invalid(investigationLoginHelp);
-      if (error instanceof LocalHumanTestApiError && error.status === 403) return failure(error, false, loginMessage);
-      return invalid("暂时无法核对提交回执；本次没有重发决定。请保留草稿并稍后查询。");
-    }
-  }
   try {
     const task = await postInvestigation(path, body, key);
-    return success(task.task_id);
+    revalidatePath("/review/investigations");
+    revalidatePath(`/review/investigations/${task.task_id}`);
+    return { error: null, message, taskId: task.task_id };
   } catch (error) {
-    if (receipt && error instanceof LocalHumanTestApiError && error.status === 401) return invalid(investigationLoginHelp);
-    if (receipt && (!(error instanceof LocalHumanTestApiError) || error.status >= 500)) {
-      try { const saved = await receipt(); if (saved.committed) return success(saved.task_id); } catch { /* Unknown remains unknown. */ }
-      return invalid("提交结果尚不确定，尚未查到成功回执。草稿与请求标识已保留；再次提交前会先查询回执。");
-    }
     return failure(error, path === "/investigations", loginMessage);
   }
 }
@@ -315,7 +292,7 @@ export async function investigationRuleAction(
   if (decision === "APPROVE" && evidence.some(e => !e.authority || !e.relation || !e.effective_at
     || e.applicability !== "APPLIES_TO_EXACT_TARGET")) return invalid("批准需要逐条明确证据的权威级别、支持关系、生效时间及精确适用目标；未解决事项可保留待裁决。");
   return submit(`/investigations/${taskId}/rules/decisions`, { ...body, rule_preparation_id: preparationId,
-    rule_candidate_id: candidateId, decision, evidence, reason }, text(form, "request_key"), "独立规则审核已记录；完整条件覆盖与资格判断尚待后续处理。", undefined, text(form, "workbench") === "1");
+    rule_candidate_id: candidateId, decision, evidence, reason }, text(form, "request_key"), "独立规则审核已记录；完整条件覆盖与资格判断尚待后续处理。");
 }
 
 export async function investigationFactAction(
@@ -338,7 +315,7 @@ export async function investigationFactAction(
     if (decision === "APPROVE" && (support !== "SUPPORTED" || precedence !== "PASSED")) return invalid("批准需要原文明确支持，并完成更正、适用范围及例外核查。");
     return submit(`/investigations/${taskId}/facts/decisions`, { ...body, preparation_id: preparationId,
       candidate_id: candidateId, decision, evidence_support: support, precedence_check: precedence, reason,
-    }, text(form, "request_key"), "独立字段审核已记录；资格结论及公开发布仍需后续处理。", undefined, text(form, "workbench") === "1");
+    }, text(form, "request_key"), "独立字段审核已记录；资格结论及公开发布仍需后续处理。");
   }
   const entityId = text(form, "entity_id");
   if (kind !== "promote" || !entityId || entityId.length > 256) return invalid("请选择明确的公告或岗位目标。");
@@ -346,7 +323,7 @@ export async function investigationFactAction(
   if (supersedes && !UUID.test(supersedes)) return invalid("被替代事实集的标识无效，请核对当前版本。");
   return submit(`/investigations/${taskId}/facts/promotions`, { ...body, preparation_id: preparationId,
     entity_id: entityId, supersedes_id: supersedes || null, reason,
-  }, text(form, "request_key"), "该目标的审核事实集已保存；未知及未接入条件继续保留，尚未形成完整资格结论。", undefined, text(form, "workbench") === "1");
+  }, text(form, "request_key"), "该目标的审核事实集已保存；未知及未接入条件继续保留，尚未形成完整资格结论。");
 }
 
 /**

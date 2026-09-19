@@ -89,7 +89,7 @@ def list_public_opportunities(
 ) -> PublicOpportunityPage | JSONResponse:
     try:
         query = _parse_query(request)
-    except ValueError, ValidationError:
+    except (ValueError, ValidationError):
         return _problem(
             request,
             status=400,

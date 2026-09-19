@@ -1,0 +1,6 @@
+{
+  "python311_grammar": "PASS_NOT_RUNTIME_TEST",
+  "json_schemas": "PASS_DRAFT202012",
+  "demo_feedback": "PASS_STRUCTURE_ONLY",
+  "real_exports_handoff_schema": "PASS_2_BUNDLES"
+}

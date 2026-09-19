@@ -1,0 +1,20 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_review_first_page_bounded_and_entire_scope_preserved ___________
+
+client = <starlette.testclient.TestClient object at 0x7f6693201a90>
+svc = <deepaha.product.service.Product object at 0x7f6693f582f0>
+
+    def test_review_first_page_bounded_and_entire_scope_preserved(client,svc):
+        r=svc.ingest(svc.test_source,packet(extra={'announcement_level':[{'field':'条件','value':str(i)} for i in range(1000)]}),actor='operator')
+        login(client,'reviewer')
+        first=client.get('/api/review/'+r['id']).json()
+>       assert len(first['opportunities'][0]['fields'])==50
+E       AssertionError: assert 1000 == 50
+E        +  where 1000 = len([{'evidence': [], 'excluded': False, 'id': 'b98f19260b4add466f30eb22', 'label': '条件', ...}, {'evidence': [], 'excluded...', 'label': '条件', ...}, {'evidence': [], 'excluded': False, 'id': 'de94da850bb6cde36f242fba', 'label': '条件', ...}, ...])
+
+tests/product/test_delivery_quality.py:76: AssertionError
+=========================== short test summary info ============================
+FAILED tests/product/test_delivery_quality.py::test_review_first_page_bounded_and_entire_scope_preserved - AssertionError: assert 1000 == 50
+ +  where 1000 = len([{'evidence': [], 'excluded': False, 'id': 'b98f19260b4add466f30eb22', 'label': '条件', ...}, {'evidence': [], 'excluded...', 'label': '条件', ...}, {'evidence': [], 'excluded': False, 'id': 'de94da850bb6cde36f242fba', 'label': '条件', ...}, ...])
+1 failed in 1.34s

@@ -1,0 +1,40 @@
+{
+  "test": "SG7 final real HTTP smoke",
+  "service": {
+    "live": true,
+    "version": "3.7.0-rc1"
+  },
+  "auth": "real cookie+csrf login succeeded with isolated smoke account",
+  "lab_summary": {
+    "synthetic_twins": 100,
+    "gold_cases": null,
+    "pair_truths": null,
+    "production_authority": "UNCHANGED",
+    "model_training": "NONE"
+  },
+  "gold_benchmark": {
+    "status": "COMPLETED",
+    "targets": 1,
+    "twins": 100,
+    "pairs": 100,
+    "unsafe_recommendations": 0,
+    "truth_pairs": 1,
+    "truth_accuracy": 1.0,
+    "recommendation_truth_pairs": 1,
+    "recommendation_accuracy": 1.0,
+    "real_gold_pairs": 0,
+    "llm_used": false,
+    "production_mutated": false
+  },
+  "founding_user": {
+    "before": "NOT_JOINED",
+    "join": "ACTIVE",
+    "after_join": "ACTIVE",
+    "leave": "WITHDRAWN"
+  },
+  "notes": [
+    "Used isolated SQLite data directory; user production data was not touched.",
+    "No WMA/LLM call was made by the benchmark.",
+    "Operator-annotated smoke truth is engineering validation, not independent human Gold."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "input": "copy of user-uploaded pre-SG1 RC2 WMA data",
+  "database_modified_original": false,
+  "upgrade_copy_only": true,
+  "first_upgrade": {
+    "actionable_schema_version": "2",
+    "backup_verified": true,
+    "existing_rows_preserved": true,
+    "catalog_targets_created": 106,
+    "catalog_targets": 106
+  },
+  "unit_counts": {
+    "GROUP": 58,
+    "POSITION": 106
+  },
+  "root_publications": 1,
+  "overview_decisions": 1,
+  "catalog_total": 106,
+  "sample_targets": [
+    ["服务类专业教师", "POSITION", "岗位"],
+    ["思政专业教师", "POSITION", "岗位"],
+    ["精密检测类专业教师", "POSITION", "岗位"]
+  ],
+  "second_upgrade": {
+    "already_current": true,
+    "actionable_schema_version": "2",
+    "catalog_targets": 106,
+    "data_modified": false
+  },
+  "sg2_database_migration": false
+}

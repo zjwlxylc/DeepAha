@@ -1,0 +1,7 @@
+{
+  "executable": "codex",
+  "profile": "",
+  "model": "",
+  "timeout_seconds": 300,
+  "allow_network_downloads": false
+}

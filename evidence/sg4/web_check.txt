@@ -1,0 +1,1 @@
+Product JavaScript syntax, no-fixture, SG1 actionable, SG2 multi-type, SG3 currentness, and SG4 eligibility UI checks passed

@@ -1,0 +1,67 @@
+.......FF                                                                [100%]
+=================================== FAILURES ===================================
+_________ test_one_bad_opportunity_does_not_block_other_usable_objects _________
+
+svc = <deepaha.product.service.Product object at 0x7f4b94a92250>
+
+    def test_one_bad_opportunity_does_not_block_other_usable_objects(svc):
+        import json,io,zipfile
+        from deepaha.product.storage import unpack
+        files=unpack(packet());good=json.loads(files['opportunities.json'])
+        bad={**good,'opportunity_name':'来源错配的另一项','official_url':'https://another.example.net/none'}
+        files['opportunities.json']=json.dumps({'opportunities':[good,bad,{'facts':[]}]}).encode()
+        b=io.BytesIO()
+        with zipfile.ZipFile(b,'w') as z:
+            for k,v in files.items():z.writestr(k,v)
+        r=svc.ingest(svc.test_source,b.getvalue(),actor='operator')
+>       assert r['can_approve']
+E       assert False
+
+tests/product/test_delivery_quality.py:97: AssertionError
+_______ test_multiple_distinct_notice_urls_keep_identity_across_versions _______
+
+svc = <deepaha.product.service.Product object at 0x7f4b94475d50>
+
+    def test_multiple_distinct_notice_urls_keep_identity_across_versions(svc):
+        import json,io,zipfile
+        from deepaha.product.storage import unpack
+        def multi(extra):
+            files=unpack(packet());a=json.loads(files['opportunities.json'])
+            b={**a,'opportunity_name':'另一公告','official_url':'https://research.example.org/notices/102'}
+            a['summary']=extra
+            files['opportunities.json']=json.dumps({'opportunities':[a,b]}).encode();buff=io.BytesIO()
+            with zipfile.ZipFile(buff,'w') as z:
+                for k,v in files.items():z.writestr(k,v)
+            return buff.getvalue()
+        first=svc.ingest(svc.test_source,multi('第一版'),actor='operator')
+        one=svc.decide(first['id'],'APPROVE',first['preview_hash'],'','multi-1',actor='reviewer')
+        second=svc.ingest(svc.test_source,multi('第二版'),actor='operator')
+        two=svc.decide(second['id'],'APPROVE',second['preview_hash'],'','multi-2',actor='reviewer')
+>       assert one['public_ids']==two['public_ids']
+E       AssertionError: assert ['opp_01a0ab1...8a6c166d2da8'] == ['opp_01a0ab1...00d164eeb0cf']
+E         
+E         At index 0 diff: 'opp_01a0ab187aec7332b7db972b0b8bddeb' != 'opp_01a0ab187b0c7af6ade4ebb91b8a75a5'
+E         
+E         Full diff:
+E           [
+E         -     'opp_01a0ab187b0c7af6ade4ebb91b8a75a5',
+E         -     'opp_01a0ab187b0e7c72b02200d164eeb0cf',
+E         +     'opp_01a0ab187aec7332b7db972b0b8bddeb',
+E         +     'opp_01a0ab187af3702999748a6c166d2da8',
+E           ]
+
+tests/product/test_delivery_quality.py:117: AssertionError
+=========================== short test summary info ============================
+FAILED tests/product/test_delivery_quality.py::test_one_bad_opportunity_does_not_block_other_usable_objects - assert False
+FAILED tests/product/test_delivery_quality.py::test_multiple_distinct_notice_urls_keep_identity_across_versions - AssertionError: assert ['opp_01a0ab1...8a6c166d2da8'] == ['opp_01a0ab1...00d164eeb0cf']
+  
+  At index 0 diff: 'opp_01a0ab187aec7332b7db972b0b8bddeb' != 'opp_01a0ab187b0c7af6ade4ebb91b8a75a5'
+  
+  Full diff:
+    [
+  -     'opp_01a0ab187b0c7af6ade4ebb91b8a75a5',
+  -     'opp_01a0ab187b0e7c72b02200d164eeb0cf',
+  +     'opp_01a0ab187aec7332b7db972b0b8bddeb',
+  +     'opp_01a0ab187af3702999748a6c166d2da8',
+    ]
+2 failed, 7 passed in 5.39s

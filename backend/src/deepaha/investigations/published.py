@@ -41,7 +41,7 @@ def _numeric_id(value: Any) -> str:
 def _hash(value: Any) -> str:
     try:
         encoded = json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
-    except ValueError, TypeError:
+    except (ValueError, TypeError):
         _fail()
     return sha256(encoded.encode()).hexdigest()
 

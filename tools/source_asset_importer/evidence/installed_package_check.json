@@ -1,0 +1,12 @@
+{
+  "command": "python -S with extracted wheel on PYTHONPATH; no third-party site packages",
+  "exit_code": 0,
+  "stdout": "{\"installed_wheel\": \"PASS\", \"bundled_sample\": \"PASS\", \"dependency_free_demo\": \"PASS\", \"receipt_readback\": \"PASS\"}\n",
+  "stderr": "",
+  "result": {
+    "installed_wheel": "PASS",
+    "bundled_sample": "PASS",
+    "dependency_free_demo": "PASS",
+    "receipt_readback": "PASS"
+  }
+}

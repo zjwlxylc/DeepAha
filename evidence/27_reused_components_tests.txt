@@ -1,0 +1,3 @@
+TEST_HTTPX_COMPATIBILITY_ALIAS=httpx2 -> installed httpx 0.28.1; no live WMA
+.........................................s                               [100%]
+41 passed, 2 skipped in 0.27s

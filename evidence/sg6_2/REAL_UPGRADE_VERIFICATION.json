@@ -1,0 +1,120 @@
+{
+  "first": {
+    "already_current": false,
+    "qualification_compiler_version": "1",
+    "backup": "/mnt/data/sg6_2_verify_final/data/backups/before-sg6-2-final.zip",
+    "backup_verified": true,
+    "targets_refreshed": 328,
+    "catalog_targets": 328,
+    "data_modified": true
+  },
+  "second": {
+    "already_current": true,
+    "qualification_compiler_version": "1",
+    "catalog_targets": 328,
+    "targets_refreshed": 0,
+    "data_modified": false
+  },
+  "authority_tables_unchanged": true,
+  "before_tables": {
+    "opportunities": {
+      "rows": 6,
+      "sha256": "2770c94ddd0ee6cabdddae369a1505421e0e94dfb6afdaa4234ede704e271ec4"
+    },
+    "product_opportunity_identity": {
+      "rows": 6,
+      "sha256": "07b52aa211dd42691da239f656eb5841659e1188afee97f62169281ee3cacf54"
+    },
+    "product_opportunity_units": {
+      "rows": 425,
+      "sha256": "ac1827dc45ded659a71f810978ccc83d20870b7badb52d042286bfe5cedbf9ed"
+    },
+    "product_overview_decisions": {
+      "rows": 6,
+      "sha256": "94cd4f8ff58570de2ec800f2af1152081dec44f69c7fe730543b5a67cc5245b6"
+    },
+    "product_overview_publications": {
+      "rows": 6,
+      "sha256": "8b9d5b5570bf92c8d9dc8767f571956edfd9fbeaa2dd7b11676b53e8413ca81d"
+    },
+    "product_overview_revisions": {
+      "rows": 6,
+      "sha256": "a9973bbae083a83e2d968297cf1b2803d6a4f25a6352276437b4b403761c8809"
+    },
+    "product_result_snapshots": {
+      "rows": 7,
+      "sha256": "2b51999fbaa70495a212997ffad8589c24d748dfdb0d26108c76c912b5d91915"
+    },
+    "product_tasks": {
+      "rows": 9,
+      "sha256": "8b044dbc6a56390b9f39218f0a2b2327482cfbdb6d7a8f39a04c75cf0627a06f"
+    },
+    "product_accounts": {
+      "rows": 1,
+      "sha256": "a65e72825bf23b5a4e025198d2000db51bcf53fcae66b28e21fba5183859685b"
+    },
+    "product_profiles": {
+      "rows": 1,
+      "sha256": "71241a6add1a66d26766b5313b5778e6b3bfe24a95fc77b631db8717d6a963d1"
+    }
+  },
+  "after_tables": {
+    "opportunities": {
+      "rows": 6,
+      "sha256": "2770c94ddd0ee6cabdddae369a1505421e0e94dfb6afdaa4234ede704e271ec4"
+    },
+    "product_opportunity_identity": {
+      "rows": 6,
+      "sha256": "07b52aa211dd42691da239f656eb5841659e1188afee97f62169281ee3cacf54"
+    },
+    "product_opportunity_units": {
+      "rows": 425,
+      "sha256": "ac1827dc45ded659a71f810978ccc83d20870b7badb52d042286bfe5cedbf9ed"
+    },
+    "product_overview_decisions": {
+      "rows": 6,
+      "sha256": "94cd4f8ff58570de2ec800f2af1152081dec44f69c7fe730543b5a67cc5245b6"
+    },
+    "product_overview_publications": {
+      "rows": 6,
+      "sha256": "8b9d5b5570bf92c8d9dc8767f571956edfd9fbeaa2dd7b11676b53e8413ca81d"
+    },
+    "product_overview_revisions": {
+      "rows": 6,
+      "sha256": "a9973bbae083a83e2d968297cf1b2803d6a4f25a6352276437b4b403761c8809"
+    },
+    "product_result_snapshots": {
+      "rows": 7,
+      "sha256": "2b51999fbaa70495a212997ffad8589c24d748dfdb0d26108c76c912b5d91915"
+    },
+    "product_tasks": {
+      "rows": 9,
+      "sha256": "8b044dbc6a56390b9f39218f0a2b2327482cfbdb6d7a8f39a04c75cf0627a06f"
+    },
+    "product_accounts": {
+      "rows": 1,
+      "sha256": "a65e72825bf23b5a4e025198d2000db51bcf53fcae66b28e21fba5183859685b"
+    },
+    "product_profiles": {
+      "rows": 1,
+      "sha256": "71241a6add1a66d26766b5313b5778e6b3bfe24a95fc77b631db8717d6a963d1"
+    }
+  },
+  "objects_before": {
+    "files": 252,
+    "sha256": "1339fa1ad24f4442de4ca76a40478bcb30bf5be4fa3db6dba50be98e9ab4d4a3"
+  },
+  "objects_after": {
+    "files": 252,
+    "sha256": "1339fa1ad24f4442de4ca76a40478bcb30bf5be4fa3db6dba50be98e9ab4d4a3"
+  },
+  "objects_unchanged": true,
+  "target_projection": {
+    "total": 328,
+    "with_version_1": 328,
+    "canonical_conditions": 1821,
+    "deterministic_conditions": 1235,
+    "unresolved_pre_evidence": 586,
+    "meta_version": "1"
+  }
+}

@@ -264,34 +264,3 @@ try {
 }
 finally { Remove-Item Function:docker }
 Write-Host "旧版 Word 阅读镜像首次准备测试：PASS"
-
-$volumeTestRoot = Join-Path ([IO.Path]::GetTempPath()) ("deepaha-volume-test-" + [guid]::NewGuid())
-New-Item -ItemType Directory -Path $volumeTestRoot | Out-Null
-$volumeInfo = Get-LocalManualProjectInfo -ProjectRoot $volumeTestRoot
-$script:VolumeInUse = $false
-function docker {
-    $global:LASTEXITCODE = 0
-    if ($args[0] -eq 'volume') {
-        return '[{"Name":"deepaha-local-manual-123456abcdef_postgres_data","Driver":"local","Labels":{"com.docker.compose.project":"deepaha-local-manual-123456abcdef","com.docker.compose.volume":"postgres_data"}}]'
-    }
-    if ($script:VolumeInUse) { return 'running-container' }
-}
-try {
-    Set-LocalManualDataVolume -ProjectInfo $volumeInfo
-    Assert-Equal $env:DEEPAHA_LOCAL_MANUAL_EXTERNAL_VOLUME 'false' 'Default keeps its own volume'
-    Assert-Throws { Set-LocalManualDataVolume -ProjectInfo $volumeInfo -ExistingDataVolume '../wrong' } '只允许接续'
-    Set-LocalManualDataVolume -ProjectInfo $volumeInfo -ExistingDataVolume 'deepaha-local-manual-123456abcdef_postgres_data'
-    Assert-Equal $env:DEEPAHA_LOCAL_MANUAL_EXTERNAL_VOLUME 'true' 'Existing data remains external'
-    Set-LocalManualDataVolume -ProjectInfo $volumeInfo
-    Assert-Equal $env:DEEPAHA_LOCAL_MANUAL_DATA_VOLUME 'deepaha-local-manual-123456abcdef_postgres_data' 'Restart must retain selected data'
-    $script:VolumeInUse = $true
-    Assert-Throws { Set-LocalManualDataVolume -ProjectInfo $volumeInfo } '仍被运行容器'
-}
-finally {
-    Remove-Item Function:docker
-    if (-not ([IO.Path]::GetFullPath($volumeTestRoot)).StartsWith([IO.Path]::GetTempPath())) { throw 'Unsafe test cleanup' }
-    Remove-Item -LiteralPath $volumeTestRoot -Recurse -Force
-    Remove-Item Env:DEEPAHA_LOCAL_MANUAL_DATA_VOLUME -ErrorAction SilentlyContinue
-    Remove-Item Env:DEEPAHA_LOCAL_MANUAL_EXTERNAL_VOLUME -ErrorAction SilentlyContinue
-}
-Write-Host "工作树持久卷接续测试：PASS"

@@ -1,0 +1,1 @@
+Product JavaScript syntax and no-fixture checks passed

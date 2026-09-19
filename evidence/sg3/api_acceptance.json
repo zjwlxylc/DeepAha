@@ -1,0 +1,523 @@
+{
+  "result": "PASS",
+  "checks": [
+    "precise_unit_invalidation",
+    "sibling_unchanged",
+    "old_deadline_reminder_cancelled_only_for_affected_target",
+    "targeted_recheck",
+    "accepted_extension",
+    "history_compare",
+    "target_scoped_withdrawal"
+  ],
+  "A01": "unit_01a0b41127f8770dbbd217fe6fa1582e",
+  "A02": "unit_01a0b41127f8716983d3f6bf0f90974c",
+  "evidence": [
+    {
+      "step": "first_intake",
+      "result": {
+        "adapter_version": "overview-display/3.3.0",
+        "opportunities": [
+          {
+            "identity_key": "daf010cf2e7fef5b9c9318f1540405a9a96c99226e9a31ba3fc8dd2d912e698a",
+            "title": "DeepAha SG3 当前性体验公告（虚构）",
+            "type": "PUBLIC_INSTITUTION_JOB",
+            "issuer": "海湾研究中心（虚构）",
+            "source_name": "海湾研究中心（虚构）",
+            "official_url": "https://research.example.org/sg3-demo",
+            "application_url": null,
+            "region": "",
+            "summary": "",
+            "fields": [
+              {
+                "id": "a833247121e53d03e7b1b35c",
+                "label": "公告说明",
+                "value": "第一版共同说明",
+                "state": "CONFIRMED",
+                "section": "其他说明",
+                "notes": [],
+                "evidence": [
+                  {
+                    "artifact_id": "root",
+                    "quote": "第一版共同说明",
+                    "locator": {
+                      "line": "1"
+                    },
+                    "located": true,
+                    "url": "https://research.example.org/sg3-demo"
+                  }
+                ],
+                "quote_located": true,
+                "excluded": false,
+                "usage": {
+                  "display": true,
+                  "qualification": false,
+                  "date_action": true
+                },
+                "target": "root-0"
+              }
+            ],
+            "children": [
+              {
+                "id": "92dff6b5613b5110d745f60e",
+                "source_key": "issuer-group",
+                "identity_source": "SOURCE_RECORD_KEY",
+                "source_path": "root-0/units/0/issuer-group",
+                "name": "科研部",
+                "kind": "GROUP",
+                "parent_id": null,
+                "fields": [],
+                "code": "",
+                "application_url": null,
+                "official_url": null,
+                "region": "",
+                "summary": "",
+                "lifecycle_status": "ACTIVE"
+              },
+              {
+                "id": "da510961961dc0fdce2fabe0",
+                "source_key": "official-position-A01",
+                "identity_source": "SOURCE_RECORD_KEY",
+                "source_path": "root-0/units/0/0/official-position-A01",
+                "name": "智能制造工程助理",
+                "kind": "POSITION",
+                "parent_id": "92dff6b5613b5110d745f60e",
+                "fields": [
+                  {
+                    "id": "cdf215ce89c75d000e9896b2",
+                    "label": "报名截止",
+                    "value": "2026-11-10",
+                    "state": "CONFIRMED",
+                    "section": "时间与办理",
+                    "notes": [],
+                    "evidence": [
+                      {
+                        "artifact_id": "a01",
+                        "quote": "A01 报名截止：2026-11-10",
+                        "locator": {
+                          "line": "1"
+                        },
+                        "located": true,
+                        "url": "https://research.example.org/sg3-demo#A01"
+                      }
+                    ],
+                    "quote_located": true,
+                    "excluded": false,
+                    "usage": {
+                      "display": true,
+                      "qualification": false,
+                      "date_action": true
+                    },
+                    "target": "root-0/units/0/0/official-position-A01"
+                  },
+                  {
+                    "id": "e6b910592b3d47707dd79f43",
+                    "label": "岗位描述",
+                    "value": "参与智能制造项目。",
+                    "state": "CONFIRMED",
+                    "section": "其他说明",
+                    "notes": [],
+                    "evidence": [
+                      {
+                        "artifact_id": "a01",
+                        "quote": "岗位 A01 参与智能制造项目。",
+                        "locator": {
+                          "line": "2"
+                        },
+                        "located": true,
+                        "url": "https://research.example.org/sg3-demo#A01"
+                      }
+                    ],
+                    "quote_located": true,
+                    "excluded": false,
+                    "usage": {
+                      "display": true,
+                      "qualification": false,
+                      "date_action": true
+                    },
+                    "target": "root-0/units/0/0/official-position-A01"
+                  }
+                ],
+                "code": "A01",
+                "application_url": null,
+                "official_url": null,
+                "region": "",
+                "summary": "",
+                "lifecycle_status": "ACTIVE"
+              },
+              {
+                "id": "597950d5968104c7062f7cec",
+                "source_key": "official-position-A02",
+                "identity_source": "SOURCE_RECORD_KEY",
+                "source_path": "root-0/units/0/1/official-position-A02",
+                "name": "技术项目管理员",
+                "kind": "POSITION",
+                "parent_id": "92dff6b5613b5110d745f60e",
+                "fields": [
+                  {
+                    "id": "06f0cea2a33e6c41a75d8da1",
+                    "label": "报名截止",
+                    "value": "2026-11-20",
+                    "state": "CONFIRMED",
+                    "section": "时间与办理",
+                    "notes": [],
+                    "evidence": [
+                      {
+                        "artifact_id": "a02",
+                        "quote": "A02 报名截止：2026-11-20",
+                        "locator": {
+                          "line": "1"
+                        },
+                        "located": true,
+                        "url": "https://research.example.org/sg3-demo#A02"
+                      }
+                    ],
+                    "quote_located": true,
+                    "excluded": false,
+                    "usage": {
+                      "display": true,
+                      "qualification": false,
+                      "date_action": true
+                    },
+                    "target": "root-0/units/0/1/official-position-A02"
+                  },
+                  {
+                    "id": "809da4b09e1737ba10867644",
+                    "label": "岗位描述",
+                    "value": "负责技术项目协调。",
+                    "state": "CONFIRMED",
+                    "section": "其他说明",
+                    "notes": [],
+                    "evidence": [
+                      {
+                        "artifact_id": "a02",
+                        "quote": "岗位 A02 面向项目管理。",
+                        "locator": {
+                          "line": "2"
+                        },
+                        "located": true,
+                        "url": "https://research.example.org/sg3-demo#A02"
+                      }
+                    ],
+                    "quote_located": true,
+                    "excluded": false,
+                    "usage": {
+                      "display": true,
+                      "qualification": false,
+                      "date_action": true
+                    },
+                    "target": "root-0/units/0/1/official-position-A02"
+                  }
+                ],
+                "code": "A02",
+                "application_url": null,
+                "official_url": null,
+                "region": "",
+                "summary": "",
+                "lifecycle_status": "ACTIVE"
+              }
+            ],
+            "notes": [],
+            "deadline": null,
+            "deadline_precision": null,
+            "eligibility": "UNCERTAIN",
+            "raw_type": "招聘",
+            "lifecycle_status": "ACTIVE"
+          }
+        ],
+        "artifacts": [
+          {
+            "id": "root",
+            "name": "artifacts/root.txt",
+            "url": "https://research.example.org/sg3-demo",
+            "path": "artifacts/root.txt",
+            "sha256": "01ae7194d4d45e63c8b65323264a5deaf3052b323163169586d5910f004caf58",
+            "integrity": "MATCH",
+            "state": "已保存"
+          },
+          {
+            "id": "a01",
+            "name": "artifacts/a01.txt",
+            "url": "https://research.example.org/sg3-demo#A01",
+            "path": "artifacts/a01.txt",
+            "sha256": "ef771af1afd643d1ccb4aa9121793b5f060e0f9d10b2bda8e216d80a0bd3ecc4",
+            "integrity": "MATCH",
+            "state": "已保存"
+          },
+          {
+            "id": "a02",
+            "name": "artifacts/a02.txt",
+            "url": "https://research.example.org/sg3-demo#A02",
+            "path": "artifacts/a02.txt",
+            "sha256": "763bf2738e4e86c726eec820079813c6b7786d917c2032ee840e182d7deb75c5",
+            "integrity": "MATCH",
+            "state": "已保存"
+          }
+        ],
+        "excluded_objects": [],
+        "notes": [],
+        "blockers": [],
+        "can_approve": true,
+        "field_count": 5,
+        "report": "# DeepAha SG3 当前性体验公告（虚构）\n这是 SG3 虚构验收数据。",
+        "id": "01a0b411-27e4-7678-a863-4eb51c3e8959",
+        "preview_hash": "949cb8b419688a7e6654888b3763cc8cc749f02fe04e18cc6b7b7741be2c1b5d",
+        "status": "PENDING",
+        "source": {
+          "id": "01a0b411-272c-7ada-9b84-ad3bee81ea45",
+          "name": "海湾研究中心（虚构）",
+          "url": "https://research.example.org/",
+          "active": true,
+          "tier": "OFFICIAL_PRIMARY",
+          "enabled": true,
+          "allowed_hosts": [
+            "research.example.org"
+          ],
+          "brief": "",
+          "policy_version": 1,
+          "interval_hours": 0,
+          "last_success": null,
+          "last_failure": null,
+          "legacy": false,
+          "intelligence": null
+        },
+        "received_at": "2026-09-18T10:30:18.338854",
+        "receipt": null,
+        "overall_note": "",
+        "file_names": [
+          "opportunities.json",
+          "evidence.json",
+          "report.md",
+          "artifacts/root.txt",
+          "artifacts/a01.txt",
+          "artifacts/a02.txt"
+        ]
+      }
+    },
+    {
+      "step": "pending_review",
+      "result": {
+        "has_changes": true,
+        "counts": {
+          "changed": 1,
+          "added": 0,
+          "missing": 0,
+          "withdrawn": 0,
+          "unchanged": 1
+        },
+        "targets": [
+          {
+            "public_id": "unit_01a0b41127f8770dbbd217fe6fa1582e",
+            "title": "智能制造工程助理",
+            "code": "A01",
+            "change_kind": "UPDATED",
+            "affected_fields": [
+              "deadline",
+              "fields:报名截止#1",
+              "evidence:a01"
+            ],
+            "before_deadline": "2026-11-10",
+            "after_deadline": "2026-12-05",
+            "summary": "报名截止由2026-11-10变为2026-12-05；字段变化：报名截止；关联原件已替换",
+            "diff": {
+              "affected_fields": [
+                "deadline",
+                "fields:报名截止#1",
+                "evidence:a01"
+              ],
+              "scalar": {
+                "deadline": {
+                  "before": "2026-11-10",
+                  "after": "2026-12-05"
+                }
+              },
+              "fields": {
+                "fields:报名截止#1": {
+                  "before": {
+                    "value": "2026-11-10",
+                    "state": "CONFIRMED",
+                    "quote_located": true,
+                    "usage": {
+                      "display": true,
+                      "qualification": false,
+                      "date_action": true
+                    },
+                    "evidence": [
+                      {
+                        "artifact_id": "a01",
+                        "quote": "A01 报名截止：2026-11-10",
+                        "locator": {
+                          "line": "1"
+                        },
+                        "located": true
+                      }
+                    ]
+                  },
+                  "after": {
+                    "value": "2026-12-05",
+                    "state": "CONFIRMED",
+                    "quote_located": true,
+                    "usage": {
+                      "display": true,
+                      "qualification": false,
+                      "date_action": true
+                    },
+                    "evidence": [
+                      {
+                        "artifact_id": "a01",
+                        "quote": "A01 报名截止：2026-12-05",
+                        "locator": {
+                          "line": "1"
+                        },
+                        "located": true
+                      }
+                    ]
+                  }
+                }
+              },
+              "changed_artifacts": [
+                "a01"
+              ]
+            }
+          }
+        ],
+        "replaced_artifacts": [
+          "a01"
+        ],
+        "root_lifecycle_status": "ACTIVE",
+        "pending_revision_id": "01a0b411-281c-7853-bff3-ca3399b13647"
+      }
+    },
+    {
+      "step": "recheck_task",
+      "result": {
+        "id": "01a0b411-2841-7104-9890-6200f55dbaad",
+        "source_id": "01a0b411-272c-7ada-9b84-ad3bee81ea45",
+        "notice_url": "https://research.example.org/sg3-demo",
+        "status": "QUEUED",
+        "kind": "RECHECK",
+        "instruction": "仅复查具体机会 unit_01a0b41127f8770dbbd217fe6fa1582e（智能制造工程助理，编号A01）。重点核对：deadline、fields:报名截止#1、evidence:a01。当前变化说明：报名截止由2026-11-10变为2026-12-05；字段变化：报名截止；关联原件已替换只追查与此具体机会直接相关的官方公告、附件、更正、延期、撤回或附件替换；不要扩大到其他兄弟岗位/赛道，也不要把本轮未看到解释为撤回。",
+        "runtime_id": null,
+        "session_id": null,
+        "stage": "WAITING",
+        "error_code": null,
+        "budget_seconds": 1200,
+        "attempts": 0,
+        "revision_id": null,
+        "created_at": "2026-09-18T10:30:18.433378+00:00",
+        "updated_at": "2026-09-18T10:30:18.433381+00:00"
+      }
+    },
+    {
+      "step": "history",
+      "result": {
+        "target_public_id": "unit_01a0b41127f8770dbbd217fe6fa1582e",
+        "current_status": "CURRENT",
+        "versions": [
+          {
+            "catalog_target_id": "01a0b411-284c-7896-b154-8e47e0220254",
+            "publication_id": "01a0b411-284b-7060-a5f3-7d97016baace",
+            "revision_id": "01a0b411-281c-7853-bff3-ca3399b13647",
+            "status": "CURRENT",
+            "created_at": "2026-09-18T10:30:18.444810",
+            "title": "智能制造工程助理",
+            "code": "A01",
+            "deadline": "2026-12-05",
+            "deadline_precision": "day",
+            "currentness": null
+          },
+          {
+            "catalog_target_id": "01a0b411-27fb-779c-ade2-9c2b65118760",
+            "publication_id": "01a0b411-27f6-774d-aaba-407bb3335a00",
+            "revision_id": "01a0b411-27e4-7678-a863-4eb51c3e8959",
+            "status": "SUPERSEDED",
+            "created_at": "2026-09-18T10:30:18.363651",
+            "title": "智能制造工程助理",
+            "code": "A01",
+            "deadline": "2026-11-10",
+            "deadline_precision": "day",
+            "currentness": {
+              "pending_revision_id": "01a0b411-281c-7853-bff3-ca3399b13647",
+              "change_kind": "UPDATED",
+              "affected_fields": [
+                "deadline",
+                "fields:报名截止#1",
+                "evidence:a01"
+              ],
+              "summary": "报名截止由2026-11-10变为2026-12-05；字段变化：报名截止；关联原件已替换"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "compare",
+      "result": {
+        "target_public_id": "unit_01a0b41127f8770dbbd217fe6fa1582e",
+        "from_id": "01a0b411-27fb-779c-ade2-9c2b65118760",
+        "to_id": "01a0b411-284c-7896-b154-8e47e0220254",
+        "changes": {
+          "deadline": {
+            "before": "2026-11-10",
+            "after": "2026-12-05"
+          },
+          "fields": {
+            "fields:报名截止#1": {
+              "before": {
+                "value": "2026-11-10",
+                "state": "CONFIRMED",
+                "quote_located": true,
+                "usage": {
+                  "display": true,
+                  "qualification": false,
+                  "date_action": true
+                },
+                "evidence": [
+                  {
+                    "artifact_id": "a01",
+                    "quote": "A01 报名截止：2026-11-10",
+                    "locator": {
+                      "line": "1"
+                    },
+                    "located": true
+                  }
+                ]
+              },
+              "after": {
+                "value": "2026-12-05",
+                "state": "CONFIRMED",
+                "quote_located": true,
+                "usage": {
+                  "display": true,
+                  "qualification": false,
+                  "date_action": true
+                },
+                "evidence": [
+                  {
+                    "artifact_id": "a01",
+                    "quote": "A01 报名截止：2026-12-05",
+                    "locator": {
+                      "line": "1"
+                    },
+                    "located": true
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "affected_fields": [
+          "deadline",
+          "fields:报名截止#1"
+        ]
+      }
+    },
+    {
+      "step": "withdraw",
+      "result": {
+        "id": "unit_01a0b41127f8770dbbd217fe6fa1582e",
+        "status": "WITHDRAWN",
+        "scope": "TARGET"
+      }
+    }
+  ]
+}

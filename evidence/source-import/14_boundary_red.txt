@@ -1,0 +1,27 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+________ test_non_string_candidate_key_remains_research_not_approvable _________
+
+svc = <deepaha.product.service.Product object at 0x7fa15b644440>
+
+    def test_non_string_candidate_key_remains_research_not_approvable(svc):
+        h=handoff();h['source_candidates'][0]['candidate_key']=123
+        p=svc.scout_prepare(json.dumps(h).encode(),'Handoff.json',actor='operator')
+        assert p['status']=='PREPARED'
+>       assert svc.scout_items(p['id'],actor='operator')['items'][0]['blocking']
+E       assert False
+
+backend/tests/product/test_scout_import.py:330: AssertionError
+____________ test_reverse_proxy_has_matching_source_upload_envelope ____________
+
+    def test_reverse_proxy_has_matching_source_upload_envelope():
+        root=Path(__file__).resolve().parents[3]
+        nginx=(root/'infra/product/nginx.conf.example').read_text()
+>       assert 'location = /api/manage/scout/previews' in nginx
+E       AssertionError: assert 'location = /api/manage/scout/previews' in '# Integrate with the existing server block. Install valid TLS certificates separately.\n# Do not overwrite the curren...server {\n    listen 80;\n    server_name deepaha.com www.deepaha.com;\n    return 301 https://$host$request_uri;\n}\n'
+
+backend/tests/product/test_scout_import.py:336: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_scout_import.py::test_non_string_candidate_key_remains_research_not_approvable - assert False
+FAILED backend/tests/product/test_scout_import.py::test_reverse_proxy_has_matching_source_upload_envelope - AssertionError: assert 'location = /api/manage/scout/previews' in '# Integrate with the existing server block. Install valid TLS certificates separately.\n# Do not overwrite the curren...server {\n    listen 80;\n    server_name deepaha.com www.deepaha.com;\n    return 301 https://$host$request_uri;\n}\n'
+2 failed, 26 deselected in 0.95s

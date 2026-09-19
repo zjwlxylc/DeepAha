@@ -1,0 +1,56 @@
+{
+  "upgrade": {
+    "actionable_schema_version": "2",
+    "backup": "/mnt/data/sg3_real_regression/deepaha-data/backups/sg3-real-before-sg1.zip",
+    "backup_verified": true,
+    "already_current": false,
+    "existing_rows_preserved": true,
+    "catalog_targets_created": 106,
+    "catalog_targets": 106
+  },
+  "second_upgrade": {
+    "already_current": true,
+    "actionable_schema_version": "2",
+    "catalog_targets": 106,
+    "data_modified": false
+  },
+  "catalog_total": 106,
+  "target_rows": 106,
+  "active_targets": 106,
+  "unit_kinds": {
+    "GROUP": 58,
+    "POSITION": 106
+  },
+  "legacy_tables_unchanged": true,
+  "objects_unchanged": true,
+  "legacy_table_digests": {
+    "opportunities": [
+      "2e0071b9aca92040e97cafd08938e1d4b2273fbf46407f302ad33980ccd96e54",
+      1
+    ],
+    "product_opportunity_identity": [
+      "e8f2d086bdc8319f15eda0145ef1dfd01aa73d17438d53fda3e40b454615f2bc",
+      1
+    ],
+    "product_overview_publications": [
+      "e49d310eb50e7e67c8649d52e5c7a3d7862353d96fe13aeb4c74a29e5ed27021",
+      1
+    ],
+    "product_overview_decisions": [
+      "8a94329a46a7d3adc1beba364ce62a653e95ba800325f4b9217ec72c384adf33",
+      1
+    ],
+    "product_tasks": [
+      "a5d0502496a80d4715817cafc7d685912b25c9dac2c0796e35f724b9035cf9ff",
+      1
+    ],
+    "product_overview_revisions": [
+      "9cba9723f3c11dade4dfef9dfff1905a93d801b475ffc513d738758757269cb2",
+      1
+    ]
+  },
+  "object_digest": [
+    "4e9a02de4c4fa7f4a87cfeaed9c9dee91455433a0a02b397218b8a80bc8ef6c9",
+    20
+  ]
+}

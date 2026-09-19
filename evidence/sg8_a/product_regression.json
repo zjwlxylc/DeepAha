@@ -1,0 +1,189 @@
+{
+  "release": "3.8.0-rc1",
+  "verification": "each file executed in isolated pytest subprocess; all observed RC=0",
+  "files": 30,
+  "tests": 227,
+  "failed_files": 0,
+  "results": [
+    {
+      "file": "test_action_loop.py",
+      "collected": 11,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_action_loop_api.py",
+      "collected": 1,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_actionable_granularity.py",
+      "collected": 13,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_api.py",
+      "collected": 6,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_contract.py",
+      "collected": 21,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_currentness.py",
+      "collected": 12,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_currentness_api.py",
+      "collected": 2,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_delivery_quality.py",
+      "collected": 13,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_eligibility.py",
+      "collected": 17,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_milestones_management.py",
+      "collected": 12,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_multitype_opportunity_core.py",
+      "collected": 10,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_operations.py",
+      "collected": 9,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_personal_value.py",
+      "collected": 13,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_qualification_compiler.py",
+      "collected": 19,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_scout_import.py",
+      "collected": 29,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg5_1_frontend_contract.py",
+      "collected": 2,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg6_2_frontend_contract.py",
+      "collected": 3,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg6_2_upgrade.py",
+      "collected": 3,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg6_frontend_contract.py",
+      "collected": 2,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg6_upgrade.py",
+      "collected": 1,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg7_2_frontend_contract.py",
+      "collected": 2,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg7_api.py",
+      "collected": 2,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg7_founding_users.py",
+      "collected": 3,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg7_frontend_contract.py",
+      "collected": 2,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg7_independent_oracle100.py",
+      "collected": 1,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg7_lab.py",
+      "collected": 5,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg7_recommendation_oracle100.py",
+      "collected": 1,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg7_upgrade.py",
+      "collected": 3,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_sg8a_deployment.py",
+      "collected": 6,
+      "rc": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "test_worker.py",
+      "collected": 3,
+      "rc": 0,
+      "status": "PASS"
+    }
+  ]
+}

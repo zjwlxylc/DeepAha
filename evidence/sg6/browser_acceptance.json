@@ -1,0 +1,71 @@
+{
+  "transport": "EXPLICIT_TEST_HTTP_BRIDGE",
+  "native_browser_navigation": "BLOCKED_BY_ADMINISTRATOR",
+  "database": "COPY_OF_USER_MULTI_WMA_DATA_AFTER_SG6",
+  "checks": [
+    "mobile_actions_weekly_digest",
+    "action_timeline_modal",
+    "independent_notification_controls",
+    "notifications_and_weekly_summary",
+    "operator_deidentified_feedback_candidates",
+    "mobile_no_horizontal_overflow"
+  ],
+  "http_calls": [
+    {
+      "method": "GET",
+      "path": "/api/site",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/actions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/weekly-digest",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/actions/unit_01a0b45c18f3778b9ad21919a44aff1d/history",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/profile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/weekly-digest",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/manage/feedback-candidates?offset=0&limit=50",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/actions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/weekly-digest",
+      "status": 200
+    }
+  ],
+  "page_errors": []
+}

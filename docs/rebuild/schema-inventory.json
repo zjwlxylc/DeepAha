@@ -1,0 +1,862 @@
+{
+  "product_meta": [
+    {
+      "name": "key",
+      "type": "VARCHAR(80)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "value",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_accounts": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "username",
+      "type": "VARCHAR(80)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "password_hash",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "roles",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "active",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_sessions": [
+    {
+      "name": "token_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "account_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "csrf_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "expires_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "revoked",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_login_attempts": [
+    {
+      "name": "key",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "count",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "since",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "sources": [
+    {
+      "name": "source_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "public_id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "canonical_url",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "authority_name",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "tier",
+      "type": "VARCHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "jurisdiction",
+      "type": "TEXT",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "active",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "updated_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_source_profiles": [
+    {
+      "name": "source_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "allowed_hosts",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "brief",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "policy_version",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "scheduling_enabled",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "interval_hours",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "last_success",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "last_failure",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "next_due",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "research_asset",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "opportunities": [
+    {
+      "name": "opportunity_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "public_id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "type",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "canonical_title",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "issuer_name",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "jurisdiction",
+      "type": "TEXT",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "current_version",
+      "type": "INTEGER",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "publication_status",
+      "type": "VARCHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "updated_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_opportunity_identity": [
+    {
+      "name": "id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "source_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "source_key",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "opportunity_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_result_snapshots": [
+    {
+      "name": "id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "source_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "digest",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "manifest",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "task_id",
+      "type": "VARCHAR(36)",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "received_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_overview_revisions": [
+    {
+      "name": "id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "snapshot_id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "preview_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "content",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "can_approve",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "policy_version",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_overview_decisions": [
+    {
+      "name": "id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "revision_id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "reviewer_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "request_key",
+      "type": "VARCHAR(128)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "decision",
+      "type": "VARCHAR(16)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "preview_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "note",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "receipt",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_overview_publications": [
+    {
+      "name": "id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "opportunity_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "decision_id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "revision_id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "content",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "invalidated_fields",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_tasks": [
+    {
+      "name": "id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "source_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "creator_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "notice_url",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "kind",
+      "type": "VARCHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "instruction",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "runtime_id",
+      "type": "VARCHAR(128)",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "session_id",
+      "type": "VARCHAR(128)",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "workspace",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "remote_binding",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "stage",
+      "type": "VARCHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "error_code",
+      "type": "VARCHAR(128)",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "budget_seconds",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "attempts",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "revision_id",
+      "type": "VARCHAR(36)",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "files",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "request_key",
+      "type": "VARCHAR(128)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "updated_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_profiles": [
+    {
+      "name": "account_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "data",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "updated_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_actions": [
+    {
+      "name": "id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "account_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "opportunity_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "note",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "updated_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_feedback": [
+    {
+      "name": "id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "account_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "opportunity_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "data",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_notices": [
+    {
+      "name": "id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "account_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "opportunity_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "publication_id",
+      "type": "VARCHAR(36)",
+      "nullable": true,
+      "primary_key": false
+    },
+    {
+      "name": "title",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "body",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "kind",
+      "type": "VARCHAR(32)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "dedupe_key",
+      "type": "VARCHAR(160)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "due_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "state",
+      "type": "VARCHAR(24)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_audit": [
+    {
+      "name": "id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "actor",
+      "type": "VARCHAR(80)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "action",
+      "type": "VARCHAR(80)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "target",
+      "type": "VARCHAR(128)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "summary",
+      "type": "TEXT",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ],
+  "product_import_records": [
+    {
+      "name": "digest",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": true
+    },
+    {
+      "name": "actor",
+      "type": "VARCHAR(80)",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "asset",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "receipt",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+usage: deepaha [-h]
+               {init,setup,user-add,user-disable,password-reset,source-add,identity-adopt,source-import,intake,examples,worker,serve,backup,verify-backup,restore-backup,legacy-inventory,legacy-export} ...
+
+DeepAha 机会星图：初始化、账号、采集、导入和备份
+
+positional arguments:
+  {init,setup,user-add,user-disable,password-reset,source-add,identity-adopt,source-import,intake,examples,worker,serve,backup,verify-backup,restore-backup,legacy-inventory,legacy-export}
+    init                仅新增当前产品所需数据表，不改写旧表
+    setup               交互初始化并开通拥有审核/维护权限的首个账号
+
+options:
+  -h, --help            show this help message and exit

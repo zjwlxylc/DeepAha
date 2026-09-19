@@ -52,21 +52,6 @@ describe("rule actions", () => {
     expect((await investigationRuleAction(empty, data)).error).toContain("核验回执");
     expect(fetch).not.toHaveBeenCalled();
   });
-  it("queries a committed workbench receipt after a lost POST without another write", async () => {
-    const data = form(); data.set("workbench", "1");
-    vi.mocked(fetch).mockResolvedValueOnce(Response.json({ task_id: taskId, committed: false, receipt_id: null }))
-      .mockRejectedValueOnce(new TypeError("lost response"))
-      .mockResolvedValueOnce(Response.json({ task_id: taskId, committed: true, receipt_id: "saved" }));
-    expect((await investigationRuleAction(empty, data)).message).toContain("独立规则审核已记录");
-    expect(vi.mocked(fetch).mock.calls.filter(([, options]) => options?.method === "POST")).toHaveLength(1);
-    expect(String(vi.mocked(fetch).mock.calls[2][0])).toContain("review-receipts");
-  });
-  it("does not POST when the workbench receipt query is unavailable", async () => {
-    const data = form(); data.set("workbench", "1");
-    vi.mocked(fetch).mockRejectedValueOnce(new TypeError("offline"));
-    expect((await investigationRuleAction(empty, data)).error).toContain("没有重发决定");
-    expect(vi.mocked(fetch).mock.calls.filter(([, options]) => options?.method === "POST")).toHaveLength(0);
-  });
   it("prepares candidates without a decision or evidence assessment", async () => {
     const data = form(); data.set("kind", "prepare");
     expect((await investigationRuleAction(empty, data)).message).toContain("尚未批准");

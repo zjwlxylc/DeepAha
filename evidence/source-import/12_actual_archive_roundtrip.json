@@ -1,0 +1,43 @@
+{
+  "input_filename": "WB-scout.zip",
+  "input_sha256": "087dae925b1919f8db731b65afa7de81644aaa34fc72b7fb1513033206244191",
+  "tool_version": "0.3.1",
+  "summary": {
+    "input_originals": 1,
+    "files": 107,
+    "batches": 18,
+    "duplicate_handoff_files": 0,
+    "run_conflicts": 0,
+    "source_versions": 72,
+    "candidate_groups": 52,
+    "repeated_identity_versions": 20,
+    "brief_versions": 74,
+    "evidence_records": 212,
+    "public_evidence_urls": 164,
+    "attachment_files": 33,
+    "attachment_references": 30,
+    "legacy_profile_compatible_batches": 0,
+    "same_endpoint_pairs": 0,
+    "blocked_sources": 4,
+    "issue_count": 39,
+    "timeline_anomalies": 0
+  },
+  "export_readiness": "UNFINISHED_REVIEW_NOT_FOR_APPROVAL",
+  "server_received_candidates": 48,
+  "not_selected": 4,
+  "sources_created": 0,
+  "tasks_created": 0,
+  "opportunities_created": 0,
+  "original_tool_feedback_inspection": {
+    "structure": "PASS",
+    "bundle_binding": "MATCH",
+    "authenticity": "UNVERIFIED",
+    "applied_to_official_state": false,
+    "message": "结构检查通过，不代表来自真实DeepAha。需由原系统查询或可信签名验证；本工具不将文件自报升级为正式状态。"
+  },
+  "restart_receipt_equal": true,
+  "elapsed_seconds": 2.892,
+  "database": "ISOLATED_TEMPORARY_SQLITE",
+  "technical_replay_not_human_approval": true,
+  "network_calls": 0
+}

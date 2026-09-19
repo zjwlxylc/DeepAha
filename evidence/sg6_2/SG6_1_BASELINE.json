@@ -1,0 +1,230 @@
+{
+  "complete": {
+    "total": 328,
+    "status": {
+      "UNCERTAIN": 300,
+      "INELIGIBLE": 28
+    },
+    "coverage": {
+      "BOUNDED": 328
+    },
+    "risk": {
+      "NONE": 328
+    },
+    "zero_requirements": 189,
+    "evidence": {
+      "LOCATED": 966,
+      "UNLOCATED": 88
+    },
+    "condition_types": {
+      "GRADUATION_YEAR_SET": 223,
+      "BIRTH_DATE_MIN": 115,
+      "EDUCATION_MIN": 106,
+      "UNSUPPORTED_HARD_CONDITION": 355,
+      "MAJOR_CODE_SET": 241,
+      "HUKOU_REGION": 14
+    },
+    "conflicts": {
+      "MAJOR_CODE_SET": 28
+    },
+    "unresolved_count": 0
+  },
+  "actual_like": {
+    "total": 328,
+    "status": {
+      "INELIGIBLE": 97,
+      "UNCERTAIN": 231
+    },
+    "coverage": {
+      "BOUNDED": 328
+    },
+    "risk": {
+      "NONE": 328
+    },
+    "zero_requirements": 189,
+    "evidence": {
+      "LOCATED": 966,
+      "UNLOCATED": 88
+    },
+    "condition_types": {
+      "GRADUATION_YEAR_SET": 223,
+      "BIRTH_DATE_MIN": 115,
+      "EDUCATION_MIN": 106,
+      "UNSUPPORTED_HARD_CONDITION": 355,
+      "MAJOR_CODE_SET": 241,
+      "HUKOU_REGION": 14
+    },
+    "conflicts": {
+      "EDUCATION_MIN": 97
+    },
+    "unresolved_count": 0
+  },
+  "recommendations": {
+    "featured": [
+      {
+        "id": "unit_01a0b4b28bed77f4a545c5bd0dae80d7",
+        "title": "审判辅助1",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bee71348a71caa13361f5a5",
+        "title": "审判辅助2",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bee71a5a9552d52242e135e",
+        "title": "综合行政",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      }
+    ],
+    "items": [
+      {
+        "id": "unit_01a0b4b28bed77f4a545c5bd0dae80d7",
+        "title": "审判辅助1",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bee71348a71caa13361f5a5",
+        "title": "审判辅助2",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bee71a5a9552d52242e135e",
+        "title": "综合行政",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bee78929c8bba2c52786649",
+        "title": "审判辅助3",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bef769d91a097d735b913bf",
+        "title": "审查与确权",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bef7f0491e8fde4514d8f44",
+        "title": "人工智能+未来产业研究",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf07ce080b66ec83a712571",
+        "title": "企业服务(1)",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf17095a8b62fc31a4fece2",
+        "title": "企业服务(2)",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf1723ca1ef1222be89ebae",
+        "title": "企业服务(3)",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf173adb5b7b45373432990",
+        "title": "信息技术",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf2742089595b5f75656f15",
+        "title": "人工智能学院专任教师",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf275f9baaa182436dd23f6",
+        "title": "智能制造学院专任教师",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf27929913d1c54da0e548c",
+        "title": "设计学院专任教师",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf371eabc8974f0854ae3f7",
+        "title": "瑞安学院专任教师",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf3783397de0d568c81be74",
+        "title": "数字经贸学院专任教师",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf37cb9a93a9c7342aa6f2e",
+        "title": "建筑工程学院专任教师",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf4743981ca4d4d307b4fd8",
+        "title": "马克思主义学院专任教师",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf47755b0b243ed4643f280",
+        "title": "发展规划处（产教融合处）专职科研",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf47b4b8926ac74f800fce1",
+        "title": "永嘉学院专任教师",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      },
+      {
+        "id": "unit_01a0b4b28bf578d4bad1088375c42f93",
+        "title": "教师岗位2",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": null,
+        "priority_band": "HIGH"
+      }
+    ],
+    "excluded_ineligible": 11
+  }
+}

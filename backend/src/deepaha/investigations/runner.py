@@ -119,7 +119,7 @@ async def execute_investigation(
             validated = await asyncio.to_thread(validate_delivery, results, originals)
             # Synchronous validation/import must also finish before the persisted deadline.
             store.finish(task_id, owner, validated, results)
-    except TimeoutError, asyncio.CancelledError:
+    except (TimeoutError, asyncio.CancelledError):
         if claimed:
             status = (
                 "EXECUTION_UNCERTAIN"
@@ -162,5 +162,5 @@ async def execute_investigation(
         try:
             async with asyncio.timeout(5):
                 await client.aclose()
-        except Exception, asyncio.CancelledError:
+        except (Exception, asyncio.CancelledError):
             pass  # Cleanup never masks the durable task outcome or triggers another prompt.

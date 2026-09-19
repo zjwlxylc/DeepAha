@@ -1,0 +1,22 @@
+{
+  "result": "PASS",
+  "catalog_total": 4,
+  "expected_statuses": {
+    "E01": "ELIGIBLE",
+    "I01": "INELIGIBLE",
+    "U01": "UNCERTAIN",
+    "L01": "LIKELY_ELIGIBLE"
+  },
+  "actual_statuses": {
+    "E01": "ELIGIBLE",
+    "I01": "INELIGIBLE",
+    "U01": "UNCERTAIN",
+    "L01": "LIKELY_ELIGIBLE"
+  },
+  "xlsx_conflict_types": [
+    "EDUCATION_MIN",
+    "MAJOR_CODE_SET"
+  ],
+  "llm_used": false,
+  "profile_export_roundtrip": true
+}

@@ -1,0 +1,1644 @@
+{
+  "base_commit_local": "29570496a7e919862d017526a9d413854508bd9d",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "status": "MODIFIED",
+      "base_sha256": "4ec56c010d8b62f35859df46c1d0b1e2df199a51a585d938c3194fd041682e8c",
+      "new_sha256": "f862fdb98b3064b90a0941af8169cec0109bdc9815a50ed6b04acc1aa12ef98d"
+    },
+    {
+      "path": "CHANGELOG-3.0.0-rc2.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "5bf2eb3ceb8320ae1ed01c5cb23f983d53153444f7ea0ca10677e61cea7be519"
+    },
+    {
+      "path": "README.md",
+      "status": "MODIFIED",
+      "base_sha256": "1077f4800d8db13381edb3e4d37ddfcd43214b00aadf535228c94a95d0ec84d9",
+      "new_sha256": "d4c269ab5665468f167157531f0c25ac96b2229d43740d9f0360f0c03b846366"
+    },
+    {
+      "path": "RELEASE_STATUS.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "bdc2ce88d46f77611b3b147a3280cafe8128537ac4420c976fd6170bd0f36cfa"
+    },
+    {
+      "path": "backend/pyproject.toml",
+      "status": "MODIFIED",
+      "base_sha256": "a8ed6b3798b8ba5636a1b828f584da6a2442db9d829d16def899b2e0c5a6bd28",
+      "new_sha256": "ceb67df88eef40771885a302383694c42eedc9776e94f66c4c2fac7553c999d7"
+    },
+    {
+      "path": "backend/src/deepaha/product/__init__.py",
+      "status": "MODIFIED",
+      "base_sha256": "310d0d9f04560fd172cdc140bb5ecf1c6959923733dac5f3024064fb82207fdd",
+      "new_sha256": "ae2f4b15e0707b080836e63428f51fdc3404f584cb48c52af2ce629f0ca6f1a1"
+    },
+    {
+      "path": "backend/src/deepaha/product/api.py",
+      "status": "MODIFIED",
+      "base_sha256": "2faf04aa2bc7acc190578bfd310d664168115ed4cd3980fdaaad0e78aa58d934",
+      "new_sha256": "e83e38504cd0a07c01e4a23ad329189405d7a2e2eec2c4f86319064dbf11dcff"
+    },
+    {
+      "path": "backend/src/deepaha/product/cli.py",
+      "status": "MODIFIED",
+      "base_sha256": "d1ad4bcbea977b5ab6c68addd7b73cb9eb4498b0352bce6e2fb0607b9e97d108",
+      "new_sha256": "544b419d088420719cadef6daae5c4d223ee750798deee9f38aa92c7ac6eb788"
+    },
+    {
+      "path": "backend/src/deepaha/product/scout.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e43d247990e9b6fc003a0f546c366bab826723e6302ffbe698b100ce21a279d6"
+    },
+    {
+      "path": "backend/src/deepaha/product/scout_api.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "5bc2f8e3e8c4bf6790f8ff14187c1e46e8c2d825abef6877292453ea4180da19"
+    },
+    {
+      "path": "backend/src/deepaha/product/scout_models.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e82e27a10b471166b82f17d8e7dd29cdc6e6c61d4e199d2f7b77575b751829a4"
+    },
+    {
+      "path": "backend/src/deepaha/product/scout_package.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "7435af6555d2da6ec73d5be324c58f16fdaf7c2a1ad265361170143372659f49"
+    },
+    {
+      "path": "backend/src/deepaha/product/scout_research/__init__.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "backend/src/deepaha/product/scout_research/contract.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "420d1edfcf4e20d7cf99261a04914cd47d93c9a53d58d33641752f52ae6f582f"
+    },
+    {
+      "path": "backend/src/deepaha/product/scout_research/errors.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "01c9f009174302dfcc7bbe22ab50aa54376fd2340270873a6de397c10f282462"
+    },
+    {
+      "path": "backend/src/deepaha/product/scout_research/research/__init__.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "backend/src/deepaha/product/scout_research/research/audit.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "52019cd7b04d2a357118d75325e1a1470a16f9302aabb94551f4342819a10e83"
+    },
+    {
+      "path": "backend/src/deepaha/product/scout_research/research/ingest.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "df88967cbae8d9404f5d7d0429d5ce4b651fe784b4d5f8d6a951d9fa434f48b4"
+    },
+    {
+      "path": "backend/src/deepaha/product/scout_research/research/normalize.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a65d0197eed82bfc19bbf079d7cca218d1a52bfed3bc5b38580520ecd7f7ddff"
+    },
+    {
+      "path": "backend/src/deepaha/product/service.py",
+      "status": "MODIFIED",
+      "base_sha256": "034f623714239f4ef1805168d7458eedc824ecabd85a45637cd6e900260e09ed",
+      "new_sha256": "027b37327febd79584f9eedc3e6d708766747f2e19a1cd1228d5951cb612afba"
+    },
+    {
+      "path": "backend/src/deepaha/product/sources.py",
+      "status": "MODIFIED",
+      "base_sha256": "0440d8b421744909e3173936ee26a462cfa49d0b4825c160b803bed33cb50722",
+      "new_sha256": "01519e7c6315f25c88f3b8d0ca1b8718cf080acffc64e2afa683595974daf50c"
+    },
+    {
+      "path": "backend/src/deepaha/product/tasks.py",
+      "status": "MODIFIED",
+      "base_sha256": "717bc7182d8d676ec616fc53b0a4089ed5e7ff7b53ac5acd9c162ab541c79e05",
+      "new_sha256": "adaaebcf9000a22b8960d11787e378b2d677004ef60f460e27304ed2c5eadc86"
+    },
+    {
+      "path": "backend/src/deepaha/product/upgrade.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8fb482240f50e2195209ecb50e2da73ed28056b3ec7d36eb2f243f74f989806d"
+    },
+    {
+      "path": "backend/src/deepaha/product/worker.py",
+      "status": "MODIFIED",
+      "base_sha256": "7ef91781691a209574e34cb4e6918e8cea755d2c0e4fa013e3425fb6baf5a567",
+      "new_sha256": "7a2f5d4d26c55c141c0d8494e7b6e2a8f27d7d72a5ff6403779bd4e9438ce3dd"
+    },
+    {
+      "path": "backend/tests/product/test_scout_import.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "7abbfac4d68d132539bdda92f2b9393d839f351a3d4237e8692171fda3953bcb"
+    },
+    {
+      "path": "docs/source-import/00_AUDIT_AND_SCOPE.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "0defa2dc00fb8ee8d702c201cf03326a733ef526897887584e85e2a2f5f766e7"
+    },
+    {
+      "path": "docs/source-import/01_DESIGN.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9af60a335b1b5ee6564177d90103fb423a66bb91d2fda4bd0d8ffc9d7b5fe78d"
+    },
+    {
+      "path": "docs/source-import/02_IMPLEMENTATION_PLAN.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "3cc1b3e1c24a35ac456bc4e267db7cc6fe21a8cc700b0df0c6ab03feead2ae39"
+    },
+    {
+      "path": "docs/source-import/03_CONTRACT_AND_API.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9f6d90176d2be98582676aa1bda40bbab64509a064972db5aaed18c5b902ae10"
+    },
+    {
+      "path": "docs/source-import/04_USER_AND_UPGRADE.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "ffa578a365465478448b5e19c0e9811afa0ee7e200be8ceca69a37b0cb54b0ff"
+    },
+    {
+      "path": "docs/source-import/05_VALIDATION_AND_BOUNDARIES.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "2582afc3b4c47d32320c4dc251eef3e3e2961d322c6fd38a2d5d43c48fbf1f01"
+    },
+    {
+      "path": "docs/source-import/06_CODEX_HANDOFF.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e5efa2c0ed305d5195884d7b3db6deb553ccf96b1de56e45b0afcb67b48b87a6"
+    },
+    {
+      "path": "docs/source-import/INPUTS_AND_REUSE.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "fa684946424e979ad43b342dc50b9132156ad09228dbc1f1caea28a0c788780c"
+    },
+    {
+      "path": "docs/source-import/openapi.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8dc2126a497eb10abf803c9d3c4ad0d7c46693dab72e472416919bb96c207569"
+    },
+    {
+      "path": "evidence/source-import/01_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a539be0cb99289d1f34e9c96f4d311bb1459ed2be86fbc19968290e14efffa84"
+    },
+    {
+      "path": "evidence/source-import/02_first_green.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "75497c3f0220bfc20d322c15a23c3888ea181f43dac773570c96b4a468c80c1d"
+    },
+    {
+      "path": "evidence/source-import/03_domain_tests.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "d1c4177c58d5c61637dff981709195c964177cc19ed7bdd22524b35ad7123f75"
+    },
+    {
+      "path": "evidence/source-import/04_green_regression.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8fb861ae05ef621d6c05769caacdf2ccf75930fe60f95411b0e04e4c69c6e58e"
+    },
+    {
+      "path": "evidence/source-import/05_actual_WB_format.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c794b945dec3cb404fa5f91725b9dd4af528979f209aec6359b20b1af65ade44"
+    },
+    {
+      "path": "evidence/source-import/06_roundtrip_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "7777147e40ccb4bbc02a1193354041935694de089acdd0a2e3d4dda6f139cb83"
+    },
+    {
+      "path": "evidence/source-import/07_roundtrip_green.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c6ce8518a2cc113cc5560b3731e234ed6d559e746221ae903ce01599dfe7e797"
+    },
+    {
+      "path": "evidence/source-import/08_upgrade_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a2b6dfe0cdb30abbe9675fd5b2692bd5667c5a11d4dd1e0835200a7de636fcae"
+    },
+    {
+      "path": "evidence/source-import/09_full_product.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "dc172360157a26b24c4dd35a51ca6a00848ef791cb9c5f41373ea8226499ff7e"
+    },
+    {
+      "path": "evidence/source-import/10_native_probe.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "939c5be6bcdc5dbc4b16c2b1921e95401545e3c6cf717a2873e6ffd6d7370e3a"
+    },
+    {
+      "path": "evidence/source-import/11_browser_checks.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "39e951dc1acba0a33aac5eb174c6c524bcfcadc1e53872d02df01c171cf40267"
+    },
+    {
+      "path": "evidence/source-import/11_browser_output.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "caf8e0b35b28243002d6f712658a2ee64750c492c8abba61414e7986622c13e4"
+    },
+    {
+      "path": "evidence/source-import/12_actual_archive_roundtrip.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a258d11b97875fc172176766d93789493ffed32688db7f44af783e60f83464d6"
+    },
+    {
+      "path": "evidence/source-import/13_importer_regression.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "686ae531db5001bafa998955fb6c7d232168ed110366300c3935871162b06d84"
+    },
+    {
+      "path": "evidence/source-import/14_boundary_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "df1dbaba3950e89b97cfca385b1d0567b2ae4748b7cce66e4f966c19a5f83796"
+    },
+    {
+      "path": "evidence/source-import/14_rendering_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "6f6eb7482f9647b801d1c23afe7743590d2ab9bcefdd6481253d60205488a0a3"
+    },
+    {
+      "path": "evidence/source-import/15_final_product.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "19853abce6514730063bcfde2e21e82818d7fe8a584fb49e763bda6a7b1022ed"
+    },
+    {
+      "path": "evidence/source-import/16_final_frontend.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "6d394b13a1d628ba2cb0901af40356f7a69a46746d3141c7a800afaf593df386"
+    },
+    {
+      "path": "evidence/source-import/17_namespace_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "19842ecbd5e4ebfaeb9ee1e3025b9310e4f151cd4ea9e7d79dcb48d8288d934c"
+    },
+    {
+      "path": "evidence/source-import/18_interrupted_product.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "b1465583f636400d07cfcb4155ca42d335e6ba18991ff96f7a4fd2957fcadf92"
+    },
+    {
+      "path": "evidence/source-import/19_verified_product.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9801dbed40d2966bdc411e2f00438d7c0982e18f04ac1a425c7367561b389fef"
+    },
+    {
+      "path": "evidence/source-import/20_actual_archive_output.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "b4cf210ddc9ae4521df8ea673e723cc686c46e4bcfd5fd7b9afbbdcc6414337c"
+    },
+    {
+      "path": "evidence/source-import/screenshots/01_source_assets.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "decbd6b3ae28428fa96199f1ec03de22b5846069fe9232c598de17b3352ac892"
+    },
+    {
+      "path": "evidence/source-import/screenshots/02_import_preview.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "fa4de5653cbfa798672ef82bf5a94a00c5910a944e8bb27de1edddec068913ab"
+    },
+    {
+      "path": "evidence/source-import/screenshots/03_candidate_detail.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "43637b6a56666840a0d9672967264f96e766857f0eb7ae910950f690fcc707b3"
+    },
+    {
+      "path": "evidence/source-import/screenshots/04_bound_source.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "f051bb045d1dd3b08aba288d7724289554eaa473aafdd2a7509f0ca91abe74ef"
+    },
+    {
+      "path": "examples/source-intelligence/Example_ResearchHandoff_v0.3.1.zip",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "5588a3f6dea713849a3411f6d0335fc00226cc3a2738811265aea2b224092812"
+    },
+    {
+      "path": "examples/source-intelligence/Handoff.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "26f81c40ee47c36f2f26a0202290714b7df53319383bc396aa59806c335e163f"
+    },
+    {
+      "path": "examples/source-intelligence/README.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "331ab1245d4941333fd8eaec310e22704ed1bf338a042c371ba7a66a5d6329cd"
+    },
+    {
+      "path": "infra/product/nginx.conf.example",
+      "status": "MODIFIED",
+      "base_sha256": "efc98fe3f1fd3efb7259d8153f3c80cecd5661b3620be7da52c655f44eed7800",
+      "new_sha256": "145155595b33787a636af06d8ec350999d80001fb121eda527715d1a264721b5"
+    },
+    {
+      "path": "scripts/launch_product.py",
+      "status": "MODIFIED",
+      "base_sha256": "4bdeb1d9fb65417888734a424493f6ffe820637edcd8c99cbdcfd7941be0df21",
+      "new_sha256": "3c421960b56a73fb27c4beb7dde903852bfb538bf247d029f1fbb287a1f30f7c"
+    },
+    {
+      "path": "tests/e2e/browser_visual_bridge.py",
+      "status": "MODIFIED",
+      "base_sha256": "d81269de0cbc38477b2da51da8b193f44e441900cf5313507f78e94d8d0ad81c",
+      "new_sha256": "bfc5cf78a8e7db9eba11f6b298134c9a93927a733b7d2fba31916a89ffe6c298"
+    },
+    {
+      "path": "tests/e2e/source_import_browser.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9d6cf387c26cd7c1ce9aa4b2bddbc5509837cbc3b3c66cea8a802c66cc6d5fde"
+    },
+    {
+      "path": "tests/e2e/source_import_real_archive.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "803ee14b1698050dce578c8a3b2bf637e41f0499a561aac19172b17a3b68e798"
+    },
+    {
+      "path": "tools/source_asset_importer/.gitignore",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "346df78c996abfd5b3b38e80ea1311b80194eb5e631db97a1b1c54138c73ad5b"
+    },
+    {
+      "path": "tools/source_asset_importer/CHANGELOG.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "bbfbe786aa1a8733bc800b136f69e18c357de1c846141fa5cd3d5ab0f2ba8a17"
+    },
+    {
+      "path": "tools/source_asset_importer/MANIFEST.sha256",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a7f017ab5cc4647a8d1c5c55b6f1a32959ddede1a23e22bb4002ba519df85f25"
+    },
+    {
+      "path": "tools/source_asset_importer/README.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "02eff0c17e4a7df747b0be7fd9012aa00c82fb22df4f4984ee9a7705b1ede5b2"
+    },
+    {
+      "path": "tools/source_asset_importer/codex-library.settings.example.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "57a9edca9a1830350fc625d8331a78f96e9d12fd0236cbb763e0721b5a7e4be5"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/__init__.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "880e3b09f566ab6c2b06749de36345339fd4177125b4c2045d1fb68e0a3f3b14"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/__main__.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "79ee6f134c5c5193377cf9b189cbdcc3e2095e49ba9cec310114441c15a917c4"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/cli.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "b88cd3d5c4f9be2a671086d1d56621a86cbbaf665a45d87574c770ce3f212f3c"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/client.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "09c498e1609daa12e73f98ba68c747254933f9502cd53f5f215d721de340122a"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/codex_process.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "cc99f5538cc722bf6b11adacb622eb8c6a4a377100b118b9ba439e3af1e7bb95"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/config.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c0cad2ecc49101bf729ef61896b2cf7039aca1da6d06bc33c4d31abda5cab021"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/contract.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "420d1edfcf4e20d7cf99261a04914cd47d93c9a53d58d33641752f52ae6f582f"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/controller.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "355ad882eddfeed134e37d64778ae9f2c0b31ded82812cfe8ace56c441e4c596"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/data/demo_Handoff.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "7a292e62fd8d9e7a013fa008a97319c7faa9590207459c4928384aa0d34c21ef"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/demo.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "93c3a908d3a1a366bcbcb14a352472008e9a831b81856aaac46917f3700368fd"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/demo_server.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8ae85b97c18ffd96ff8395b4a00b3728d7eb7ea9efc3938528a9b33513f6785e"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/errors.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "01c9f009174302dfcc7bbe22ab50aa54376fd2340270873a6de397c10f282462"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/fastapi_adapter.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8465f5e8d34d9d981b5fbf8e4dc78e94604ddcb516ee69a2ce8266578fc293f4"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/gui.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "092519b0c86a587ace2f081d2012ecd7cef86ced9b8d6c2634fcbe43ddf64773"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/http_api.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9eb98140d4c550592423e97ffdc6623364fd3bdd7666b933124ba97a156019aa"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/integration.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "59f7e65263f910d96d497c5c08dea62ecf2e8754d1feb45f0f4c8bf45d22b6a1"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/library_pull.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c639db5181884af4f9488b73873138f301331dafd057a22433eb26f85870ac79"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/library_window.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8f8f19debce3b309412891bf9b1e88b55887e1f1f79f5e32f5ec14d7624493a2"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/receipts.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "fa683eb8c9804dee333f35f34916d26e9869f44d6c6018ae2d932b40d6b5cf5a"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/repository.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "df39dc61fc776e8e61dc6e0203c6fdb5c32f6d123fcd4b8a19631298ab6c88e8"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/research/__init__.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e4af4bc5716174c8d0ccb8553afc9c265e89011cd1e9e387ec6e94c76b5ea5b7"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/research/audit.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "52019cd7b04d2a357118d75325e1a1470a16f9302aabb94551f4342819a10e83"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/research/baseline.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "722d021f4179af0b5897be3b979629a730225d736f3b4c8776cf409f15b14672"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/research/feedback.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "72def4fb557a207afdac3f801a75453dd022322dabc24ba7e36ab429e14e204a"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/research/ingest.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "df88967cbae8d9404f5d7d0429d5ce4b651fe784b4d5f8d6a951d9fa434f48b4"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/research/library.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "75d3a53cbc7c1e4e28749242eed0106504ab5a0373d3fb14a467d54d498d96e7"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/research/normalize.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a65d0197eed82bfc19bbf079d7cca218d1a52bfed3bc5b38580520ecd7f7ddff"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/research/workspace.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "46032127be43fec69d22ed00da6368935b102a29d6562d98b488c4d202f62aaf"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/security.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "b429509a77deef12f33f17b010fee4a24b729144406ea8a989ffc0fed6657065"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/service.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e50d85234daaf99c5e1da0f7bd9036e06d6258224f12f67bc46e066e060601c7"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/web/app.js",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "f820cded9adf9d0c250122050388957943abe6e3fe1471d010ed219251146bcf"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/web/index.html",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "5f95f02105e498d648e90aa666d4d78abf67b41569ef3c5ddfb801a14a24b4d3"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/web/style.css",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e0b510a8dc910022b32c228e338a4688e1e84192140db616be52016718b11804"
+    },
+    {
+      "path": "tools/source_asset_importer/deepaha_importer/workbench.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "dbb9e57ac43bf7975ceab772f83ef676e9a169f2c245d878003f57ec63529b25"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/CODEX_HANDOFF.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e529771aef19410121b2985424f728b656714e8951fa022c8ef6a14b21e6e23f"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/CONTRACT.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e898f4f9298e8f60f5a6456f5e83a483352204929716294ddb3c9b35f62d6a14"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/IMPLEMENTATION_STATUS.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "1462fac8699634fde9e1c2712f3bf65f3d342bcf9fa0eb583da5c8164351f022"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/LIBRARY_PULL.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "65f1a373d13478abd5ba5824d239f7207648219dcc14529796e9f37027bf49f5"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/SECURITY_AND_LIMITS.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "4b875178edf351b1f55f4adb7163406f4bcecefd64fdc37c7b21322a9740fb37"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/TECHNICAL_REFERENCES.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "caf3841ab7125e9f77eaebf82ff5c62a77b393a91757e5d6819ba1e10e6e1b01"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/baseline/DeepAha_Scout_新版使用与导入方案_v1.0.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c6c664007d0c4ec477c62d3abbf2c5ec1969ade38832050350852bbdbd73ad59"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/baseline/DeepAha_Source_Intelligence_Scout_v2.2.1_Prompt.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "1a50e14b230d58d71be0e4d6b6a209ad9cf6001ca8f2026e8089952abac1a4c0"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/baseline/IMPLEMENTATION_STATUS_v0.1.0.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "0d6a1f8078f5935e4a4c9ec346fa52f0aff74cc1868d55913a3f15b0cd6ca24b"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/baseline/README_v0.1.0.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9137e0c5bd540dfdb7524bd594d6d900b9062a70ffd1af142c39443e87f6e0bd"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/superpowers/plans/2026-09-06-importer.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "caa0fd6aa1e6faf4857baad10a169cdd7d1a6dae8c6260727473c942f6f56df6"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/superpowers/plans/2026-09-06-library-pull.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9a5aaac0ca97282757acfab086cb50442c720daf5a32bf309fd49db99df60831"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.0/CODEX_R2_NEXT_TASK.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8ccc7335c4274c28de4313ce141af9e34164707f5ed4cdc4de877a95c9e2c5a0"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.0/COMPATIBILITY.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "16fec7ff1336629064f0cd26c26c43606696d66939668ce5fc82c41c007c2396"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.0/DESIGN.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "ebe2ce65f8b6cb99aa0712d2dcff6b6f7563bef20fb02c10875dd1c08b9562a9"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.0/FEEDBACK_PLAN.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "4ccf131606c40f50d8a7552828d61506da63f9189b017a830590779219526209"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.0/GPT_30_Case_Review_Notes.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "6956041c1900fad38862d23f06012a8f81a97ce4f315dd569bbfe33a036d9305"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.0/IMPLEMENTATION_PLAN.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "cf836541534c3bcf2d54101dfda4772fcd8e69fe747bb4ce67c44b33df1109e0"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.0/QUICKSTART.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "bea36b642f407c1d368e1d0c16135af6319b3a180c48ca4c369914de3c30d031"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.0/README_v0.2.0_HISTORICAL.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "f651d1c8c04b7d660e4aa1abd32cf47eb59a1a116a0bfb966ab2d1bc5fcd4958"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.0/REVIEW_HANDOFF.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "5519db5d52953a2cf898f00f42dd4aa167eeb3aab881774f47f2f2e6cf646334"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.0/VALIDATION.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "22fe55c9d09f06f80607828a76a806176c84ab3aaec4c631d555bb5677fb0e60"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.1/CHANGE_DESIGN.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c8b64871fbec7a33e35382a0709cd5bf1814b02bbb40a9fa3f95c427844ec20e"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.1/QUICKSTART.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "0c68f69dc87e286f76f46a6b5b117b0cdffc6a126f3b38b5c78c4f525a51037e"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.1/TEST_REVIEW.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "cf116610b8bb7805d684342ce2d8907bdc2ceb753120a36397d389cde9646653"
+    },
+    {
+      "path": "tools/source_asset_importer/docs/v0.3.1/VALIDATION.md",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "f75c335a9e4c0c2b817a6766c67823361a5dc989962004ca05e42c0d8258867c"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/01_contract_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "7eb3edae695efa6ecf144a7e7881b0a854306e18f0fd947a59826fb8d09cba4a"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/02_contract_green.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "334efb9da9e5a79055356ca70a0f45e856876e7444af303d5bd8b7be7d512654"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/03_service_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "ac53793022b4d845e96f5b3c35489663936f23ac395d7fd356b1052c0dd638f6"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/04_service_green.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "7aa972faaceffc6018e030ad00c77c662dc96d9e268104213b5c3742900e9039"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/05_http_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "cae0fbdff49dc2b89fd59b4c01cb200ec76c2d009442b2e06e6c4fe75e7e4435"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/06_http_green.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "2c9350b4d4fc77a1492e6a6bbb4c760591a46b1e910ec90bc63733cbaf011d38"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/07_workflow_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c8febe41c59d84374d2aeacf2748094028124d64af108c54c02f2ff1467e4e02"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/08_workflow_green.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "d0375b106580960fbb1dcd1648a28b5f35c8ea236fd33c3e05575c9184b3fcbb"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/09_cli_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "60ebf2c9e74c471a9293bc4748a879a3d61e7818a1523f1f3ce6f845013d3aa7"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/10_cli_green.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "fd2488e9b4be0141e2f3d18132999eedc27fd6469ff1a396ee23447762619ddd"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/11_hardening_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8858866bed0b2775d024b59384cc085e1133ae386a2401e28845a3080fd0ec75"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/12_all_after_hardening.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "ae42d73dceb893494a73f51d773a11d09164ff75177031ddf96ec1314c6b3c16"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/13_gui_fastapi.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "5ec8ddca738f6fa612defda6fcb6cd5cd8d0a3b3bcfdae0286e52d27018b4fa5"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/14_gui_clean.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "4351b6c9c8d92ba10ef5aa5b6ab029cc7318c79356634f481f80c954fdcb00fb"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/15_gui_layout_red.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "68e07b8afc26cdd3d80a03224ddd2e7ed019cf2231c8f3fb298b9ce74d2b7b51"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/16_gui_layout_green.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8a1c2e63ad21fe716a9a3436fed94c60a6d5bcc2eb8ece47a13fb925f289c006"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/17_recovery.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9ff0390994680a49085ac2823df16ed3b839cacd6dd6eeed6f9e0848ecaf1729"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/RELEASE_STATUS_v0.2.0.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "ece1af01784c8e12ca95f5e967582c434ab65112ad41cdfa412f50346d509f72"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/RELEASE_STATUS_v0.3.0.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "186c1df0d1b8a3cddfe37b472f4588adfe5ccb062e7311dea3b9799f893d6644"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/SOURCE_CHANGESET_v0.2.0.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a676b18448f20b9a83a2af5308ea9d28e4d977762bedbaac3ad41d9edf5f6c76"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/baseline_integrity.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "613bc5a850bc024a60b6f55d39824823aeeb53de3d8cb9cc6021ad8b906f381e"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/final_verification.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "797b51d9566d7ea1591c64b16a74f9148786eeb7bace0007072e13880aa8df1d"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/final_verification.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e07d2c3f1f926bba6349bede286493d17238bd61cc1459919f3bf5fd83e7d88a"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/gui_minimum_linux_xvfb.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "73b332b3d6e2ae31a74c5b3893efb7f6f783ff5c60feddae652903f7aa5cfb4e"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/gui_preview_linux_xvfb.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "f2ca5cea755a320a5d0a49dc4d4dbad317e4dee4c04c23206628d89d9f1c707c"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/installed_package_check.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "573e439e5be60231d797149f64364a2d58caad04f724322e661f9cb74cf0a9ff"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/01_research_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "4c5045ae506c768e63285aefe2801537bde91495ca8d9b974dbe77dfe2d2f9d7"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/02_research_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "94fed9eeb259b65b6b9d01c16dc624cbb9b732f5aef55e20126d4ff0ab9d4560"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/03_actual_shape_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "6e821baddd9126d82661bdd399a0b1bbd3c8abc41df6c0bfda8ab22ab8563e22"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/04_actual_shape_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "6bf5fd55bad9fcd8efe709bb5c70b58f17d2ceb58bb8c3afc023da9646b3cbcf"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/05_baseline_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "843d8ea812528dce14e0f3a349931d3435e0b6361224db9caa8852edfe9e2194"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/06_baseline_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "d700db1ed489f6df282a4e106282e5b7fddb35e59adeb883fcaf0fb8f8f0f2d7"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/07_workspace_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "f13a0741cf5804ebc4b5e61de0bd3240018145dd6ffb48e76bb39fb57624b20e"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/08_workspace_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e2b6a4b1baa3a1443a8d3b6019f817369b57063e3e6a2641786c810d4655bb6c"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/09_library_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9544409780d16f3ecd7114623defc6e11e9f25ab6304c503e6029d7c34ee78a1"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/10_library_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "bda55f077be17475322c76493ba58f29ea5221290a2382da5641cac081b59381"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/11_workbench_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c548e450fce0efd16b2fa98f0c99906048a84a26972e44bd31f6981b5fe0dfa1"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/12_workbench_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "4cdac5842a8312a9dc9edc07a35c13eed83fd0b4e183b54ce7e1c7a85e38d651"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/13_launch_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8f52ca55e0e67c82b442359daedfa159ac54bebe586a1dc301a717095de5447d"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/14_launch_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "054475160999cd9d4879f0efafa27836a5c0329b82901a9541376d6f587735fc"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/15_browser.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9f3c16a6aee146161a5e2f2c3833434a584663af29cf827efc693a73cc0af3b2"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/16_browser_dom.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9552afecb050e626b3f98fca8efb268cf640ce0dd4d39410673aa482f2dfb7a8"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/17_mobile_refined.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "de5276539863b0f76a30497703f84b6648aef7022b5d0e76d3a07702a00825f3"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/18_reference_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "83905d7e6d38f636c796eefa20a085fcca93c4b0fce2df989a42f07043329c3e"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/19_reference_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "2f78c4a1e0149eca23a2b621b7bed556f1f8735c29064bc29476b30a23cf1baf"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/20_full_suite.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "2f20d79d2b897c32bc56e9f2c196635f446de658d4616d2843d3b55a0b0a9763"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/21_integrity_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "d87ac1f483a72a3647dfa6f0fd259dbe5b0ccfc2509153f992031a267eb3479b"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/22_integrity_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "88538623450badd6e123acc21db5787e058293e4c9034844a98646d35ddd38bb"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/23_real_asset_audit.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a8ab2660afb4938603c8c0f2113659bd55a0fcb02b7597d0f1bcaa2f163792bd"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/24_bundle_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "7dcb4faa112e139187ea7750245b0af93367dd6319a355030a44d27b97bd0882"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/25_bundle_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "d215d5aa17bb9ada73e1d84b940ddf335d3cfa6294d93fe02c4724b219346333"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/26_full_suite_final.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "693b870f3b8f9f11f529fcef978f3d499d55acc5ef99530d9fc3d9fbbc727357"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/27_syntax.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/28_browser_final.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "de5276539863b0f76a30497703f84b6648aef7022b5d0e76d3a07702a00825f3"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/29_wheel_build.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a6596bd9f1d65894deb04470be84895572bc8f434c377eeacbb28fe7a4a28e6d"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/30_schema_grammar.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "ee24cc6311ec475138a3884224dc2a3ce3355eb443f8ea84fbfea911ecd91992"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/31_protected_legacy_diff.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/browser/browser_validation.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "d7a314861d796821693641bc813330a7e3a1f3a43436cf3ee58260a4cc437fc0"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/browser/workbench-export-desktop.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "aa99034faa044fe3297f2da8fabce5f201da65a70562120a494f747b911e308c"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/browser/workbench-intake-desktop.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c5328fc3c8ac6167b7968c585608c1b8cbb9cb45d9b010895d8ddb01829d487e"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/browser/workbench-library-dialog.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "55caf657ad97ead7c2eb17825189f60888696b99aa13576b4d71f82c6726b8a4"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/browser/workbench-list-mobile.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "49c05c6db1b3ea728c7424a82325b56c6282a54cf4e1a0de81eac6860eb9f783"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/browser/workbench-review-desktop.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "682d8f14affb3c08e670316b094549e3baf92864f29581fb85d077a2284f6fb0"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.0/browser/workbench-review-mobile.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "d52708277b8adbb95dc672b2cd59897f0605dde993bbb075bf2a09ca0f63f21b"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/01_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9d6c45ca5ac0a538d21e940f56745802d57e4e37bdcc88dbfa68d1b58ea3ccbb"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/02_core_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "947a5d709b826bc00a0f52533d8686d52203d71ee84153ff2940b3ed3205f239"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/03_ui_core_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "65ae9bb5ecce5a0ec8e5789f76edc773c4a6f21bf0d47cd533ffc735f2d0a1c4"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/04_full_initial.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "6246ecfbbf55721faf8569c114a21b6e6eef7e6b7d9cadf73ed36070bee2292b"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/05_runtime_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "f4bbb9680167f075850e5ee0f211b0897eeb3660c75a177ef17093ff34541515"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/06_runtime_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "107d93a255e37ebaf4c24e9ffaee187042d38a3b5195abd6d6422d367adac433"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/07_http_patch.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8127936e1afe87b414e9b9b97bc538d402595055c162540d196cd684d3a47b32"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/08_full_final.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "6f7591ab4068648dda4c590704cd906092b628cfb30238e3ce759e83d4a2dcba"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/09_dom_final.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "84144f5905614d8700768abef83bf87b0497ac305788180df9b96856a4ca724d"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/10_diagnostic_redaction_red.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "2885e9bf5f3d9c1b543092ca2a188d3a3a4a4e8f4f9ddee84e9623dd0e4bf995"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/11_diagnostic_redaction_green.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8e836b758ad09598fe4115c63ecac3370cf836c5a675251f362c3d1fc58ea69e"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/12_release_tests.log",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e344b860617e3a9261c3f072531d900bdf48ce822dc3b65f81acb6799f1bb1d9"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/actual_r58_export_regression.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "24e149e9f8f19d14ba43d27aaa507afd0e783d84a6838d88e22cdd1a52a70509"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/browser/dialog_validation.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "84144f5905614d8700768abef83bf87b0497ac305788180df9b96856a4ca724d"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/browser/library-blocked-desktop.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "4af36a0709a89305683875b300807a70095796ed38286bc213f22d65eba73d44"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/browser/library-blocked-mobile.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "ea6298c7bafd1d4451a3d9bcbdf86927aff232159c6e5db9e910dd287fb1b709"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/browser/library-progress-cancel-desktop.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "3fbc92f0a4d4cec8405d0e76b314eb651afc0836c105bf2e68d7704ffdc3c875"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/browser/library-progress-cancel-mobile.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "215d8f1821678eddd48590e429d3ea65d770a14c0e46562cca7514e5c381fa09"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/browser/normal-navigation-result.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "72b814aac80bc21993bc8d879c21f20feabba579ebb3c5eac37b5e59873297d4"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/browser/review-r58-completed.png",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "413e6d2ec4a0901a4b6607f01b8032c4207cd6a36ea52a494cb7e6b71c440cd7"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/real_environment_diagnostic.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "88f23ad13ddc0317b395bfa3dd1350759ad32508e8db6d43a0b782db42ee2ef6"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/reanalysis_regression.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "3c63bf1019a2c2110ea405da48287705c08ff70c8494bff36e412783c16fc2bd"
+    },
+    {
+      "path": "tools/source_asset_importer/evidence/v0.3.1/user_export_audit.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "156d582bb5738eaee9182260ae0750ed0707dec65cf62f05de8496bfca7be25a"
+    },
+    {
+      "path": "tools/source_asset_importer/examples/demo_Handoff.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "7a292e62fd8d9e7a013fa008a97319c7faa9590207459c4928384aa0d34c21ef"
+    },
+    {
+      "path": "tools/source_asset_importer/examples/demo_Update_Handoff.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "d72f846b44c707547814f46a83dc6044991993733cf25401f69c8adc50b1e797"
+    },
+    {
+      "path": "tools/source_asset_importer/examples/scout_feedback_DEMO_ONLY.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "7380a362574d344c23e67d8eb8767e0f946d89bbb94411f912525c7ac316ee8b"
+    },
+    {
+      "path": "tools/source_asset_importer/launch_unix.sh",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a15e8d18254795e70fc24d5c5dd2e45196156b451ad623c4060929569820c4ac"
+    },
+    {
+      "path": "tools/source_asset_importer/launch_windows.cmd",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a17ab182ba37096d4efbb154f66e94eae7cd71ca6f44f510b0d445482fa8f5de"
+    },
+    {
+      "path": "tools/source_asset_importer/migrations/001_reference_postgres.sql",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "ff9e2b9329b78843622405a458e3d451a9593e4b2c43ce5eabd8b4ee9e60ab8e"
+    },
+    {
+      "path": "tools/source_asset_importer/migrations/001_reference_sqlite.sql",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a82dfe54b5bb0ff745a39a3cc07fcb641bec59fd2558b26f386a542cfd06bde0"
+    },
+    {
+      "path": "tools/source_asset_importer/pyproject.toml",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8df3cadfb02514e01b1d5252ddcd89c7e66620199ddff8cbe1d7f53e992afe29"
+    },
+    {
+      "path": "tools/source_asset_importer/requirements.txt",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "1ebe403e9d966cecaec8392bb72df7800382e0e9bb8db90c21bd1776afe1658e"
+    },
+    {
+      "path": "tools/source_asset_importer/run_importer.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "67aeaa7c55f5d50c912fa7b38d3d4cae5d0c90776c8397ebc11cf2bf85fe8ec0"
+    },
+    {
+      "path": "tools/source_asset_importer/run_legacy_importer.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "37d41409ae0d9b4bdf1b9c98661c0e9bb9bfe7a53dbddb1fa1dc62aa4d6baaa3"
+    },
+    {
+      "path": "tools/source_asset_importer/schemas/normalized_handoff.schema.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "1648bb0f65a6acf8e84ebe26fbc1da2dd4a91a2773ebc830696b3b29ead17b9a"
+    },
+    {
+      "path": "tools/source_asset_importer/schemas/research_handoff_v1.schema.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c574e750f92e06826d6ce0d5f9aedb2cb2712a24321fd9b9eb7066c013f8f9cc"
+    },
+    {
+      "path": "tools/source_asset_importer/schemas/scout_feedback_v1.schema.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "48b868339c39710c6515fe32724c398619a7f83f282f493d85138d5327f8ee91"
+    },
+    {
+      "path": "tools/source_asset_importer/scripts/audit_review_export.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "1345f565506ac229b3c532dff1fc629346fd4d1a1ea22b8b336e8645e99ade46"
+    },
+    {
+      "path": "tools/source_asset_importer/scripts/package_source.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "2479b8fdb6692333a433fb23983fba374e915470ab9d6978ff7780872713f613"
+    },
+    {
+      "path": "tools/source_asset_importer/scripts/review_real_assets.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "aef729088daaa13435ba5c66d6bb180a900416e60179b55ac0cf6dff45fdc53b"
+    },
+    {
+      "path": "tools/source_asset_importer/scripts/test_library_dialog_dom.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9c09f9381761c18f7d059306a6a2be570e5515ba38c036a862007684609165bd"
+    },
+    {
+      "path": "tools/source_asset_importer/scripts/test_workbench_browser.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c1496f068b11d5d4629f632c3c2cc4422ea6ca764c6389929957a4c47e6fbc52"
+    },
+    {
+      "path": "tools/source_asset_importer/scripts/test_workbench_dom.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "f5a1221e2e7ba50ffe510c2d1de5ee0357126166cd8c3e68fc49b3edd16d1a79"
+    },
+    {
+      "path": "tools/source_asset_importer/scripts/verify.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "966c0f06a1b571f3a9f9cfe949c2f023492a69d8a9b2314c671132ce7908b034"
+    },
+    {
+      "path": "tools/source_asset_importer/settings.example.json",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "b0a76a9f0e66a0669ec976f2af38de24d39f0d2bd318f843527bd5d471a720fc"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/__init__.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/helpers.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "d9b30f22bbd571b5b0c8c8d43d62339a0bb7ed54ab5b0144be04e5dee2fe8b95"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_baseline.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "b1d7b061de5bc539074c979a2d89cb180b6979869782a2aa53a7fb58621921b2"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_cli.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "ea61932bbc453cf84935c8f9e3e262850798177484704a3089a73e50e10ecdde"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_contract.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "45e793573de5ee61772b627b60b4d5baff79ea85bf831087de05d05823655ef3"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_fastapi_optional.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "c3fad032ddf73087c4ac0e9608e91e26de656509c700e4256d71443fca38861b"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_gui.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "06145ab6bcbf359ba8616478da1d6c00fd592fbed89f15474bc159050794340d"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_hardening.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "d5cb501afd5b9345fd250b5eb915c814b615df365b416772a87623c2bea120b3"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_http_client.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "8ca9c7dc8b2ffd4e932313fafeb753d040a41ae8310c8513faafeb291d556f00"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_library_connection.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "e740b5997fb272027879dda30240cf5c716e7eba1db46ef0021c10a4c62f9e22"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_library_http_patch.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "fb8f24b31e652448adc273ca0c9af1de86ef6cfe57c69ee490a6a6cbc2d9b973"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_library_runtime_patch.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "4514ea4e2dacf287e2567c37b8d872641c6d4fa44fe1b7dab2981b55acda3646"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_patch_workbench.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "fc0cc3a1e337bf51dabbe41d9fb0a57ecd588191754e5e4cfdf291bc7606b58b"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_postgres_optional.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "4929551499c646ed3fac88f3d5c48589e688d4969cb5551a435a6a5353b0b798"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_recovery.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "0daea631a9008bc72bd0425ca3af06b061d7bcb0427db704a002cb562647b38d"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_research.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "d7f98f9a29cda469973ad7560c16f15bf9f5b7b5fe3125c73a2235016fd8297f"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_research_library.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "5f8a76bcee8119c806293c81a8929fd8a393e3d20ffdb1cae2dfc6d097b72680"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_service.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "3aec351caef182d0dae7cc679b15587dc15e8639bd164eb30954edb1b4d37c74"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_workbench.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "cf893145d02e07190aeb97e7ed98bfd47c7700c49624fe304ddcf04a57eebf97"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_workflow.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "963753bee7b8d54355a3571fe3f812908b2cc69026a4073d329702e9f9aa0af6"
+    },
+    {
+      "path": "tools/source_asset_importer/tests/test_workspace.py",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "cb7c718d34dfe64760aa0595a79dab0f070305becd3f7d75f8a6863797c4c153"
+    },
+    {
+      "path": "tools/source_asset_importer/启动单批兼容窗口.cmd",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "58dabedd460eb0bfd5c4c12b12bcfe92ba5416189c163aa6a87e1c30f1118c62"
+    },
+    {
+      "path": "tools/source_asset_importer/启动来源导入.cmd",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "a17ab182ba37096d4efbb154f66e94eae7cd71ca6f44f510b0d445482fa8f5de"
+    },
+    {
+      "path": "web/package.json",
+      "status": "MODIFIED",
+      "base_sha256": "1463a5df95dcb8113db88546a7aa47586fd0bd2581d614df3653a3123e13d7d0",
+      "new_sha256": "a24a22f0c33c79d756cb5ca75491343fe8cf2251fe6d22699bb8c193177ec429"
+    },
+    {
+      "path": "web/public/product/core.js",
+      "status": "MODIFIED",
+      "base_sha256": "4e2da1ce688d83a923ef4ef9ab7c3053f861f93741023ca7cf8dd02411bc3d62",
+      "new_sha256": "bcfaf3fc84b0d5573a4f70d7053d8d14935d61903347947aad59664d0139977a"
+    },
+    {
+      "path": "web/public/product/product.css",
+      "status": "MODIFIED",
+      "base_sha256": "f434cd49efbd5691eed0668f398cb0337d038f674042921d400483fad5f44622",
+      "new_sha256": "c29a5ea9d72c761ff3e86f1b141c9289287946ef08554c67f62f7528e0e161ea"
+    },
+    {
+      "path": "web/public/product/scout.js",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "b653c1956f26c68e54f6411d69a5d0cfaeef568110649afb9e2bdaf7f26bc192"
+    },
+    {
+      "path": "web/public/product/workbench.js",
+      "status": "MODIFIED",
+      "base_sha256": "415903e489b8337619f5c99d10993fbc1cce344750ddcd2e45e3d6cc2c95f157",
+      "new_sha256": "53e5e527d4a9282b1704bde9f164e13c897d0610d069fa8dfcf0523524739217"
+    },
+    {
+      "path": "web/scripts/check-product.mjs",
+      "status": "MODIFIED",
+      "base_sha256": "ec3c9525efcd55283657c8a9ac769c6252f6ad998ec0c64a17b62a66e0d07092",
+      "new_sha256": "cc26b2dbf1ebd9d35870c2b3a60ba97c524d789a709758a496071453fab3b844"
+    },
+    {
+      "path": "web/scripts/test-product-core.mjs",
+      "status": "ADDED",
+      "base_sha256": null,
+      "new_sha256": "9f978d9523933777143188aa9fc323b063fa9162f611a22998e2188ba9e6a6ba"
+    },
+    {
+      "path": "web/server.mjs",
+      "status": "MODIFIED",
+      "base_sha256": "4c9cacc27e45af0083f5c0ed232331d32ade0a734cd788d76382b129a053d79c",
+      "new_sha256": "fcdd7ae10f5e038a89f3b693cc0ac7e13a26753c2376b2980ad4cd8b819c657d"
+    }
+  ],
+  "deletions": []
+}

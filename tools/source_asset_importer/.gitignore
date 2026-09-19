@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+.venv/
+runtime/
+settings.json
+*.db
+*.sqlite3
+*.pem
+.env
+.pytest_cache/
+
+# Local Library retrieval configuration and user assets
+codex-library.settings.json
+library_downloads/
+library_runs/
+
+# Build products and local research workspace
+build/
+dist/
+*.egg-info/
+research_workbench/
+library_research_downloads/

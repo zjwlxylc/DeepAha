@@ -1,0 +1,153 @@
+{
+  "scope": "对指定输入的辅助离线批审，不是人工批准或网页事实核验",
+  "notes": {
+    "src-c5696f99a572632ad4aa": {
+      "use_category": "REFERENCE_ANCHOR",
+      "review_note": "国聘行动的政策通知是项目锚点，不是持续岗位列表；与WB国聘平台建立项目—平台关系，不新增一条同等采集主线。"
+    },
+    "src-ef69d6277587460c0b87": {
+      "use_category": "RELATION_REVIEW",
+      "review_note": "与WB大赛动态候选使用同一个cy.ncss.cn入口。可共用一个经批准的Endpoint，但两套候选键、全部版本和证据都保留，不能只留评分高者。"
+    },
+    "src-08360e4b51e2a192dd8d": {
+      "use_category": "REFERENCE_ANCHOR",
+      "review_note": "“才聚文旅”通知是政策和专题线索；正式岗位应回到明确发布单位，不把一个通知当长期岗位库。"
+    },
+    "src-238f6a500d905968e86c": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "文旅政务公开目录范围很宽；批准前限定青年项目、招聘或扶持栏目，排除日常政务和结果公示。"
+    },
+    "src-2f137cb40234d461478b": {
+      "use_category": "RELATED_ENDPOINT",
+      "review_note": "青年策展属于同一文旅来源网络中的项目/栏目，先审Endpoint关系；职业经历或机构申报条件不能简化为所有本科生可报。"
+    },
+    "src-6cac9190fb8e70c51b33": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "保留年度计划长期来源；与WB通知栏目建上下级关系。既往招募与本年可报名分别核验，不能把项目常设视为报名常开。"
+    },
+    "src-ad29f35edf6d6697c026": {
+      "use_category": "REFERENCE_ANCHOR",
+      "review_note": "“双惠”属于异地求职支持政策锚点；申请入口、城市范围和适用期要另核验，不能当成招聘机会数量。"
+    },
+    "src-d12676f83e9d4a77c6df": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "国家社会实践站适合发现活动网络；具体报名可能在地方或小程序，不能由总门户直接判断全体学生可申请。"
+    },
+    "src-517bb79b3e7d1830fab3": {
+      "use_category": "RELATED_ENDPOINT",
+      "review_note": "电子报属于发现/公告入口，与乐业上海动态岗位区互补；刊发日期不是当前仍开放的证明。"
+    },
+    "src-32ee9145a452128517b1": {
+      "use_category": "DEFER_RECON",
+      "review_note": "当前Seed指向协会总门户，不等于大赛的独立入口；与WB vcsc.org.cn的关系需依据官方链接核对，院校组队规则不能当个人报名。"
+    },
+    "src-8d6eecd181f5519abf09": {
+      "use_category": "TRIAL_CANDIDATE",
+      "review_note": "适合小批量活动发现试点；保留六次版本观察，逐活动核验主办、开放窗口、校内或全国范围，结果新闻不进入报名列表。"
+    },
+    "src-c21a564808b55fb59939": {
+      "use_category": "DEFER_RECON",
+      "review_note": "资料声明ACCESS_LIMITED，先保留来源和障碍；浏览访问/挑战处理未完成前不启用自动采集，更不绕登录或验证码。"
+    },
+    "src-75d179e296dd8ee2194c": {
+      "use_category": "RELATED_ENDPOINT",
+      "review_note": "保留镇海炼化独立机构身份及与中石化集团关系；需检查详情URL是否仍为稳定栏目，不能仅凭路径包含Gone判失效。"
+    },
+    "src-7b7e16f22b99f889c3d5": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "研究生赛事网络可保留；学位层次、赛道、团队限制需要分别读取，不泛化为所有大学生机会。"
+    },
+    "src-baa696c9c560dad23f47": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "科研岗位具有长尾价值，但研究生/博士岗位与本科实习应分开；独立研究所不能仅因同属中科院而与其他所合并。"
+    },
+    "src-16a69694f8c809ce77fc": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "保留独立研究院招聘栏目；按岗位核验学历、身份与地点，专业科研招聘不自动映射为本科项目实践。"
+    },
+    "src-d226b29e3b878a648b31": {
+      "use_category": "DEFER_RECON",
+      "review_note": "当前Seed是集团相关站点总入口，需要确认实际人才栏目、运行机构和公告样例，不能仅凭集团名认为已具备可持续采集入口。"
+    },
+    "src-cef408bf2a9e355a76ab": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "动态招聘可作为后续代表性样本；要复核筛选、详情可见性和签名/访问障碍，不根据首页PUBLIC声明推断全库可读。"
+    },
+    "src-0a35006d252ce291d175": {
+      "use_category": "TRIAL_CANDIDATE",
+      "review_note": "独立研究助理栏目适合来源批准后的静态长尾试点；每条仍需查学历、雇用方式、截止与课题组附件，不把建议等同已批准。"
+    },
+    "src-bdefc3431bf308fa5657": {
+      "use_category": "DEFER_RECON",
+      "review_note": "科技业务管理系统可能面向机构申报且需要登录；先区分公开通知与登录办理，将机构项目和个人青年机会分开。"
+    },
+    "src-6e7b33d07fdd15e83d5e": {
+      "use_category": "TRIAL_CANDIDATE",
+      "review_note": "保留#/employmentTrainee路由，作为动态网页代表性试点候选；与上海电子报不误并，需另外验证岗位当前开放状态。"
+    },
+    "src-3eeacd772b74cdaf9e0c": {
+      "use_category": "RELATION_REVIEW",
+      "review_note": "origin-www子域与WB主域不自动改写/合并；先核验官方重定向和发布责任，再选择稳定入口，保持申报指南历史版本。"
+    },
+    "src-f46bb92f5790a8d3a9cf": {
+      "use_category": "REFERENCE_ANCHOR",
+      "review_note": "单篇国际组织项目文章用于项目参考，不视为完整招聘/资助库；origin-bg主机需正式来源关系证据。"
+    },
+    "src-b7b8ab13690212aff174": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "科技见习计划有潜在实践价值；按实际城市和岗位访问情况限定范围，不能用某轮PUBLIC覆盖之前访问障碍，正式启用须重测。"
+    },
+    "src-a49baf6cf3aee1c0ddf9": {
+      "use_category": "REFERENCE_ANCHOR",
+      "review_note": "人才政策过渡提示应作为版本和例外证据，保留新旧政策适用边界，不直接从提示文案生成用户资格。"
+    },
+    "src-87b2583c3f829ccdd25a": {
+      "use_category": "TRIAL_CANDIDATE",
+      "review_note": "网上招考栏目适合作为宁波公告试点候选；人才网公告、报名系统、甬上乐业承担不同角色，按关系关联而非按城市去重。"
+    },
+    "src-78629139a87f88eb4752": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "城市综合发现源保留；招聘、实习、青年入乡等栏目分别限定范围，追到原单位证据后再进入正式机会。"
+    },
+    "src-8271547fa18c2fc01009": {
+      "use_category": "TRIAL_CANDIDATE",
+      "review_note": "人才申报系统作为机会促成资源代表样本；只看公开政策和指南，不执行登录、申请、代填或获取个人申报信息。"
+    },
+    "src-66bfd88083e7457758b0": {
+      "use_category": "RELATED_ENDPOINT",
+      "review_note": "报名系统属于行动/报名入口，与父公告绑定，不另造一个无边界的岗位采集Source；页面可达不代表所有公告可读。"
+    },
+    "src-50682dba2e2f085dd91c": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "杭州人才会客厅属于城市服务和政策支持；地区、身份、待遇和办理条件按具体项目核验，不计作就业岗位。"
+    },
+    "src-584d7cc4e7514a8ac2be": {
+      "use_category": "REFERENCE_ANCHOR",
+      "review_note": "单篇政府公报政策是参考锚点；实际见习岗位与政策资格分开，公报年份和现行状态不得靠报告标题推定。"
+    },
+    "src-a8a64a035f2d8724bc4f": {
+      "use_category": "DEFER_RECON",
+      "review_note": "团委总入口需补稳定通知栏目及连续学生机会样例；不把一次活动或校内结果新闻夸成成熟长期网络。"
+    },
+    "src-cb78016f2b7a19148d05": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "校内科技创新栏目保留，必须标记院校/学籍限制，区分申报通知、立项公示、获奖新闻。"
+    },
+    "src-e1e70b643b9022d2833d": {
+      "use_category": "REFERENCE_ANCHOR",
+      "review_note": "博士生社会历练试点为特定学历和地区项目锚点；不泛化为本科生都可报名的实践来源。"
+    },
+    "src-9ec466ed44eae16c26a0": {
+      "use_category": "TRIAL_CANDIDATE",
+      "review_note": "适合高职学生机会代表性试点；就业网与学工/团委是不同Endpoint，校内资格、历史活动与当前申报状态需明确。"
+    },
+    "src-acf72a3f928789c6e651": {
+      "use_category": "SCOPED_CANDIDATE",
+      "review_note": "人才服务入口保留；旧政策和服务指南须核对有效版本，不能把历史补贴额度当现行承诺。"
+    },
+    "src-eb6ebb05a2dbe4e3abcc": {
+      "use_category": "REFERENCE_ANCHOR",
+      "review_note": "志愿讲解员单公告保留为低曝光机会样本；当期截止未重新核验，不宣称现在仍招募，也不自动创建长期高频任务。"
+    }
+  }
+}

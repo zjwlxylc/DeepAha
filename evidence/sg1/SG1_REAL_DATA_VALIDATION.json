@@ -1,0 +1,45 @@
+{
+  "source": "user_uploaded_deepaha-data.zip_copy",
+  "original_schema": {
+    "opportunity_roots": 1,
+    "publications": 1,
+    "decisions": 1,
+    "tasks": 1,
+    "catalog_targets": 0
+  },
+  "wma_projection": {
+    "group_units": 58,
+    "position_units": 106,
+    "structural_units_total": 164
+  },
+  "after_sg1_upgrade": {
+    "opportunity_roots": 1,
+    "publications": 1,
+    "decisions": 1,
+    "tasks": 1,
+    "opportunity_units": 164,
+    "catalog_targets": 106,
+    "catalog_target_kind": "POSITION",
+    "catalog_status": "CURRENT"
+  },
+  "legacy_rows_digest_check": "SAME",
+  "wma_object_hash_check": "ALL_MATCH",
+  "backup_verified": true,
+  "backup_sha256": "95bc70fe77ac72df890c7acb9b56ffde3a04a66acb761277902a0f8142dcdee7",
+  "browser_bridge": {
+    "real_api": true,
+    "mocked_business_data": false,
+    "catalog_total": 106,
+    "review_action_targets": 106,
+    "sample_position": {
+      "code": "106",
+      "title": "服务类专业教师",
+      "issuer": "浙江省机电技师学院",
+      "region": "浙江义乌"
+    },
+    "viewports_checked": [360, 390, 430],
+    "horizontal_overflow": false,
+    "page_errors": 0,
+    "native_browser_network": "BLOCKED_BY_ADMINISTRATOR"
+  }
+}

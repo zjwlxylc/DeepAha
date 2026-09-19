@@ -1,0 +1,25 @@
+FF...                                                                    [100%]
+=================================== FAILURES ===================================
+___________________ test_backup_restore_into_empty_directory ___________________
+
+svc = <deepaha.product.service.Product object at 0x7f7d07767380>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-14/test_backup_restore_into_empty0')
+
+    def test_backup_restore_into_empty_directory(svc,tmp_path):
+>       from deepaha.product.backup import create_backup,restore_backup,verify_backup
+E       ModuleNotFoundError: No module named 'deepaha.product.backup'
+
+tests/product/test_operations.py:10: ModuleNotFoundError
+________________________ test_backup_rejects_traversal _________________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-14/test_backup_rejects_traversal0')
+
+    def test_backup_rejects_traversal(tmp_path):
+>       from deepaha.product.backup import verify_backup
+E       ModuleNotFoundError: No module named 'deepaha.product.backup'
+
+tests/product/test_operations.py:29: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/product/test_operations.py::test_backup_restore_into_empty_directory - ModuleNotFoundError: No module named 'deepaha.product.backup'
+FAILED tests/product/test_operations.py::test_backup_rejects_traversal - ModuleNotFoundError: No module named 'deepaha.product.backup'
+2 failed, 3 passed in 2.01s

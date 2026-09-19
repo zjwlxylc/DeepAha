@@ -1,0 +1,59 @@
+EEEEE                                                                    [100%]
+==================================== ERRORS ====================================
+__________ ERROR at setup of test_public_cannot_read_private_or_write __________
+
+svc = <deepaha.product.service.Product object at 0x7f1f6e7201a0>
+
+    @pytest.fixture
+    def client(svc):
+>       from deepaha.product.api import create_app
+E       ModuleNotFoundError: No module named 'deepaha.product.api'
+
+tests/product/test_api.py:7: ModuleNotFoundError
+_______ ERROR at setup of test_authenticated_real_upload_approve_catalog _______
+
+svc = <deepaha.product.service.Product object at 0x7f1f6e640f50>
+
+    @pytest.fixture
+    def client(svc):
+>       from deepaha.product.api import create_app
+E       ModuleNotFoundError: No module named 'deepaha.product.api'
+
+tests/product/test_api.py:7: ModuleNotFoundError
+_________ ERROR at setup of test_csrf_origin_and_extra_input_rejected __________
+
+svc = <deepaha.product.service.Product object at 0x7f1f6e642710>
+
+    @pytest.fixture
+    def client(svc):
+>       from deepaha.product.api import create_app
+E       ModuleNotFoundError: No module named 'deepaha.product.api'
+
+tests/product/test_api.py:7: ModuleNotFoundError
+______________ ERROR at setup of test_no_secrets_in_manage_status ______________
+
+svc = <deepaha.product.service.Product object at 0x7f1f6e7d7100>
+
+    @pytest.fixture
+    def client(svc):
+>       from deepaha.product.api import create_app
+E       ModuleNotFoundError: No module named 'deepaha.product.api'
+
+tests/product/test_api.py:7: ModuleNotFoundError
+____________ ERROR at setup of test_product_html_no_fixture_script _____________
+
+svc = <deepaha.product.service.Product object at 0x7f1f6e5503e0>
+
+    @pytest.fixture
+    def client(svc):
+>       from deepaha.product.api import create_app
+E       ModuleNotFoundError: No module named 'deepaha.product.api'
+
+tests/product/test_api.py:7: ModuleNotFoundError
+=========================== short test summary info ============================
+ERROR tests/product/test_api.py::test_public_cannot_read_private_or_write - ModuleNotFoundError: No module named 'deepaha.product.api'
+ERROR tests/product/test_api.py::test_authenticated_real_upload_approve_catalog - ModuleNotFoundError: No module named 'deepaha.product.api'
+ERROR tests/product/test_api.py::test_csrf_origin_and_extra_input_rejected - ModuleNotFoundError: No module named 'deepaha.product.api'
+ERROR tests/product/test_api.py::test_no_secrets_in_manage_status - ModuleNotFoundError: No module named 'deepaha.product.api'
+ERROR tests/product/test_api.py::test_product_html_no_fixture_script - ModuleNotFoundError: No module named 'deepaha.product.api'
+5 errors in 2.67s

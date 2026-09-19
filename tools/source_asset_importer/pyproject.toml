@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deepaha-source-asset-importer"
+version = "0.3.1"
+description = "Human-confirmed source intelligence import client and reusable service"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+postgres = ["psycopg[binary]>=3.1,<4"]
+server = ["fastapi>=0.110,<1"]
+test-server = ["fastapi>=0.110,<1", "httpx>=0.27,<1"]
+
+[project.scripts]
+deepaha-source-import = "deepaha_importer.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["deepaha_importer*"]
+
+[tool.setuptools.package-data]
+deepaha_importer = ["data/*.json", "web/*.html", "web/*.css", "web/*.js"]

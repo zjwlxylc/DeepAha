@@ -1,0 +1,13 @@
+test_commit_response_failure_recovers_without_second_write (tests.test_recovery.RecoveryTests.test_commit_response_failure_recovers_without_second_write) ... 127.0.0.1 - - [06/Sep/2026 05:26:13] "GET /api/scout-import/v1/capabilities HTTP/1.1" 200 346
+127.0.0.1 - - [06/Sep/2026 05:26:13] "POST /api/scout-import/v1/preview HTTP/1.1" 200 2925
+127.0.0.1 - - [06/Sep/2026 05:26:13] "POST /api/scout-import/v1/commit HTTP/1.1" 503 82
+127.0.0.1 - - [06/Sep/2026 05:26:13] "GET /api/scout-import/v1/batches/by-run/lost-response-demo HTTP/1.1" 200 2741
+127.0.0.1 - - [06/Sep/2026 05:26:13] "GET /api/scout-import/v1/batches/by-run/lost-response-demo HTTP/1.1" 200 2741
+ok
+test_redirect_never_forwards_authorization (tests.test_recovery.RecoveryTests.test_redirect_never_forwards_authorization) ... 127.0.0.1 - - [06/Sep/2026 05:26:13] "GET /api/scout-import/v1/capabilities HTTP/1.1" 302 0
+ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.033s
+
+OK

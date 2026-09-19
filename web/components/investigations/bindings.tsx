@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import Link from "next/link";
 import type { InvestigationBindingTarget, InvestigationTask } from "../../lib/investigations";
 import InvestigationIdentityForm from "./identity-form";
 import InvestigationBindingForm from "./binding-form";
@@ -28,8 +27,7 @@ export default function InvestigationBindings({ task, targets }: { task: Investi
         </li>)}</ol>
       </details> : null}
     </> : <p>尚未确认归属。</p>}
-    {ready && task.workbench && binding ? <p>归属修订需要核对并保留全部岗位，请前往<Link href={`/review/investigations/${task.task_id}#investigation-binding-title`}>修订完整岗位归属</Link>。当前对象可继续登记新岗位，保留已有归属。</p>
-      : ready && targets.length ? <InvestigationBindingForm key={binding?.binding_id ?? task.delivery_hash} task={task} targets={targets} requestKey={randomUUID()} />
+    {ready && targets.length ? <InvestigationBindingForm key={binding?.binding_id ?? task.delivery_hash} task={task} targets={targets} requestKey={randomUUID()} />
       : ready ? <p>目前没有可选择的机会版本。请核对原件，首次登记内部机会身份。</p>
         : <p>请先完成内部材料审核及全部文档证据准备。</p>}
     {ready ? <InvestigationIdentityForm key={`identity:${binding?.binding_id ?? task.delivery_hash}`} task={task} requestKey={randomUUID()} /> : null}

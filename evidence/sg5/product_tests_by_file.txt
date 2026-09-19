@@ -1,0 +1,48 @@
+=== test_actionable_granularity.py ===
+.............                                                            [100%]
+13 passed in 9.59s
+RC=0
+=== test_api.py ===
+......                                                                   [100%]
+6 passed in 6.12s
+RC=0
+=== test_contract.py ===
+.....................                                                    [100%]
+21 passed in 10.30s
+RC=0
+=== test_currentness.py ===
+............                                                             [100%]
+12 passed in 5.39s
+RC=0
+=== test_currentness_api.py ===
+..                                                                       [100%]
+2 passed in 2.06s
+RC=0
+=== test_delivery_quality.py ===
+.............                                                            [100%]
+13 passed in 8.60s
+RC=0
+=== test_eligibility.py ===
+.................                                                        [100%]
+17 passed in 7.35s
+RC=0
+=== test_multitype_opportunity_core.py ===
+..........                                                               [100%]
+10 passed in 4.62s
+RC=0
+=== test_operations.py ===
+.........                                                                [100%]
+9 passed in 3.57s
+RC=0
+=== test_personal_value.py ===
+............                                                             [100%]
+12 passed in 6.44s
+RC=0
+=== test_scout_import.py ===
+.............................                                            [100%]
+29 passed in 13.60s
+RC=0
+=== test_worker.py ===
+...                                                                      [100%]
+3 passed in 1.70s
+RC=0

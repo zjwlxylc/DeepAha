@@ -1,0 +1,14 @@
+{
+  "mode": "OFFLINE_DOM_WITH_APPLICATION_METHODS; FETCH_DOWNLOAD_STORAGE_STUBBED",
+  "direct_browser_http": "ENVIRONMENT_BLOCKED_BY_ADMINISTRATOR",
+  "real_asset_selection": 31,
+  "candidate_groups": 89,
+  "save_and_undo": "PASS",
+  "evidence_and_version_tabs": "PASS",
+  "mobile_390_no_horizontal_overflow": "PASS",
+  "mobile_back_to_list": "PASS",
+  "export_all_member_hashes": "PASS",
+  "export_button": "PASS_APPLICATION; BROWSER_DOWNLOAD_STUBBED",
+  "library_dialog": "PASS_UI_ONLY_NO_LIVE_CODEX_CALL",
+  "page_errors": []
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "deepaha.scout-feedback.v1",
+  "issuer": "DEMO_ONLY_NOT_A_SYSTEM_RECEIPT",
+  "instance_id": "example-instance",
+  "environment": "DEMO",
+  "feedback_id": "example-no-events",
+  "bundle_id": "0000000000000000000000000000000000000000000000000000000000000000",
+  "observed_at": "2026-09-13T00:00:00+08:00",
+  "events": [],
+  "notice": "格式示例，没有声称任何候选已被接收或来源已批准，不能作为系统反馈。"
+}

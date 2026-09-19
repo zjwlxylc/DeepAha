@@ -1,0 +1,10 @@
+{
+  "native_browser_http": "BLOCKED_BY_ADMINISTRATOR",
+  "error": "ERR_BLOCKED_BY_ADMINISTRATOR",
+  "sg3_browser_completion_claim": false,
+  "substitute_evidence": [
+    "web/scripts/check-product.mjs",
+    "evidence/sg3/api_acceptance.json"
+  ],
+  "final_visual_acceptance": "USER_WINDOWS_LOCAL_RUN"
+}

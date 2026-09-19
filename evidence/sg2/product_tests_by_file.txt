@@ -1,0 +1,13 @@
+Verified with clean process exits on 2026-09-18:
+- test_actionable_granularity.py: 13 passed
+- test_api.py: 5 passed
+- test_contract.py: 21 passed
+- test_delivery_quality.py: 13 passed
+- test_multitype_opportunity_core.py: 10 passed
+- test_operations.py: 9 passed
+- test_scout_import.py: 29 passed
+- test_worker.py: 3 passed
+TOTAL: 103 passed, 0 failed
+
+Aggregate same-process run also printed: 103 passed in 35.72s / 36.23s.
+In this container, the aggregate command can remain attached after pytest prints its terminal summary; no product assertion failed. Per-file runs above exit 0 and are the packaging verification gate.

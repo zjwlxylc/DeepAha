@@ -231,7 +231,7 @@ class ContentValidator:
                     huge_tree=False,
                 )
                 etree.fromstring(body, parser=parser)
-        except json.JSONDecodeError, UnicodeDecodeError:
+        except (json.JSONDecodeError, UnicodeDecodeError):
             return "MALFORMED_JSON"
         except etree.XMLSyntaxError:
             return "MALFORMED_XML"
@@ -243,7 +243,7 @@ class ContentValidator:
             return 0
         try:
             tree = html.fromstring(content)
-        except ValueError, TypeError:
+        except (ValueError, TypeError):
             return 0
         matched = 0
         for selector in selectors:

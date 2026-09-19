@@ -254,16 +254,9 @@ def describe_rule_preparation(
     }
 
 
-def describe_rules(
-    session: Session,
-    task_id: UUID,
-    binding_id: UUID,
-    *,
-    scoped: bool = False,
-    entity_id: str | None = None,
-) -> dict[str, Any]:
+def describe_rules(session: Session, task_id: UUID, binding_id: UUID) -> dict[str, Any]:
     current, history = [], []
-    statement = (
+    records = session.execute(
         select(InvestigationRulePreparation, InvestigationFactPreparation, VersionedVerifiedFactSet)
         .join(
             InvestigationFactPreparation,
@@ -281,9 +274,6 @@ def describe_rules(
             InvestigationRulePreparation.rule_preparation_id,
         )
     )
-    if scoped:
-        statement = statement.where(InvestigationRulePreparation.entity_id == entity_id)
-    records = session.execute(statement)
     for prep, facts, fact_set in records:
         view = describe_rule_preparation(session, prep)
         if (

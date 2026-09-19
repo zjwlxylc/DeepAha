@@ -1,0 +1,55 @@
+{
+  "inputs": {
+    "DeepAha_Rebuild_3.0.0-rc1.zip": {
+      "sha256": "811984de0dc1bd41ee3ef6c8603b9331d0c5990e2e93cc3baf7f7c7904ffae2d",
+      "size_bytes": 26148599
+    },
+    "DeepAha_Source_Asset_Importer_v0.3.1.zip": {
+      "sha256": "1af93ac39ffeaa0311c8cd0cc22b606fa879b6a9ad12f1802f215db2056413d8",
+      "size_bytes": 2535924
+    },
+    "WB-scout.zip": {
+      "sha256": "087dae925b1919f8db731b65afa7de81644aaa34fc72b7fb1513033206244191",
+      "size_bytes": 17032873
+    }
+  },
+  "pure_module_reuse": {
+    "contract.py": {
+      "source": "tools/source_asset_importer/deepaha_importer/contract.py",
+      "target": "backend/src/deepaha/product/scout_research/contract.py",
+      "sha256": "420d1edfcf4e20d7cf99261a04914cd47d93c9a53d58d33641752f52ae6f582f",
+      "byte_identical": true
+    },
+    "errors.py": {
+      "source": "tools/source_asset_importer/deepaha_importer/errors.py",
+      "target": "backend/src/deepaha/product/scout_research/errors.py",
+      "sha256": "01c9f009174302dfcc7bbe22ab50aa54376fd2340270873a6de397c10f282462",
+      "byte_identical": true
+    },
+    "research/ingest.py": {
+      "source": "tools/source_asset_importer/deepaha_importer/research/ingest.py",
+      "target": "backend/src/deepaha/product/scout_research/research/ingest.py",
+      "sha256": "df88967cbae8d9404f5d7d0429d5ce4b651fe784b4d5f8d6a951d9fa434f48b4",
+      "byte_identical": true
+    },
+    "research/normalize.py": {
+      "source": "tools/source_asset_importer/deepaha_importer/research/normalize.py",
+      "target": "backend/src/deepaha/product/scout_research/research/normalize.py",
+      "sha256": "a65d0197eed82bfc19bbf079d7cca218d1a52bfed3bc5b38580520ecd7f7ddff",
+      "byte_identical": true
+    },
+    "research/audit.py": {
+      "source": "tools/source_asset_importer/deepaha_importer/research/audit.py",
+      "target": "backend/src/deepaha/product/scout_research/research/audit.py",
+      "sha256": "52019cd7b04d2a357118d75325e1a1470a16f9302aabb94551f4342819a10e83",
+      "byte_identical": true
+    }
+  },
+  "runtime": {
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41"
+  },
+  "external_tool_version": "0.3.1",
+  "tool_modified": false,
+  "remote_repository_modified": false
+}

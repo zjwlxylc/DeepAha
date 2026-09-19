@@ -1,0 +1,16 @@
+{
+  "mode": "OFFLINE_DOM_FETCH_DOWNLOAD_STORAGE_STUBBED",
+  "http_browser": "ADMINISTRATOR_BLOCKED_NOT_BYPASSED",
+  "cloud_library": "NOT_TESTED",
+  "initial_session": "ISOLATED_FIXTURE_RECONSTRUCTED_FROM_USER_EXPORT",
+  "r58_restored_complete_state": "PASS",
+  "all_52_decisions_accessible": "PASS",
+  "modal_cancel_focus_and_click": "PASS_DESKTOP_FOCUS_MOBILE_CLICK",
+  "duplicate_click_guard": "PASS",
+  "diagnostic_download_requested": true,
+  "real_environment_missing_cli_handled": "PASS",
+  "mobile_dialog_no_horizontal_overflow": "PASS",
+  "manual_file_input_preserved": "PASS",
+  "original_review_decisions_unchanged": "PASS",
+  "page_errors": []
+}

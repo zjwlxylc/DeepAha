@@ -1,0 +1,45 @@
+{
+  "health": {
+    "live": true,
+    "version": "3.7.1-rc1"
+  },
+  "catalog_before": 1,
+  "catalog_after": 1,
+  "twins": {
+    "created": 100,
+    "unchanged": 0,
+    "total": 100,
+    "synthetic_only": true,
+    "version": 2
+  },
+  "gold_metrics": {
+    "pairs": 100,
+    "twins": 100,
+    "targets": 1,
+    "eligibility": {
+      "UNCERTAIN": 100
+    },
+    "priority_bands": {
+      "NOT_RECOMMENDED": 81,
+      "HIGH": 8,
+      "RELEVANT": 11
+    },
+    "qualification_gates": {
+      "NORMAL": 100
+    },
+    "unsafe_recommendations": 0,
+    "unsafe_examples": [],
+    "truth_pairs": 0,
+    "truth_accuracy": null,
+    "truth_origin_pairs": {},
+    "real_gold_pairs": 0,
+    "engineering_or_operator_pairs": 0,
+    "recommendation_truth_pairs": 0,
+    "recommendation_accuracy": null,
+    "recommendation_truth_origin_pairs": {},
+    "real_recommendation_gold_pairs": 0,
+    "llm_used": false,
+    "production_mutated": false
+  },
+  "founding_user": "JOIN_LEAVE_PASS"
+}

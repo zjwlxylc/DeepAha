@@ -18,7 +18,10 @@ from pathlib import PurePosixPath
 from typing import Any
 from urllib.parse import urlsplit
 
-import httpx2
+try:
+    import httpx2
+except ImportError:
+    import httpx as httpx2  # Standard HTTPX exposes the same transport interface.
 from pydantic import SecretStr
 
 from deepaha.investigations.published import (

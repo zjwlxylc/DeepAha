@@ -1,0 +1,18 @@
+{
+  "source_archive": "DeepAha-main.zip",
+  "source_commit": "d0918ec1245264e271f42a18d54c0fb903000c00",
+  "github_observed_main": "8f0c4a5d252d785444695930610ada4f8b8a0cb0",
+  "github_archive_download": "BLOCKED_CONTAINER_NETWORK",
+  "archive_sha256": "9366410a3aa159fdf615a0e639485411137f2eb2d8b2b14888d207ba3de35d61",
+  "plan_sha256": "4f5cd384e2561fcd0405a69159c79b6949c198c0eab584dd90e5ae8ee1b07866",
+  "dependencies_observed": {
+    "fastapi": "0.128.2",
+    "sqlalchemy": "2.0.50",
+    "pydantic": "2.13.4",
+    "uvicorn": "0.48.0",
+    "httpx": "0.28.1",
+    "alembic": "1.18.4",
+    "pytest": "9.0.2",
+    "playwright": "1.57.0"
+  }
+}

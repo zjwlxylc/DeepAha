@@ -1,0 +1,35 @@
+# Optional local server-parity simulation. It does not replace the normal Windows SQLite launcher.
+name: deepaha-sg8a-dev
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-deepaha_dev}
+      POSTGRES_USER: ${POSTGRES_USER:-deepaha_dev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.sg8a-dev}
+    volumes:
+      - sg8a_pg:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  api:
+    build:
+      context: ../..
+      dockerfile: infra/product/Dockerfile
+    env_file: .env.sg8a-dev
+    environment:
+      DEEPAHA_DATA_DIR: /var/lib/deepaha
+      # Docker parity is bound to loopback HTTP. .env.sg8a-dev keeps mode=local
+      # while still exercising PostgreSQL and the production container image.
+    volumes:
+      - sg8a_objects:/var/lib/deepaha
+    ports:
+      - "127.0.0.1:18000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  sg8a_pg:
+  sg8a_objects:

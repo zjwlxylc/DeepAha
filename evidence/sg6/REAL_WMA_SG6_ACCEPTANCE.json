@@ -1,0 +1,80 @@
+{
+  "source": "COPY_OF_USER_MULTI_WMA_DATA",
+  "wma_called": false,
+  "sg5_1_upgrade": {
+    "already_current": false,
+    "time_projection_version": "1",
+    "backup": "/mnt/data/sg6_final_realdata/backups/before-sg5-1-for-sg6-acceptance.zip",
+    "backup_verified": true,
+    "targets_refreshed": 328,
+    "catalog_targets": 328,
+    "data_modified": true
+  },
+  "sg6_upgrade": {
+    "already_current": false,
+    "action_loop_schema_version": "1",
+    "backup": "/mnt/data/sg6_final_realdata/backups/before-sg6-acceptance.zip",
+    "backup_verified": true,
+    "existing_rows_preserved": true,
+    "migrated_action_events": 0,
+    "migrated_feedback_candidates": 0,
+    "data_modified": true
+  },
+  "sg6_second_upgrade": {
+    "already_current": true,
+    "action_loop_schema_version": "1",
+    "data_modified": false,
+    "action_events": 0,
+    "feedback_candidates": 0
+  },
+  "preexisting_tables_and_objects_unchanged_by_sg6": true,
+  "current_targets": 328,
+  "target": {
+    "id": "unit_01a0b45c18f3778b9ad21919a44aff1d",
+    "title": "河北省行唐县分公司-金融柜员、理财经理岗",
+    "safe_deadline": "2026-10-31"
+  },
+  "automatic_deadline_schedules_created": 3,
+  "action_history_states": [
+    "SAVED",
+    "PREPARING"
+  ],
+  "outcome_action_status": "WAITING",
+  "eligibility_before_and_after_feedback": "UNCERTAIN",
+  "feedback_candidate": {
+    "id": "01a0b534-d252-7fcb-9a10-7a665e4ab6be",
+    "target_id": "unit_01a0b45c18f3778b9ad21919a44aff1d",
+    "kind": "OUTCOME",
+    "state": "CANDIDATE",
+    "opportunity_type": "PUBLIC_INSTITUTION_JOB",
+    "previously_known": false,
+    "useful": true,
+    "action_reason": "准备申请",
+    "outcome": "INTERVIEW",
+    "action_status": "WAITING",
+    "created_at": "2026-09-18T15:48:52.946419"
+  },
+  "weekly_digest": {
+    "period_key": "2026-W38",
+    "action_summary": {
+      "SAVED": 0,
+      "PREPARING": 0,
+      "APPLIED": 0,
+      "WAITING": 1,
+      "COMPLETED": 0,
+      "DISMISSED": 0
+    },
+    "due_soon_count": 0,
+    "change_count": 0,
+    "new_opportunity_count": 3
+  },
+  "weekly_scheduler_created_first": 2,
+  "weekly_scheduler_created_second": 0,
+  "periodic_recheck_tasks_created": 1,
+  "periodic_recheck_source": "宁波求职补贴",
+  "personal_export_timeline_events": 3,
+  "objects_digest": {
+    "files": 252,
+    "sha256": "99cc6b6532a3cc607a374866097020181968def6893097e358b8e8b4ef104030"
+  }
+}

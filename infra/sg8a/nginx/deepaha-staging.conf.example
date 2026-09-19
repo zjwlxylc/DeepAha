@@ -1,0 +1,23 @@
+# staging.deepaha.com is deliberately protected by HTTP Basic Auth in addition
+# to the application's own login. Create /etc/nginx/.htpasswd-deepaha-staging.
+server {
+    listen 443 ssl http2;
+    server_name staging.deepaha.com;
+    ssl_certificate /etc/letsencrypt/live/staging.deepaha.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/staging.deepaha.com/privkey.pem;
+    server_tokens off;
+    auth_basic "DeepAha staging";
+    auth_basic_user_file /etc/nginx/.htpasswd-deepaha-staging;
+    client_max_body_size 101m;
+    location / {
+        proxy_pass http://127.0.0.1:8100;
+        include /etc/nginx/proxy_params;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_read_timeout 180s;
+    }
+}
+server {
+    listen 80;
+    server_name staging.deepaha.com;
+    return 301 https://$host$request_uri;
+}

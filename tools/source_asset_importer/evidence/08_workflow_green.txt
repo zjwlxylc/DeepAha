@@ -1,0 +1,13 @@
+test_cancel_does_not_submit (tests.test_workflow.WorkflowTests.test_cancel_does_not_submit) ... ok
+test_demo_receipt_marked_nonproduction (tests.test_workflow.WorkflowTests.test_demo_receipt_marked_nonproduction) ... ok
+test_input_changes_invalidate_confirm (tests.test_workflow.WorkflowTests.test_input_changes_invalidate_confirm) ... ok
+test_new_file_invalidates_preview (tests.test_workflow.WorkflowTests.test_new_file_invalidates_preview) ... ok
+test_no_token_written_into_pending_or_receipts (tests.test_workflow.WorkflowTests.test_no_token_written_into_pending_or_receipts) ... ok
+test_preview_then_confirm_receipt (tests.test_workflow.WorkflowTests.test_preview_then_confirm_receipt) ... ok
+test_recover_after_restart (tests.test_workflow.WorkflowTests.test_recover_after_restart) ... ok
+test_saved_receipt_is_idempotent_and_never_overwrites (tests.test_workflow.WorkflowTests.test_saved_receipt_is_idempotent_and_never_overwrites) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.064s
+
+OK

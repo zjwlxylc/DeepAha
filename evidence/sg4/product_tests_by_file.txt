@@ -1,0 +1,18 @@
+SG4 final product test evidence — each file executed in a fresh pytest process on the final code tree.
+
+test_actionable_granularity.py: 13 passed, exit 0
+test_api.py: 5 passed, exit 0
+test_contract.py: 21 passed, exit 0
+test_currentness.py: 12 passed, exit 0
+test_currentness_api.py: 2 passed, exit 0
+test_delivery_quality.py: 13 passed, exit 0
+test_eligibility.py: 17 passed, exit 0
+test_multitype_opportunity_core.py: 10 passed, exit 0
+test_operations.py: 9 passed, exit 0
+test_scout_import.py: 29 passed, exit 0
+test_worker.py: 3 passed, exit 0
+
+TOTAL: 134 passed, 0 failed.
+Collection cross-check: 134 tests collected.
+
+Note: one attempt to orchestrate all fresh processes inside a single long tool call hit the tool execution timeout. No individual file failure was observed; every file listed above was then executed independently and returned exit 0.

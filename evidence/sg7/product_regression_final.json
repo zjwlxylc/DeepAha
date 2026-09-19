@@ -1,0 +1,190 @@
+{
+  "method": "each test file executed in its own pytest process to avoid the known cross-file long-process exit issue",
+  "files": 26,
+  "tests": 216,
+  "failed_files": 0,
+  "results": [
+    {
+      "file": "test_action_loop.py",
+      "tests": 11,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "...........                                                              [100%]"
+    },
+    {
+      "file": "test_action_loop_api.py",
+      "tests": 1,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ".                                                                        [100%]"
+    },
+    {
+      "file": "test_actionable_granularity.py",
+      "tests": 13,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ".............                                                            [100%]"
+    },
+    {
+      "file": "test_api.py",
+      "tests": 6,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "......                                                                   [100%]"
+    },
+    {
+      "file": "test_contract.py",
+      "tests": 21,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ".....................                                                    [100%]"
+    },
+    {
+      "file": "test_currentness.py",
+      "tests": 12,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "............                                                             [100%]"
+    },
+    {
+      "file": "test_currentness_api.py",
+      "tests": 2,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "..                                                                       [100%]"
+    },
+    {
+      "file": "test_delivery_quality.py",
+      "tests": 13,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ".............                                                            [100%]"
+    },
+    {
+      "file": "test_eligibility.py",
+      "tests": 17,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ".................                                                        [100%]"
+    },
+    {
+      "file": "test_milestones_management.py",
+      "tests": 12,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "............                                                             [100%]"
+    },
+    {
+      "file": "test_multitype_opportunity_core.py",
+      "tests": 10,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "..........                                                               [100%]"
+    },
+    {
+      "file": "test_operations.py",
+      "tests": 9,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ".........                                                                [100%]"
+    },
+    {
+      "file": "test_personal_value.py",
+      "tests": 13,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ".............                                                            [100%]"
+    },
+    {
+      "file": "test_qualification_compiler.py",
+      "tests": 19,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "...................                                                      [100%]"
+    },
+    {
+      "file": "test_scout_import.py",
+      "tests": 29,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ".............................                                            [100%]"
+    },
+    {
+      "file": "test_sg5_1_frontend_contract.py",
+      "tests": 2,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "..                                                                       [100%]"
+    },
+    {
+      "file": "test_sg6_2_frontend_contract.py",
+      "tests": 3,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "...                                                                      [100%]"
+    },
+    {
+      "file": "test_sg6_2_upgrade.py",
+      "tests": 3,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "...                                                                      [100%]"
+    },
+    {
+      "file": "test_sg6_frontend_contract.py",
+      "tests": 2,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "..                                                                       [100%]"
+    },
+    {
+      "file": "test_sg6_upgrade.py",
+      "tests": 1,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ".                                                                        [100%]"
+    },
+    {
+      "file": "test_sg7_api.py",
+      "tests": 2,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "..                                                                       [100%]"
+    },
+    {
+      "file": "test_sg7_founding_users.py",
+      "tests": 3,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "...                                                                      [100%]"
+    },
+    {
+      "file": "test_sg7_frontend_contract.py",
+      "tests": 2,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "..                                                                       [100%]"
+    },
+    {
+      "file": "test_sg7_lab.py",
+      "tests": 5,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ".....                                                                    [100%]"
+    },
+    {
+      "file": "test_sg7_upgrade.py",
+      "tests": 2,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "..                                                                       [100%]"
+    },
+    {
+      "file": "test_worker.py",
+      "tests": 3,
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "...                                                                      [100%]"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "native_browser_acceptance": "BLOCKED_BY_ENVIRONMENT",
+  "error": "ERR_BLOCKED_BY_ADMINISTRATOR",
+  "stage": "page.goto before application HTTP bridge could satisfy navigation",
+  "production_code_failure": false,
+  "claim": "No native Chromium UI acceptance is claimed in this environment; Windows local manual acceptance remains required."
+}

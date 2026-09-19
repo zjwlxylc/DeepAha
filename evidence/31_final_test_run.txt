@@ -1,0 +1,8 @@
+Scope: current product + actually reused local storage/WMA modules only.
+Old-test compatibility alias: httpx2 -> installed httpx 0.28.1; no live WMA.
+........................................................................ [ 79%]
+..................s                                                      [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/investigations/test_wma_published.py:18: could not import 'cloud_agent_sdk': No module named 'cloud_agent_sdk'
+SKIPPED [1] tests/investigations/test_wma.py:457: could not import 'cloud_agent_sdk': No module named 'cloud_agent_sdk'
+90 passed, 2 skipped in 20.90s

@@ -1,0 +1,4 @@
+SG2 current product module compile check:
+python -m compileall -q backend/src/deepaha/product => PASS
+
+Full backend/src compileall is NOT a SG2 completion gate and does not pass in this inherited archive because preserved legacy modules outside deepaha.product contain pre-existing Python-2-style multi-exception syntax. SG2 did not modify or reactivate those modules. Current product tests import and validate the supported deepaha.product path.

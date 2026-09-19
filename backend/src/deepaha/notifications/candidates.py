@@ -106,7 +106,7 @@ def _deadline_evidence_id(version: OpportunityVersion) -> UUID | None:
         return None
     try:
         return UUID(str(matches[0].get("evidence_ref_id")))
-    except TypeError, ValueError:
+    except (TypeError, ValueError):
         return None
 
 

@@ -1,0 +1,3 @@
+tests/product/test_worker.py::test_source_pause_stops_new_dispatch PASSED [100%]
+
+============================= 93 passed in 49.67s ==============================

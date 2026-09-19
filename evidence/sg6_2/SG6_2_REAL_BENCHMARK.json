@@ -1,0 +1,240 @@
+{
+  "complete": {
+    "total": 328,
+    "status": {
+      "UNCERTAIN": 185,
+      "INELIGIBLE": 139,
+      "LIKELY_ELIGIBLE": 4
+    },
+    "coverage": {
+      "PARTIAL": 328
+    },
+    "risk": {
+      "NORMAL": 328
+    },
+    "zero_requirements": 0,
+    "evidence": {
+      "LOCATED": 1543,
+      "UNLOCATED": 278
+    },
+    "condition_types": {
+      "FRESH_GRADUATE_REQUIRED": 90,
+      "BIRTH_DATE_MIN": 115,
+      "EDUCATION_MIN": 300,
+      "DEGREE_MIN": 109,
+      "MAJOR_CODE_SET": 66,
+      "UNSUPPORTED_HARD_CONDITION": 88,
+      "NATIONALITY": 106,
+      "GRADUATION_YEAR_SET": 294,
+      "MAJOR_TEXT_REQUIREMENT": 370,
+      "EXPERIENCE_MIN_YEARS": 22,
+      "CERTIFICATE_REQUIRED": 2,
+      "TITLE_REQUIRED": 2,
+      "EXPERIENCE_REQUIREMENT": 2,
+      "TEAM_SIZE_MAX": 35,
+      "APPLICATION_LIMIT": 63,
+      "PARTICIPANT_SCOPE": 28,
+      "HARDSHIP_CATEGORY": 7,
+      "HUKOU_REGION": 15,
+      "EMPLOYMENT_STATUS": 7,
+      "BIRTH_DATE_BY_EDUCATION": 100
+    },
+    "conflicts": {
+      "MAJOR_CODE_SET": 37,
+      "EXPERIENCE_MIN_YEARS": 2,
+      "GRADUATION_YEAR_SET": 100
+    },
+    "unresolved_count": 704
+  },
+  "actual_like": {
+    "total": 328,
+    "status": {
+      "INELIGIBLE": 199,
+      "UNCERTAIN": 129
+    },
+    "coverage": {
+      "PARTIAL": 328
+    },
+    "risk": {
+      "NORMAL": 228,
+      "HIGH": 100
+    },
+    "zero_requirements": 0,
+    "evidence": {
+      "LOCATED": 1543,
+      "UNLOCATED": 278
+    },
+    "condition_types": {
+      "FRESH_GRADUATE_REQUIRED": 90,
+      "BIRTH_DATE_MIN": 115,
+      "EDUCATION_MIN": 300,
+      "DEGREE_MIN": 109,
+      "MAJOR_CODE_SET": 66,
+      "UNSUPPORTED_HARD_CONDITION": 88,
+      "NATIONALITY": 106,
+      "GRADUATION_YEAR_SET": 294,
+      "MAJOR_TEXT_REQUIREMENT": 370,
+      "EXPERIENCE_MIN_YEARS": 22,
+      "CERTIFICATE_REQUIRED": 2,
+      "TITLE_REQUIRED": 2,
+      "EXPERIENCE_REQUIREMENT": 2,
+      "TEAM_SIZE_MAX": 35,
+      "APPLICATION_LIMIT": 63,
+      "PARTICIPANT_SCOPE": 28,
+      "HARDSHIP_CATEGORY": 7,
+      "HUKOU_REGION": 15,
+      "EMPLOYMENT_STATUS": 7,
+      "BIRTH_DATE_BY_EDUCATION": 100
+    },
+    "conflicts": {
+      "EDUCATION_MIN": 199
+    },
+    "unresolved_count": 704
+  },
+  "recommendations": {
+    "featured": [],
+    "items": [
+      {
+        "id": "unit_01a0b4b2084b787ea5ce9b8cdbf3a342",
+        "title": "方正分局（公司）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084c72c9b971f8eacd094b02",
+        "title": "巴彦分局（公司）专卖稽查员",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084c755fb0734de7b78e72f5",
+        "title": "延寿分局（公司）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084c7da4b431c857d17431a0",
+        "title": "延寿分局（公司）专卖稽查员",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084d716c95e6c47797adae9c",
+        "title": "依兰分局（公司）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084d746c8fb1ed853fb62601",
+        "title": "依兰分局（公司）专卖稽查员",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084d7d0d91b769f1395b1be4",
+        "title": "木兰分局（公司）专卖稽查员",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084d7da29755651884ae10e6",
+        "title": "木兰分局（公司）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084e718fb5abf299757e05b6",
+        "title": "昂昂溪分局（营销部）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084e7e8e9c8ea45c285b437e",
+        "title": "梅里斯分局（营销部）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084f747eb200307aec806a93",
+        "title": "讷河分局（公司）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084f757289aa825f8c2e9629",
+        "title": "龙江分局（公司）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2084f7e5bb36b57df59cdf0cd",
+        "title": "泰来分局（公司）专卖稽查员",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b20850700387ca8288fdf04553",
+        "title": "富裕分局（公司）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b20850705fa3fd8daf7ed90117",
+        "title": "甘南分局（公司）专卖稽查员",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b208507ba791950415665f1a17",
+        "title": "富裕分局（公司）专卖稽查员",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b208517794999fb785476b816a",
+        "title": "克山分局（公司）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b2085177da96ba17483f8349d4",
+        "title": "依安分局（公司）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b208517827821fb935c104c6f0",
+        "title": "克东分局（公司）客户经理",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      },
+      {
+        "id": "unit_01a0b4b20852793c986346d5a4d5cd69",
+        "title": "拜泉分局（公司）专卖稽查员",
+        "eligibility_status": "UNCERTAIN",
+        "qualification_gate": "HOLD_FOR_CONFIRMATION",
+        "priority_band": "EXPLORE"
+      }
+    ],
+    "excluded_ineligible": 37
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "source": "copy of user-uploaded WMA data; no source database or source objects modified",
+  "targets": 328,
+  "roots": 6,
+  "safe_deadlines": 282,
+  "time_states": {
+    "PARTIAL": 46,
+    "READY": 282
+  },
+  "action_states": {
+    "CLOSED": 214,
+    "OPEN": 68,
+    "UNKNOWN": 46
+  },
+  "authoritative_tables": {
+    "product_opportunity_identity": {
+      "rows_before": 6,
+      "rows_after": 6,
+      "unchanged": true,
+      "sha256_before": "6a73e192350c2ebe65cc02096cec176b3d4690592e0557665bb03f7011f55d56",
+      "sha256_after": "6a73e192350c2ebe65cc02096cec176b3d4690592e0557665bb03f7011f55d56"
+    },
+    "product_opportunity_units": {
+      "rows_before": 425,
+      "rows_after": 425,
+      "unchanged": true,
+      "sha256_before": "e2f914e892c79cc77968bf5ba81daa0d662052b3865b3f9dfd275d4ff7ad49f4",
+      "sha256_after": "e2f914e892c79cc77968bf5ba81daa0d662052b3865b3f9dfd275d4ff7ad49f4"
+    },
+    "product_overview_decisions": {
+      "rows_before": 6,
+      "rows_after": 6,
+      "unchanged": true,
+      "sha256_before": "137c22b9cdb0393a670200dbc72a10d40922ac36f5d388fa7552a42d0e2ae6e3",
+      "sha256_after": "137c22b9cdb0393a670200dbc72a10d40922ac36f5d388fa7552a42d0e2ae6e3"
+    },
+    "product_overview_publications": {
+      "rows_before": 6,
+      "rows_after": 6,
+      "unchanged": true,
+      "sha256_before": "9773d2c76364412062597b2ff4cc673366b81cd3311d20b6fb4dda0a7c20c631",
+      "sha256_after": "9773d2c76364412062597b2ff4cc673366b81cd3311d20b6fb4dda0a7c20c631"
+    },
+    "product_overview_revisions": {
+      "rows_before": 6,
+      "rows_after": 6,
+      "unchanged": true,
+      "sha256_before": "789ed8fb16d7e0b1b9bf07b96de43c12cf213aeac4ab38e0ba46a24ab14536a3",
+      "sha256_after": "789ed8fb16d7e0b1b9bf07b96de43c12cf213aeac4ab38e0ba46a24ab14536a3"
+    },
+    "product_result_snapshots": {
+      "rows_before": 7,
+      "rows_after": 7,
+      "unchanged": true,
+      "sha256_before": "adacf4534cd9287d3e8ffae5d8beb46edd55d01ba74dde6b45b9ff1613803241",
+      "sha256_after": "adacf4534cd9287d3e8ffae5d8beb46edd55d01ba74dde6b45b9ff1613803241"
+    },
+    "product_tasks": {
+      "rows_before": 9,
+      "rows_after": 9,
+      "unchanged": true,
+      "sha256_before": "dd120327b292258ab57d9c30aef27e3c4e7da210d485b17c34bccb9026262921",
+      "sha256_after": "dd120327b292258ab57d9c30aef27e3c4e7da210d485b17c34bccb9026262921"
+    }
+  },
+  "objects": {
+    "file_count_before": 252,
+    "file_count_after": 252,
+    "unchanged": true,
+    "aggregate_before": "d01387abf4b99eeb8c04217bbeddf2854b39f50f00f6ff79d191cdba23dc0787",
+    "aggregate_after": "d01387abf4b99eeb8c04217bbeddf2854b39f50f00f6ff79d191cdba23dc0787"
+  },
+  "second_upgrade": {
+    "already_current": true,
+    "data_modified": false
+  },
+  "interpretation": "282/328 targets gained a safe application deadline; 46 remain non-computable because evidence/currentness does not safely support a primary deadline. No unlocated date string was promoted merely because it looked like a date."
+}

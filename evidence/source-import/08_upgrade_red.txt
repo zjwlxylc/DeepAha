@@ -1,0 +1,14 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________ test_additive_upgrade_keeps_accounts_and_original_rows ____________
+
+svc = <deepaha.product.service.Product object at 0x7f2d42944590>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_additive_upgrade_keeps_ac0')
+
+    def test_additive_upgrade_keeps_accounts_and_original_rows(svc,tmp_path):
+>       from deepaha.product.upgrade import upgrade_source_intake
+E       ModuleNotFoundError: No module named 'deepaha.product.upgrade'
+
+backend/tests/product/test_scout_import.py:308: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_scout_import.py::test_additive_upgrade_keeps_accounts_and_original_rows - ModuleNotFoundError: No module named 'deepaha.product.upgrade'

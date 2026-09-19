@@ -1,0 +1,1 @@
+旧运行入口已退役。请运行 python -m deepaha.product.cli worker

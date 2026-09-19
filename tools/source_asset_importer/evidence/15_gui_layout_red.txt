@@ -1,0 +1,15 @@
+test_action_buttons_visible_at_default_and_minimum_size (tests.test_gui.GUITests.test_action_buttons_visible_at_default_and_minimum_size) ... FAIL
+
+======================================================================
+FAIL: test_action_buttons_visible_at_default_and_minimum_size (tests.test_gui.GUITests.test_action_buttons_visible_at_default_and_minimum_size)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_gui.py", line 63, in test_action_buttons_visible_at_default_and_minimum_size
+    self.assertTrue(button.winfo_ismapped(),geometry)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 is not true : 1100x790
+
+----------------------------------------------------------------------
+Ran 1 test in 0.108s
+
+FAILED (failures=1)

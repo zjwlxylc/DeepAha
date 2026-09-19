@@ -1,0 +1,10 @@
+{
+  "release": "3.8.0-rc1",
+  "portable_migration_algorithm": "PASS_SQLITE_TO_SQLITE_TYPED_COPY_HARNESS",
+  "tables": 41,
+  "rows": 10,
+  "object_files": 2,
+  "credentials_migrated": false,
+  "sessions_revoked": true,
+  "note": "PostgreSQL server is not installed in this container; same typed SQLAlchemy copy path is gated for real PostgreSQL on host."
+}

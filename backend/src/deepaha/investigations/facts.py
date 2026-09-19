@@ -8,7 +8,7 @@ from uuid import UUID, uuid7
 
 from pydantic import ValidationError
 from sqlalchemy import select
-from sqlalchemy.orm import Session, load_only
+from sqlalchemy.orm import Session
 
 from deepaha.contracts.phase9b import (
     EvidenceSupportResult,
@@ -376,27 +376,10 @@ def prepare_facts(
         return describe_facts(session, task_id, binding.binding_id)
 
 
-def describe_facts(
-    session: Session,
-    task_id: UUID,
-    binding_id: UUID | None,
-    *,
-    entity_id: str | None = None,
-    offset: int | None = None,
-) -> dict[str, Any]:
+def describe_facts(session: Session, task_id: UUID, binding_id: UUID | None) -> dict[str, Any]:
     preparations = list(
         session.scalars(
             select(InvestigationFactPreparation)
-            .options(
-                load_only(
-                    InvestigationFactPreparation.preparation_id,
-                    InvestigationFactPreparation.binding_id,
-                    InvestigationFactPreparation.mapping_version,
-                    InvestigationFactPreparation.check_id,
-                    InvestigationFactPreparation.result_hash,
-                    InvestigationFactPreparation.created_at,
-                )
-            )
             .where(InvestigationFactPreparation.task_id == task_id)
             .order_by(
                 InvestigationFactPreparation.created_at.desc(),
@@ -423,24 +406,17 @@ def describe_facts(
     ]
     if current is None:
         return {"current": None, "history": history}
-    action_query = (
-        select(InvestigationFactAction)
-        .where(InvestigationFactAction.preparation_id == current.preparation_id)
-        .order_by(InvestigationFactAction.created_at, InvestigationFactAction.action_id)
+    actions = list(
+        session.scalars(
+            select(InvestigationFactAction)
+            .where(InvestigationFactAction.preparation_id == current.preparation_id)
+            .order_by(InvestigationFactAction.created_at, InvestigationFactAction.action_id)
+        )
     )
-    if offset is not None:
-        action_query = action_query.where(InvestigationFactAction.entity_id == entity_id)
-    actions = list(session.scalars(action_query))
-    source_rows = cast(list[dict[str, Any]], current.result["rows"])
-    targets = cast(list[dict[str, Any]], current.result["targets"])
-    if offset is not None:
-        source_rows = [row for row in source_rows if row["entity_id"] == entity_id]
-        targets = [target for target in targets if target["entity_id"] == entity_id]
-        actions = [action for action in actions if action.entity_id == entity_id]
     decisions = {}
     promotions = {}
     active_fact_sets = {}
-    for target in targets:
+    for target in cast(list[dict[str, Any]], current.result["targets"]):
         statement = select(VersionedVerifiedFactSet).where(
             VersionedVerifiedFactSet.status == "ACTIVE",
             VersionedVerifiedFactSet.target_scope == target["target_scope"],
@@ -478,48 +454,6 @@ def describe_facts(
                 "status": fact_set.status if fact_set else "MISSING",
                 "reason": action.request["reason"],
             }
-    result: dict[str, Any] = dict(current.result)
-    if offset is not None:
-        candidate_ids = [row["candidate_id"] for row in source_rows if row["candidate_id"]]
-        values = [decisions.get(candidate_id, {}).get("decision") for candidate_id in candidate_ids]
-        attention = [
-            index
-            for index, row in enumerate(source_rows)
-            if decisions.get(row["candidate_id"], {}).get("decision") not in ("APPROVE", "REJECT")
-        ]
-        unknown = [
-            index
-            for index, row in enumerate(source_rows)
-            if row["abstained"]
-            or decisions.get(row["candidate_id"], {}).get("decision")
-            in ("UNKNOWN", "NEEDS_ADJUDICATION")
-        ]
-
-        def next_index(indices: list[int]) -> int | None:
-            return next(
-                (index for index in indices if index > offset), indices[0] if indices else None
-            )
-
-        result = {
-            "rows": source_rows[offset : offset + 1],
-            "targets": targets,
-            "documents": [],
-            "slice": {
-                "entity_id": entity_id,
-                "offset": offset,
-                "total": len(source_rows),
-                "candidate_total": len(candidate_ids),
-                "attention_total": len(attention),
-                "next_attention_offset": next_index(attention),
-                "unknown_total": len(unknown),
-                "next_unknown_offset": next_index(unknown),
-                "can_promote": bool(values)
-                and all(v and v != "NEEDS_ADJUDICATION" for v in values)
-                and any(v in ("APPROVE", "UNKNOWN") for v in values),
-            },
-        }
-        visible_ids = {row["candidate_id"] for row in result["rows"]}
-        decisions = {key: value for key, value in decisions.items() if key in visible_ids}
     return {
         "current": {
             "preparation_id": str(current.preparation_id),
@@ -527,7 +461,7 @@ def describe_facts(
             "mapping_version": current.mapping_version,
             "check_id": str(current.check_id),
             "result_hash": current.result_hash,
-            **result,
+            **current.result,
             "decisions": decisions,
             "promotions": promotions,
             "active_fact_sets": active_fact_sets,

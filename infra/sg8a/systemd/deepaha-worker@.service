@@ -1,0 +1,30 @@
+[Unit]
+Description=DeepAha background worker (%i)
+After=network-online.target deepaha-api@%i.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=deepaha
+Group=deepaha
+WorkingDirectory=/opt/deepaha/%i-current/backend
+Environment=PYTHONPATH=/opt/deepaha/%i-current/backend/src
+EnvironmentFile=/etc/deepaha/%i.env
+ExecStart=/opt/deepaha/%i-current/.venv-product/bin/python -m deepaha.product.cli worker
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+ReadWritePaths=/var/lib/deepaha/%i
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

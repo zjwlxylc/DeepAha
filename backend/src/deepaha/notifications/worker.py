@@ -477,7 +477,7 @@ class ReminderWorker:
     ) -> None:
         try:
             self._adapter.deliver(session, intent, delivered_at=delivered_at)
-        except TransientDeliveryError, PermanentDeliveryError:
+        except (TransientDeliveryError, PermanentDeliveryError):
             raise
         except ValidationError as error:
             raise PermanentDeliveryError("ADAPTER_CONTRACT_INVALID") from error

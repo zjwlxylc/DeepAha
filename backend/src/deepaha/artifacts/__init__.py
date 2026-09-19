@@ -1,17 +1,14 @@
-from deepaha.artifacts.models import RawArtifact
-from deepaha.artifacts.service import (
-    ImportRawArtifactCommand,
-    ImportRawArtifactResult,
-    RawArtifactProvenanceConflict,
-    build_raw_object_key,
-    import_raw_artifact,
-)
+"""Artifact exports. Load ORM/service dependencies only when actually requested.
+The byte store is shared by the current product and the historical pipeline.
+"""
+from importlib import import_module
 
 __all__ = [
-    "ImportRawArtifactCommand",
-    "ImportRawArtifactResult",
-    "RawArtifact",
-    "RawArtifactProvenanceConflict",
-    "build_raw_object_key",
-    "import_raw_artifact",
+    'ImportRawArtifactCommand','ImportRawArtifactResult','RawArtifact',
+    'RawArtifactProvenanceConflict','build_raw_object_key','import_raw_artifact',
 ]
+
+def __getattr__(name):
+    if name not in __all__:raise AttributeError(name)
+    module='deepaha.artifacts.models' if name=='RawArtifact' else 'deepaha.artifacts.service'
+    return getattr(import_module(module),name)

@@ -1,0 +1,28 @@
+test_auth_is_not_taken_from_handoff (tests.test_http_client.HTTPTests.test_auth_is_not_taken_from_handoff) ... 127.0.0.1 - - [06/Sep/2026 05:14:57] "GET /api/scout-import/v1/capabilities HTTP/1.1" 200 336
+ok
+test_bad_token (tests.test_http_client.HTTPTests.test_bad_token) ... 127.0.0.1 - - [06/Sep/2026 05:14:57] "GET /api/scout-import/v1/capabilities HTTP/1.1" 401 92
+ok
+test_confirm_cannot_be_skipped (tests.test_http_client.HTTPTests.test_confirm_cannot_be_skipped) ... 127.0.0.1 - - [06/Sep/2026 05:14:57] "GET /api/scout-import/v1/capabilities HTTP/1.1" 200 336
+ok
+127.0.0.1 - - [06/Sep/2026 05:14:57] "POST /api/scout-import/v1/preview HTTP/1.1" 200 2895
+test_environment_mismatch_before_transfer (tests.test_http_client.HTTPTests.test_environment_mismatch_before_transfer) ... ok
+test_insecure_remote_url_rejected (tests.test_http_client.HTTPTests.test_insecure_remote_url_rejected) ... ok
+test_loopback_http_requires_explicit_flag (tests.test_http_client.HTTPTests.test_loopback_http_requires_explicit_flag) ... ok
+test_real_loopback_import_and_lookup (tests.test_http_client.HTTPTests.test_real_loopback_import_and_lookup) ... 127.0.0.1 - - [06/Sep/2026 05:14:57] "GET /api/scout-import/v1/capabilities HTTP/1.1" 200 336
+127.0.0.1 - - [06/Sep/2026 05:14:57] "GET /api/scout-import/v1/capabilities HTTP/1.1" 200 336
+127.0.0.1 - - [06/Sep/2026 05:14:57] "POST /api/scout-import/v1/preview HTTP/1.1" 200 2895
+127.0.0.1 - - [06/Sep/2026 05:14:57] "POST /api/scout-import/v1/commit HTTP/1.1" 200 2715
+127.0.0.1 - - [06/Sep/2026 05:14:57] "GET /api/scout-import/v1/batches/by-run/demo-20260906-001 HTTP/1.1" 200 2715
+127.0.0.1 - - [06/Sep/2026 05:14:57] "GET /api/scout-import/v1/batches/by-run/demo-20260906-001 HTTP/1.1" 200 2715
+ok
+test_router_rejects_publish (tests.test_http_client.HTTPTests.test_router_rejects_publish) ... ok
+test_undeclared_body_key_rejected (tests.test_http_client.HTTPTests.test_undeclared_body_key_rejected) ... 127.0.0.1 - - [06/Sep/2026 05:14:57] "POST /api/scout-import/v1/publish HTTP/1.1" 404 122
+127.0.0.1 - - [06/Sep/2026 05:14:57] "POST /api/scout-import/v1/preview HTTP/1.1" 422 144
+ok
+test_wrong_target_pin (tests.test_http_client.HTTPTests.test_wrong_target_pin) ... 127.0.0.1 - - [06/Sep/2026 05:14:57] "GET /api/scout-import/v1/capabilities HTTP/1.1" 200 336
+ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.082s
+
+OK

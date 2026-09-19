@@ -1,0 +1,10 @@
+{
+  "environment": "LINUX_VERIFIED_EXISTING_DEPENDENCIES_PTH_HARNESS",
+  "fresh_dependency_install": "NOT_RUN",
+  "ready": true,
+  "status_output": "api: 运行中\nworker: 运行中\n",
+  "stop_output": "api: 运行中\nworker: 已停止\n",
+  "launcher_exit": 0,
+  "launcher_output": "机会星图：http://127.0.0.1:8011\n审核工作台：http://127.0.0.1:8011/review/overview\n数据目录：/tmp/deepaha-launcher-newdt22d\n关闭窗口或按Ctrl+C停止本次服务。\n",
+  "runtime_manifest_removed": true
+}

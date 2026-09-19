@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "user_has_no_workspace_entry",
+    "reviewer_entry_label",
+    "reviewer_workspace_scope",
+    "operator_entry_label",
+    "operator_workspace_scope",
+    "combined_entry_label",
+    "combined_workspace_sections",
+    "workspace_no_horizontal_overflow_768_1024_1440_1920"
+  ],
+  "page_errors": []
+}

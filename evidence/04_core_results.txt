@@ -1,0 +1,54 @@
+F.................                                                       [100%]
+=================================== FAILURES ===================================
+__________ test_partial_evidence_approve_persists_and_never_qualifies __________
+
+svc = <deepaha.product.service.Product object at 0x7fb6fac8f230>
+
+    def test_partial_evidence_approve_persists_and_never_qualifies(svc):
+        a=svc.ingest(svc.test_source,packet(),actor='operator')
+        assert a['can_approve'] and a['notes']
+        r=svc.decide(a['id'],'APPROVE',a['preview_hash'],'','same-request',actor='reviewer')
+        assert r['decision']=='APPROVE'
+>       assert svc.decide(a['id'],'APPROVE',a['preview_hash'],'','same-request',actor='reviewer')==r
+E       AssertionError: assert {'decision': ...ids': [], ...} == {'decision': ...fd6d29'], ...}
+E         
+E         Omitting 5 identical items, use -vv to show
+E         Differing items:
+E         {'public_ids': []} != {'public_ids': ['opp_01a0aafa8d2674d8a17c0a98b8fd6d29']}
+E         
+E         Full diff:
+E           {
+E               'decision': 'APPROVE',
+E               'id': '01a0aafa-8d25-7cbd-91b1-996a423850a1',
+E               'preview_hash': 'a4df9dc7910c04e291374716a0fee495d8670e0b7b02ce3e28426bdb90bf80e5',
+E         -     'public_ids': [
+E         +     'public_ids': [],
+E         ?                    ++
+E         -         'opp_01a0aafa8d2674d8a17c0a98b8fd6d29',
+E         -     ],
+E               'revision_id': '01a0aafa-8d1e-7dbd-8a48-6e0e644672a1',
+E               'saved_at': '2026-09-16T16:09:01.989695+00:00',
+E           }
+
+tests/product/test_contract.py:45: AssertionError
+=========================== short test summary info ============================
+FAILED tests/product/test_contract.py::test_partial_evidence_approve_persists_and_never_qualifies - AssertionError: assert {'decision': ...ids': [], ...} == {'decision': ...fd6d29'], ...}
+  
+  Omitting 5 identical items, use -vv to show
+  Differing items:
+  {'public_ids': []} != {'public_ids': ['opp_01a0aafa8d2674d8a17c0a98b8fd6d29']}
+  
+  Full diff:
+    {
+        'decision': 'APPROVE',
+        'id': '01a0aafa-8d25-7cbd-91b1-996a423850a1',
+        'preview_hash': 'a4df9dc7910c04e291374716a0fee495d8670e0b7b02ce3e28426bdb90bf80e5',
+  -     'public_ids': [
+  +     'public_ids': [],
+  ?                    ++
+  -         'opp_01a0aafa8d2674d8a17c0a98b8fd6d29',
+  -     ],
+        'revision_id': '01a0aafa-8d1e-7dbd-8a48-6e0e644672a1',
+        'saved_at': '2026-09-16T16:09:01.989695+00:00',
+    }
+1 failed, 17 passed in 6.82s

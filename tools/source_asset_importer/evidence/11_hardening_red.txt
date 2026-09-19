@@ -1,0 +1,125 @@
+test_dns_hostname_validation (tests.test_hardening.AdditionalContractTests.test_dns_hostname_validation) ... 
+  test_dns_hostname_validation (tests.test_hardening.AdditionalContractTests.test_dns_hostname_validation) (u='https://bad$host.org/x') ... FAIL
+  test_dns_hostname_validation (tests.test_hardening.AdditionalContractTests.test_dns_hostname_validation) (u='http://127.1/x') ... FAIL
+test_evidence_references_nonempty (tests.test_hardening.AdditionalContractTests.test_evidence_references_nonempty) ... FAIL
+test_localhost_trailing_dot_rejected (tests.test_hardening.AdditionalContractTests.test_localhost_trailing_dot_rejected) ... FAIL
+test_malformed_metadata_is_a_controlled_error (tests.test_hardening.AdditionalContractTests.test_malformed_metadata_is_a_controlled_error) ... ERROR
+test_secret_key_spelling_normalized (tests.test_hardening.AdditionalContractTests.test_secret_key_spelling_normalized) ... FAIL
+test_source_basic_types (tests.test_hardening.AdditionalContractTests.test_source_basic_types) ... 
+  test_source_basic_types (tests.test_hardening.AdditionalContractTests.test_source_basic_types) (key='score_breakdown') ... FAIL
+  test_source_basic_types (tests.test_hardening.AdditionalContractTests.test_source_basic_types) (key='authority_assessment') ... FAIL
+  test_source_basic_types (tests.test_hardening.AdditionalContractTests.test_source_basic_types) (key='system_source_id') ... FAIL
+test_traversal_dependency_rejected (tests.test_hardening.AdditionalContractTests.test_traversal_dependency_rejected) ... ok
+test_unlisted_attachment_rejected (tests.test_hardening.AdditionalContractTests.test_unlisted_attachment_rejected) ... ok
+test_wrong_attachment_hash_rejected (tests.test_hardening.AdditionalContractTests.test_wrong_attachment_hash_rejected) ... ok
+test_expired_preview (tests.test_hardening.AdditionalServiceTests.test_expired_preview) ... ok
+test_preview_shows_field_changes (tests.test_hardening.AdditionalServiceTests.test_preview_shows_field_changes) ... ERROR
+test_same_revision_cannot_be_changed (tests.test_hardening.AdditionalServiceTests.test_same_revision_cannot_be_changed) ... ok
+test_source_change_keeps_legacy_identity_as_conflict_not_duplicate_add (tests.test_hardening.AdditionalServiceTests.test_source_change_keeps_legacy_identity_as_conflict_not_duplicate_add) ... FAIL
+
+======================================================================
+ERROR: test_malformed_metadata_is_a_controlled_error (tests.test_hardening.AdditionalContractTests.test_malformed_metadata_is_a_controlled_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_hardening.py", line 18, in test_malformed_metadata_is_a_controlled_error
+    with self.assertRaises(ImporterError): Package.from_file(file)
+                                           ~~~~~~~~~~~~~~~~~^^^^^^
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/deepaha_importer/contract.py", line 276, in from_file
+    dependencies = data.get('run_metadata', {}).get('file_dependencies', []) if isinstance(data, dict) else []
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+
+======================================================================
+ERROR: test_preview_shows_field_changes (tests.test_hardening.AdditionalServiceTests.test_preview_shows_field_changes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_hardening.py", line 73, in test_preview_shows_field_changes
+    self.assertEqual(item['changes']['source_name']['before'],'演练来源 A')
+                     ~~~~^^^^^^^^^^^
+KeyError: 'changes'
+
+======================================================================
+FAIL: test_dns_hostname_validation (tests.test_hardening.AdditionalContractTests.test_dns_hostname_validation) (u='https://bad$host.org/x')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_hardening.py", line 25, in test_dns_hostname_validation
+    with self.subTest(u=u), self.assertRaises(ImporterError): canonical_url(u)
+                            ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ImporterError not raised
+
+======================================================================
+FAIL: test_dns_hostname_validation (tests.test_hardening.AdditionalContractTests.test_dns_hostname_validation) (u='http://127.1/x')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_hardening.py", line 25, in test_dns_hostname_validation
+    with self.subTest(u=u), self.assertRaises(ImporterError): canonical_url(u)
+                            ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ImporterError not raised
+
+======================================================================
+FAIL: test_evidence_references_nonempty (tests.test_hardening.AdditionalContractTests.test_evidence_references_nonempty)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_hardening.py", line 49, in test_evidence_references_nonempty
+    with self.assertRaises(ImporterError): Package.from_bytes(raw(d))
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ImporterError not raised
+
+======================================================================
+FAIL: test_localhost_trailing_dot_rejected (tests.test_hardening.AdditionalContractTests.test_localhost_trailing_dot_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_hardening.py", line 21, in test_localhost_trailing_dot_rejected
+    with self.assertRaises(ImporterError): canonical_url('https://localhost./secret')
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ImporterError not raised
+
+======================================================================
+FAIL: test_secret_key_spelling_normalized (tests.test_hardening.AdditionalContractTests.test_secret_key_spelling_normalized)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_hardening.py", line 28, in test_secret_key_spelling_normalized
+    with self.assertRaises(ImporterError): parse_json(b'{"API Key":"secret"}')
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ImporterError not raised
+
+======================================================================
+FAIL: test_source_basic_types (tests.test_hardening.AdditionalContractTests.test_source_basic_types) (key='score_breakdown')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_hardening.py", line 33, in test_source_basic_types
+    with self.subTest(key=key), self.assertRaises(ImporterError): Package.from_bytes(raw(d))
+                                ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ImporterError not raised
+
+======================================================================
+FAIL: test_source_basic_types (tests.test_hardening.AdditionalContractTests.test_source_basic_types) (key='authority_assessment')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_hardening.py", line 33, in test_source_basic_types
+    with self.subTest(key=key), self.assertRaises(ImporterError): Package.from_bytes(raw(d))
+                                ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ImporterError not raised
+
+======================================================================
+FAIL: test_source_basic_types (tests.test_hardening.AdditionalContractTests.test_source_basic_types) (key='system_source_id')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_hardening.py", line 33, in test_source_basic_types
+    with self.subTest(key=key), self.assertRaises(ImporterError): Package.from_bytes(raw(d))
+                                ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ImporterError not raised
+
+======================================================================
+FAIL: test_source_change_keeps_legacy_identity_as_conflict_not_duplicate_add (tests.test_hardening.AdditionalServiceTests.test_source_change_keeps_legacy_identity_as_conflict_not_duplicate_add)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_hardening.py", line 88, in test_source_change_keeps_legacy_identity_as_conflict_not_duplicate_add
+    self.assertFalse(pre['can_commit'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.045s
+
+FAILED (failures=9, errors=2)

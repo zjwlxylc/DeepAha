@@ -1,0 +1,36 @@
+{
+  "tool": "DeepAha_Source_Asset_Importer",
+  "version": "0.3.0",
+  "release_scope": "LOCAL_RESEARCH_REVIEW_SOURCE_PACKAGE",
+  "base_zip": {
+    "name": "DeepAha_Source_Asset_Importer_v0.2.0.zip",
+    "size_bytes": 350374,
+    "sha256": "b82f666bd1e355535ee9be56c1220b0dda9679c99b7b868fc783509fbea962ed"
+  },
+  "unit_integration_tests": {
+    "total": 142,
+    "passed": 141,
+    "skipped": 1,
+    "failures": 0,
+    "skip_reason": "PostgreSQL real environment not supplied"
+  },
+  "real_asset_replay": {
+    "gpt_runs": 30,
+    "wb_runs": 18,
+    "source_observations": 164,
+    "candidate_identity_groups": 89,
+    "binary_samples": 33
+  },
+  "direct_browser_http": "ENVIRONMENT_BLOCKED_BY_ADMINISTRATOR",
+  "browser_dom": "PASS_WITH_FETCH_DOWNLOAD_STORAGE_STUBBED",
+  "windows": "NOT_TESTED",
+  "live_codex_library": "NOT_TESTED",
+  "production_intake": "NOT_IMPLEMENTED_IN_MAIN_PROJECT",
+  "system_feedback_authenticity": "NOT_VERIFIED",
+  "database_writes": "NONE_TO_DEEPAHA",
+  "source_approval": "NONE",
+  "wma_runs_started": 0,
+  "independent_subagent_review": "NOT_PERFORMED",
+  "archive_status": "RECORDED_SEPARATELY_AFTER_PACKAGING",
+  "protected_legacy_diff_bytes": 0
+}

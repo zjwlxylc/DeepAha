@@ -1,0 +1,85 @@
+{
+  "transport": "EXPLICIT_TEST_HTTP_BRIDGE",
+  "native_browser_navigation": "BLOCKED_BY_ADMINISTRATOR",
+  "database": "COPY_OF_USER_WMA_DATA_AFTER_SG5_1_BACKFILL",
+  "checks": [
+    "grouped_catalog_real_data",
+    "group_expands_specific_targets",
+    "exact_target_view_preserved",
+    "public_safe_time_display",
+    "desktop_no_overflow_1280_1440_1920"
+  ],
+  "http_calls": [
+    {
+      "method": "GET",
+      "path": "/api/site",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/catalog/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/catalog/groups?q=&kind=&status=&time_state=&offset=0&limit=20",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/catalog/groups/opp_01a0b4b28be77683b0de469b09efca7a/targets?limit=50",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/catalog/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/catalog/targets?q=&kind=&status=&time_state=&offset=0&limit=50",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/catalog/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/catalog/groups?q=&kind=&status=&time_state=&offset=0&limit=20",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/catalog/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/catalog/groups?q=&kind=&status=&time_state=&offset=0&limit=20",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/catalog/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/catalog/groups?q=&kind=&status=&time_state=&offset=0&limit=20",
+      "status": 200
+    }
+  ],
+  "page_errors": []
+}

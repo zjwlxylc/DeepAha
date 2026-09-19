@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+if __name__ == "__main__":
+    raise SystemExit("旧运行入口已退役。请运行 python -m deepaha.product.cli worker")
+
 import argparse
 import logging
 import time
@@ -420,8 +423,3 @@ def main(argv: list[str] | None = None) -> int:
     return 0
 
 
-if __name__ == "__main__":
-    raise SystemExit(main())
-
-
-__all__ = ["build_human_test_worker", "main"]

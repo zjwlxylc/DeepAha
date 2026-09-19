@@ -8,7 +8,7 @@ from pathlib import Path
 from secrets import token_urlsafe
 from uuid import UUID
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, delete
 from sqlalchemy.engine import make_url
 from sqlalchemy.orm import Session
 
@@ -96,8 +96,11 @@ def bootstrap_local_human_test(
             ):
                 raise RuntimeError("LOCAL_HUMAN_TEST_REVIEWER_CONFLICT")
 
-            # Opening another local browser must not invalidate an existing
-            # review window. Existing expiry and revocation remain authoritative.
+            session.execute(
+                delete(ReviewerAuthSessionModel).where(
+                    ReviewerAuthSessionModel.reviewer_id == LOCAL_REVIEWER_ID
+                )
+            )
             session.add(
                 ReviewerAuthSessionModel(
                     token_sha256=reviewer_token_digest(reviewer_session),

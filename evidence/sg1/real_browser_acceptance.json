@@ -1,0 +1,74 @@
+{
+  "transport": "EXPLICIT_TEST_HTTP_BRIDGE",
+  "native_browser_network": "BLOCKED_BY_ADMINISTRATOR",
+  "real_uploaded_database_copy": true,
+  "expected_catalog_targets": 106,
+  "checks": [
+    "authenticated_real_database",
+    "review_one_root_106_action_targets",
+    "catalog_is_106_position_cards",
+    "position_106_detail_has_own_ancestor_common_sections",
+    "position_detail_no_overflow_360",
+    "position_detail_no_overflow_390",
+    "position_detail_no_overflow_430",
+    "unit_scoped_favorite_persisted"
+  ],
+  "page_errors": [],
+  "http_calls": [
+    {
+      "method": "GET",
+      "path": "/api/site",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 401
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review?status=PENDING&q=&offset=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review?status=APPROVED&q=&offset=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/review/01a0af33-6136-7d99-819e-df809b0157f3?item=0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog?q=%E6%9C%8D%E5%8A%A1%E7%B1%BB%E4%B8%93%E4%B8%9A%E6%95%99%E5%B8%88&kind=&region=&offset=0&limit=20",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog/unit_01a0b2f1320e7c2aaa758f6c4d9fe405",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/me/actions/unit_01a0b2f1320e7c2aaa758f6c4d9fe405",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/actions",
+      "status": 200
+    }
+  ]
+}

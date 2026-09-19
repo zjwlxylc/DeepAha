@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:deepaha:scout-feedback:v1",
+  "title": "DeepAha Scout feedback exchange — proposed, issuer verification separate",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "issuer",
+    "instance_id",
+    "environment",
+    "feedback_id",
+    "bundle_id",
+    "observed_at",
+    "events"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "deepaha.scout-feedback.v1"
+    },
+    "issuer": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "instance_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "environment": {
+      "enum": [
+        "DEMO",
+        "TEST",
+        "STAGING",
+        "PRODUCTION"
+      ]
+    },
+    "feedback_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "bundle_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "package_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "events": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "type": "object",
+        "required": [
+          "event_id",
+          "type",
+          "candidate_ref",
+          "occurred_at"
+        ],
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "type": {
+            "enum": [
+              "CANDIDATE_RECEIVED",
+              "CANDIDATE_REJECTED",
+              "SOURCE_APPROVED",
+              "SOURCE_SUSPENDED",
+              "PRODUCTION_RUN_COMPLETED",
+              "PRODUCTION_RUN_FAILED",
+              "BRIEF_REVIEWED",
+              "SOURCE_MERGED"
+            ]
+          },
+          "candidate_ref": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 800
+          },
+          "occurred_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "system_source_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "transaction_id": {
+            "type": "string"
+          },
+          "run_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metrics": {
+            "type": "object",
+            "description": "Only observed metrics; unknown values must be null."
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "enum": [
+                    "SOURCE_APPROVED",
+                    "SOURCE_SUSPENDED",
+                    "SOURCE_MERGED"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "system_source_id"
+              ]
+            }
+          }
+        ],
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true,
+  "description": "Schema validation never authenticates issuer, proves an event occurred or authorizes state changes."
+}

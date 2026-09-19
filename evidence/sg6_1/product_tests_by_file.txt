@@ -1,0 +1,21 @@
+=== tests/product/test_action_loop.py ===
+...........                                                              [100%]
+11 passed in 3.97s
+RC=0 COUNT=11
+=== tests/product/test_action_loop_api.py ===
+.                                                                        [100%]
+1 passed in 1.12s
+RC=0 COUNT=1
+=== tests/product/test_actionable_granularity.py ===
+.............                                                            [100%]
+13 passed in 5.17s
+RC=0 COUNT=13
+=== tests/product/test_api.py ===
+......                                                                   [100%]
+6 passed in 3.45s
+RC=0 COUNT=6
+=== tests/product/test_contract.py ===
+.....................                                                    [100%]
+21 passed in 7.57s
+RC=0 COUNT=21
+=== tests/product/test_currentness.py ===

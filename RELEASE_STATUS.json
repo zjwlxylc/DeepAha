@@ -1,0 +1,47 @@
+{
+  "release": "3.8.0-rc1",
+  "scope": "SG8-A: productionize SG7.2 for PostgreSQL staging/production deployment, portable data migration, backup, smoke and rollback without changing opportunity business authority",
+  "base_release": "3.7.2-rc1 SG7.2",
+  "status": "SG8_A_STAGING_HOST_ACCEPTANCE_CANDIDATE",
+  "engineering_self_test": "PASS",
+  "product_tests": {
+    "passed": 227,
+    "failed": 0,
+    "files": 30,
+    "verification": "each backend/tests/product file executed in isolated pytest subprocess; every file RC=0",
+    "evidence": "evidence/sg8_a/product_regression.json"
+  },
+  "sg7_1_oracles_preserved": {
+    "eligibility_pairs": 600,
+    "eligibility_accuracy": 1.0,
+    "recommendation_pairs": 2000,
+    "recommendation_accuracy": 1.0,
+    "unsafe_recommendations": 0,
+    "wma_or_llm_used": false,
+    "production_mutated": false
+  },
+  "sg8_a": {
+    "postgresql_production_required": true,
+    "sqlite_to_postgresql_migration_implemented": true,
+    "migration_table_fingerprint_verification": true,
+    "migration_object_sha256_verification": true,
+    "local_sessions_revoked_on_migration": true,
+    "wma_credentials_migrated": false,
+    "staging_production_separated": true,
+    "versioned_release_symlinks": true,
+    "quiesced_backup": true,
+    "empty_target_restore": true,
+    "automatic_code_rollback_same_db_generation_only": true,
+    "self_registration_default": false
+  },
+  "compileall": "PASS",
+  "frontend_contracts": "PASS",
+  "local_http_smoke": "PASS_3.8.0_RC1",
+  "portable_migration_harness": "PASS_41_TABLES_TYPED_COPY",
+  "host_postgresql_nginx_systemd_test": "PENDING_REAL_STAGING_HOST",
+  "wma_live_probe": "NOT_CALLED_IN_SG8_A_BUILD",
+  "deployment_performed": false,
+  "remote_repo_modified": false,
+  "contains_credentials": false,
+  "next_gate": "Codex deploys staging only; user accepts staging before production switch"
+}

@@ -1,0 +1,19 @@
+FINAL SG5.1 PRODUCT TEST EVIDENCE
+Each listed file was run in a fresh pytest process after the final production-code change and returned RC=0.
+
+test_actionable_granularity.py: 13 PASS
+test_api.py: 6 PASS
+test_contract.py: 21 PASS
+test_currentness.py: 12 PASS
+test_currentness_api.py: 2 PASS
+test_delivery_quality.py: 13 PASS
+test_eligibility.py: 17 PASS
+test_milestones_management.py: 12 PASS
+test_multitype_opportunity_core.py: 10 PASS
+test_operations.py: 9 PASS
+test_personal_value.py: 12 PASS
+test_scout_import.py: 29 PASS
+test_sg5_1_frontend_contract.py: 2 PASS
+test_worker.py: 3 PASS
+
+TOTAL=161 PASS=161 FAIL=0

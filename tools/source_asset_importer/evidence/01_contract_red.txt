@@ -1,0 +1,17 @@
+E
+======================================================================
+ERROR: test_contract (unittest.loader._FailedTest.test_contract)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_contract
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+  File "/mnt/data/DeepAha_Source_Asset_Importer_v0.1.0/tests/test_contract.py", line 7, in <module>
+    from deepaha_importer.contract import Package, parse_json, canonical_url
+ModuleNotFoundError: No module named 'deepaha_importer.contract'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

@@ -3,13 +3,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import InvestigationsPage from "../app/review/investigations/page";
 import InvestigationPage from "../app/review/investigations/[taskId]/page";
-import { getInvestigationQueue, getInvestigationSources, getInvestigation, getInvestigationBindingTargets } from "../lib/investigations";
+import { getInvestigations, getInvestigationSources, getInvestigation, getInvestigationBindingTargets } from "../lib/investigations";
 import { humanTestFetch } from "../lib/local-human-test";
 import { source, task, taskId, preparedDocuments, bindingTarget, evidenceCheck } from "./investigations-fixture";
 
 vi.mock("../lib/investigations", async (original) => ({
   ...await original<typeof import("../lib/investigations")>(),
-  getInvestigationQueue: vi.fn(), getInvestigationSources: vi.fn(), getInvestigation: vi.fn(), getInvestigationBindingTargets: vi.fn(),
+  getInvestigations: vi.fn(), getInvestigationSources: vi.fn(), getInvestigation: vi.fn(), getInvestigationBindingTargets: vi.fn(),
 }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 // The list page reads runtime readiness through the authenticated local API, so
@@ -40,7 +40,7 @@ describe("investigation pages", () => {
     expect(screen.queryByText(/旧检查曾通过/)).not.toBeInTheDocument();
   });
   beforeEach(() => {
-    vi.mocked(getInvestigationQueue).mockResolvedValue({ tasks: [], next_cursor: null });
+    vi.mocked(getInvestigations).mockResolvedValue({ tasks: [] });
     vi.mocked(getInvestigationSources).mockResolvedValue({ sources: [source] });
     vi.mocked(getInvestigation).mockResolvedValue(task);
     vi.mocked(getInvestigationBindingTargets).mockResolvedValue({ targets: [bindingTarget] });
@@ -154,22 +154,6 @@ describe("investigation pages", () => {
     vi.mocked(getInvestigation).mockResolvedValue({ ...task, status });
     render(await InvestigationPage({ params: Promise.resolve({ taskId }) }));
     expect(screen.queryByRole("button", { name: "准备文档证据" })).not.toBeInTheDocument();
-  });
-  it("uses server queue filters and preserves navigation context", async () => {
-    vi.mocked(getInvestigationQueue).mockResolvedValue({ tasks: [{ ...task, title: "队列摘要", material_count: 3, next_step: "核对材料" }], next_cursor: "next-token" });
-    render(await InvestigationsPage({ searchParams: Promise.resolve({ q: "公告", status: "PENDING_REVIEW", cursor: "first-token" }) }));
-    const query = vi.mocked(getInvestigationQueue).mock.calls.at(-1)![0];
-    expect(query.get("q")).toBe("公告");
-    expect(query.get("cursor")).toBe("first-token");
-    const next = new URL(screen.getByRole("link", { name: "下一页" }).getAttribute("href")!, "http://local");
-    expect(next.searchParams.get("cursor")).toBe("next-token");
-    expect(next.searchParams.get("status")).toBe("PENDING_REVIEW");
-    expect(screen.getByRole("link", { name: "队列摘要" }).getAttribute("href")).toContain("queue=");
-    expect(screen.getByText("本页待审核")).toBeVisible();
-  });
-  it("returns from a task to the same queue filters", async () => {
-    render(await InvestigationPage({ params: Promise.resolve({ taskId }), searchParams: Promise.resolve({ queue: "q=notice&cursor=opaque" }) }));
-    expect(screen.getByRole("link", { name: "官方机会调查" })).toHaveAttribute("href", "/review/investigations?q=notice&cursor=opaque");
   });
   it("registers tasks without a live execution control", async () => {
     render(await InvestigationsPage());

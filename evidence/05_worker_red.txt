@@ -1,0 +1,37 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_________________________ test_no_credentials_no_claim _________________________
+
+svc = <deepaha.product.service.Product object at 0x7fa1e7a3b0e0>
+
+    def test_no_credentials_no_claim(svc):
+>       from deepaha.product.worker import run_once
+E       ModuleNotFoundError: No module named 'deepaha.product.worker'
+
+tests/product/test_worker.py:7: ModuleNotFoundError
+_____________________ test_recovery_does_not_prompt_again ______________________
+
+svc = <deepaha.product.service.Product object at 0x7fa1e77d0550>
+
+    def test_recovery_does_not_prompt_again(svc):
+>       from deepaha.product.worker import run_once
+E       ModuleNotFoundError: No module named 'deepaha.product.worker'
+
+tests/product/test_worker.py:15: ModuleNotFoundError
+_____________________ test_source_pause_stops_new_dispatch _____________________
+
+svc = <deepaha.product.service.Product object at 0x7fa1e77d1a90>
+
+    def test_source_pause_stops_new_dispatch(svc):
+        from deepaha.product.errors import Problem
+        svc.source_status(svc.test_source,False,'维护',actor='operator')
+>       with pytest.raises(Problem):svc.create_task(svc.test_source,'https://research.example.org/notices/101',actor='operator',request_key='job3')
+                                    ^^^^^^^^^^^^^^^
+E       AttributeError: 'Product' object has no attribute 'create_task'
+
+tests/product/test_worker.py:36: AttributeError
+=========================== short test summary info ============================
+FAILED tests/product/test_worker.py::test_no_credentials_no_claim - ModuleNotFoundError: No module named 'deepaha.product.worker'
+FAILED tests/product/test_worker.py::test_recovery_does_not_prompt_again - ModuleNotFoundError: No module named 'deepaha.product.worker'
+FAILED tests/product/test_worker.py::test_source_pause_stops_new_dispatch - AttributeError: 'Product' object has no attribute 'create_task'
+3 failed in 1.37s

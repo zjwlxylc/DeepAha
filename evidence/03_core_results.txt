@@ -1,0 +1,15 @@
+F.........                                                               [100%]
+=================================== FAILURES ===================================
+__________ test_partial_evidence_approve_persists_and_never_qualifies __________
+
+svc = <deepaha.product.service.Product object at 0x7f8465cbf0e0>
+
+    def test_partial_evidence_approve_persists_and_never_qualifies(svc):
+        a=svc.ingest(svc.test_source,packet(),actor='operator')
+>       assert a['can_approve'] and a['notes']
+E       assert (True and [])
+
+tests/product/test_contract.py:42: AssertionError
+=========================== short test summary info ============================
+FAILED tests/product/test_contract.py::test_partial_evidence_approve_persists_and_never_qualifies - assert (True and [])
+1 failed, 9 passed in 4.08s

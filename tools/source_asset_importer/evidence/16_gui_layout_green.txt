@@ -1,0 +1,11 @@
+test_action_buttons_visible_at_default_and_minimum_size (tests.test_gui.GUITests.test_action_buttons_visible_at_default_and_minimum_size) ... ok
+test_cancel_has_no_receipt (tests.test_gui.GUITests.test_cancel_has_no_receipt) ... ok
+test_initial_confirmation_disabled (tests.test_gui.GUITests.test_initial_confirmation_disabled) ... ok
+test_real_confirm_writes_receipt (tests.test_gui.GUITests.test_real_confirm_writes_receipt) ... ok
+test_real_preview_populates_table (tests.test_gui.GUITests.test_real_preview_populates_table) ... ok
+test_target_change_invalidates_preview (tests.test_gui.GUITests.test_target_change_invalidates_preview) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.521s
+
+OK

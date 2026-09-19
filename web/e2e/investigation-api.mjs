@@ -67,38 +67,8 @@ const server = createServer(async (request, response) => {
   if (path === "/seed-rule-review") { current = ruleReadyTask(); current.rule_review = { current: [], history: [] }; response.end("{}"); return; }
   if (path === "/drop-next-receipt") { dropNextReceipt = true; response.end("{}"); return; }
   if (path === "/receipts") { response.end(JSON.stringify({ mutations: receipts.size, posts })); return; }
-  if (path === "/seed-workbench") {
-    current = ruleReadyTask();
-    current.binding_entities.push({ id: "position-2", name: "合成第二岗位", kind: "position", code: "P002" });
-    current.opportunities.units[0].positions.push({ id: "position-2", name: "合成第二岗位", code: "P002" });
-    response.end("{}"); return;
-  }
   if (request.headers.authorization !== "Bearer synthetic-browser-reviewer") {
     response.writeHead(401); response.end("{}"); return;
-  }
-  if (path.endsWith("/investigations/queue")) {
-    const matches = (!url.searchParams.get("status") || current.status === url.searchParams.get("status")) && (!url.searchParams.get("q") || current.brief.includes(url.searchParams.get("q")));
-    response.end(JSON.stringify({ tasks: matches ? [{ task_id: current.task_id, source_id: current.source_id, title: current.opportunities?.opportunity_name ?? current.brief, status: current.status, notice_url: current.notice_url, created_at: current.created_at, updated_at: current.updated_at, error_code: current.error_code, calibration: current.calibration, material_count: current.materials.length, next_step: "核对材料" }] : [], next_cursor: null })); return;
-  }
-  if (path.endsWith("/review-receipts")) {
-    const saved = receipts.get(url.searchParams.get("request_key"));
-    response.end(JSON.stringify({ task_id: current.task_id, committed: !!saved, receipt_id: saved ? "synthetic-saved-receipt" : null })); return;
-  }
-  if (path.endsWith("/workbench")) {
-    const view = structuredClone(current), entity = url.searchParams.get("entity_id"), offset = Number(url.searchParams.get("offset") ?? 0);
-    const rows = view.facts.filter(row => row.entity_id === entity);
-    view.draft_scope = "synthetic-session-scope";
-    view.workbench = { entity_id: entity, offset, total: rows.length };
-    view.facts = rows.slice(offset, offset + 1);
-    const prep = view.fact_review?.current;
-    if (prep) {
-      const candidates = prep.rows.filter(row => row.entity_id === entity);
-      prep.slice = { entity_id: entity, offset, total: candidates.length, candidate_total: candidates.filter(row => row.candidate_id).length, can_promote: false };
-      prep.rows = candidates.slice(offset, offset + 1);
-      prep.targets = prep.targets.filter(target => target.entity_id === entity);
-    }
-    view.rule_review = { current: [], history: [] };
-    response.end(JSON.stringify(view)); return;
   }
   if (path.endsWith("/sources")) { response.end(JSON.stringify({ sources: [source] })); return; }
   if (path.endsWith("/binding-targets")) { response.end(JSON.stringify({ targets: [bindingTarget] })); return; }
