@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     command_timeout_seconds: int = Field(default=1800, ge=10, le=7200)
     max_output_bytes: int = Field(default=131_072, ge=4096, le=1_048_576)
     max_log_lines: int = Field(default=500, ge=20, le=2000)
-    trusted_hosts: list[str] = Field(default_factory=lambda: ["ops.deepaha.com", "localhost"])
+    trusted_hosts: list[str] = Field(\n        default_factory=lambda: ["ops.deepaha.com", "localhost", "127.0.0.1"]\n    )
     token_hashes_json: str = "{}"
 
     @field_validator("trusted_hosts", mode="before")
