@@ -39,6 +39,7 @@ class GatewayCore:
         if code:
             raise HTTPException(503, {"code": "ADAPTER_STATUS_FAILED"})
         return {
+            "request_id": request_id,
             "environment": environment,
             "adapter_status": output,
             "recent_operations": self.operations(principal, environment, 5)["operations"],
@@ -57,7 +58,12 @@ class GatewayCore:
         code, output = await self.runner.direct(["logs", environment, service, str(lines)])
         if code:
             raise HTTPException(503, {"code": "LOG_READ_FAILED"})
-        return {"environment": environment, "service": service, "output": output}
+        return {
+            "request_id": request_id,
+            "environment": environment,
+            "service": service,
+            "output": output,
+        }
 
     def operations(self, principal, environment, limit):
         require(principal, environment, "read")
