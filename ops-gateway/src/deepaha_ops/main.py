@@ -423,5 +423,3 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     return app
 
-
-app = create_app()
