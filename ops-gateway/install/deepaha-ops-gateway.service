@@ -9,7 +9,7 @@ User=deepaha-ops
 Group=deepaha-ops
 EnvironmentFile=/etc/deepaha-ops/gateway.env
 WorkingDirectory=/opt/deepaha/ops-gateway
-ExecStart=/opt/deepaha/ops-gateway/.venv/bin/uvicorn deepaha_ops.main:app --app-dir src --host 127.0.0.1 --port 8765 --workers 1 --proxy-headers --forwarded-allow-ips=127.0.0.1
+ExecStart=/opt/deepaha/ops-gateway/.venv/bin/uvicorn deepaha_ops.main:create_app --factory --app-dir src --host 127.0.0.1 --port 8765 --workers 1 --proxy-headers --forwarded-allow-ips=127.0.0.1
 Restart=on-failure
 RestartSec=3
 PrivateTmp=true
