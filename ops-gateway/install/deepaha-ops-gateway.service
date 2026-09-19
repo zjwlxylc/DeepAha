@@ -1,0 +1,28 @@
+[Unit]
+Description=DeepAha Ops Gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=deepaha-ops
+Group=deepaha-ops
+EnvironmentFile=/etc/deepaha-ops/gateway.env
+WorkingDirectory=/opt/deepaha/ops-gateway
+ExecStart=/opt/deepaha/ops-gateway/.venv/bin/uvicorn deepaha_ops.main:app --app-dir src --host 127.0.0.1 --port 8765 --workers 1 --proxy-headers --forwarded-allow-ips=127.0.0.1
+Restart=on-failure
+RestartSec=3
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+MemoryDenyWriteExecute=true
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
