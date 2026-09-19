@@ -4,6 +4,7 @@ import asyncio
 import os
 import signal
 from collections.abc import Sequence
+from contextlib import suppress
 from pathlib import Path
 
 from deepaha_ops.audit import AuditEvent, AuditLog, now_iso, redact_text
@@ -34,10 +35,8 @@ class OperationRunner:
     async def stop(self) -> None:
         if self._worker is not None:
             self._worker.cancel()
-            try:
+            with suppress(asyncio.CancelledError):
                 await self._worker
-            except asyncio.CancelledError:
-                pass
             self._worker = None
 
     async def enqueue(self, operation_id: str) -> None:
