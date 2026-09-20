@@ -141,3 +141,23 @@ def test_explicit_additive_upgrade_preserves_accounts_and_is_repeatable(access):
     assert not ACCESS_TABLE_NAMES.intersection(inspect(access.db.engine).get_table_names())
     for _ in range(2):Base.metadata.create_all(access.db.engine,tables=tables)
     with access.db.tx(False) as s:assert before=={a.id:a.password_hash for a in s.scalars(select(Account))}
+
+
+def test_isolated_worker_cli_preserves_no_remote_and_no_schedules(svc,tmp_path,monkeypatch):
+    from deepaha.product import cli,worker
+    from deepaha.product.config import Settings,ConnectionConfig
+    monkeypatch.setattr(Settings,'from_env',lambda:Settings(data_dir=tmp_path,database_url=svc.database_url))
+    def forbidden(*args,**kw):raise AssertionError('Isolated fixture worker must not schedule or load remote credentials')
+    monkeypatch.setattr(worker,'schedule_weekly_digests',forbidden)
+    monkeypatch.setattr(worker,'schedule_due',forbidden)
+    monkeypatch.setattr(ConnectionConfig,'factory',forbidden)
+    async def idle(p,*,client_factory):
+        assert client_factory is None
+        return {'state':'NOT_CONFIGURED'}
+    monkeypatch.setattr(worker,'run_once',idle)
+    assert cli.main(['worker','--isolated-fixture-mode','--once']) in (None,0)
+
+
+def test_preserved_empty_bootstrap_rejects_existing_database(svc,tmp_path):
+    from deepaha.product.empty_bootstrap import bootstrap_empty
+    with pytest.raises(RuntimeError,match='NONEMPTY_SCHEMA'):bootstrap_empty(svc.database_url,tmp_path/'objects')

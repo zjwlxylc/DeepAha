@@ -76,6 +76,9 @@ def main():
         if hashlib.sha256((dest/name).read_bytes()).hexdigest()!=digest:raise RuntimeError('Extracted file mismatch')
     receipt['verified_package_files']=len(manifest['files'])
     run([str(RUNTIME),'-m','compileall','-q',str(dest/'backend/src')])
+    candidate_env=os.environ.copy();candidate_env['PYTHONPATH']=str(dest/'backend/src')
+    help_output=run([str(RUNTIME),'-m','deepaha.product.cli','worker','--help'],env=candidate_env).stdout
+    if b'--isolated-fixture-mode' not in help_output:raise RuntimeError('Missing installed isolated-worker CLI contract')
     sys.path.insert(0,str(dest/'backend/src'))
     from sqlalchemy import create_engine,inspect,text
     from sqlalchemy.engine import make_url
@@ -150,6 +153,18 @@ def main():
             if site.get('registration_mode')!='invite':raise RuntimeError('Invitation mode not active')
             for path in ('/','/register','/product/access-ui.js','/product/access.css'):
                 if client.get(path).status_code!=200:raise RuntimeError('Staging route failed: '+path)
+        # A process may briefly be active before argparse/runtime failure. Observe
+        # both services across the restart window instead of accepting a transient start.
+        observed={}
+        for _ in range(3):
+            time.sleep(5)
+            for unit in (API,WORKER):
+                if unit==WORKER and not active[WORKER]:continue
+                run(['systemctl','is-active','--quiet',unit])
+                count=run(['systemctl','show',unit,'-p','NRestarts','--value']).stdout.strip()
+                if unit in observed and count!=observed[unit]:raise RuntimeError('Service restarted during observation: '+unit)
+                observed[unit]=count
+        receipt['service_stability_observation']='PASS'
         if Path('/opt/deepaha/staging-current').resolve()!=live:raise RuntimeError('Live pointer changed externally')
         receipt['status']='DEPLOYED_READY_FOR_FUNCTIONAL_SMOKE';success=True
     finally:

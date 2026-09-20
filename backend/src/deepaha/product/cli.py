@@ -38,7 +38,7 @@ def main(argv=None):
     sources=sub.add_parser('source-import');sources.add_argument('file',type=Path);sources.add_argument('--actor',required=True)
     ingest=sub.add_parser('intake');ingest.add_argument('file',type=Path);ingest.add_argument('--source',required=True);ingest.add_argument('--actor',required=True);ingest.add_argument('--notice-url')
     examples=sub.add_parser('examples');examples.add_argument('--actor',required=True);examples.add_argument('--output',type=Path,help='只生成虚构体验数据文件，不入库')
-    worker=sub.add_parser('worker');worker.add_argument('--once',action='store_true');worker.add_argument('--schedule-as',help='用该维护账号执行已授权的周期检查')
+    worker=sub.add_parser('worker');worker.add_argument('--once',action='store_true');worker.add_argument('--schedule-as',help='用该维护账号执行已授权的周期检查');worker.add_argument('--isolated-fixture-mode',action='store_true',help='Only heartbeat: disable schedules and remote clients in isolated tests')
     server=sub.add_parser('serve');server.add_argument('--host',default='127.0.0.1');server.add_argument('--port',type=int,default=8000)
     backup=sub.add_parser('backup');backup.add_argument('file',type=Path)
     verify=sub.add_parser('verify-backup');verify.add_argument('file',type=Path)
@@ -148,8 +148,8 @@ def main(argv=None):
                 while True:
                     try:
                         from .worker import schedule_weekly_digests
-                        schedule_weekly_digests(p)
-                        factory=ConnectionConfig(settings.data_dir,settings.mode).factory()
+                        if not args.isolated_fixture_mode:schedule_weekly_digests(p)
+                        factory=None if args.isolated_fixture_mode else ConnectionConfig(settings.data_dir,settings.mode).factory()
                         if factory:schedule_due(p,args.schedule_as)
                         result=await run_once(p,client_factory=factory)
                         if args.once or result['state'] not in ('IDLE','NOT_CONFIGURED'):output(result)
