@@ -24,6 +24,7 @@ def test_authenticated_real_upload_approve_catalog(client,svc):
     r=client.post('/api/intake/'+svc.test_source,content=packet(),headers={'Content-Type':'application/zip'})
     assert r.status_code==200,r.text
     value=r.json()
+    login(client,'reader')
     assert client.post('/api/review/'+value['id']+'/decision',json={'decision':'APPROVE','preview_hash':value['preview_hash'],'note':'','request_key':'testrequest'}).status_code==403
     login(client,'reviewer')
     r=client.post('/api/review/'+value['id']+'/decision',json={'decision':'APPROVE','preview_hash':value['preview_hash'],'note':'','request_key':'testrequest'})

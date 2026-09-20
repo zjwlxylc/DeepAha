@@ -66,8 +66,9 @@ def test_reject_one_reason_and_no_catalog(svc):
 def test_permission_separation(svc):
     from deepaha.product.errors import Problem
     a=svc.ingest(svc.test_source,packet(),actor='operator')
-    with pytest.raises(Problem):svc.decide(a['id'],'APPROVE',a['preview_hash'],'','x',actor='operator')
+    with pytest.raises(Problem):svc.decide(a['id'],'APPROVE',a['preview_hash'],'','x',actor='reader')
     with pytest.raises(Problem):svc.add_source('不能写','https://other.example.org',actor='reviewer')
+    assert svc.decide(a['id'],'APPROVE',a['preview_hash'],'','operator-review',actor='operator')['decision']=='APPROVE'
 
 
 def test_stale_and_opposite_decisions(svc):

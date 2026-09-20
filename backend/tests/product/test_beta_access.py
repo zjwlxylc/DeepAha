@@ -11,7 +11,7 @@ from deepaha.product.models import Account, now
 
 @pytest.fixture
 def access(svc):
-    svc.create_account('admin', 'long-password-123', ['user', 'admin'])
+    svc.create_account('admin', 'long-password-123', ['user', 'operator'])
     return svc
 
 
@@ -32,8 +32,8 @@ def test_invitation_atomic_capacity_and_secret_redaction(access):
     assert sum(isinstance(r,dict) for r in results)==1
     rows=access.list_invitations(actor='admin')['items']
     assert rows[0]['used_count']==1 and rows[0]['status']=='EXHAUSTED'
-    assert i['code'] not in str(rows)
-    assert i['code'] not in str(access.access_audit(actor='admin'))
+    assert all('code' not in row and 'code_hash' not in row for row in rows)
+    assert all(i['code'] not in row['summary'] for row in access.access_audit(actor='admin')['items'])
 
 
 def test_invalid_expired_revoked_duplicate_and_consent(access):
@@ -51,11 +51,11 @@ def test_invalid_expired_revoked_duplicate_and_consent(access):
 
 
 def test_roles_account_status_and_last_admin(access):
-    with pytest.raises(Problem):access.create_invitations(actor='operator',label='no')
+    with pytest.raises(Problem):access.create_invitations(actor='reviewer',label='no')
     with pytest.raises(Problem):access.list_accounts(actor='reader')
     with access.db.tx(False) as s: aid=s.scalar(select(Account.id).where(Account.username=='admin'))
     with pytest.raises(Problem):access.update_account(aid,actor='admin',active=False,roles=['user'],reason='test')
-    access.create_account('admin2','long-password-123',['admin'])
+    access.create_account('admin2','long-password-123',['operator'])
     access.update_account(aid,actor='admin2',active=False,roles=['user'],reason='授权收回')
     session=access.login('reader','long-password-123')
     with access.db.tx(False) as s:rid=s.scalar(select(Account.id).where(Account.username=='reader'))
@@ -170,8 +170,91 @@ def test_host_account_and_password_maintenance_revoke_unused_reset_codes(access,
     code=access.issue_password_reset(rid,actor='admin',reason='verified')['code']
     access.revoke_account('reader');access.revoke_account('reader',active=True)
     with pytest.raises(Problem):access.reset_password(code,'New-password-123')
+
     code=access.issue_password_reset(rid,actor='admin',reason='verified')['code']
     monkeypatch.setattr(Settings,'from_env',lambda:Settings(data_dir=tmp_path,database_url=access.database_url))
     monkeypatch.setattr(cli.getpass,'getpass',lambda prompt:'CLI-new-password-123')
     assert cli.main(['password-reset','reader']) in (None,0)
     with pytest.raises(Problem):access.reset_password(code,'New-password-123')
+
+
+def test_four_character_passwords_across_account_and_recovery_flows(access):
+    from deepaha.product.auth import password_hash,verify_password
+    assert verify_password('1234',password_hash('1234'))
+    with pytest.raises(Problem):password_hash('123')
+    with pytest.raises(Problem):password_hash('a'*257)
+    i=invite(access)
+    r=access.register_invited('shortpass','1234',i['code'],accepted=True)
+    assert access.login('shortpass','1234')['username']=='shortpass'
+    access.change_password('1234','abcd',actor='shortpass')
+    reset=access.issue_password_reset(r['id'],actor='operator',reason='identity checked')
+    access.reset_password(reset['code'],'5678')
+    assert access.login('shortpass','5678')['roles']==['user']
+
+
+def test_four_digit_codes_unique_and_never_reissued(access,monkeypatch):
+    from deepaha.product import access as module
+    monkeypatch.setattr(module,'INVITATION_CODE_SPACE',3)
+    first=access.create_invitations(actor='operator',label='batch',count=2)['items']
+    assert len({r['code'] for r in first})==2
+    assert all(len(r['code'])==4 and r['code'].isdigit() for r in first)
+    for r in first:access.revoke_invitation(r['id'],actor='operator')
+    last=access.create_invitations(actor='operator',label='next')['items'][0]
+    assert last['code'] not in {r['code'] for r in first}
+    with pytest.raises(Problem) as ex:access.create_invitations(actor='operator',label='full')
+    assert ex.value.code=='INVITE_CODES_EXHAUSTED'
+
+
+def test_legacy_admin_migration_preserves_password_and_roles_is_idempotent(access):
+    # Simulate the previously deployed schema/account without using the new role API.
+    with access.db.tx() as s:
+        a=s.scalar(select(Account).where(Account.username=='admin'))
+        a.roles=['user','reviewer','admin'];old_hash=a.password_hash
+    old_session=access.login('admin','long-password-123')
+    result=access.migrate_access_roles()
+    assert result['migrated_accounts']==1
+    with access.db.tx(False) as s:
+        a=s.scalar(select(Account).where(Account.username=='admin'))
+        assert set(a.roles)=={'user','reviewer','operator'} and a.password_hash==old_hash
+    with pytest.raises(Problem):access.authenticate(old_session['token'])
+    assert access.migrate_access_roles()['migrated_accounts']==0
+    assert access.create_invitations(actor='admin',label='works')['items']
+    with pytest.raises(Problem):access.create_account('obsolete','1234',['admin'])
+    assert access.restore_access_roles(result['changes'])['restored_accounts']==1
+    with access.db.tx(False) as s:
+        a=s.scalar(select(Account).where(Account.username=='admin'))
+        assert a.roles==['user','reviewer','admin'] and a.password_hash==old_hash
+
+
+def test_api_four_character_password_and_operator_management(access,tmp_path):
+    from fastapi.testclient import TestClient
+    from deepaha.product.api import create_app
+    from deepaha.product.config import Settings
+    with TestClient(create_app(Settings(data_dir=tmp_path,database_url=access.database_url,allow_registration=True),access)) as c:
+        auth=c.post('/api/auth/login',json={'username':'operator','password':'long-password-123'}).json()
+        headers={'X-CSRF-Token':auth['csrf']}
+        r=c.post('/api/admin/invitations',json={'label':'operator invite'},headers=headers)
+        assert r.status_code==200
+        code=r.json()['items'][0]['code'];assert len(code)==4 and code.isdigit()
+        assert c.get('/api/admin/users').status_code==200
+        c.cookies.clear()
+        payload={'username':'api_short','password':'123','invite_code':code,'accepted':True}
+        assert c.post('/api/auth/register',json=payload).status_code==422
+        assert c.post('/api/auth/register',json={**payload,'password':'1234'}).status_code==200
+        assert c.get('/api/admin/users').status_code==403
+
+
+def test_operator_inherits_reviewer_permissions_api(access,tmp_path):
+    from .test_contract import packet
+    from fastapi.testclient import TestClient
+    from deepaha.product.api import create_app
+    from deepaha.product.config import Settings
+    preview=access.ingest(access.test_source,packet(),actor='operator')
+    with TestClient(create_app(Settings(data_dir=tmp_path,database_url=access.database_url),access)) as c:
+        auth=c.post('/api/auth/login',json={'username':'operator','password':'long-password-123'}).json()
+        assert auth['roles']==['operator']
+        assert c.get('/api/review').status_code==200
+        r=c.post('/api/review/'+preview['id']+'/decision',json={'decision':'APPROVE','preview_hash':preview['preview_hash'],'note':'','request_key':'operator-inherits-review'},headers={'X-CSRF-Token':auth['csrf']})
+        assert r.status_code==200 and r.json()['decision']=='APPROVE'
+        c.post('/api/auth/login',json={'username':'reviewer','password':'long-password-123'})
+        assert c.get('/api/admin/users').status_code==403

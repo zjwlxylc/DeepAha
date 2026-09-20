@@ -6,12 +6,14 @@ from sqlalchemy import select
 from .models import Account, LoginSession, LoginAttempt, PasswordReset, Audit, now
 from .errors import Problem
 
-ROLES={'user','reviewer','operator','admin'}
+ROLES={'user','reviewer','operator'}
+def has_role(roles,required):
+    return required in roles or (required=='reviewer' and 'operator' in roles)
 def digest(value):return hashlib.sha256(value.encode()).hexdigest()
 def aware(value):return value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value
 
 def password_hash(password):
-    if not 12<=len(password)<=256:raise Problem('密码须为12至256个字符')
+    if not 4<=len(password)<=256:raise Problem('密码须为4至256个字符')
     salt=secrets.token_hex(16)
     key=hashlib.scrypt(password.encode(),salt=salt.encode(),n=32768,r=8,p=1,maxmem=67108864).hex()
     return 'scrypt$32768$'+salt+'$'+key
@@ -27,7 +29,7 @@ class AuthMixin:
     def _account(self,s,actor,role=None):
         a=s.scalar(select(Account).where(Account.username==actor,Account.active.is_(True)))
         if not a:raise Problem('请重新登录',401,'AUTH_REQUIRED')
-        if role and role not in a.roles:raise Problem('没有执行此操作的权限',403,'FORBIDDEN')
+        if role and not has_role(a.roles,role):raise Problem('没有执行此操作的权限',403,'FORBIDDEN')
         return a
     def create_account(self,username,password,roles):
         import re

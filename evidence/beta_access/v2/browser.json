@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "operator_only_account_management": true,
+  "four_digit_invite": true,
+  "four_character_registration": true,
+  "three_role_cards": true,
+  "checkbox_sizes": [
+    {
+      "w": 19,
+      "h": 19
+    },
+    {
+      "w": 19,
+      "h": 19
+    },
+    {
+      "w": 19,
+      "h": 19
+    },
+    {
+      "w": 19,
+      "h": 19
+    }
+  ],
+  "mobile_no_horizontal_overflow": true,
+  "role_save": true,
+  "javascript_errors": []
+}

@@ -5,3 +5,36 @@
 .access-table .meta { display:block; margin-top:6px; font-size:12px; color:#74839c; }
 #access-secret textarea { width:100%; box-sizing:border-box; margin-top:16px; font-family:monospace; overflow-wrap:anywhere; }
 #invite-form .form-field { flex:1 1 170px; }
+
+/* Scope account controls so global input width/min-height rules cannot stretch checkboxes. */
+dialog:has(.access-account-form) { width:min(620px,calc(100vw - 32px)); max-height:calc(100dvh - 40px); padding:0; }
+dialog:has(.access-account-form) .dialog-form { display:flex; flex-direction:column; padding:0; max-height:calc(100dvh - 40px); gap:0; }
+dialog:has(.access-account-form) .dialog-form>.between { flex:none; padding:20px 24px; border-bottom:1px solid #e8edf4; }
+dialog:has(.access-account-form) .dialog-form>.between h2 { font-size:20px; line-height:1.4; }
+dialog:has(.access-account-form) .dialog-body { min-height:0; overflow:auto; padding:20px 24px; margin:0; }
+dialog:has(.access-account-form) .dialog-footer { flex:none; margin:0; padding:16px 24px; border-top:1px solid #e8edf4; background:#fff; }
+.access-account-form { display:grid; gap:18px; color:#233c5b; }
+.access-account-heading { display:flex; align-items:center; gap:12px; min-width:0; }
+.access-account-heading>div { min-width:0; }
+.access-account-heading strong { display:block; font-size:16px; overflow-wrap:anywhere; }
+.access-account-heading p { margin:3px 0 0; font-size:12px; color:#7a8ba0; }
+.access-account-form .access-toggle,.access-account-form .access-role-card { display:flex; align-items:center; justify-content:flex-start; gap:12px; width:100%; box-sizing:border-box; padding:13px 15px; border:1px solid #e2e8f1; border-radius:12px; cursor:pointer; margin:0; }
+.access-account-form .access-toggle { background:#f7f9fc; }
+.access-account-form input[type=checkbox] { display:block; flex:0 0 19px; width:19px; height:19px; min-width:19px; min-height:19px; margin:0; padding:0; accent-color:#1554c0; cursor:pointer; }
+.access-account-form .access-toggle>span,.access-account-form .access-role-card>span { display:block; flex:1; min-width:0; text-align:left; }
+.access-account-form .access-toggle strong,.access-account-form .access-role-card strong { display:block; font-size:14px; line-height:1.4; font-weight:650; }
+.access-account-form .access-toggle small,.access-account-form .access-role-card small { display:block; margin-top:4px; font-size:12px; line-height:1.5; color:#75849a; font-weight:400; }
+.access-role-fieldset { border:0; padding:0; margin:0; min-width:0; }
+.access-role-fieldset legend { float:none; width:100%; padding:0 0 10px; font-size:13px; font-weight:650; }
+.access-role-fieldset legend span { margin-left:8px; font-size:12px; font-weight:400; color:#8794a7; }
+.access-role-options { display:grid; gap:8px; }
+.access-account-form .access-role-card:hover { border-color:#b4c9e7; }
+.access-account-form .access-role-card:has(input:checked) { background:#f0f5ff; border-color:#a8c2ef; }
+.access-account-form .form-field { margin:0; gap:8px; }
+.access-account-form .form-field label { font-size:13px; }
+.access-change-note { margin:0; color:#8490a3; font-size:12px; line-height:1.5; }
+@media(max-width:620px) {
+ dialog:has(.access-account-form) .dialog-form>.between,dialog:has(.access-account-form) .dialog-body { padding:16px 18px; }
+ dialog:has(.access-account-form) .dialog-footer { padding:14px 18px; flex-direction:row; justify-content:flex-end; gap:10px; }
+ dialog:has(.access-account-form) .dialog-footer .btn { width:auto; min-width:88px; }
+}

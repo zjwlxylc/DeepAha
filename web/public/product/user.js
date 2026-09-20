@@ -56,7 +56,6 @@ function workspaceEntry(){
  if(reviewer&&operator)return ['/review/overview','desktop','工作台'];
  if(reviewer)return ['/review/overview','inbox','审核工作台'];
  if(operator)return ['/manage','settings','系统管理'];
- if(has('admin'))return ['/manage/invitations','user','邀请与用户'];
  return null;
 }
 function shell(body,path,narrow=false,actions=''){

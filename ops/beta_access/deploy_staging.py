@@ -90,7 +90,7 @@ def main():
     pg=os.environ.copy();pg.update({'PGHOST':url.host or 'localhost','PGPORT':str(url.port or 5432),'PGUSER':url.username or '', 'PGPASSWORD':url.password or '', 'PGDATABASE':url.database or ''})
     active={name:subprocess.run(['systemctl','is-active','--quiet',name]).returncode==0 for name in (API,WORKER)}
     env_backup=backup/'staging-isolated.env';shutil.copy2(ENV,env_backup);env_backup.chmod(0o600)
-    changed=False;stopped=False;success=False
+    changed=False;stopped=False;success=False;role_changes=[];roles_migrated=False
     try:
         if CURRENT.resolve()!=old:raise RuntimeError('Concurrent release detected')
         stopped=True
@@ -121,17 +121,28 @@ def main():
         from deepaha.product.models import Account
         from sqlalchemy import select
         p=Product(cfg['DEEPAHA_DATABASE_URL'],Path(cfg['DEEPAHA_DATA_DIR'])/'objects')
+        # Save compensating role changes before migration; passwords are never exported.
         with p.db.tx(False) as s:
-            admins=[a.username for a in s.scalars(select(Account).where(Account.active.is_(True))) if 'admin' in a.roles]
-            conflict=s.scalar(select(Account).where(Account.username=='beta_admin'))
+            password_hashes={a.id:a.password_hash for a in s.scalars(select(Account))}
+            role_changes=[{'id':a.id,'before':a.roles,'after':list(dict.fromkeys([r for r in a.roles if r!='admin']+['operator']))}
+                          for a in s.scalars(select(Account)) if 'admin' in a.roles]
+        role_backup=backup/'access-roles-rollback.json'
+        role_backup.write_text(json.dumps(role_changes));role_backup.chmod(0o600)
+        migration=p.migrate_access_roles();roles_migrated=True
+        receipt['legacy_admins_migrated_to_operator']=migration['migrated_accounts']
+        with p.db.tx(False) as s:
+            if password_hashes!={a.id:a.password_hash for a in s.scalars(select(Account))}:raise RuntimeError('Role migration changed account passwords')
+            receipt['existing_password_hashes_unchanged']=True
+            admins=[a.username for a in s.scalars(select(Account).where(Account.active.is_(True))) if 'operator' in a.roles]
+            conflict=s.scalar(select(Account).where(Account.username=='beta_operator'))
         if not admins:
-            if conflict:raise RuntimeError('beta_admin name conflict; manual resolution required')
+            if conflict:raise RuntimeError('beta_operator name conflict; manual resolution required')
             password=secrets.token_urlsafe(24)
-            p.create_account('beta_admin',password,['user','admin'])
-            secret=backup/'admin-once.json'
-            secret.write_text(json.dumps({'username':'beta_admin','password':password,'url':'https://staging.deepaha.com/login','note':'首次登录后请在账号安全页修改密码；仍需既有staging Basic Auth。'},ensure_ascii=False))
-            secret.chmod(0o600);receipt['admin_credentials_file']=str(secret)
-        else:receipt['existing_admin_retained']=True
+            p.create_account('beta_operator',password,['user','operator'])
+            secret=backup/'operator-once.json'
+            secret.write_text(json.dumps({'username':'beta_operator','password':password,'url':'https://staging.deepaha.com/login','note':'首次登录后请在账号安全页修改密码；仍需既有staging Basic Auth。'},ensure_ascii=False))
+            secret.chmod(0o600);receipt['operator_credentials_file']=str(secret)
+        else:receipt['existing_operator_retained']=True
         p.db.engine.dispose()
         # Replace only the registration flag; preserve host-owned secrets and file permissions.
         value=ENV.read_text();lines=[line for line in value.splitlines() if not line.startswith('DEEPAHA_ALLOW_REGISTRATION=')]
@@ -169,6 +180,9 @@ def main():
         receipt['status']='DEPLOYED_READY_FOR_FUNCTIONAL_SMOKE';success=True
     finally:
         if not success and stopped:
+            if roles_migrated and role_changes:
+                run(['systemctl','stop',API]);run(['systemctl','stop',WORKER])
+                p.restore_access_roles(role_changes)
             if CURRENT.resolve()==dest:switch(old)
             if changed:shutil.copy2(env_backup,ENV)
             for name,was_active in active.items():

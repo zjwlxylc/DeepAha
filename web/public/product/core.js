@@ -4,7 +4,7 @@ export const $$=(q,scope=document)=>[...scope.querySelectorAll(q)];
 export const e=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const icon=(name,cls='')=>`<svg class="icon ${cls}" viewBox="0 0 24 24" aria-hidden="true">${window.DeepAhaIcons[name]||window.DeepAhaIcons.file}</svg>`;
 export const brand=()=>`<a href="/" data-nav class="logo"><img class="brand-mark" src="/product/brand-logo.png" width="40" height="40" alt="DeepAha"><span><span class="logo-word">DeepAha</span><span class="brand-caption">机会星图</span></span></a>`;
-export const has=(role)=>state.user?.roles?.includes(role);
+export const has=(role)=>Boolean(state.user?.roles?.includes(role)||(role==='reviewer'&&state.user?.roles?.includes('operator')));
 export const time=(s)=>{if(!s)return '—';const date=new Date(s);if(Number.isNaN(date.getTime()))return '时间未明确';return new Intl.DateTimeFormat('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Shanghai'}).format(date);};
 export const types={PUBLIC_INSTITUTION_JOB:'事业单位',STATE_OWNED_ENTERPRISE_JOB:'国央企',CIVIL_SERVICE:'考公',GRASSROOTS_PROGRAM:'基层项目',YOUTH_POLICY_BENEFIT:'人才政策',POSTGRAD_RECOMMENDATION:'升学',ADMISSION_CHANGE:'招生信息',COMPETITION:'竞赛',RESEARCH_PROGRAM:'科研',SCHOLARSHIP:'奖学金',YOUTH_DEVELOPMENT_PROGRAM:'成长与实践'};
 export const statusText={PENDING:'待审核',APPROVED:'已收录',REJECTED:'不通过',CURRENT:'已收录',UPDATE_PENDING:'更新待收录',WITHDRAWN:'已撤回',QUEUED:'等待调查',RUNNING:'处理中',RECOVERY_QUEUED:'等待恢复',NEEDS_RECOVERY:'待恢复',FAILED:'处理失败',READY:'结果已接收',CANCELLED:'已停止后续处理',SAVED:'已收藏',PREPARING:'准备中',APPLIED:'已申请',WAITING:'等待结果',COMPLETED:'已完成',DISMISSED:'暂不考虑'};

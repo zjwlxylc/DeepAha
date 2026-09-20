@@ -8,7 +8,8 @@ from .errors import Problem
 from .models import Account, Audit, Invitation, InvitationRedemption, LoginAttempt, LoginSession, PasswordReset, now
 
 NOTICE_VERSION='beta-access-v1'
-ACCESS_ACTIONS={'INVITE_CREATE','INVITE_REVOKE','INVITE_REDEEM','ADMIN_ACCOUNT','ADMIN_REVOKE_SESSIONS','ADMIN_RESET_ISSUE','ACCESS_PASSWORD_RESET','ACCESS_PASSWORD_CHANGE','ACCESS_ADMIN_BOOTSTRAP'}
+INVITATION_CODE_SPACE=10000
+ACCESS_ACTIONS={'INVITE_CREATE','INVITE_REVOKE','INVITE_REDEEM','ADMIN_ACCOUNT','ADMIN_REVOKE_SESSIONS','ADMIN_RESET_ISSUE','ACCESS_PASSWORD_RESET','ACCESS_PASSWORD_CHANGE','ACCESS_ADMIN_BOOTSTRAP','ACCESS_ROLE_MIGRATION','ACCESS_ROLE_ROLLBACK','ACCESS_OPERATOR_GRANT'}
 
 
 def _revoke_sessions(s, account_id):
@@ -25,6 +26,31 @@ def _invitation(row):
 
 
 class AccessMixin:
+    def migrate_access_roles(self):
+        """Explicit backup-first migration; no passwords or business roles removed."""
+        changes=[]
+        with self.db.tx() as s:
+            for account in s.scalars(select(Account).order_by(Account.id)):
+                if 'admin' not in account.roles:continue
+                before=list(account.roles)
+                after=list(dict.fromkeys([r for r in before if r!='admin']+['operator']))
+                account.roles=after
+                _revoke_sessions(s,account.id);_invalidate_resets(s,account.id)
+                self._audit(s,'SYSTEM_CLI','ACCESS_ROLE_MIGRATION',account.id,'合并账号管理权限到维护员；密码未变更')
+                changes.append({'id':account.id,'before':before,'after':after})
+        return {'migrated_accounts':len(changes),'changes':changes}
+
+    def restore_access_roles(self,changes):
+        """Host-only compensation for a failed deployment, with concurrency guard."""
+        with self.db.tx() as s:
+            for change in changes:
+                account=s.get(Account,change['id'])
+                if not account or account.roles!=change['after']:
+                    raise Problem('账号角色已发生后续变更，停止自动回退',409,'ROLE_ROLLBACK_CONFLICT')
+                account.roles=change['before'];_revoke_sessions(s,account.id);_invalidate_resets(s,account.id)
+                self._audit(s,'SYSTEM_CLI','ACCESS_ROLE_ROLLBACK',account.id,'发布失败恢复迁移前角色；密码未变更')
+        return {'restored_accounts':len(changes)}
+
     def _access_limit(self,s,scope,ip,maximum=20):
         key=digest('access|'+scope+'|'+ip)
         row=s.get(LoginAttempt,key)
@@ -37,9 +63,11 @@ class AccessMixin:
         if not label.strip() or len(label)>120 or not 1<=count<=50 or not 1<=max_uses<=1000 or not 1<=expires_days<=90:raise Problem('邀请码设置不正确')
         result=[]
         with self.db.tx() as s:
-            self._account(s,actor,'admin')
-            for _ in range(count):
-                code=secrets.token_urlsafe(24)
+            self._account(s,actor,'operator')
+            occupied=set(s.scalars(select(Invitation.code_hash)))
+            available=[f'{n:04d}' for n in range(INVITATION_CODE_SPACE) if digest(f'{n:04d}') not in occupied]
+            if count>len(available):raise Problem('四位邀请码已分配完，请联系维护员处理',409,'INVITE_CODES_EXHAUSTED')
+            for code in secrets.SystemRandom().sample(available,count):
                 row=Invitation(code_hash=digest(code),label=label.strip(),max_uses=max_uses,expires_at=now()+timedelta(days=expires_days),created_by=actor)
                 s.add(row);s.flush()
                 self._audit(s,actor,'INVITE_CREATE',row.id,f'名额={max_uses};有效天数={expires_days}')
@@ -48,14 +76,14 @@ class AccessMixin:
 
     def list_invitations(self,*,actor,offset=0,limit=30):
         with self.db.tx(False) as s:
-            self._account(s,actor,'admin')
+            self._account(s,actor,'operator')
             total=s.scalar(select(func.count()).select_from(Invitation))
             rows=s.scalars(select(Invitation).order_by(Invitation.created_at.desc(),Invitation.id).offset(offset).limit(limit))
             return {'total':total,'items':[_invitation(r) for r in rows]}
 
     def revoke_invitation(self,id,*,actor):
         with self.db.tx() as s:
-            self._account(s,actor,'admin');row=s.get(Invitation,id)
+            self._account(s,actor,'operator');row=s.get(Invitation,id)
             if not row:raise Problem('邀请码不存在',404)
             row.revoked=True;self._audit(s,actor,'INVITE_REVOKE',id,'停止新注册，不影响已注册账号')
         return {'revoked':True}
@@ -77,7 +105,7 @@ class AccessMixin:
 
     def list_accounts(self,*,actor,q='',offset=0,limit=30):
         with self.db.tx(False) as s:
-            self._account(s,actor,'admin')
+            self._account(s,actor,'operator')
             cond=Account.username.contains(q,autoescape=True)
             total=s.scalar(select(func.count()).select_from(Account).where(cond))
             rows=s.execute(select(Account,InvitationRedemption,Invitation).outerjoin(InvitationRedemption,Account.id==InvitationRedemption.account_id).outerjoin(Invitation,Invitation.id==InvitationRedemption.invitation_id).where(cond).order_by(Account.created_at.desc(),Account.id).offset(offset).limit(limit))
@@ -86,26 +114,26 @@ class AccessMixin:
     def update_account(self,id,*,actor,active,roles,reason):
         if not roles or set(roles)-ROLES or not reason.strip() or len(reason)>500:raise Problem('角色和操作原因不能为空')
         with self.db.tx() as s:
-            admin=self._account(s,actor,'admin');a=s.get(Account,id)
+            admin=self._account(s,actor,'operator');a=s.get(Account,id)
             if not a:raise Problem('账号不存在',404)
             if a.id==admin.id:raise Problem('不能通过管理页面修改自己的角色或状态',409,'SELF_CHANGE_FORBIDDEN')
-            if 'admin' in a.roles and a.active and (not active or 'admin' not in roles):
-                others=[x for x in s.scalars(select(Account).where(Account.active.is_(True),Account.id!=a.id)) if 'admin' in x.roles]
-                if not others:raise Problem('必须保留至少一名活跃管理员',409,'LAST_ADMIN')
+            if 'operator' in a.roles and a.active and (not active or 'operator' not in roles):
+                others=[x for x in s.scalars(select(Account).where(Account.active.is_(True),Account.id!=a.id)) if 'operator' in x.roles]
+                if not others:raise Problem('必须保留至少一名活跃维护员',409,'LAST_OPERATOR')
             a.active=active;a.roles=list(dict.fromkeys(roles));_revoke_sessions(s,a.id);_invalidate_resets(s,a.id)
             self._audit(s,actor,'ADMIN_ACCOUNT',id,f'active={active};roles={",".join(a.roles)};原因={reason.strip()}')
         return {'updated':True}
 
     def revoke_user_sessions(self,id,*,actor,reason):
         with self.db.tx() as s:
-            self._account(s,actor,'admin')
+            self._account(s,actor,'operator')
             if not s.get(Account,id):raise Problem('账号不存在',404)
             _revoke_sessions(s,id);self._audit(s,actor,'ADMIN_REVOKE_SESSIONS',id,reason)
         return {'revoked':True}
 
     def issue_password_reset(self,id,*,actor,reason):
         with self.db.tx() as s:
-            admin=self._account(s,actor,'admin');a=s.get(Account,id)
+            admin=self._account(s,actor,'operator');a=s.get(Account,id)
             if not a or not a.active:raise Problem('账号不存在或已停用',404)
             if admin.id==a.id:raise Problem('请在账号安全页用旧密码修改自己的密码',409)
             _invalidate_resets(s,id)
@@ -136,6 +164,6 @@ class AccessMixin:
 
     def access_audit(self,*,actor,offset=0,limit=30):
         with self.db.tx(False) as s:
-            self._account(s,actor,'admin')
+            self._account(s,actor,'operator')
             rows=s.scalars(select(Audit).where(Audit.action.in_(ACCESS_ACTIONS)).order_by(Audit.created_at.desc(),Audit.id).offset(offset).limit(limit))
             return {'items':[{'action':r.action,'actor':r.actor,'target':r.target,'summary':r.summary,'created_at':aware(r.created_at).isoformat()} for r in rows]}

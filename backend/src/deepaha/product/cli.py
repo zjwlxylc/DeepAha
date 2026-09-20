@@ -22,7 +22,7 @@ def main(argv=None):
     sub=ap.add_subparsers(dest='command',required=True)
     sub.add_parser('init',help='仅新增当前产品所需数据表，不改写旧表')
     sub.add_parser('upgrade-access',help='已完成宿主备份后，显式新增邀请码表；不改现有业务表')
-    admin=sub.add_parser('access-admin');admin.add_argument('username',help='显式授予已有账号admin角色')
+    admin=sub.add_parser('access-operator');admin.add_argument('username',help='显式授予已有账号operator角色')
     upgrade=sub.add_parser('upgrade',help='备份并补齐rc2来源资产表，保留所有原有数据');upgrade.add_argument('--backup',type=Path)
     sg1=sub.add_parser('upgrade-sg1',help='备份并升级为SG1岗位/赛道级机会总览');sg1.add_argument('--backup',type=Path)
     sg51=sub.add_parser('upgrade-sg5-1',help='备份并刷新SG5.1证据支持的时间节点，不重新调用WMA');sg51.add_argument('--backup',type=Path)
@@ -55,24 +55,25 @@ def main(argv=None):
             p.initialize();output({'initialized':True,'data_dir':str(settings.data_dir)})
             if args.command=='setup':
                 name=input('首个账号（英文或数字，默认 owner）: ').strip() or 'owner'
-                password=getpass.getpass('密码（至少12个字符）: ')
+                password=getpass.getpass('密码（至少4个字符）: ')
                 if getpass.getpass('再次输入密码: ')!=password:raise Problem('两次密码不一致')
                 output(p.create_account(name,password,['user','reviewer','operator']))
         elif args.command=='upgrade-access':
             from .models import Base,ACCESS_TABLE_NAMES
             Base.metadata.create_all(p.db.engine,tables=[t for t in Base.metadata.sorted_tables if t.name in ACCESS_TABLE_NAMES])
-            output({'access_schema':'1','added_tables':sorted(ACCESS_TABLE_NAMES),'existing_business_rows_changed':False})
-        elif args.command=='access-admin':
+            result=p.migrate_access_roles()
+            output({'access_schema':'2','added_tables':sorted(ACCESS_TABLE_NAMES),'migrated_accounts':result['migrated_accounts'],'passwords_changed':False})
+        elif args.command=='access-operator':
             from sqlalchemy import select
             from .models import Account
             from .access import _revoke_sessions
             with p.db.tx() as s:
                 account=s.scalar(select(Account).where(Account.username==args.username,Account.active.is_(True)))
                 if not account:raise Problem('指定账号不存在或已停用',404)
-                account.roles=list(dict.fromkeys([*account.roles,'admin']))
+                account.roles=list(dict.fromkeys([r for r in account.roles if r!='admin']+['operator']))
                 _revoke_sessions(s,account.id)
-                p._audit(s,'SYSTEM_CLI','ACCESS_ADMIN_BOOTSTRAP',account.id,'显式授予账号管理权限')
-            output({'admin_granted':True})
+                p._audit(s,'SYSTEM_CLI','ACCESS_OPERATOR_GRANT',account.id,'显式授予账号管理权限')
+            output({'operator_granted':True})
         elif args.command=='upgrade':
             from .upgrade import upgrade_source_intake
             from .models import now
@@ -104,14 +105,14 @@ def main(argv=None):
             target=args.backup or settings.data_dir/'backups'/('before-sg7-'+now().strftime('%Y%m%dT%H%M%S%f')+'.zip')
             output(upgrade_opportunity_lab(p,target))
         elif args.command=='user-add':
-            pw=os.environ.get(args.password_env,'') if args.password_env else getpass.getpass('账号密码（至少12个字符）: ')
+            pw=os.environ.get(args.password_env,'') if args.password_env else getpass.getpass('账号密码（至少4个字符）: ')
             output(p.create_account(args.username,pw,args.roles.split(',')))
         elif args.command=='user-disable':p.revoke_account(args.username);output({'disabled':args.username})
         elif args.command=='password-reset':
             from sqlalchemy import select
             from .models import Account,LoginSession,PasswordReset
             from .auth import password_hash
-            value=getpass.getpass('新密码（至少12个字符）: ')
+            value=getpass.getpass('新密码（至少4个字符）: ')
             if getpass.getpass('再次输入新密码: ')!=value:raise Problem('两次密码不一致')
             with p.db.tx() as s:
                 account=s.scalar(select(Account).where(Account.username==args.username))

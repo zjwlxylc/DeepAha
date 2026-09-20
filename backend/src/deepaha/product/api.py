@@ -14,6 +14,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from deepaha.artifacts.object_store import ObjectIntegrityError
 from .service import Product
+from .auth import has_role
 from .config import Settings,ConnectionConfig
 from .errors import Problem
 from .storage import MAX_ARCHIVE
@@ -29,7 +30,7 @@ class Login(Strict):
     username:str=Field(min_length=3,max_length=80)
     password:str=Field(min_length=1,max_length=256)
 class Registration(Login):
-    password:str=Field(min_length=12,max_length=256)
+    password:str=Field(min_length=4,max_length=256)
     invite_code:str=Field(min_length=1,max_length=128)
     accepted:bool
 class Decide(Strict):
@@ -175,7 +176,7 @@ def create_app(settings=None,product=None):
         return res
     def user(req,role=None,write=False):
         u=p.authenticate(req.cookies.get('deepaha_session'),req.headers.get('x-csrf-token','') if write else None)
-        if role and role not in u['roles']:raise Problem('没有执行此操作的权限',403,'FORBIDDEN')
+        if role and not has_role(u['roles'],role):raise Problem('没有执行此操作的权限',403,'FORBIDDEN')
         return u['username']
     def reader(req):
         if not settings.public_catalog:user(req)
