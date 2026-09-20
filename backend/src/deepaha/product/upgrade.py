@@ -3,6 +3,7 @@
 PostgreSQL requires an operator-managed pg_dump and the existing `init` command;
 this helper deliberately does not pretend to create a portable PostgreSQL backup.
 """
+import json
 from pathlib import Path
 from sqlalchemy import inspect
 from .models import Meta
