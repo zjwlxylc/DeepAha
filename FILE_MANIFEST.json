@@ -166,8 +166,8 @@
     },
     {
       "path": ".gitattributes",
-      "bytes": 809,
-      "sha256": "20e8b0831bcff7421b31bc45cc38d33b5e293d94d51489592f7a2a882dabfa7f"
+      "bytes": 828,
+      "sha256": "85a79f3b38052191313e113074dadc8e76ddd0fc520a7bd7ee1905f63ac073bc"
     },
     {
       "path": ".gitignore",
@@ -6141,8 +6141,8 @@
     },
     {
       "path": "docs/experience/INTEGRATION_RELEASE.md",
-      "bytes": 1961,
-      "sha256": "940caf69df1b00af2b1232da4d2d55f123dc315a1dc88aa0b1383fd7306af867"
+      "bytes": 2142,
+      "sha256": "f55ea0fc9de2c58d85478a9234e9256c72517fb8bacf31fc7f49ae447c06212d"
     },
     {
       "path": "docs/experience/README.md",
