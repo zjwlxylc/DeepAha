@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {birthDateValue,birthDateFields} from '../public/product/birth-date.js';
+const today=new Date(2026,8,20);
+assert.equal(birthDateValue('2000','2','29',today).value,'2000-02-29');
+assert.ok(birthDateValue('2001','2','29',today).error);
+assert.ok(birthDateValue('2000','4','31',today).error);
+assert.ok(birthDateValue('2026','9','21',today).error);
+assert.ok(birthDateValue('2000','','',today).error);
+assert.ok(birthDateValue('20','1','1',today).error);
+assert.equal(birthDateValue('','','',today).error,'');
+assert.equal(birthDateValue('','','',today).value,'');
+assert.ok(birthDateFields('2000-02-29').includes('value="2000-02-29"'));
+assert.ok(!birthDateFields('<script>alert(1)</script>').includes('<script>'));
+console.log('Birth date checks passed: leap dates, invalid dates, future dates, optional clearing and stored format');

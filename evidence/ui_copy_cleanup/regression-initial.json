@@ -1,0 +1,157 @@
+[
+  {
+    "file": "test_action_loop.py",
+    "rc": 0,
+    "seconds": 12.22
+  },
+  {
+    "file": "test_action_loop_api.py",
+    "rc": 0,
+    "seconds": 4.46
+  },
+  {
+    "file": "test_actionable_granularity.py",
+    "rc": 0,
+    "seconds": 13.48
+  },
+  {
+    "file": "test_api.py",
+    "rc": 0,
+    "seconds": 8.38
+  },
+  {
+    "file": "test_beta_access.py",
+    "rc": 0,
+    "seconds": 20.36
+  },
+  {
+    "file": "test_contract.py",
+    "rc": 0,
+    "seconds": 18.52
+  },
+  {
+    "file": "test_currentness.py",
+    "rc": 0,
+    "seconds": 11.38
+  },
+  {
+    "file": "test_currentness_api.py",
+    "rc": 0,
+    "seconds": 4.93
+  },
+  {
+    "file": "test_delivery_quality.py",
+    "rc": 0,
+    "seconds": 13.21
+  },
+  {
+    "file": "test_eligibility.py",
+    "rc": 0,
+    "seconds": 15.02
+  },
+  {
+    "file": "test_milestones_management.py",
+    "rc": 0,
+    "seconds": 12.29
+  },
+  {
+    "file": "test_multitype_opportunity_core.py",
+    "rc": 0,
+    "seconds": 9.78
+  },
+  {
+    "file": "test_operations.py",
+    "rc": 0,
+    "seconds": 7.74
+  },
+  {
+    "file": "test_personal_value.py",
+    "rc": 0,
+    "seconds": 16.19
+  },
+  {
+    "file": "test_qualification_compiler.py",
+    "rc": 0,
+    "seconds": 7.59
+  },
+  {
+    "file": "test_scout_import.py",
+    "rc": 0,
+    "seconds": 26.49
+  },
+  {
+    "file": "test_sg5_1_frontend_contract.py",
+    "rc": 0,
+    "seconds": 1.0
+  },
+  {
+    "file": "test_sg6_2_frontend_contract.py",
+    "rc": 0,
+    "seconds": 1.06
+  },
+  {
+    "file": "test_sg6_2_upgrade.py",
+    "rc": 0,
+    "seconds": 4.19
+  },
+  {
+    "file": "test_sg6_frontend_contract.py",
+    "rc": 0,
+    "seconds": 1.04
+  },
+  {
+    "file": "test_sg6_upgrade.py",
+    "rc": 0,
+    "seconds": 3.03
+  },
+  {
+    "file": "test_sg7_2_frontend_contract.py",
+    "rc": 0,
+    "seconds": 0.97
+  },
+  {
+    "file": "test_sg7_api.py",
+    "rc": 0,
+    "seconds": 5.48
+  },
+  {
+    "file": "test_sg7_founding_users.py",
+    "rc": 0,
+    "seconds": 4.65
+  },
+  {
+    "file": "test_sg7_frontend_contract.py",
+    "rc": 1,
+    "seconds": 1.32
+  },
+  {
+    "file": "test_sg7_independent_oracle100.py",
+    "rc": 0,
+    "seconds": 9.41
+  },
+  {
+    "file": "test_sg7_lab.py",
+    "rc": 0,
+    "seconds": 6.63
+  },
+  {
+    "file": "test_sg7_recommendation_oracle100.py",
+    "rc": 0,
+    "seconds": 23.66
+  },
+  {
+    "file": "test_sg7_upgrade.py",
+    "rc": 0,
+    "seconds": 3.75
+  },
+  {
+    "file": "test_sg8a_deployment.py",
+    "rc": 0,
+    "seconds": 4.81
+  },
+  {
+    "file": "test_worker.py",
+    "rc": 0,
+    "seconds": 4.66
+  }
+]

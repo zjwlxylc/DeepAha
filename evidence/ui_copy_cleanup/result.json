@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "scope": "synthetic UI fixtures; no live user data",
+  "mobile_home_label": true,
+  "copy_removed": true,
+  "notes_collapsed_and_expandable": true,
+  "excluded_status_retained": true,
+  "time_conflict_visible": true,
+  "qualification_risk_visible": true,
+  "escaped_notes": true,
+  "mobile_pages_checked": 11,
+  "javascript_errors": []
+}

@@ -11,7 +11,7 @@ def test_sg7_frontend_has_operator_lab_and_voluntary_user_lab_without_restoring_
     assert "path==='/app/lab'" in user and '机会共创实验' in user
     assert '自愿加入共创实验' in lab and '退出共创实验' in lab
     assert '不算真人 Gold' in lab and '机会 × 数字分身评估真值' in lab
-    assert '确定性标准答案判卷' in lab and '工程标准答案不等于独立人工 Gold' in lab
+    assert '自动测试与真人反馈分别统计' in lab and '工程样本不计入独立人工评估' in lab
     assert 'V${twins.items?.[0]?.version||2}' in lab
     assert '预期推荐结论' in lab and 'expected_recommendation' in lab
     assert '/api/manage/lab/' in api and '/api/me/lab' in api
@@ -22,6 +22,6 @@ def test_sg7_frontend_has_operator_lab_and_voluntary_user_lab_without_restoring_
 
 def test_sg7_lab_ui_does_not_claim_model_training_or_send_profile_to_wma():
     lab=(ROOT/'lab-ui.js').read_text(encoding='utf-8')
-    assert '不会把你的完整画像发给 WMA' in lab
-    assert '不自动训练外部模型' in lab
-    assert '不会批准正式事实' in lab
+    assert '个人画像不发送给外部服务' in lab
+    assert '不用于训练外部模型' in lab
+    assert '不改变正式收录或资格判断' in lab

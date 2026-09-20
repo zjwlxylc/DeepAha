@@ -200,7 +200,7 @@ def functional_smoke(p):
     p.create_account(name,password,['operator'])
     try:
         with httpx.Client(base_url='https://www.deepaha.com',headers={'Origin':'https://www.deepaha.com'},timeout=20) as c:
-            for path in ('/','/login','/register','/product/access-ui.js','/product/access.css'):
+            for path in ('/','/login','/register','/product/access-ui.js','/product/access.css','/product/birth-date.js'):
                 if c.get(path).status_code!=200:raise RuntimeError('Public route failed: '+path)
             r=c.post('/api/auth/login',json={'username':name,'password':password})
             if r.status_code!=200:raise RuntimeError('Public login failed')
@@ -214,6 +214,10 @@ def functional_smoke(p):
                 r=u.post('/api/auth/register',json={'username':user_name,'password':'1234','invite_code':item['code'],'accepted':True})
                 if r.status_code!=200:raise RuntimeError('Invited registration failed')
                 if u.get('/api/admin/users').status_code!=403:raise RuntimeError('User boundary failed')
+                u.headers['X-CSRF-Token']=r.json()['csrf']
+                for value in ('2000-02-29',''):
+                    if u.put('/api/me/profile',json={'birth_date':value}).status_code!=200:raise RuntimeError('Birth date save failed')
+                    if u.get('/api/me/profile').json()['birth_date']!=value:raise RuntimeError('Birth date readback failed')
             with httpx.Client(timeout=20,follow_redirects=False) as edge:
                 r=edge.get('https://deepaha.com/register?release_check=1')
                 if r.status_code!=301 or r.headers.get('location')!='https://www.deepaha.com/register?release_check=1':raise RuntimeError('Apex redirect failed')
@@ -223,6 +227,6 @@ def functional_smoke(p):
         with p.db.tx(False) as s:exists=s.scalar(select(Account.id).where(Account.username==user_name))
         if exists:p.revoke_account(user_name)
         p.revoke_account(name)
-    return {'https_login':'PASS','maintainer_permissions':'PASS','four_digit_invite_four_character_registration':'PASS','ordinary_user_boundary':'PASS','apex_redirect':'PASS','staging_basic_auth':'PASS','synthetic_accounts_disabled':True,'synthetic_invite_revoked':True}
+    return {'https_login':'PASS','maintainer_permissions':'PASS','four_digit_invite_four_character_registration':'PASS','ordinary_user_boundary':'PASS','birth_date_save_clear':'PASS','apex_redirect':'PASS','staging_basic_auth':'PASS','synthetic_accounts_disabled':True,'synthetic_invite_revoked':True}
 
 if __name__=='__main__':main()

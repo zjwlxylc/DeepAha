@@ -16,12 +16,12 @@ def test_profile_exposes_optional_compiler_fields_without_manual_review_controls
     assert 'qualification-approve' not in source
 
 
-def test_fit_ui_surfaces_compiler_coverage_and_high_risk_without_changing_status():
+def test_fit_ui_surfaces_unresolved_conditions_and_high_risk_without_engineering_copy():
     source=USER.read_text(encoding='utf-8')
-    assert 'compiler_state' in source
+    assert '资格条件自动编译' not in source
     assert 'unresolved_conditions' in source
     assert 'qualification_risk' in source
-    assert '存在明显资格冲突线索' in source
+    assert '请先核对资格条件' in source
 
 
 def test_star_ui_explains_hold_for_confirmation_as_ranking_gate_not_ineligible():

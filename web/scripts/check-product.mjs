@@ -24,7 +24,7 @@ for(const [name,source,needles] of [
 
 
 for(const [name,source,needles] of [
- ['user.js',user,['currentness-banner','版本记录','/history','更新待收录']],
+ ['user.js',user,['currentness-banner','更新记录','/history','更新待收录']],
  ['workbench.js',workbench,['变更范围','currentness','定向复查','撤回具体机会']],
 ]){
  for(const needle of needles)if(!source.includes(needle))throw new Error(`SG3 currentness UI contract missing in ${name}: ${needle}`);
@@ -32,7 +32,7 @@ for(const [name,source,needles] of [
 
 
 for(const [name,source,needles] of [
- ['user.js',user,['major_code','birth_date','hukou_region','当前条件明确符合','发现明确不符合条件','资格判断只使用已定位的当前官方材料','查看资格依据']],
+ ['user.js',user,['major_code','birth_date','hukou_region','当前条件明确符合','发现明确不符合条件','查看最新官方条件','查看资格依据']],
 ]){
  for(const needle of needles)if(!source.includes(needle))throw new Error(`SG4 eligibility UI contract missing in ${name}: ${needle}`);
 }

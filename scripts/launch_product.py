@@ -23,6 +23,25 @@ MANIFEST=DATA/'runtime.json'
 STOP_REQUEST=DATA/'.stop-requested'
 
 
+def upgrade_local_access(database,command,environment):
+    """Back up the local database before the additive access/role upgrade."""
+    import sqlite3
+    required={'product_invitations','product_invitation_redemptions','product_password_resets'}
+    with sqlite3.connect(database) as source:
+        tables={r[0] for r in source.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        legacy=any('admin' in json.loads(r[0]) for r in source.execute('SELECT roles FROM product_accounts'))
+        if required.issubset(tables) and not legacy:return None
+        backups=database.parent/'backups';backups.mkdir(exist_ok=True)
+        backup=backups/('before-access-'+str(time.time_ns())+'.db')
+        with sqlite3.connect(backup) as target:
+            source.backup(target)
+            if target.execute('PRAGMA quick_check').fetchone()[0]!='ok':
+                raise RuntimeError('账号升级前备份校验失败，未执行升级。')
+    print('正在升级账号功能。备份：'+str(backup))
+    subprocess.run(command+['upgrade-access'],cwd=ROOT/'backend',env=environment,check=True)
+    return backup
+
+
 def check_owned(record,project):
     import psutil
     try:
@@ -95,7 +114,7 @@ def main():
     with socket.socket() as sock:
         if sock.connect_ex(('127.0.0.1',args.port))==0:raise RuntimeError(f'端口{args.port}已被占用；未停止任何既有服务。')
     DATA.mkdir(parents=True,exist_ok=True,mode=0o700)
-    environment={**os.environ,'PYTHONPATH':str(ROOT/'backend/src'),'DEEPAHA_DATA_DIR':str(DATA)}
+    environment={**os.environ,'PYTHONPATH':str(ROOT/'backend/src'),'DEEPAHA_DATA_DIR':str(DATA),'PYTHONUTF8':'1'}
     command=[str(PYTHON),'-m','deepaha.product.cli']
     import sqlite3
     database=DATA/'deepaha.db'
@@ -107,9 +126,9 @@ def main():
             return connection.execute('SELECT COUNT(*) FROM product_accounts').fetchone()[0]>0
     def run_setup():
         for attempt in range(3):
-            print('\n需要设置一个账号才能登录。账号可用英文或数字；密码至少 12 个字符，输入时不显示，输完按回车。')
+            print('\n请设置登录账号，密码至少 4 个字符（输入时不显示）。')
             if subprocess.run(command+['setup'],cwd=ROOT/'backend',env=environment).returncode==0:return
-            print(f'设置未完成（第 {attempt+1} 次）。常见原因：两次密码不一致，或密码少于 12 个字符。')
+            print(f'设置未完成（第 {attempt+1} 次），请检查两次密码是否一致且不少于 4 个字符。')
         raise RuntimeError('连续三次未完成账号设置。服务未启动；重新双击本脚本即可继续设置，已建好的数据不会丢。')
     if not database.exists():
         print('首次启动：创建独立产品数据目录，并设置首个账号。')
@@ -134,6 +153,7 @@ def main():
         subprocess.run(command+['upgrade-sg6-2'],cwd=ROOT/'backend',env=environment,check=True)
         print('正在检查 SG7 机会实验室；只增加隔离实验数据结构，不改正式事实、审核结果或 WMA 原件。')
         subprocess.run(command+['upgrade-sg7'],cwd=ROOT/'backend',env=environment,check=True)
+        upgrade_local_access(database,command,environment)
         if not has_account():
             print('数据目录里还没有任何账号，补设首个账号后再启动服务。')
             run_setup()
@@ -149,11 +169,13 @@ def main():
         MANIFEST.write_text(json.dumps({'project':str(ROOT),'processes':processes},indent=2))
         url=f'http://127.0.0.1:{args.port}'
         for _ in range(50):
+            if not check_owned(processes[0],ROOT):
+                raise RuntimeError('API启动失败。日志：'+str(logs/'api.log'))
             try:
                 with urllib.request.urlopen(url+'/health/ready',timeout=1) as response:
                     if response.status==200:break
             except OSError:time.sleep(.2)
-        else:raise RuntimeError('服务未就绪，请查看数据目录logs/api.log。')
+        else:raise RuntimeError('服务未就绪。日志：'+str(logs/'api.log'))
         print('机会星图：'+url+'\n审核工作台：'+url+'/review/overview\n数据目录：'+str(DATA)+'\n关闭窗口或按Ctrl+C停止本次服务。')
         if not args.no_browser:webbrowser.open(url)
         while True:

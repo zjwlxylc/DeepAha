@@ -225,3 +225,17 @@ a[data-nav],button,summary,input,select,textarea{scroll-margin-top:90px}.work-si
  .marketing-footer-inner{grid-template-columns:1fr;gap:28px}.marketing-legal{grid-column:auto}.marketing-footer .logo .brand-mark{width:36px;height:36px}
  .about-hero{grid-template-columns:1fr;padding:62px 0 52px;gap:32px}.about-hero h1{font-size:40px;letter-spacing:-1.8px}.about-hero p{font-size:14px}.about-hero>img{width:150px;height:150px;border-radius:36px;justify-self:start}.about-belief{padding:65px 0}.about-statement h2{font-size:32px}.about-copy{font-size:13px}.about-principles{grid-template-columns:1fr;gap:12px}.about-principles article{min-height:auto;padding:24px 21px}.about-flow{gap:10px}.about-flow div{height:92px}.about-values>div:first-child h2{font-size:31px}.about-value-grid{grid-template-columns:1fr}.about-value-grid article{min-height:auto}.about-brand{grid-template-columns:1fr;margin:28px auto 70px;padding:28px;border-radius:24px;gap:28px}.about-brand>img{width:120px;height:120px;border-radius:29px}.about-brand h2{font-size:28px}.about-brand .marketing-hero-actions .btn{width:100%}
 }
+
+/* Keep opportunity facts prominent; secondary notes remain available on demand. */
+.detail-notes{margin-top:16px;border-top:1px solid var(--line);padding-top:12px;color:var(--muted);font-size:13px}
+.detail-notes summary,.detail-history summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:8px;list-style:none;font-weight:600}
+.detail-notes summary::before,.detail-history summary::before{content:'＋';font-weight:400}
+.detail-notes[open] summary::before,.detail-history[open] summary::before{content:'−'}
+.detail-notes ul,.field-notes{padding-left:20px;line-height:1.8;color:var(--muted);font-size:13px}
+.detail-history{color:var(--muted)}
+.detail-hero .currentness-banner{background:#f3f6fa;border:1px solid var(--line);color:var(--ink);padding:12px 14px;font-size:13px}
+.detail-hero .currentness-banner p{font-size:12px;color:var(--muted);margin-top:4px}
+.birth-date-inputs{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(2,minmax(0,1fr));gap:10px}
+.birth-date-inputs label{display:flex;flex-direction:column;gap:6px;min-width:0}
+.birth-date-inputs input,.birth-date-inputs select{min-height:48px;font-size:16px;width:100%;padding:10px}
+.birth-date-field #clear-birth-date{min-height:44px;padding:6px 0}

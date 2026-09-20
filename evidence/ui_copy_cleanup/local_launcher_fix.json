@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "database": "C:\\Users\\LENOVO\\deepaha-data\\deepaha.db",
+  "backup": "C:\\Users\\LENOVO\\deepaha-data\\backups\\before-access-1789878110032894600.db",
+  "existing_account_passwords_unchanged": true,
+  "http_live_ready_home_assets": "PASS",
+  "worker_started": false
+}
