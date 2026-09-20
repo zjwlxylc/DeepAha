@@ -1,0 +1,142 @@
+openapi: 3.1.0
+info:
+  title: DeepAha Ops Gateway
+  version: 1.0.0
+  description: Least-privilege DeepAha operations API. Never use a mutation unless the user explicitly requested that exact operation.
+servers:
+  - url: https://ops.deepaha.com
+security:
+  - bearerAuth: []
+paths:
+  /v1/status:
+    get:
+      operationId: get_deepaha_status
+      summary: Read DeepAha service and release status
+      responses:
+        '200': {description: Status}
+  /v1/logs:
+    get:
+      operationId: get_deepaha_logs
+      summary: Read bounded logs for an allowlisted DeepAha service
+      parameters:
+        - in: query
+          name: service
+          required: true
+          schema: {type: string, enum: [gateway, api, web, worker]}
+        - in: query
+          name: lines
+          required: false
+          schema: {type: integer, minimum: 20, maximum: 500, default: 200}
+      responses:
+        '200': {description: Logs}
+  /v1/deploy:
+    post:
+      operationId: deploy_deepaha
+      summary: Deploy one immutable Git commit. Production requires explicit user authorization and confirmation.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [environment, commit_sha]
+              properties:
+                environment: {type: string, enum: [staging, production]}
+                commit_sha: {type: string, pattern: '^[0-9a-f]{40}$'}
+                confirmation: {type: [string, 'null'], description: Use DEPLOY_PRODUCTION only after the user explicitly asks for production deployment.}
+      responses:
+        '202': {description: Operation queued}
+  /v1/backup:
+    post:
+      operationId: backup_deepaha
+      summary: Create a DeepAha backup
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                environment: {type: string, enum: [staging, production], default: production}
+      responses:
+        '202': {description: Operation queued}
+  /v1/rollback:
+    post:
+      operationId: rollback_deepaha
+      summary: Roll back application code to previous or an allowlisted historical commit. This does not restore the database.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [environment, target, confirmation]
+              properties:
+                environment: {type: string, enum: [staging, production]}
+                target: {type: string, description: previous or full 40-character commit SHA}
+                confirmation: {type: string, description: ROLLBACK_STAGING or ROLLBACK_PRODUCTION after explicit user authorization.}
+      responses:
+        '202': {description: Operation queued}
+  /v1/restart:
+    post:
+      operationId: restart_deepaha_service
+      summary: Restart only an allowlisted DeepAha service group
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [target]
+              properties:
+                target: {type: string, enum: [api, web, worker, all]}
+      responses:
+        '202': {description: Operation queued}
+  /v1/beta-users:
+    post:
+      operationId: create_deepaha_beta_user
+      summary: Create a beta user through the server adapter; requires user_admin scope
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, email]
+              properties:
+                username: {type: string}
+                email: {type: string, format: email}
+      responses:
+        '202': {description: Operation queued}
+  /v1/operations/{operation_id}:
+    get:
+      operationId: get_deepaha_operation
+      summary: Poll a previously queued operation
+      parameters:
+        - in: path
+          name: operation_id
+          required: true
+          schema: {type: string}
+      responses:
+        '200': {description: Operation state}
+components:
+  parameters:
+    IdempotencyKey:
+      in: header
+      name: Idempotency-Key
+      required: true
+      schema: {type: string, minLength: 8, maxLength: 128}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

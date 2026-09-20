@@ -1,0 +1,34 @@
+name: Ops Gateway CI
+
+on:
+  push:
+    branches: [main, gpt/ops-gateway-v1]
+    paths:
+      - "ops-gateway/**"
+      - ".github/workflows/ops-gateway.yml"
+      - "scripts/verify-ops-gateway.ps1"
+  pull_request:
+    paths:
+      - "ops-gateway/**"
+      - ".github/workflows/ops-gateway.yml"
+      - "scripts/verify-ops-gateway.ps1"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ops-gateway
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+          enable-cache: true
+      - run: uv sync --group dev
+      - run: uv run ruff format --check .
+      - run: uv run ruff check .
+      - run: uv run pytest
