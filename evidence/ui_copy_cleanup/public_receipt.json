@@ -1,0 +1,37 @@
+{
+  "build": "beta-access-20260920-9149e03f",
+  "old_release": "/opt/deepaha/releases/beta-access-20260920-b35ccd03",
+  "new_release": "/opt/deepaha/releases/beta-access-20260920-9149e03f",
+  "backup": "/var/backups/deepaha/public-beta/beta-access-20260920-9149e03f",
+  "www_modified": true,
+  "isolated_staging_modified": false,
+  "wma_called": false,
+  "exact_wma_secret_matches": 0,
+  "credential_values_compared": 2,
+  "verified_package_files": 2282,
+  "backup_restore_drill": "PASS",
+  "additive_migration_existing_counts_preserved": true,
+  "legacy_admins_migrated_to_operator": 0,
+  "existing_password_hashes_unchanged": true,
+  "existing_operator_retained": true,
+  "service_stability_observation": "PASS",
+  "functional_smoke": {
+    "https_login": "PASS",
+    "maintainer_permissions": "PASS",
+    "four_digit_invite_four_character_registration": "PASS",
+    "ordinary_user_boundary": "PASS",
+    "birth_date_save_clear": "PASS",
+    "apex_redirect": "PASS",
+    "staging_basic_auth": "PASS",
+    "synthetic_accounts_disabled": true,
+    "synthetic_invite_revoked": true
+  },
+  "status": "DEPLOYED_AND_VERIFIED",
+  "service_restarts": {
+    "deepaha-api@staging": "0",
+    "deepaha-worker@staging": "0"
+  },
+  "source_commit": "9149e03f00aab99137b6240ac0817f1216213263",
+  "finished_at_utc": "2026-09-20T04:52:04.268749+00:00",
+  "backup_checksums_written": true
+}

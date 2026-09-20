@@ -2,7 +2,7 @@
 
 ## 最新正式站交付（2026-09-20）
 
-继续开发或部署前先读 `docs/beta-access/PUBLIC_RELEASE.md`。用户已确认staging验收并授权正式发布。邀请码与用户管理版本已发布至www/deepaha.com，标签 `v3.8.0-rc1-beta-access`，源码b35ccd03；正式服务仍命名为staging/8100。staging域名独立使用staging-isolated/8200，保持d32082ad版本及Basic Auth。原HANDOFF/ACCESS_V2为此前隔离验收历史；发布前仍需实机复核。
+继续开发或部署前先读 `docs/beta-access/UI_COPY_CLEANUP.md`（最新正式发布）及 `docs/beta-access/PUBLIC_RELEASE.md`（账号功能首次发布历史）。用户已人工验收，最新正式源码9149e03f，含用户端文案精简、生日输入与本地启动升级修复。正式服务仍命名为staging/8100，指针staging-current。staging域名独立使用staging-isolated/8200，保持d32082ad版本及Basic Auth。发布前仍需实机复核。
 
 当前交付：**3.8.0-rc1 / SG8-A Public Beta 生产化底座**。
 

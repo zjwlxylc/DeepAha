@@ -1,0 +1,14 @@
+{
+  "birth_date_mobile_edit_save_clear": "PASS",
+  "status": "PASS",
+  "scope": "public HTTPS frontend with intercepted synthetic API fixtures; no live user data",
+  "mobile_home_label": true,
+  "copy_removed": true,
+  "notes_collapsed_and_expandable": true,
+  "excluded_status_retained": true,
+  "time_conflict_visible": true,
+  "qualification_risk_visible": true,
+  "escaped_notes": true,
+  "mobile_pages_checked": 11,
+  "javascript_errors": []
+}

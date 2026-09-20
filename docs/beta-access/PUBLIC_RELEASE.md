@@ -1,3 +1,5 @@
+> 最新正式版本已更新至9149e03f，见 [UI_COPY_CLEANUP.md](UI_COPY_CLEANUP.md)。以下保留首次账号功能发布记录。
+
 # Public Beta 邀请准入发布
 
 用户于2026-09-20确认隔离staging验收通过，授权合并main、推送、打标签并发布正式站。
