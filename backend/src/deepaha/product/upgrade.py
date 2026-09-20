@@ -252,3 +252,59 @@ def upgrade_opportunity_lab(product, backup_path):
     return {'already_current':False,'opportunity_lab_schema_version':'2','backup':backup['backup'],'backup_verified':True,
             'existing_rows_preserved':True,'production_facts_modified':False,'wma_called':False,'data_modified':True,
             'historical_twins_deactivated':len(old_twins),'v2_twin_generation_required':bool(old_twins)}
+
+
+def upgrade_experience(product, backup_path):
+    """Explicit additive extension. SQLite archive or a real pg_dump precedes DDL.
+
+    Run with API/worker stopped. Added tables may remain on rollback, but old
+    workers do NOT understand new dispatch records. See RELEASE_AND_ROLLBACK.md.
+    Never restore a backup over a database accepting new writes.
+    """
+    from .models import Base,EXPERIENCE_TABLE_NAMES,ProfileRevision,Account,Task
+    from .dispatch_policy import ensure_dispatch
+    from sqlalchemy import select,func
+    tables=set(inspect(product.db.engine).get_table_names())
+    if 'product_meta' not in tables:raise Problem('新安装请运行setup；此命令仅升级已有产品库',409)
+    with product.db.tx(False) as s:
+        meta=s.get(Meta,'experience_schema_version')
+        if EXPERIENCE_TABLE_NAMES.issubset(tables) and meta and meta.value=='1':
+            return {'already_current':True,'data_modified':False,'wma_called':False}
+        if s.scalar(select(func.count()).select_from(Task).where(Task.status=='RUNNING')):
+            raise Problem('仍有运行中任务；请先确认远端状态并停止工作进程',409,'ACTIVE_WORK')
+    path=Path(backup_path)
+    if product.db.engine.dialect.name=='sqlite':
+        backup=create_backup(product.database_url,product.object_root,path)
+        verify_backup(backup['backup'])
+    elif product.db.engine.dialect.name=='postgresql':
+        import os,subprocess,hashlib,shutil,tarfile
+        from sqlalchemy.engine import make_url
+        if path.exists():raise Problem('备份目录已存在，拒绝覆盖',409)
+        if not shutil.which('pg_dump') or not shutil.which('pg_restore'):raise Problem('需要pg_dump和pg_restore',409,'POSTGRES_TOOLS_REQUIRED')
+        path.mkdir(parents=True,mode=0o700)
+        u=make_url(product.database_url);env={**os.environ,'PGHOST':u.host or 'localhost','PGPORT':str(u.port or 5432),
+            'PGUSER':u.username or '', 'PGPASSWORD':u.password or '', 'PGDATABASE':u.database or ''}
+        dump=path/'database.dump'
+        try:
+            with dump.open('xb') as out:
+                subprocess.run(['pg_dump','--format=custom','--no-owner','--no-acl'],env=env,stdout=out,stderr=subprocess.PIPE,check=True,timeout=600)
+            subprocess.run(['pg_restore','--list',str(dump)],stdout=subprocess.DEVNULL,stderr=subprocess.PIPE,check=True,timeout=60)
+            with tarfile.open(path/'objects.tar.gz','w:gz') as archive:
+                archive.add(product.object_root,arcname='objects',filter=lambda info:None if '/.locks/' in info.name else info)
+            hashes={}
+            for file in (dump,path/'objects.tar.gz'):
+                with file.open('rb') as handle:hashes[file.name]=hashlib.file_digest(handle,'sha256').hexdigest()
+            (path/'SHA256SUMS.json').write_text(json.dumps(hashes,indent=2))
+        except (OSError,subprocess.SubprocessError):raise Problem('PostgreSQL备份失败；未执行升级，检查宿主工具',503,'POSTGRES_BACKUP_FAILED') from None
+        backup={'backup':str(path),'credentials_included':False}
+    else:raise Problem('仅支持SQLite和PostgreSQL',409)
+    with product.db.tx() as s:
+        Base.metadata.create_all(s.connection(),tables=[t for t in Base.metadata.sorted_tables if t.name in EXPERIENCE_TABLE_NAMES])
+        for a in s.scalars(select(Account)):
+            if not s.get(ProfileRevision,a.id):s.add(ProfileRevision(account_id=a.id,version=0))
+        for t in s.scalars(select(Task)):ensure_dispatch(s,t)
+        row=s.get(Meta,'experience_schema_version')
+        if row:row.value='1'
+        else:s.add(Meta(key='experience_schema_version',value='1'))
+    return {'already_current':False,'backup':backup['backup'],'backup_verified':True,'added_tables':sorted(EXPERIENCE_TABLE_NAMES-tables),
+            'existing_facts_modified':False,'passwords_changed':False,'wma_called':False,'data_modified':True}

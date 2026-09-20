@@ -3,7 +3,7 @@ from datetime import datetime, date, time, timedelta, timezone
 from zoneinfo import ZoneInfo
 from sqlalchemy import select
 from .models import (
-    Profile, Action, Feedback, Notice, Opportunity, Publication,
+    Profile, ProfileRevision, PreparationItem, Action, Feedback, Notice, Opportunity, Publication,
     CatalogTarget, TargetAction, TargetFeedback, TargetNotice, TargetActionEvent, FeedbackCandidate, now,
 )
 from .adapter import text
@@ -19,7 +19,7 @@ class PersonalMixin:
     def get_profile(self,*,actor):
         with self.db.tx(False) as s:
             a=self._account(s,actor);return self._profile(s,a.id)
-    def set_profile(self,data,*,actor):
+    def _validate_profile(self,data):
         if not isinstance(data,dict) or set(data)-PROFILE_KEYS:raise Problem('画像字段不正确')
         cleaned={}
         for k,v in data.items():
@@ -75,22 +75,57 @@ class PersonalMixin:
             else:
                 if not isinstance(v,str) or len(v)>300:raise Problem('画像内容过长')
                 cleaned[k]=v.strip()
+        return cleaned
+
+    def _profile_version(self,s,account_id):
+        row=s.get(ProfileRevision,account_id)
+        return row.version if row else 0
+
+    def _bump_profile_version(self,s,account_id):
+        row=s.get(ProfileRevision,account_id)
+        if not row:row=ProfileRevision(account_id=account_id,version=0);s.add(row)
+        row.version+=1
+        return row.version
+
+    def _save_profile(self,s,a,cleaned,actor):
+        p=s.get(Profile,a.id)
+        if p:p.data=cleaned;p.updated_at=now()
+        else:s.add(Profile(account_id=a.id,data=cleaned))
+        profile=self._profile(s,a.id)
+        if profile.get('notification_enabled') is False:
+            for cls in (Notice,TargetNotice):
+                for n in s.scalars(select(cls).where(cls.account_id==a.id,cls.state!='CANCELLED')):n.state='CANCELLED'
+        else:
+            if profile.get('notification_deadline_enabled') is False:self._cancel_notice_kind(s,a.id,'DEADLINE')
+            if profile.get('notification_change_enabled') is False:self._cancel_notice_kind(s,a.id,'CHANGE')
+            if profile.get('notification_weekly_enabled') is False:self._cancel_notice_kind(s,a.id,'WEEKLY')
+            self._sync_all_action_deadlines(s,a.id,profile)
+        self._audit(s,actor,'UPDATE_PROFILE',a.id,'更新个人偏好与通知开关；未发送外部模型')
+        return self._bump_profile_version(s,a.id)
+
+    def set_profile(self,data,*,actor):
+        # Legacy PUT deliberately retains full-replacement semantics.
+        cleaned=self._validate_profile(data)
+        with self.db.tx() as s:
+            a=self._account(s,actor);self._save_profile(s,a,cleaned,actor)
+        return cleaned
+
+    def profile_state(self,*,actor):
+        with self.db.tx(False) as s:
+            a=self._account(s,actor)
+            return {'profile':self._profile(s,a.id),'version':self._profile_version(s,a.id)}
+
+    def patch_profile(self,changes,expected_version,*,actor):
+        if type(expected_version) is not int or expected_version<0:raise Problem('资料版本不正确')
+        cleaned_changes=self._validate_profile(changes)
         with self.db.tx() as s:
             a=self._account(s,actor)
-            p=s.get(Profile,a.id)
-            if p:p.data=cleaned;p.updated_at=now()
-            else:s.add(Profile(account_id=a.id,data=cleaned))
-            profile=self._profile(s,a.id)
-            if profile.get('notification_enabled') is False:
-                for cls in (Notice,TargetNotice):
-                    for n in s.scalars(select(cls).where(cls.account_id==a.id,cls.state!='CANCELLED')):n.state='CANCELLED'
-            else:
-                if profile.get('notification_deadline_enabled') is False:self._cancel_notice_kind(s,a.id,'DEADLINE')
-                if profile.get('notification_change_enabled') is False:self._cancel_notice_kind(s,a.id,'CHANGE')
-                if profile.get('notification_weekly_enabled') is False:self._cancel_notice_kind(s,a.id,'WEEKLY')
-                self._sync_all_action_deadlines(s,a.id,profile)
-            self._audit(s,actor,'UPDATE_PROFILE',a.id,'更新个人偏好与通知开关；未发送外部模型')
-        return cleaned
+            if self._profile_version(s,a.id)!=expected_version:
+                raise Problem('资料已在别处更新；请先查看最新资料，再确认合并',409,'PROFILE_CHANGED')
+            merged={**self._profile(s,a.id),**cleaned_changes}
+            if not cleaned_changes:return {'profile':merged,'version':expected_version}
+            version=self._save_profile(s,a,merged,actor)
+            return {'profile':merged,'version':version}
 
     def _target_row(self,s,public_id):
         row=self._current_target(s,public_id)
@@ -115,7 +150,7 @@ class PersonalMixin:
             for n in s.scalars(select(TargetNotice).where(TargetNotice.account_id==a.id,TargetNotice.target_public_id==public_id,TargetNotice.kind=='DEADLINE')):n.state='CANCELLED'
         return {'removed':True}
 
-    def my_actions(self,*,actor,offset=0,limit=50):
+    def my_actions(self,*,actor,offset=0,limit=50,_envelope=False,status=''):
         with self.db.tx(False) as s:
             a=self._account(s,actor);result=[]
             target_actions=list(s.scalars(select(TargetAction).where(TargetAction.account_id==a.id).order_by(TargetAction.updated_at.desc(),TargetAction.id)))
@@ -133,6 +168,11 @@ class PersonalMixin:
                 c['notes']=list(dict.fromkeys(c.get('notes',[])+['这是旧版公告级行动记录，未自动映射到任何具体岗位或赛道。']))
                 result.append({'opportunity':c,'status':ac.status,'note':ac.note,'updated_at':ac.updated_at.isoformat(),'legacy_scope':True})
             result.sort(key=lambda x:x['updated_at'],reverse=True)
+            if _envelope:
+                from collections import Counter
+                counts=dict(Counter(x['status'] for x in result))
+                if status:result=[x for x in result if x['status']==status]
+                return {'items':result[offset:offset+min(limit,50)],'total':len(result),'counts':counts,'offset':offset,'limit':limit}
             return result[offset:offset+min(limit,50)]
 
     def feedback(self,public_id,data,*,actor):
@@ -271,7 +311,7 @@ class PersonalMixin:
             else:s.add(TargetNotice(account_id=a.id,target_public_id=public_id,opportunity_id=target.opportunity_id,catalog_target_id=target.id,title='你关注的具体机会即将截止',body=f'{target.content["title"]}；材料标注报名截止日期为{day}。',kind='DEADLINE',dedupe_key=dedupe,due_at=due))
         return {'scheduled':True,'date':day,'days_before':days_before,'channel':'IN_APP'}
 
-    def notifications(self,*,actor,offset=0,limit=50):
+    def notifications(self,*,actor,offset=0,limit=50,unread=False,_envelope=False):
         with self.db.tx(False) as s:
             a=self._account(s,actor);out=[]
             for n in s.scalars(select(TargetNotice).where(TargetNotice.account_id==a.id,TargetNotice.state!='CANCELLED',TargetNotice.due_at<=now())):
@@ -279,7 +319,10 @@ class PersonalMixin:
             for n in s.scalars(select(Notice).where(Notice.account_id==a.id,Notice.state!='CANCELLED',Notice.due_at<=now())):
                 o=s.get(Opportunity,n.opportunity_id) if n.opportunity_id else None
                 out.append({'id':n.id,'title':n.title,'body':n.body,'kind':n.kind,'state':n.state,'opportunity_id':o.public_id if o else None,'created_at':n.created_at.isoformat()})
+            unread_count=sum(x['state']!='READ' for x in out)
+            if unread:out=[x for x in out if x['state']!='READ']
             out.sort(key=lambda x:(x['created_at'],x['id']),reverse=True)
+            if _envelope:return {'items':out[offset:offset+min(limit,50)],'total':len(out),'unread_count':unread_count,'offset':offset,'limit':limit}
             return out[offset:offset+min(limit,50)]
 
     def mark_read(self,id,*,actor):
@@ -352,7 +395,7 @@ class PersonalMixin:
             lab={'status':enrollment.status if enrollment else 'NOT_JOINED','cohort':enrollment.cohort if enrollment else None,
                  'consent_version':enrollment.consent_version if enrollment else None,'joined_at':enrollment.joined_at.isoformat() if enrollment else None,
                  'withdrawn_at':enrollment.withdrawn_at.isoformat() if enrollment and enrollment.withdrawn_at else None,'exposures':exposures}
-        return {'profile':self.get_profile(actor=actor),'actions':actions,'action_history':histories,'feedback':feed,'opportunity_lab':lab}
+        return {'profile':self.get_profile(actor=actor),'preparation_items':self.preparation_items(actor=actor)['items'],'actions':actions,'action_history':histories,'feedback':feed,'opportunity_lab':lab}
 
     def erase_personal(self,*,actor):
         with self.db.tx() as s:
@@ -361,9 +404,10 @@ class PersonalMixin:
             if feedback_ids:
                 for row in s.scalars(select(FeedbackCandidate).where(FeedbackCandidate.feedback_id.in_(feedback_ids))):s.delete(row)
             from .models import LabEnrollment, LabExposure
-            for cls in (LabExposure,TargetActionEvent,Profile,TargetAction,TargetFeedback,TargetNotice,Action,Feedback,Notice):
+            for cls in (PreparationItem,LabExposure,TargetActionEvent,Profile,TargetAction,TargetFeedback,TargetNotice,Action,Feedback,Notice):
                 for row in s.scalars(select(cls).where(cls.account_id==a.id)):s.delete(row)
             enrollment=s.get(LabEnrollment,a.id)
             if enrollment:s.delete(enrollment)
+            self._bump_profile_version(s,a.id)
             self._audit(s,actor,'ERASE_PERSONAL',a.id,'已删除画像、行动时间线、反馈、派生评估候选、SG7共创记录和个人通知')
         return {'erased':True}

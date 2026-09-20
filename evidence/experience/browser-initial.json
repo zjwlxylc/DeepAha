@@ -1,0 +1,51 @@
+{
+  "errors": [],
+  "requests": [
+    {
+      "path": "/api/site",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/me",
+      "status": 401,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/profile-state",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/action-board?status=&offset=0&limit=30",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/opportunities",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/profile",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/action-board",
+      "status": 200,
+      "method": "GET"
+    }
+  ],
+  "scope": "Render the actual ES modules in Chromium with an explicit test-only transport.\nThe runtime forbids all native URL navigation. No browser policy is changed.\nA virtual location is used only inside the QA-loaded module copies; API calls\nare forwarded to the isolated real HTTP service. No production code uses this harness.\n"
+}

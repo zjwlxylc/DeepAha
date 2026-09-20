@@ -1,0 +1,11 @@
+
+> deepaha-product-web@3.8.0-rc1 test
+> node scripts/check-product.mjs && node scripts/check-sg7-2.mjs
+
+Product JavaScript syntax, no-fixture, SG1 actionable, SG2 multi-type, SG3 currentness, and SG4 eligibility UI checks passed
+SG7_2_PUBLIC_HOME_ABOUT_BRAND=PASS
+SG7_1_INDEPENDENT_GOLD_AND_TWIN_V2=PASS
+Birth date checks passed: leap dates, invalid dates, future dates, optional clearing and stored format
+Core rendering checks passed: missing/invalid/known dates and text escaping
+Compact field checks passed: notes retained, collapsed, escaped; exclusion, paging and sources preserved
+Experience helpers and route contracts: PASS

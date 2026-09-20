@@ -1,0 +1,123 @@
+{
+  "scope": "Fresh isolated database and actual loopback HTTP; not TLS, native Windows or live WMA. No worker started.",
+  "checks": [
+    {
+      "test": "GET /health/live",
+      "passed": true
+    },
+    {
+      "test": "GET /health/ready",
+      "passed": true
+    },
+    {
+      "test": "GET /",
+      "passed": true
+    },
+    {
+      "test": "GET /app/overview",
+      "passed": true
+    },
+    {
+      "test": "GET /review/overview",
+      "passed": true
+    },
+    {
+      "test": "GET /manage/execution",
+      "passed": true
+    },
+    {
+      "test": "strict CSP retained",
+      "passed": true
+    },
+    {
+      "test": "static app.js",
+      "passed": true
+    },
+    {
+      "test": "static core.js",
+      "passed": true
+    },
+    {
+      "test": "static home.js",
+      "passed": true
+    },
+    {
+      "test": "static experience.css",
+      "passed": true
+    },
+    {
+      "test": "static profile-editor.js",
+      "passed": true
+    },
+    {
+      "test": "static operations-ui.js",
+      "passed": true
+    },
+    {
+      "test": "static actions-ui.js",
+      "passed": true
+    },
+    {
+      "test": "static brand-logo.png",
+      "passed": true
+    },
+    {
+      "test": "anonymous management denied",
+      "passed": true
+    },
+    {
+      "test": "reader login",
+      "passed": true
+    },
+    {
+      "test": "reader management denied",
+      "passed": true
+    },
+    {
+      "test": "missing csrf denied",
+      "passed": true
+    },
+    {
+      "test": "versioned PATCH",
+      "passed": true
+    },
+    {
+      "test": "unmodified fields preserved",
+      "passed": true
+    },
+    {
+      "test": "stale version rejected",
+      "passed": true
+    },
+    {
+      "test": "preparation persisted",
+      "passed": true
+    },
+    {
+      "test": "preparation idempotency",
+      "passed": true
+    },
+    {
+      "test": "personal export includes preparation",
+      "passed": true
+    },
+    {
+      "test": "operator login",
+      "passed": true
+    },
+    {
+      "test": "source beyond50 discoverable",
+      "passed": true
+    },
+    {
+      "test": "operator inherits review",
+      "passed": true
+    },
+    {
+      "test": "conservative serial",
+      "passed": true
+    }
+  ],
+  "status": "PASS",
+  "wma_called": false
+}

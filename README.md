@@ -1,3 +1,11 @@
+# 本次候选：experience-84353c7-20260920
+
+基线 `84353c7`。完整体验改善源码交付；**未部署、未推送、未做真实 WMA / PostgreSQL / 真人验收**。
+先读 `docs/experience/README.md`、`TEST_REPORT.md`、`RUN_AND_UPGRADE.md`、`RELEASE_AND_ROLLBACK.md`（均在 docs/experience）。
+此候选新增五张表，必须先备份后执行 `upgrade-experience`；旧 Worker 不可直接在新任务队列上回退运行。以下保留 SG8-A 历史记录，不代表本候选当前状态。
+
+---
+
 # DeepAha 机会星图 · 3.8.0-rc1（SG8-A）
 
 **基线：3.7.2-rc1 / SG7.2。SG8-A 不改变机会生产、整体审核、Eligibility、Value/Priority、Gold Benchmark 或首页产品逻辑，只把已通过本地工程验证的产品升级为可长期 staging / production 发布、备份、迁移与回退的 Public Beta 底座。**

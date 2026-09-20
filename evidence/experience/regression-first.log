@@ -1,0 +1,31 @@
+........................................................................ [ 27%]
+........................................................................ [ 54%]
+........................................................................ [ 81%]
+.................F..F...........................                         [100%]
+=================================== FAILURES ===================================
+_ test_sg6_user_ui_exposes_action_timeline_feedback_and_notification_controls __
+
+    def test_sg6_user_ui_exposes_action_timeline_feedback_and_notification_controls():
+        js=(ROOT/'web/public/product/user.js').read_text(encoding='utf-8')
+        for token in ['行动时间线','本周机会摘要','截止提醒','机会变化','每周机会摘要','以前知道这个机会吗','最终结果']:
+>           assert token in js
+E           assert '行动时间线' in "import {renderActions,renderNotifications,showPreparation} from './actions-ui.js';\nimport {homeHero,bindHome} from '...记录',true));\n }else{body=empty('这个页面暂不可用','','/','返回首页');}\n return {html:shell(body,path,narrow,actions),after};\n}\n"
+
+backend/tests/product/test_sg6_frontend_contract.py:7: AssertionError
+_ test_sg7_2_migrates_public_home_about_and_uploaded_brand_without_touching_product_contracts _
+
+    def test_sg7_2_migrates_public_home_about_and_uploaded_brand_without_touching_product_contracts():
+        user=(ROOT/'user.js').read_text(encoding='utf-8')
+        core=(ROOT/'core.js').read_text(encoding='utf-8')
+        css=(ROOT/'product.css').read_text(encoding='utf-8')
+        html=(ROOT/'index.html').read_text(encoding='utf-8')
+        logo=ROOT/'brand-logo.png'
+        assert logo.exists() and logo.stat().st_size > 10_000
+        assert '/product/brand-logo.png' in core
+>       assert '机会星图' in user and '让属于你的机会，' in user and '不再擦肩而过' in user
+E       assert ('机会星图' in "import {renderActions,renderNotifications,showPreparation} from './actions-ui.js';\nimport {homeHero,bindHome} from '...记录',true));\n }else{body=empty('这个页面暂不可用','','/','返回首页');}\n return {html:shell(body,path,narrow,actions),after};\n}\n" and '让属于你的机会，' in "import {renderActions,renderNotifications,showPreparation} from './actions-ui.js';\nimport {homeHero,bindHome} from '...记录',true));\n }else{body=empty('这个页面暂不可用','','/','返回首页');}\n return {html:shell(body,path,narrow,actions),after};\n}\n")
+
+backend/tests/product/test_sg7_2_frontend_contract.py:14: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_sg6_frontend_contract.py::test_sg6_user_ui_exposes_action_timeline_feedback_and_notification_controls - assert '行动时间线' in "import {renderActions,renderNotifications,showPreparation} from './actions-ui.js';\nimport {homeHero,bindHome} from '...记录',true));\n }else{body=empty('这个页面暂不可用','','/','返回首页');}\n return {html:shell(body,path,narrow,actions),after};\n}\n"
+FAILED backend/tests/product/test_sg7_2_frontend_contract.py::test_sg7_2_migrates_public_home_about_and_uploaded_brand_without_touching_product_contracts - assert ('机会星图' in "import {renderActions,renderNotifications,showPreparation} from './actions-ui.js';\nimport {homeHero,bindHome} from '...记录',true));\n }else{body=empty('这个页面暂不可用','','/','返回首页');}\n return {html:shell(body,path,narrow,actions),after};\n}\n" and '让属于你的机会，' in "import {renderActions,renderNotifications,showPreparation} from './actions-ui.js';\nimport {homeHero,bindHome} from '...记录',true));\n }else{body=empty('这个页面暂不可用','','/','返回首页');}\n return {html:shell(body,path,narrow,actions),after};\n}\n")

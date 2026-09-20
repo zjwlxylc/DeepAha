@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from sqlalchemy import create_engine, event, select, text, inspect
 from sqlalchemy.orm import Session
-from .models import Base, Meta, LAB_TABLE_NAMES
+from .models import Base, Meta, LAB_TABLE_NAMES, EXPERIENCE_TABLE_NAMES
 from .errors import Problem
 
 class Database:
@@ -28,11 +28,14 @@ class Database:
             raise Problem('SG6行动闭环数据结构尚未升级。停服务后运行：python -m deepaha.product.cli upgrade-sg6',409,'ACTION_LOOP_UPGRADE_REQUIRED')
         if 'product_meta' in existing and action_loop.issubset(existing) and not LAB_TABLE_NAMES.issubset(existing) and not allow_existing_upgrade:
             raise Problem('SG7机会实验室数据结构尚未升级。停服务后运行：python -m deepaha.product.cli upgrade-sg7',409,'OPPORTUNITY_LAB_UPGRADE_REQUIRED')
+        if 'product_meta' in existing and not EXPERIENCE_TABLE_NAMES.issubset(existing) and not allow_existing_upgrade:
+            raise Problem('体验扩展尚未升级；请备份并执行upgrade-experience',409,'EXPERIENCE_UPGRADE_REQUIRED')
         Base.metadata.create_all(self.engine)
         with self.tx() as s:
             row=s.get(Meta,'schema_version')
             if row and row.value!='1':raise Problem('数据结构版本不兼容',409)
             if not row:s.add(Meta(key='schema_version',value='1'))
+            if not s.get(Meta,'experience_schema_version'):s.add(Meta(key='experience_schema_version',value='1'))
             if not s.get(Meta,'catalog_revision'):s.add(Meta(key='catalog_revision',value='0'))
             av=s.get(Meta,'actionable_schema_version')
             if av and av.value!='2':raise Problem('行动目标数据结构版本不兼容',409)

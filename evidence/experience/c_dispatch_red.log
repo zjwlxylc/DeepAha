@@ -1,0 +1,140 @@
+FFFFFFFFFF                                                               [100%]
+=================================== FAILURES ===================================
+__________ test_policy_is_serial_unverified_and_browser_cannot_grant ___________
+
+client = <starlette.testclient.TestClient object at 0x7f14370cb380>
+
+    def test_policy_is_serial_unverified_and_browser_cannot_grant(client):
+        login(client,'operator')
+>       r=client.get('/api/manage/execution-policies');assert r.status_code==200
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_dispatch_policy.py:18: AssertionError
+__________________ test_policy_agens_and_unknown_force_serial __________________
+
+svc = <deepaha.product.service.Product object at 0x7f1436f09310>
+
+    def test_policy_agens_and_unknown_force_serial(svc):
+>       assert hasattr(svc,'observe_binding'), 'server must inspect and bind the actual release'
+E       AssertionError: server must inspect and bind the actual release
+E       assert False
+E        +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1436f09310>, 'observe_binding')
+
+backend/tests/product/test_dispatch_policy.py:27: AssertionError
+___________ test_two_workers_one_task_prompt_once_and_durable_claim ____________
+
+svc = <deepaha.product.service.Product object at 0x7f1436f0ad50>
+
+    def test_two_workers_one_task_prompt_once_and_durable_claim(svc):
+>       assert hasattr(svc,'execution_policies'), 'durable scheduler not installed'
+E       AssertionError: durable scheduler not installed
+E       assert False
+E        +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1436f0ad50>, 'execution_policies')
+
+backend/tests/product/test_dispatch_policy.py:60: AssertionError
+___________ test_interruption_never_automatically_reprompts[create] ____________
+
+svc = <deepaha.product.service.Product object at 0x7f1436ed5810>
+phase = 'create'
+
+    @pytest.mark.parametrize('phase',['create','upload','prompt','download'])
+    def test_interruption_never_automatically_reprompts(svc,phase):
+>       assert hasattr(svc,'execution_policies')
+E       AssertionError: assert False
+E        +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1436ed5810>, 'execution_policies')
+
+backend/tests/product/test_dispatch_policy.py:73: AssertionError
+___________ test_interruption_never_automatically_reprompts[upload] ____________
+
+svc = <deepaha.product.service.Product object at 0x7f1436ed7950>
+phase = 'upload'
+
+    @pytest.mark.parametrize('phase',['create','upload','prompt','download'])
+    def test_interruption_never_automatically_reprompts(svc,phase):
+>       assert hasattr(svc,'execution_policies')
+E       AssertionError: assert False
+E        +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1436ed7950>, 'execution_policies')
+
+backend/tests/product/test_dispatch_policy.py:73: AssertionError
+___________ test_interruption_never_automatically_reprompts[prompt] ____________
+
+svc = <deepaha.product.service.Product object at 0x7f1435e03890>
+phase = 'prompt'
+
+    @pytest.mark.parametrize('phase',['create','upload','prompt','download'])
+    def test_interruption_never_automatically_reprompts(svc,phase):
+>       assert hasattr(svc,'execution_policies')
+E       AssertionError: assert False
+E        +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1435e03890>, 'execution_policies')
+
+backend/tests/product/test_dispatch_policy.py:73: AssertionError
+__________ test_interruption_never_automatically_reprompts[download] ___________
+
+svc = <deepaha.product.service.Product object at 0x7f1435e6dbf0>
+phase = 'download'
+
+    @pytest.mark.parametrize('phase',['create','upload','prompt','download'])
+    def test_interruption_never_automatically_reprompts(svc,phase):
+>       assert hasattr(svc,'execution_policies')
+E       AssertionError: assert False
+E        +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1435e6dbf0>, 'execution_policies')
+
+backend/tests/product/test_dispatch_policy.py:73: AssertionError
+______ test_parallel_cap_with_simulated_trusted_grant_and_changed_binding ______
+
+svc = <deepaha.product.service.Product object at 0x7f1435e6f680>
+
+    def test_parallel_cap_with_simulated_trusted_grant_and_changed_binding(svc):
+>       assert hasattr(svc,'observe_binding')
+E       AssertionError: assert False
+E        +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1435e6f680>, 'observe_binding')
+
+backend/tests/product/test_dispatch_policy.py:87: AssertionError
+___ test_expired_lease_fences_old_worker_and_preserves_uncertain_remote_slot ___
+
+svc = <deepaha.product.service.Product object at 0x7f1435d1c550>
+
+    def test_expired_lease_fences_old_worker_and_preserves_uncertain_remote_slot(svc):
+>       assert hasattr(svc,'execution_policies')
+E       AssertionError: assert False
+E        +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1435d1c550>, 'execution_policies')
+
+backend/tests/product/test_dispatch_policy.py:106: AssertionError
+_____________________ test_pause_recovery_and_queue_limit ______________________
+
+client = <starlette.testclient.TestClient object at 0x7f1435aa56d0>
+svc = <deepaha.product.service.Product object at 0x7f1435d1da50>
+
+    def test_pause_recovery_and_queue_limit(client,svc):
+        login(client,'operator')
+>       r=client.get('/api/manage/execution-policies');assert r.status_code==200
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_dispatch_policy.py:123: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_dispatch_policy.py::test_policy_is_serial_unverified_and_browser_cannot_grant - assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_dispatch_policy.py::test_policy_agens_and_unknown_force_serial - AssertionError: server must inspect and bind the actual release
+assert False
+ +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1436f09310>, 'observe_binding')
+FAILED backend/tests/product/test_dispatch_policy.py::test_two_workers_one_task_prompt_once_and_durable_claim - AssertionError: durable scheduler not installed
+assert False
+ +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1436f0ad50>, 'execution_policies')
+FAILED backend/tests/product/test_dispatch_policy.py::test_interruption_never_automatically_reprompts[create] - AssertionError: assert False
+ +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1436ed5810>, 'execution_policies')
+FAILED backend/tests/product/test_dispatch_policy.py::test_interruption_never_automatically_reprompts[upload] - AssertionError: assert False
+ +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1436ed7950>, 'execution_policies')
+FAILED backend/tests/product/test_dispatch_policy.py::test_interruption_never_automatically_reprompts[prompt] - AssertionError: assert False
+ +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1435e03890>, 'execution_policies')
+FAILED backend/tests/product/test_dispatch_policy.py::test_interruption_never_automatically_reprompts[download] - AssertionError: assert False
+ +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1435e6dbf0>, 'execution_policies')
+FAILED backend/tests/product/test_dispatch_policy.py::test_parallel_cap_with_simulated_trusted_grant_and_changed_binding - AssertionError: assert False
+ +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1435e6f680>, 'observe_binding')
+FAILED backend/tests/product/test_dispatch_policy.py::test_expired_lease_fences_old_worker_and_preserves_uncertain_remote_slot - AssertionError: assert False
+ +  where False = hasattr(<deepaha.product.service.Product object at 0x7f1435d1c550>, 'execution_policies')
+FAILED backend/tests/product/test_dispatch_policy.py::test_pause_recovery_and_queue_limit - assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code

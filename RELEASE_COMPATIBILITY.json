@@ -1,7 +1,9 @@
 {
   "release": "3.8.0-rc1",
-  "database_generation": "deepaha-product-v1-actionable2-actionloop1-lab2",
-  "code_rollback_compatible_with": ["3.7.2-rc1", "3.7.1-rc1"],
-  "schema_change_in_release": false,
-  "automatic_database_rollback": false
+  "database_generation": "deepaha-product-v1-actionable2-actionloop1-lab2-experience1",
+  "code_rollback_compatible_with": [],
+  "schema_change_in_release": true,
+  "automatic_database_rollback": false,
+  "extension": "experience-84353c7-20260920",
+  "manual_rollback_notes": "docs/experience/RELEASE_AND_ROLLBACK.md"
 }

@@ -1,0 +1,93 @@
+{
+  "base_commit": "84353c7e5286e276d24af8e0342d4d3441c30ec5",
+  "production_logo": {
+    "path": "web/public/product/brand-logo.png",
+    "sha256": "5c61733631bdfcb302e0cbefca25b71b0c192fc93e924f4a20e4db96a6ae9ff7",
+    "identical_to_base": true
+  },
+  "hero_files": [
+    {
+      "path": "web/public/product/hero/deepaha-ai-personalized-v2-1536.jpg",
+      "sha256": "4584c82888538e8f640d6e14d83edd5c32bf909652514380ac541865fbd5b84f",
+      "bytes": 118726,
+      "prototype_paths": [
+        "public/brand/deepaha-ai-personalized-v2-1536.jpg"
+      ],
+      "identical": true
+    },
+    {
+      "path": "web/public/product/hero/deepaha-ai-personalized-v2-1536.webp",
+      "sha256": "f8e8e3bae1c14e94bbd82690fd0cefed60c85961b886b7ef9c8543de1b15164a",
+      "bytes": 56484,
+      "prototype_paths": [
+        "public/brand/deepaha-ai-personalized-v2-1536.webp"
+      ],
+      "identical": true
+    },
+    {
+      "path": "web/public/product/hero/deepaha-ai-personalized-v2-768.webp",
+      "sha256": "d03a9f0a197d172181b1ca58877ae5477aae97d986be03da8c26a8fe9db1af49",
+      "bytes": 19832,
+      "prototype_paths": [
+        "public/brand/deepaha-ai-personalized-v2-768.webp"
+      ],
+      "identical": true
+    },
+    {
+      "path": "web/public/product/hero/deepaha-official-sources-v2-1536.jpg",
+      "sha256": "875f33a1e02fd60dc03c9a2bbacf8c03582f7f153ed35af5aba01002b0d9e1d9",
+      "bytes": 92431,
+      "prototype_paths": [
+        "public/brand/deepaha-official-sources-v2-1536.jpg"
+      ],
+      "identical": true
+    },
+    {
+      "path": "web/public/product/hero/deepaha-official-sources-v2-1536.webp",
+      "sha256": "adb44688a530b628e2843849b5849a90b989fb3483f7eecf86dd9ed559491007",
+      "bytes": 39324,
+      "prototype_paths": [
+        "public/brand/deepaha-official-sources-v2-1536.webp"
+      ],
+      "identical": true
+    },
+    {
+      "path": "web/public/product/hero/deepaha-official-sources-v2-768.webp",
+      "sha256": "a98a5c93d1bc5ac7a3f5d2c689fb604c41f08e9ec12da28792b3c040a94c27e0",
+      "bytes": 15322,
+      "prototype_paths": [
+        "public/brand/deepaha-official-sources-v2-768.webp"
+      ],
+      "identical": true
+    },
+    {
+      "path": "web/public/product/hero/deepaha-opportunity-map-v2-1536.jpg",
+      "sha256": "ab791b74bff7947dcc08fce9c8203c07697560f6b1c4816bb572391423714bab",
+      "bytes": 175023,
+      "prototype_paths": [
+        "public/brand/deepaha-opportunity-map-v2-1536.jpg"
+      ],
+      "identical": true
+    },
+    {
+      "path": "web/public/product/hero/deepaha-opportunity-map-v2-1536.webp",
+      "sha256": "f8f9e45e0e7a15ed43f4966fae0c7221cfdbc3dfdc803ee03c67e6aa30ddbbdc",
+      "bytes": 83748,
+      "prototype_paths": [
+        "public/brand/deepaha-opportunity-map-v2-1536.webp"
+      ],
+      "identical": true
+    },
+    {
+      "path": "web/public/product/hero/deepaha-opportunity-map-v2-768.webp",
+      "sha256": "88b4d39ab06fe6bbca734c182a6383dd1fcb8e5d7e22b2c92f4b23711a8d5c9e",
+      "bytes": 24960,
+      "prototype_paths": [
+        "public/brand/deepaha-opportunity-map-v2-768.webp"
+      ],
+      "identical": true
+    }
+  ],
+  "hero_count": 9,
+  "image_generation_used": false
+}

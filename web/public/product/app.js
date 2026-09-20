@@ -2,7 +2,7 @@ import {renderAccess} from './access-ui.js';
 import {state,$,e,brand,icon,api,bind,toast,go,empty} from './core.js';
 import {renderUser} from './user.js';
 import {renderWork} from './workbench.js';
-let generation=0;
+let generation=0,cleanup=()=>{};
 
 function enhanceControls(){
  document.querySelectorAll('input,select,textarea').forEach(control=>{
@@ -29,7 +29,7 @@ async function render(){
  try{
   let page=['/register','/reset-password','/account/security'].includes(path)?await renderAccess(path):path==='/login'?await loginView(params):path.startsWith('/review')||path.startsWith('/manage')?await renderWork(path,params):await renderUser(path,params);
   if(current!==generation)return;
-  $('#app').innerHTML=page.html;page.after();enhanceControls();window.scrollTo(0,0);
+  cleanup();if($('#dialog').open)$('#dialog').close();$('#app').innerHTML=page.html;const dispose=page.after();cleanup=typeof dispose==='function'?dispose:()=>{};enhanceControls();window.scrollTo(0,0);
   document.title=($('#main-content h1')?.textContent||'机会星图')+' · DeepAha';
  }catch(err){
   if(current!==generation)return;
@@ -37,7 +37,7 @@ async function render(){
   $('#app').innerHTML=`<main id="main-content" class="user-main page-error">${brand()}<div class="mt24">${empty(err.status===403?'没有访问此页面的权限':err.status===410?'这条机会已撤回':'暂时无法读取',err.message,'/app/overview','返回机会总览')}</div></main>`;
  }finally{if(current===generation){document.body.classList.remove('route-loading');$('#app')?.removeAttribute('aria-busy');}}
 }
-document.addEventListener('click',ev=>{const a=ev.target.closest('a[data-nav]');if(a&&ev.button===0&&!ev.ctrlKey&&!ev.metaKey&&!ev.shiftKey){ev.preventDefault();go(a.getAttribute('href'));}});
+document.addEventListener('click',ev=>{const a=ev.target.closest('a[data-nav]');if(a&&!a.hasAttribute('aria-disabled')&&ev.button===0&&!ev.ctrlKey&&!ev.metaKey&&!ev.shiftKey){ev.preventDefault();go(a.getAttribute('href'));}});
 window.addEventListener('routechange',render);window.addEventListener('popstate',render);
 try{state.site=await api('/api/site');}catch{}
 try{state.user=await api('/api/auth/me');state.csrf=state.user.csrf;}catch{}

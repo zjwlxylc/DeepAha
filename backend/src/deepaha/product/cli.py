@@ -10,7 +10,7 @@ import secrets
 import sqlite3
 import sys
 import zipfile
-from .config import Settings,ConnectionConfig
+from .config import Settings,ConnectionConfig,BindingRegistry
 from .service import Product
 from .errors import Problem
 
@@ -20,6 +20,16 @@ def output(v):print(json.dumps(v,ensure_ascii=False,indent=2,default=str))
 def main(argv=None):
     ap=argparse.ArgumentParser(prog='deepaha',description='DeepAha 机会星图：初始化、账号、采集、导入和备份')
     sub=ap.add_subparsers(dest='command',required=True)
+    experience=sub.add_parser('upgrade-experience',help='备份并新增体验扩展；不改旧事实或密码');experience.add_argument('--backup',type=Path)
+    live=sub.add_parser('validate-wma-live',help='宿主显式付费实测1/2/4并发；无模拟开关，成功后保存当前绑定验证记录')
+    live.add_argument('--actor',required=True);live.add_argument('--connection',default='default')
+    live.add_argument('--source',required=True);live.add_argument('--url',required=True)
+    live.add_argument('--parallel',type=int,choices=[1,2,4],required=True)
+    live.add_argument('--max-prompts',type=int,default=0);live.add_argument('--budget-seconds',type=int,default=600)
+    live.add_argument('--confirm-paid-validation',action='store_true')
+    live.add_argument('--evidence-dir',type=Path,required=True)
+    resolve=sub.add_parser('resolve-wma-probe',help='宿主确认实测进程和远端会话均已结束后解除调度占用；不会停止远端')
+    resolve.add_argument('--actor',required=True);resolve.add_argument('--reason',required=True);resolve.add_argument('--confirm-remote-terminal',action='store_true')
     sub.add_parser('init',help='仅新增当前产品所需数据表，不改写旧表')
     sub.add_parser('upgrade-access',help='已完成宿主备份后，显式新增邀请码表；不改现有业务表')
     admin=sub.add_parser('access-operator');admin.add_argument('username',help='显式授予已有账号operator角色')
@@ -58,6 +68,23 @@ def main(argv=None):
                 password=getpass.getpass('密码（至少4个字符）: ')
                 if getpass.getpass('再次输入密码: ')!=password:raise Problem('两次密码不一致')
                 output(p.create_account(name,password,['user','reviewer','operator']))
+        elif args.command=='resolve-wma-probe':
+            from .live_validation import resolve_probe
+            output(resolve_probe(p,actor=args.actor,confirmed=args.confirm_remote_terminal,reason=args.reason))
+        elif args.command=='validate-wma-live':
+            from .config import BindingRegistry
+            from .live_validation import validate_live
+            result=asyncio.run(validate_live(p,BindingRegistry(settings.data_dir,settings.mode),actor=args.actor,
+                connection_ref=args.connection,source_id=args.source,url=args.url,parallel=args.parallel,
+                max_prompts=args.max_prompts,budget_seconds=args.budget_seconds,confirmed=args.confirm_paid_validation,evidence_dir=args.evidence_dir))
+            output(result)
+            if result['status']!='PASS':return 1
+        elif args.command=='upgrade-experience':
+            from .upgrade import upgrade_experience
+            from .models import now
+            suffix='.zip' if p.db.engine.dialect.name=='sqlite' else ''
+            target=args.backup or settings.data_dir/'backups'/('before-experience-'+now().strftime('%Y%m%dT%H%M%S%f')+suffix)
+            output(upgrade_experience(p,target))
         elif args.command=='upgrade-access':
             from .models import Base,ACCESS_TABLE_NAMES
             Base.metadata.create_all(p.db.engine,tables=[t for t in Base.metadata.sorted_tables if t.name in ACCESS_TABLE_NAMES])
@@ -153,7 +180,10 @@ def main(argv=None):
                         if not args.isolated_fixture_mode:schedule_weekly_digests(p)
                         factory=None if args.isolated_fixture_mode else ConnectionConfig(settings.data_dir,settings.mode).factory()
                         if factory:schedule_due(p,args.schedule_as)
-                        result=await run_once(p,client_factory=factory)
+                        if args.isolated_fixture_mode:result=await run_once(p,client_factory=None)
+                        else:
+                            from .worker import run_cycle
+                            result=await run_cycle(p,BindingRegistry(settings.data_dir,settings.mode))
                         if args.once or result['state'] not in ('IDLE','NOT_CONFIGURED'):output(result)
                     except KeyboardInterrupt:return
                     except Exception as e:

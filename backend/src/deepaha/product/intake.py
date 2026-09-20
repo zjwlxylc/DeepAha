@@ -9,8 +9,10 @@ from .storage import unpack, sha
 from .errors import Problem
 
 class IntakeMixin:
-    def ingest(self,source_id,archive,*,actor,task_id=None,notice_url=None):
+    def ingest(self,source_id,archive,*,actor,task_id=None,notice_url=None,worker_lease=None):
+        from .dispatch_policy import assert_worker_lease
         with self.db.tx(False) as s:
+            if worker_lease:assert_worker_lease(s,task_id,worker_lease)
             self._account(s,actor,'operator');source=self._source(s,source_id)
         files=unpack(archive)
         digest=hash_json({k:sha(v) for k,v in sorted(files.items())})
@@ -23,6 +25,8 @@ class IntakeMixin:
         # Immutable raw archive is retained separately from normalized entry identities.
         manifest['__received_archive.zip']=self.store.save({'__received_archive.zip':archive})['__received_archive.zip']
         with self.db.tx() as s:
+            if worker_lease:assert_worker_lease(s,task_id,worker_lease)
+            self._account(s,actor,'operator')
             old=s.scalar(select(Snapshot).where(Snapshot.source_id==source_id,Snapshot.digest==digest))
             if old:snap_id=old.id
             else:
@@ -40,6 +44,8 @@ class IntakeMixin:
         # to this exact return without mutating OpportunityUnit rows.
         rev_id=uid()
         with self.db.tx() as s:
+            if worker_lease:assert_worker_lease(s,task_id,worker_lease)
+            self._account(s,actor,'operator')
             old=s.scalar(select(Revision).where(Revision.snapshot_id==snap_id))
             if old:return self._preview(s,old)
             any_currentness_change=False

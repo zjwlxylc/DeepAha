@@ -1,0 +1,24 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_action_and_notice_envelopes_are_paginated_and_private __________
+
+svc = <deepaha.product.service.Product object at 0x7f9fee3452b0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-8/test_action_and_notice_envelop0')
+
+    def test_action_and_notice_envelopes_are_paginated_and_private(svc,tmp_path):
+        from fastapi.testclient import TestClient
+        from deepaha.product.api import create_app
+        from deepaha.product.config import Settings
+        with TestClient(create_app(Settings(data_dir=tmp_path,database_url=svc.database_url),svc)) as c:
+            c.post('/api/auth/login',json={'username':'reader','password':'long-password-123'})
+            r=c.get('/api/me/action-board?status=PREPARING').json()
+>           assert r.get('total')==0 and r.get('counts')=={}
+E           AssertionError: assert (None == 0)
+E            +  where None = <built-in method get of dict object at 0x7f9fed1cffc0>('total')
+E            +    where <built-in method get of dict object at 0x7f9fed1cffc0> = {'error': 'INVALID_REQUEST', 'message': '接口不存在'}.get
+
+backend/tests/product/test_experience_api.py:129: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_experience_api.py::test_action_and_notice_envelopes_are_paginated_and_private - AssertionError: assert (None == 0)
+ +  where None = <built-in method get of dict object at 0x7f9fed1cffc0>('total')
+ +    where <built-in method get of dict object at 0x7f9fed1cffc0> = {'error': 'INVALID_REQUEST', 'message': '接口不存在'}.get

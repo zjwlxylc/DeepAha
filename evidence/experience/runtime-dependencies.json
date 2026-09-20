@@ -1,0 +1,74 @@
+[
+  {
+    "name": "fastapi",
+    "required": "==0.128.2",
+    "installed": "0.128.2",
+    "matches": true
+  },
+  {
+    "name": "starlette",
+    "required": "==0.50.0",
+    "installed": "0.50.0",
+    "matches": true
+  },
+  {
+    "name": "uvicorn",
+    "required": "==0.48.0",
+    "installed": "0.48.0",
+    "matches": true
+  },
+  {
+    "name": "SQLAlchemy",
+    "required": "==2.0.50",
+    "installed": "2.0.50",
+    "matches": true
+  },
+  {
+    "name": "pydantic",
+    "required": "==2.13.4",
+    "installed": "2.13.4",
+    "matches": true
+  },
+  {
+    "name": "httpx",
+    "required": "==0.28.1",
+    "installed": "0.28.1",
+    "matches": true
+  },
+  {
+    "name": "cryptography",
+    "required": "==46.0.4",
+    "installed": "46.0.4",
+    "matches": true
+  },
+  {
+    "name": "psutil",
+    "required": "==7.2.2",
+    "installed": "7.2.2",
+    "matches": true
+  },
+  {
+    "name": "tzdata",
+    "required": "==2026.2",
+    "installed": "2026.2",
+    "matches": true
+  },
+  {
+    "name": "codebuddy-cloud-agent-sdk",
+    "required": "==0.3.4",
+    "installed": null,
+    "matches": false
+  },
+  {
+    "name": "openpyxl",
+    "required": "==3.1.5",
+    "installed": "3.1.5",
+    "matches": true
+  },
+  {
+    "name": "et-xmlfile",
+    "required": "==2.0.0",
+    "installed": "2.0.0",
+    "matches": true
+  }
+]

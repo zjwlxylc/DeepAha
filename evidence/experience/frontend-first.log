@@ -1,0 +1,16 @@
+
+> deepaha-product-web@3.8.0-rc1 test
+> node scripts/check-product.mjs && node scripts/check-sg7-2.mjs
+
+Product JavaScript syntax, no-fixture, SG1 actionable, SG2 multi-type, SG3 currentness, and SG4 eligibility UI checks passed
+file:///mnt/data/deepaha_resume/work/web/scripts/check-sg7-2.mjs:23
+for(const [label,body,needle] of checks){if(!body.includes(needle))throw new Error(`SG7.2 check failed: ${label}`)}
+                                                                         ^
+
+Error: SG7.2 check failed: homepage promise
+    at file:///mnt/data/deepaha_resume/work/web/scripts/check-sg7-2.mjs:23:74
+    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.16.0

@@ -1,0 +1,123 @@
+..FFFF                                                                   [100%]
+=================================== FAILURES ===================================
+___________ test_live_factory_failure_is_durable_and_does_not_grant ____________
+
+svc = <deepaha.product.service.Product object at 0x7f27830ce990>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-18/test_live_factory_failure_is_d0')
+
+    def test_live_factory_failure_is_durable_and_does_not_grant(svc,tmp_path):
+        import json
+        from deepaha.product.live_validation import validate_live
+        class Reader:
+            async def inspect_release(self):return {'published_model':'other-model'}
+            async def aclose(self):pass
+        class Registry:
+            created=0
+            def fingerprint(self,*args):return 'binding-1'
+            def factory(self,*args):
+                def create():
+                    self.created+=1
+                    if self.created==2:raise RuntimeError('synthetic factory failure')
+                    return Reader()
+                return create
+>       result=asyncio.run(validate_live(svc,Registry(),actor='operator',connection_ref='default',source_id=svc.test_source,
+            url='https://research.example.org/notices/101',parallel=1,max_prompts=1,budget_seconds=60,confirmed=True,evidence_dir=tmp_path/'live'))
+
+backend/tests/product/test_live_validation_guard.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.13/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/asyncio/base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend/src/deepaha/product/live_validation.py:123: in validate_live
+    await asyncio.gather(*(one(i) for i in range(parallel)))
+backend/src/deepaha/product/live_validation.py:78: in one
+    report['records'].append(record);persist();client=factory();key='probe_'+uuid.uuid4().hex
+                                                      ^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def create():
+        self.created+=1
+>       if self.created==2:raise RuntimeError('synthetic factory failure')
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: synthetic factory failure
+
+backend/tests/product/test_live_validation_guard.py:35: RuntimeError
+_________ test_live_probe_reservation_blocks_workers_and_another_probe _________
+
+svc = <deepaha.product.service.Product object at 0x7f2782e1d310>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-18/test_live_probe_reservation_bl0')
+
+    def test_live_probe_reservation_blocks_workers_and_another_probe(svc,tmp_path):
+        from deepaha.product.models import Meta
+        from deepaha.product.dispatch_policy import claim
+        from deepaha.product.live_validation import validate_live
+        svc.create_task(svc.test_source,'https://research.example.org/1',actor='operator',request_key='probe-guard')
+        with svc.db.tx() as s:s.add(Meta(key='wma_live_probe',value='{"run_id":"pending","status":"RUNNING"}'))
+>       assert claim(svc,'default',None,'worker') is None
+E       AssertionError: assert {'actor': 'operator', 'budget': 1200, 'files': {}, 'id': '01a0be49-4354-78c5-b2e0-bc22c810c8bb', ...} is None
+E        +  where {'actor': 'operator', 'budget': 1200, 'files': {}, 'id': '01a0be49-4354-78c5-b2e0-bc22c810c8bb', ...} = <function claim at 0x7f27831bd1c0>(<deepaha.product.service.Product object at 0x7f2782e1d310>, 'default', None, 'worker')
+
+backend/tests/product/test_live_validation_guard.py:52: AssertionError
+_____________ test_live_probe_refuses_existing_remote_reservation ______________
+
+svc = <deepaha.product.service.Product object at 0x7f2783037a80>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-18/test_live_probe_refuses_existi0')
+
+    def test_live_probe_refuses_existing_remote_reservation(svc,tmp_path):
+        from deepaha.product.models import TaskDispatch
+        from deepaha.product.live_validation import validate_live
+        t=svc.create_task(svc.test_source,'https://research.example.org/1',actor='operator',request_key='remote-guard')
+        with svc.db.tx() as s:s.get(TaskDispatch,t['id']).remote_pending=True
+        class ForbiddenRegistry:
+            def factory(self,*args):raise AssertionError('must not start probe alongside existing remote request')
+        with pytest.raises(Problem) as err:
+>           asyncio.run(validate_live(svc,ForbiddenRegistry(),actor='operator',connection_ref='default',source_id=svc.test_source,
+                url='https://research.example.org/notices/101',parallel=1,max_prompts=1,budget_seconds=60,confirmed=True,evidence_dir=tmp_path/'live'))
+
+backend/tests/product/test_live_validation_guard.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.13/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/asyncio/base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend/src/deepaha/product/live_validation.py:54: in validate_live
+    factory=registry.factory(connection_ref)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.product.test_live_validation_guard.test_live_probe_refuses_existing_remote_reservation.<locals>.ForbiddenRegistry object at 0x7f27831b9fd0>
+args = ('default',)
+
+>   def factory(self,*args):raise AssertionError('must not start probe alongside existing remote request')
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: must not start probe alongside existing remote request
+
+backend/tests/product/test_live_validation_guard.py:67: AssertionError
+__________ test_uncertain_live_probe_reserves_until_host_confirmation __________
+
+svc = <deepaha.product.service.Product object at 0x7f2782de15b0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-18/test_uncertain_live_probe_rese0')
+
+    def test_uncertain_live_probe_reserves_until_host_confirmation(svc,tmp_path):
+        from deepaha.product.models import Meta
+>       from deepaha.product.live_validation import validate_live,resolve_probe
+E       ImportError: cannot import name 'resolve_probe' from 'deepaha.product.live_validation' (/mnt/data/deepaha_resume/work/backend/src/deepaha/product/live_validation.py)
+
+backend/tests/product/test_live_validation_guard.py:76: ImportError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_live_validation_guard.py::test_live_factory_failure_is_durable_and_does_not_grant - RuntimeError: synthetic factory failure
+FAILED backend/tests/product/test_live_validation_guard.py::test_live_probe_reservation_blocks_workers_and_another_probe - AssertionError: assert {'actor': 'operator', 'budget': 1200, 'files': {}, 'id': '01a0be49-4354-78c5-b2e0-bc22c810c8bb', ...} is None
+ +  where {'actor': 'operator', 'budget': 1200, 'files': {}, 'id': '01a0be49-4354-78c5-b2e0-bc22c810c8bb', ...} = <function claim at 0x7f27831bd1c0>(<deepaha.product.service.Product object at 0x7f2782e1d310>, 'default', None, 'worker')
+FAILED backend/tests/product/test_live_validation_guard.py::test_live_probe_refuses_existing_remote_reservation - AssertionError: must not start probe alongside existing remote request
+FAILED backend/tests/product/test_live_validation_guard.py::test_uncertain_live_probe_reserves_until_host_confirmation - ImportError: cannot import name 'resolve_probe' from 'deepaha.product.live_validation' (/mnt/data/deepaha_resume/work/backend/src/deepaha/product/live_validation.py)

@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+assert.ok(fs.existsSync('public/product/experience-core.js'),'experience helpers must exist');
+const {changedFields,catalogURL,returnPath,detailURL}=await import('../public/product/experience-core.js');
+const initial={major:'广告学',team_size:null,birth_date:'2000-02-29',notification_enabled:false};
+assert.deepEqual(changedFields(initial,{...initial,team_size:4}),{team_size:4});
+assert.deepEqual(changedFields(initial,{...initial,birth_date:''}),{birth_date:''});
+assert.deepEqual(changedFields(initial,{...initial}),{});
+assert.equal(returnPath('https://evil.example'),' /app/overview'.trim());
+assert.equal(returnPath('//evil.example'),'/app/overview');
+assert.equal(returnPath('/app/overview?q=abc&region=宁波'),'/app/overview?q=abc&region=宁波');
+const path=catalogURL(new URLSearchParams('q=研究&region=宁波&offset=20'),{kind:'COMPETITION',offset:0});
+assert.equal(new URL(path,'https://local').searchParams.get('region'),'宁波');
+assert.equal(new URL(detailURL('one',path),'https://local').searchParams.get('return'),path);
+const user=fs.readFileSync('public/product/user.js','utf8'),ops=fs.readFileSync('public/product/workbench.js','utf8');
+assert.ok(user.includes('bindProfilePatch'));
+assert.ok(ops.includes('renderOperations'));
+const home=fs.readFileSync('public/product/home.js','utf8');
+assert.ok(home.includes('deepaha-opportunity-map-v2')&&home.includes('prefers-reduced-motion'));
+assert.ok(!home.includes('marketing-process'));
+console.log('Experience helpers and route contracts: PASS');
+const icons=fs.readFileSync('public/product/icons.js','utf8');
+assert.match(icons,/\bcircle\s*:\s*['"]<circle/,'Unchecked preparation items need a dedicated circle icon');
+
+assert.ok(fs.readFileSync('public/product/operations-ui.js','utf8').includes('r.live_probe'),'Live probe reservation must be visible to operators');

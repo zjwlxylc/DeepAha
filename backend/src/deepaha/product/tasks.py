@@ -11,7 +11,7 @@ class TasksMixin:
     def _task_view(self,t):
         return {k:(getattr(t,k).isoformat() if k.endswith('_at') and getattr(t,k) else getattr(t,k)) for k in
           ['id','source_id','notice_url','status','kind','instruction','runtime_id','session_id','stage','error_code','budget_seconds','attempts','revision_id','created_at','updated_at']}
-    def create_task(self,source_id,url,*,actor,request_key,instruction='',kind='INVESTIGATE',budget_seconds=1200):
+    def create_task(self,source_id,url,*,actor,request_key,instruction='',kind='INVESTIGATE',budget_seconds=1200,connection_ref='default'):
         if not 60<=budget_seconds<=1800:raise Problem('调查预算应为60至1800秒')
         if kind not in ('INVESTIGATE','RECHECK','SUPPLEMENT'):raise Problem('调查类型不正确')
         if not request_key or len(request_key)>128:raise Problem('请求标识不正确')
@@ -20,13 +20,23 @@ class TasksMixin:
         with self.db.tx() as s:
             a=self._account(s,actor,'operator');source=self._source(s,source_id)
             old=s.scalar(select(Task).where(Task.request_key==request_key))
+            from .dispatch_policy import ensure_dispatch,policy_dict
+            from .models import DispatchPolicy,TaskDispatch
+            from sqlalchemy import func
+            import re
+            if not re.fullmatch(r'[a-zA-Z0-9_-]{1,48}',connection_ref):raise Problem('执行连接标识不正确')
             if old:
+                if ensure_dispatch(s,old).connection_ref!=connection_ref:raise Problem('请求连接冲突',409)
                 if old.creator_id!=a.id or old.notice_url!=url or old.source_id!=source_id or old.instruction!=instruction or old.kind!=kind or old.budget_seconds!=budget_seconds:raise Problem('请求标识冲突',409)
                 return self._task_view(old)
             if not source['active'] or not source['enabled']:raise Problem('该来源已暂停新任务',409)
             if urlsplit(url).hostname not in source['allowed_hosts']:raise Problem('网址不属于该来源的允许范围',400)
+            policy=policy_dict(s.get(DispatchPolicy,connection_ref),connection_ref)
+            queued=s.scalar(select(func.count()).select_from(Task).outerjoin(TaskDispatch,Task.id==TaskDispatch.task_id).where(Task.status.in_(['QUEUED','RUNNING','RECOVERY_QUEUED']),func.coalesce(TaskDispatch.connection_ref,'default')==connection_ref))
+            if queued>=policy['queue_limit']:raise Problem('该执行连接的任务队列已满，请先处理现有任务',409,'QUEUE_FULL')
             t=Task(source_id=source_id,creator_id=a.id,notice_url=url,request_key=request_key,instruction=text(instruction,10000),kind=kind,budget_seconds=budget_seconds)
             s.add(t);s.flush();t.workspace='/workspace/deepaha/'+t.id
+            ensure_dispatch(s,t,connection_ref)
             s.add(TaskSourceContext(task_id=t.id,payload={k:source.get(k) for k in
                 ('id','name','url','allowed_hosts','brief','policy_version','intelligence')}))
             self._audit(s,actor,'CREATE_INVESTIGATION',t.id,'已授权一次Direct WMA调查')
@@ -71,7 +81,11 @@ class TasksMixin:
             self._account(s,actor,'operator');t=s.get(Task,id)
             if not t:raise Problem('任务不存在',404)
             context=s.get(TaskSourceContext,id)
-            return {**self._task_view(t),'source_context':context.payload if context else None}
+            from .models import TaskDispatch
+            from .experience import task_guidance
+            d=s.get(TaskDispatch,id)
+            return {**self._task_view(t),'source_context':context.payload if context else None,'next_action':task_guidance(t),
+                'dispatch':{'connection_ref':d.connection_ref,'policy':d.policy_snapshot,'prompt_started':d.prompt_started,'remote_pending':d.remote_pending,'lease_expires_at':aware(d.lease_expires_at).isoformat() if d.lease_expires_at else None} if d else None}
     def tasks(self,*,actor,offset=0,limit=30):
         with self.db.tx(False) as s:
             self._account(s,actor,'operator')

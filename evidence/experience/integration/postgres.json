@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "tests": 2,
+  "isolation": "dedicated temporary PostgreSQL database, peer-authenticated postgres OS user",
+  "real_postgresql": true,
+  "wma_called": false,
+  "temporary_database_dropped": true
+}

@@ -15,7 +15,7 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from deepaha.artifacts.object_store import ObjectIntegrityError
 from .service import Product
 from .auth import has_role
-from .config import Settings,ConnectionConfig
+from .config import Settings,ConnectionConfig,BindingRegistry
 from .errors import Problem
 from .storage import MAX_ARCHIVE
 from .scout_package import MAX_UPLOAD
@@ -48,6 +48,7 @@ class SourceState(Strict):
     reason:str=Field(min_length=1,max_length=1000)
     expected_version:int|None=None
 class TaskInput(Strict):
+    connection_ref:str=Field(default='default',pattern=r'^[a-zA-Z0-9_-]{1,48}$')
     source_id:str
     url:str=Field(max_length=3000)
     request_key:str=Field(min_length=1,max_length=128)
@@ -111,7 +112,9 @@ def create_app(settings=None,product=None):
         if not inspect(p.db.engine).has_table('product_meta'):
             raise RuntimeError('Database not initialized. Run: python -m deepaha.product.cli init')
         tables=set(inspect(p.db.engine).get_table_names())
-        from .models import ACCESS_TABLE_NAMES
+        from .models import ACCESS_TABLE_NAMES,EXPERIENCE_TABLE_NAMES
+        if not EXPERIENCE_TABLE_NAMES.issubset(tables):
+            raise RuntimeError('体验扩展未升级；请先备份并运行upgrade-experience')
         if not ACCESS_TABLE_NAMES.issubset(tables):
             raise RuntimeError('邀请码结构尚未升级；备份后运行 python -m deepaha.product.cli upgrade-access')
         if not SCOUT_TABLE_NAMES.issubset(tables):
@@ -380,7 +383,10 @@ def create_app(settings=None,product=None):
     @app.get('/api/manage/tasks')
     def tasks(req:Request,offset:int=Query(0,ge=0),limit:int=Query(30,ge=1,le=50)):return p.tasks(actor=user(req,'operator'),offset=offset,limit=limit)
     @app.post('/api/manage/tasks')
-    def create_task(data:TaskInput,req:Request):return p.create_task(**data.model_dump(),actor=user(req,'operator',True))
+    def create_task(data:TaskInput,req:Request):
+        actor=user(req,'operator',True)
+        if data.connection_ref not in BindingRegistry(settings.data_dir,settings.mode).definitions():raise Problem('宿主未登记该执行连接',404)
+        return p.create_task(**data.model_dump(),actor=actor)
     @app.get('/api/manage/tasks/{id}')
     def task(id:str,req:Request):return p.task_detail(id,actor=user(req,'operator'))
     @app.post('/api/manage/tasks/{id}/recover')
@@ -432,6 +438,11 @@ def create_app(settings=None,product=None):
     @app.post('/api/me/lab/leave')
     def my_lab_leave(req:Request):return p.lab_leave(actor=user(req,write=True))
 
+    from .experience_api import mount_experience
+    mount_experience(app,p,user)
+    from .experience_api import mount_dispatch
+    mount_dispatch(app,p,user,BindingRegistry(settings.data_dir,settings.mode))
+
     @app.get('/api/me/profile')
     def profile(req:Request):return p.get_profile(actor=user(req))
     @app.put('/api/me/profile')
@@ -457,7 +468,7 @@ def create_app(settings=None,product=None):
     @app.post('/api/me/reminders/{id}')
     def reminder(id:str,data:ReminderInput,req:Request):return p.set_reminder(id,**data.model_dump(),actor=user(req,write=True))
     @app.get('/api/me/notifications')
-    def notifications(req:Request,offset:int=Query(0,ge=0),limit:int=Query(50,ge=1,le=50)):return p.notifications(actor=user(req),offset=offset,limit=limit)
+    def notifications(req:Request,offset:int=Query(0,ge=0),limit:int=Query(50,ge=1,le=50),unread:bool=False):return p.notifications(actor=user(req),offset=offset,limit=limit,unread=unread)
     @app.post('/api/me/notifications/{id}/read')
     def mark(id:str,req:Request):return p.mark_read(id,actor=user(req,write=True))
     @app.get('/api/me/export')

@@ -1,0 +1,30 @@
+.......F.                                                                [100%]
+=================================== FAILURES ===================================
+________________ test_sg8a_server_assets_are_safe_and_versioned ________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-54/test_sg8a_server_assets_are_sa0')
+
+    def test_sg8a_server_assets_are_safe_and_versioned(tmp_path):
+        required=[
+            ROOT/'infra/sg8a/production.env.example',ROOT/'infra/sg8a/staging.env.example',
+            ROOT/'infra/sg8a/systemd/deepaha-api@.service',ROOT/'infra/sg8a/systemd/deepaha-worker@.service',
+            ROOT/'infra/sg8a/nginx/deepaha-production.conf.example',ROOT/'infra/sg8a/nginx/deepaha-staging.conf.example',
+            ROOT/'ops/sg8a/bootstrap-host.sh',ROOT/'ops/sg8a/install-release.sh',ROOT/'ops/sg8a/rollback.sh',
+            ROOT/'ops/sg8a/backup-postgres.sh',ROOT/'ops/sg8a/verify-backup.sh',ROOT/'ops/sg8a/restore-postgres-backup.sh',ROOT/'ops/sg8a/smoke.sh',ROOT/'ops/sg8a/preflight-host.sh',
+            ROOT/'RELEASE_COMPATIBILITY.json',
+        ]
+        assert all(path.exists() for path in required)
+        for script in (ROOT/'ops/sg8a').glob('*.sh'):
+            # Resolve PATH explicitly: Windows CreateProcess otherwise prefers System32's
+            # WSL launcher even when a working Git Bash is first on PATH.
+            bash=shutil.which('bash')
+            assert bash, 'A working Bash is required for deployment script validation'
+            subprocess.run([bash,'-n',str(script)],check=True)
+        compatibility=json.loads((ROOT/'RELEASE_COMPATIBILITY.json').read_text(encoding='utf-8'))
+        assert compatibility['release']=='3.8.0-rc1'
+>       assert compatibility['schema_change_in_release'] is False
+E       assert True is False
+
+backend/tests/product/test_sg8a_deployment.py:101: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_sg8a_deployment.py::test_sg8a_server_assets_are_safe_and_versioned - assert True is False

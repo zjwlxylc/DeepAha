@@ -1,0 +1,11 @@
+{
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "node": "v22.16.0",
+  "chromium": "Chromium 144.0.7559.96 built on Debian GNU/Linux 13 (trixie)",
+  "pypdf": "5.9.0",
+  "declared_pypdf": ">=6,<7",
+  "wma_sdk_installed": false,
+  "canonical_clean_install_verified": false,
+  "actual_scope": "Existing Linux container; test databases isolated and temporary"
+}

@@ -1,0 +1,25 @@
+{
+  "scanned": "Source-text high-confidence private-key/payment/AWS markers; runtime credential files/DBs excluded separately",
+  "matches": [
+    "contracts/corpora/v0.8.0/model-call-ledger-string-values.json"
+  ],
+  "exact_live_secret_reference_available": false,
+  "not_a_formal_security_audit": true,
+  "classifications": [
+    {
+      "path": "contracts/corpora/v0.8.0/model-call-ledger-string-values.json",
+      "classification": "BASELINE_NEGATIVE_SECURITY_TEST_FIXTURE",
+      "identical_to_base": true,
+      "contract_version": "p9b-model-call-ledger-string-values-v1",
+      "tested_by": [
+        "backend/tests/p9b/test_ledger_value_contract.py",
+        "backend/tests/integration/test_p9b_gateway_value_contract.py"
+      ],
+      "note": "These marker strings are intentional forbidden-value examples with allowed=false, not runtime credentials; baseline fixture retained."
+    }
+  ],
+  "unclassified_high_confidence_matches": [],
+  "font_files": [],
+  "runtime_database_files": [],
+  "runtime_credential_files": []
+}

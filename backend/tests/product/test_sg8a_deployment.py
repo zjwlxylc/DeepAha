@@ -98,7 +98,11 @@ def test_sg8a_server_assets_are_safe_and_versioned(tmp_path):
         subprocess.run([bash,'-n',str(script)],check=True)
     compatibility=json.loads((ROOT/'RELEASE_COMPATIBILITY.json').read_text(encoding='utf-8'))
     assert compatibility['release']=='3.8.0-rc1'
-    assert compatibility['schema_change_in_release'] is False
+    # Experience extension adds tables and must block the historical automatic
+    # rollback path: old workers do not understand named bindings or leases.
+    assert compatibility['schema_change_in_release'] is True
+    assert compatibility['database_generation'].endswith('-experience1')
+    assert compatibility['code_rollback_compatible_with']==[]
     api_unit=(ROOT/'infra/sg8a/systemd/deepaha-api@.service').read_text(encoding='utf-8')
     assert 'EnvironmentFile=/etc/deepaha/%i.env' in api_unit
     assert 'ReadWritePaths=/var/lib/deepaha/%i' in api_unit

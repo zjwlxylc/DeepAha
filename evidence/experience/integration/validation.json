@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "platform": "Windows",
+  "native_windows_tested": true,
+  "human_acceptance": "User confirmed local acceptance and production publication in this conversation",
+  "full_suite": {
+    "tests": 278,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 2,
+    "passed": 276
+  },
+  "individual_files": 37,
+  "all_stage_returncodes_zero": true,
+  "postgres_real_tests": 2,
+  "http_checks": 29,
+  "native_browser_page_sizes": 87,
+  "wma_live_parallel_validation": "NOT_RUN; serial defaults retained",
+  "raw_metadata_note": "verify.py has hardcoded native_windows_tested false and human NOT_RUN. This integration record corrects only execution context; raw output is preserved."
+}

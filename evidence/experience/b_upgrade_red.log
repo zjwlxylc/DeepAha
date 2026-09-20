@@ -1,0 +1,32 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_________________ test_additive_upgrade_backup_and_idempotency _________________
+
+svc = <deepaha.product.service.Product object at 0x7f95691f41a0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-5/test_additive_upgrade_backup_a0')
+
+    def test_additive_upgrade_backup_and_idempotency(svc,tmp_path):
+        from deepaha.product import upgrade
+>       assert hasattr(upgrade,'upgrade_experience'), 'explicit extension migration must exist'
+E       AssertionError: explicit extension migration must exist
+E       assert False
+E        +  where False = hasattr(<module 'deepaha.product.upgrade' from '/mnt/data/deepaha_resume/work/backend/src/deepaha/product/upgrade.py'>, 'upgrade_experience')
+
+backend/tests/product/test_experience_upgrade.py:11: AssertionError
+___________________ test_initializer_refuses_silent_upgrade ____________________
+
+svc = <deepaha.product.service.Product object at 0x7f9569106ad0>
+
+    def test_initializer_refuses_silent_upgrade(svc):
+        tables=[t for t in Base.metadata.sorted_tables if t.name in EXPERIENCE_TABLE_NAMES]
+        Base.metadata.drop_all(svc.db.engine,tables=list(reversed(tables)))
+>       with pytest.raises(Problem) as err:svc.initialize()
+             ^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'deepaha.product.errors.Problem'>
+
+backend/tests/product/test_experience_upgrade.py:36: Failed
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_experience_upgrade.py::test_additive_upgrade_backup_and_idempotency - AssertionError: explicit extension migration must exist
+assert False
+ +  where False = hasattr(<module 'deepaha.product.upgrade' from '/mnt/data/deepaha_resume/work/backend/src/deepaha/product/upgrade.py'>, 'upgrade_experience')
+FAILED backend/tests/product/test_experience_upgrade.py::test_initializer_refuses_silent_upgrade - Failed: DID NOT RAISE <class 'deepaha.product.errors.Problem'>

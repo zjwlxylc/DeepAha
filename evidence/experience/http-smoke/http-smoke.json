@@ -1,0 +1,35 @@
+{
+  "scope": "Fresh isolated database and actual loopback HTTP; not TLS, native Windows or live WMA. No worker started.",
+  "checks": [
+    {
+      "test": "GET /health/live",
+      "passed": true
+    },
+    {
+      "test": "GET /health/ready",
+      "passed": true
+    },
+    {
+      "test": "GET /",
+      "passed": true
+    },
+    {
+      "test": "GET /app/overview",
+      "passed": true
+    },
+    {
+      "test": "GET /review/overview",
+      "passed": true
+    },
+    {
+      "test": "GET /manage/execution",
+      "passed": true
+    },
+    {
+      "test": "strict CSP retained",
+      "passed": false
+    }
+  ],
+  "status": "FAIL",
+  "wma_called": false
+}

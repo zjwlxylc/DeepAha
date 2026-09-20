@@ -1,0 +1,25 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_projection_runs_off_event_loop_so_lease_heartbeat_can_progress ______
+
+svc = <deepaha.product.service.Product object at 0x7f30c6f55400>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f30c6ca82b0>
+
+    def test_projection_runs_off_event_loop_so_lease_heartbeat_can_progress(svc,monkeypatch):
+        import threading
+        from deepaha.product.worker import run_once
+        t=task(svc);original=svc.ingest;loop_thread=threading.get_ident();threads=[]
+        def inspect_thread(*args,**kw):
+            threads.append(threading.get_ident());return original(*args,**kw)
+        monkeypatch.setattr(svc,'ingest',inspect_thread)
+        result=asyncio.run(run_once(svc,FakeClient))
+>       assert result['state']=='READY' and threads and threads[0]!=loop_thread
+E       AssertionError: assert ('READY' == 'READY'
+E         
+E           READY and [139848131438464] and 139848131438464 != 139848131438464)
+
+backend/tests/product/test_dispatch_policy.py:173: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_dispatch_policy.py::test_projection_runs_off_event_loop_so_lease_heartbeat_can_progress - AssertionError: assert ('READY' == 'READY'
+  
+    READY and [139848131438464] and 139848131438464 != 139848131438464)

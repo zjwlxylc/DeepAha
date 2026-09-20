@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "id": "research",
+      "label": "研究调查连接",
+      "agent_id_env": "DEEPAHA_WMA_RESEARCH_AGENT_ID",
+      "api_key_env": "DEEPAHA_WMA_RESEARCH_API_KEY",
+      "source_app": "deepaha",
+      "enabled": false
+    }
+  ]
+}

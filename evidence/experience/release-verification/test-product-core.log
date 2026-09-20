@@ -1,0 +1,2 @@
+Core rendering checks passed: missing/invalid/known dates and text escaping
+Compact field checks passed: notes retained, collapsed, escaped; exclusion, paging and sources preserved

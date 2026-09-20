@@ -11,10 +11,10 @@ def test_sg7_2_migrates_public_home_about_and_uploaded_brand_without_touching_pr
     logo=ROOT/'brand-logo.png'
     assert logo.exists() and logo.stat().st_size > 10_000
     assert '/product/brand-logo.png' in core
-    assert '机会星图' in user and '让属于你的机会，' in user and '不再擦肩而过' in user
-    assert '它怎样替你找到机会' in user
-    assert '怎样判断你是否符合' in user
-    assert '怎样帮你继续行动' in user
+    home=(ROOT/'home.js').read_text(encoding='utf-8')
+    assert '机会星图' in user and '让适合你的机会，' in home
+    assert 'deepaha-opportunity-map-v2' in home and 'marketing-final' in user
+    assert not any(x in home for x in ('marketing-process','marketing-judge','marketing-action'))
     assert "path==='/about'" in user and '用 AI 助力青年' in user and '用户做主' in user
     assert 'marketingShell' in user and '.marketing-hero' in css and '.about-hero' in css
     assert 'brand-logo.png' in html

@@ -99,3 +99,64 @@ class ConnectionConfig:
         from pydantic import SecretStr
         from deepaha.investigations.wma import WmaBinding,DirectWmaClient
         return lambda:DirectWmaClient(WmaBinding(api_key=SecretStr(c['api_key']),agent_id=c['agent_id'],source_app=c['source_app'],agent_version='1.0.0'))
+
+
+class BindingRegistry:
+    """Host-configured named bindings. Files contain environment-variable NAMES, not secrets.
+
+    Default preserves the existing encrypted local connection and production env path.
+    Named binding registration is host-only; the web can edit limits, never credentials.
+    """
+    def __init__(self,directory,mode='local'):
+        self.default=ConnectionConfig(directory,mode);self.mode=mode
+
+    def definitions(self):
+        import re
+        result={'default':{'id':'default','label':'默认调查连接'}}
+        filename=os.getenv('DEEPAHA_WMA_BINDINGS_FILE')
+        if not filename:return result
+        try:
+            path=Path(filename)
+            if not path.is_absolute() or path.stat().st_size>65536:raise ValueError()
+            data=json.loads(path.read_text(encoding='utf-8'))
+            if set(data)!={'bindings'} or not isinstance(data['bindings'],list) or len(data['bindings'])>12:raise ValueError()
+            for row in data['bindings']:
+                if not isinstance(row,dict) or set(row)-{'id','label','agent_id_env','api_key_env','source_app','enabled'}:raise ValueError()
+                id=row['id']
+                if not re.fullmatch(r'[a-zA-Z0-9_-]{1,48}',id) or id in result:raise ValueError()
+                for key in ('agent_id_env','api_key_env'):
+                    if not re.fullmatch(r'DEEPAHA_WMA_[A-Z0-9_]{1,100}',row[key]):raise ValueError()
+                if type(row.get('enabled',False)) is not bool:raise ValueError()
+                result[id]={**row,'label':str(row.get('label',id))[:100]}
+        except (OSError,ValueError,KeyError,TypeError):raise Problem('宿主WMA连接登记文件不正确；未启用新调度',503,'BINDING_CONFIG_INVALID') from None
+        return result
+
+    def _load(self,ref):
+        rows=self.definitions()
+        if ref not in rows:raise Problem('执行连接不存在',404,'CONNECTION_NOT_FOUND')
+        if ref=='default':return self.default.load()
+        row=rows[ref]
+        return {'agent_id':os.getenv(row['agent_id_env'],''),'api_key':os.getenv(row['api_key_env'],''),
+                'source_app':row.get('source_app','deepaha-dail'),'enabled':row.get('enabled',False),'origin':'HOST'}
+
+    def public(self):
+        out=[]
+        for ref,row in self.definitions().items():
+            c=self._load(ref)
+            out.append({'id':ref,'label':row['label'],'configured':bool(c.get('agent_id') and c.get('api_key')),
+                'enabled':bool(c.get('enabled')),'origin':c.get('origin','NONE')})
+        return out
+
+    def fingerprint(self,ref,release):
+        from .adapter import hash_json
+        c=self._load(ref)
+        # Only the final digest leaves memory; no key, partial key, or standalone key hash is stored.
+        return hash_json({'binding':{k:c.get(k) for k in ('agent_id','api_key','source_app')},'release':release})
+
+    def factory(self,ref):
+        if ref=='default':return self.default.factory()
+        c=self._load(ref)
+        if not c.get('enabled') or not c.get('api_key') or not c.get('agent_id'):return None
+        from pydantic import SecretStr
+        from deepaha.investigations.wma import WmaBinding,DirectWmaClient
+        return lambda:DirectWmaClient(WmaBinding(api_key=SecretStr(c['api_key']),agent_id=c['agent_id'],source_app=c['source_app'],agent_version='1.0.0'))

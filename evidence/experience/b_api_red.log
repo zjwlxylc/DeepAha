@@ -1,0 +1,100 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+______ test_versioned_profile_patch_preserves_omitted_and_explicit_clear _______
+
+client = <starlette.testclient.TestClient object at 0x7f3d087f70e0>
+svc = <deepaha.product.service.Product object at 0x7f3d097dd010>
+
+    def test_versioned_profile_patch_preserves_omitted_and_explicit_clear(client,svc):
+        svc.set_profile({'major':'广告学','certificates':['CET6'],'cities':['宁波'],'birth_date':'2000-02-29','notification_enabled':False},actor='reader')
+        login(client,'reader')
+>       r=client.get('/api/me/profile-state');assert r.status_code==200
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_experience_api.py:21: AssertionError
+_______ test_profile_two_clients_and_erase_cannot_resurrect_old_version ________
+
+svc = <deepaha.product.service.Product object at 0x7f3d087ce710>
+
+    def test_profile_two_clients_and_erase_cannot_resurrect_old_version(svc):
+>       assert hasattr(svc,'profile_state'), 'versioned profile state is required'
+E       AssertionError: versioned profile state is required
+E       assert False
+E        +  where False = hasattr(<deepaha.product.service.Product object at 0x7f3d087ce710>, 'profile_state')
+
+backend/tests/product/test_experience_api.py:36: AssertionError
+_______ test_source_search_full_population_stable_paging_and_permissions _______
+
+client = <starlette.testclient.TestClient object at 0x7f3d085bb110>
+svc = <deepaha.product.service.Product object at 0x7f3d08698a50>
+
+    def test_source_search_full_population_stable_paging_and_permissions(client,svc):
+        seed_sources(svc);login(client,'operator')
+>       r=client.get('/api/manage/source-search?q=来源119&enabled=true');assert r.status_code==200
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_experience_api.py:58: AssertionError
+______________ test_task_search_counts_guidance_and_source_detail ______________
+
+client = <starlette.testclient.TestClient object at 0x7f3d08332c10>
+svc = <deepaha.product.service.Product object at 0x7f3d087aba80>
+
+    def test_task_search_counts_guidance_and_source_detail(client,svc):
+        t=svc.create_task(svc.test_source,'https://research.example.org/notice',actor='operator',request_key='search-task',instruction='寻找独特的火星项目')
+        login(client,'operator')
+>       r=client.get('/api/manage/task-search?q=火星');assert r.status_code==200
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_experience_api.py:79: AssertionError
+_________ test_preparation_items_persist_isolate_conflict_export_erase _________
+
+client = <starlette.testclient.TestClient object at 0x7f3d0810d0f0>
+svc = <deepaha.product.service.Product object at 0x7f3d084029e0>
+
+    def test_preparation_items_persist_isolate_conflict_export_erase(client,svc):
+        target=published(svc);login(client,'reader')
+        base='/api/me/actions/'+target+'/items'
+>       r=client.post(base,json={'text':'准备作品集','request_key':'prepare-one'});assert r.status_code==200,r.text
+                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"detail":"Method Not Allowed"}
+E       assert 405 == 200
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+
+backend/tests/product/test_experience_api.py:96: AssertionError
+________ test_items_reject_spoofed_official_and_bulk_read_requires_csrf ________
+
+client = <starlette.testclient.TestClient object at 0x7f3cfa55ed70>
+svc = <deepaha.product.service.Product object at 0x7f3d0ac79370>
+
+    def test_items_reject_spoofed_official_and_bulk_read_requires_csrf(client,svc):
+        target=published(svc);login(client,'reader')
+>       assert client.post('/api/me/actions/'+target+'/items',json={'text':'伪造官方要求','origin':'OFFICIAL','request_key':'spoof'}).status_code==422
+E       AssertionError: assert 405 == 422
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+E        +    where <Response [405 Method Not Allowed]> = post((('/api/me/actions/' + 'unit_01a0be2ec1577065907e5c56883190fa') + '/items'), json={'origin': 'OFFICIAL', 'request_key': 'spoof', 'text': '伪造官方要求'})
+E        +      where post = <starlette.testclient.TestClient object at 0x7f3cfa55ed70>.post
+
+backend/tests/product/test_experience_api.py:117: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_experience_api.py::test_versioned_profile_patch_preserves_omitted_and_explicit_clear - assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_experience_api.py::test_profile_two_clients_and_erase_cannot_resurrect_old_version - AssertionError: versioned profile state is required
+assert False
+ +  where False = hasattr(<deepaha.product.service.Product object at 0x7f3d087ce710>, 'profile_state')
+FAILED backend/tests/product/test_experience_api.py::test_source_search_full_population_stable_paging_and_permissions - assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_experience_api.py::test_task_search_counts_guidance_and_source_detail - assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_experience_api.py::test_preparation_items_persist_isolate_conflict_export_erase - AssertionError: {"detail":"Method Not Allowed"}
+assert 405 == 200
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+FAILED backend/tests/product/test_experience_api.py::test_items_reject_spoofed_official_and_bulk_read_requires_csrf - AssertionError: assert 405 == 422
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+ +    where <Response [405 Method Not Allowed]> = post((('/api/me/actions/' + 'unit_01a0be2ec1577065907e5c56883190fa') + '/items'), json={'origin': 'OFFICIAL', 'request_key': 'spoof', 'text': '伪造官方要求'})
+ +      where post = <starlette.testclient.TestClient object at 0x7f3cfa55ed70>.post

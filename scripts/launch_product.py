@@ -154,6 +154,8 @@ def main():
         print('正在检查 SG7 机会实验室；只增加隔离实验数据结构，不改正式事实、审核结果或 WMA 原件。')
         subprocess.run(command+['upgrade-sg7'],cwd=ROOT/'backend',env=environment,check=True)
         upgrade_local_access(database,command,environment)
+        print('正在检查体验扩展：资料版本、准备事项和受控调度。')
+        subprocess.run(command+['upgrade-experience'],cwd=ROOT/'backend',env=environment,check=True)
         if not has_account():
             print('数据目录里还没有任何账号，补设首个账号后再启动服务。')
             run_setup()

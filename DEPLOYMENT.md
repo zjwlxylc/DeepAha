@@ -1,3 +1,5 @@
+> 当前候选为 experience-84353c7-20260920。未授权部署；新增表及不兼容旧 Worker 的回退保护见 `docs/experience/RELEASE_AND_ROLLBACK.md`。以下是历史部署说明。
+
 # DeepAha 3.8.0-rc1 / SG8-A 部署入口
 
 SG8-A 是当前正式部署入口。旧 `docs/rebuild/06_DEPLOYMENT.md` 仍保留为重建阶段历史资料，但**不再作为公网发布默认流程**。

@@ -446,3 +446,69 @@ LAB_TABLE_NAMES={
     'product_lab_gold_cases','product_lab_pair_truths','product_lab_twins','product_lab_runs','product_lab_run_results',
     'product_lab_enrollments','product_lab_exposures',
 }
+
+
+# Experience extension tables are additive: no columns or facts in legacy tables change.
+class ProfileRevision(Base):
+    __tablename__='product_profile_revisions'
+    account_id: Mapped[str]=mapped_column(ForeignKey('product_accounts.id'),primary_key=True)
+    version: Mapped[int]=mapped_column(Integer,default=0)
+
+class PreparationItem(Base):
+    __tablename__='product_preparation_items'
+    __table_args__=(UniqueConstraint('account_id','request_key'),)
+    id: Mapped[str]=mapped_column(String(36),primary_key=True,default=uid)
+    account_id: Mapped[str]=mapped_column(ForeignKey('product_accounts.id'),index=True)
+    target_public_id: Mapped[str]=mapped_column(String(64),index=True)
+    text: Mapped[str]=mapped_column(String(500))
+    done: Mapped[bool]=mapped_column(Boolean,default=False)
+    origin: Mapped[str]=mapped_column(String(32),default='USER')
+    publication_id: Mapped[str]=mapped_column(String(64))
+    field_id: Mapped[str|None]=mapped_column(String(128),nullable=True)
+    request_key: Mapped[str]=mapped_column(String(128))
+    version: Mapped[int]=mapped_column(Integer,default=1)
+    created_at: Mapped[datetime]=mapped_column(DateTime(timezone=True),default=now)
+    updated_at: Mapped[datetime]=mapped_column(DateTime(timezone=True),default=now)
+
+EXPERIENCE_TABLE_NAMES={'product_profile_revisions','product_preparation_items'}
+
+
+class DispatchPolicy(Base):
+    __tablename__='product_dispatch_policies'
+    connection_ref: Mapped[str]=mapped_column(String(48),primary_key=True)
+    version: Mapped[int]=mapped_column(Integer,default=0)
+    mode: Mapped[str]=mapped_column(String(16),default='SERIAL')
+    max_concurrent: Mapped[int]=mapped_column(Integer,default=1)
+    domain_limit: Mapped[int]=mapped_column(Integer,default=1)
+    queue_limit: Mapped[int]=mapped_column(Integer,default=20)
+    task_budget_seconds: Mapped[int]=mapped_column(Integer,default=1200)
+    new_dispatch_enabled: Mapped[bool]=mapped_column(Boolean,default=True)
+    observed_fingerprint: Mapped[str]=mapped_column(String(64),default='')
+    published_model: Mapped[str]=mapped_column(String(256),default='')
+    release_evidence: Mapped[dict]=mapped_column(JSON,default=dict)
+    inspected_at: Mapped[datetime|None]=mapped_column(DateTime(timezone=True),nullable=True)
+
+class DispatchValidation(Base):
+    __tablename__='product_dispatch_validations'
+    id: Mapped[str]=mapped_column(String(36),primary_key=True,default=uid)
+    connection_ref: Mapped[str]=mapped_column(String(48),index=True)
+    binding_fingerprint: Mapped[str]=mapped_column(String(64))
+    parallel: Mapped[int]=mapped_column(Integer)
+    origin: Mapped[str]=mapped_column(String(16))
+    passed: Mapped[bool]=mapped_column(Boolean,default=False)
+    report_sha256: Mapped[str]=mapped_column(String(64))
+    created_at: Mapped[datetime]=mapped_column(DateTime(timezone=True),default=now)
+
+class TaskDispatch(Base):
+    __tablename__='product_task_dispatches'
+    task_id: Mapped[str]=mapped_column(ForeignKey('product_tasks.id'),primary_key=True)
+    connection_ref: Mapped[str]=mapped_column(String(48),default='default',index=True)
+    binding_fingerprint: Mapped[str]=mapped_column(String(64),default='')
+    model_name: Mapped[str]=mapped_column(String(256),default='')
+    policy_snapshot: Mapped[dict]=mapped_column(JSON,default=dict)
+    lease_owner: Mapped[str|None]=mapped_column(String(128),nullable=True)
+    lease_expires_at: Mapped[datetime|None]=mapped_column(DateTime(timezone=True),nullable=True)
+    prompt_started: Mapped[bool]=mapped_column(Boolean,default=False)
+    remote_pending: Mapped[bool]=mapped_column(Boolean,default=False)
+
+EXPERIENCE_TABLE_NAMES |= {'product_dispatch_policies','product_dispatch_validations','product_task_dispatches'}

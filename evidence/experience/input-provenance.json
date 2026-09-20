@@ -1,0 +1,15 @@
+{
+  "DeepAha.zip": {
+    "bytes": 165729023,
+    "sha256": "62640d4891c341d4dbe5ff59f2b1860438dac83f530d0a13f61ff775548c2af7"
+  },
+  "DeepAha_机会星图_原型源码_v22_2026-09-20(1).zip": {
+    "bytes": 8990545,
+    "sha256": "3510248eb1fc0039b824d99b911ce26519899428bcbdb42db2e75d1978806fd6"
+  },
+  "production_logo": {
+    "path": "web/public/product/brand-logo.png",
+    "sha256": "5c61733631bdfcb302e0cbefca25b71b0c192fc93e924f4a20e4db96a6ae9ff7",
+    "identical_to_base": true
+  }
+}

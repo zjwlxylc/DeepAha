@@ -1,0 +1,841 @@
+{
+  "timestamp": "2026-09-20T15:14:04.824724+00:00",
+  "base": "84353c7e5286e276d24af8e0342d4d3441c30ec5",
+  "wma_called": false,
+  "stages": [
+    {
+      "name": "product-full",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-c",
+        "backend/pyproject.toml",
+        "backend/tests/product",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\product-full.xml"
+      ],
+      "returncode": 0,
+      "seconds": 248.6,
+      "counts": {
+        "tests": 278,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 2,
+        "passed": 276
+      }
+    },
+    {
+      "name": "test_action_loop",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_action_loop.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_action_loop.xml"
+      ],
+      "returncode": 0,
+      "seconds": 12.92,
+      "counts": {
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 11
+      }
+    },
+    {
+      "name": "test_action_loop_api",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_action_loop_api.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_action_loop_api.xml"
+      ],
+      "returncode": 0,
+      "seconds": 3.98,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      }
+    },
+    {
+      "name": "test_actionable_granularity",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_actionable_granularity.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_actionable_granularity.xml"
+      ],
+      "returncode": 0,
+      "seconds": 20.24,
+      "counts": {
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 13
+      }
+    },
+    {
+      "name": "test_api",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_api.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_api.xml"
+      ],
+      "returncode": 0,
+      "seconds": 10.05,
+      "counts": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 6
+      }
+    },
+    {
+      "name": "test_beta_access",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_beta_access.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_beta_access.xml"
+      ],
+      "returncode": 0,
+      "seconds": 26.05,
+      "counts": {
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 17
+      }
+    },
+    {
+      "name": "test_contract",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_contract.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_contract.xml"
+      ],
+      "returncode": 0,
+      "seconds": 24.6,
+      "counts": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 21
+      }
+    },
+    {
+      "name": "test_currentness",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_currentness.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_currentness.xml"
+      ],
+      "returncode": 0,
+      "seconds": 14.55,
+      "counts": {
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 12
+      }
+    },
+    {
+      "name": "test_currentness_api",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_currentness_api.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_currentness_api.xml"
+      ],
+      "returncode": 0,
+      "seconds": 5.58,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 2
+      }
+    },
+    {
+      "name": "test_delivery_quality",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_delivery_quality.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_delivery_quality.xml"
+      ],
+      "returncode": 0,
+      "seconds": 17.08,
+      "counts": {
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 13
+      }
+    },
+    {
+      "name": "test_dispatch_policy",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_dispatch_policy.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_dispatch_policy.xml"
+      ],
+      "returncode": 0,
+      "seconds": 17.74,
+      "counts": {
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 14
+      }
+    },
+    {
+      "name": "test_eligibility",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_eligibility.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_eligibility.xml"
+      ],
+      "returncode": 0,
+      "seconds": 19.95,
+      "counts": {
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 17
+      }
+    },
+    {
+      "name": "test_experience_api",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_experience_api.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_experience_api.xml"
+      ],
+      "returncode": 0,
+      "seconds": 13.6,
+      "counts": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 8
+      }
+    },
+    {
+      "name": "test_experience_postgres",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_experience_postgres.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_experience_postgres.xml"
+      ],
+      "returncode": 0,
+      "seconds": 1.86,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 2,
+        "passed": 0
+      }
+    },
+    {
+      "name": "test_experience_upgrade",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_experience_upgrade.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_experience_upgrade.xml"
+      ],
+      "returncode": 0,
+      "seconds": 3.78,
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 3
+      }
+    },
+    {
+      "name": "test_live_validation_guard",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_live_validation_guard.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_live_validation_guard.xml"
+      ],
+      "returncode": 0,
+      "seconds": 6.21,
+      "counts": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 6
+      }
+    },
+    {
+      "name": "test_local_launcher_access",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_local_launcher_access.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_local_launcher_access.xml"
+      ],
+      "returncode": 0,
+      "seconds": 3.49,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      }
+    },
+    {
+      "name": "test_milestones_management",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_milestones_management.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_milestones_management.xml"
+      ],
+      "returncode": 0,
+      "seconds": 15.38,
+      "counts": {
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 12
+      }
+    },
+    {
+      "name": "test_multitype_opportunity_core",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_multitype_opportunity_core.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_multitype_opportunity_core.xml"
+      ],
+      "returncode": 0,
+      "seconds": 12.09,
+      "counts": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 10
+      }
+    },
+    {
+      "name": "test_operations",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_operations.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_operations.xml"
+      ],
+      "returncode": 0,
+      "seconds": 9.57,
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 9
+      }
+    },
+    {
+      "name": "test_personal_value",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_personal_value.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_personal_value.xml"
+      ],
+      "returncode": 0,
+      "seconds": 20.91,
+      "counts": {
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 13
+      }
+    },
+    {
+      "name": "test_qualification_compiler",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_qualification_compiler.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_qualification_compiler.xml"
+      ],
+      "returncode": 0,
+      "seconds": 9.29,
+      "counts": {
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 19
+      }
+    },
+    {
+      "name": "test_scout_import",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_scout_import.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_scout_import.xml"
+      ],
+      "returncode": 0,
+      "seconds": 31.29,
+      "counts": {
+        "tests": 29,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 29
+      }
+    },
+    {
+      "name": "test_sg5_1_frontend_contract",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg5_1_frontend_contract.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg5_1_frontend_contract.xml"
+      ],
+      "returncode": 0,
+      "seconds": 1.01,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 2
+      }
+    },
+    {
+      "name": "test_sg6_2_frontend_contract",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg6_2_frontend_contract.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg6_2_frontend_contract.xml"
+      ],
+      "returncode": 0,
+      "seconds": 1.0,
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 3
+      }
+    },
+    {
+      "name": "test_sg6_2_upgrade",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg6_2_upgrade.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg6_2_upgrade.xml"
+      ],
+      "returncode": 0,
+      "seconds": 4.86,
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 3
+      }
+    },
+    {
+      "name": "test_sg6_frontend_contract",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg6_frontend_contract.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg6_frontend_contract.xml"
+      ],
+      "returncode": 0,
+      "seconds": 1.01,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 2
+      }
+    },
+    {
+      "name": "test_sg6_upgrade",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg6_upgrade.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg6_upgrade.xml"
+      ],
+      "returncode": 0,
+      "seconds": 3.24,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      }
+    },
+    {
+      "name": "test_sg7_2_frontend_contract",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg7_2_frontend_contract.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg7_2_frontend_contract.xml"
+      ],
+      "returncode": 0,
+      "seconds": 1.03,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 2
+      }
+    },
+    {
+      "name": "test_sg7_api",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg7_api.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg7_api.xml"
+      ],
+      "returncode": 0,
+      "seconds": 6.09,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 2
+      }
+    },
+    {
+      "name": "test_sg7_founding_users",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg7_founding_users.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg7_founding_users.xml"
+      ],
+      "returncode": 0,
+      "seconds": 5.43,
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 3
+      }
+    },
+    {
+      "name": "test_sg7_frontend_contract",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg7_frontend_contract.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg7_frontend_contract.xml"
+      ],
+      "returncode": 0,
+      "seconds": 1.06,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 2
+      }
+    },
+    {
+      "name": "test_sg7_independent_oracle100",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg7_independent_oracle100.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg7_independent_oracle100.xml"
+      ],
+      "returncode": 0,
+      "seconds": 9.88,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      }
+    },
+    {
+      "name": "test_sg7_lab",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg7_lab.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg7_lab.xml"
+      ],
+      "returncode": 0,
+      "seconds": 8.1,
+      "counts": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 5
+      }
+    },
+    {
+      "name": "test_sg7_recommendation_oracle100",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg7_recommendation_oracle100.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg7_recommendation_oracle100.xml"
+      ],
+      "returncode": 0,
+      "seconds": 28.44,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      }
+    },
+    {
+      "name": "test_sg7_upgrade",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg7_upgrade.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg7_upgrade.xml"
+      ],
+      "returncode": 0,
+      "seconds": 4.43,
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 3
+      }
+    },
+    {
+      "name": "test_sg8a_deployment",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_sg8a_deployment.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_sg8a_deployment.xml"
+      ],
+      "returncode": 0,
+      "seconds": 5.71,
+      "counts": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 6
+      }
+    },
+    {
+      "name": "test_worker",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "backend\\tests\\product\\test_worker.py",
+        "-q",
+        "--junitxml=D:\\DeepAha-experience-release\\verification\\test_worker.xml"
+      ],
+      "returncode": 0,
+      "seconds": 5.17,
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 3
+      }
+    },
+    {
+      "name": "compileall",
+      "command": [
+        "D:\\DeepAha\\.venv-product\\Scripts\\python.exe",
+        "-m",
+        "compileall",
+        "-q",
+        "backend/src",
+        "backend/tests/product",
+        "scripts/experience"
+      ],
+      "returncode": 0,
+      "seconds": 1.71
+    },
+    {
+      "name": "check-product",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/check-product.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 1.0
+    },
+    {
+      "name": "check-sg7-1",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/check-sg7-1.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.07
+    },
+    {
+      "name": "check-sg7-2",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/check-sg7-2.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.07
+    },
+    {
+      "name": "test-birth-date",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-birth-date.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.07
+    },
+    {
+      "name": "test-product-core",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-product-core.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.1
+    },
+    {
+      "name": "test-experience",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "scripts/test-experience.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.07
+    }
+  ],
+  "status": "PASS",
+  "postgres_scope": "NOT_RUN; two opt-in tests skipped",
+  "native_windows_tested": false,
+  "human_acceptance": "NOT_RUN",
+  "production_deployment": "NOT_RUN"
+}

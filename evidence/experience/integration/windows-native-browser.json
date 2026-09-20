@@ -1,0 +1,861 @@
+{
+  "scope": "Native Chromium navigation + actual local HTTP, synthetic database; not production HTTPS or a human test.",
+  "transport": "native",
+  "pages": [
+    {
+      "route": "/",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "让适合你的机会，不再轻易与你擦肩而过。",
+      "overflow": []
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "让适合你的机会，不再轻易与你擦肩而过。",
+      "overflow": []
+    },
+    {
+      "route": "/",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "让适合你的机会，不再轻易与你擦肩而过。",
+      "overflow": []
+    },
+    {
+      "route": "/about",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "用 AI 助力青年，用 AI 发现机会。",
+      "overflow": []
+    },
+    {
+      "route": "/app/overview",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "机会总览",
+      "overflow": []
+    },
+    {
+      "route": "/app/opportunity/unit_01a0bf6347847b3bb4b653b323697635",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "研究助理",
+      "overflow": []
+    },
+    {
+      "route": "/app/star",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "我的机会星图",
+      "overflow": []
+    },
+    {
+      "route": "/app/actions",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "收藏与行动",
+      "overflow": []
+    },
+    {
+      "route": "/app/actions?view=list",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "收藏与行动",
+      "overflow": []
+    },
+    {
+      "route": "/app/profile",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "我的关注方向",
+      "overflow": []
+    },
+    {
+      "route": "/app/notifications",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "消息与提醒",
+      "overflow": []
+    },
+    {
+      "route": "/app/me",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "reader",
+      "overflow": []
+    },
+    {
+      "route": "/app/privacy",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "数据与隐私",
+      "overflow": []
+    },
+    {
+      "route": "/app/lab",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "机会共创实验",
+      "overflow": []
+    },
+    {
+      "route": "/account/security",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "账号安全",
+      "overflow": []
+    },
+    {
+      "route": "/about",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "用 AI 助力青年，用 AI 发现机会。",
+      "overflow": []
+    },
+    {
+      "route": "/app/overview",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "机会总览",
+      "overflow": [
+        "chip ",
+        "chip ",
+        "chip ",
+        "chip "
+      ]
+    },
+    {
+      "route": "/app/opportunity/unit_01a0bf6347847b3bb4b653b323697635",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "研究助理",
+      "overflow": []
+    },
+    {
+      "route": "/app/star",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "我的机会星图",
+      "overflow": []
+    },
+    {
+      "route": "/app/actions",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "收藏与行动",
+      "overflow": []
+    },
+    {
+      "route": "/app/actions?view=list",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "收藏与行动",
+      "overflow": []
+    },
+    {
+      "route": "/app/profile",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "我的关注方向",
+      "overflow": []
+    },
+    {
+      "route": "/app/notifications",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "消息与提醒",
+      "overflow": []
+    },
+    {
+      "route": "/app/me",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "reader",
+      "overflow": []
+    },
+    {
+      "route": "/app/privacy",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "数据与隐私",
+      "overflow": []
+    },
+    {
+      "route": "/app/lab",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "机会共创实验",
+      "overflow": []
+    },
+    {
+      "route": "/account/security",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "账号安全",
+      "overflow": []
+    },
+    {
+      "route": "/about",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "用 AI 助力青年，用 AI 发现机会。",
+      "overflow": []
+    },
+    {
+      "route": "/app/overview",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "机会总览",
+      "overflow": [
+        "chip ",
+        "chip ",
+        "chip ",
+        "chip ",
+        "chip ",
+        "chip "
+      ]
+    },
+    {
+      "route": "/app/opportunity/unit_01a0bf6347847b3bb4b653b323697635",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "研究助理",
+      "overflow": []
+    },
+    {
+      "route": "/app/star",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "我的机会星图",
+      "overflow": []
+    },
+    {
+      "route": "/app/actions",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "收藏与行动",
+      "overflow": []
+    },
+    {
+      "route": "/app/actions?view=list",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "收藏与行动",
+      "overflow": []
+    },
+    {
+      "route": "/app/profile",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "我的关注方向",
+      "overflow": []
+    },
+    {
+      "route": "/app/notifications",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "消息与提醒",
+      "overflow": []
+    },
+    {
+      "route": "/app/me",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "reader",
+      "overflow": []
+    },
+    {
+      "route": "/app/privacy",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "数据与隐私",
+      "overflow": []
+    },
+    {
+      "route": "/app/lab",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "机会共创实验",
+      "overflow": []
+    },
+    {
+      "route": "/account/security",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "账号安全",
+      "overflow": []
+    },
+    {
+      "route": "/manage",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "运行与连接",
+      "overflow": []
+    },
+    {
+      "route": "/manage/sources",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "来源管理",
+      "overflow": []
+    },
+    {
+      "route": "/manage/sources/01a0bf63-470b-708e-9da3-63eb8c03fe64",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "第120号唯一目标来源",
+      "overflow": []
+    },
+    {
+      "route": "/manage/tasks",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "任务管理",
+      "overflow": []
+    },
+    {
+      "route": "/manage/tasks/01a0bf63-498b-722d-9988-524097633a54",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "调查记录",
+      "overflow": []
+    },
+    {
+      "route": "/manage/execution",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "WMA 执行策略",
+      "overflow": []
+    },
+    {
+      "route": "/manage/source-imports",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "来源资产",
+      "overflow": []
+    },
+    {
+      "route": "/manage/lab",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "机会实验室",
+      "overflow": []
+    },
+    {
+      "route": "/manage/feedback",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "反馈样本",
+      "overflow": []
+    },
+    {
+      "route": "/manage/history",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "操作记录",
+      "overflow": []
+    },
+    {
+      "route": "/manage/invitations",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "邀请码",
+      "overflow": []
+    },
+    {
+      "route": "/manage/users",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "用户管理",
+      "overflow": []
+    },
+    {
+      "route": "/manage/access-audit",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "账号操作记录",
+      "overflow": []
+    },
+    {
+      "route": "/review/overview",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "审核收件箱",
+      "overflow": []
+    },
+    {
+      "route": "/review/catalog",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "收录管理",
+      "overflow": []
+    },
+    {
+      "route": "/review/packet/01a0bf63-497d-7529-b49a-9adca8c37462",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "整体审核",
+      "overflow": []
+    },
+    {
+      "route": "/manage",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "运行与连接",
+      "overflow": []
+    },
+    {
+      "route": "/manage/sources",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "来源管理",
+      "overflow": []
+    },
+    {
+      "route": "/manage/sources/01a0bf63-470b-708e-9da3-63eb8c03fe64",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "第120号唯一目标来源",
+      "overflow": []
+    },
+    {
+      "route": "/manage/tasks",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "任务管理",
+      "overflow": []
+    },
+    {
+      "route": "/manage/tasks/01a0bf63-498b-722d-9988-524097633a54",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "调查记录",
+      "overflow": []
+    },
+    {
+      "route": "/manage/execution",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "WMA 执行策略",
+      "overflow": []
+    },
+    {
+      "route": "/manage/source-imports",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "来源资产",
+      "overflow": []
+    },
+    {
+      "route": "/manage/lab",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "机会实验室",
+      "overflow": []
+    },
+    {
+      "route": "/manage/feedback",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "反馈样本",
+      "overflow": []
+    },
+    {
+      "route": "/manage/history",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "操作记录",
+      "overflow": []
+    },
+    {
+      "route": "/manage/invitations",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "邀请码",
+      "overflow": []
+    },
+    {
+      "route": "/manage/users",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "用户管理",
+      "overflow": []
+    },
+    {
+      "route": "/manage/access-audit",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "账号操作记录",
+      "overflow": []
+    },
+    {
+      "route": "/review/overview",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "审核收件箱",
+      "overflow": []
+    },
+    {
+      "route": "/review/catalog",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "收录管理",
+      "overflow": []
+    },
+    {
+      "route": "/review/packet/01a0bf63-497d-7529-b49a-9adca8c37462",
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "整体审核",
+      "overflow": []
+    },
+    {
+      "route": "/manage",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "运行与连接",
+      "overflow": []
+    },
+    {
+      "route": "/manage/sources",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "来源管理",
+      "overflow": []
+    },
+    {
+      "route": "/manage/sources/01a0bf63-470b-708e-9da3-63eb8c03fe64",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "第120号唯一目标来源",
+      "overflow": []
+    },
+    {
+      "route": "/manage/tasks",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "任务管理",
+      "overflow": []
+    },
+    {
+      "route": "/manage/tasks/01a0bf63-498b-722d-9988-524097633a54",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "调查记录",
+      "overflow": []
+    },
+    {
+      "route": "/manage/execution",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "WMA 执行策略",
+      "overflow": []
+    },
+    {
+      "route": "/manage/source-imports",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "来源资产",
+      "overflow": []
+    },
+    {
+      "route": "/manage/lab",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "机会实验室",
+      "overflow": []
+    },
+    {
+      "route": "/manage/feedback",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "反馈样本",
+      "overflow": []
+    },
+    {
+      "route": "/manage/history",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "操作记录",
+      "overflow": []
+    },
+    {
+      "route": "/manage/invitations",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "邀请码",
+      "overflow": []
+    },
+    {
+      "route": "/manage/users",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "用户管理",
+      "overflow": []
+    },
+    {
+      "route": "/manage/access-audit",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "账号操作记录",
+      "overflow": []
+    },
+    {
+      "route": "/review/overview",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "审核收件箱",
+      "overflow": []
+    },
+    {
+      "route": "/review/catalog",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "收录管理",
+      "overflow": []
+    },
+    {
+      "route": "/review/packet/01a0bf63-497d-7529-b49a-9adca8c37462",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "整体审核",
+      "overflow": []
+    }
+  ],
+  "checks": [
+    {
+      "test": "final-button-hover-0",
+      "computed": {
+        "text": "rgb(10, 64, 167)",
+        "background": "rgba(255, 255, 255, 0.753)",
+        "width": 154,
+        "scroll": 152
+      }
+    },
+    {
+      "test": "final-button-hover-1",
+      "computed": {
+        "text": "rgb(255, 255, 255)",
+        "background": "rgba(24, 62, 118, 0.043)",
+        "width": 106,
+        "scroll": 104
+      }
+    },
+    {
+      "test": "resize-preserves-draft",
+      "passed": true
+    },
+    {
+      "test": "profile-patch-preserves-other-fields",
+      "passed": true
+    },
+    {
+      "test": "profile-conflict-dialog-and-preserved-draft",
+      "passed": true
+    },
+    {
+      "test": "profile-explicit-merge-keeps-external-change",
+      "passed": true
+    },
+    {
+      "test": "catalog-return-filters",
+      "passed": true
+    },
+    {
+      "test": "preparation-persists",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Shift+Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Shift+Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Shift+Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Shift+Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Shift+Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Shift+Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Shift+Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Shift+Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Shift+Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-contained-Shift+Tab",
+      "passed": true
+    },
+    {
+      "test": "dialog-focus-return",
+      "passed": true
+    },
+    {
+      "test": "remote-selector-finds-source-120",
+      "passed": true
+    },
+    {
+      "test": "mobile-readonly-sources-visible",
+      "passed": true
+    },
+    {
+      "test": "mobile-write-blocked",
+      "passed": true
+    },
+    {
+      "test": "javascript-errors",
+      "passed": true
+    }
+  ],
+  "javascript_errors": [],
+  "request_count": 0,
+  "unexpected_http": []
+}

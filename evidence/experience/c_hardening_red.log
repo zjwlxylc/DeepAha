@@ -1,0 +1,51 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_____________ test_source_revoked_during_upload_never_sends_prompt _____________
+
+svc = <deepaha.product.service.Product object at 0x7f2330cf1400>
+
+    def test_source_revoked_during_upload_never_sends_prompt(svc):
+        from deepaha.product.worker import run_once
+        class Revoking(FakeClient):
+            async def upload(self,path,data):
+                if path.endswith('task.json'):svc.source_status(svc.test_source,False,'撤销采集',actor='operator')
+        task(svc);Revoking.prompts=0
+        result=asyncio.run(run_once(svc,Revoking))
+>       assert Revoking.prompts==0 and result['code']=='SOURCE_POLICY_CHANGED'
+E       AssertionError: assert (1 == 0)
+E        +  where 1 = <class 'tests.product.test_dispatch_policy.test_source_revoked_during_upload_never_sends_prompt.<locals>.Revoking'>.prompts
+
+backend/tests/product/test_dispatch_policy.py:142: AssertionError
+________ test_ingest_fences_cancelled_or_expired_worker_before_revision ________
+
+svc = <deepaha.product.service.Product object at 0x7f233089ad50>
+
+    def test_ingest_fences_cancelled_or_expired_worker_before_revision(svc):
+        from deepaha.product.dispatch_policy import claim
+        from deepaha.product.models import TaskDispatch,Revision
+        t=task(svc);claim(svc,'default',None,'owner')
+        svc.cancel_task(t['id'],actor='operator')
+        with pytest.raises(Problem) as ex:
+>           svc.ingest(svc.test_source,packet(),actor='operator',task_id=t['id'],worker_lease='owner')
+E           TypeError: IntakeMixin.ingest() got an unexpected keyword argument 'worker_lease'
+
+backend/tests/product/test_dispatch_policy.py:151: TypeError
+____________ test_inspected_binding_change_does_not_claim_or_prompt ____________
+
+svc = <deepaha.product.service.Product object at 0x7f233078ae90>
+
+    def test_inspected_binding_change_does_not_claim_or_prompt(svc):
+        from deepaha.product.worker import run_once
+        class Changed(FakeClient):
+            async def inspect_release(self):return {'configuration_sha256':'new'}
+        task(svc);Changed.prompts=0
+>       result=asyncio.run(run_once(svc,Changed,binding_fingerprint='old',expected_release={'configuration_sha256':'old'}))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: run_once() got an unexpected keyword argument 'expected_release'
+
+backend/tests/product/test_dispatch_policy.py:161: TypeError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_dispatch_policy.py::test_source_revoked_during_upload_never_sends_prompt - AssertionError: assert (1 == 0)
+ +  where 1 = <class 'tests.product.test_dispatch_policy.test_source_revoked_during_upload_never_sends_prompt.<locals>.Revoking'>.prompts
+FAILED backend/tests/product/test_dispatch_policy.py::test_ingest_fences_cancelled_or_expired_worker_before_revision - TypeError: IntakeMixin.ingest() got an unexpected keyword argument 'worker_lease'
+FAILED backend/tests/product/test_dispatch_policy.py::test_inspected_binding_change_does_not_claim_or_prompt - TypeError: run_once() got an unexpected keyword argument 'expected_release'

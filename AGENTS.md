@@ -1,3 +1,11 @@
+# 本次候选：experience-84353c7-20260920
+
+基线 `84353c7`。完整体验改善源码交付；原包交付状态为未部署。用户已人工运行验收并授权迁移、合并、推送及正式发布；本次最新执行记录见 `docs/experience/INTEGRATION_RELEASE.md`。真实 WMA 并发验收不包含在本次发布中。
+先读 `docs/experience/README.md`、`TEST_REPORT.md`、`RUN_AND_UPGRADE.md`、`RELEASE_AND_ROLLBACK.md`（均在 docs/experience）。
+此候选新增五张表，必须先备份后执行 `upgrade-experience`；旧 Worker 不可直接在新任务队列上回退运行。以下保留 SG8-A 历史记录，不代表本候选当前状态。
+
+---
+
 # DeepAha 当前开发入口
 
 ## 最新正式站交付（2026-09-20）

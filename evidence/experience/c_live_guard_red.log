@@ -1,0 +1,22 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_live_runner_requires_explicit_cost_confirmation_before_registry_access __
+
+svc = <deepaha.product.service.Product object at 0x7fd559437e00>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-13/test_live_runner_requires_expl0')
+
+    def test_live_runner_requires_explicit_cost_confirmation_before_registry_access(svc,tmp_path):
+>       import deepaha.product.live_validation as live
+E       ModuleNotFoundError: No module named 'deepaha.product.live_validation'
+
+backend/tests/product/test_live_validation_guard.py:8: ModuleNotFoundError
+_________________ test_peak_counts_overlap_not_total_requests __________________
+
+    def test_peak_counts_overlap_not_total_requests():
+>       from deepaha.product.live_validation import request_peak
+E       ModuleNotFoundError: No module named 'deepaha.product.live_validation'
+
+backend/tests/product/test_live_validation_guard.py:18: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_live_validation_guard.py::test_live_runner_requires_explicit_cost_confirmation_before_registry_access - ModuleNotFoundError: No module named 'deepaha.product.live_validation'
+FAILED backend/tests/product/test_live_validation_guard.py::test_peak_counts_overlap_not_total_requests - ModuleNotFoundError: No module named 'deepaha.product.live_validation'
