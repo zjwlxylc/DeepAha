@@ -109,7 +109,7 @@ def main(argv=None):
         elif args.command=='user-disable':p.revoke_account(args.username);output({'disabled':args.username})
         elif args.command=='password-reset':
             from sqlalchemy import select
-            from .models import Account,LoginSession
+            from .models import Account,LoginSession,PasswordReset
             from .auth import password_hash
             value=getpass.getpass('新密码（至少12个字符）: ')
             if getpass.getpass('再次输入新密码: ')!=value:raise Problem('两次密码不一致')
@@ -118,6 +118,7 @@ def main(argv=None):
                 if not account:raise Problem('账号不存在',404)
                 account.password_hash=password_hash(value)
                 for r in s.scalars(select(LoginSession).where(LoginSession.account_id==account.id)):r.revoked=True
+                for r in s.scalars(select(PasswordReset).where(PasswordReset.account_id==account.id)):r.used=True
                 p._audit(s,'SYSTEM_CLI','PASSWORD_RESET',account.id,'更改密码并撤销全部会话')
             output({'password_reset':True})
         elif args.command=='identity-adopt':output(p.adopt_identity(args.source,args.notice_url,args.public_id,actor=args.actor,source_record_key=args.source_record_key))

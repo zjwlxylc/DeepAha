@@ -17,13 +17,15 @@
   {
     "file": "test_api.py",
     "rc": 0,
-    "seconds": 8.26
+    "seconds": 8.26,
+    "rerun_reason": "final authentication and isolated CLI compatibility verification"
   },
   {
     "file": "test_beta_access.py",
     "rc": 0,
     "seconds": 8.08,
-    "rerun_reason": "final expanded access tests"
+    "rerun_reason": "Final CLI reset revocation, isolated worker and bootstrap tests passed",
+    "test_count": 12
   },
   {
     "file": "test_contract.py",
@@ -63,7 +65,8 @@
   {
     "file": "test_operations.py",
     "rc": 0,
-    "seconds": 7.99
+    "seconds": 7.99,
+    "rerun_reason": "final authentication and isolated CLI compatibility verification"
   },
   {
     "file": "test_personal_value.py",
@@ -149,11 +152,12 @@
     "file": "test_sg8a_deployment.py",
     "rc": 0,
     "seconds": 7.52,
-    "rerun_reason": "Windows Bash resolution fixed"
+    "rerun_reason": "final authentication and isolated CLI compatibility verification"
   },
   {
     "file": "test_worker.py",
     "rc": 0,
-    "seconds": 4.48
+    "seconds": 4.48,
+    "rerun_reason": "final authentication and isolated CLI compatibility verification"
   }
 ]

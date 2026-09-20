@@ -3,7 +3,7 @@ import hmac
 import secrets
 from datetime import timedelta,timezone
 from sqlalchemy import select
-from .models import Account, LoginSession, LoginAttempt, Audit, now
+from .models import Account, LoginSession, LoginAttempt, PasswordReset, Audit, now
 from .errors import Problem
 
 ROLES={'user','reviewer','operator','admin'}
@@ -79,4 +79,5 @@ class AuthMixin:
             if not a:raise Problem('账号不存在',404)
             a.active=active
             for se in s.scalars(select(LoginSession).where(LoginSession.account_id==a.id)):se.revoked=True
+            for reset in s.scalars(select(PasswordReset).where(PasswordReset.account_id==a.id)):reset.used=True
             s.add(Audit(actor='SYSTEM_CLI',action='ACCOUNT_STATUS',target=a.id,summary='active='+str(active)))

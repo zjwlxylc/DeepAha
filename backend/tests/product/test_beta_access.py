@@ -161,3 +161,17 @@ def test_isolated_worker_cli_preserves_no_remote_and_no_schedules(svc,tmp_path,m
 def test_preserved_empty_bootstrap_rejects_existing_database(svc,tmp_path):
     from deepaha.product.empty_bootstrap import bootstrap_empty
     with pytest.raises(RuntimeError,match='NONEMPTY_SCHEMA'):bootstrap_empty(svc.database_url,tmp_path/'objects')
+
+
+def test_host_account_and_password_maintenance_revoke_unused_reset_codes(access,tmp_path,monkeypatch):
+    from deepaha.product import cli
+    from deepaha.product.config import Settings
+    with access.db.tx(False) as s:rid=s.scalar(select(Account.id).where(Account.username=='reader'))
+    code=access.issue_password_reset(rid,actor='admin',reason='verified')['code']
+    access.revoke_account('reader');access.revoke_account('reader',active=True)
+    with pytest.raises(Problem):access.reset_password(code,'New-password-123')
+    code=access.issue_password_reset(rid,actor='admin',reason='verified')['code']
+    monkeypatch.setattr(Settings,'from_env',lambda:Settings(data_dir=tmp_path,database_url=access.database_url))
+    monkeypatch.setattr(cli.getpass,'getpass',lambda prompt:'CLI-new-password-123')
+    assert cli.main(['password-reset','reader']) in (None,0)
+    with pytest.raises(Problem):access.reset_password(code,'New-password-123')
