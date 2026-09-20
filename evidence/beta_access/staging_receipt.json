@@ -1,0 +1,33 @@
+{
+  "build": "beta-access-20260920-c6636456",
+  "old_release": "/opt/deepaha/staging-isolated-releases/beta-access-20260920-186ca7e4",
+  "new_release": "/opt/deepaha/staging-isolated-releases/beta-access-20260920-c6636456",
+  "backup": "/var/backups/deepaha/staging-isolated/beta-access-20260920-c6636456",
+  "www_modified": false,
+  "wma_called": false,
+  "exact_wma_secret_matches": 0,
+  "credential_values_compared": 2,
+  "verified_package_files": 2255,
+  "backup_restore_drill": "PASS",
+  "additive_migration_existing_counts_preserved": true,
+  "existing_admin_retained": true,
+  "service_stability_observation": "PASS",
+  "status": "DEPLOYED_AND_VERIFIED",
+  "functional_smoke": {
+    "scope": "ISOLATED_STAGING_SYNTHETIC_ENGINEERING_SMOKE",
+    "www_modified": false,
+    "wma_called": false,
+    "postgres_concurrent_one_seat": "PASS",
+    "single_use_reset_and_session_revocation": "PASS",
+    "account_disable_and_admin_boundary": "PASS",
+    "synthetic_account_disabled": true,
+    "deploy_check": "PASS",
+    "status": "PASS"
+  },
+  "service_restarts": 0,
+  "backup_checksums_written": true,
+  "object_archive_files": 3,
+  "source_commit": "c66364565f61354b563ed341479e23a77acd7a33",
+  "finished_at_utc": "2026-09-20T00:06:38.834490+00:00",
+  "staging_basic_auth_retained": true
+}

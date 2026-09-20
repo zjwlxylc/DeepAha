@@ -1,0 +1,11 @@
+{
+  "scope": "ISOLATED_STAGING_SYNTHETIC_ENGINEERING_SMOKE",
+  "www_modified": false,
+  "wma_called": false,
+  "postgres_concurrent_one_seat": "PASS",
+  "single_use_reset_and_session_revocation": "PASS",
+  "account_disable_and_admin_boundary": "PASS",
+  "synthetic_account_disabled": true,
+  "deploy_check": "PASS",
+  "status": "PASS"
+}

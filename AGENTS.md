@@ -1,5 +1,9 @@
 # DeepAha 当前开发入口
 
+## 最新隔离 staging 交付（2026-09-20）
+
+继续开发或部署邀请码/用户管理前，先读 `docs/beta-access/HANDOFF.md`。邀请码版本已部署到独立 `staging-isolated` / 8200；www仍使用原 `staging` / 8100。本轮未发布正式体验站。不能再依据旧共享环境说明判断当前拓扑；发布前仍需实机复核。
+
 当前交付：**3.8.0-rc1 / SG8-A Public Beta 生产化底座**。
 
 基线：**3.7.2-rc1 / SG7.2**。SG8-A 只增加部署、PostgreSQL迁移、备份、staging/production、发布与回退能力；SG1–SG7.2 的正式业务核心继续冻结。
