@@ -1,8 +1,8 @@
 # DeepAha 当前开发入口
 
-## 最新隔离 staging 交付（2026-09-20）
+## 最新正式站交付（2026-09-20）
 
-继续开发或部署邀请码/用户管理前，先读 `docs/beta-access/HANDOFF.md`。邀请码版本已部署到独立 `staging-isolated` / 8200；www仍使用原 `staging` / 8100。本轮未发布正式体验站。不能再依据旧共享环境说明判断当前拓扑；发布前仍需实机复核。
+继续开发或部署前先读 `docs/beta-access/PUBLIC_RELEASE.md`。用户已确认staging验收并授权正式发布。邀请码与用户管理版本已发布至www/deepaha.com，标签 `v3.8.0-rc1-beta-access`，源码b35ccd03；正式服务仍命名为staging/8100。staging域名独立使用staging-isolated/8200，保持d32082ad版本及Basic Auth。原HANDOFF/ACCESS_V2为此前隔离验收历史；发布前仍需实机复核。
 
 当前交付：**3.8.0-rc1 / SG8-A Public Beta 生产化底座**。
 

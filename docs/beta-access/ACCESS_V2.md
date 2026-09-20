@@ -1,3 +1,5 @@
+> 后续更新：本功能已获用户验收并发布正式站，当前发布与回退信息见 [PUBLIC_RELEASE.md](PUBLIC_RELEASE.md)。以下为隔离staging阶段记录。
+
 # 账号权限与邀请码调整（2026-09-20）
 
 当前状态：**DEPLOYED_AND_VERIFIED**。已发布到现有隔离 staging，www 未发布。
