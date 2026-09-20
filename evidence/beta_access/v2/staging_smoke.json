@@ -1,0 +1,14 @@
+{
+  "scope": "ISOLATED_STAGING_SYNTHETIC_ENGINEERING_SMOKE",
+  "build": "beta-access-20260920-d32082ad",
+  "www_modified": false,
+  "wma_called": false,
+  "operator_inherits_review_and_manages_users": "PASS",
+  "four_digit_code_four_character_password_atomic_registration": "PASS",
+  "four_character_reset_and_role_change_session_revocation": "PASS",
+  "legacy_admin_role_removed": "PASS",
+  "deploy_check": "PASS",
+  "status": "PASS",
+  "synthetic_accounts_disabled": true,
+  "synthetic_invitation_revoked": true
+}
