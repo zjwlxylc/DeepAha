@@ -124,6 +124,8 @@ class TasksMixin:
             self._account(s,actor,'operator')
             s.execute(sqltext('SELECT 1'));out['database']='READ_OK'
             r=s.get(Meta,'worker_heartbeat')
+            from .worker_health import status
+            out['worker_health']=status(s)
             if r:
                 try:out['worker']=json.loads(r.value)
                 except ValueError:pass

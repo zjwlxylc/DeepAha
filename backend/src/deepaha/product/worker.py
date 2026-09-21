@@ -208,7 +208,7 @@ async def run_cycle(product,registry):
     Every dispatch wave re-inspects the published release. A changed fingerprint
     invalidates grants and frozen queued work instead of silently changing models.
     """
-    results=[]
+    results=[];dispatch_errors=[]
     for binding in registry.public():
         ref=binding['id'];factory=registry.factory(ref)
         if not factory:continue
@@ -220,6 +220,7 @@ async def run_cycle(product,registry):
         except Exception as error:
             code=getattr(error,'code','BINDING_INSPECTION_FAILED')
             if not isinstance(code,str) or not re.fullmatch('[A-Z0-9_]{1,100}',code):code='BINDING_INSPECTION_FAILED'
+            dispatch_errors.append(code)
             results.append({'state':code,'connection_ref':ref});continue
         finally:
             if client:await client.aclose()
@@ -229,6 +230,8 @@ async def run_cycle(product,registry):
             p=policy_dict(s.get(DispatchPolicy,ref),ref)
             cap=effective_parallel(p['mode'],p['max_concurrent'],p['published_model'],valid_capacity(s,ref,fingerprint))
         # claim() is the actual authority; gather is only a bounded executor.
-        results.extend(await asyncio.gather(*(run_once(product,factory,connection_ref=ref,binding_fingerprint=fingerprint,expected_release=release) for _ in range(cap))))
+        wave=await asyncio.gather(*(run_once(product,factory,connection_ref=ref,binding_fingerprint=fingerprint,expected_release=release) for _ in range(cap)))
+        results.extend(wave)
+        dispatch_errors.extend(x['state'] for x in wave if x['state'] not in ('IDLE','READY','NEEDS_RECOVERY'))
     heartbeat(product)
-    return {'state':'CYCLE','results':results} if results else {'state':'NOT_CONFIGURED'}
+    return {'state':'CYCLE','results':results,'dispatch_errors':dispatch_errors} if results else {'state':'NOT_CONFIGURED'}

@@ -15,7 +15,7 @@ from .service import Product
 from .errors import Problem
 
 
-def output(v):print(json.dumps(v,ensure_ascii=False,indent=2,default=str))
+def output(v):print(json.dumps(v,ensure_ascii=False,indent=2,default=str),flush=True)
 
 def main(argv=None):
     ap=argparse.ArgumentParser(prog='deepaha',description='DeepAha 机会星图：初始化、账号、采集、导入和备份')
@@ -73,7 +73,6 @@ def main(argv=None):
             from .live_validation import resolve_probe
             output(resolve_probe(p,actor=args.actor,confirmed=args.confirm_remote_terminal,reason=args.reason))
         elif args.command=='validate-wma-live':
-            from .config import BindingRegistry
             from .live_validation import validate_live
             result=asyncio.run(validate_live(p,BindingRegistry(settings.data_dir,settings.mode),actor=args.actor,
                 connection_ref=args.connection,source_id=args.source,url=args.url,parallel=args.parallel,
@@ -184,8 +183,12 @@ def main(argv=None):
             except DomainError as e:raise Problem('订阅结构尚未就绪，请先备份并运行 upgrade-services',409,e.code) from None
             from .worker import run_once,schedule_due
             async def loop():
+                from .worker_health import record, pulse, log_error, safe_error
+                record(p,'STARTING')
+                monitor=asyncio.create_task(pulse(p))
                 while True:
                     try:
+                        record(p,'WORKING')
                         from .worker import schedule_weekly_digests
                         if not args.isolated_fixture_mode:
                             schedule_weekly_digests(p)
@@ -197,10 +200,14 @@ def main(argv=None):
                         else:
                             from .worker import run_cycle
                             result=await run_cycle(p,BindingRegistry(settings.data_dir,settings.mode))
+                        errors=result.get('dispatch_errors',[])
+                        record(p,'ERROR' if errors else ('NOT_CONFIGURED' if result['state']=='NOT_CONFIGURED' else 'OK'),error=errors[0] if errors else None)
                         if args.once or result['state'] not in ('IDLE','NOT_CONFIGURED'):output(result)
                     except KeyboardInterrupt:return
                     except Exception as e:
-                        output({'state':'WORKER_UNAVAILABLE','code':getattr(e,'code',type(e).__name__)})
+                        log_error(e)
+                        try:record(p,'ERROR',error=safe_error(e))
+                        except Exception as health_error:log_error(health_error)
                         if args.once:raise SystemExit(1)
                     if args.once:return
                     await asyncio.sleep(5)

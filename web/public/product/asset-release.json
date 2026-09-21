@@ -1,6 +1,6 @@
 {
   "iteration": "mobile-r3",
-  "build": "mobile-r3-7f6388bb22f0",
+  "build": "mobile-r3-2be788ac2568",
   "files": {
     "access-ui.js": "68a979b8761350c48cf5940070ec1fbc2565ad334e7fde5568023020fb70c500",
     "access.css": "a3c686f7b8bed9d856e9743b562f2f90972b074c30e6b7f448871f3927bacdc6",
@@ -29,6 +29,6 @@
     "sharing-ui.js": "73d8bac4682c9a00556022713664fbba2405e7dd44b5061cc9a262f766d025bb",
     "source-query.js": "1c1851de0c79bb08b2e5f9fe1c1e85d74831094f0b5d2f5b9d8c7802a3386d11",
     "user.js": "d639d0d0e2cfece737f921496169ebb013871beeb1f5aae913e59dc984d8d02d",
-    "workbench.js": "4f56e3d3665f11fe37d4b99e5c283cad1eb09135a185ea018eb19ef85f835a9b"
+    "workbench.js": "e73536a1f96f8f388dc67a5a869ae26cb45139f10b8bb8945ac7fb6a052aebaa"
   }
 }

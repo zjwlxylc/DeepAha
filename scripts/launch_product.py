@@ -191,6 +191,7 @@ def main():
             time.sleep(2)
             if STOP_REQUEST.exists():return 0
             if not check_owned(processes[0],ROOT):raise RuntimeError('API服务已退出，请查看日志。')
+            if not check_owned(processes[1],ROOT):raise RuntimeError('调查工作进程已退出，请查看 logs/worker.log。')
     except KeyboardInterrupt:return 0
     finally:
         for record in processes:
