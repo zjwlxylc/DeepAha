@@ -1,0 +1,54 @@
+PASS route /services
+PASS plans start draft
+PASS route /manage/services
+PASS api GET /api/membership/plans
+PASS native pricing persisted
+PASS route /services
+PASS layout services 320
+PASS layout services 390
+PASS layout services 768
+PASS layout services 1440
+PASS route /services
+PASS route /app/subscription
+PASS order waiting not claimed paid
+PASS layout subscription-pending 390
+PASS route /manage/services/orders
+PASS route /app/tracking
+PASS tracking saved
+PASS layout tracking 390
+PASS route /app/sources
+PASS source automatically pending
+PASS layout source-submission 390
+PASS route /review/sources
+PASS reviewer not price admin
+PASS layout source-review 1440
+PASS route /review/sources
+PASS source adopted
+PASS route /manage/services/items
+PASS layout service-items 1440
+PASS route /manage/services/runtime
+PASS api GET /api/membership/manage/runtime
+PASS scheduled directory scan completed
+PASS no paid auto enabled
+PASS route /app/notifications
+PASS unified services notices
+PASS layout unified-messages 390
+PASS route /app/me
+PASS native account has subscriptions
+PASS layout account 390
+PASS route /services
+PASS route /manage/services/orders
+PASS layout quoted-orders 1440
+PASS route /app/subscription
+PASS custom quote accepted
+PASS route /manage/services
+PASS layout management-readonly 390
+FAIL mobile write buttons disabled
+Traceback (most recent call last):
+  File "/mnt/data/work/DeepAha_R3/scripts/services_r3/browser_cases.py", line 65, in <module>
+    h.login('owner');route('/manage/services',390);shot('management-readonly',390);check('mobile write buttons disabled',p.get_by_role('button',name='＋ 新建套餐',exact=True).is_disabled())
+                                                                                   ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/work/DeepAha_R3/scripts/services_r3/browser_cases.py", line 11, in check
+    if not ok:raise AssertionError(name+' '+detail)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: mobile write buttons disabled 

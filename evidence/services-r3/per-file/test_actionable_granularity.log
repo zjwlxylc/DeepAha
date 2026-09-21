@@ -1,0 +1,50 @@
+.........F...                                                            [100%]
+=================================== FAILURES ===================================
+______ test_api_review_reports_action_targets_and_returns_target_receipt _______
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+svc = <deepaha.product.service.Product object at 0x7fb22a246250>
+
+    def test_api_review_reports_action_targets_and_returns_target_receipt(svc):
+        from fastapi.testclient import TestClient
+        from deepaha.product.api import create_app
+        from deepaha.product.config import Settings
+>       app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/product/test_actionable_granularity.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_actionable_granularity.py::test_api_review_reports_action_targets_and_returns_target_receipt - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting

@@ -1,0 +1,116 @@
+OK mobile filter is one-row toolbar
+OK 44px mobile filter target
+OK 44px carousel controls
+OK brand asset unchanged
+OK guest account is not forced login
+OK filter applies query
+OK decision entry before fact panels
+OK return keeps filter and scroll
+OK detail shows saved preparation state
+OK repeat save does not reset progress
+OK mobile defaults list
+OK preparation supports continuous entry
+OK inline editing keeps list
+OK completion persists
+OK dialog dirty-close safeguard
+OK profile leave confirmation preserves input
+OK profile PATCH actually saved
+OK conflict shown
+OK explicit merge updates visible untouched values
+OK message badge reachable on phone
+OK mark read uses real backend
+OK modal focus Tab
+OK modal focus Shift+Tab
+OK dialog restores opener focus
+OK login server error is inline
+OK password visibility control works
+OK layout 320 /
+OK layout 320 /about
+OK layout 320 /app/overview
+OK layout 320 /app/opportunity/unit_01a0bf777bcf796baae841a358e7906f
+OK layout 320 /app/star
+OK layout 320 /app/actions
+OK layout 320 /app/actions?view=board
+OK layout 320 /app/profile
+OK layout 320 /app/notifications
+OK layout 320 /app/me
+OK layout 320 /app/privacy
+OK layout 320 /app/lab
+OK layout 320 /account/security
+OK layout 390 /
+OK layout 390 /about
+OK layout 390 /app/overview
+OK layout 390 /app/opportunity/unit_01a0bf777bcf796baae841a358e7906f
+OK layout 390 /app/star
+OK layout 390 /app/actions
+OK layout 390 /app/actions?view=board
+OK layout 390 /app/profile
+OK layout 390 /app/notifications
+OK layout 390 /app/me
+OK layout 390 /app/privacy
+OK layout 390 /app/lab
+OK layout 390 /account/security
+OK layout 768 /
+OK layout 768 /about
+OK layout 768 /app/overview
+OK layout 768 /app/opportunity/unit_01a0bf777bcf796baae841a358e7906f
+OK layout 768 /app/star
+OK layout 768 /app/actions
+OK layout 768 /app/actions?view=board
+OK layout 768 /app/profile
+OK layout 768 /app/notifications
+OK layout 768 /app/me
+OK layout 768 /app/privacy
+OK layout 768 /app/lab
+OK layout 768 /account/security
+OK layout 1440 /
+OK layout 1440 /about
+OK layout 1440 /app/overview
+OK layout 1440 /app/opportunity/unit_01a0bf777bcf796baae841a358e7906f
+OK layout 1440 /app/star
+OK layout 1440 /app/actions
+OK layout 1440 /app/actions?view=board
+OK layout 1440 /app/profile
+OK layout 1440 /app/notifications
+OK layout 1440 /app/me
+OK layout 1440 /app/privacy
+OK layout 1440 /app/lab
+OK layout 1440 /account/security
+OK layout 390 /manage
+OK layout 390 /manage/sources
+OK layout 390 /manage/sources/01a0bf77-7ab6-7511-be90-287341346b39
+OK layout 390 /manage/tasks
+OK layout 390 /manage/tasks/01a0bf77-7b2a-7367-9329-e51454db72e9
+OK layout 390 /manage/execution
+OK layout 390 /manage/source-imports
+OK layout 390 /manage/lab
+OK layout 390 /manage/feedback
+OK layout 390 /manage/history
+OK layout 390 /manage/invitations
+OK layout 390 /manage/users
+OK layout 390 /manage/access-audit
+OK layout 390 /review/overview
+OK layout 390 /review/catalog
+OK layout 390 /review/packet/01a0bf77-7b23-76ac-b6ac-4d08e47258a3
+OK layout 1440 /manage
+OK layout 1440 /manage/sources
+OK layout 1440 /manage/sources/01a0bf77-7ab6-7511-be90-287341346b39
+OK layout 1440 /manage/tasks
+OK layout 1440 /manage/tasks/01a0bf77-7b2a-7367-9329-e51454db72e9
+OK layout 1440 /manage/execution
+OK layout 1440 /manage/source-imports
+OK layout 1440 /manage/lab
+OK layout 1440 /manage/feedback
+OK layout 1440 /manage/history
+OK layout 1440 /manage/invitations
+OK layout 1440 /manage/users
+OK layout 1440 /manage/access-audit
+OK layout 1440 /review/overview
+OK layout 1440 /review/catalog
+OK layout 1440 /review/packet/01a0bf77-7b23-76ac-b6ac-4d08e47258a3
+OK mobile admin remains readonly
+OK final CTA visible on hover 0
+OK final CTA visible on hover 1
+OK reviewer has no source/account menu
+OK javascript errors absent
+checks 115 failed 0 views 84

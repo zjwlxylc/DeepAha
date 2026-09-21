@@ -30,7 +30,7 @@ class Harness:
   self.page.expose_function('__qaFetch',fetch)
   html=(PUBLIC/'index.html').read_text();html=re.sub(r'<script.*?</script>','',html);html=re.sub(r'<link[^>]*>','',html)
   self.page.set_content(html)
-  self.page.add_style_tag(content='\n'.join((PUBLIC/n).read_text() for n in ['brand-v2.css','product.css','access.css','experience.css']))
+  self.page.add_style_tag(content='\n'.join((PUBLIC/n).read_text() for n in ['brand-v2.css','product.css','access.css','experience.css','mobile-r2.css']))
   self.page.add_script_tag(content=(PUBLIC/'icons.js').read_text())
   assets={}
   for f in [PUBLIC/'brand-logo.png',*(PUBLIC/'hero').glob('*')]:
@@ -56,10 +56,10 @@ class Harness:
   }''',sources)
  def go(self,path):
   self.page.evaluate('(p)=>{if(window.__qaGo)window.__qaGo(p);else{history.pushState({},"",p);window.dispatchEvent(new Event("routechange"));}}',path);self.page.wait_for_timeout(220)
-  self.page.wait_for_function("!document.body.classList.contains('route-loading')")
+  self.page.locator("body:not(.route-loading)").wait_for(state="attached")
  def login(self,name):
   if TRANSPORT=='native':
    r=self.client.post('/api/auth/login',json={'username':name,'password':'test-browser-123'});r.raise_for_status()
-  self.go('/login');self.page.locator('#username').fill(name);self.page.locator('#password').fill('test-browser-123');self.page.locator('#login-form button[type=submit]').click();self.page.wait_for_timeout(250);self.page.wait_for_function("!document.body.classList.contains('route-loading')")
+  self.go('/login');self.page.locator('#username').fill(name);self.page.locator('#password').fill('test-browser-123');self.page.locator('#login-form button[type=submit]').click();self.page.locator('#login-form').wait_for(state='detached');self.page.wait_for_timeout(250);self.page.locator("body:not(.route-loading)").wait_for(state="attached")
  def screenshot(self,name):self.page.screenshot(path=str(OUTPUT/name),full_page=True)
  def close(self):self.client.close();self.browser.close()

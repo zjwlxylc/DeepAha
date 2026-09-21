@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+assert.ok(fs.existsSync('public/product/mobile-core.js'),'Mobile R2 pure helpers not implemented');
+const {defaultActionView,internalPath,readableAction,filterCount,compactCount}=await import('../public/product/mobile-core.js');
+assert.equal(defaultActionView(null,390),'list');assert.equal(defaultActionView(null,1440),'board');assert.equal(defaultActionView('board',320),'board');
+for(const bad of ['https://evil.invalid','//evil.invalid','/\\evil.invalid','/app/\nwrong',null])assert.equal(internalPath(bad),'/');
+assert.equal(internalPath('/app/overview?q=传播'),'/app/overview?q=传播');
+assert.equal(readableAction({saved:true,status:'PREPARING'}),'准备中');
+assert.equal(readableAction({saved:false}),'收藏机会');
+assert.equal(filterCount(new URLSearchParams('q=传播&kind=COMPETITION&region=宁波&offset=50')),3);
+assert.equal(compactCount(120),'99+');assert.equal(compactCount(0),'');
+const {returnPath,detailURL}=await import('../public/product/experience-core.js');
+assert.equal(returnPath('/app/notifications?unread=true'),'/app/notifications?unread=true');
+assert.equal(returnPath('/manage/users'),'/app/overview');
+assert.equal(returnPath('/app/overview?x=1\\evil'),'/app/overview');
+assert.ok(detailURL('test','/app/notifications?unread=true').includes('notifications'));
+console.log('MOBILE_R2_HELPERS=PASS (15 assertions)');

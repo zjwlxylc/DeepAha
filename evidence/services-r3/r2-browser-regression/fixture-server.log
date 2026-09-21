@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/mnt/data/work/DeepAha_R3/backend/src/deepaha/product/frontend_assets.py", line 27, in validate_release
+    raise ValueError('content mismatch')
+ValueError: content mismatch
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/data/work/DeepAha_R3/scripts/mobile_r2/fixture_server.py", line 43, in <module>
+    uvicorn.run(create_app(settings,p),host='127.0.0.1',port=int(os.environ['DEEPAHA_QA_PORT']),log_level='warning')
+                ~~~~~~~~~~^^^^^^^^^^^^
+  File "/mnt/data/work/DeepAha_R3/backend/src/deepaha/product/api.py", line 505, in create_app
+    frontend_build=validate_release(static)
+  File "/mnt/data/work/DeepAha_R3/backend/src/deepaha/product/frontend_assets.py", line 30, in validate_release
+    raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting

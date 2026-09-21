@@ -13,6 +13,12 @@ while (($#)); do
   esac
 done
 SOURCE="$(cd "$SOURCE" && pwd)"
+# R3 has a distinct schema and release identity. Do not silently reuse the old
+# 3.8.0-rc1 directory or restart a pre-R3 worker on new membership tasks.
+if [[ -f "$SOURCE/RELEASE_STATUS.json" ]] && grep -q 'mobile-r3' "$SOURCE/RELEASE_STATUS.json"; then
+  echo 'R3禁止使用SG8-A历史自动安装器。先阅读 docs/services-r3/DEPLOYMENT.md，停服务、备份、upgrade-services及核验后再切换发布指针。' >&2
+  exit 4
+fi
 VERSION="$(python3.13 - "$SOURCE/RELEASE_STATUS.json" <<'PY'
 import json,sys
 print(json.load(open(sys.argv[1],encoding='utf-8'))['release'])

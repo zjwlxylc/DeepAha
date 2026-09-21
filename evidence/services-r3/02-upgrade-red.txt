@@ -1,0 +1,36 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+__________________ test_old_r2_needs_explicit_backup_upgrade ___________________
+
+svc = <deepaha.product.service.Product object at 0x7f401f7dc1a0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-3/test_old_r2_needs_explicit_bac0')
+
+    def test_old_r2_needs_explicit_backup_upgrade(svc,tmp_path):
+>       from deepaha.product.services_upgrade import upgrade_services
+E       ModuleNotFoundError: No module named 'deepaha.product.services_upgrade'
+
+backend/tests/product/test_services_upgrade_r3.py:13: ModuleNotFoundError
+_____________ test_partial_schema_fails_without_fabricating_repair _____________
+
+svc = <deepaha.product.service.Product object at 0x7f401f4139d0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-3/test_partial_schema_fails_with0')
+
+    def test_partial_schema_fails_without_fabricating_repair(svc,tmp_path):
+>       from deepaha.product.services_upgrade import upgrade_services
+E       ModuleNotFoundError: No module named 'deepaha.product.services_upgrade'
+
+backend/tests/product/test_services_upgrade_r3.py:32: ModuleNotFoundError
+_______________________ test_unknown_schema_fails_closed _______________________
+
+svc = <deepaha.product.service.Product object at 0x7f401f4eec10>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-3/test_unknown_schema_fails_clos0')
+
+    def test_unknown_schema_fails_closed(svc,tmp_path):
+>       from deepaha.product.services_upgrade import upgrade_services
+E       ModuleNotFoundError: No module named 'deepaha.product.services_upgrade'
+
+backend/tests/product/test_services_upgrade_r3.py:40: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_services_upgrade_r3.py::test_old_r2_needs_explicit_backup_upgrade - ModuleNotFoundError: No module named 'deepaha.product.services_upgrade'
+FAILED backend/tests/product/test_services_upgrade_r3.py::test_partial_schema_fails_without_fabricating_repair - ModuleNotFoundError: No module named 'deepaha.product.services_upgrade'
+FAILED backend/tests/product/test_services_upgrade_r3.py::test_unknown_schema_fails_closed - ModuleNotFoundError: No module named 'deepaha.product.services_upgrade'

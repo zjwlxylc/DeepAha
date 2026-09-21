@@ -99,6 +99,11 @@ def main():
     parser.add_argument('--no-browser',action='store_true')
     parser.add_argument('--port',type=int,default=8000)
     args=parser.parse_args()
+    if not (args.stop or args.status):
+        stamp=ROOT/'web/public/product/asset-release.json'
+        if stamp.is_file():
+            release=json.loads(stamp.read_text(encoding='utf-8')).get('build','unknown')
+            print('程序目录：'+str(ROOT)+'\n前端版本：'+str(release))
     if (args.stop or args.status) and not PYTHON.exists():
         print('专用环境尚不存在，本启动器没有需要管理的进程。');return 0
     if args.stop or args.status:
@@ -156,6 +161,8 @@ def main():
         upgrade_local_access(database,command,environment)
         print('正在检查体验扩展：资料版本、准备事项和受控调度。')
         subprocess.run(command+['upgrade-experience'],cwd=ROOT/'backend',env=environment,check=True)
+        print('正在检查R3订阅与荐源结构；首次升级会先备份。')
+        subprocess.run(command+['upgrade-services'],cwd=ROOT/'backend',env=environment,check=True)
         if not has_account():
             print('数据目录里还没有任何账号，补设首个账号后再启动服务。')
             run_setup()

@@ -1,0 +1,8 @@
+{
+  "release": "3.8.0-rc1",
+  "extension": "experience-84353c7-20260920",
+  "status": "ENGINEERING_CANDIDATE_NOT_DEPLOYED",
+  "details": "DELIVERY_STATUS.json",
+  "test_report": "docs/experience/TEST_REPORT.md",
+  "historical_sg8a_status": "docs/experience/baseline-release-status.json"
+}

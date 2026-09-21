@@ -1,0 +1,77 @@
+F....F                                                                   [100%]
+=================================== FAILURES ===================================
+___________ test_real_queued_run_review_publish_and_personal_notice ____________
+
+client = <starlette.testclient.TestClient object at 0x7f50d933e3c0>
+svc = <deepaha.product.service.Product object at 0x7f50da4e9fd0>
+
+    def test_real_queued_run_review_publish_and_personal_notice(client,svc):
+        t,w,j=site_job(client,svc)
+        job=t.dispatch(A,j['id']);assert job['state']=='CORE_QUEUED'
+        assert len(svc.tasks(actor='operator'))==1
+        assert t.dispatch(A,j['id'])['core_task_id']==job['core_task_id']
+        FakeClient.prompts=0
+        result=asyncio.run(run_once(svc,FakeClient));assert result['state']=='READY',result
+        assert FakeClient.prompts==1 and svc.catalog()['total']==0
+        state=t.refresh(A,j['id']);assert state['state']=='RESULT_PENDING_REVIEW'
+>       revision=svc.review_detail(result['revision_id'],actor='operator')
+                 ^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Product' object has no attribute 'review_detail'
+
+backend/tests/product/test_tracking_host_r3.py:41: AttributeError
+______ test_erase_during_ambiguous_dispatch_does_not_restore_deleted_job _______
+
+client = <starlette.testclient.TestClient object at 0x7f50d1fef0b0>
+svc = <deepaha.product.service.Product object at 0x7f50d201c190>
+
+    def test_erase_during_ambiguous_dispatch_does_not_restore_deleted_job(client,svc):
+        t,w,j=site_job(client,svc);enqueue=t.core.enqueue
+        created=[]
+        def then_clear(*a,**kw):
+            value=enqueue(*a,**kw);created.append(value['id']);svc.erase_personal(actor='reader');return value
+        t.core.enqueue=then_clear
+>       result=t.dispatch(A,j['id'])
+               ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/product/test_tracking_host_r3.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <deepaha_membership.tracking.Tracking object at 0x7f50d214a120>
+a = Actor(name='operator', roles=frozenset({'operator'}))
+id = 'fb0c78f1cdac4663835aa9021177acf5'
+
+    def dispatch(self,a,id):
+        a.need('operator')
+        with self.s.write() as c:
+            j=row(c,select(jobs).where(jobs.c.id==id));require(j,'任务不存在',404)
+            require(j['actor']==a.name,'请由原授权维护员重试该任务，避免改变任务身份',403)
+            if j['state'] not in ('QUEUED','RETRYABLE','DISPATCHING'):return j
+            require(j['state']!='DISPATCHING' or j['lease_until']<=self.s.time(),'任务正被处理，请稍后刷新',409,'JOB_LEASED')
+            w=row(c,select(watches).where(watches.c.id==j['watch_id']))
+            if w['id'] not in self._effective_ids(c,w['owner'],'SITE'):
+                c.execute(update(jobs).where(jobs.c.id==id).values(state='BLOCKED',error='ENTITLEMENT_REQUIRED',updated_at=self.s.time()))
+                return row(c,select(jobs).where(jobs.c.id==id))
+            l=row(c,select(leads).where(leads.c.id==w['config']['lead_id']))
+            require(l and l['state']=='APPROVED' and l['source_id'],'请先审核并登记来源',409)
+            require(l['collection_enabled'],'请先明确授权本模块使用此来源；原来源默认启用不等于用户定制任务授权',409,'SOURCE_NOT_AUTHORIZED')
+            generation=j['generation']+1
+            c.execute(update(jobs).where(jobs.c.id==id).values(state='DISPATCHING',generation=generation,attempts=j['attempts']+1,lease_until=stamp(self.s.clock()+timedelta(minutes=2)),updated_at=self.s.time()))
+        # External calls intentionally outside the short DB transaction. A stable
+        # core request key recovers ambiguous success without issuing another task.
+        try:
+            self.dns(l['approved_url'])
+            task=self.core.enqueue(a,l,'mbr:'+id,j['connection'])
+            require(isinstance(task,dict) and task.get('id'),'采集任务回执无效',502)
+            state,error='CORE_QUEUED',None
+        except Exception as exc:
+            task=None;state,error='RETRYABLE',getattr(exc,'code','DISPATCH_RESULT_UNKNOWN')
+        with self.s.write() as c:
+            current=row(c,select(jobs).where(jobs.c.id==id))
+>           if current['generation']!=generation:return current
+               ^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: 'NoneType' object is not subscriptable
+
+backend/src/deepaha_membership/tracking.py:242: TypeError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_tracking_host_r3.py::test_real_queued_run_review_publish_and_personal_notice - AttributeError: 'Product' object has no attribute 'review_detail'
+FAILED backend/tests/product/test_tracking_host_r3.py::test_erase_during_ambiguous_dispatch_does_not_restore_deleted_job - TypeError: 'NoneType' object is not subscriptable

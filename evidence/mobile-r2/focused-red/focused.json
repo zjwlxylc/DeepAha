@@ -1,0 +1,47 @@
+[
+  {
+    "name": "editing another item cannot discard unsaved draft",
+    "passed": false,
+    "detail": ""
+  },
+  {
+    "name": "success message fits viewport",
+    "passed": true,
+    "detail": "{'x': 16, 'right': 374, 'w': 390}"
+  },
+  {
+    "name": "source return keeps filters",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "task return keeps status",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "remote search reaches source outside first page",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "selected source prefills task URL",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "clearing selection clears only auto URL",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "clearing source does not erase user URL",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "no unexpected JS errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

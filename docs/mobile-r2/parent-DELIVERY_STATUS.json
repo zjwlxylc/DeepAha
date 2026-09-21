@@ -1,0 +1,43 @@
+{
+  "release": "3.8.0-rc1",
+  "extension": "experience-84353c7-20260920",
+  "base_commit": "84353c7e5286e276d24af8e0342d4d3441c30ec5",
+  "artifact_kind": "FULL_SOURCE_ENGINEERING_CANDIDATE",
+  "engineering_scope": [
+    "A0",
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "B3",
+    "C1"
+  ],
+  "D1": "TOOLS_DELIVERED_HUMAN_ACCEPTANCE_NOT_RUN",
+  "additive_tables": 5,
+  "core_eligibility_value_rules_changed": false,
+  "overall_review_preserved": true,
+  "production_deployed": false,
+  "remote_repository_writes": false,
+  "live_wma_tested": false,
+  "postgres_live_tested": false,
+  "windows_native_tested": false,
+  "contains_user_database": false,
+  "contains_credentials": false,
+  "default_dispatch": "SERIAL",
+  "not_a_prototype": true,
+  "verification": {
+    "product_passed": 276,
+    "product_skipped": 2,
+    "product_failed": 0,
+    "per_file_suites": 37,
+    "command_stages": 45,
+    "ui_page_width_combinations": 87,
+    "ui_assertions_passed": 31,
+    "ui_hover_observations": 2,
+    "ui_transport": "test-only HTTP bridge; not native browser Cookie/TLS",
+    "http_checks_passed": 29,
+    "canonical_clean_install_verified": false,
+    "evidence": "evidence/experience/release-verification/verification.json"
+  }
+}

@@ -1,0 +1,285 @@
+EEEEEE                                                                   [100%]
+==================================== ERRORS ====================================
+__________ ERROR at setup of test_public_cannot_read_private_or_write __________
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+svc = <deepaha.product.service.Product object at 0x7f2261d79010>
+
+    @pytest.fixture
+    def client(svc):
+        from deepaha.product.api import create_app
+        from deepaha.product.config import Settings
+>       app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/product/test_api.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+_______ ERROR at setup of test_authenticated_real_upload_approve_catalog _______
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+svc = <deepaha.product.service.Product object at 0x7f226096e710>
+
+    @pytest.fixture
+    def client(svc):
+        from deepaha.product.api import create_app
+        from deepaha.product.config import Settings
+>       app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/product/test_api.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+_________ ERROR at setup of test_csrf_origin_and_extra_input_rejected __________
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+svc = <deepaha.product.service.Product object at 0x7f2260724cd0>
+
+    @pytest.fixture
+    def client(svc):
+        from deepaha.product.api import create_app
+        from deepaha.product.config import Settings
+>       app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/product/test_api.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+______________ ERROR at setup of test_no_secrets_in_manage_status ______________
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+svc = <deepaha.product.service.Product object at 0x7f22605ab5c0>
+
+    @pytest.fixture
+    def client(svc):
+        from deepaha.product.api import create_app
+        from deepaha.product.config import Settings
+>       app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/product/test_api.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+____________ ERROR at setup of test_product_html_no_fixture_script _____________
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+svc = <deepaha.product.service.Product object at 0x7f226038c510>
+
+    @pytest.fixture
+    def client(svc):
+        from deepaha.product.api import create_app
+        from deepaha.product.config import Settings
+>       app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/product/test_api.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+________ ERROR at setup of test_sg5_value_endpoint_and_profile_controls ________
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+svc = <deepaha.product.service.Product object at 0x7f22601b6450>
+
+    @pytest.fixture
+    def client(svc):
+        from deepaha.product.api import create_app
+        from deepaha.product.config import Settings
+>       app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/product/test_api.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+=========================== short test summary info ============================
+ERROR backend/tests/product/test_api.py::test_public_cannot_read_private_or_write - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_api.py::test_authenticated_real_upload_approve_catalog - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_api.py::test_csrf_origin_and_extra_input_rejected - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_api.py::test_no_secrets_in_manage_status - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_api.py::test_product_html_no_fixture_script - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_api.py::test_sg5_value_endpoint_and_profile_controls - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting

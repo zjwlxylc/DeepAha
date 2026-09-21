@@ -96,6 +96,11 @@ def restore_backup(path, destination):
                 if c.execute("SELECT value FROM product_meta WHERE key='schema_version'").fetchone()!=('1',):raise Problem('备份数据库版本不兼容')
                 c.execute('UPDATE product_sessions SET revoked=1')
                 c.execute("DELETE FROM product_meta WHERE key='worker_heartbeat'")
+                row=c.execute("SELECT value FROM product_meta WHERE key='services_runtime_v1'").fetchone()
+                if row:
+                    runtime=json.loads(row[0]);runtime.update(enabled=False,allow_site_enqueue=False,lease_until=None,next_due=None,last_result={'state':'PAUSED_AFTER_RESTORE'})
+                    runtime['version']=runtime.get('version',0)+1
+                    c.execute("UPDATE product_meta SET value=? WHERE key='services_runtime_v1'",(json.dumps(runtime),))
         except sqlite3.DatabaseError as e:raise Problem('备份数据库不可恢复') from e
         finally:
             c.close()

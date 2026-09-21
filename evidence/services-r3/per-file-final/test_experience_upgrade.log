@@ -1,0 +1,18 @@
+..F                                                                      [100%]
+=================================== FAILURES ===================================
+_______ test_release_generation_blocks_automatic_rollback_to_old_workers _______
+
+    def test_release_generation_blocks_automatic_rollback_to_old_workers():
+        import json
+        from pathlib import Path
+        data=json.loads(Path('RELEASE_COMPATIBILITY.json').read_text(encoding='utf-8'))
+>       assert data['database_generation'].endswith('-experience1')
+E       AssertionError: assert False
+E        +  where False = <built-in method endswith of str object at 0x7f26f19af590>('-experience1')
+E        +    where <built-in method endswith of str object at 0x7f26f19af590> = 'deepaha-product-v1-actionable2-actionloop1-lab2-experience1-services1'.endswith
+
+backend/tests/product/test_experience_upgrade.py:44: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_experience_upgrade.py::test_release_generation_blocks_automatic_rollback_to_old_workers - AssertionError: assert False
+ +  where False = <built-in method endswith of str object at 0x7f26f19af590>('-experience1')
+ +    where <built-in method endswith of str object at 0x7f26f19af590> = 'deepaha-product-v1-actionable2-actionloop1-lab2-experience1-services1'.endswith

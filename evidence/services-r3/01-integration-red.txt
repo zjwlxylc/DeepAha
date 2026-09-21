@@ -1,0 +1,142 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+______________ test_member_routes_share_real_auth_roles_and_csrf _______________
+
+client = <starlette.testclient.TestClient object at 0x7faff99eb8c0>
+
+    def test_member_routes_share_real_auth_roles_and_csrf(client):
+        r=client.get(P+'/plans')
+>       assert r.status_code==200,r.text
+E       AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_services_r3.py:39: AssertionError
+________ test_real_trial_changes_entitlements_not_role_or_free_catalog _________
+
+client = <starlette.testclient.TestClient object at 0x7faff83a4190>
+
+    def test_real_trial_changes_entitlements_not_role_or_free_catalog(client):
+>       trial(client)
+
+backend/tests/product/test_services_r3.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/product/test_services_r3.py:17: in trial
+    plan=published(client,code)
+         ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7faff83a4190>
+code = 'basic'
+
+    def published(client, code='basic'):
+        login(client,'operator')
+        r=client.post(P+'/manage/plans/'+code+'/status',json={'version':1,'status':'PUBLISHED'})
+>       assert r.status_code==200,r.text
+E       AssertionError: {"detail":"Method Not Allowed"}
+E       assert 405 == 200
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+
+backend/tests/product/test_services_r3.py:13: AssertionError
+____________ test_messages_merge_badges_batch_read_and_do_not_leak _____________
+
+client = <starlette.testclient.TestClient object at 0x7faff811a350>
+svc = <deepaha.product.service.Product object at 0x7faff83a4a50>
+
+    def test_messages_merge_badges_batch_read_and_do_not_leak(client,svc):
+>       trial(client)
+
+backend/tests/product/test_services_r3.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/product/test_services_r3.py:17: in trial
+    plan=published(client,code)
+         ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7faff811a350>
+code = 'basic'
+
+    def published(client, code='basic'):
+        login(client,'operator')
+        r=client.post(P+'/manage/plans/'+code+'/status',json={'version':1,'status':'PUBLISHED'})
+>       assert r.status_code==200,r.text
+E       AssertionError: {"detail":"Method Not Allowed"}
+E       assert 405 == 200
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+
+backend/tests/product/test_services_r3.py:13: AssertionError
+______ test_export_and_erase_cover_member_private_data_preserve_contract _______
+
+client = <starlette.testclient.TestClient object at 0x7fafe77e6190>
+svc = <deepaha.product.service.Product object at 0x7faff83a8e90>
+
+    def test_export_and_erase_cover_member_private_data_preserve_contract(client,svc):
+>       trial(client)
+
+backend/tests/product/test_services_r3.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/product/test_services_r3.py:17: in trial
+    plan=published(client,code)
+         ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7fafe77e6190>
+code = 'basic'
+
+    def published(client, code='basic'):
+        login(client,'operator')
+        r=client.post(P+'/manage/plans/'+code+'/status',json={'version':1,'status':'PUBLISHED'})
+>       assert r.status_code==200,r.text
+E       AssertionError: {"detail":"Method Not Allowed"}
+E       assert 405 == 200
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+
+backend/tests/product/test_services_r3.py:13: AssertionError
+_______________ test_free_site_enters_review_without_publishing ________________
+
+client = <starlette.testclient.TestClient object at 0x7fafe757b360>
+svc = <deepaha.product.service.Product object at 0x7faff814a9e0>
+
+    def test_free_site_enters_review_without_publishing(client,svc):
+        login(client,'reader')
+        payload={'key':'r3-source-0002','name':'研究中心','url':'https://research.example.org/jobs','note':'建议补充该网站','consent':True,'kind':'SOURCE'}
+        a=client.post(P+'/submissions',json=payload)
+>       assert a.status_code==200,a.text
+E       AssertionError: {"detail":"Method Not Allowed"}
+E       assert 405 == 200
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+
+backend/tests/product/test_services_r3.py:95: AssertionError
+____________ test_runtime_settings_explicit_versioned_authorization ____________
+
+client = <starlette.testclient.TestClient object at 0x7fafe733d6d0>
+
+    def test_runtime_settings_explicit_versioned_authorization(client):
+        login(client,'reader')
+>       assert client.get(P+'/manage/runtime').status_code==403
+E       AssertionError: assert 404 == 403
+E        +  where 404 = <Response [404 Not Found]>.status_code
+E        +    where <Response [404 Not Found]> = get(('/api/membership' + '/manage/runtime'))
+E        +      where get = <starlette.testclient.TestClient object at 0x7fafe733d6d0>.get
+
+backend/tests/product/test_services_r3.py:109: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_services_r3.py::test_member_routes_share_real_auth_roles_and_csrf - AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_services_r3.py::test_real_trial_changes_entitlements_not_role_or_free_catalog - AssertionError: {"detail":"Method Not Allowed"}
+assert 405 == 200
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+FAILED backend/tests/product/test_services_r3.py::test_messages_merge_badges_batch_read_and_do_not_leak - AssertionError: {"detail":"Method Not Allowed"}
+assert 405 == 200
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+FAILED backend/tests/product/test_services_r3.py::test_export_and_erase_cover_member_private_data_preserve_contract - AssertionError: {"detail":"Method Not Allowed"}
+assert 405 == 200
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+FAILED backend/tests/product/test_services_r3.py::test_free_site_enters_review_without_publishing - AssertionError: {"detail":"Method Not Allowed"}
+assert 405 == 200
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+FAILED backend/tests/product/test_services_r3.py::test_runtime_settings_explicit_versioned_authorization - AssertionError: assert 404 == 403
+ +  where 404 = <Response [404 Not Found]>.status_code
+ +    where <Response [404 Not Found]> = get(('/api/membership' + '/manage/runtime'))
+ +      where get = <starlette.testclient.TestClient object at 0x7fafe733d6d0>.get

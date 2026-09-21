@@ -1,0 +1,89 @@
+FFFFF                                                                    [100%]
+=================================== FAILURES ===================================
+___________ test_save_is_atomic_idempotent_and_never_resets_progress ___________
+
+svc = <deepaha.product.service.Product object at 0x7f7b5707d010>
+
+    def test_save_is_atomic_idempotent_and_never_resets_progress(svc):
+        oid=target(svc)
+>       assert hasattr(svc,'save_opportunity'), 'Missing idempotent save operation'
+E       AssertionError: Missing idempotent save operation
+E       assert False
+E        +  where False = hasattr(<deepaha.product.service.Product object at 0x7f7b5707d010>, 'save_opportunity')
+
+backend/tests/product/test_mobile_r2.py:22: AssertionError
+____________________ test_save_api_auth_csrf_and_real_state ____________________
+
+client = <starlette.testclient.TestClient object at 0x7f7b55581400>
+svc = <deepaha.product.service.Product object at 0x7f7b562e2350>
+
+    def test_save_api_auth_csrf_and_real_state(client,svc):
+        oid=target(svc);base='/api/me/actions/'+oid
+>       assert client.get(base).status_code==401
+E       AssertionError: assert 404 == 401
+E        +  where 404 = <Response [404 Not Found]>.status_code
+E        +    where <Response [404 Not Found]> = get('/api/me/actions/unit_01a0bf6a038e7df2a1a8245cd34be9cd')
+E        +      where get = <starlette.testclient.TestClient object at 0x7f7b55581400>.get
+
+backend/tests/product/test_mobile_r2.py:40: AssertionError
+___________ test_withdrawn_action_remains_identifiable_and_removable ___________
+
+svc = <deepaha.product.service.Product object at 0x7f7b562e2990>
+
+    def test_withdrawn_action_remains_identifiable_and_removable(svc):
+        oid=target(svc);svc.set_action(oid,'SAVED',actor='reader')
+        previous=svc.my_actions(actor='reader')[0]['opportunity']['title']
+        svc.withdraw(oid,'原公告撤回',actor='reviewer')
+>       assert svc.my_actions(actor='reader')[0]['opportunity']['title']==previous
+E       AssertionError: assert '已撤回的具体机会' == '研究助理'
+E         
+E         - 研究助理
+E         + 已撤回的具体机会
+
+backend/tests/product/test_mobile_r2.py:52: AssertionError
+____________ test_summary_requires_auth_and_has_safe_minimal_fields ____________
+
+client = <starlette.testclient.TestClient object at 0x7f7b54075090>
+svc = <deepaha.product.service.Product object at 0x7f7b55522fd0>
+
+    def test_summary_requires_auth_and_has_safe_minimal_fields(client,svc):
+>       assert client.get('/api/me/summary').status_code==401
+E       AssertionError: assert 404 == 401
+E        +  where 404 = <Response [404 Not Found]>.status_code
+E        +    where <Response [404 Not Found]> = get('/api/me/summary')
+E        +      where get = <starlette.testclient.TestClient object at 0x7f7b54075090>.get
+
+backend/tests/product/test_mobile_r2.py:59: AssertionError
+_____________ test_frontend_build_addresses_the_whole_module_graph _____________
+
+client = <starlette.testclient.TestClient object at 0x7f7b4ffb1e50>
+
+    def test_frontend_build_addresses_the_whole_module_graph(client):
+>       r=client.get('/');assert 'no-store' in r.headers.get('cache-control','')
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert 'no-store' in ''
+E        +  where '' = get('cache-control', '')
+E        +    where get = Headers({'content-type': 'text/html; charset=utf-8', 'accept-ranges': 'bytes', 'content-length': '961', 'last-modified...src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"}).get
+E        +      where Headers({'content-type': 'text/html; charset=utf-8', 'accept-ranges': 'bytes', 'content-length': '961', 'last-modified...src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"}) = <Response [200 OK]>.headers
+
+backend/tests/product/test_mobile_r2.py:68: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_mobile_r2.py::test_save_is_atomic_idempotent_and_never_resets_progress - AssertionError: Missing idempotent save operation
+assert False
+ +  where False = hasattr(<deepaha.product.service.Product object at 0x7f7b5707d010>, 'save_opportunity')
+FAILED backend/tests/product/test_mobile_r2.py::test_save_api_auth_csrf_and_real_state - AssertionError: assert 404 == 401
+ +  where 404 = <Response [404 Not Found]>.status_code
+ +    where <Response [404 Not Found]> = get('/api/me/actions/unit_01a0bf6a038e7df2a1a8245cd34be9cd')
+ +      where get = <starlette.testclient.TestClient object at 0x7f7b55581400>.get
+FAILED backend/tests/product/test_mobile_r2.py::test_withdrawn_action_remains_identifiable_and_removable - AssertionError: assert '已撤回的具体机会' == '研究助理'
+  
+  - 研究助理
+  + 已撤回的具体机会
+FAILED backend/tests/product/test_mobile_r2.py::test_summary_requires_auth_and_has_safe_minimal_fields - AssertionError: assert 404 == 401
+ +  where 404 = <Response [404 Not Found]>.status_code
+ +    where <Response [404 Not Found]> = get('/api/me/summary')
+ +      where get = <starlette.testclient.TestClient object at 0x7f7b54075090>.get
+FAILED backend/tests/product/test_mobile_r2.py::test_frontend_build_addresses_the_whole_module_graph - assert 'no-store' in ''
+ +  where '' = get('cache-control', '')
+ +    where get = Headers({'content-type': 'text/html; charset=utf-8', 'accept-ranges': 'bytes', 'content-length': '961', 'last-modified...src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"}).get
+ +      where Headers({'content-type': 'text/html; charset=utf-8', 'accept-ranges': 'bytes', 'content-length': '961', 'last-modified...src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"}) = <Response [200 OK]>.headers

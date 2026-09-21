@@ -1,0 +1,9 @@
+editing another item cannot discard unsaved draft False
+success message fits viewport True
+source return keeps filters True
+task return keeps status True
+remote search reaches source outside first page True
+selected source prefills task URL True
+clearing selection clears only auto URL True
+clearing source does not erase user URL True
+no unexpected JS errors True

@@ -34,6 +34,9 @@ def _patch(product,id,lease_owner=None,remote_terminal=False,**values):
     with product.db.tx() as s:
         t=s.get(Task,id)
         d=s.get(TaskDispatch,id)
+        if values.get('stage') in ('CREATING','PROMPT_STARTED'):
+            from .membership import assert_task_authorized
+            assert_task_authorized(product,s,t)
         if lease_owner and (not d or d.lease_owner!=lease_owner or not d.lease_expires_at or aware(d.lease_expires_at)<=now()):raise Problem('任务租约已失效',409,'LEASE_LOST')
         if d and values.get('stage')=='PROMPT_STARTED':
             source=product._source(s,t.source_id);frozen=s.get(TaskSourceContext,id);actor=s.get(Account,t.creator_id)

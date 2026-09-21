@@ -1,0 +1,23 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_full_migration_keeps_subscription_and_pauses_runtime ___________
+
+client = <starlette.testclient.TestClient object at 0x7f6b21b7de80>
+svc = <deepaha.product.service.Product object at 0x7f6b222c6270>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-18/test_full_migration_keeps_subs0')
+
+    def test_full_migration_keeps_subscription_and_pauses_runtime(client,svc,tmp_path):
+        trial(client)
+        login(client,'operator');cfg=client.get(P+'/manage/runtime').json()
+        assert client.put(P+'/manage/runtime',json={'version':cfg['version'],'enabled':True,'allow_site_enqueue':True,'max_jobs':2,'connection':'default'}).status_code==200
+        backup=tmp_path/'full.zip';create_backup(svc.database_url,svc.object_root,backup)
+        target='sqlite:///'+str(tmp_path/'target.db')
+        report=migrate_sqlite_backup(backup,target,tmp_path/'target-objects',require_postgres=False)
+        engine=create_engine(target)
+        try:
+>           assert 'mbr_orders' in report['database']['tables']
+E           AssertionError: assert 'mbr_orders' in {'opportunities': 0, 'product_accounts': 3, 'product_actions': 0, 'product_audit': 5, ...}
+
+backend/tests/product/test_services_migration_r3.py:19: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_services_migration_r3.py::test_full_migration_keeps_subscription_and_pauses_runtime - AssertionError: assert 'mbr_orders' in {'opportunities': 0, 'product_accounts': 3, 'product_actions': 0, 'product_audit': 5, ...}

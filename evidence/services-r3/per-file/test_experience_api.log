@@ -1,0 +1,376 @@
+E.EEEEFE                                                                 [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_versioned_profile_patch_preserves_omitted_and_explicit_clear _
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+fixturedef = <FixtureDef argname='client' scope='function' baseid='tests/product/test_experience_api.py'>
+request = <SubRequest 'client' for <Function test_versioned_profile_patch_preserves_omitted_and_explicit_clear>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+
+/opt/pyvenv/lib/python3.13/site-packages/pytest_asyncio/plugin.py:728: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/product/test_api.py:9: in client
+    app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+_ ERROR at setup of test_source_search_full_population_stable_paging_and_permissions _
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+fixturedef = <FixtureDef argname='client' scope='function' baseid='tests/product/test_experience_api.py'>
+request = <SubRequest 'client' for <Function test_source_search_full_population_stable_paging_and_permissions>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+
+/opt/pyvenv/lib/python3.13/site-packages/pytest_asyncio/plugin.py:728: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/product/test_api.py:9: in client
+    app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+_____ ERROR at setup of test_task_search_counts_guidance_and_source_detail _____
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+fixturedef = <FixtureDef argname='client' scope='function' baseid='tests/product/test_experience_api.py'>
+request = <SubRequest 'client' for <Function test_task_search_counts_guidance_and_source_detail>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+
+/opt/pyvenv/lib/python3.13/site-packages/pytest_asyncio/plugin.py:728: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/product/test_api.py:9: in client
+    app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+_ ERROR at setup of test_preparation_items_persist_isolate_conflict_export_erase _
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+fixturedef = <FixtureDef argname='client' scope='function' baseid='tests/product/test_experience_api.py'>
+request = <SubRequest 'client' for <Function test_preparation_items_persist_isolate_conflict_export_erase>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+
+/opt/pyvenv/lib/python3.13/site-packages/pytest_asyncio/plugin.py:728: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/product/test_api.py:9: in client
+    app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+_ ERROR at setup of test_items_reject_spoofed_official_and_bulk_read_requires_csrf _
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+fixturedef = <FixtureDef argname='client' scope='function' baseid='tests/product/test_experience_api.py'>
+request = <SubRequest 'client' for <Function test_items_reject_spoofed_official_and_bulk_read_requires_csrf>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+
+/opt/pyvenv/lib/python3.13/site-packages/pytest_asyncio/plugin.py:728: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/product/test_api.py:9: in client
+    app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+_ ERROR at setup of test_notification_batch_is_atomic_private_and_unread_filter_precedes_paging _
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+fixturedef = <FixtureDef argname='client' scope='function' baseid='tests/product/test_experience_api.py'>
+request = <SubRequest 'client' for <Function test_notification_batch_is_atomic_private_and_unread_filter_precedes_paging>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+
+/opt/pyvenv/lib/python3.13/site-packages/pytest_asyncio/plugin.py:728: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/product/test_api.py:9: in client
+    app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+=================================== FAILURES ===================================
+__________ test_action_and_notice_envelopes_are_paginated_and_private __________
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+svc = <deepaha.product.service.Product object at 0x7feb7d13f350>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-35/test_action_and_notice_envelop0')
+
+    def test_action_and_notice_envelopes_are_paginated_and_private(svc,tmp_path):
+        from fastapi.testclient import TestClient
+        from deepaha.product.api import create_app
+        from deepaha.product.config import Settings
+>       with TestClient(create_app(Settings(data_dir=tmp_path,database_url=svc.database_url),svc)) as c:
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/product/test_experience_api.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_experience_api.py::test_action_and_notice_envelopes_are_paginated_and_private - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_experience_api.py::test_versioned_profile_patch_preserves_omitted_and_explicit_clear - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_experience_api.py::test_source_search_full_population_stable_paging_and_permissions - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_experience_api.py::test_task_search_counts_guidance_and_source_detail - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_experience_api.py::test_preparation_items_persist_isolate_conflict_export_erase - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_experience_api.py::test_items_reject_spoofed_official_and_bulk_read_requires_csrf - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_experience_api.py::test_notification_batch_is_atomic_private_and_unread_filter_precedes_paging - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting

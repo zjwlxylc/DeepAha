@@ -1,0 +1,332 @@
+{
+  "iteration": "mobile-r3",
+  "scope": "Fresh isolated database and actual loopback HTTP; not TLS, native Windows or live WMA. No worker started.",
+  "checks": [
+    {
+      "test": "GET /health/live",
+      "passed": true
+    },
+    {
+      "test": "GET /health/ready",
+      "passed": true
+    },
+    {
+      "test": "GET /",
+      "passed": true
+    },
+    {
+      "test": "GET /app/overview",
+      "passed": true
+    },
+    {
+      "test": "GET /review/overview",
+      "passed": true
+    },
+    {
+      "test": "GET /manage/execution",
+      "passed": true
+    },
+    {
+      "test": "strict CSP retained",
+      "passed": true
+    },
+    {
+      "test": "static app.js",
+      "passed": true
+    },
+    {
+      "test": "static core.js",
+      "passed": true
+    },
+    {
+      "test": "static home.js",
+      "passed": true
+    },
+    {
+      "test": "static experience.css",
+      "passed": true
+    },
+    {
+      "test": "static profile-editor.js",
+      "passed": true
+    },
+    {
+      "test": "static operations-ui.js",
+      "passed": true
+    },
+    {
+      "test": "static actions-ui.js",
+      "passed": true
+    },
+    {
+      "test": "static brand-logo.png",
+      "passed": true
+    },
+    {
+      "test": "anonymous management denied",
+      "passed": true
+    },
+    {
+      "test": "reader login",
+      "passed": true
+    },
+    {
+      "test": "reader management denied",
+      "passed": true
+    },
+    {
+      "test": "missing csrf denied",
+      "passed": true
+    },
+    {
+      "test": "versioned PATCH",
+      "passed": true
+    },
+    {
+      "test": "unmodified fields preserved",
+      "passed": true
+    },
+    {
+      "test": "stale version rejected",
+      "passed": true
+    },
+    {
+      "test": "preparation persisted",
+      "passed": true
+    },
+    {
+      "test": "preparation idempotency",
+      "passed": true
+    },
+    {
+      "test": "personal export includes preparation",
+      "passed": true
+    },
+    {
+      "test": "operator login",
+      "passed": true
+    },
+    {
+      "test": "source beyond50 discoverable",
+      "passed": true
+    },
+    {
+      "test": "operator inherits review",
+      "passed": true
+    },
+    {
+      "test": "conservative serial",
+      "passed": true
+    },
+    {
+      "test": "R3 membership current",
+      "passed": true
+    },
+    {
+      "test": "R3 operator service catalog",
+      "passed": true
+    },
+    {
+      "test": "R3 drafts are not public",
+      "passed": true
+    },
+    {
+      "test": "R3 default automatic service disabled",
+      "passed": true
+    },
+    {
+      "test": "R3 share management ready",
+      "passed": true
+    },
+    {
+      "test": "R3 OG initially rendered",
+      "passed": true
+    },
+    {
+      "test": "R3 private no OG",
+      "passed": true
+    },
+    {
+      "test": "R3 share landing clickable",
+      "passed": true
+    },
+    {
+      "test": "R3 SDK CSP only public sharing",
+      "passed": true
+    },
+    {
+      "test": "R3 default wide image",
+      "passed": true
+    },
+    {
+      "test": "R3 default square image",
+      "passed": true
+    },
+    {
+      "test": "R3 unconfigured WeChat no remote",
+      "passed": true
+    },
+    {
+      "test": "R3 no external signing",
+      "passed": true
+    },
+    {
+      "test": "HTML never cached",
+      "passed": true
+    },
+    {
+      "test": "served build matches HTML",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes access-ui.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes access.css",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes actions-ui.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes app.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes birth-date.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes brand-v2.css",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes core.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes experience-core.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes experience.css",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes home.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes icons.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes lab-ui.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes membership-r3.css",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes membership-ui.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes mobile-core.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes mobile-r2.css",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes operations-ui.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes product.css",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes profile-editor.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes profile-layout.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes scout.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes share-page.css",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes share-page.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes sharing-r3.css",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes sharing-ui.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes source-query.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes user.js",
+      "passed": true
+    },
+    {
+      "test": "versioned bytes workbench.js",
+      "passed": true
+    },
+    {
+      "test": "old alias revalidates",
+      "passed": true
+    },
+    {
+      "test": "unknown build fails closed",
+      "passed": true
+    },
+    {
+      "test": "save state is persisted",
+      "passed": true
+    },
+    {
+      "test": "preparing action update",
+      "passed": true
+    },
+    {
+      "test": "save without CSRF rejected",
+      "passed": true
+    },
+    {
+      "test": "repeat save preserves status and note",
+      "passed": true
+    },
+    {
+      "test": "summary reflects real data",
+      "passed": true
+    },
+    {
+      "test": "summary excludes private notes",
+      "passed": true
+    },
+    {
+      "test": "cross-origin save rejected",
+      "passed": true
+    }
+  ],
+  "status": "PASS",
+  "wma_called": false
+}

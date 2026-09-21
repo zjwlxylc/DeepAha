@@ -1,0 +1,111 @@
+E........E....                                                           [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_policy_is_serial_unverified_and_browser_cannot_grant __
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+fixturedef = <FixtureDef argname='client' scope='function' baseid='tests/product/test_dispatch_policy.py'>
+request = <SubRequest 'client' for <Function test_policy_is_serial_unverified_and_browser_cannot_grant>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+
+/opt/pyvenv/lib/python3.13/site-packages/pytest_asyncio/plugin.py:728: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/product/test_api.py:9: in client
+    app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+____________ ERROR at setup of test_pause_recovery_and_queue_limit _____________
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+>               raise ValueError('content mismatch')
+E               ValueError: content mismatch
+
+backend/src/deepaha/product/frontend_assets.py:27: ValueError
+
+The above exception was the direct cause of the following exception:
+
+fixturedef = <FixtureDef argname='client' scope='function' baseid='tests/product/test_dispatch_policy.py'>
+request = <SubRequest 'client' for <Function test_pause_recovery_and_queue_limit>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+
+/opt/pyvenv/lib/python3.13/site-packages/pytest_asyncio/plugin.py:728: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/product/test_api.py:9: in client
+    app=create_app(Settings(database_url=svc.database_url,data_dir=svc.object_root.parent,public_catalog=True,allowed_hosts=['testserver']),product=svc)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/deepaha/product/api.py:505: in create_app
+    frontend_build=validate_release(static)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product')
+
+    def validate_release(directory: Path) -> str:
+        try:
+            html,expected=build_release(directory)
+            actual=json.loads((directory/'asset-release.json').read_text(encoding='utf-8'))
+            if actual!=expected or (directory/'index.html').read_text(encoding='utf-8')!=html:
+                raise ValueError('content mismatch')
+            return expected['build']
+        except (OSError,ValueError,KeyError) as error:
+>           raise RuntimeError('ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting') from error
+E           RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+
+backend/src/deepaha/product/frontend_assets.py:30: RuntimeError
+=========================== short test summary info ============================
+ERROR backend/tests/product/test_dispatch_policy.py::test_policy_is_serial_unverified_and_browser_cannot_grant - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting
+ERROR backend/tests/product/test_dispatch_policy.py::test_pause_recovery_and_queue_limit - RuntimeError: ASSET_BUILD_STALE: run python scripts/mobile_r2/build_assets.py before starting

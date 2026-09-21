@@ -1,0 +1,216 @@
+{
+  "status": "PASS",
+  "platform": "Windows Python 3.14",
+  "product": {
+    "tests": 331,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 2,
+    "passed": 329
+  },
+  "membership": {
+    "passed": 112,
+    "failures": 0
+  },
+  "postgres_real": {
+    "passed": 8,
+    "temporary_db_removed": true
+  },
+  "per_file": [
+    {
+      "name": "test_action_loop.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_action_loop_api.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_actionable_granularity.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_api.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_beta_access.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_contract.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_currentness.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_currentness_api.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_custom_intake_r3.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_delivery_quality.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_dispatch_policy.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_eligibility.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_experience_api.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_experience_postgres.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_experience_upgrade.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_live_validation_guard.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_local_launcher_access.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_milestones_management.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_mobile_r2.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_mobile_r2_storage.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_multitype_opportunity_core.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_operations.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_personal_value.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_qualification_compiler.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_scout_import.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_services_migration_r3.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_services_r3.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_services_ui_r3.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_services_upgrade_r3.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg5_1_frontend_contract.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg6_2_frontend_contract.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg6_2_upgrade.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg6_frontend_contract.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg6_upgrade.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg7_2_frontend_contract.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg7_api.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg7_founding_users.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg7_frontend_contract.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg7_independent_oracle100.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg7_lab.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg7_recommendation_oracle100.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg7_upgrade.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sg8a_deployment.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_sharing_r3.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_tracking_host_r3.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_wechat_r3.py",
+      "returncode": 0
+    },
+    {
+      "name": "test_worker.py",
+      "returncode": 0
+    }
+  ],
+  "frontend_build": "mobile-r3-7f6388bb22f0",
+  "protected_files": 16,
+  "notes": [
+    "Membership Windows ZIP fixture/path validation repaired; final 112 tests pass.",
+    "Native browser waits adapted to strict CSP and asynchronous login; application CSP unchanged.",
+    "No real WMA/payment/WeChat calls."
+  ]
+}

@@ -1,9 +1,11 @@
 {
   "release": "3.8.0-rc1",
-  "database_generation": "deepaha-product-v1-actionable2-actionloop1-lab2-experience1",
+  "database_generation": "deepaha-product-v1-actionable2-actionloop1-lab2-experience1-services1",
   "code_rollback_compatible_with": [],
   "schema_change_in_release": true,
   "automatic_database_rollback": false,
-  "extension": "experience-84353c7-20260920",
-  "manual_rollback_notes": "docs/experience/RELEASE_AND_ROLLBACK.md"
+  "extension": "mobile-r3-services-20260921",
+  "manual_rollback_notes": "docs/services-r3/DEPLOYMENT.md",
+  "parent_extension": "mobile-r2-20260920",
+  "iteration_schema_change": true
 }

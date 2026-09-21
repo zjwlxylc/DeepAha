@@ -1,3 +1,27 @@
+# 当前候选：Mobile R3｜订阅、荐源、定制跟踪与网站分享
+
+基于本轮实际上传的R2完整ZIP，SHA256 `929ab1518f53717018864ffc7904600d9d8a4ca3f1bba52a776631e3dbb3f467`。R3是原系统完整整合，不是S1独立演示；未push、未merge、未部署。
+
+先读 `docs/services-r3/RUN_AND_UPGRADE.md`、`DEPLOYMENT.md`、`TEST_REPORT.md`、`CODEX_HANDOFF.md` 和根目录 `CHANGESET_MOBILE_R3.json`。Windows仍用原启动脚本，Python3.13/3.14；数据目录不变。首次 `upgrade-services` 先备份后新增14张表，目录默认为草稿，服务周期运行与外部调查默认关闭。
+
+运行源仅 `backend/src/deepaha`、`backend/src/deepaha_membership`、`web/public/product`。`validation/membership-s1/src` 只是历史测试输入。用 `python scripts/services_r3/verify.py --output evidence/services-r3/local-verify` 验证；源包逐文件核验用 `python scripts/experience/verify_manifest.py`。
+
+R3禁止用SG8-A旧安装脚本直接上线；同名3.8.0-rc1旧发布目录不能覆盖。新代际为 `…-experience1-services1`，不得把R2旧worker直接接R3数据库回退。完整流程见本轮部署文档。
+
+品牌/海报/资格与价值规则/整体审核/Scout边界保留。支付仍为试用或人工核对，不伪装真实支付回调；微信凭据只在宿主环境，真实WMA/PG/微信/实体手机需现场验收。
+
+**以下是原R2及更早版本历史，不代表R3当前状态；旧根目录元数据备份在 `docs/services-r3/r2-metadata`。**
+
+---
+
+# 当前候选：Mobile R2｜手机优先的产品级打磨
+
+基于用户刚验收的 experience-84353c7-20260920 完整包；本轮未推送、未部署。先读 `docs/mobile-r2/RUN_AND_UPGRADE.md`、`CHANGELOG.md`、`TEST_REPORT.md` 和 `CODEX_HANDOFF.md`。启动前核对 `scripts/mobile_r2/build_assets.py --check`。R2 相对父版本新增表为 0，保留累计 experience1 回退安全锁。
+
+Codex 正在发布的父版本不能被本包整目录覆盖；请使用 `CHANGESET_MOBILE_R2.json` 三方核对。以下各版文档作为历史记录保留，不代表 R2 当前发布状态。
+
+---
+
 # 本次候选：experience-84353c7-20260920
 
 基线 `84353c7`。完整体验改善源码交付；**未部署、未推送、未做真实 WMA / PostgreSQL / 真人验收**。

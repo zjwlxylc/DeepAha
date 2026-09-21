@@ -1,0 +1,22 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______ test_asset_manifest_detects_changed_module_before_immutable_serve _______
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-5/test_asset_manifest_detects_ch0')
+
+    def test_asset_manifest_detects_changed_module_before_immutable_serve(tmp_path):
+        import importlib
+>       assert importlib.util.find_spec('deepaha.product.frontend_assets'), 'Release validator missing'
+E       AssertionError: Release validator missing
+E       assert None
+E        +  where None = <function find_spec at 0x7f4188f3bb00>('deepaha.product.frontend_assets')
+E        +    where <function find_spec at 0x7f4188f3bb00> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = <module 'importlib' from '/usr/lib/python3.13/importlib/__init__.py'>.util
+
+backend/tests/product/test_mobile_r2.py:97: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_mobile_r2.py::test_asset_manifest_detects_changed_module_before_immutable_serve - AssertionError: Release validator missing
+assert None
+ +  where None = <function find_spec at 0x7f4188f3bb00>('deepaha.product.frontend_assets')
+ +    where <function find_spec at 0x7f4188f3bb00> = <module 'importlib.util' (frozen)>.find_spec
+ +      where <module 'importlib.util' (frozen)> = <module 'importlib' from '/usr/lib/python3.13/importlib/__init__.py'>.util

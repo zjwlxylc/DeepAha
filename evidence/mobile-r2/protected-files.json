@@ -1,0 +1,70 @@
+[
+  {
+    "file": "web/public/product/brand-logo.png",
+    "unchanged": true
+  },
+  {
+    "file": "backend/src/deepaha/product/models.py",
+    "unchanged": true
+  },
+  {
+    "file": "backend/src/deepaha/product/eligibility.py",
+    "unchanged": true
+  },
+  {
+    "file": "backend/src/deepaha/product/value.py",
+    "unchanged": true
+  },
+  {
+    "file": "backend/src/deepaha/product/scout.py",
+    "unchanged": true
+  },
+  {
+    "file": "backend/src/deepaha/product/dispatch_policy.py",
+    "unchanged": true
+  },
+  {
+    "file": "backend/src/deepaha/product/worker.py",
+    "unchanged": true
+  },
+  {
+    "file": "backend/src/deepaha/artifacts/local_file.py",
+    "unchanged": true
+  },
+  {
+    "file": "web/public/product/hero/deepaha-ai-personalized-v2-1536.jpg",
+    "unchanged": true
+  },
+  {
+    "file": "web/public/product/hero/deepaha-ai-personalized-v2-1536.webp",
+    "unchanged": true
+  },
+  {
+    "file": "web/public/product/hero/deepaha-ai-personalized-v2-768.webp",
+    "unchanged": true
+  },
+  {
+    "file": "web/public/product/hero/deepaha-official-sources-v2-1536.jpg",
+    "unchanged": true
+  },
+  {
+    "file": "web/public/product/hero/deepaha-official-sources-v2-1536.webp",
+    "unchanged": true
+  },
+  {
+    "file": "web/public/product/hero/deepaha-official-sources-v2-768.webp",
+    "unchanged": true
+  },
+  {
+    "file": "web/public/product/hero/deepaha-opportunity-map-v2-1536.jpg",
+    "unchanged": true
+  },
+  {
+    "file": "web/public/product/hero/deepaha-opportunity-map-v2-1536.webp",
+    "unchanged": true
+  },
+  {
+    "file": "web/public/product/hero/deepaha-opportunity-map-v2-768.webp",
+    "unchanged": true
+  }
+]

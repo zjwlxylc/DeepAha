@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+const {workspaceReturn,publicNote}=await import('../public/product/mobile-core.js');
+assert.equal(workspaceReturn('/manage/tasks?q=研究&status=FAILED','/manage/tasks'),'/manage/tasks?q=研究&status=FAILED');
+for(const bad of ['//evil.test','/manage/users','/manage/tasks-evil','/manage/tasks?x=1\\evil'])assert.equal(workspaceReturn(bad,'/manage/tasks'),'/manage/tasks');
+assert.equal(publicNote('原始特殊限制须满足'),'原始特殊限制须满足');
+assert.ok(publicNote('本份返回有2项共同内容尚未定位引用，原文与对应备注已保留。').includes('2 项'));
+const {SourcePages}=await import('../public/product/source-query.js');
+const pages=new SourcePages();let seen=[];let fail=false;
+const fetcher=async query=>{seen.push(query.offset);if(fail)throw new Error('offline');return {items:[{id:'i'+query.offset}],has_more:query.offset<60,total:90};};
+await pages.load('a',false,fetcher);assert.equal(pages.offset,0);
+fail=true;await assert.rejects(pages.load('a',true,fetcher));assert.equal(pages.offset,0);
+fail=false;await pages.load('a',true,fetcher);assert.equal(pages.offset,30);assert.deepEqual(seen,[0,30,30]);
+let resolve;const stale=pages.load('slow',false,()=>new Promise(r=>resolve=r));await pages.load('fast',false,fetcher);resolve({items:[{id:'stale'}],has_more:false,total:1});assert.equal(await stale,null);assert.equal(pages.query,'fast');
+console.log('MOBILE_R2_OPS=PASS (safe returns, conservative copy, pagination failure/reorder)');

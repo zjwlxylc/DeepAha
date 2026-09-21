@@ -1,0 +1,11 @@
+lost write response keeps input True
+uncertain write shown inline True
+retry uses same idempotency key True
+dialog action visible in short viewport True
+read failure offers local retry True
+retry keeps query True
+reader sees clear permission error True
+missing content offers safe return True
+disabled reminders point to setting True
+settings link returns to opportunity True
+no JS errors True

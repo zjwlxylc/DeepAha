@@ -1,0 +1,195 @@
+{
+  "status": "FAIL",
+  "files": [
+    {
+      "file": "test_action_loop.py",
+      "returncode": 0,
+      "seconds": 8.87
+    },
+    {
+      "file": "test_action_loop_api.py",
+      "returncode": 0,
+      "seconds": 4.85
+    },
+    {
+      "file": "test_actionable_granularity.py",
+      "returncode": 0,
+      "seconds": 10.86
+    },
+    {
+      "file": "test_api.py",
+      "returncode": 0,
+      "seconds": 8.22
+    },
+    {
+      "file": "test_beta_access.py",
+      "returncode": 0,
+      "seconds": 16.67
+    },
+    {
+      "file": "test_contract.py",
+      "returncode": 0,
+      "seconds": 13.4
+    },
+    {
+      "file": "test_currentness.py",
+      "returncode": 0,
+      "seconds": 8.55
+    },
+    {
+      "file": "test_currentness_api.py",
+      "returncode": 0,
+      "seconds": 5.27
+    },
+    {
+      "file": "test_delivery_quality.py",
+      "returncode": 0,
+      "seconds": 11.09
+    },
+    {
+      "file": "test_dispatch_policy.py",
+      "returncode": 1,
+      "seconds": 11.1
+    },
+    {
+      "file": "test_eligibility.py",
+      "returncode": 0,
+      "seconds": 11.7
+    },
+    {
+      "file": "test_experience_api.py",
+      "returncode": 0,
+      "seconds": 9.85
+    },
+    {
+      "file": "test_experience_postgres.py",
+      "returncode": 0,
+      "seconds": 3.1
+    },
+    {
+      "file": "test_experience_upgrade.py",
+      "returncode": 0,
+      "seconds": 3.8
+    },
+    {
+      "file": "test_live_validation_guard.py",
+      "returncode": 0,
+      "seconds": 5.31
+    },
+    {
+      "file": "test_local_launcher_access.py",
+      "returncode": 0,
+      "seconds": 4.95
+    },
+    {
+      "file": "test_milestones_management.py",
+      "returncode": 0,
+      "seconds": 10.26
+    },
+    {
+      "file": "test_mobile_r2.py",
+      "returncode": 0,
+      "seconds": 7.54
+    },
+    {
+      "file": "test_multitype_opportunity_core.py",
+      "returncode": 0,
+      "seconds": 7.79
+    },
+    {
+      "file": "test_operations.py",
+      "returncode": 0,
+      "seconds": 6.79
+    },
+    {
+      "file": "test_personal_value.py",
+      "returncode": 0,
+      "seconds": 10.96
+    },
+    {
+      "file": "test_qualification_compiler.py",
+      "returncode": 0,
+      "seconds": 6.68
+    },
+    {
+      "file": "test_scout_import.py",
+      "returncode": 0,
+      "seconds": 18.99
+    },
+    {
+      "file": "test_sg5_1_frontend_contract.py",
+      "returncode": 0,
+      "seconds": 2.4
+    },
+    {
+      "file": "test_sg6_2_frontend_contract.py",
+      "returncode": 0,
+      "seconds": 2.4
+    },
+    {
+      "file": "test_sg6_2_upgrade.py",
+      "returncode": 0,
+      "seconds": 4.29
+    },
+    {
+      "file": "test_sg6_frontend_contract.py",
+      "returncode": 0,
+      "seconds": 2.47
+    },
+    {
+      "file": "test_sg6_upgrade.py",
+      "returncode": 0,
+      "seconds": 4.5
+    },
+    {
+      "file": "test_sg7_2_frontend_contract.py",
+      "returncode": 0,
+      "seconds": 2.49
+    },
+    {
+      "file": "test_sg7_api.py",
+      "returncode": 0,
+      "seconds": 10.26
+    },
+    {
+      "file": "test_sg7_founding_users.py",
+      "returncode": 0,
+      "seconds": 5.49
+    },
+    {
+      "file": "test_sg7_frontend_contract.py",
+      "returncode": 0,
+      "seconds": 2.69
+    },
+    {
+      "file": "test_sg7_independent_oracle100.py",
+      "returncode": 0,
+      "seconds": 9.9
+    },
+    {
+      "file": "test_sg7_lab.py",
+      "returncode": 0,
+      "seconds": 7.01
+    },
+    {
+      "file": "test_sg7_recommendation_oracle100.py",
+      "returncode": 0,
+      "seconds": 17.09
+    },
+    {
+      "file": "test_sg7_upgrade.py",
+      "returncode": 0,
+      "seconds": 4.95
+    },
+    {
+      "file": "test_sg8a_deployment.py",
+      "returncode": 0,
+      "seconds": 4.98
+    },
+    {
+      "file": "test_worker.py",
+      "returncode": 0,
+      "seconds": 3.92
+    }
+  ]
+}

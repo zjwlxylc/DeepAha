@@ -1,0 +1,1576 @@
+{
+  "transport": "bridge",
+  "scope": "Real DOM/ES modules and real local FastAPI/SQLite; QA-only transport bridge when native navigation is blocked. No live WMA/payment/WeChat.",
+  "checks": [
+    {
+      "name": "route /services",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n首页\n机会总览\n我的机会星图\n收藏与行动\n消息\n我\n我的\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nLESS SEARCHING. MORE POSSIBILITY.\n\n重要的机会，\n值得被持续关注。\n\n短期集中寻找、全年持续留意，或围绕指定网站跟踪。选择与你当下目标相符的服务。\n\n↗\n服务方案正在准备中\n\n公开机会和原有免费功能不受影响。套餐经维护员确认后"
+    },
+    {
+      "name": "plans start draft",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "route /manage/services",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n订阅与服务\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格"
+    },
+    {
+      "name": "api GET /api/membership/plans",
+      "passed": true,
+      "detail": "[{\"code\":\"basic\",\"version\":1,\"status\":\"PUBLISHED\",\"terms\":{\"name\":\"基础订阅\",\"description\":\"陪你走完一个关键机会窗口\",\"tier\":\"BASIC\",\"months\":2,\"topic_limit\":3,\"site_limit\":0,\"scan_hours\":24,\"site_scan_hours\":24,\"sort_order\":10,\"price_cents\":2990,\"service_codes\":[\"topic_watch\",\"inapp_alerts\"],\"services\":[{\"code\":\"t"
+    },
+    {
+      "name": "native pricing persisted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "route /services",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n首页\n机会总览\n我的机会星图\n收藏与行动\n工作台\n消息\nO\n我的\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nLESS SEARCHING. MORE POSSIBILITY.\n\n重要的机会，\n值得被持续关注。\n\n短期集中寻找、全年持续留意，或围绕指定网站跟踪。选择与你当下目标相符的服务。\n\n↗\n基础订阅\n2个自然月\n\n陪你走完一个关键机会窗口\n\n¥29.90"
+    },
+    {
+      "name": "layout services 320",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320}"
+    },
+    {
+      "name": "layout services 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "layout services 768",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768}"
+    },
+    {
+      "name": "layout services 1440",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440}"
+    },
+    {
+      "name": "route /services",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n7\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nLESS SEARCHING. MORE POSSIBILITY.\n\n重要的机会，\n值得被持续关注。\n\n短期集中寻找、全年持续留意，或围绕指定网站跟踪。选择与你当下目标相符的服务。\n\n基础订阅\n2个自然月\n\n陪你走完一个关键机会窗口\n\n¥29.90 / 期\n✓\n3个同时启用的跟踪主题\n✓\n已发布机会检查间隔 24"
+    },
+    {
+      "name": "route /app/subscription",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n7\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n我的订阅\n\n服务周期、待确认报价与历史申请，集中在这里查看。\n\nYOUR CURRENT SERVICE\n\n免费使用\n\n尚未开通持续跟踪服务。公开机会仍可正常查看。\n\n免费使用\n服务周期\n当前没有服务周期\n\n申请后需由维护员完成服务确认。\n\n服务申请\n"
+    },
+    {
+      "name": "order waiting not claimed paid",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "layout subscription-pending 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "route /manage/services/orders",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n订阅与服务\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格"
+    },
+    {
+      "name": "route /app/tracking",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n8\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n我的持续跟踪\n\n让关注变成可回看的记录，而不是反复打开同一个网页。\n\n＋ 添加跟踪主题\n主题名额\n0 / 3\n定制网站名额\n0 / 0\n已发布机会检查\n24 小时\n主题跟踪检查已发布机会；指定网站需维护员接入采集。目标间隔不代表检查必定完成，以下显示实"
+    },
+    {
+      "name": "tracking saved",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "layout tracking 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "route /app/sources",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n8\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n一起补全机会来源\n\n你发现的一个公开网站，可能帮助更多人看见原本错过的机会。\n\n＋ 提交网站\n提交 → 线索审核 → 来源接入 → 机会审核\n审核网站与发布机会是两件事。网站线索通过，不代表其中每条内容已核实。\n还没有提交网站\n\n免费用户也能提交。我们"
+    },
+    {
+      "name": "source automatically pending",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "layout source-submission 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "route /review/sources",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\nR\nreviewer\n审核员\nDeepAha\n网站线索审核\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n网站线索审核\n\n整体判断是否值得接入，不将线索审核等同于机会事实审核。\n\n原机会审核 ↗\n\n按最新提交展示，最多200条。请勿在发给用户的回复或公开采集说明中包含个人"
+    },
+    {
+      "name": "reviewer not price admin",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "layout source-review 1440",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440}"
+    },
+    {
+      "name": "route /review/sources",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n网站线索审核\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n网站线索审核\n\n整"
+    },
+    {
+      "name": "source adopted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "route /manage/services/items",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n订阅与服务\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格"
+    },
+    {
+      "name": "layout service-items 1440",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440}"
+    },
+    {
+      "name": "route /manage/services/runtime",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n订阅与服务\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n持续服务运行设置\n\n"
+    },
+    {
+      "name": "api GET /api/membership/manage/runtime",
+      "passed": true,
+      "detail": "{\"version\":1,\"enabled\":true,\"allow_site_enqueue\":false,\"max_jobs\":3,\"connection\":\"default\",\"actor\":\"owner\",\"next_due\":\"2026-09-21T02:13:30.638102+00:00\",\"last_run\":\"2026-09-21T01:13:30.660899+00:00\",\"last_result\":{\"state\":\"COMPLETED\",\"topics\":{\"checked\":1,\"notices_created\":15,\"failed\":0},\"site_publi"
+    },
+    {
+      "name": "scheduled directory scan completed",
+      "passed": true,
+      "detail": "{'version': 1, 'enabled': True, 'allow_site_enqueue': False, 'max_jobs': 3, 'connection': 'default', 'actor': 'owner', 'next_due': '2026-09-21T02:13:30.638102+00:00', 'last_run': '2026-09-21T01:13:30.660899+00:00', 'last_result': {'state': 'COMPLETED', 'topics': {'checked': 1, 'notices_created': 15, 'failed': 0}, 'site_publications': {'checked': 0, 'notices_created': 0, 'failed': 0}, 'refreshed': 0, 'dispatched': 0, 'skipped': 0}, 'lease_until': None}"
+    },
+    {
+      "name": "no paid auto enabled",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "route /app/notifications",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n25\n消息与提醒\n\n25 条未读\n\n提醒设置\n本周机会摘要\n本页标为已读\n全部\n只看未读\n服务进展\n研究助理\n09/21 09:13\n\n跟踪主题：宁波科研实践。此条目匹配你的筛选条件，不代表已判定符合报名资格。\n\n查看服务进展\n标为已读\n服务进展\n青年科研实践计划 1\n09/21 09:13\n\n跟踪主题：宁波科研实践。此条目匹配你的筛选条件，不代表已判定符合"
+    },
+    {
+      "name": "unified services notices",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "layout unified-messages 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "route /app/me",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n25\nr\nreader\n\n我的机会，由我选择。\n\n8\n收藏与行动\n25\n未读消息\n关注方向\n分享机会星图\n↗\n我的订阅\n持续跟踪\n推荐网站\n服务方案\n我的关注方向\n我的机会星图\n收藏与行动\n机会共创实验\n消息与提醒\n数据与隐私\n账号安全\n退出登录\n\nDeepAha · 机会服务 R3\nmobile-r3-bcc84a48b67f\n\n首页\n总览\n星图\n行动\n我"
+    },
+    {
+      "name": "native account has subscriptions",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "layout account 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "route /services",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n25\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nLESS SEARCHING. MORE POSSIBILITY.\n\n重要的机会，\n值得被持续关注。\n\n短期集中寻找、全年持续留意，或围绕指定网站跟踪。选择与你当下目标相符的服务。\n\n基础订阅\n2个自然月\n\n陪你走完一个关键机会窗口\n\n¥29.90 / 期\n✓\n3个同时启用的跟踪主题\n✓\n已发布机会检查间隔 2"
+    },
+    {
+      "name": "route /manage/services/orders",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n订阅与服务\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格"
+    },
+    {
+      "name": "layout quoted-orders 1440",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440}"
+    },
+    {
+      "name": "route /app/subscription",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n26\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n我的订阅\n\n服务周期、待确认报价与历史申请，集中在这里查看。\n\nYOUR CURRENT SERVICE\n\n基础订阅\n\n当前服务结束：2026/11/21 09:13（北京时间）\n\n服务中\n服务周期\n基础订阅\n\n2026/09/21 09:13 → "
+    },
+    {
+      "name": "custom quote accepted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "route /manage/services",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n返回用户端\n工作台导航 · 订阅与服务\n\n手机工作台 · 只读查看，审核与设置请使用电脑\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格与服务项目由这里统一维护；新条款不追溯改变旧订单。\n\n套餐价格\n服务项目\n申请与报价\n用户权益\n跟踪任务\n操作记录\n运行设置\n\n所有预置价格均为试运营假设，默认草稿，维护员确认后再上架。"
+    },
+    {
+      "name": "layout management-readonly 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "mobile write buttons disabled",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "route /manage/sharing",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n网站分享\n收藏与行动\n返回用户端\n网站分享\n\n统一公开链接的封面、标题与描述。\n\n打开实际分享页 ↗\n分享样式\n网站HT"
+    },
+    {
+      "name": "layout sharing-settings 1440",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440}"
+    },
+    {
+      "name": "share preview updates immediately",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "api GET /api/manage/sharing",
+      "passed": true,
+      "detail": "{\"version\":1,\"origin\":\"https://deepaha.com\",\"title\":\"机会星图｜看见你的下一步\",\"description\":\"官方机会与持续关注，让适合你的机会不再轻易擦肩而过。\",\"cover\":\"default-wide.jpg\",\"square\":\"default-square.jpg\",\"wechat_enabled\":false,\"verification_name\":\"\",\"verification_text\":\"\",\"diagnostics\":{\"credentials_configured\":false,\"app_id\":\"\",\"secre"
+    },
+    {
+      "name": "share settings persisted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "api GET /api/manage/sharing",
+      "passed": true,
+      "detail": "{\"version\":2,\"origin\":\"https://deepaha.com\",\"title\":\"机会星图｜看见你的下一步\",\"description\":\"官方机会与持续关注，让适合你的机会不再轻易擦肩而过。\",\"cover\":\"7ca572b8987b1b095b7d28faff9dbcbfa2d8ae5352357399ed57c9d93c4002c9.jpg\",\"square\":\"default-square.jpg\",\"wechat_enabled\":false,\"verification_name\":\"\",\"verification_text\":\"\",\"diagnostics"
+    },
+    {
+      "name": "share cover upload persisted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "layout sharing-settings 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "layout sharing-settings 768",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768}"
+    },
+    {
+      "name": "public HTML is standalone OG",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "public canonical not fixture host",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "route /app/privacy",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n26\n我的\n数据与隐私\n由你掌握\n\n可导出或清除你的资料、收藏、行动、跟踪、网站提交私文与反馈。必要的订单条款、权益及核对记录保留，不自动退款。外部调查只接收审核后的公开来源说明，不接收你的画像或私人需求。\n\n导出我的数据\n清除画像与个人记录\n首页\n总览\n星图\n行动\n我的\n分享设置已更新"
+    },
+    {
+      "name": "layout privacy 320",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320}"
+    },
+    {
+      "name": "route /app/privacy",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n26\n我的\n数据与隐私\n由你掌握\n\n可导出或清除你的资料、收藏、行动、跟踪、网站提交私文与反馈。必要的订单条款、权益及核对记录保留，不自动退款。外部调查只接收审核后的公开来源说明，不接收你的画像或私人需求。\n\n导出我的数据\n清除画像与个人记录\n首页\n总览\n星图\n行动\n我的\n分享设置已更新"
+    },
+    {
+      "name": "layout privacy 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "route /app/privacy",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n首页\n机会总览\n我的机会星图\n收藏与行动\n消息\n26\nR\n我的\n我的\n数据与隐私\n由你掌握\n\n可导出或清除你的资料、收藏、行动、跟踪、网站提交私文与反馈。必要的订单条款、权益及核对记录保留，不自动退款。外部调查只接收审核后的公开来源说明，不接收你的画像或私人需求。\n\n导出我的数据\n清除画像与个人记录\n分享设置已更新"
+    },
+    {
+      "name": "layout privacy 1440",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440}"
+    },
+    {
+      "name": "route /app/subscription",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n26\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n我的订阅\n\n服务周期、待确认报价与历史申请，集中在这里查看。\n\nYOUR CURRENT SERVICE\n\n基础订阅\n\n当前服务结束：2026/11/21 09:13（北京时间）\n\n服务中\n服务周期\n基础订阅\n\n2026/09/21 09:13 → "
+    },
+    {
+      "name": "layout subscription 320",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320}"
+    },
+    {
+      "name": "route /app/subscription",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n26\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n我的订阅\n\n服务周期、待确认报价与历史申请，集中在这里查看。\n\nYOUR CURRENT SERVICE\n\n基础订阅\n\n当前服务结束：2026/11/21 09:13（北京时间）\n\n服务中\n服务周期\n基础订阅\n\n2026/09/21 09:13 → "
+    },
+    {
+      "name": "layout subscription 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "route /app/subscription",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n首页\n机会总览\n我的机会星图\n收藏与行动\n消息\n26\nR\n我的\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n我的订阅\n\n服务周期、待确认报价与历史申请，集中在这里查看。\n\nYOUR CURRENT SERVICE\n\n基础订阅\n\n当前服务结束：2026/11/21 09:13（北京时间）\n\n服务中\n服"
+    },
+    {
+      "name": "layout subscription 1440",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440}"
+    },
+    {
+      "name": "route /app/tracking",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n26\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n我的持续跟踪\n\n让关注变成可回看的记录，而不是反复打开同一个网页。\n\n＋ 添加跟踪主题\n主题名额\n1 / 3\n定制网站名额\n0 / 0\n已发布机会检查\n24 小时\n主题跟踪检查已发布机会；指定网站需维护员接入采集。目标间隔不代表检查必定完成，以下显示"
+    },
+    {
+      "name": "layout tracking 320",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320}"
+    },
+    {
+      "name": "route /app/tracking",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n26\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n我的持续跟踪\n\n让关注变成可回看的记录，而不是反复打开同一个网页。\n\n＋ 添加跟踪主题\n主题名额\n1 / 3\n定制网站名额\n0 / 0\n已发布机会检查\n24 小时\n主题跟踪检查已发布机会；指定网站需维护员接入采集。目标间隔不代表检查必定完成，以下显示"
+    },
+    {
+      "name": "layout tracking 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "route /app/tracking",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n首页\n机会总览\n我的机会星图\n收藏与行动\n消息\n26\nR\n我的\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n我的持续跟踪\n\n让关注变成可回看的记录，而不是反复打开同一个网页。\n\n＋ 添加跟踪主题\n主题名额\n1 / 3\n定制网站名额\n0 / 0\n已发布机会检查\n24 小时\n主题跟踪检查已发布机会；指定"
+    },
+    {
+      "name": "layout tracking 1440",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440}"
+    },
+    {
+      "name": "route /app/sources",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n26\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n一起补全机会来源\n\n你发现的一个公开网站，可能帮助更多人看见原本错过的机会。\n\n＋ 提交网站\n提交 → 线索审核 → 来源接入 → 机会审核\n审核网站与发布机会是两件事。网站线索通过，不代表其中每条内容已核实。\n海湾科研栏目\n线索通过\n\nhttps:"
+    },
+    {
+      "name": "layout sources 320",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320}"
+    },
+    {
+      "name": "route /app/sources",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n26\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n一起补全机会来源\n\n你发现的一个公开网站，可能帮助更多人看见原本错过的机会。\n\n＋ 提交网站\n提交 → 线索审核 → 来源接入 → 机会审核\n审核网站与发布机会是两件事。网站线索通过，不代表其中每条内容已核实。\n海湾科研栏目\n线索通过\n\nhttps:"
+    },
+    {
+      "name": "layout sources 390",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390}"
+    },
+    {
+      "name": "route /app/sources",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n首页\n机会总览\n我的机会星图\n收藏与行动\n消息\n26\nR\n我的\n服务方案\n我的订阅\n持续跟踪\n网站建议\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n一起补全机会来源\n\n你发现的一个公开网站，可能帮助更多人看见原本错过的机会。\n\n＋ 提交网站\n提交 → 线索审核 → 来源接入 → 机会审核\n审核网站与发布机会是两件事。网站线索通过，不代表其"
+    },
+    {
+      "name": "layout sources 1440",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440}"
+    },
+    {
+      "name": "route /manage/services",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n返回用户端\n工作台导航 · 订阅与服务\n\n手机工作台 · 只读查看，审核与设置请使用电脑\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格与服务项目由这里统一维护；新条款不追溯改变旧订单。\n\n套餐价格\n服务项目\n申请与报价\n用户权益\n跟踪任务\n操作记录\n运行设置\n\n所有预置价格均为试运营假设，默认草稿，维护员确认后再上架。"
+    },
+    {
+      "name": "route /manage/services",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n订阅与服务\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格"
+    },
+    {
+      "name": "route /manage/services/items",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n返回用户端\n工作台导航 · 订阅与服务\n\n手机工作台 · 只读查看，审核与设置请使用电脑\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格与服务项目由这里统一维护；新条款不追溯改变旧订单。\n\n套餐价格\n服务项目\n申请与报价\n用户权益\n跟踪任务\n操作记录\n运行设置\n＋ 新建服务项目\n站内更新提醒\n\n新发现或版本变化进入站内消"
+    },
+    {
+      "name": "route /manage/services/items",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n订阅与服务\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格"
+    },
+    {
+      "name": "route /manage/services/grants",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n返回用户端\n工作台导航 · 订阅与服务\n\n手机工作台 · 只读查看，审核与设置请使用电脑\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格与服务项目由这里统一维护；新条款不追溯改变旧订单。\n\n套餐价格\n服务项目\n申请与报价\n用户权益\n跟踪任务\n操作记录\n运行设置\nreader · 基础订阅\n服务中\n\n2026/09/21 "
+    },
+    {
+      "name": "route /manage/services/grants",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n订阅与服务\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格"
+    },
+    {
+      "name": "route /manage/services/jobs",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n返回用户端\n工作台导航 · 订阅与服务\n\n手机工作台 · 只读查看，审核与设置请使用电脑\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格与服务项目由这里统一维护；新条款不追溯改变旧订单。\n\n套餐价格\n服务项目\n申请与报价\n用户权益\n跟踪任务\n操作记录\n运行设置\n检查已发布主题机会\n检查已发布的网站机会\n网站线索与来源接入"
+    },
+    {
+      "name": "route /manage/services/jobs",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n订阅与服务\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格"
+    },
+    {
+      "name": "route /manage/services/audit",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n返回用户端\n工作台导航 · 订阅与服务\n\n手机工作台 · 只读查看，审核与设置请使用电脑\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格与服务项目由这里统一维护；新条款不追溯改变旧订单。\n\n套餐价格\n服务项目\n申请与报价\n用户权益\n跟踪任务\n操作记录\n运行设置\nACCEPT_CUSTOM_QUOTE\n2026/09/21"
+    },
+    {
+      "name": "route /manage/services/audit",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n订阅与服务\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n服务管理\n\n套餐价格"
+    },
+    {
+      "name": "route /manage/services/runtime",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n返回用户端\n工作台导航 · 订阅与服务\n\n手机工作台 · 只读查看，审核与设置请使用电脑\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n持续服务运行设置\n\n复用原系统工作进程；未启用时不会自动安排网站调查。\n\n套餐价格\n服务项目\n申请与报价\n用户权益\n跟踪任务\n操作记录\n运行设置\n周期检查已启用\n仅已发布目录\n\n最近一轮：2026/09/2"
+    },
+    {
+      "name": "route /manage/services/runtime",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n订阅与服务\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n持续服务运行设置\n\n"
+    },
+    {
+      "name": "route /review/sources",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n返回用户端\n工作台导航 · 网站线索审核\n\n手机工作台 · 只读查看，审核与设置请使用电脑\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n网站线索审核\n\n整体判断是否值得接入，不将线索审核等同于机会事实审核。\n\n原机会审核 ↗\n\n按最新提交展示，最多200条。请勿在发给用户的回复或公开采集说明中包含个人隐私。\n\n海湾科研栏目\n线索通过\n\nh"
+    },
+    {
+      "name": "route /review/sources",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n网站线索审核\n收藏与行动\n返回用户端\n\nDEEPAHA / OPPORTUNITY SERVICE\n\n网站线索审核\n\n整"
+    },
+    {
+      "name": "route /manage/sharing",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n返回用户端\n工作台导航 · 网站分享\n\n手机工作台 · 只读查看，审核与设置请使用电脑\n\n网站分享\n\n统一公开链接的封面、标题与描述。\n\n打开实际分享页 ↗\n分享样式\n网站HTTPS域名\n分享标题\n分享描述\n横版封面 · 1200 × 630\nPNG / JPEG / WEBP，最多5MB\n微信缩略图 · 600 × 600\n自动裁切；不要上传个人资料图片\n"
+    },
+    {
+      "name": "route /manage/sharing",
+      "passed": true,
+      "detail": "跳到主要内容\nDeepAha\n机会星图\n内容审核\n审核收件箱\n收录管理\n网站线索审核\n系统管理\n运行与连接\n来源管理\n来源资产\n任务管理\n订阅与服务\n网站分享\n执行策略\n机会实验室\n反馈样本\n操作记录\n账号管理\n邀请码\n用户管理\n账号记录\nO\nowner\n维护员\nDeepAha\n网站分享\n收藏与行动\n返回用户端\n网站分享\n\n统一公开链接的封面、标题与描述。\n\n打开实际分享页 ↗\n分享样式\n网站HT"
+    },
+    {
+      "name": "no javascript page errors",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "name": "no server errors",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "screenshots": [
+    "services-320.png",
+    "services-390.png",
+    "services-768.png",
+    "services-1440.png",
+    "subscription-pending-390.png",
+    "tracking-390.png",
+    "source-submission-390.png",
+    "source-review-1440.png",
+    "service-items-1440.png",
+    "unified-messages-390.png",
+    "account-390.png",
+    "quoted-orders-1440.png",
+    "management-readonly-390.png",
+    "sharing-settings-1440.png",
+    "sharing-settings-390.png",
+    "sharing-settings-768.png",
+    "privacy-320.png",
+    "privacy-390.png",
+    "privacy-1440.png",
+    "subscription-320.png",
+    "subscription-390.png",
+    "subscription-1440.png",
+    "tracking-320.png",
+    "tracking-390.png",
+    "tracking-1440.png",
+    "sources-320.png",
+    "sources-390.png",
+    "sources-1440.png"
+  ],
+  "views": [
+    {
+      "name": "services",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "name": "services",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "services",
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "name": "services",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "name": "subscription-pending",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "tracking",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "source-submission",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "source-review",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "name": "service-items",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "name": "unified-messages",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "account",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "quoted-orders",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "name": "management-readonly",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "sharing-settings",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "name": "sharing-settings",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "sharing-settings",
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "name": "privacy",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "name": "privacy",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "privacy",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "name": "subscription",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "name": "subscription",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "subscription",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "name": "tracking",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "name": "tracking",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "tracking",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "name": "sources",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "name": "sources",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "name": "sources",
+      "width": 1440,
+      "scroll": 1440
+    }
+  ],
+  "errors": [],
+  "http_requests": [
+    {
+      "path": "/api/site",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/me",
+      "status": 401,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/plans/basic/status",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/manage/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/plans/deep/status",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/manage/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/plans/custom/status",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/manage/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/orders",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/me",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/orders",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/runtime-status",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/orders",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/orders/f4568c765de14cfbbc6bf7992ec1c0db/confirm",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/manage/orders",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/me",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/watches",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/jobs",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/runtime-status",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/watches/topics",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/me",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/watches",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/jobs",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/runtime-status",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/submissions",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/submissions",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/submissions",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/review/leads",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/review/leads/b55303a05b1a411892c4ddc8bd9fb7ea/decision",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/review/leads",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/review/leads",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/leads/b55303a05b1a411892c4ddc8bd9fb7ea/adopt",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/review/leads",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/leads/b55303a05b1a411892c4ddc8bd9fb7ea/enable",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/review/leads",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/services",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/runtime",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/runtime",
+      "status": 200,
+      "method": "PUT"
+    },
+    {
+      "path": "/api/membership/manage/runtime",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/runtime/check",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/manage/runtime",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/notification-list?unread=false&offset=0&limit=30",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/profile",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/orders",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/orders",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/orders/b4162bac5f3f484eab9eb79338542b0e/quote",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/manage/orders",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/me",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/orders",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/runtime-status",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/orders/b4162bac5f3f484eab9eb79338542b0e/accept",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/membership/me",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/orders",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/runtime-status",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/manage/sharing",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/manage/sharing",
+      "status": 200,
+      "method": "PUT"
+    },
+    {
+      "path": "/api/manage/sharing/cover?kind=wide",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/manage/sharing",
+      "status": 200,
+      "method": "PUT"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/me",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/orders",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/runtime-status",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/me",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/orders",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/runtime-status",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/me",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/orders",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/runtime-status",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/me",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/watches",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/jobs",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/runtime-status",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/me",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/watches",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/jobs",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/runtime-status",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/me",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/watches",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/jobs",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/runtime-status",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/submissions",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/submissions",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/submissions",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/api/catalog?q=&kind=&region=&offset=0&limit=20",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/me/summary",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/plans",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/services",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/services",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/grants",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/grants",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/watches",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/jobs",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/watches",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/jobs",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/audit",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/audit",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/runtime",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/manage/runtime",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/review/leads",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/membership/review/leads",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/manage/sharing",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/api/manage/sharing",
+      "status": 200,
+      "method": "GET"
+    }
+  ]
+}

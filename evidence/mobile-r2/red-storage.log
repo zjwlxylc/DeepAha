@@ -1,0 +1,43 @@
+F.F                                                                      [100%]
+=================================== FAILURES ===================================
+_______ test_local_shared_object_waits_then_saves_without_partial_bytes ________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-41/test_local_shared_object_waits0')
+
+    def test_local_shared_object_waits_then_saves_without_partial_bytes(tmp_path):
+        store=ArchiveStore(tmp_path/'objects');content=b'same fixture attachment';fd=_held(store,content)
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            future=pool.submit(store.save,{'attachment.txt':content})
+            try:
+                time.sleep(.12)
+>               assert not future.done(), 'A short local write lock must not fail the investigation'
+E               AssertionError: A short local write lock must not fail the investigation
+E               assert not True
+E                +  where True = done()
+E                +    where done = <Future at 0x7fd4bea327b0 state=finished raised ObjectIntegrityError>.done
+
+backend/tests/product/test_mobile_r2_storage.py:22: AssertionError
+_______________ test_local_lock_wait_is_bounded_and_retains_lock _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-41/test_local_lock_wait_is_bounde0')
+
+    def test_local_lock_wait_is_bounded_and_retains_lock(tmp_path):
+        store=ArchiveStore(tmp_path/'objects');content=b'held permanently';fd=_held(store,content);started=time.monotonic()
+        try:
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                future=pool.submit(store.save,{'attachment.txt':content})
+                with pytest.raises(ObjectIntegrityError,match='already in progress'):future.result(timeout=5)
+>           assert 1.9 <= time.monotonic()-started < 4.5
+E           assert 1.9 <= (1965.496637079 - 1965.496114273)
+E            +  where 1965.496637079 = <built-in function monotonic>()
+E            +    where <built-in function monotonic> = time.monotonic
+
+backend/tests/product/test_mobile_r2_storage.py:44: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_mobile_r2_storage.py::test_local_shared_object_waits_then_saves_without_partial_bytes - AssertionError: A short local write lock must not fail the investigation
+assert not True
+ +  where True = done()
+ +    where done = <Future at 0x7fd4bea327b0 state=finished raised ObjectIntegrityError>.done
+FAILED backend/tests/product/test_mobile_r2_storage.py::test_local_lock_wait_is_bounded_and_retains_lock - assert 1.9 <= (1965.496637079 - 1965.496114273)
+ +  where 1965.496637079 = <built-in function monotonic>()
+ +    where <built-in function monotonic> = time.monotonic

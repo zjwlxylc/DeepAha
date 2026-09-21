@@ -16,4 +16,6 @@ tar -C "$DATA_DIR" -xzf "$BACKUP_DIR/objects.tar.gz"
 chown -R deepaha:deepaha "$DATA_DIR/objects" 2>/dev/null || true
 # Restored sessions were valid at backup time; revoke them before any service starts.
 python3.13 "$ROOT/ops/sg8a/envtool.py" run "$ENV_FILE" psql -v ON_ERROR_STOP=1 -qc "update product_sessions set revoked=true; delete from product_meta where key='worker_heartbeat';"
-echo 'RESTORE_TO_EMPTY=PASS; WMA credentials must be injected separately.'
+# R3 runtime intent survives the data restore, but must be explicitly re-enabled.
+python3.13 "$ROOT/ops/sg8a/envtool.py" run "$ENV_FILE" psql -v ON_ERROR_STOP=1 -qc "update product_meta set value=((value::jsonb) || jsonb_build_object('enabled',false,'allow_site_enqueue',false,'lease_until',null,'next_due',null,'version',coalesce((value::jsonb->>'version')::int,0)+1,'last_result',jsonb_build_object('state','PAUSED_AFTER_RESTORE')))::text where key='services_runtime_v1';"
+echo 'RESTORE_TO_EMPTY=PASS; service scheduling paused; WMA/WeChat credentials must be injected separately.' 

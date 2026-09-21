@@ -1,0 +1,22 @@
+{
+  "release": "3.8.0-rc1",
+  "base_release": "3.7.2-rc1",
+  "main_entry": "backend/src/deepaha/main.py",
+  "read_first": "docs/experience/README.md",
+  "sg8_a_start": "docs/sg8_a/00_START_HERE.md",
+  "sg8_a_data_migration": "docs/sg8_a/02_DATA_MIGRATION.md",
+  "sg8_a_server_deployment": "docs/sg8_a/03_SERVER_DEPLOYMENT.md",
+  "sg8_a_release_rollback": "docs/sg8_a/04_RELEASE_ROLLBACK.md",
+  "sg8_a_validation": "docs/sg8_a/05_VALIDATION.md",
+  "codex_deploy_task": "docs/sg8_a/06_CODEX_DEPLOY_TASK.md",
+  "release_status": "DELIVERY_STATUS.json",
+  "compatibility": "RELEASE_COMPATIBILITY.json",
+  "checksums": "FILE_MANIFEST.sha256",
+  "contains_user_database": false,
+  "contains_user_objects": false,
+  "contains_credentials": false,
+  "expected_first_server_action": "NONE: no deployment authorized; see docs/experience/RELEASE_AND_ROLLBACK.md",
+  "codex_deploy_task_top_level": "DeepAha_SG8_A_Codex部署任务.md",
+  "extension": "experience-84353c7-20260920",
+  "base_commit": "84353c7e5286e276d24af8e0342d4d3441c30ec5"
+}

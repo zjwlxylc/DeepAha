@@ -140,17 +140,34 @@ class PersonalMixin:
             self._set_action_row(s,a,target,status,note,'STATUS')
             return {'id':target.public_id,'status':status,'note':note}
 
-    def remove_action(self,public_id,*,actor):
+    def action_state(self,public_id,*,actor):
+        with self.db.tx(False) as s:
+            a=self._account(s,actor)
+            row=s.scalar(select(TargetAction).where(TargetAction.account_id==a.id,TargetAction.target_public_id==public_id))
+            return {'id':public_id,'saved':row is not None,'status':row.status if row else None,'note':row.note if row else ''}
+
+    def save_opportunity(self,public_id,*,actor):
+        # The transaction serializes concurrent saves on both supported databases.
+        # Never change a pre-existing preparation/application status or note.
         with self.db.tx() as s:
             a=self._account(s,actor);target=self._target_row(s,public_id)
             row=s.scalar(select(TargetAction).where(TargetAction.account_id==a.id,TargetAction.target_public_id==public_id))
+            created=row is None
+            if created:row=self._set_action_row(s,a,target,'SAVED','','STATUS')
+            return {'id':public_id,'saved':True,'created':created,'status':row.status,'note':row.note}
+
+    def remove_action(self,public_id,*,actor):
+        with self.db.tx() as s:
+            a=self._account(s,actor)
+            target=s.scalar(select(CatalogTarget).where(CatalogTarget.public_id==public_id).order_by(CatalogTarget.created_at.desc(),CatalogTarget.id.desc()))
+            row=s.scalar(select(TargetAction).where(TargetAction.account_id==a.id,TargetAction.target_public_id==public_id))
             if row:
-                self._record_action_event(s,a.id,target,row.status,'DISMISSED',row.note,'REMOVE')
+                if target:self._record_action_event(s,a.id,target,row.status,'DISMISSED',row.note,'REMOVE')
                 s.delete(row)
             for n in s.scalars(select(TargetNotice).where(TargetNotice.account_id==a.id,TargetNotice.target_public_id==public_id,TargetNotice.kind=='DEADLINE')):n.state='CANCELLED'
         return {'removed':True}
 
-    def my_actions(self,*,actor,offset=0,limit=50,_envelope=False,status=''):
+    def my_actions(self,*,actor,offset=0,limit=50,_envelope=False,status='',_all=False):
         with self.db.tx(False) as s:
             a=self._account(s,actor);result=[]
             target_actions=list(s.scalars(select(TargetAction).where(TargetAction.account_id==a.id).order_by(TargetAction.updated_at.desc(),TargetAction.id)))
@@ -159,7 +176,8 @@ class PersonalMixin:
                 if target:
                     opp=s.get(Opportunity,target.opportunity_id);c=self._target(target,opp)
                 else:
-                    c={'id':ac.target_public_id,'title':'已撤回的具体机会','status':'WITHDRAWN','deadline':None,'type':'YOUTH_DEVELOPMENT_PROGRAM','notes':['该具体机会已撤回。']}
+                    last=s.scalar(select(CatalogTarget).where(CatalogTarget.public_id==ac.target_public_id).order_by(CatalogTarget.created_at.desc(),CatalogTarget.id.desc()))
+                    c={'id':ac.target_public_id,'title':(last.content or {}).get('title','已撤回的具体机会') if last else '已撤回的具体机会','status':'WITHDRAWN','deadline':None,'type':'YOUTH_DEVELOPMENT_PROGRAM','notes':['该具体机会已撤回。']}
                 result.append({'opportunity':c,'status':ac.status,'note':ac.note,'updated_at':ac.updated_at.isoformat(),'legacy_scope':False})
             # Preserve old rc2 root-level actions. Never guess a child target for a multi-unit root.
             for ac,o in s.execute(select(Action,Opportunity).join(Opportunity,Action.opportunity_id==Opportunity.opportunity_id).where(Action.account_id==a.id).order_by(Action.updated_at.desc(),Action.id)):
@@ -168,6 +186,7 @@ class PersonalMixin:
                 c['notes']=list(dict.fromkeys(c.get('notes',[])+['这是旧版公告级行动记录，未自动映射到任何具体岗位或赛道。']))
                 result.append({'opportunity':c,'status':ac.status,'note':ac.note,'updated_at':ac.updated_at.isoformat(),'legacy_scope':True})
             result.sort(key=lambda x:x['updated_at'],reverse=True)
+            if _all:return result
             if _envelope:
                 from collections import Counter
                 counts=dict(Counter(x['status'] for x in result))
@@ -319,6 +338,8 @@ class PersonalMixin:
             for n in s.scalars(select(Notice).where(Notice.account_id==a.id,Notice.state!='CANCELLED',Notice.due_at<=now())):
                 o=s.get(Opportunity,n.opportunity_id) if n.opportunity_id else None
                 out.append({'id':n.id,'title':n.title,'body':n.body,'kind':n.kind,'state':n.state,'opportunity_id':o.public_id if o else None,'created_at':n.created_at.isoformat()})
+            from .membership import notice_rows
+            out.extend(notice_rows(s.connection(),actor))
             unread_count=sum(x['state']!='READ' for x in out)
             if unread:out=[x for x in out if x['state']!='READ']
             out.sort(key=lambda x:(x['created_at'],x['id']),reverse=True)
@@ -328,6 +349,10 @@ class PersonalMixin:
     def mark_read(self,id,*,actor):
         with self.db.tx() as s:
             a=self._account(s,actor)
+            if id.startswith('mbr:'):
+                from .membership import mark_notice
+                mark_notice(s.connection(),actor,id)
+                return {'read':True}
             n=s.get(TargetNotice,id)
             if n is None:n=s.get(Notice,id)
             if not n or n.account_id!=a.id:raise Problem('通知不存在',404)
@@ -395,7 +420,9 @@ class PersonalMixin:
             lab={'status':enrollment.status if enrollment else 'NOT_JOINED','cohort':enrollment.cohort if enrollment else None,
                  'consent_version':enrollment.consent_version if enrollment else None,'joined_at':enrollment.joined_at.isoformat() if enrollment else None,
                  'withdrawn_at':enrollment.withdrawn_at.isoformat() if enrollment and enrollment.withdrawn_at else None,'exposures':exposures}
-        return {'profile':self.get_profile(actor=actor),'preparation_items':self.preparation_items(actor=actor)['items'],'actions':actions,'action_history':histories,'feedback':feed,'opportunity_lab':lab}
+        from .membership import export as export_membership
+        with self.db.tx(False) as s:member_data=export_membership(s.connection(),actor)
+        return {'membership':member_data,'profile':self.get_profile(actor=actor),'preparation_items':self.preparation_items(actor=actor)['items'],'actions':actions,'action_history':histories,'feedback':feed,'opportunity_lab':lab}
 
     def erase_personal(self,*,actor):
         with self.db.tx() as s:
@@ -408,6 +435,8 @@ class PersonalMixin:
                 for row in s.scalars(select(cls).where(cls.account_id==a.id)):s.delete(row)
             enrollment=s.get(LabEnrollment,a.id)
             if enrollment:s.delete(enrollment)
+            from .membership import erase
+            erase(s,actor)
             self._bump_profile_version(s,a.id)
             self._audit(s,actor,'ERASE_PERSONAL',a.id,'已删除画像、行动时间线、反馈、派生评估候选、SG7共创记录和个人通知')
         return {'erased':True}

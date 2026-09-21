@@ -1,0 +1,1 @@
+这些S1测试在R3验证时通过PYTHONPATH加载主工程backend/src的当前业务模块。src目录只是历史静态UI与合成装配工具的测试输入，不是R3运行入口。真实宿主与新UI另外由backend/tests/product/test_*r3.py和scripts/services_r3/browser_check.py验证。

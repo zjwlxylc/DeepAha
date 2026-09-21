@@ -1,0 +1,17 @@
+Looking in indexes: http://mirrors.tencentyun.com/pypi/simple
+Collecting Pillow==12.3.0
+  Downloading http://mirrors.tencentyun.com/pypi/packages/f7/62/de5bdd77d935331f4f802edc11e4d82950f642caad6cb2f949837b8560e2/pillow-12.3.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 54.3 MB/s eta 0:00:00
+Requirement already satisfied: pypdf==6.19.0 in /opt/deepaha/product-runtimes/mobile-r3-v1/lib/python3.13/site-packages (6.19.0)
+Installing collected packages: Pillow
+Successfully installed Pillow-12.3.0
+
+[notice] A new release of pip is available: 24.3.1 -> 26.2.1
+[notice] To update, run: /opt/deepaha/product-runtimes/mobile-r3-v1/bin/python -m pip install --upgrade pip
+........                                                                 [100%]
+=============================== warnings summary ===============================
+../../opt/deepaha/product-runtimes/mobile-r3-v1/lib/python3.13/site-packages/starlette/testclient.py:45
+  /opt/deepaha/product-runtimes/mobile-r3-v1/lib/python3.13/site-packages/starlette/testclient.py:45: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html

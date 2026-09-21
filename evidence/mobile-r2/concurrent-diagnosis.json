@@ -1,0 +1,29 @@
+{
+  "errors": [
+    {
+      "exception": "ObjectIntegrityError",
+      "message": "object write is already in progress",
+      "cause": "[Errno 11] Resource temporarily unavailable",
+      "errno": 11,
+      "trace": "Traceback (most recent call last):\n  File \"/mnt/data/iteration2/DeepAha_Experience/backend/src/deepaha/artifacts/local_file.py\", line 217, in _acquire_lock\n    fcntl.flock(\n    ~~~~~~~~~~~^\n        descriptor,\n        ^^^^^^^^^^^\n        fcntl.LOCK_EX | fcntl.LOCK_NB,\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\nBlockingIOError: [Errno 11] Resource temporarily unavailable\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/mnt/data/iteration2/diagnose_concurrent.py\", line 18, in record\n    try:return original(files)\n               ~~~~~~~~^^^^^^^\n  File \"/mnt/data/iteration2/DeepAha_Experience/backend/src/deepaha/product/storage.py\", line 57, in save\n    self.backend.put_bytes_if_absent(key=key,content=b,media_type='application/octet-stream',sha256=h)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/data/iteration2/DeepAha_Experience/backend/src/deepaha/artifacts/local_file.py\", line 45, in put_bytes_if_absent\n    lock_descriptor = self._acquire_lock(lock_path)\n  File \"/mnt/data/iteration2/DeepAha_Experience/backend/src/deepaha/artifacts/local_file.py\", line 225, in _acquire_lock\n    raise ObjectIntegrityError(\"object write is already in progress\") from error\ndeepaha.artifacts.object_store.ObjectIntegrityError: object write is already in progress\n"
+    }
+  ],
+  "results": [
+    {
+      "state": "READY",
+      "task_id": "01a0bf83-c5c1-797b-938c-92a42a7c18fa",
+      "revision_id": "01a0bf83-c635-7f42-8a5c-d73bb3f0e656"
+    },
+    {
+      "state": "NEEDS_RECOVERY",
+      "task_id": "01a0bf83-c5c5-7c9b-a7db-98b11f1cec10",
+      "code": "WMA_OPERATION_FAILED"
+    },
+    {
+      "state": "IDLE"
+    },
+    {
+      "state": "IDLE"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "errors": [],
+  "results": [
+    {
+      "state": "READY",
+      "task_id": "01a0bf84-a527-72bf-8dbe-422e8916ba5f",
+      "revision_id": "01a0bf84-a5e5-751a-850e-03263aad1e62"
+    },
+    {
+      "state": "READY",
+      "task_id": "01a0bf84-a52e-7e72-8116-7bb310487708",
+      "revision_id": "01a0bf84-a5e5-751a-850e-03263aad1e62"
+    },
+    {
+      "state": "IDLE"
+    },
+    {
+      "state": "IDLE"
+    }
+  ]
+}

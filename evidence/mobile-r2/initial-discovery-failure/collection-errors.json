@@ -1,0 +1,992 @@
+[
+  {
+    "name": ".src.deepaha.api.local_human_test",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/src/deepaha/api/local_human_test.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/src/deepaha/api/local_human_test.py:13: in <module>\n    from deepaha.acquisition.recipes import load_recipe_manifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.acquisition.test_contracts",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/acquisition/test_contracts.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/acquisition/test_contracts.py:8: in <module>\n    from deepaha.acquisition.contracts import (\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.acquisition.test_discovery",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/acquisition/test_discovery.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/acquisition/test_discovery.py:5: in <module>\n    from deepaha.acquisition.contracts import SourceRecipe, SourceRecipeManifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.acquisition.test_health",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/acquisition/test_health.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/acquisition/test_health.py:5: in <module>\n    from deepaha.acquisition.contracts import (\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.acquisition.test_official_evidence",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/acquisition/test_official_evidence.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/acquisition/test_official_evidence.py:7: in <module>\n    from deepaha.acquisition import OfficialEvidenceTask as PublicOfficialEvidenceTask\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.acquisition.test_orchestrator",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/acquisition/test_orchestrator.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/acquisition/test_orchestrator.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.acquisition.test_recipes",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/acquisition/test_recipes.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/acquisition/test_recipes.py:8: in <module>\n    from deepaha.acquisition.contracts import SourceRecipeManifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.acquisition.test_replay",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/acquisition/test_replay.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/acquisition/test_replay.py:10: in <module>\n    from deepaha.acquisition.contracts import (\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.acquisition.test_validation",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/acquisition/test_validation.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/acquisition/test_validation.py:8: in <module>\n    from deepaha.acquisition.contracts import (\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_cross_level_preview",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_cross_level_preview.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_cross_level_preview.py:4: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_feedback",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_feedback.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_feedback.py:8: in <module>\n    from deepaha.api.feedback import get_feedback_service\nbackend/src/deepaha/api/feedback.py:7: in <module>\n    from deepaha.api.personal import (\nbackend/src/deepaha/api/personal.py:20: in <module>\n    from deepaha.eligibility.service import EligibilityService\nbackend/src/deepaha/eligibility/__init__.py:9: in <module>\n    from deepaha.eligibility.service import (\nbackend/src/deepaha/eligibility/service.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_group_applicability",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_group_applicability.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_group_applicability.py:3: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_group_facts",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_group_facts.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_group_facts.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_group_inheritance",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_group_inheritance.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_group_inheritance.py:3: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_group_inheritance_contract",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_group_inheritance_contract.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_group_inheritance_contract.py:10: in <module>\n    from deepaha.investigations.group_inheritance_contracts import GroupInheritancePreview\nbackend/src/deepaha/investigations/group_inheritance_contracts.py:10: in <module>\n    from deepaha.investigations.group_applicability_decision_contracts import (\nbackend/src/deepaha/investigations/group_applicability_decision_contracts.py:14: in <module>\n    from deepaha.investigations.group_applicability_decisions import DecideGroupApplicability\nbackend/src/deepaha/investigations/group_applicability_decisions.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_group_rule_preview",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_group_rule_preview.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_group_rule_preview.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_group_rule_review",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_group_rule_review.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_group_rule_review.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_investigation_announcement_snapshots",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_investigation_announcement_snapshots.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_investigation_announcement_snapshots.py:3: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_investigation_dispatch",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_investigation_dispatch.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_investigation_dispatch.py:4: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_investigation_document_exclusions",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_investigation_document_exclusions.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_investigation_document_exclusions.py:13: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_investigation_group_sources",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_investigation_group_sources.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_investigation_group_sources.py:3: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_investigation_rule_applicability",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_investigation_rule_applicability.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_investigation_rule_applicability.py:3: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_investigation_runtime",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_investigation_runtime.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_investigation_runtime.py:10: in <module>\n    from deepaha.api import investigation_runtime as runtime_api\nbackend/src/deepaha/api/investigation_runtime.py:7: in <module>\n    from deepaha.api.investigations import PrincipalDep, StoreDep, list_sources, problem\nbackend/src/deepaha/api/investigations.py:11: in <module>\n    from deepaha.api.local_human_test import (\nbackend/src/deepaha/api/local_human_test.py:13: in <module>\n    from deepaha.acquisition.recipes import load_recipe_manifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_investigation_unit_plans",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_investigation_unit_plans.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_investigation_unit_plans.py:4: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_investigations",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_investigations.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_investigations.py:4: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_local_human_test",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_local_human_test.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_local_human_test.py:10: in <module>\n    from deepaha.acquisition.contracts import SourceUsageRole\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_local_human_test_security",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_local_human_test_security.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_local_human_test_security.py:11: in <module>\n    from deepaha.api.local_human_test import (\nbackend/src/deepaha/api/local_human_test.py:13: in <module>\n    from deepaha.acquisition.recipes import load_recipe_manifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_personal",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_personal.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_personal.py:8: in <module>\n    from deepaha.api.personal import (\nbackend/src/deepaha/api/personal.py:20: in <module>\n    from deepaha.eligibility.service import EligibilityService\nbackend/src/deepaha/eligibility/__init__.py:9: in <module>\n    from deepaha.eligibility.service import (\nbackend/src/deepaha/eligibility/service.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_public_opportunities",
+    "message": "collection failure",
+    "detail": "backend/tests/api/test_public_opportunities.py:10: in <module>\n    from deepaha.api.public_opportunities import get_public_catalog_service\nbackend/src/deepaha/api/public_opportunities.py:16: in <module>\n    from deepaha.public_catalog.service import PublicCatalogService\nbackend/src/deepaha/public_catalog/service.py:19: in <module>\n    from deepaha.opportunities.models import Opportunity, OpportunityEvent, OpportunityVersion\nbackend/src/deepaha/opportunities/__init__.py:2: in <module>\n    from deepaha.opportunities.resolver import resolve_document\nbackend/src/deepaha/opportunities/resolver.py:4: in <module>\n    from deepaha.opportunities.identity import (\nbackend/src/deepaha/opportunities/identity.py:13: in <module>\n    from deepaha.opportunities.types import UNSET, OpportunityPatch\nbackend/src/deepaha/opportunities/types.py:92: in <module>\n    class ResolutionIndex:\nbackend/src/deepaha/opportunities/types.py:119: in ResolutionIndex\n    def empty(cls) -> ResolutionIndex:\n                      ^^^^^^^^^^^^^^^\nE   NameError: name 'ResolutionIndex' is not defined"
+  },
+  {
+    "name": ".tests.api.test_relation_review_api",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_relation_review_api.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_relation_review_api.py:3: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_reminders",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_reminders.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_reminders.py:8: in <module>\n    from deepaha.api.personal import require_principal\nbackend/src/deepaha/api/personal.py:20: in <module>\n    from deepaha.eligibility.service import EligibilityService\nbackend/src/deepaha/eligibility/__init__.py:9: in <module>\n    from deepaha.eligibility.service import (\nbackend/src/deepaha/eligibility/service.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.api.test_review",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/api/test_review.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/api/test_review.py:8: in <module>\n    from deepaha.api.review import get_review_service, require_reviewer_principal\nbackend/src/deepaha/api/review.py:9: in <module>\n    from deepaha.api.personal import PRIVATE_CACHE_CONTROL\nbackend/src/deepaha/api/personal.py:20: in <module>\n    from deepaha.eligibility.service import EligibilityService\nbackend/src/deepaha/eligibility/__init__.py:9: in <module>\n    from deepaha.eligibility.service import (\nbackend/src/deepaha/eligibility/service.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.documents.test_opaque_parser",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/documents/test_opaque_parser.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/documents/test_opaque_parser.py:16: in <module>\n    from deepaha.investigations.documents import document_parsers\nbackend/src/deepaha/investigations/documents.py:17: in <module>\n    from deepaha.documents.service import DocumentService, ParseDocumentCommand\nbackend/src/deepaha/documents/service.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.documents.test_spreadsheet_limits",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/documents/test_spreadsheet_limits.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/documents/test_spreadsheet_limits.py:11: in <module>\n    from deepaha.investigations.delivery import (\nbackend/src/deepaha/investigations/delivery.py:20: in <module>\n    from deepaha.evidence_verification.adapters.defaults import default_registry\nbackend/src/deepaha/evidence_verification/adapters/defaults.py:3: in <module>\n    from deepaha.evidence_verification.adapters.html import HtmlAdapter\nbackend/src/deepaha/evidence_verification/adapters/html.py:4: in <module>\n    from cssselect import SelectorError\nE   ModuleNotFoundError: No module named 'cssselect'"
+  },
+  {
+    "name": ".tests.evidence_verification.test_document_reader",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/evidence_verification/test_document_reader.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/evidence_verification/test_document_reader.py:13: in <module>\n    from deepaha.evidence_verification.adapters.defaults import default_registry\nbackend/src/deepaha/evidence_verification/adapters/defaults.py:3: in <module>\n    from deepaha.evidence_verification.adapters.html import HtmlAdapter\nbackend/src/deepaha/evidence_verification/adapters/html.py:4: in <module>\n    from cssselect import SelectorError\nE   ModuleNotFoundError: No module named 'cssselect'"
+  },
+  {
+    "name": ".tests.evidence_verification.test_file_adapters",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/evidence_verification/test_file_adapters.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/evidence_verification/test_file_adapters.py:17: in <module>\n    from deepaha.evidence_verification.adapters.defaults import default_registry\nbackend/src/deepaha/evidence_verification/adapters/defaults.py:3: in <module>\n    from deepaha.evidence_verification.adapters.html import HtmlAdapter\nbackend/src/deepaha/evidence_verification/adapters/html.py:4: in <module>\n    from cssselect import SelectorError\nE   ModuleNotFoundError: No module named 'cssselect'"
+  },
+  {
+    "name": ".tests.evidence_verification.test_html_adapter",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/evidence_verification/test_html_adapter.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/evidence_verification/test_html_adapter.py:5: in <module>\n    from deepaha.evidence_verification.adapters.html import HtmlAdapter\nbackend/src/deepaha/evidence_verification/adapters/html.py:4: in <module>\n    from cssselect import SelectorError\nE   ModuleNotFoundError: No module named 'cssselect'"
+  },
+  {
+    "name": ".tests.evidence_verification.test_json_notice_adapter",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/evidence_verification/test_json_notice_adapter.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/evidence_verification/test_json_notice_adapter.py:8: in <module>\n    from deepaha.evidence_verification.adapters.defaults import default_registry\nbackend/src/deepaha/evidence_verification/adapters/defaults.py:3: in <module>\n    from deepaha.evidence_verification.adapters.html import HtmlAdapter\nbackend/src/deepaha/evidence_verification/adapters/html.py:4: in <module>\n    from cssselect import SelectorError\nE   ModuleNotFoundError: No module named 'cssselect'"
+  },
+  {
+    "name": ".tests.feedback.test_phase7_fixture",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/feedback/test_phase7_fixture.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/feedback/test_phase7_fixture.py:6: in <module>\n    from tests.feedback.seed_phase7_browser import assert_phase7_browser_database_url\nbackend/tests/feedback/seed_phase7_browser.py:16: in <module>\n    from deepaha.eligibility.service import EligibilityService, MatchInput\nbackend/src/deepaha/eligibility/__init__.py:9: in <module>\n    from deepaha.eligibility.service import (\nbackend/src/deepaha/eligibility/service.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.feedback.test_service",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/feedback/test_service.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/feedback/test_service.py:8: in <module>\n    from deepaha.feedback.service import (\nbackend/src/deepaha/feedback/service.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_acquisition_document_gate",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_acquisition_document_gate.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_acquisition_document_gate.py:1: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_acquisition_evaluation_persistence",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_acquisition_evaluation_persistence.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_acquisition_evaluation_persistence.py:3: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_acquisition_evaluation_service",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_acquisition_evaluation_service.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_acquisition_evaluation_service.py:2: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_acquisition_fetchers",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_acquisition_fetchers.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_acquisition_fetchers.py:8: in <module>\n    from deepaha.acquisition.contracts import FetchRequest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_acquisition_health",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_acquisition_health.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_acquisition_health.py:7: in <module>\n    from deepaha.acquisition.health import (\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_acquisition_health_persistence",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_acquisition_health_persistence.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_acquisition_health_persistence.py:2: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_acquisition_orchestrator",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_acquisition_orchestrator.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_acquisition_orchestrator.py:8: in <module>\n    from deepaha.acquisition.contracts import SourceRecipe\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_adjudication_storage",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_adjudication_storage.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_adjudication_storage.py:9: in <module>\n    from deepaha.investigations.adjudication_storage import freeze_adjudication, thaw_adjudication\nbackend/src/deepaha/investigations/adjudication_storage.py:15: in <module>\n    from deepaha.investigations.cross_level_adjudication import AdjudicationPackage\nbackend/src/deepaha/investigations/cross_level_adjudication.py:14: in <module>\n    from deepaha.investigations.cross_level_review import CrossLevelReview\nbackend/src/deepaha/investigations/cross_level_review.py:9: in <module>\n    from deepaha.investigations.announcement_sources import _assemble as announcement_projection\nbackend/src/deepaha/investigations/announcement_sources.py:18: in <module>\n    from deepaha.investigations.applicability import _command, _describe, _history, _review_context\nbackend/src/deepaha/investigations/applicability.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_collection_service",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_collection_service.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_collection_service.py:2: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_cross_level_api",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_cross_level_api.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_cross_level_api.py:11: in <module>\n    from deepaha.api.investigations import get_investigation_store\nbackend/src/deepaha/api/investigations.py:11: in <module>\n    from deepaha.api.local_human_test import (\nbackend/src/deepaha/api/local_human_test.py:13: in <module>\n    from deepaha.acquisition.recipes import load_recipe_manifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_cross_level_preview",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_cross_level_preview.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_cross_level_preview.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_document_service",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_document_service.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_document_service.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_applicability_api",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_applicability_api.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_applicability_api.py:13: in <module>\n    from deepaha.api.investigations import get_investigation_store\nbackend/src/deepaha/api/investigations.py:11: in <module>\n    from deepaha.api.local_human_test import (\nbackend/src/deepaha/api/local_human_test.py:13: in <module>\n    from deepaha.acquisition.recipes import load_recipe_manifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_applicability_decisions",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_applicability_decisions.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_applicability_decisions.py:8: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_fact_migration",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_fact_migration.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_fact_migration.py:6: in <module>\n    from deepaha.investigations.group_facts import prepare_group_facts\nbackend/src/deepaha/investigations/group_facts.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_facts",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_facts.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_facts.py:8: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_identity",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_identity.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_identity.py:2: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_identity_migration",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_identity_migration.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_identity_migration.py:8: in <module>\n    from deepaha.p9b.identity import OpportunityUnitService, UnitSeed\nbackend/src/deepaha/p9b/identity.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_inheritance_api",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_inheritance_api.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_inheritance_api.py:9: in <module>\n    from deepaha.investigations.group_applicability import read_group_rule_applicability\nbackend/src/deepaha/investigations/group_applicability.py:10: in <module>\n    from deepaha.investigations.applicability import _blocks, _command, _material_url\nbackend/src/deepaha/investigations/applicability.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_inheritance_preview",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_inheritance_preview.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_inheritance_preview.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_rule_applicability",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_rule_applicability.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_rule_applicability.py:8: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_rule_preview",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_rule_preview.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_rule_preview.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_rule_review",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_rule_review.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_rule_review.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_rule_review_migration",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_rule_review_migration.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_rule_review_migration.py:9: in <module>\n    from deepaha.investigations.group_rule_review import prepare_group_rule_review\nbackend/src/deepaha/investigations/group_rule_review.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_source_binding",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_source_binding.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_source_binding.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_group_source_migration",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_group_source_migration.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_group_source_migration.py:6: in <module>\n    from deepaha.investigations.group_bindings import preview_group_source, register_group_source\nbackend/src/deepaha/investigations/group_bindings.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_announcement_snapshots",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_announcement_snapshots.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_announcement_snapshots.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_binding",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_binding.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_binding.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_dispatch",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_dispatch.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_dispatch.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_document_exclusions",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_document_exclusions.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_document_exclusions.py:16: in <module>\n    from deepaha.api.investigations import get_investigation_store\nbackend/src/deepaha/api/investigations.py:11: in <module>\n    from deepaha.api.local_human_test import (\nbackend/src/deepaha/api/local_human_test.py:13: in <module>\n    from deepaha.acquisition.recipes import load_recipe_manifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_documents",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_documents.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_documents.py:16: in <module>\n    from deepaha.documents.service import DocumentService, ParseDocumentCommand, ParseDocumentResult\nbackend/src/deepaha/documents/service.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_evidence_checks",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_evidence_checks.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_evidence_checks.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_facts",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_facts.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_facts.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_registration",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_registration.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_registration.py:16: in <module>\n    from deepaha.investigations.delivery import ValidatedDelivery\nbackend/src/deepaha/investigations/delivery.py:20: in <module>\n    from deepaha.evidence_verification.adapters.defaults import default_registry\nbackend/src/deepaha/evidence_verification/adapters/defaults.py:3: in <module>\n    from deepaha.evidence_verification.adapters.html import HtmlAdapter\nbackend/src/deepaha/evidence_verification/adapters/html.py:4: in <module>\n    from cssselect import SelectorError\nE   ModuleNotFoundError: No module named 'cssselect'"
+  },
+  {
+    "name": ".tests.integration.test_investigation_rule_applicability",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_rule_applicability.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_rule_applicability.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_rules",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_rules.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_rules.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_store",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_store.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_store.py:11: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_unit_api",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_unit_api.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_unit_api.py:7: in <module>\n    from deepaha.api.investigations import get_investigation_store\nbackend/src/deepaha/api/investigations.py:11: in <module>\n    from deepaha.api.local_human_test import (\nbackend/src/deepaha/api/local_human_test.py:13: in <module>\n    from deepaha.acquisition.recipes import load_recipe_manifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_unit_coverage",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_unit_coverage.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_unit_coverage.py:15: in <module>\n    from deepaha.investigations.delivery import validate_delivery\nbackend/src/deepaha/investigations/delivery.py:20: in <module>\n    from deepaha.evidence_verification.adapters.defaults import default_registry\nbackend/src/deepaha/evidence_verification/adapters/defaults.py:3: in <module>\n    from deepaha.evidence_verification.adapters.html import HtmlAdapter\nbackend/src/deepaha/evidence_verification/adapters/html.py:4: in <module>\n    from cssselect import SelectorError\nE   ModuleNotFoundError: No module named 'cssselect'"
+  },
+  {
+    "name": ".tests.integration.test_investigation_unit_replay",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_unit_replay.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_unit_replay.py:8: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_unit_snapshots",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_unit_snapshots.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_unit_snapshots.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_investigation_vertical_slice",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_investigation_vertical_slice.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_investigation_vertical_slice.py:15: in <module>\n    from deepaha.api.investigations import get_investigation_store\nbackend/src/deepaha/api/investigations.py:11: in <module>\n    from deepaha.api.local_human_test import (\nbackend/src/deepaha/api/local_human_test.py:13: in <module>\n    from deepaha.acquisition.recipes import load_recipe_manifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_local_human_test_acquisition",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_local_human_test_acquisition.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_local_human_test_acquisition.py:8: in <module>\n    from uuid import UUID, uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_local_human_test_extraction",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_local_human_test_extraction.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_local_human_test_extraction.py:8: in <module>\n    from uuid import UUID, uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_local_human_test_migration",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_local_human_test_migration.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_local_human_test_migration.py:12: in <module>\n    from deepaha.db.models import Base\nbackend/src/deepaha/db/models.py:1: in <module>\n    from deepaha.acquisition.models import (\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_local_human_test_review_publication",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_local_human_test_review_publication.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_local_human_test_review_publication.py:3: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_local_human_test_runs",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_local_human_test_runs.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_local_human_test_runs.py:7: in <module>\n    from uuid import UUID, uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_local_investigation_sources",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_local_investigation_sources.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_local_investigation_sources.py:10: in <module>\n    from deepaha.api.investigations import list_sources\nbackend/src/deepaha/api/investigations.py:11: in <module>\n    from deepaha.api.local_human_test import (\nbackend/src/deepaha/api/local_human_test.py:13: in <module>\n    from deepaha.acquisition.recipes import load_recipe_manifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_local_provider_gateway",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_local_provider_gateway.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_local_provider_gateway.py:13: in <module>\n    from deepaha.p9b.gateway import GatewayExecutor\nbackend/src/deepaha/p9b/gateway.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_migrations",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_migrations.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_migrations.py:13: in <module>\n    from deepaha.db.models import Base\nbackend/src/deepaha/db/models.py:1: in <module>\n    from deepaha.acquisition.models import (\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_opaque_binding",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_opaque_binding.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_opaque_binding.py:10: in <module>\n    from deepaha.investigations.document_exclusions import exclude_document\nbackend/src/deepaha/investigations/document_exclusions.py:27: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_opaque_document_blocks",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_opaque_document_blocks.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_opaque_document_blocks.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_opportunity_identity_service",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_opportunity_identity_service.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_opportunity_identity_service.py:3: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_opportunity_resolution_service",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_opportunity_resolution_service.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_opportunity_resolution_service.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p10b1_migration",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p10b1_migration.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p10b1_migration.py:3: in <module>\n    from uuid import UUID, uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p10b1_official_evidence",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p10b1_official_evidence.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p10b1_official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p9b_b0_persistence",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p9b_b0_persistence.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p9b_b0_persistence.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p9b_document_block_migration",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p9b_document_block_migration.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p9b_document_block_migration.py:3: in <module>\n    from uuid import uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p9b_document_blocks",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p9b_document_blocks.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p9b_document_blocks.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p9b_fact_lifecycle_migration",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p9b_fact_lifecycle_migration.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p9b_fact_lifecycle_migration.py:3: in <module>\n    from uuid import uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p9b_fact_persistence",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p9b_fact_persistence.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p9b_fact_persistence.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p9b_gateway_execution",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p9b_gateway_execution.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p9b_gateway_execution.py:13: in <module>\n    from deepaha.p9b.gateway import GatewayExecutionError, GatewayExecutor\nbackend/src/deepaha/p9b/gateway.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p9b_gateway_state",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p9b_gateway_state.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p9b_gateway_state.py:2: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p9b_gateway_value_contract",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p9b_gateway_value_contract.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p9b_gateway_value_contract.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p9b_gateway_value_migration",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p9b_gateway_value_migration.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p9b_gateway_value_migration.py:2: in <module>\n    from uuid import UUID, uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_p9b_gold_migration",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_p9b_gold_migration.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_p9b_gold_migration.py:5: in <module>\n    from uuid import UUID, uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_persistence_contract",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_persistence_contract.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_persistence_contract.py:2: in <module>\n    from uuid import UUID, uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase1_official_sample",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase1_official_sample.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase1_official_sample.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase2_official_html_sample",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase2_official_html_sample.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase2_official_html_sample.py:5: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase2_persistence_contract",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase2_persistence_contract.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase2_persistence_contract.py:2: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase3_persistence_contract",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase3_persistence_contract.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase3_persistence_contract.py:3: in <module>\n    from uuid import UUID, uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase3_resolution_replay",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase3_resolution_replay.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase3_resolution_replay.py:3: in <module>\n    from uuid import uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase4_evaluation_run",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase4_evaluation_run.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase4_evaluation_run.py:7: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase4_match_replay",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase4_match_replay.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase4_match_replay.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase4_persistence_contract",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase4_persistence_contract.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase4_persistence_contract.py:3: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase5_public_catalog_persistence",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase5_public_catalog_persistence.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase5_public_catalog_persistence.py:3: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase6_action_persistence",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase6_action_persistence.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase6_action_persistence.py:2: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase6_personal_api",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase6_personal_api.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase6_personal_api.py:9: in <module>\n    from deepaha.api.personal import get_current_time\nbackend/src/deepaha/api/personal.py:20: in <module>\n    from deepaha.eligibility.service import EligibilityService\nbackend/src/deepaha/eligibility/__init__.py:9: in <module>\n    from deepaha.eligibility.service import (\nbackend/src/deepaha/eligibility/service.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase6_personal_match_replay",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase6_personal_match_replay.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase6_personal_match_replay.py:3: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase6_profile_persistence",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase6_profile_persistence.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase6_profile_persistence.py:3: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase7_feedback_isolation",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase7_feedback_isolation.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase7_feedback_isolation.py:1: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase7_feedback_submission",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase7_feedback_submission.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase7_feedback_submission.py:17: in <module>\n    from tests.feedback.support import (\nbackend/tests/feedback/support.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase7_persistence",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase7_persistence.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase7_persistence.py:2: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase7_review_workflow",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase7_review_workflow.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase7_review_workflow.py:9: in <module>\n    from deepaha.api.review import get_review_service\nbackend/src/deepaha/api/review.py:9: in <module>\n    from deepaha.api.personal import PRIVATE_CACHE_CONTROL\nbackend/src/deepaha/api/personal.py:20: in <module>\n    from deepaha.eligibility.service import EligibilityService\nbackend/src/deepaha/eligibility/__init__.py:9: in <module>\n    from deepaha.eligibility.service import (\nbackend/src/deepaha/eligibility/service.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase7_reviewer_authorization",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase7_reviewer_authorization.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase7_reviewer_authorization.py:1: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase7_transaction_rollback",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase7_transaction_rollback.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase7_transaction_rollback.py:13: in <module>\n    from deepaha.feedback.service import FeedbackService\nbackend/src/deepaha/feedback/service.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase7_validation_gate",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase7_validation_gate.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase7_validation_gate.py:2: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase7_vertical_slice",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase7_vertical_slice.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase7_vertical_slice.py:9: in <module>\n    from deepaha.feedback.service import FeedbackService\nbackend/src/deepaha/feedback/service.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase8_candidate_transaction",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase8_candidate_transaction.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase8_candidate_transaction.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase8_inbox_isolation",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase8_inbox_isolation.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase8_inbox_isolation.py:3: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase8_persistence",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase8_persistence.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase8_persistence.py:2: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase8_preference_api",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase8_preference_api.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase8_preference_api.py:4: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase8_public_governance",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase8_public_governance.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase8_public_governance.py:3: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase8_transaction_rollback",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase8_transaction_rollback.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase8_transaction_rollback.py:14: in <module>\n    from deepaha.notifications.adapters import PostgresTestInboxAdapter\nbackend/src/deepaha/notifications/adapters.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase8_vertical_slice",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase8_vertical_slice.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase8_vertical_slice.py:11: in <module>\n    from deepaha.notifications.candidates import DeadlineReminderCandidateService\nbackend/src/deepaha/notifications/candidates.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_phase8_worker_recovery",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_phase8_worker_recovery.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_phase8_worker_recovery.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_raw_artifact_import",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_raw_artifact_import.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_raw_artifact_import.py:5: in <module>\n    from uuid import uuid4, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_reader_document_blocks",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_reader_document_blocks.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_reader_document_blocks.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_real_acquisition_replay",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_real_acquisition_replay.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_real_acquisition_replay.py:6: in <module>\n    from deepaha.acquisition.recipes import load_recipe_manifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_real_integration_cost_gate",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_real_integration_cost_gate.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_real_integration_cost_gate.py:8: in <module>\n    from deepaha.acquisition.health import get_integration_cost_gate\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_real_s02_opportunity_replay",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_real_s02_opportunity_replay.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_real_s02_opportunity_replay.py:8: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_relation_decisions",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_relation_decisions.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_relation_decisions.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_relation_proposal_index",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_relation_proposal_index.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_relation_proposal_index.py:5: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_relation_proposals",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_relation_proposals.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_relation_proposals.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_relation_queue",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_relation_queue.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_relation_queue.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_relation_review_api",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_relation_review_api.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_relation_review_api.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_s3_object_store",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_s3_object_store.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_s3_object_store.py:6: in <module>\n    from mypy_boto3_s3 import S3Client\nE   ModuleNotFoundError: No module named 'mypy_boto3_s3'"
+  },
+  {
+    "name": ".tests.integration.test_scope_preflight",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_scope_preflight.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_scope_preflight.py:7: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.integration.test_source_health",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/integration/test_source_health.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/integration/test_source_health.py:2: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_adjudication_storage",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_adjudication_storage.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_adjudication_storage.py:8: in <module>\n    from deepaha.investigations.adjudication_storage import freeze_adjudication, thaw_adjudication\nbackend/src/deepaha/investigations/adjudication_storage.py:15: in <module>\n    from deepaha.investigations.cross_level_adjudication import AdjudicationPackage\nbackend/src/deepaha/investigations/cross_level_adjudication.py:14: in <module>\n    from deepaha.investigations.cross_level_review import CrossLevelReview\nbackend/src/deepaha/investigations/cross_level_review.py:9: in <module>\n    from deepaha.investigations.announcement_sources import _assemble as announcement_projection\nbackend/src/deepaha/investigations/announcement_sources.py:18: in <module>\n    from deepaha.investigations.applicability import _command, _describe, _history, _review_context\nbackend/src/deepaha/investigations/applicability.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_cli",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_cli.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_cli.py:11: in <module>\n    from deepaha.investigations.cli import WmaEnvironment, require_live_ready, require_local_ready\nbackend/src/deepaha/investigations/cli.py:16: in <module>\n    from deepaha.investigations.runner import execute_investigation\nbackend/src/deepaha/investigations/runner.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_contracts",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_contracts.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_contracts.py:1: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_cross_level_adjudication",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_cross_level_adjudication.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_cross_level_adjudication.py:11: in <module>\n    from deepaha.investigations.announcement_sources import _assemble\nbackend/src/deepaha/investigations/announcement_sources.py:18: in <module>\n    from deepaha.investigations.applicability import _command, _describe, _history, _review_context\nbackend/src/deepaha/investigations/applicability.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_cross_level_review",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_cross_level_review.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_cross_level_review.py:8: in <module>\n    from deepaha.investigations.announcement_sources import _assemble\nbackend/src/deepaha/investigations/announcement_sources.py:18: in <module>\n    from deepaha.investigations.applicability import _command, _describe, _history, _review_context\nbackend/src/deepaha/investigations/applicability.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_dispatch",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_dispatch.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_dispatch.py:11: in <module>\n    from deepaha.investigations import dispatch\nbackend/src/deepaha/investigations/dispatch.py:12: in <module>\n    from deepaha.investigations.cli import execute_registered\nbackend/src/deepaha/investigations/cli.py:16: in <module>\n    from deepaha.investigations.runner import execute_investigation\nbackend/src/deepaha/investigations/runner.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_document_exclusions",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_document_exclusions.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_document_exclusions.py:12: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_field_mapping",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_field_mapping.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_field_mapping.py:8: in <module>\n    from deepaha.investigations.delivery import DeliveryEvidence, DeliveryFact\nbackend/src/deepaha/investigations/delivery.py:20: in <module>\n    from deepaha.evidence_verification.adapters.defaults import default_registry\nbackend/src/deepaha/evidence_verification/adapters/defaults.py:3: in <module>\n    from deepaha.evidence_verification.adapters.html import HtmlAdapter\nbackend/src/deepaha/evidence_verification/adapters/html.py:4: in <module>\n    from cssselect import SelectorError\nE   ModuleNotFoundError: No module named 'cssselect'"
+  },
+  {
+    "name": ".tests.investigations.test_group_contracts",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_group_contracts.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_group_contracts.py:2: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_group_sources",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_group_sources.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_group_sources.py:7: in <module>\n    from deepaha.investigations.group_sources import group_membership\nbackend/src/deepaha/investigations/group_sources.py:10: in <module>\n    from deepaha.investigations.bindings import _check_positions, _latest, _validated_members\nbackend/src/deepaha/investigations/bindings.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_local_wma_config",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_local_wma_config.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_local_wma_config.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_rule_review",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_rule_review.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_rule_review.py:3: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_runner",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_runner.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_runner.py:12: in <module>\n    from deepaha.investigations import runner\nbackend/src/deepaha/investigations/runner.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_runtime_readiness",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_runtime_readiness.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_runtime_readiness.py:12: in <module>\n    from deepaha.investigations import runtime\nbackend/src/deepaha/investigations/runtime.py:14: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_scope_preflight",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_scope_preflight.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_scope_preflight.py:9: in <module>\n    from deepaha.investigations.scope_preflight import project_scope_preflight\nbackend/src/deepaha/investigations/scope_preflight.py:12: in <module>\n    from deepaha.investigations.bindings import _authorize\nbackend/src/deepaha/investigations/bindings.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_store_boundaries",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_store_boundaries.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_store_boundaries.py:17: in <module>\n    from deepaha.investigations.runner import InvestigationClient, execute_investigation\nbackend/src/deepaha/investigations/runner.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.investigations.test_wma",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_wma.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_wma.py:11: in <module>\n    import httpx2\nE   ModuleNotFoundError: No module named 'httpx2'"
+  },
+  {
+    "name": ".tests.investigations.test_wma_published",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/investigations/test_wma_published.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/investigations/test_wma_published.py:12: in <module>\n    import httpx2\nE   ModuleNotFoundError: No module named 'httpx2'"
+  },
+  {
+    "name": ".tests.local_human_test.test_bootstrap",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/local_human_test/test_bootstrap.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/local_human_test/test_bootstrap.py:3: in <module>\n    from deepaha.acquisition.recipes import load_recipe_manifest\nbackend/src/deepaha/acquisition/__init__.py:3: in <module>\n    from deepaha.acquisition.official_evidence import (\nbackend/src/deepaha/acquisition/official_evidence.py:6: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.local_human_test.test_extraction",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/local_human_test/test_extraction.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/local_human_test/test_extraction.py:8: in <module>\n    from deepaha.local_human_test.extraction import (\nbackend/src/deepaha/local_human_test/extraction.py:8: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.local_human_test.test_publication",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/local_human_test/test_publication.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/local_human_test/test_publication.py:7: in <module>\n    from deepaha.local_human_test.publication import (\nbackend/src/deepaha/local_human_test/publication.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.local_human_test.test_review",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/local_human_test/test_review.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/local_human_test/test_review.py:5: in <module>\n    from deepaha.local_human_test.review import (\nbackend/src/deepaha/local_human_test/review.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.local_human_test.test_rule_compilation",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/local_human_test/test_rule_compilation.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/local_human_test/test_rule_compilation.py:6: in <module>\n    from deepaha.local_human_test.review import build_rule_payload\nbackend/src/deepaha/local_human_test/review.py:7: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.local_human_test.test_worker_runtime",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/local_human_test/test_worker_runtime.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/local_human_test/test_worker_runtime.py:14: in <module>\n    from deepaha.documents.service import DocumentService\nbackend/src/deepaha/documents/service.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.notifications.test_adapters",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/notifications/test_adapters.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/notifications/test_adapters.py:3: in <module>\n    from deepaha.notifications.adapters import (\nbackend/src/deepaha/notifications/adapters.py:4: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.notifications.test_candidates",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/notifications/test_candidates.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/notifications/test_candidates.py:6: in <module>\n    from deepaha.notifications.candidates import recognize_deadline_change\nbackend/src/deepaha/notifications/candidates.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.notifications.test_cli",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/notifications/test_cli.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/notifications/test_cli.py:5: in <module>\n    import deepaha.notifications.cli as cli\nbackend/src/deepaha/notifications/cli.py:7: in <module>\n    from deepaha.notifications.worker import (\nbackend/src/deepaha/notifications/worker.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.notifications.test_phase8_fixture",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/notifications/test_phase8_fixture.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/notifications/test_phase8_fixture.py:6: in <module>\n    import tests.notifications.seed_phase8_browser as browser_seed\nbackend/tests/notifications/seed_phase8_browser.py:10: in <module>\n    from deepaha.notifications.worker import ReminderWorker\nbackend/src/deepaha/notifications/worker.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.notifications.test_preferences",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/notifications/test_preferences.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/notifications/test_preferences.py:6: in <module>\n    from deepaha.notifications.preferences import reminder_preference_input_sha256\nbackend/src/deepaha/notifications/preferences.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.notifications.test_worker",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/notifications/test_worker.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/notifications/test_worker.py:5: in <module>\n    from deepaha.notifications.worker import ReminderWorkerRunSummary, validate_worker_limit\nbackend/src/deepaha/notifications/worker.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.opportunities.test_identity_replay",
+    "message": "collection failure",
+    "detail": "backend/tests/opportunities/test_identity_replay.py:11: in <module>\n    from deepaha.opportunities.identity import (\nbackend/src/deepaha/opportunities/__init__.py:2: in <module>\n    from deepaha.opportunities.resolver import resolve_document\nbackend/src/deepaha/opportunities/resolver.py:4: in <module>\n    from deepaha.opportunities.identity import (\nbackend/src/deepaha/opportunities/identity.py:13: in <module>\n    from deepaha.opportunities.types import UNSET, OpportunityPatch\nbackend/src/deepaha/opportunities/types.py:92: in <module>\n    class ResolutionIndex:\nbackend/src/deepaha/opportunities/types.py:119: in ResolutionIndex\n    def empty(cls) -> ResolutionIndex:\n                      ^^^^^^^^^^^^^^^\nE   NameError: name 'ResolutionIndex' is not defined"
+  },
+  {
+    "name": ".tests.opportunities.test_replay",
+    "message": "collection failure",
+    "detail": "backend/tests/opportunities/test_replay.py:13: in <module>\n    from deepaha.opportunities.versioning import (\nbackend/src/deepaha/opportunities/__init__.py:2: in <module>\n    from deepaha.opportunities.resolver import resolve_document\nbackend/src/deepaha/opportunities/resolver.py:4: in <module>\n    from deepaha.opportunities.identity import (\nbackend/src/deepaha/opportunities/identity.py:13: in <module>\n    from deepaha.opportunities.types import UNSET, OpportunityPatch\nbackend/src/deepaha/opportunities/types.py:92: in <module>\n    class ResolutionIndex:\nbackend/src/deepaha/opportunities/types.py:119: in ResolutionIndex\n    def empty(cls) -> ResolutionIndex:\n                      ^^^^^^^^^^^^^^^\nE   NameError: name 'ResolutionIndex' is not defined"
+  },
+  {
+    "name": ".tests.opportunities.test_resolver",
+    "message": "collection failure",
+    "detail": "backend/tests/opportunities/test_resolver.py:17: in <module>\n    from deepaha.opportunities.identity import (\nbackend/src/deepaha/opportunities/__init__.py:2: in <module>\n    from deepaha.opportunities.resolver import resolve_document\nbackend/src/deepaha/opportunities/resolver.py:4: in <module>\n    from deepaha.opportunities.identity import (\nbackend/src/deepaha/opportunities/identity.py:13: in <module>\n    from deepaha.opportunities.types import UNSET, OpportunityPatch\nbackend/src/deepaha/opportunities/types.py:92: in <module>\n    class ResolutionIndex:\nbackend/src/deepaha/opportunities/types.py:119: in ResolutionIndex\n    def empty(cls) -> ResolutionIndex:\n                      ^^^^^^^^^^^^^^^\nE   NameError: name 'ResolutionIndex' is not defined"
+  },
+  {
+    "name": ".tests.opportunities.test_versioning",
+    "message": "collection failure",
+    "detail": "backend/tests/opportunities/test_versioning.py:19: in <module>\n    from deepaha.opportunities.types import OpportunityPatch\nbackend/src/deepaha/opportunities/__init__.py:2: in <module>\n    from deepaha.opportunities.resolver import resolve_document\nbackend/src/deepaha/opportunities/resolver.py:4: in <module>\n    from deepaha.opportunities.identity import (\nbackend/src/deepaha/opportunities/identity.py:13: in <module>\n    from deepaha.opportunities.types import UNSET, OpportunityPatch\nbackend/src/deepaha/opportunities/types.py:92: in <module>\n    class ResolutionIndex:\nbackend/src/deepaha/opportunities/types.py:119: in ResolutionIndex\n    def empty(cls) -> ResolutionIndex:\n                      ^^^^^^^^^^^^^^^\nE   NameError: name 'ResolutionIndex' is not defined"
+  },
+  {
+    "name": ".tests.p9b.test_datasets",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/p9b/test_datasets.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/p9b/test_datasets.py:12: in <module>\n    from deepaha.p9b.datasets import (\nbackend/src/deepaha/p9b/datasets.py:3: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.p9b.test_fact_lifecycle",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/p9b/test_fact_lifecycle.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/p9b/test_fact_lifecycle.py:12: in <module>\n    from deepaha.p9b.facts import (\nbackend/src/deepaha/p9b/facts.py:3: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.p9b.test_gateway_state",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/p9b/test_gateway_state.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/p9b/test_gateway_state.py:2: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.p9b.test_gold_import",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/p9b/test_gold_import.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/p9b/test_gold_import.py:16: in <module>\n    from deepaha.p9b.gold_import import GoldImportError, validate_gold_import\nbackend/src/deepaha/p9b/gold_import.py:17: in <module>\n    from deepaha.p9b.gold import GoldRepository\nbackend/src/deepaha/p9b/gold.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.p9b.test_ledger_value_contract",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/p9b/test_ledger_value_contract.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/p9b/test_ledger_value_contract.py:5: in <module>\n    from uuid import uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.p9b.test_openai_compatible_adapter",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/p9b/test_openai_compatible_adapter.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/p9b/test_openai_compatible_adapter.py:8: in <module>\n    import httpx2\nE   ModuleNotFoundError: No module named 'httpx2'"
+  },
+  {
+    "name": ".tests.personal.test_profile",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/personal/test_profile.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/personal/test_profile.py:8: in <module>\n    from deepaha.personal.profile import profile_input_sha256\nbackend/src/deepaha/personal/profile.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.personal.test_ranking",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/personal/test_ranking.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/personal/test_ranking.py:10: in <module>\n    from deepaha.personal.matching import RankableMatch, rank_personal_matches\nbackend/src/deepaha/personal/matching.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.review.test_service",
+    "message": "collection failure",
+    "detail": "backend/tests/review/test_service.py:9: in <module>\n    from deepaha.review.schemas import (\nbackend/src/deepaha/review/schemas.py:47: in <module>\n    class ConfidenceAssessmentWrite(ReviewApiModel):\nbackend/src/deepaha/review/schemas.py:58: in ConfidenceAssessmentWrite\n    def validate_complete_evidence(self) -> ConfidenceAssessmentWrite:\n                                            ^^^^^^^^^^^^^^^^^^^^^^^^^\nE   NameError: name 'ConfidenceAssessmentWrite' is not defined"
+  },
+  {
+    "name": ".tests.sources.test_cli",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/sources/test_cli.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/sources/test_cli.py:7: in <module>\n    import deepaha.sources.cli as cli\nbackend/src/deepaha/sources/cli.py:7: in <module>\n    from deepaha.artifacts.s3 import S3ObjectStore\nbackend/src/deepaha/artifacts/s3.py:7: in <module>\n    from mypy_boto3_s3 import S3Client\nE   ModuleNotFoundError: No module named 'mypy_boto3_s3'"
+  },
+  {
+    "name": ".tests.sources.test_collector_policy",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/sources/test_collector_policy.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/sources/test_collector_policy.py:11: in <module>\n    from deepaha.sources.collector import collect_http_attempts\nbackend/src/deepaha/sources/collector.py:9: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.test_announcement_sources",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/test_announcement_sources.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/test_announcement_sources.py:8: in <module>\n    from deepaha.investigations.announcement_sources import _assemble, _record\nbackend/src/deepaha/investigations/announcement_sources.py:18: in <module>\n    from deepaha.investigations.applicability import _command, _describe, _history, _review_context\nbackend/src/deepaha/investigations/applicability.py:6: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": ".tests.test_ci_workflow",
+    "message": "collection failure",
+    "detail": "backend/tests/test_ci_workflow.py:5: in <module>\n    CI = (Path(__file__).parents[2] / \".github/workflows/ci.yml\").read_text(\"utf-8\")\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.13/pathlib/_local.py:548: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.13/pathlib/_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.13/pathlib/_local.py:539: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: '/mnt/data/iteration2/DeepAha_Experience/.github/workflows/ci.yml'"
+  },
+  {
+    "name": ".tests.validation.test_service",
+    "message": "collection failure",
+    "detail": "ImportError while importing test module '/mnt/data/iteration2/DeepAha_Experience/backend/tests/validation/test_service.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nbackend/tests/validation/test_service.py:16: in <module>\n    from deepaha.validation.service import (\nbackend/src/deepaha/validation/service.py:5: in <module>\n    from uuid import UUID, uuid7\nE   ImportError: cannot import name 'uuid7' from 'uuid' (/usr/lib/python3.13/uuid.py). Did you mean: 'uuid1'?"
+  },
+  {
+    "name": "pytest.internal",
+    "message": "internal error",
+    "detail": "Traceback (most recent call last):\n  File \"/usr/lib/python3.13/argparse.py\", line 1951, in _parse_known_args2\n    namespace, args = self._parse_known_args(args, namespace, intermixed)\n                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.13/argparse.py\", line 2248, in _parse_known_args\n    raise ArgumentError(None, _('the following arguments are required: %s') %\n               ', '.join(required_actions))\nargparse.ArgumentError: the following arguments are required: --input, --output\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/main.py\", line 318, in wrap_session\n    session.exitstatus = doit(config, session) or 0\n                         ~~~~^^^^^^^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/main.py\", line 371, in _main\n    config.hook.pytest_collection(session=session)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_callers.py\", line 167, in _multicall\n    raise exception\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n    ~~~~~~~~~~~~~~^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/logging.py\", line 788, in pytest_collection\n    return (yield)\n            ^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n    ~~~~~~~~~~~~~~^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/warnings.py\", line 98, in pytest_collection\n    return (yield)\n            ^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n    ~~~~~~~~~~~~~~^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/config/__init__.py\", line 1403, in pytest_collection\n    return (yield)\n            ^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/main.py\", line 382, in pytest_collection\n    session.perform_collect()\n    ~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/main.py\", line 857, in perform_collect\n    self.items.extend(self.genitems(node))\n    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/main.py\", line 1023, in genitems\n    yield from self.genitems(subnode)\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/main.py\", line 1023, in genitems\n    yield from self.genitems(subnode)\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/main.py\", line 1023, in genitems\n    yield from self.genitems(subnode)\n  [Previous line repeated 1 more time]\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/main.py\", line 1020, in genitems\n    rep, duplicate = self._collect_one_node(node, handle_dupes)\n                     ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/main.py\", line 883, in _collect_one_node\n    rep = collect_one_node(node)\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/runner.py\", line 576, in collect_one_node\n    rep: CollectReport = ihook.pytest_make_collect_report(collector=collector)\n                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_callers.py\", line 167, in _multicall\n    raise exception\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_callers.py\", line 139, in _multicall\n    teardown.throw(exception)\n    ~~~~~~~~~~~~~~^^^^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/capture.py\", line 880, in pytest_make_collect_report\n    rep = yield\n          ^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/pluggy/_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/runner.py\", line 400, in pytest_make_collect_report\n    call = CallInfo.from_call(\n        collect, \"collect\", reraise=(KeyboardInterrupt, SystemExit)\n    )\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/runner.py\", line 353, in from_call\n    result: TResult | None = func()\n                             ~~~~^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/runner.py\", line 398, in collect\n    return list(collector.collect())\n                ~~~~~~~~~~~~~~~~~^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/python.py\", line 563, in collect\n    self._register_setup_module_fixture()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/python.py\", line 576, in _register_setup_module_fixture\n    self.obj, (\"setUpModule\", \"setup_module\")\n    ^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/python.py\", line 289, in obj\n    self._obj = obj = self._getobj()\n                      ~~~~~~~~~~~~^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/python.py\", line 560, in _getobj\n    return importtestmodule(self.path, self.config)\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/python.py\", line 507, in importtestmodule\n    mod = import_path(\n        path,\n    ...<2 lines>...\n        consider_namespace_packages=config.getini(\"consider_namespace_packages\"),\n    )\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/pathlib.py\", line 587, in import_path\n    importlib.import_module(module_name)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/usr/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1387, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\n  File \"/opt/pyvenv/lib/python3.13/site-packages/ddtrace/internal/module.py\", line 313, in _exec_module\n    self.loader.exec_module(module)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^\n  File \"/opt/pyvenv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py\", line 197, in exec_module\n    exec(co, module.__dict__)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/data/iteration2/DeepAha_Experience/tools/source_asset_importer/scripts/test_library_dialog_dom.py\", line 17, in <module>\n    p=argparse.ArgumentParser();p.add_argument('--input',type=Path,required=True);p.add_argument('--output',type=Path,required=True);args=p.parse_args();args.output.mkdir(parents=True,exist_ok=True)\n                                                                                                                                          ~~~~~~~~~~~~^^\n  File \"/usr/lib/python3.13/argparse.py\", line 1912, in parse_args\n    args, argv = self.parse_known_args(args, namespace)\n                 ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.13/argparse.py\", line 1922, in parse_known_args\n    return self._parse_known_args2(args, namespace, intermixed=False)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.13/argparse.py\", line 1953, in _parse_known_args2\n    self.error(str(err))\n    ~~~~~~~~~~^^^^^^^^^^\n  File \"/usr/lib/python3.13/argparse.py\", line 2672, in error\n    self.exit(2, _('%(prog)s: error: %(message)s\\n') % args)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.13/argparse.py\", line 2659, in exit\n    _sys.exit(status)\n    ~~~~~~~~~^^^^^^^^\nSystemExit: 2"
+  }
+]

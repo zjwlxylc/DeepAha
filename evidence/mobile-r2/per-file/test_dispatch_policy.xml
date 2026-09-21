@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="14" time="7.991" timestamp="2026-09-20T15:46:23.899609+00:00" hostname="localhost"><testcase classname="tests.product.test_dispatch_policy" name="test_policy_is_serial_unverified_and_browser_cannot_grant" time="0.824" /><testcase classname="tests.product.test_dispatch_policy" name="test_policy_agens_and_unknown_force_serial" time="0.382" /><testcase classname="tests.product.test_dispatch_policy" name="test_two_workers_one_task_prompt_once_and_durable_claim" time="0.495" /><testcase classname="tests.product.test_dispatch_policy" name="test_interruption_never_automatically_reprompts[create]" time="0.439" /><testcase classname="tests.product.test_dispatch_policy" name="test_interruption_never_automatically_reprompts[upload]" time="0.545" /><testcase classname="tests.product.test_dispatch_policy" name="test_interruption_never_automatically_reprompts[prompt]" time="0.554" /><testcase classname="tests.product.test_dispatch_policy" name="test_interruption_never_automatically_reprompts[download]" time="0.513" /><testcase classname="tests.product.test_dispatch_policy" name="test_parallel_cap_with_simulated_trusted_grant_and_changed_binding" time="0.553"><failure message="assert 1 == 2&#10; +  where 1 = sum(&lt;generator object test_parallel_cap_with_simulated_trusted_grant_and_changed_binding.&lt;locals&gt;.&lt;genexpr&gt; at 0x7f07c7573e00&gt;)">svc = &lt;deepaha.product.service.Product object at 0x7f07d4932cf0&gt;
+
+    def test_parallel_cap_with_simulated_trusted_grant_and_changed_binding(svc):
+        assert hasattr(svc,'observe_binding')
+        from deepaha.product.models import DispatchPolicy,DispatchValidation,TaskDispatch
+        from deepaha.product.worker import run_once
+        # TEST FIXTURE ONLY: simulates a previously measured LIVE record, does not run a provider.
+        with svc.db.tx() as s:
+            s.add(DispatchPolicy(connection_ref='default',version=1,mode='PARALLEL',max_concurrent=2,domain_limit=2,
+                observed_fingerprint='fp1',published_model='other-model',release_evidence={}))
+            s.add(DispatchValidation(connection_ref='default',binding_fingerprint='fp1',parallel=2,origin='LIVE',passed=True,report_sha256='a'*64))
+        for n in range(4):task(svc,'par-'+str(n))
+        FakeClient.prompts=FakeClient.peak=0
+        async def race():return await asyncio.gather(*(run_once(svc,FakeClient,binding_fingerprint='fp1',connection_ref='default') for _ in range(4)))
+        result=asyncio.run(race());assert FakeClient.peak==2 and FakeClient.prompts==2
+&gt;       assert sum(x['state']=='READY' for x in result)==2
+E       assert 1 == 2
+E        +  where 1 = sum(&lt;generator object test_parallel_cap_with_simulated_trusted_grant_and_changed_binding.&lt;locals&gt;.&lt;genexpr&gt; at 0x7f07c7573e00&gt;)
+
+backend/tests/product/test_dispatch_policy.py:99: AssertionError</failure></testcase><testcase classname="tests.product.test_dispatch_policy" name="test_expired_lease_fences_old_worker_and_preserves_uncertain_remote_slot" time="0.442" /><testcase classname="tests.product.test_dispatch_policy" name="test_pause_recovery_and_queue_limit" time="0.855" /><testcase classname="tests.product.test_dispatch_policy" name="test_source_revoked_during_upload_never_sends_prompt" time="0.445" /><testcase classname="tests.product.test_dispatch_policy" name="test_ingest_fences_cancelled_or_expired_worker_before_revision" time="0.488" /><testcase classname="tests.product.test_dispatch_policy" name="test_inspected_binding_change_does_not_claim_or_prompt" time="0.423" /><testcase classname="tests.product.test_dispatch_policy" name="test_projection_runs_off_event_loop_so_lease_heartbeat_can_progress" time="0.499" /></testsuite></testsuites>

@@ -146,7 +146,7 @@ class ActionLoopMixin:
     def weekly_digest(self,*,actor,at=None):
         at=at or now();local=at.astimezone(ZoneInfo('Asia/Shanghai'))
         year,week,_=local.isocalendar();period=f'{year}-W{week:02d}'
-        actions=self.my_actions(actor=actor,offset=0,limit=50)
+        actions=self.my_actions(actor=actor,_all=True)
         counts=Counter(x['status'] for x in actions)
         due=[]
         today=local.date()

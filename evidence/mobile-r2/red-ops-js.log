@@ -1,0 +1,8 @@
+file:///mnt/data/iteration2/DeepAha_Experience/web/scripts/test-mobile-r2-ops.mjs:3
+assert.equal(workspaceReturn('/manage/tasks?q=研究&status=FAILED','/manage/tasks'),'/manage/tasks?q=研究&status=FAILED');
+             ^
+
+TypeError: workspaceReturn is not a function
+    at file:///mnt/data/iteration2/DeepAha_Experience/web/scripts/test-mobile-r2-ops.mjs:3:14
+
+Node.js v22.16.0

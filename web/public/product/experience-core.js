@@ -8,7 +8,7 @@ export function catalogURL(params,changes={}){
 }
 export function returnPath(value){
  if(typeof value!=='string'||value.includes('\\')||/[\r\n]/.test(value))return '/app/overview';
- return /^\/app\/(overview|star|actions)(\?[^#]*)?$/.test(value)?value:'/app/overview';
+ return /^\/app\/(overview|star|actions|notifications)(\?[^#]*)?$/.test(value)?value:'/app/overview';
 }
 export function detailURL(id,back='/app/overview'){
  return '/app/opportunity/'+encodeURIComponent(id)+'?return='+encodeURIComponent(returnPath(back));

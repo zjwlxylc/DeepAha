@@ -1,0 +1,20 @@
+{
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "os": "linux",
+  "dependencies": {
+    "fastapi": "0.128.2",
+    "starlette": "0.50.0",
+    "uvicorn": "0.48.0",
+    "SQLAlchemy": "2.0.50",
+    "pydantic": "2.13.4",
+    "httpx": "0.28.1",
+    "cryptography": "46.0.4",
+    "Pillow": "12.3.0",
+    "pypdf": "5.9.0",
+    "pytest": "9.0.2",
+    "playwright": "1.57.0"
+  },
+  "clean_install": "NOT_RUN; existing Linux environment",
+  "native_windows": "NOT_RUN",
+  "node": "22.16.0"
+}

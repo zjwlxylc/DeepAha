@@ -1,0 +1,54 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+__________ test_membership_is_native_spa_not_iframe_or_parallel_login __________
+
+    def test_membership_is_native_spa_not_iframe_or_parallel_login():
+        user=(WEB/'user.js').read_text();work=(WEB/'workbench.js').read_text()
+>       assert 'renderMembership' in user and 'renderMembership' in work
+E       assert ('renderMembership' in "import {filterCount,readableAction,internalPath} from './mobile-core.js';\nimport {renderActions,renderNotifications,...记录',true));\n }else{body=empty('这个页面暂不可用','','/','返回首页');}\n return {html:shell(body,path,narrow,actions),after};\n}\n")
+
+backend/tests/product/test_services_ui_r3.py:8: AssertionError
+____________ test_notice_and_privacy_have_new_routes_and_retention _____________
+
+    def test_notice_and_privacy_have_new_routes_and_retention():
+        user=(WEB/'user.js').read_text();n=(WEB/'actions-ui.js').read_text()
+>       assert 'target_url' in n and "SERVICE:'服务进展'" in n
+E       assert ('target_url' in 'import {defaultActionView} from \'./mobile-core.js\';\nimport {$,e,icon,api,bind,modal,toast,go,tag,time,statusText,p...'blue\')}</summary><div class="digest-content">${rows||\'<p class="muted">本周暂无需要特别提醒的变化。</p>\'}</div></details>`;\n}\n')
+
+backend/tests/product/test_services_ui_r3.py:18: AssertionError
+________________ test_share_sdk_does_not_claim_completed_share _________________
+
+    def test_share_sdk_does_not_claim_completed_share():
+>       s=(WEB/'share-page.js').read_text()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/product/test_services_ui_r3.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.13/pathlib/_local.py:548: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/mnt/data/work/DeepAha_R3/web/public/product/share-page.js')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/mnt/data/work/DeepAha_R3/web/public/product/share-page.js'
+
+/usr/lib/python3.13/pathlib/_local.py:539: FileNotFoundError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_services_ui_r3.py::test_membership_is_native_spa_not_iframe_or_parallel_login - assert ('renderMembership' in "import {filterCount,readableAction,internalPath} from './mobile-core.js';\nimport {renderActions,renderNotifications,...记录',true));\n }else{body=empty('这个页面暂不可用','','/','返回首页');}\n return {html:shell(body,path,narrow,actions),after};\n}\n")
+FAILED backend/tests/product/test_services_ui_r3.py::test_notice_and_privacy_have_new_routes_and_retention - assert ('target_url' in 'import {defaultActionView} from \'./mobile-core.js\';\nimport {$,e,icon,api,bind,modal,toast,go,tag,time,statusText,p...'blue\')}</summary><div class="digest-content">${rows||\'<p class="muted">本周暂无需要特别提醒的变化。</p>\'}</div></details>`;\n}\n')
+FAILED backend/tests/product/test_services_ui_r3.py::test_share_sdk_does_not_claim_completed_share - FileNotFoundError: [Errno 2] No such file or directory: '/mnt/data/work/DeepAha_R3/web/public/product/share-page.js'

@@ -9,17 +9,17 @@ export function homeHero(){
 export function bindHome(){
  const root=document.querySelector('.home-carousel');if(!root)return ()=>{};
  const media=window.matchMedia('(prefers-reduced-motion: reduce)');
- let current=0,paused=media.matches,hover=false,focus=false,startX=0;
+ let current=0,paused=media.matches,hover=false,focus=false,startX=0,startY=0,lastManual=0;
  const pause=root.querySelector('[data-carousel="pause"]');
  function show(n){current=(n+3)%3;root.querySelectorAll('[data-slide]').forEach((el,i)=>{el.classList.toggle('active',i===current);el.setAttribute('aria-hidden',String(i!==current));});root.querySelectorAll('.home-dots button').forEach((el,i)=>el.setAttribute('aria-pressed',String(i===current)));}
  function update(){pause.textContent=paused?'播放':'暂停';pause.setAttribute('aria-label',paused?'开始自动切换':'暂停自动切换');}
- root.addEventListener('click',ev=>{const value=ev.target.closest('[data-carousel]')?.dataset.carousel;if(value===undefined)return;if(value==='pause'){paused=!paused;update();}else show(value==='next'?current+1:value==='previous'?current-1:Number(value));});
+ root.addEventListener('click',ev=>{const value=ev.target.closest('[data-carousel]')?.dataset.carousel;if(value===undefined)return;if(value==='pause'){paused=!paused;update();}else {show(value==='next'?current+1:value==='previous'?current-1:Number(value));lastManual=Date.now();}});
  root.addEventListener('keydown',ev=>{if(ev.key==='ArrowRight'||ev.key==='ArrowLeft'){ev.preventDefault();show(current+(ev.key==='ArrowRight'?1:-1));}});
  root.addEventListener('mouseenter',()=>hover=true);root.addEventListener('mouseleave',()=>hover=false);
  root.addEventListener('focusin',()=>focus=true);root.addEventListener('focusout',ev=>{focus=root.contains(ev.relatedTarget);});
- root.addEventListener('touchstart',ev=>startX=ev.changedTouches[0].clientX,{passive:true});
- root.addEventListener('touchend',ev=>{const delta=ev.changedTouches[0].clientX-startX;if(Math.abs(delta)>42)show(current+(delta<0?1:-1));},{passive:true});
+ root.addEventListener('touchstart',ev=>{startX=ev.changedTouches[0].clientX;startY=ev.changedTouches[0].clientY;},{passive:true});
+ root.addEventListener('touchend',ev=>{const delta=ev.changedTouches[0].clientX-startX;if(Math.abs(delta)>42&&Math.abs(delta)>Math.abs(ev.changedTouches[0].clientY-startY)*1.2){show(current+(delta<0?1:-1));lastManual=Date.now();}},{passive:true});
  const reduced=()=>{if(media.matches){paused=true;update();}};media.addEventListener('change',reduced);
- const timer=setInterval(()=>{if(!paused&&!hover&&!focus&&!document.hidden)show(current+1);},5000);update();
+ const timer=setInterval(()=>{if(!paused&&!hover&&!focus&&!document.hidden&&Date.now()-lastManual>5000)show(current+1);},5000);update();
  return ()=>{clearInterval(timer);media.removeEventListener('change',reduced);};
 }

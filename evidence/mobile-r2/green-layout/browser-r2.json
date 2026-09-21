@@ -1,0 +1,34 @@
+{
+  "scope": "Actual JS/DOM + synthetic accounts + real SQLite/HTTP via test-only bridge; not native URL/cookie/TLS/physical-phone acceptance. No WMA Worker.",
+  "checks": [
+    {
+      "name": "mobile filter is one-row toolbar",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "44px mobile filter target",
+      "passed": true,
+      "detail": "{'w': 52.015625, 'h': 44}"
+    },
+    {
+      "name": "44px carousel controls",
+      "passed": true,
+      "detail": "[{'w': 44, 'h': 44}, {'w': 32, 'h': 44}, {'w': 32, 'h': 44}, {'w': 32, 'h': 44}, {'w': 44, 'h': 44}, {'w': 44, 'h': 44}]"
+    },
+    {
+      "name": "brand asset unchanged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "javascript errors absent",
+      "passed": true,
+      "detail": "[]"
+    }
+  ],
+  "views": [],
+  "javascript_errors": [],
+  "http_requests": 3,
+  "failed_http": []
+}

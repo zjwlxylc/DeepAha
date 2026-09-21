@@ -41,7 +41,7 @@ def test_release_generation_blocks_automatic_rollback_to_old_workers():
     import json
     from pathlib import Path
     data=json.loads(Path('RELEASE_COMPATIBILITY.json').read_text(encoding='utf-8'))
-    assert data['database_generation'].endswith('-experience1')
+    assert data['database_generation'].endswith('-experience1-services1')
     assert not data['code_rollback_compatible_with']
     assert data['schema_change_in_release'] is True
 

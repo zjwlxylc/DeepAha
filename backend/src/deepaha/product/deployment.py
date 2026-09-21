@@ -41,8 +41,13 @@ REQUIRED_META = {
 }
 
 
+def _all_tables():
+    from deepaha_membership.db import metadata as membership_metadata
+    return list(Base.metadata.sorted_tables)+list(membership_metadata.sorted_tables)
+
+
 def _table_names() -> list[str]:
-    return [table.name for table in Base.metadata.sorted_tables]
+    return [table.name for table in _all_tables()]
 
 
 def _normal(value: Any) -> Any:
@@ -98,7 +103,7 @@ def _destination_has_rows(engine: Engine) -> list[str]:
     existing = set(inspect(engine).get_table_names())
     occupied: list[str] = []
     with engine.connect() as connection:
-        for table in Base.metadata.sorted_tables:
+        for table in _all_tables():
             if table.name not in existing:
                 continue
             if connection.execute(select(func.count()).select_from(table)).scalar_one() > 0:
@@ -124,9 +129,11 @@ def _copy_database(source_url: str, destination_url: str, *, require_postgres: b
             raise Problem("目标数据库不是空库，拒绝覆盖：" + ", ".join(occupied[:8]), 409, "MIGRATION_NONEMPTY")
 
         Base.metadata.create_all(destination.engine)
+        from deepaha_membership.db import metadata as membership_metadata
+        membership_metadata.create_all(destination.engine)
         copied: dict[str, int] = {}
         with source.engine.connect() as source_connection, destination.engine.begin() as destination_connection:
-            for table in Base.metadata.sorted_tables:
+            for table in _all_tables():
                 rows = source_connection.execute(select(table)).mappings()
                 batch: list[dict] = []
                 total = 0
@@ -148,7 +155,7 @@ def _copy_database(source_url: str, destination_url: str, *, require_postgres: b
                 copied[table.name] = total
 
         fingerprints = {}
-        for table in Base.metadata.sorted_tables:
+        for table in _all_tables():
             source_count, source_digest = _table_fingerprint(source.engine, table)
             destination_count, destination_digest = _table_fingerprint(destination.engine, table)
             if source_count != destination_count or source_digest != destination_digest:
@@ -244,6 +251,12 @@ def deployment_check(settings: Settings, *, require_account: bool = True) -> dic
             with database.tx(False) as session:
                 meta_values = {key: (session.get(Meta, key).value if session.get(Meta, key) else None) for key in REQUIRED_META}
                 active_accounts = session.scalar(select(func.count()).select_from(Account).where(Account.active.is_(True))) or 0
+        try:
+            from deepaha_membership.db import Store
+            Store(database.engine).assert_ready()
+            record("services_schema",True,{"version":"1"})
+        except Exception:
+            record("services_schema",False,"upgrade-services required")
         record("schema_versions", all(meta_values.get(k) == v for k, v in REQUIRED_META.items()), meta_values)
         record("active_account", (active_accounts > 0) or not require_account, active_accounts)
     except Exception as exc:  # Deployment check must summarize instead of leaking a stack trace.

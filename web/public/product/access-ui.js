@@ -1,3 +1,4 @@
+import {internalPath} from './mobile-core.js';
 import {state,$,e,brand,has,time,api,bind,go,toast,modal,pagination} from './core.js';
 
 const field=(label,name,attrs='')=>`<div class="form-field"><label for="access-${name}">${label}</label><input id="access-${name}" name="${name}" ${attrs}></div>`;
@@ -8,21 +9,21 @@ function secretBox(text){
  const box=$('#access-secret');box.hidden=false;
  box.innerHTML=`<h2>请立即保存，仅本次显示</h2><p class="muted mt8">请保存并私下交付。关闭后无法再次查看，丢失后需重新签发。</p><textarea id="access-secret-value" readonly rows="6" aria-label="一次性凭据"></textarea><button class="btn mt12" id="copy-access-secret">复制</button><button class="btn mt12" id="hide-access-secret">清除显示</button>`;
  $('#access-secret-value').value=text;box.scrollIntoView({block:'center',behavior:'smooth'});
- bind('#copy-access-secret','click',async()=>{await navigator.clipboard.writeText(text);toast('已复制，请妥善保管');});
+ bind('#copy-access-secret','click',async()=>{try{await navigator.clipboard.writeText(text);toast('已复制，请妥善保管');}catch{const value=$('#access-secret-value');value.focus();value.select();toast('浏览器未允许自动复制，已选中内容，请手动复制');}});
  bind('#hide-access-secret','click',()=>{box.replaceChildren();box.hidden=true;});
 }
 
-export async function renderAccess(path){
+export async function renderAccess(path,params=new URLSearchParams()){
  const security=path==='/account/security',reset=path==='/reset-password';
  if(security&&!state.user)throw Object.assign(new Error('请先登录'),{status:401});
  if(!security&&!reset&&!state.site.registration)return {html:`<main id="main-content" class="login-page"><div class="login-card access-card">${brand()}<h1>注册暂未开放</h1><p>已有账号仍可登录，请联系邀请人了解下一批体验安排。</p><a href="/login" data-nav>返回登录</a></div></main>`,after:()=>{}};
  const title=security?'账号安全':reset?'重置密码':'受邀加入机会星图';
- const inputs=security?field('原密码','old_password','type="password" required maxlength="256" autocomplete="current-password"'):reset?field('一次性重置码','code','required maxlength="128" autocomplete="off"'):field('邀请码','invite_code','required minlength="4" maxlength="128" placeholder="输入4位邀请码" autocomplete="off"')+field('账号（英文、数字或 _.@-）','username','required minlength="3" maxlength="80" pattern="[a-zA-Z0-9_.@\\-]+" autocomplete="username"');
+ const inputs=security?field('原密码','old_password','type="password" required maxlength="256" autocomplete="current-password"'):reset?field('一次性重置码','code','required maxlength="128" autocomplete="off"'):field('邀请码','invite_code','required minlength="4" maxlength="128" placeholder="输入4位邀请码" inputmode="numeric" autocomplete="off"')+field('账号（英文、数字或 _.@-）','username','required minlength="3" maxlength="80" pattern="[a-zA-Z0-9_.@\\-]+" autocomplete="username"');
  return {html:`<main id="main-content" class="login-page"><div class="login-card access-card">${brand()}<h1>${title}</h1><p class="muted mt12">${security?'修改密码后，所有设备需重新登录。':reset?'请联系维护员获取重置码，有效期30分钟。':'请输入邀请码创建账号。'}</p><form id="access-form" class="mt20">${inputs}${password}${confirm}${!security&&!reset?`<div class="access-notice mt16"><strong>体验与数据说明</strong><p class="small mt8">账号用于登录和保存你主动填写的偏好、收藏及反馈。你可以在“数据与隐私”导出或清除个人记录；加入共创实验需另外同意。机会信息和资格提示请以官方公告为准。</p></div><label class="access-consent mt16"><input name="accepted" type="checkbox" required>我已阅读并理解以上体验与数据说明</label>`:''}<button type="submit" class="btn primary wide mt20">${security?'修改密码并退出':reset?'重置密码':'注册并开始体验'}</button></form><a class="back-link" href="${security?'/app/me':'/login'}" data-nav>${security?'返回我的':'返回登录'}</a></div></main>`,after:()=>bind('#access-form','submit',async(_,f)=>{
   const data=checkedPassword(Object.fromEntries(new FormData(f)));
   if(security){await api('/api/auth/change-password',{method:'POST',data:{old_password:data.old_password,new_password:data.password}});state.user=null;state.csrf='';go('/login');toast('密码已修改，请重新登录');}
   else if(reset){await api('/api/auth/reset-password',{method:'POST',data});state.user=null;state.csrf='';go('/login');toast('密码已重置，请重新登录');}
-  else{data.accepted=data.accepted==='on';const r=await api('/api/auth/register',{method:'POST',data});state.user=r;state.csrf=r.csrf;go('/app/profile');}
+  else{data.accepted=data.accepted==='on';const r=await api('/api/auth/register',{method:'POST',data});state.user=r;state.csrf=r.csrf;go(params.has('next')?internalPath(params.get('next')):'/app/profile');}
  })};
 }
 
@@ -48,11 +49,11 @@ export async function renderAccessManage(path,params){
     const u=r.items.find(x=>x.id===b.dataset.id);
     modal('管理账号',`<div class="access-account-form"><div class="access-account-heading"><span class="avatar">${e(u.username.slice(0,1).toUpperCase())}</span><div><strong>${e(u.username)}</strong><p>设置登录状态与使用权限</p></div></div><label class="access-toggle"><input name="active" type="checkbox" ${u.active?'checked':''}><span><strong>允许登录</strong><small>关闭后，该账号将退出所有设备</small></span></label><fieldset class="access-role-fieldset"><legend>角色权限 <span>至少选择一项</span></legend><div class="access-role-options">${Object.entries(roles).map(([key,label])=>`<label class="access-role-card"><input type="checkbox" name="roles" value="${key}" ${u.roles.includes(key)?'checked':''}><span><strong>${label}</strong><small>${roleDescriptions[key]}</small></span></label>`).join('')}</div></fieldset>${reason}<p class="access-change-note">保存后，该用户需要重新登录。</p></div>`,async fd=>{
       const selected=fd.getAll('roles');if(!selected.length)throw new Error('请至少选择一种角色');
-      await api('/api/admin/users/'+u.id,{method:'PATCH',data:{active:fd.has('active'),roles:selected,reason:fd.get('reason')}});go(path);
+      await api('/api/admin/users/'+u.id,{method:'PATCH',data:{active:fd.has('active'),roles:selected,reason:fd.get('reason')}});go(path+'?q='+encodeURIComponent(q)+'&offset='+offset);
     },'保存更改');
    });
    bind('.reset-user','click',(_,b)=>modal('签发密码重置码','<p>请先在线下核验用户身份。重置码30分钟有效且仅能使用一次；新码会替换此前重置码。</p>'+reason,async fd=>{const result=await api('/api/admin/users/'+b.dataset.id+'/password-reset',{method:'POST',data:{reason:fd.get('reason')}});secretBox(result.code+'\n到期：'+time(result.expires_at)+'\n用户访问 /reset-password 输入重置码。');},'已核验身份，签发'));
-   bind('.revoke-user','click',(_,b)=>modal('退出全部会话',reason,async fd=>{await api('/api/admin/users/'+b.dataset.id+'/revoke-sessions',{method:'POST',data:{reason:fd.get('reason')}});toast('会话已撤销');go(path);},'确认退出',true));
+   bind('.revoke-user','click',(_,b)=>modal('退出全部会话',reason,async fd=>{await api('/api/admin/users/'+b.dataset.id+'/revoke-sessions',{method:'POST',data:{reason:fd.get('reason')}});toast('会话已撤销');go(path+'?q='+encodeURIComponent(q)+'&offset='+offset);},'确认退出',true));
   }};
  }
  const r=await api('/api/admin/audit?offset='+offset);

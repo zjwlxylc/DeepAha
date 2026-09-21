@@ -1,0 +1,1173 @@
+{
+  "scope": "Actual JS/DOM + synthetic accounts + real SQLite/HTTP via test-only bridge; not native URL/cookie/TLS/physical-phone acceptance. No WMA Worker.",
+  "checks": [
+    {
+      "name": "mobile filter is one-row toolbar",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "44px mobile filter target",
+      "passed": true,
+      "detail": "{'w': 52.015625, 'h': 44}"
+    },
+    {
+      "name": "44px carousel controls",
+      "passed": true,
+      "detail": "[{'w': 44, 'h': 44}, {'w': 32, 'h': 44}, {'w': 32, 'h': 44}, {'w': 32, 'h': 44}, {'w': 44, 'h': 44}, {'w': 44, 'h': 44}]"
+    },
+    {
+      "name": "brand asset unchanged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "guest account is not forced login",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "filter applies query",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "decision entry before fact panels",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "return keeps filter and scroll",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "detail shows saved preparation state",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "repeat save does not reset progress",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile defaults list",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "preparation supports continuous entry",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "inline editing keeps list",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "completion persists",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "dialog dirty-close safeguard",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "profile leave confirmation preserves input",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "profile PATCH actually saved",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "conflict shown",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "explicit merge updates visible untouched values",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "message badge reachable on phone",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mark read uses real backend",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "modal focus Tab",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "modal focus Shift+Tab",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "dialog restores opener focus",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "login server error is inline",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "password visibility control works",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "layout 320 /",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '让适合你的机会，不再轻易与你擦肩而过。', 'route': '/'}"
+    },
+    {
+      "name": "layout 320 /about",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '用 AI 助力青年，用 AI 发现机会。', 'route': '/about'}"
+    },
+    {
+      "name": "layout 320 /app/overview",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '机会总览', 'route': '/app/overview'}"
+    },
+    {
+      "name": "layout 320 /app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '青年科研实践计划 13', 'route': '/app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23'}"
+    },
+    {
+      "name": "layout 320 /app/star",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '我的机会星图', 'route': '/app/star'}"
+    },
+    {
+      "name": "layout 320 /app/actions",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '收藏与行动', 'route': '/app/actions'}"
+    },
+    {
+      "name": "layout 320 /app/actions?view=board",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '收藏与行动', 'route': '/app/actions?view=board'}"
+    },
+    {
+      "name": "layout 320 /app/profile",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '我的关注方向', 'route': '/app/profile'}"
+    },
+    {
+      "name": "layout 320 /app/notifications",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '消息与提醒', 'route': '/app/notifications'}"
+    },
+    {
+      "name": "layout 320 /app/me",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': 'reader', 'route': '/app/me'}"
+    },
+    {
+      "name": "layout 320 /app/privacy",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '数据与隐私', 'route': '/app/privacy'}"
+    },
+    {
+      "name": "layout 320 /app/lab",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '机会共创实验', 'route': '/app/lab'}"
+    },
+    {
+      "name": "layout 320 /account/security",
+      "passed": true,
+      "detail": "{'width': 320, 'scroll': 320, 'h1': 1, 'title': '账号安全', 'route': '/account/security'}"
+    },
+    {
+      "name": "layout 390 /",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '让适合你的机会，不再轻易与你擦肩而过。', 'route': '/'}"
+    },
+    {
+      "name": "layout 390 /about",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '用 AI 助力青年，用 AI 发现机会。', 'route': '/about'}"
+    },
+    {
+      "name": "layout 390 /app/overview",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '机会总览', 'route': '/app/overview'}"
+    },
+    {
+      "name": "layout 390 /app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '青年科研实践计划 13', 'route': '/app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23'}"
+    },
+    {
+      "name": "layout 390 /app/star",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '我的机会星图', 'route': '/app/star'}"
+    },
+    {
+      "name": "layout 390 /app/actions",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '收藏与行动', 'route': '/app/actions'}"
+    },
+    {
+      "name": "layout 390 /app/actions?view=board",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '收藏与行动', 'route': '/app/actions?view=board'}"
+    },
+    {
+      "name": "layout 390 /app/profile",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '我的关注方向', 'route': '/app/profile'}"
+    },
+    {
+      "name": "layout 390 /app/notifications",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '消息与提醒', 'route': '/app/notifications'}"
+    },
+    {
+      "name": "layout 390 /app/me",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': 'reader', 'route': '/app/me'}"
+    },
+    {
+      "name": "layout 390 /app/privacy",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '数据与隐私', 'route': '/app/privacy'}"
+    },
+    {
+      "name": "layout 390 /app/lab",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '机会共创实验', 'route': '/app/lab'}"
+    },
+    {
+      "name": "layout 390 /account/security",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '账号安全', 'route': '/account/security'}"
+    },
+    {
+      "name": "layout 768 /",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '让适合你的机会，不再轻易与你擦肩而过。', 'route': '/'}"
+    },
+    {
+      "name": "layout 768 /about",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '用 AI 助力青年，用 AI 发现机会。', 'route': '/about'}"
+    },
+    {
+      "name": "layout 768 /app/overview",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '机会总览', 'route': '/app/overview'}"
+    },
+    {
+      "name": "layout 768 /app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '青年科研实践计划 13', 'route': '/app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23'}"
+    },
+    {
+      "name": "layout 768 /app/star",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '我的机会星图', 'route': '/app/star'}"
+    },
+    {
+      "name": "layout 768 /app/actions",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '收藏与行动', 'route': '/app/actions'}"
+    },
+    {
+      "name": "layout 768 /app/actions?view=board",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '收藏与行动', 'route': '/app/actions?view=board'}"
+    },
+    {
+      "name": "layout 768 /app/profile",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '我的关注方向', 'route': '/app/profile'}"
+    },
+    {
+      "name": "layout 768 /app/notifications",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '消息与提醒', 'route': '/app/notifications'}"
+    },
+    {
+      "name": "layout 768 /app/me",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': 'reader', 'route': '/app/me'}"
+    },
+    {
+      "name": "layout 768 /app/privacy",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '数据与隐私', 'route': '/app/privacy'}"
+    },
+    {
+      "name": "layout 768 /app/lab",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '机会共创实验', 'route': '/app/lab'}"
+    },
+    {
+      "name": "layout 768 /account/security",
+      "passed": true,
+      "detail": "{'width': 768, 'scroll': 768, 'h1': 1, 'title': '账号安全', 'route': '/account/security'}"
+    },
+    {
+      "name": "layout 1440 /",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '让适合你的机会，不再轻易与你擦肩而过。', 'route': '/'}"
+    },
+    {
+      "name": "layout 1440 /about",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '用 AI 助力青年，用 AI 发现机会。', 'route': '/about'}"
+    },
+    {
+      "name": "layout 1440 /app/overview",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '机会总览', 'route': '/app/overview'}"
+    },
+    {
+      "name": "layout 1440 /app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '青年科研实践计划 13', 'route': '/app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23'}"
+    },
+    {
+      "name": "layout 1440 /app/star",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '我的机会星图', 'route': '/app/star'}"
+    },
+    {
+      "name": "layout 1440 /app/actions",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '收藏与行动', 'route': '/app/actions'}"
+    },
+    {
+      "name": "layout 1440 /app/actions?view=board",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '收藏与行动', 'route': '/app/actions?view=board'}"
+    },
+    {
+      "name": "layout 1440 /app/profile",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '我的关注方向', 'route': '/app/profile'}"
+    },
+    {
+      "name": "layout 1440 /app/notifications",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '消息与提醒', 'route': '/app/notifications'}"
+    },
+    {
+      "name": "layout 1440 /app/me",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': 'reader', 'route': '/app/me'}"
+    },
+    {
+      "name": "layout 1440 /app/privacy",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '数据与隐私', 'route': '/app/privacy'}"
+    },
+    {
+      "name": "layout 1440 /app/lab",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '机会共创实验', 'route': '/app/lab'}"
+    },
+    {
+      "name": "layout 1440 /account/security",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '账号安全', 'route': '/account/security'}"
+    },
+    {
+      "name": "layout 390 /manage",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '运行与连接', 'route': '/manage'}"
+    },
+    {
+      "name": "layout 390 /manage/sources",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '来源管理', 'route': '/manage/sources'}"
+    },
+    {
+      "name": "layout 390 /manage/sources/01a0c190-cf03-7d05-a2d9-74acb1aae6e7",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '海湾研究中心', 'route': '/manage/sources/01a0c190-cf03-7d05-a2d9-74acb1aae6e7'}"
+    },
+    {
+      "name": "layout 390 /manage/tasks",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '任务管理', 'route': '/manage/tasks'}"
+    },
+    {
+      "name": "layout 390 /manage/tasks/01a0c190-cf8d-78ae-9f56-c72185d91981",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '调查记录', 'route': '/manage/tasks/01a0c190-cf8d-78ae-9f56-c72185d91981'}"
+    },
+    {
+      "name": "layout 390 /manage/execution",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': 'WMA 执行策略', 'route': '/manage/execution'}"
+    },
+    {
+      "name": "layout 390 /manage/source-imports",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '来源资产', 'route': '/manage/source-imports'}"
+    },
+    {
+      "name": "layout 390 /manage/lab",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '机会实验室', 'route': '/manage/lab'}"
+    },
+    {
+      "name": "layout 390 /manage/feedback",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '反馈样本', 'route': '/manage/feedback'}"
+    },
+    {
+      "name": "layout 390 /manage/history",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '操作记录', 'route': '/manage/history'}"
+    },
+    {
+      "name": "layout 390 /manage/invitations",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '邀请码', 'route': '/manage/invitations'}"
+    },
+    {
+      "name": "layout 390 /manage/users",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '用户管理', 'route': '/manage/users'}"
+    },
+    {
+      "name": "layout 390 /manage/access-audit",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '账号操作记录', 'route': '/manage/access-audit'}"
+    },
+    {
+      "name": "layout 390 /review/overview",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '审核收件箱', 'route': '/review/overview'}"
+    },
+    {
+      "name": "layout 390 /review/catalog",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '收录管理', 'route': '/review/catalog'}"
+    },
+    {
+      "name": "layout 390 /review/packet/01a0c190-cf86-7c33-91e2-f29f1e97c0c4",
+      "passed": true,
+      "detail": "{'width': 390, 'scroll': 390, 'h1': 1, 'title': '整体审核', 'route': '/review/packet/01a0c190-cf86-7c33-91e2-f29f1e97c0c4'}"
+    },
+    {
+      "name": "layout 1440 /manage",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '运行与连接', 'route': '/manage'}"
+    },
+    {
+      "name": "layout 1440 /manage/sources",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '来源管理', 'route': '/manage/sources'}"
+    },
+    {
+      "name": "layout 1440 /manage/sources/01a0c190-cf03-7d05-a2d9-74acb1aae6e7",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '海湾研究中心', 'route': '/manage/sources/01a0c190-cf03-7d05-a2d9-74acb1aae6e7'}"
+    },
+    {
+      "name": "layout 1440 /manage/tasks",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '任务管理', 'route': '/manage/tasks'}"
+    },
+    {
+      "name": "layout 1440 /manage/tasks/01a0c190-cf8d-78ae-9f56-c72185d91981",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '调查记录', 'route': '/manage/tasks/01a0c190-cf8d-78ae-9f56-c72185d91981'}"
+    },
+    {
+      "name": "layout 1440 /manage/execution",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': 'WMA 执行策略', 'route': '/manage/execution'}"
+    },
+    {
+      "name": "layout 1440 /manage/source-imports",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '来源资产', 'route': '/manage/source-imports'}"
+    },
+    {
+      "name": "layout 1440 /manage/lab",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '机会实验室', 'route': '/manage/lab'}"
+    },
+    {
+      "name": "layout 1440 /manage/feedback",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '反馈样本', 'route': '/manage/feedback'}"
+    },
+    {
+      "name": "layout 1440 /manage/history",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '操作记录', 'route': '/manage/history'}"
+    },
+    {
+      "name": "layout 1440 /manage/invitations",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '邀请码', 'route': '/manage/invitations'}"
+    },
+    {
+      "name": "layout 1440 /manage/users",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '用户管理', 'route': '/manage/users'}"
+    },
+    {
+      "name": "layout 1440 /manage/access-audit",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '账号操作记录', 'route': '/manage/access-audit'}"
+    },
+    {
+      "name": "layout 1440 /review/overview",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '审核收件箱', 'route': '/review/overview'}"
+    },
+    {
+      "name": "layout 1440 /review/catalog",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '收录管理', 'route': '/review/catalog'}"
+    },
+    {
+      "name": "layout 1440 /review/packet/01a0c190-cf86-7c33-91e2-f29f1e97c0c4",
+      "passed": true,
+      "detail": "{'width': 1440, 'scroll': 1440, 'h1': 1, 'title': '整体审核', 'route': '/review/packet/01a0c190-cf86-7c33-91e2-f29f1e97c0c4'}"
+    },
+    {
+      "name": "mobile admin remains readonly",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "final CTA visible on hover 0",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "final CTA visible on hover 1",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reviewer has no source/account menu",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "javascript errors absent",
+      "passed": true,
+      "detail": "[]"
+    }
+  ],
+  "views": [
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "让适合你的机会，不再轻易与你擦肩而过。",
+      "route": "/"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "用 AI 助力青年，用 AI 发现机会。",
+      "route": "/about"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "机会总览",
+      "route": "/app/overview"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "青年科研实践计划 13",
+      "route": "/app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "我的机会星图",
+      "route": "/app/star"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "收藏与行动",
+      "route": "/app/actions"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "收藏与行动",
+      "route": "/app/actions?view=board"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "我的关注方向",
+      "route": "/app/profile"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "消息与提醒",
+      "route": "/app/notifications"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "reader",
+      "route": "/app/me"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "数据与隐私",
+      "route": "/app/privacy"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "机会共创实验",
+      "route": "/app/lab"
+    },
+    {
+      "width": 320,
+      "scroll": 320,
+      "h1": 1,
+      "title": "账号安全",
+      "route": "/account/security"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "让适合你的机会，不再轻易与你擦肩而过。",
+      "route": "/"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "用 AI 助力青年，用 AI 发现机会。",
+      "route": "/about"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "机会总览",
+      "route": "/app/overview"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "青年科研实践计划 13",
+      "route": "/app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "我的机会星图",
+      "route": "/app/star"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "收藏与行动",
+      "route": "/app/actions"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "收藏与行动",
+      "route": "/app/actions?view=board"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "我的关注方向",
+      "route": "/app/profile"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "消息与提醒",
+      "route": "/app/notifications"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "reader",
+      "route": "/app/me"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "数据与隐私",
+      "route": "/app/privacy"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "机会共创实验",
+      "route": "/app/lab"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "账号安全",
+      "route": "/account/security"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "让适合你的机会，不再轻易与你擦肩而过。",
+      "route": "/"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "用 AI 助力青年，用 AI 发现机会。",
+      "route": "/about"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "机会总览",
+      "route": "/app/overview"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "青年科研实践计划 13",
+      "route": "/app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "我的机会星图",
+      "route": "/app/star"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "收藏与行动",
+      "route": "/app/actions"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "收藏与行动",
+      "route": "/app/actions?view=board"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "我的关注方向",
+      "route": "/app/profile"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "消息与提醒",
+      "route": "/app/notifications"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "reader",
+      "route": "/app/me"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "数据与隐私",
+      "route": "/app/privacy"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "机会共创实验",
+      "route": "/app/lab"
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "h1": 1,
+      "title": "账号安全",
+      "route": "/account/security"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "让适合你的机会，不再轻易与你擦肩而过。",
+      "route": "/"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "用 AI 助力青年，用 AI 发现机会。",
+      "route": "/about"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "机会总览",
+      "route": "/app/overview"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "青年科研实践计划 13",
+      "route": "/app/opportunity/unit_01a0c190d07573d4af6e56af1e047d23"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "我的机会星图",
+      "route": "/app/star"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "收藏与行动",
+      "route": "/app/actions"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "收藏与行动",
+      "route": "/app/actions?view=board"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "我的关注方向",
+      "route": "/app/profile"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "消息与提醒",
+      "route": "/app/notifications"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "reader",
+      "route": "/app/me"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "数据与隐私",
+      "route": "/app/privacy"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "机会共创实验",
+      "route": "/app/lab"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "账号安全",
+      "route": "/account/security"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "运行与连接",
+      "route": "/manage"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "来源管理",
+      "route": "/manage/sources"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "海湾研究中心",
+      "route": "/manage/sources/01a0c190-cf03-7d05-a2d9-74acb1aae6e7"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "任务管理",
+      "route": "/manage/tasks"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "调查记录",
+      "route": "/manage/tasks/01a0c190-cf8d-78ae-9f56-c72185d91981"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "WMA 执行策略",
+      "route": "/manage/execution"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "来源资产",
+      "route": "/manage/source-imports"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "机会实验室",
+      "route": "/manage/lab"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "反馈样本",
+      "route": "/manage/feedback"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "操作记录",
+      "route": "/manage/history"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "邀请码",
+      "route": "/manage/invitations"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "用户管理",
+      "route": "/manage/users"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "账号操作记录",
+      "route": "/manage/access-audit"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "审核收件箱",
+      "route": "/review/overview"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "收录管理",
+      "route": "/review/catalog"
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "h1": 1,
+      "title": "整体审核",
+      "route": "/review/packet/01a0c190-cf86-7c33-91e2-f29f1e97c0c4"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "运行与连接",
+      "route": "/manage"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "来源管理",
+      "route": "/manage/sources"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "海湾研究中心",
+      "route": "/manage/sources/01a0c190-cf03-7d05-a2d9-74acb1aae6e7"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "任务管理",
+      "route": "/manage/tasks"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "调查记录",
+      "route": "/manage/tasks/01a0c190-cf8d-78ae-9f56-c72185d91981"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "WMA 执行策略",
+      "route": "/manage/execution"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "来源资产",
+      "route": "/manage/source-imports"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "机会实验室",
+      "route": "/manage/lab"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "反馈样本",
+      "route": "/manage/feedback"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "操作记录",
+      "route": "/manage/history"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "邀请码",
+      "route": "/manage/invitations"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "用户管理",
+      "route": "/manage/users"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "账号操作记录",
+      "route": "/manage/access-audit"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "审核收件箱",
+      "route": "/review/overview"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "收录管理",
+      "route": "/review/catalog"
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1,
+      "title": "整体审核",
+      "route": "/review/packet/01a0c190-cf86-7c33-91e2-f29f1e97c0c4"
+    }
+  ],
+  "javascript_errors": [],
+  "http_requests": 219,
+  "failed_http": []
+}

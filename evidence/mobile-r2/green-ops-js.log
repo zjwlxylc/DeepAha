@@ -1,0 +1,7 @@
+MOBILE_R2_OPS=PASS (safe returns, conservative copy, pagination failure/reorder)
+
+> deepaha-product-web@3.8.0-rc1 test
+> node scripts/check-product.mjs && node scripts/check-sg7-2.mjs
+
+Product JavaScript syntax, no-fixture, SG1 actionable, SG2 multi-type, SG3 currentness, and SG4 eligibility UI checks passed
+SG7_2_PUBLIC_HOME_ABOUT_BRAND=PASS

@@ -1,0 +1,138 @@
+{
+  "status": "PASS",
+  "stages": [
+    {
+      "name": "asset-build",
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "scripts/mobile_r2/build_assets.py",
+        "--check"
+      ],
+      "returncode": 0,
+      "seconds": 1.14
+    },
+    {
+      "name": "product-full",
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "pytest",
+        "-c",
+        "backend/pyproject.toml",
+        "backend/tests/product",
+        "--junitxml=/mnt/data/iteration2/DeepAha_Experience/evidence/mobile-r2/final-verification/product.xml"
+      ],
+      "returncode": 0,
+      "seconds": 145.76
+    },
+    {
+      "name": "compileall",
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "compileall",
+        "-q",
+        "backend/src",
+        "backend/tests/product",
+        "scripts/mobile_r2"
+      ],
+      "returncode": 0,
+      "seconds": 0.62
+    },
+    {
+      "name": "check-product",
+      "command": [
+        "/opt/nvm/versions/node/v22.16.0/bin/node",
+        "scripts/check-product.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.42
+    },
+    {
+      "name": "check-sg7-1",
+      "command": [
+        "/opt/nvm/versions/node/v22.16.0/bin/node",
+        "scripts/check-sg7-1.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.03
+    },
+    {
+      "name": "check-sg7-2",
+      "command": [
+        "/opt/nvm/versions/node/v22.16.0/bin/node",
+        "scripts/check-sg7-2.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.03
+    },
+    {
+      "name": "test-product-core",
+      "command": [
+        "/opt/nvm/versions/node/v22.16.0/bin/node",
+        "scripts/test-product-core.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.06
+    },
+    {
+      "name": "test-birth-date",
+      "command": [
+        "/opt/nvm/versions/node/v22.16.0/bin/node",
+        "scripts/test-birth-date.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.03
+    },
+    {
+      "name": "test-experience",
+      "command": [
+        "/opt/nvm/versions/node/v22.16.0/bin/node",
+        "scripts/test-experience.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.03
+    },
+    {
+      "name": "test-mobile-r2",
+      "command": [
+        "/opt/nvm/versions/node/v22.16.0/bin/node",
+        "scripts/test-mobile-r2.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.03
+    },
+    {
+      "name": "test-mobile-r2-ops",
+      "command": [
+        "/opt/nvm/versions/node/v22.16.0/bin/node",
+        "scripts/test-mobile-r2-ops.mjs"
+      ],
+      "returncode": 0,
+      "seconds": 0.03
+    },
+    {
+      "name": "http-smoke",
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "scripts/mobile_r2/http_smoke.py",
+        "--output",
+        "/mnt/data/iteration2/DeepAha_Experience/evidence/mobile-r2/final-verification/http"
+      ],
+      "returncode": 0,
+      "seconds": 2.93
+    }
+  ],
+  "counts": {
+    "tests": 288,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 2,
+    "passed": 286
+  },
+  "wma_called": false,
+  "postgres_live": "NOT_RUN",
+  "physical_mobile": "NOT_RUN",
+  "native_windows": "NOT_RUN",
+  "new_schema_tables": 0
+}

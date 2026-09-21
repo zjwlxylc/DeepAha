@@ -1,0 +1,17 @@
+{'file': 'test_action_loop_api.py', 'returncode': 1, 'seconds': 3.99}
+{'file': 'test_action_loop.py', 'returncode': 0, 'seconds': 7.45}
+{'file': 'test_actionable_granularity.py', 'returncode': 1, 'seconds': 8.52}
+{'file': 'test_api.py', 'returncode': 1, 'seconds': 6.19}
+{'file': 'test_contract.py', 'returncode': 0, 'seconds': 10.9}
+{'file': 'test_beta_access.py', 'returncode': 1, 'seconds': 12.61}
+{'file': 'test_currentness_api.py', 'returncode': 1, 'seconds': 4.34}
+{'file': 'test_currentness.py', 'returncode': 0, 'seconds': 7.16}
+{'file': 'test_custom_intake_r3.py', 'returncode': 1, 'seconds': 3.9}
+{'file': 'test_delivery_quality.py', 'returncode': 1, 'seconds': 9.05}
+{'file': 'test_dispatch_policy.py', 'returncode': 1, 'seconds': 8.99}
+{'file': 'test_experience_api.py', 'returncode': 1, 'seconds': 7.09}
+{'file': 'test_eligibility.py', 'returncode': 0, 'seconds': 9.4}
+{'file': 'test_experience_postgres.py', 'returncode': 0, 'seconds': 2.27}
+{'file': 'test_experience_upgrade.py', 'returncode': 1, 'seconds': 2.98}
+{'file': 'test_live_validation_guard.py', 'returncode': 0, 'seconds': 3.98}
+{'file': 'test_local_launcher_access.py', 'returncode': 0, 'seconds': 3.68}

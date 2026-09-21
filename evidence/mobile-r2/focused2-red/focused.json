@@ -1,0 +1,67 @@
+[
+  {
+    "name": "editing another item cannot discard unsaved draft",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "inline draft contents retained",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "success message fits viewport",
+    "passed": true,
+    "detail": "{'x': 16, 'right': 374, 'w': 390}"
+  },
+  {
+    "name": "source return keeps filters",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "task return keeps status",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "remote search reaches source outside first page",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "selected source prefills task URL",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "clearing selection clears only auto URL",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "clearing source does not erase user URL",
+    "passed": true,
+    "detail": ""
+  },
+  {
+    "name": "review status switch retains search",
+    "passed": false,
+    "detail": ""
+  },
+  {
+    "name": "catalog view switch retains filters",
+    "passed": false,
+    "detail": ""
+  },
+  {
+    "name": "erasing personal data also clears private in-memory drafts",
+    "passed": false,
+    "detail": ""
+  },
+  {
+    "name": "no unexpected JS errors",
+    "passed": true,
+    "detail": "[]"
+  }
+]

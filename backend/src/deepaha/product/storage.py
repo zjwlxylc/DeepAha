@@ -1,11 +1,14 @@
 """Reuse the existing write-once, hash-verifying DeepAha object store."""
 import hashlib
+import errno
+import time
 import io
 import json
 import stat
 import zipfile
 from pathlib import PurePosixPath
 from deepaha.artifacts.local_file import LocalFileObjectStore
+from deepaha.artifacts.object_store import ObjectIntegrityError
 from .errors import Problem
 
 MAX_ARCHIVE=32*1024*1024
@@ -54,7 +57,21 @@ class ArchiveStore:
         manifest={}
         for name,b in files.items():
             h=sha(b);key=f'{h[:2]}/{h}'
-            self.backend.put_bytes_if_absent(key=key,content=b,media_type='application/octet-stream',sha256=h)
+            # Concurrent investigations can legitimately save identical bytes.
+            # Retry ONLY the existing store's local non-blocking lock error.
+            # Never retry corrupt data, remote prompts, or bypass its SHA checks.
+            until=time.monotonic()+2.0
+            while True:
+                try:
+                    self.backend.put_bytes_if_absent(key=key,content=b,media_type='application/octet-stream',sha256=h)
+                    break
+                except ObjectIntegrityError as error:
+                    busy=(str(error)=='object write is already in progress'
+                          and isinstance(error.__cause__,OSError)
+                          and error.__cause__.errno in {errno.EAGAIN,errno.EACCES,errno.EBUSY})
+                    remaining=until-time.monotonic()
+                    if not busy or remaining<=0:raise
+                    time.sleep(min(.025,remaining))
             manifest[name]={'key':key,'sha256':h,'size':len(b)}
         return manifest
     def load(self,manifest):return {k:self.backend.get_bytes(key=v['key']) for k,v in manifest.items()}

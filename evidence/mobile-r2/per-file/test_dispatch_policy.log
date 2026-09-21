@@ -1,0 +1,28 @@
+.......F......                                                           [100%]
+=================================== FAILURES ===================================
+______ test_parallel_cap_with_simulated_trusted_grant_and_changed_binding ______
+
+svc = <deepaha.product.service.Product object at 0x7f07d4932cf0>
+
+    def test_parallel_cap_with_simulated_trusted_grant_and_changed_binding(svc):
+        assert hasattr(svc,'observe_binding')
+        from deepaha.product.models import DispatchPolicy,DispatchValidation,TaskDispatch
+        from deepaha.product.worker import run_once
+        # TEST FIXTURE ONLY: simulates a previously measured LIVE record, does not run a provider.
+        with svc.db.tx() as s:
+            s.add(DispatchPolicy(connection_ref='default',version=1,mode='PARALLEL',max_concurrent=2,domain_limit=2,
+                observed_fingerprint='fp1',published_model='other-model',release_evidence={}))
+            s.add(DispatchValidation(connection_ref='default',binding_fingerprint='fp1',parallel=2,origin='LIVE',passed=True,report_sha256='a'*64))
+        for n in range(4):task(svc,'par-'+str(n))
+        FakeClient.prompts=FakeClient.peak=0
+        async def race():return await asyncio.gather(*(run_once(svc,FakeClient,binding_fingerprint='fp1',connection_ref='default') for _ in range(4)))
+        result=asyncio.run(race());assert FakeClient.peak==2 and FakeClient.prompts==2
+>       assert sum(x['state']=='READY' for x in result)==2
+E       assert 1 == 2
+E        +  where 1 = sum(<generator object test_parallel_cap_with_simulated_trusted_grant_and_changed_binding.<locals>.<genexpr> at 0x7f07c7573e00>)
+
+backend/tests/product/test_dispatch_policy.py:99: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_dispatch_policy.py::test_parallel_cap_with_simulated_trusted_grant_and_changed_binding - assert 1 == 2
+ +  where 1 = sum(<generator object test_parallel_cap_with_simulated_trusted_grant_and_changed_binding.<locals>.<genexpr> at 0x7f07c7573e00>)
+1 failed, 13 passed in 7.99s

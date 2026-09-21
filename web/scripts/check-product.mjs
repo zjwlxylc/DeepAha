@@ -8,7 +8,7 @@ for(const name of ['app.js','core.js','user.js','workbench.js','scout.js']){cons
 const core=readFileSync(root+'core.js','utf8'),user=readFileSync(root+'user.js','utf8'),workbench=readFileSync(root+'workbench.js','utf8');
 for(const [name,source,needles] of [
  ['core.js',core,['targetKinds','parent_announcement','编号 ']],
- ['user.js',user,['公告共同条件','单位 / 分组共同内容','收藏这项具体机会','/app/announcement/','scope-more']],
+ ['user.js',user,['公告共同条件','单位 / 分组共同内容','save-opportunity','/save','/app/announcement/','scope-more']],
  ['workbench.js',workbench,['action_targets','catalog_target_ids','预计进入总览的具体机会','child(c,o.type,o.raw_type)']],
 ]){
  for(const needle of needles)if(!source.includes(needle))throw new Error(`SG1 actionable UI contract missing in ${name}: ${needle}`);
@@ -16,8 +16,8 @@ for(const [name,source,needles] of [
 if(workbench.includes('receipt.public_ids.slice(item,item+1)'))throw new Error('Review receipt still navigates to root announcement instead of actionable target');
 
 for(const [name,source,needles] of [
- ['core.js',core,['presentation?.target_label','presentation?.time_label','presentation?.type_label']],
- ['user.js',user,['presentation?.own_section_title','presentation?.ancestor_section_title','presentation?.common_section_title','presentation?.parent_label','presentation?.action_label','POSTGRAD_RECOMMENDATION']],
+ ['core.js',core,['presentation?.target_label','presentation?.time_label','presentation?.type_label','POSTGRAD_RECOMMENDATION']],
+ ['user.js',user,['presentation?.own_section_title','presentation?.ancestor_section_title','presentation?.common_section_title','presentation?.parent_label','presentation?.action_label','Object.entries(types)']],
 ]){
  for(const needle of needles)if(!source.includes(needle))throw new Error(`SG2 multi-type UI contract missing in ${name}: ${needle}`);
 }

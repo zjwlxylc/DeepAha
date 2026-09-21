@@ -1,0 +1,200 @@
+{
+  "status": "PASS",
+  "files": [
+    {
+      "file": "test_action_loop.py",
+      "returncode": 0,
+      "seconds": 9.22
+    },
+    {
+      "file": "test_action_loop_api.py",
+      "returncode": 0,
+      "seconds": 5.34
+    },
+    {
+      "file": "test_actionable_granularity.py",
+      "returncode": 0,
+      "seconds": 11.74
+    },
+    {
+      "file": "test_api.py",
+      "returncode": 0,
+      "seconds": 10.73
+    },
+    {
+      "file": "test_beta_access.py",
+      "returncode": 0,
+      "seconds": 18.48
+    },
+    {
+      "file": "test_contract.py",
+      "returncode": 0,
+      "seconds": 14.56
+    },
+    {
+      "file": "test_currentness.py",
+      "returncode": 0,
+      "seconds": 9.1
+    },
+    {
+      "file": "test_currentness_api.py",
+      "returncode": 0,
+      "seconds": 5.88
+    },
+    {
+      "file": "test_delivery_quality.py",
+      "returncode": 0,
+      "seconds": 11.25
+    },
+    {
+      "file": "test_dispatch_policy.py",
+      "returncode": 0,
+      "seconds": 11.35
+    },
+    {
+      "file": "test_eligibility.py",
+      "returncode": 0,
+      "seconds": 11.49
+    },
+    {
+      "file": "test_experience_api.py",
+      "returncode": 0,
+      "seconds": 10.35
+    },
+    {
+      "file": "test_experience_postgres.py",
+      "returncode": 0,
+      "seconds": 3.16
+    },
+    {
+      "file": "test_experience_upgrade.py",
+      "returncode": 0,
+      "seconds": 4.09
+    },
+    {
+      "file": "test_live_validation_guard.py",
+      "returncode": 0,
+      "seconds": 5.56
+    },
+    {
+      "file": "test_local_launcher_access.py",
+      "returncode": 0,
+      "seconds": 4.95
+    },
+    {
+      "file": "test_milestones_management.py",
+      "returncode": 0,
+      "seconds": 10.71
+    },
+    {
+      "file": "test_mobile_r2.py",
+      "returncode": 0,
+      "seconds": 8.06
+    },
+    {
+      "file": "test_mobile_r2_storage.py",
+      "returncode": 0,
+      "seconds": 4.65
+    },
+    {
+      "file": "test_multitype_opportunity_core.py",
+      "returncode": 0,
+      "seconds": 8.05
+    },
+    {
+      "file": "test_operations.py",
+      "returncode": 0,
+      "seconds": 7.34
+    },
+    {
+      "file": "test_personal_value.py",
+      "returncode": 0,
+      "seconds": 11.46
+    },
+    {
+      "file": "test_qualification_compiler.py",
+      "returncode": 0,
+      "seconds": 7.21
+    },
+    {
+      "file": "test_scout_import.py",
+      "returncode": 0,
+      "seconds": 18.52
+    },
+    {
+      "file": "test_sg5_1_frontend_contract.py",
+      "returncode": 0,
+      "seconds": 2.45
+    },
+    {
+      "file": "test_sg6_2_frontend_contract.py",
+      "returncode": 0,
+      "seconds": 2.55
+    },
+    {
+      "file": "test_sg6_2_upgrade.py",
+      "returncode": 0,
+      "seconds": 4.95
+    },
+    {
+      "file": "test_sg6_frontend_contract.py",
+      "returncode": 0,
+      "seconds": 2.31
+    },
+    {
+      "file": "test_sg6_upgrade.py",
+      "returncode": 0,
+      "seconds": 3.81
+    },
+    {
+      "file": "test_sg7_2_frontend_contract.py",
+      "returncode": 0,
+      "seconds": 2.35
+    },
+    {
+      "file": "test_sg7_api.py",
+      "returncode": 0,
+      "seconds": 6.64
+    },
+    {
+      "file": "test_sg7_founding_users.py",
+      "returncode": 0,
+      "seconds": 5.28
+    },
+    {
+      "file": "test_sg7_frontend_contract.py",
+      "returncode": 0,
+      "seconds": 2.65
+    },
+    {
+      "file": "test_sg7_independent_oracle100.py",
+      "returncode": 0,
+      "seconds": 8.85
+    },
+    {
+      "file": "test_sg7_lab.py",
+      "returncode": 0,
+      "seconds": 8.12
+    },
+    {
+      "file": "test_sg7_recommendation_oracle100.py",
+      "returncode": 0,
+      "seconds": 17.93
+    },
+    {
+      "file": "test_sg7_upgrade.py",
+      "returncode": 0,
+      "seconds": 4.8
+    },
+    {
+      "file": "test_sg8a_deployment.py",
+      "returncode": 0,
+      "seconds": 4.8
+    },
+    {
+      "file": "test_worker.py",
+      "returncode": 0,
+      "seconds": 4.18
+    }
+  ]
+}

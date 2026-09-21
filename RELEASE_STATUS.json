@@ -1,8 +1,8 @@
 {
   "release": "3.8.0-rc1",
-  "extension": "experience-84353c7-20260920",
-  "status": "ENGINEERING_CANDIDATE_NOT_DEPLOYED",
+  "extension": "mobile-r3-services-20260921",
+  "status": "ENGINEERING_CANDIDATE_PENDING_HUMAN_ACCEPTANCE_NOT_DEPLOYED",
   "details": "DELIVERY_STATUS.json",
-  "test_report": "docs/experience/TEST_REPORT.md",
-  "historical_sg8a_status": "docs/experience/baseline-release-status.json"
+  "test_report": "docs/services-r3/TEST_REPORT.md",
+  "historical_parent_status": "docs/services-r3/r2-metadata/RELEASE_STATUS.json"
 }

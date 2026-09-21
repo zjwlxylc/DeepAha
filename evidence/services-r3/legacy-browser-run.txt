@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/mnt/data/work/DeepAha_R3/scripts/mobile_r2/browser_check.py", line 39, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+                                             ~~~~^^
+  File "/mnt/data/work/DeepAha_R3/scripts/mobile_r2/browser_check.py", line 25, in main
+    if process.poll() is not None:raise RuntimeError('Synthetic API exited; see fixture-server.log')
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Synthetic API exited; see fixture-server.log

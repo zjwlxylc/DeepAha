@@ -1,0 +1,8 @@
+{
+  "release": "3.8.0-rc1",
+  "extension": "mobile-r2-20260920",
+  "status": "ENGINEERING_CANDIDATE_PENDING_HUMAN_ACCEPTANCE_NOT_DEPLOYED",
+  "details": "DELIVERY_STATUS.json",
+  "test_report": "docs/mobile-r2/TEST_REPORT.md",
+  "historical_parent_status": "docs/mobile-r2/parent-RELEASE_STATUS.json"
+}

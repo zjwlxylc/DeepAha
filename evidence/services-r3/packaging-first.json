@@ -1,0 +1,1 @@
+{"status":"FAIL","issue":"packaging tool wrote mapping instead of inherited file manifest object; verify_manifest rejected it","fix":"preserve inherited files array, file_count, path/sha256/bytes schema; repackage before delivery"}

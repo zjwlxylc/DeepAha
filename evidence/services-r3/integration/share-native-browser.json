@@ -1,0 +1,34 @@
+{
+  "transport": "Explicit QA HTTP/DOM bridge, no native navigation or real WeChat",
+  "checks": [
+    {
+      "name": "public OG before JS",
+      "passed": true
+    },
+    {
+      "name": "share layout 390",
+      "passed": true
+    },
+    {
+      "name": "share layout 1440",
+      "passed": true
+    },
+    {
+      "name": "CTA target same product",
+      "passed": true
+    },
+    {
+      "name": "copy public canonical link",
+      "passed": true
+    },
+    {
+      "name": "copy feedback is not false completed-share",
+      "passed": true
+    },
+    {
+      "name": "no JS errors",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

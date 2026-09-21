@@ -1,0 +1,38 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+______ test_custom_order_and_source_enter_review_in_one_atomic_submission ______
+
+client = <starlette.testclient.TestClient object at 0x7fbd29259940>
+
+    def test_custom_order_and_source_enter_review_in_one_atomic_submission(client):
+        p=published(client,'custom');login(client,'reader')
+        data={'code':'custom','version':p['version'],'key':'combined-custom-request','note':'希望关注公开科研助理的机会','site_name':'研究院栏目','site_url':'https://research.example.org/','consent':True}
+>       r=client.post(P+'/custom-requests',json=data);assert r.status_code==200,r.text
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"detail":"Method Not Allowed"}
+E       assert 405 == 200
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+
+backend/tests/product/test_custom_intake_r3.py:9: AssertionError
+________________ test_invalid_source_does_not_leave_half_order _________________
+
+client = <starlette.testclient.TestClient object at 0x7fbd23ef5590>
+
+    def test_invalid_source_does_not_leave_half_order(client):
+        p=published(client,'custom');login(client,'reader')
+        data={'code':'custom','version':p['version'],'key':'combined-custom-request','note':'希望关注公开科研助理的机会','site_name':'研究院栏目','site_url':'http://127.0.0.1/','consent':True}
+>       assert client.post(P+'/custom-requests',json=data).status_code==400
+E       AssertionError: assert 405 == 400
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+E        +    where <Response [405 Method Not Allowed]> = post(('/api/membership' + '/custom-requests'), json={'code': 'custom', 'consent': True, 'key': 'combined-custom-request', 'note': '希望关注公开科研助理的机会', ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x7fbd23ef5590>.post
+
+backend/tests/product/test_custom_intake_r3.py:19: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_custom_intake_r3.py::test_custom_order_and_source_enter_review_in_one_atomic_submission - AssertionError: {"detail":"Method Not Allowed"}
+assert 405 == 200
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+FAILED backend/tests/product/test_custom_intake_r3.py::test_invalid_source_does_not_leave_half_order - AssertionError: assert 405 == 400
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+ +    where <Response [405 Method Not Allowed]> = post(('/api/membership' + '/custom-requests'), json={'code': 'custom', 'consent': True, 'key': 'combined-custom-request', 'note': '希望关注公开科研助理的机会', ...})
+ +      where post = <starlette.testclient.TestClient object at 0x7fbd23ef5590>.post

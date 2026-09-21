@@ -20,6 +20,7 @@ def output(v):print(json.dumps(v,ensure_ascii=False,indent=2,default=str))
 def main(argv=None):
     ap=argparse.ArgumentParser(prog='deepaha',description='DeepAha 机会星图：初始化、账号、采集、导入和备份')
     sub=ap.add_subparsers(dest='command',required=True)
+    services=sub.add_parser('upgrade-services',help='备份并接入R3订阅与荐源；不改旧账号事实');services.add_argument('--backup',type=Path)
     experience=sub.add_parser('upgrade-experience',help='备份并新增体验扩展；不改旧事实或密码');experience.add_argument('--backup',type=Path)
     live=sub.add_parser('validate-wma-live',help='宿主显式付费实测1/2/4并发；无模拟开关，成功后保存当前绑定验证记录')
     live.add_argument('--actor',required=True);live.add_argument('--connection',default='default')
@@ -79,6 +80,11 @@ def main(argv=None):
                 max_prompts=args.max_prompts,budget_seconds=args.budget_seconds,confirmed=args.confirm_paid_validation,evidence_dir=args.evidence_dir))
             output(result)
             if result['status']!='PASS':return 1
+        elif args.command=='upgrade-services':
+            from .services_upgrade import upgrade_services
+            from .models import now
+            target=args.backup or settings.data_dir/'backups'/('before-services-r3-'+now().strftime('%Y%m%dT%H%M%S%f')+('.zip' if p.db.engine.dialect.name=='sqlite' else '.pgbackup'))
+            output(upgrade_services(p,target))
         elif args.command=='upgrade-experience':
             from .upgrade import upgrade_experience
             from .models import now
@@ -172,12 +178,19 @@ def main(argv=None):
             from .api import create_app
             uvicorn.run(create_app(settings,product=p),host=args.host,port=args.port,access_log=True)
         elif args.command=='worker':
+            from deepaha_membership.db import Store
+            from deepaha_membership.errors import DomainError
+            try:Store(p.db.engine).assert_ready()
+            except DomainError as e:raise Problem('订阅结构尚未就绪，请先备份并运行 upgrade-services',409,e.code) from None
             from .worker import run_once,schedule_due
             async def loop():
                 while True:
                     try:
                         from .worker import schedule_weekly_digests
-                        if not args.isolated_fixture_mode:schedule_weekly_digests(p)
+                        if not args.isolated_fixture_mode:
+                            schedule_weekly_digests(p)
+                            from .membership import scheduled_tick
+                            await asyncio.to_thread(scheduled_tick,p,settings)
                         factory=None if args.isolated_fixture_mode else ConnectionConfig(settings.data_dir,settings.mode).factory()
                         if factory:schedule_due(p,args.schedule_as)
                         if args.isolated_fixture_mode:result=await run_once(p,client_factory=None)

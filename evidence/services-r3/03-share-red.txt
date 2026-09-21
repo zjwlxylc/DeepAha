@@ -1,0 +1,369 @@
+FFFFFFFFFFFFFFFF                                                         [100%]
+=================================== FAILURES ===================================
+______________ test_og_rendered_before_javascript_no_host_poison _______________
+
+client = <starlette.testclient.TestClient object at 0x7fbcec624c20>
+
+    def test_og_rendered_before_javascript_no_host_poison(client):
+        r=client.get('/')
+>       assert 'property="og:title"' in r.text
+E       assert 'property="og:title"' in '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n'
+E        +  where '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n' = <Response [200 OK]>.text
+
+backend/tests/product/test_sharing_r3.py:16: AssertionError
+_____________ test_public_share_landing_clickable_and_sdk_limited ______________
+
+client = <starlette.testclient.TestClient object at 0x7fbcec35aad0>
+
+    def test_public_share_landing_clickable_and_sdk_limited(client):
+        r=client.get('/share')
+>       assert r.status_code==200 and 'og:title' in r.text
+E       assert (200 == 200 and 'og:title' in '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n')
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +  and   '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n' = <Response [200 OK]>.text
+
+backend/tests/product/test_sharing_r3.py:28: AssertionError
+_________________ test_operator_controls_version_and_escaping __________________
+
+client = <starlette.testclient.TestClient object at 0x7fbcec1756d0>
+
+    def test_operator_controls_version_and_escaping(client):
+>       d=config(client);d['title']='找机会 " /><script>bad()</script>';d['description']='公开说明 & "安全"'
+          ^^^^^^^^^^^^^^
+
+backend/tests/product/test_sharing_r3.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7fbcec1756d0>
+
+    def config(client):
+        login(client,'operator')
+>       r=client.get('/api/manage/sharing');assert r.status_code==200,r.text
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_sharing_r3.py:10: AssertionError
+________________ test_bad_origins_rejected[http://deepaha.com] _________________
+
+client = <starlette.testclient.TestClient object at 0x7fbcded1eea0>
+origin = 'http://deepaha.com'
+
+    @pytest.mark.parametrize('origin',['http://deepaha.com','https://localhost','https://127.0.0.1','https://[::1]','https://deepaha.com.evil/a','https://u:p@deepaha.com','https://deepaha.com?evil=1','https://foo.local'])
+    def test_bad_origins_rejected(client,origin):
+>       d=config(client);d['origin']=origin
+          ^^^^^^^^^^^^^^
+
+backend/tests/product/test_sharing_r3.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7fbcded1eea0>
+
+    def config(client):
+        login(client,'operator')
+>       r=client.get('/api/manage/sharing');assert r.status_code==200,r.text
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_sharing_r3.py:10: AssertionError
+_________________ test_bad_origins_rejected[https://localhost] _________________
+
+client = <starlette.testclient.TestClient object at 0x7fbcdeb37e10>
+origin = 'https://localhost'
+
+    @pytest.mark.parametrize('origin',['http://deepaha.com','https://localhost','https://127.0.0.1','https://[::1]','https://deepaha.com.evil/a','https://u:p@deepaha.com','https://deepaha.com?evil=1','https://foo.local'])
+    def test_bad_origins_rejected(client,origin):
+>       d=config(client);d['origin']=origin
+          ^^^^^^^^^^^^^^
+
+backend/tests/product/test_sharing_r3.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7fbcdeb37e10>
+
+    def config(client):
+        login(client,'operator')
+>       r=client.get('/api/manage/sharing');assert r.status_code==200,r.text
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_sharing_r3.py:10: AssertionError
+_________________ test_bad_origins_rejected[https://127.0.0.1] _________________
+
+client = <starlette.testclient.TestClient object at 0x7fbcde98c5f0>
+origin = 'https://127.0.0.1'
+
+    @pytest.mark.parametrize('origin',['http://deepaha.com','https://localhost','https://127.0.0.1','https://[::1]','https://deepaha.com.evil/a','https://u:p@deepaha.com','https://deepaha.com?evil=1','https://foo.local'])
+    def test_bad_origins_rejected(client,origin):
+>       d=config(client);d['origin']=origin
+          ^^^^^^^^^^^^^^
+
+backend/tests/product/test_sharing_r3.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7fbcde98c5f0>
+
+    def config(client):
+        login(client,'operator')
+>       r=client.get('/api/manage/sharing');assert r.status_code==200,r.text
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_sharing_r3.py:10: AssertionError
+___________________ test_bad_origins_rejected[https://[::1]] ___________________
+
+client = <starlette.testclient.TestClient object at 0x7fbcde757020>
+origin = 'https://[::1]'
+
+    @pytest.mark.parametrize('origin',['http://deepaha.com','https://localhost','https://127.0.0.1','https://[::1]','https://deepaha.com.evil/a','https://u:p@deepaha.com','https://deepaha.com?evil=1','https://foo.local'])
+    def test_bad_origins_rejected(client,origin):
+>       d=config(client);d['origin']=origin
+          ^^^^^^^^^^^^^^
+
+backend/tests/product/test_sharing_r3.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7fbcde757020>
+
+    def config(client):
+        login(client,'operator')
+>       r=client.get('/api/manage/sharing');assert r.status_code==200,r.text
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_sharing_r3.py:10: AssertionError
+____________ test_bad_origins_rejected[https://deepaha.com.evil/a] _____________
+
+client = <starlette.testclient.TestClient object at 0x7fbcde59a690>
+origin = 'https://deepaha.com.evil/a'
+
+    @pytest.mark.parametrize('origin',['http://deepaha.com','https://localhost','https://127.0.0.1','https://[::1]','https://deepaha.com.evil/a','https://u:p@deepaha.com','https://deepaha.com?evil=1','https://foo.local'])
+    def test_bad_origins_rejected(client,origin):
+>       d=config(client);d['origin']=origin
+          ^^^^^^^^^^^^^^
+
+backend/tests/product/test_sharing_r3.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7fbcde59a690>
+
+    def config(client):
+        login(client,'operator')
+>       r=client.get('/api/manage/sharing');assert r.status_code==200,r.text
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_sharing_r3.py:10: AssertionError
+______________ test_bad_origins_rejected[https://u:p@deepaha.com] ______________
+
+client = <starlette.testclient.TestClient object at 0x7fbcde3f8af0>
+origin = 'https://u:p@deepaha.com'
+
+    @pytest.mark.parametrize('origin',['http://deepaha.com','https://localhost','https://127.0.0.1','https://[::1]','https://deepaha.com.evil/a','https://u:p@deepaha.com','https://deepaha.com?evil=1','https://foo.local'])
+    def test_bad_origins_rejected(client,origin):
+>       d=config(client);d['origin']=origin
+          ^^^^^^^^^^^^^^
+
+backend/tests/product/test_sharing_r3.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7fbcde3f8af0>
+
+    def config(client):
+        login(client,'operator')
+>       r=client.get('/api/manage/sharing');assert r.status_code==200,r.text
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_sharing_r3.py:10: AssertionError
+____________ test_bad_origins_rejected[https://deepaha.com?evil=1] _____________
+
+client = <starlette.testclient.TestClient object at 0x7fbcde1f2250>
+origin = 'https://deepaha.com?evil=1'
+
+    @pytest.mark.parametrize('origin',['http://deepaha.com','https://localhost','https://127.0.0.1','https://[::1]','https://deepaha.com.evil/a','https://u:p@deepaha.com','https://deepaha.com?evil=1','https://foo.local'])
+    def test_bad_origins_rejected(client,origin):
+>       d=config(client);d['origin']=origin
+          ^^^^^^^^^^^^^^
+
+backend/tests/product/test_sharing_r3.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7fbcde1f2250>
+
+    def config(client):
+        login(client,'operator')
+>       r=client.get('/api/manage/sharing');assert r.status_code==200,r.text
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_sharing_r3.py:10: AssertionError
+_________________ test_bad_origins_rejected[https://foo.local] _________________
+
+client = <starlette.testclient.TestClient object at 0x7fbcddfd39b0>
+origin = 'https://foo.local'
+
+    @pytest.mark.parametrize('origin',['http://deepaha.com','https://localhost','https://127.0.0.1','https://[::1]','https://deepaha.com.evil/a','https://u:p@deepaha.com','https://deepaha.com?evil=1','https://foo.local'])
+    def test_bad_origins_rejected(client,origin):
+>       d=config(client);d['origin']=origin
+          ^^^^^^^^^^^^^^
+
+backend/tests/product/test_sharing_r3.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7fbcddfd39b0>
+
+    def config(client):
+        login(client,'operator')
+>       r=client.get('/api/manage/sharing');assert r.status_code==200,r.text
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_sharing_r3.py:10: AssertionError
+______________ test_cover_decoded_reencoded_hashed_and_permission ______________
+
+client = <starlette.testclient.TestClient object at 0x7fbcddc55150>
+
+    def test_cover_decoded_reencoded_hashed_and_permission(client):
+        data=io.BytesIO();Image.new('RGB',(1500,900),(10,68,179)).save(data,'PNG')
+        login(client,'reader')
+>       assert client.post('/api/manage/sharing/cover?kind=wide',content=data.getvalue()).status_code==403
+E       AssertionError: assert 405 == 403
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+E        +    where <Response [405 Method Not Allowed]> = post('/api/manage/sharing/cover?kind=wide', content=b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x05\xdc\x00\x00\x03\x84\x08\x02\x00\x00\x004Zd\x93\x00\x00\x17jIDATx\x9c...\x00\x00\x00@\xc0\x94\x01\x00\x00\x00\x08\x982\x00\x00\x00\x00\x81\x0fyC\x08\t\xacl\xaap\x00\x00\x00\x00IEND\xaeB`\x82')
+E        +      where post = <starlette.testclient.TestClient object at 0x7fbcddc55150>.post
+E        +      and   b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x05\xdc\x00\x00\x03\x84\x08\x02\x00\x00\x004Zd\x93\x00\x00\x17jIDATx\x9c...\x00\x00\x00@\xc0\x94\x01\x00\x00\x00\x08\x982\x00\x00\x00\x00\x81\x0fyC\x08\t\xacl\xaap\x00\x00\x00\x00IEND\xaeB`\x82' = <built-in method getvalue of _io.BytesIO object at 0x7fbcddc59f30>()
+E        +        where <built-in method getvalue of _io.BytesIO object at 0x7fbcddc59f30> = <_io.BytesIO object at 0x7fbcddc59f30>.getvalue
+
+backend/tests/product/test_sharing_r3.py:55: AssertionError
+____________ test_only_current_public_fact_metadata_and_withdrawal _____________
+
+client = <starlette.testclient.TestClient object at 0x7fbcdda18490>
+svc = <deepaha.product.service.Product object at 0x7fbcddc71fd0>
+
+    def test_only_current_public_fact_metadata_and_withdrawal(client,svc):
+        a=svc.ingest(svc.test_source,packet('测试科研申请'),actor='operator')
+        svc.decide(a['id'],'APPROVE',a['preview_hash'],'','share-r3-test',actor='reviewer')
+        item=svc.catalog()['items'][0];id=item['id']
+        r=client.get('/share/opportunity/'+id);assert r.status_code==200,r.text
+>       assert '测试科研申请' in r.text
+E       assert '测试科研申请' in '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n'
+E        +  where '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n' = <Response [200 OK]>.text
+
+backend/tests/product/test_sharing_r3.py:75: AssertionError
+__________________ test_nonpublic_catalog_does_not_leak_share __________________
+
+client = <starlette.testclient.TestClient object at 0x7fbcdccd5370>
+svc = <deepaha.product.service.Product object at 0x7fbcdda15c50>
+
+    def test_nonpublic_catalog_does_not_leak_share(client,svc):
+        a=svc.ingest(svc.test_source,packet('不可公开名称'),actor='operator');svc.decide(a['id'],'APPROVE',a['preview_hash'],'','r3-private',actor='reviewer')
+        id=svc.catalog()['items'][0]['id']
+        client.app.state.settings.public_catalog=False
+        r=client.get('/share/opportunity/'+id)
+>       assert r.status_code==404 and '不可公开名称' not in r.text
+E       assert (200 == 404)
+E        +  where 200 = <Response [200 OK]>.status_code
+
+backend/tests/product/test_sharing_r3.py:89: AssertionError
+______________ test_signature_url_cannot_sign_external_or_private ______________
+
+client = <starlette.testclient.TestClient object at 0x7fbcdcb3e9c0>
+
+    def test_signature_url_cannot_sign_external_or_private(client):
+        for u in ['https://evil.org/share','https://deepaha.com/app/profile','https://deepaha.com/share/../manage','https://deepaha.com/share?secret=private','https://deepaha.com:8443/share']:
+            r=client.get('/api/share/wechat-signature',params={'url':u})
+>           assert r.status_code==400,(u,r.text)
+E           AssertionError: ('https://evil.org/share', '{"error":"INVALID_REQUEST","message":"接口不存在"}')
+E           assert 404 == 400
+E            +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_sharing_r3.py:95: AssertionError
+__________ test_wechat_verification_file_exact_and_no_arbitrary_path ___________
+
+client = <starlette.testclient.TestClient object at 0x7fbcdc9bc160>
+
+    def test_wechat_verification_file_exact_and_no_arbitrary_path(client):
+>       d=config(client);d.update(verification_name='MP_verify_testR3.txt',verification_text='safeDomainVerification123')
+          ^^^^^^^^^^^^^^
+
+backend/tests/product/test_sharing_r3.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7fbcdc9bc160>
+
+    def config(client):
+        login(client,'operator')
+>       r=client.get('/api/manage/sharing');assert r.status_code==200,r.text
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+backend/tests/product/test_sharing_r3.py:10: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/product/test_sharing_r3.py::test_og_rendered_before_javascript_no_host_poison - assert 'property="og:title"' in '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n'
+ +  where '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n' = <Response [200 OK]>.text
+FAILED backend/tests/product/test_sharing_r3.py::test_public_share_landing_clickable_and_sdk_limited - assert (200 == 200 and 'og:title' in '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n')
+ +  where 200 = <Response [200 OK]>.status_code
+ +  and   '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n' = <Response [200 OK]>.text
+FAILED backend/tests/product/test_sharing_r3.py::test_operator_controls_version_and_escaping - AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_sharing_r3.py::test_bad_origins_rejected[http://deepaha.com] - AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_sharing_r3.py::test_bad_origins_rejected[https://localhost] - AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_sharing_r3.py::test_bad_origins_rejected[https://127.0.0.1] - AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_sharing_r3.py::test_bad_origins_rejected[https://[::1]] - AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_sharing_r3.py::test_bad_origins_rejected[https://deepaha.com.evil/a] - AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_sharing_r3.py::test_bad_origins_rejected[https://u:p@deepaha.com] - AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_sharing_r3.py::test_bad_origins_rejected[https://deepaha.com?evil=1] - AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_sharing_r3.py::test_bad_origins_rejected[https://foo.local] - AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_sharing_r3.py::test_cover_decoded_reencoded_hashed_and_permission - AssertionError: assert 405 == 403
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+ +    where <Response [405 Method Not Allowed]> = post('/api/manage/sharing/cover?kind=wide', content=b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x05\xdc\x00\x00\x03\x84\x08\x02\x00\x00\x004Zd\x93\x00\x00\x17jIDATx\x9c...\x00\x00\x00@\xc0\x94\x01\x00\x00\x00\x08\x982\x00\x00\x00\x00\x81\x0fyC\x08\t\xacl\xaap\x00\x00\x00\x00IEND\xaeB`\x82')
+ +      where post = <starlette.testclient.TestClient object at 0x7fbcddc55150>.post
+ +      and   b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x05\xdc\x00\x00\x03\x84\x08\x02\x00\x00\x004Zd\x93\x00\x00\x17jIDATx\x9c...\x00\x00\x00@\xc0\x94\x01\x00\x00\x00\x08\x982\x00\x00\x00\x00\x81\x0fyC\x08\t\xacl\xaap\x00\x00\x00\x00IEND\xaeB`\x82' = <built-in method getvalue of _io.BytesIO object at 0x7fbcddc59f30>()
+ +        where <built-in method getvalue of _io.BytesIO object at 0x7fbcddc59f30> = <_io.BytesIO object at 0x7fbcddc59f30>.getvalue
+FAILED backend/tests/product/test_sharing_r3.py::test_only_current_public_fact_metadata_and_withdrawal - assert '测试科研申请' in '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n'
+ +  where '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,ini...dd2/icons.js"></script><script type="module" src="/product/_v/mobile-r2-c8d459040dd2/app.js"></script></body></html>\n' = <Response [200 OK]>.text
+FAILED backend/tests/product/test_sharing_r3.py::test_nonpublic_catalog_does_not_leak_share - assert (200 == 404)
+ +  where 200 = <Response [200 OK]>.status_code
+FAILED backend/tests/product/test_sharing_r3.py::test_signature_url_cannot_sign_external_or_private - AssertionError: ('https://evil.org/share', '{"error":"INVALID_REQUEST","message":"接口不存在"}')
+assert 404 == 400
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED backend/tests/product/test_sharing_r3.py::test_wechat_verification_file_exact_and_no_arbitrary_path - AssertionError: {"error":"INVALID_REQUEST","message":"接口不存在"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code

@@ -135,6 +135,8 @@ def create_app(settings=None,product=None):
             lab=s.get(Meta,'opportunity_lab_schema_version')
             if not lab or lab.value!='2':
                 raise RuntimeError('SG7.1机会实验室数据结构版本不正确。运行：python -m deepaha.product.cli upgrade-sg7')
+        from deepaha_membership.db import Store
+        Store(p.db.engine).assert_ready()
         yield
         p.db.engine.dispose()
     app=FastAPI(title='DeepAha 机会星图',version='3.8.0-rc1',lifespan=lifespan,docs_url=None,redoc_url=None,openapi_url=None)
@@ -161,7 +163,7 @@ def create_app(settings=None,product=None):
             if upload:
                 try:user(req,'operator',True)
                 except Problem as exc:return JSONResponse({'message':exc.message,'error':exc.code},exc.status)
-            cap=MAX_UPLOAD if upload else (MAX_ARCHIVE if req.url.path.startswith('/api/intake/') else 2_100_000)
+            cap=5*1024*1024 if req.url.path=='/api/manage/sharing/cover' else (MAX_UPLOAD if upload else (MAX_ARCHIVE if req.url.path.startswith('/api/intake/') else 2_100_000))
             try:body=await bounded_body(req,cap)
             except Problem as e:return JSONResponse({'message':e.message,'error':e.code},e.status)
             req._body=body
@@ -175,7 +177,15 @@ def create_app(settings=None,product=None):
         res.headers['X-Frame-Options']='DENY'
         res.headers['Permissions-Policy']='camera=(), microphone=(), geolocation=()'
         res.headers['Content-Security-Policy']="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
-        if req.url.path.startswith('/api/'):res.headers['Cache-Control']='no-store'
+        if req.url.path=='/share' or req.url.path.startswith('/share/opportunity/'):
+            res.headers['Content-Security-Policy']=res.headers['Content-Security-Policy'].replace("script-src 'self'","script-src 'self' https://res.wx.qq.com").replace("img-src 'self' data:","img-src 'self' data: https:")
+        if req.url.path.startswith('/api/') or res.headers.get('content-type','').startswith('text/html'):
+            res.headers['Cache-Control']='no-store'
+        elif req.url.path.startswith('/product/_v/'+frontend_build+'/') and res.status_code==200:
+            res.headers['Cache-Control']='public, max-age=31536000, immutable'
+        elif req.url.path.startswith('/product/'):
+            res.headers['Cache-Control']='no-cache'
+        res.headers['X-DeepAha-Build']=frontend_build
         return res
     def user(req,role=None,write=False):
         u=p.authenticate(req.cookies.get('deepaha_session'),req.headers.get('x-csrf-token','') if write else None)
@@ -187,7 +197,7 @@ def create_app(settings=None,product=None):
         res.set_cookie('deepaha_session',data['token'],max_age=43200,httponly=True,secure=settings.secure_cookie,samesite='lax',path='/')
         res.set_cookie('deepaha_csrf',data['csrf'],max_age=43200,httponly=False,secure=settings.secure_cookie,samesite='lax',path='/')
     @app.get('/api/site')
-    def site():return {'name':'机会星图','public_catalog':settings.public_catalog,'registration':settings.allow_registration,'registration_mode':'invite' if settings.allow_registration else 'closed','access_notice_version':'beta-access-v1'}
+    def site():return {'name':'机会星图','public_catalog':settings.public_catalog,'registration':settings.allow_registration,'registration_mode':'invite' if settings.allow_registration else 'closed','access_notice_version':'beta-access-v1','frontend_build':frontend_build,'product_iteration':'mobile-r3'}
     @app.get('/health/live')
     def live():return {'live':True,'version':'3.8.0-rc1'}
     @app.get('/health/ready')
@@ -482,12 +492,26 @@ def create_app(settings=None,product=None):
     @app.api_route('/api/v1/review/{path:path}',methods=['POST','PUT','PATCH','DELETE'],include_in_schema=False)
     @app.api_route('/api/v1/investigations/{path:path}',methods=['POST','PUT','PATCH','DELETE'],include_in_schema=False)
     def old_api(path:str):raise Problem('旧操作入口已退役，请使用整体审核与系统管理',410,'ROUTE_RETIRED')
+    from .mobile import mount_mobile
+    mount_mobile(app,p,user)
     mount_scout(app,p,user)
+    from .membership import mount_host
+    mount_host(app,p,settings,user)
+    from .sharing_api import mount_sharing
+    share_verification=mount_sharing(app,p,settings,user,static)
     @app.get('/api/{path:path}')
     def api_missing(path:str):raise Problem('接口不存在',404)
-    if static.exists():app.mount('/product',StaticFiles(directory=static),name='product-assets')
+    from .frontend_assets import validate_release
+    frontend_build=validate_release(static)
+    if static.exists():
+        app.mount('/product/_v/'+frontend_build,StaticFiles(directory=static),name='product-versioned-assets')
+        app.mount('/product',StaticFiles(directory=static),name='product-assets')
     @app.get('/{path:path}')
     def page(path:str):
         if path.startswith(('review/human-test','review/assurance')):return RedirectResponse('/manage/history',status_code=307)
-        return FileResponse(static/'index.html')
+        from .sharing import metadata, apply_html
+        from fastapi.responses import HTMLResponse
+        verification=share_verification(path)
+        if verification is not None:return verification
+        return HTMLResponse(apply_html((static/'index.html').read_text(encoding='utf-8'),metadata(p,settings,'/'+path)))
     return app

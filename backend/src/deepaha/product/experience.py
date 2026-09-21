@@ -132,10 +132,16 @@ class ExperienceMixin:
         if not isinstance(ids,list) or len(ids)>100 or any(not isinstance(x,str) for x in ids):raise Problem('消息标识不正确')
         with self.db.tx() as s:
             a=self._account(s,actor);rows=[]
+            membership_ids=[]
             for id in set(ids):
+                if id.startswith('mbr:'):
+                    from .membership import mark_notice
+                    mark_notice(s.connection(),actor,id)
+                    membership_ids.append(id)
+                    continue
                 r=s.get(TargetNotice,id) or s.get(Notice,id)
                 if not r or r.account_id!=a.id:raise Problem('消息不存在',404)
                 rows.append(r)
             for r in rows:
                 if r.state!='CANCELLED' and aware(r.due_at)<=now():r.state='READ'
-            return {'read':True,'count':sum(r.state=='READ' for r in rows)}
+            return {'read':True,'count':sum(r.state=='READ' for r in rows)+len(membership_ids)}

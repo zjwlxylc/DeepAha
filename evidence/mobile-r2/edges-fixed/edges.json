@@ -1,0 +1,49 @@
+{
+  "scope": "HTTP + QA-only loss injection; short viewport is not a physical mobile keyboard test",
+  "checks": [
+    {
+      "name": "lost write response keeps input",
+      "passed": true
+    },
+    {
+      "name": "uncertain write shown inline",
+      "passed": true
+    },
+    {
+      "name": "retry uses same idempotency key",
+      "passed": true
+    },
+    {
+      "name": "dialog action visible in short viewport",
+      "passed": true
+    },
+    {
+      "name": "read failure offers local retry",
+      "passed": true
+    },
+    {
+      "name": "retry keeps query",
+      "passed": true
+    },
+    {
+      "name": "reader sees clear permission error",
+      "passed": true
+    },
+    {
+      "name": "missing content offers safe return",
+      "passed": true
+    },
+    {
+      "name": "disabled reminders point to setting",
+      "passed": true
+    },
+    {
+      "name": "settings link returns to opportunity",
+      "passed": true
+    },
+    {
+      "name": "no JS errors",
+      "passed": true
+    }
+  ]
+}
